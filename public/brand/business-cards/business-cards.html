@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Business Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .card-pair {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .card-container {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        /* Standard US Business Card: 3.5" x 2" = 350px x 200px at 100dpi equivalent */
+        .card {
+            width: 350px;
+            height: 200px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =============================================
+           OPTION A: CLASSIC NAVY
+        ============================================= */
+        .card-a-front {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-a-front .logo {
+            width: 100px;
+        }
+        
+        .card-a-front .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .card-a-back {
+            background: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-a-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        
+        .card-a-back .title {
+            font-size: 12px;
+            color: var(--royal);
+            margin-top: 2px;
+        }
+        
+        .card-a-back .center {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .card-a-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .card-a-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+        
+        .card-a-back .contact-line a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        /* =============================================
+           OPTION B: BOLD SPLIT
+        ============================================= */
+        .card-b-front {
+            background: var(--navy);
+            position: relative;
+        }
+        
+        .card-b-front .accent {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 35%;
+            height: 100%;
+            background: var(--pool);
+        }
+        
+        .card-b-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-b-front .logo {
+            width: 90px;
+        }
+        
+        .card-b-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: white;
+        }
+        
+        .card-b-back {
+            background: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .card-b-back .accent-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--maroon);
+        }
+        
+        .card-b-back .top {
+            padding-left: 16px;
+        }
+        
+        .card-b-back .name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        
+        .card-b-back .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+        
+        .card-b-back .center {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        .card-b-back .contact {
+            padding-left: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 16px;
+        }
+        
+        .card-b-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           OPTION C: MINIMAL WHITE
+        ============================================= */
+        .card-c-front {
+            background: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card-c-front .logo {
+            width: 100px;
+        }
+        
+        .card-c-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .card-c-back {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-c-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+        
+        .card-c-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 2px;
+        }
+        
+        .card-c-back .center {
+            font-size: 10px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .card-c-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .card-c-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+        }
+
+        /* =============================================
+           OPTION D: DIAGONAL CUT
+        ============================================= */
+        .card-d-front {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-d-front .slice {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(155deg, var(--navy) 0%, var(--navy) 60%, var(--cream) 60%);
+        }
+        
+        .card-d-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-d-front .logo {
+            width: 90px;
+        }
+        
+        .card-d-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: right;
+        }
+        
+        .card-d-back {
+            background: var(--cream);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-d-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .card-d-back .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+        
+        .card-d-back .center {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        .card-d-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .card-d-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           OPTION E: MAROON ACCENT
+        ============================================= */
+        .card-e-front {
+            background: var(--maroon);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-e-front .logo {
+            width: 100px;
+        }
+        
+        .card-e-front .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .card-e-back {
+            background: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .card-e-back .corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--maroon);
+        }
+        
+        .card-e-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        
+        .card-e-back .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+        
+        .card-e-back .center {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        .card-e-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .card-e-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           OPTION F: POOL FORWARD
+        ============================================= */
+        .card-f-front {
+            background: var(--pool);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-f-front .logo {
+            width: 100px;
+        }
+        
+        .card-f-front .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .card-f-back {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-f-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+        
+        .card-f-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 2px;
+        }
+        
+        .card-f-back .center {
+            font-size: 10px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .card-f-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .card-f-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+        }
+        
+        /* Print specs note */
+        .specs {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 32px;
+            background: #111;
+            border-radius: 8px;
+        }
+        
+        .specs-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .specs-list {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            color: #888;
+            line-height: 1.8;
+        }
+        
+        .specs-list strong {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Business Cards</div>
+    </div>
+
+    <!-- OPTION A -->
+    <div class="section">
+        <div class="section-label">Option A — Classic Navy</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-a-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-a-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTION B -->
+    <div class="section">
+        <div class="section-label">Option B — Bold Split</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-b-front">
+                    <div class="accent"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-b-back">
+                    <div class="accent-bar"></div>
+                    <div class="top">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTION C -->
+    <div class="section">
+        <div class="section-label">Option C — Minimal White</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-c-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-c-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTION D -->
+    <div class="section">
+        <div class="section-label">Option D — Diagonal Cut</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-d-front">
+                    <div class="slice"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-d-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTION E -->
+    <div class="section">
+        <div class="section-label">Option E — Maroon Accent</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-e-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-e-back">
+                    <div class="corner"></div>
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTION F -->
+    <div class="section">
+        <div class="section-label">Option F — Pool Forward</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card card-f-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card card-f-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINT SPECS -->
+    <div class="specs">
+        <div class="specs-title">Print Specifications</div>
+        <div class="specs-list">
+            <strong>Size:</strong> 3.5" × 2" (standard US)<br>
+            <strong>Bleed:</strong> 0.125" all sides<br>
+            <strong>Safe Zone:</strong> 0.125" from trim<br>
+            <strong>Paper:</strong> 16pt C2S or 18pt Cotton<br>
+            <strong>Finish:</strong> Soft-touch matte recommended<br>
+            <strong>Colors:</strong> 4/4 CMYK or Pantone match
+        </div>
+    </div>
+
+</body>
+</html>

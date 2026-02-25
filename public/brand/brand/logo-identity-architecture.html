@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Identity Architecture | America's SBDC Redesign Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* SBDC Logo Fonts */
+        @font-face {
+            font-family: 'AkzidenzGrotesk Super';
+            src: url('../AkzidenzGroteskBE-Super.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Berthold';
+            src: url('../Berthold (1).ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #1e3a5f;
+            --royal: #1D5AA7;
+            --wine: #8A2432;
+            --red-bar: #c41230;
+            --black: #0a0a0f;
+            --ice: #f0f4f8;
+            --pool: #4A90D9;
+            --success: #2ecc71;
+            --warning: #e74c3c;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: white;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3 { font-weight: 800; line-height: 1.1; }
+        em { color: var(--pool); font-style: normal; }
+
+        .meta-text {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 80px;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            color: #444;
+        }
+
+        /* ================================================
+           SLIDE 1: TITLE
+        ================================================ */
+        .slide-title {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            text-align: center;
+            align-items: center;
+        }
+
+        .slide-title h1 {
+            font-size: 72px;
+            margin: 24px 0;
+        }
+
+        .slide-title .subtitle {
+            font-size: 22px;
+            color: #888;
+            max-width: 700px;
+            font-weight: 400;
+        }
+
+        .slide-title .logo-strip {
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .slide-title .logo-strip img {
+            height: 70px;
+        }
+
+        .slide-title .logo-strip .arrow {
+            font-size: 32px;
+            color: var(--pool);
+        }
+
+        /* ================================================
+           SLIDE 2: THE ANATOMY OF COMPLEXITY
+        ================================================ */
+        .slide-anatomy {
+            background: #fff;
+            color: var(--black);
+        }
+
+        .slide-anatomy h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .slide-anatomy h2 em { color: var(--wine); }
+
+        .slide-anatomy .intro {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 60px;
+        }
+
+        .anatomy-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .logo-diagram {
+            position: relative;
+            background: #f5f5f5;
+            padding: 60px 80px;
+            border-radius: 16px;
+            flex: 0 0 auto;
+        }
+
+        .logo-diagram .old-logo-svg {
+            width: 400px;
+            height: auto;
+        }
+
+        /* Annotation callouts */
+        .callout {
+            position: absolute;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .callout-line {
+            width: 2px;
+            background: var(--wine);
+        }
+
+        .callout-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--wine);
+            flex-shrink: 0;
+        }
+
+        .callout-text {
+            background: var(--wine);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .callout-1 { top: 20px; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+        .callout-2 { top: 70px; right: -20px; }
+        .callout-3 { bottom: 100px; left: -20px; flex-direction: row-reverse; }
+        .callout-4 { bottom: 60px; right: -20px; }
+        .callout-5 { bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; align-items: center; }
+
+        .problems-list {
+            flex: 0 0 320px;
+        }
+
+        .problems-list h3 {
+            font-size: 14px;
+            color: var(--wine);
+            margin-bottom: 24px;
+            font-family: var(--mono);
+            letter-spacing: 0.1em;
+        }
+
+        .problem-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .problem-item:last-child { border-bottom: none; }
+
+        .problem-number {
+            width: 28px;
+            height: 28px;
+            background: var(--wine);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .problem-content h4 {
+            font-size: 14px;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .problem-content p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* ================================================
+           SLIDE 3: THE SOLUTION
+        ================================================ */
+        .slide-solution {
+            background: var(--royal);
+            color: white;
+            text-align: center;
+        }
+
+        .slide-solution h2 {
+            font-size: 56px;
+            margin-bottom: 60px;
+        }
+
+        .solution-comparison {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .solution-box {
+            padding: 40px 60px;
+            border-radius: 16px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .solution-box.new {
+            background: white;
+        }
+
+        .solution-box .box-label {
+            margin-bottom: 24px;
+            opacity: 0.7;
+        }
+
+        .solution-box.new .box-label { color: var(--royal); }
+
+        .solution-box .logo-holder {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .solution-box img { height: 80px; width: auto; }
+
+        .solution-box .element-count {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .solution-box.new .element-count { color: var(--royal); }
+
+        .solution-box .element-label {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .solution-box.new .element-label { color: #666; }
+
+        .solution-arrow {
+            font-size: 48px;
+            align-self: center;
+            opacity: 0.5;
+        }
+
+        .benefits-row {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+        }
+
+        .benefit-item {
+            text-align: center;
+        }
+
+        .benefit-item .check {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px;
+        }
+
+        .benefit-item p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ================================================
+           SLIDE 4: CENTER PAIRING SYSTEM
+        ================================================ */
+        .slide-pairing {
+            background: var(--black);
+        }
+
+        .slide-pairing h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .slide-pairing .intro {
+            color: #888;
+            font-size: 18px;
+            margin-bottom: 60px;
+            max-width: 700px;
+        }
+
+        .pairing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .pairing-option {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .pairing-option .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pairing-option h3 {
+            font-size: 20px;
+            color: white;
+        }
+
+        .pairing-option .option-tag {
+            background: var(--pool);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-family: var(--mono);
+            letter-spacing: 0.1em;
+        }
+
+        .pairing-demo {
+            background: var(--navy);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .pairing-demo.light {
+            background: white;
+        }
+
+        .pairing-layout {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .pairing-layout .separator {
+            width: 1px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .pairing-layout.light .separator {
+            background: rgba(0,0,0,0.15);
+        }
+
+        .pairing-layout .network-logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .pairing-layout .host-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .pairing-layout .host-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .pairing-layout .host-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .pairing-layout.light .host-text {
+            color: var(--navy);
+        }
+
+        .pairing-layout .host-subtext {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            font-family: var(--mono);
+            letter-spacing: 0.05em;
+        }
+
+        .pairing-layout.light .host-subtext {
+            color: #888;
+        }
+
+        .pairing-note {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* ================================================
+           SLIDE 5: STATE NETWORK FLEXIBILITY
+        ================================================ */
+        .slide-networks {
+            background: #fff;
+            color: var(--black);
+        }
+
+        .slide-networks h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .slide-networks h2 em { color: var(--royal); }
+
+        .slide-networks .intro {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 60px;
+            max-width: 800px;
+        }
+
+        .networks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .network-card {
+            background: var(--navy);
+            padding: 40px 32px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .network-card .state-name {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--pool);
+            margin-bottom: 8px;
+            font-family: var(--mono);
+        }
+
+        .network-card .network-logo-mock {
+            margin-bottom: 24px;
+        }
+
+        .network-card .arc-star {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .network-card .arc-star svg {
+            width: 120px;
+            height: auto;
+        }
+
+        .network-card .sbdc-text {
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .network-card .region-tag {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            font-family: var(--mono);
+            letter-spacing: 0.05em;
+            display: inline-block;
+        }
+
+        .flexibility-callout {
+            margin-top: 60px;
+            background: var(--royal);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .flexibility-callout h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .flexibility-callout p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ================================================
+           SLIDE 6: FULL SYSTEM EXAMPLES
+        ================================================ */
+        .slide-system {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+        }
+
+        .slide-system h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .slide-system .intro {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            margin-bottom: 60px;
+        }
+
+        .system-examples {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .system-example {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .system-example .example-header {
+            background: rgba(255,255,255,0.05);
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .system-example .example-header span {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+
+        .system-example .example-content {
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .system-example .example-content.dark {
+            background: var(--navy);
+        }
+
+        .system-example .example-content.light {
+            background: white;
+        }
+
+        .system-example .sep-bar {
+            width: 1px;
+            height: 45px;
+            background: rgba(255,255,255,0.25);
+        }
+
+        .system-example .example-content.light .sep-bar {
+            background: rgba(0,0,0,0.15);
+        }
+
+        .system-example .network-mark svg {
+            height: 45px;
+            width: auto;
+        }
+
+        .system-example .center-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .system-example .center-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .system-example .example-content.light .center-name {
+            color: var(--navy);
+        }
+
+        .system-example .center-type {
+            font-size: 10px;
+            font-family: var(--mono);
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .system-example .example-content.light .center-type {
+            color: #888;
+        }
+
+        /* SVG Logo Component */
+        .sbdc-logo-svg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sbdc-logo-svg .region-text {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .sbdc-logo-svg.blue .region-text {
+            color: var(--navy);
+        }
+
+        .sbdc-logo-svg .sbdc-letters {
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .sbdc-logo-svg.blue .sbdc-letters {
+            color: var(--navy);
+        }
+
+        /* ================================================
+           SLIDE 7: CONCLUSION
+        ================================================ */
+        .slide-conclusion {
+            background: var(--navy);
+            text-align: center;
+            align-items: center;
+        }
+
+        .slide-conclusion .logo-large {
+            margin-bottom: 48px;
+        }
+
+        .slide-conclusion .logo-large img {
+            height: 100px;
+        }
+
+        .slide-conclusion h2 {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        .slide-conclusion .summary {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 60px;
+        }
+
+        .conclusion-grid {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .conclusion-item {
+            background: rgba(255,255,255,0.1);
+            padding: 32px 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .conclusion-item .icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .conclusion-item h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .conclusion-item p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Navigation */
+        .scroll-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: #444;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .slide { padding: 40px; }
+            .anatomy-container { flex-direction: column; align-items: center; }
+            .problems-list { flex: 0 0 auto; width: 100%; max-width: 500px; }
+            .pairing-grid { grid-template-columns: 1fr; }
+            .networks-grid { grid-template-columns: repeat(2, 1fr); }
+            .system-examples { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .slide-title h1 { font-size: 42px; }
+            .slide-anatomy h2 { font-size: 32px; }
+            .logo-diagram { padding: 30px; }
+            .logo-diagram .old-logo-svg { width: 280px; }
+            .networks-grid { grid-template-columns: 1fr; }
+            .solution-comparison { flex-direction: column; }
+            .conclusion-grid { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================================================
+         SLIDE 1: TITLE
+    ================================================ -->
+    <section class="slide slide-title">
+        <div class="slide-number meta-text">01 / 07</div>
+        <div class="meta-text" style="color: var(--pool); margin-bottom: 20px;">America's SBDC Brand System</div>
+        <h1>Logo Identity<br><em>Architecture</em></h1>
+        <p class="subtitle">A case for simplification: How modernizing our mark creates flexibility for every state network and service center.</p>
+        <div class="logo-strip">
+            <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-white-180h.png" alt="Old Logo" style="opacity: 0.5;">
+            <span class="arrow">→</span>
+            <img src="../assets/sbdc-white-2026.png" alt="New Logo">
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 2: ANATOMY OF COMPLEXITY
+    ================================================ -->
+    <section class="slide slide-anatomy">
+        <div class="slide-number meta-text" style="color: #ccc;">02 / 07</div>
+        <h2>The Anatomy of <em>Complexity</em></h2>
+        <p class="intro">The current America's SBDC logo system has 5+ competing elements that create cognitive overload.</p>
+
+        <div class="anatomy-container">
+            <div class="logo-diagram">
+                <!-- Old Logo Recreation with Annotations - Using Actual Fonts -->
+                <div class="old-logo-recreation" style="width: 400px; display: flex; flex-direction: column; align-items: center; position: relative;">
+                    <!-- Swoosh and Star -->
+                    <img src="../rising-star-SBDC@2x.png" alt="SBDC swoosh" style="width: 340px; height: auto; margin-bottom: -15px; position: relative; z-index: 1;">
+
+                    <!-- AMERICA'S -->
+                    <div style="font-family: 'Berthold', Georgia, serif; font-size: 28px; font-style: italic; color: #1e3a5f; letter-spacing: 0.12em; margin-bottom: -8px; position: relative; z-index: 2;">AMERICA'S</div>
+
+                    <!-- SBDC -->
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 90px; font-weight: 900; color: #1e3a5f; letter-spacing: -0.02em; line-height: 0.85; position: relative; z-index: 2;">SBDC</div>
+
+                    <!-- Red bar -->
+                    <div style="width: 340px; height: 6px; background: #c41230; margin-top: -5px;"></div>
+
+                    <!-- CALIFORNIA -->
+                    <div style="font-family: 'Berthold', Georgia, serif; font-size: 18px; color: #1e3a5f; letter-spacing: 0.3em; margin-top: 8px;">CALIFORNIA</div>
+
+                    <!-- Northern California Network -->
+                    <div style="font-family: 'Berthold', Georgia, serif; font-size: 20px; font-weight: bold; color: #1e3a5f; margin-top: 4px;">Northern California Network</div>
+                </div>
+
+                <!-- Annotation Callouts -->
+                <div class="callout callout-1">
+                    <div class="callout-text">1. National Brand Layer</div>
+                    <div class="callout-line" style="height: 20px;"></div>
+                </div>
+
+                <div class="callout callout-2" style="top: 50px; right: -160px;">
+                    <div class="callout-line" style="width: 40px; height: 2px;"></div>
+                    <div class="callout-text">2. Arc + Star Element</div>
+                </div>
+
+                <div class="callout callout-3" style="bottom: 85px; left: -150px;">
+                    <div class="callout-text">3. Core Acronym</div>
+                    <div class="callout-line" style="width: 40px; height: 2px;"></div>
+                </div>
+
+                <div class="callout callout-4" style="bottom: 65px; right: -130px;">
+                    <div class="callout-line" style="width: 40px; height: 2px;"></div>
+                    <div class="callout-text">4. Red Divider Bar</div>
+                </div>
+
+                <div class="callout callout-5" style="bottom: -10px;">
+                    <div class="callout-line" style="height: 15px;"></div>
+                    <div class="callout-text">5. State + Region Layers</div>
+                </div>
+            </div>
+
+            <div class="problems-list">
+                <h3>COMPLEXITY ISSUES</h3>
+
+                <div class="problem-item">
+                    <div class="problem-number">1</div>
+                    <div class="problem-content">
+                        <h4>4-5 Text Hierarchy Levels</h4>
+                        <p>America's → SBDC → State → Region → Center. The eye doesn't know where to land first.</p>
+                    </div>
+                </div>
+
+                <div class="problem-item">
+                    <div class="problem-number">2</div>
+                    <div class="problem-content">
+                        <h4>3-Color Minimum Requirement</h4>
+                        <p>Navy, red bar, and often a third for regional distinction. Fails in single-color applications.</p>
+                    </div>
+                </div>
+
+                <div class="problem-item">
+                    <div class="problem-number">3</div>
+                    <div class="problem-content">
+                        <h4>Red Bar Creates Visual Noise</h4>
+                        <p>The divider bar adds visual weight without adding meaning. It fragments rather than unifies.</p>
+                    </div>
+                </div>
+
+                <div class="problem-item">
+                    <div class="problem-number">4</div>
+                    <div class="problem-content">
+                        <h4>Doesn't Scale Down</h4>
+                        <p>At favicon/social avatar sizes (32×32px), the text becomes illegible mud.</p>
+                    </div>
+                </div>
+
+                <div class="problem-item">
+                    <div class="problem-number">5</div>
+                    <div class="problem-content">
+                        <h4>Centers Add MORE Complexity</h4>
+                        <p>Each center then adds their host institution logo, creating 6-7 element lockups.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 3: THE SOLUTION
+    ================================================ -->
+    <section class="slide slide-solution">
+        <div class="slide-number meta-text">03 / 07</div>
+        <h2>Distill to <em>Essence</em></h2>
+
+        <div class="solution-comparison">
+            <div class="solution-box old">
+                <div class="box-label meta-text">Current System</div>
+                <div class="logo-holder" style="flex-direction: column; height: auto; padding: 10px 0;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 160px; height: auto; filter: brightness(0) invert(1); margin-bottom: -8px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 12px; font-style: italic; color: white; letter-spacing: 0.1em; margin-bottom: -4px;">AMERICA'S</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 36px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                    <div style="width: 140px; height: 3px; background: #c41230; margin-top: -2px;"></div>
+                    <div style="font-family: 'Berthold', serif; font-size: 7px; color: white; letter-spacing: 0.25em; margin-top: 4px;">CALIFORNIA</div>
+                    <div style="font-family: 'Berthold', serif; font-size: 9px; color: white; margin-top: 2px;">Northern CA Network</div>
+                </div>
+                <div class="element-count">5+</div>
+                <div class="element-label meta-text">Elements</div>
+            </div>
+
+            <div class="solution-arrow">→</div>
+
+            <div class="solution-box new">
+                <div class="box-label meta-text">New System</div>
+                <div class="logo-holder">
+                    <img src="../assets/sbdc-blue-2026.png" alt="New Logo">
+                </div>
+                <div class="element-count">2</div>
+                <div class="element-label meta-text">Elements</div>
+            </div>
+        </div>
+
+        <div class="benefits-row">
+            <div class="benefit-item">
+                <div class="check">✓</div>
+                <p>Single color ready</p>
+            </div>
+            <div class="benefit-item">
+                <div class="check">✓</div>
+                <p>Scales to any size</p>
+            </div>
+            <div class="benefit-item">
+                <div class="check">✓</div>
+                <p>Instant recognition</p>
+            </div>
+            <div class="benefit-item">
+                <div class="check">✓</div>
+                <p>Flexible pairing</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 4: CENTER PAIRING SYSTEM
+    ================================================ -->
+    <section class="slide slide-pairing">
+        <div class="slide-number meta-text">04 / 07</div>
+        <h2>The <em>Pairing</em> System</h2>
+        <p class="intro">A simplified mark enables two elegant ways to denote center locations—without adding visual chaos back into the logo.</p>
+
+        <div class="pairing-grid">
+            <!-- Option A: Text Callout -->
+            <div class="pairing-option">
+                <div class="option-header">
+                    <h3>Option A: Text Callout</h3>
+                    <span class="option-tag">Recommended</span>
+                </div>
+                <div class="pairing-demo">
+                    <div class="pairing-layout">
+                        <div class="network-logo">
+                            <img src="../assets/sbdc-white-2026.png" alt="SBDC">
+                        </div>
+                        <div class="separator"></div>
+                        <div class="host-logo">
+                            <div class="host-text">Marin SBDC</div>
+                            <div class="host-subtext">at College of Marin</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="pairing-note">A thin 1px vertical bar separates the network mark from the center name. The center's host institution appears as a secondary line. Clean, scalable, consistent.</p>
+            </div>
+
+            <!-- Option B: Host Logo -->
+            <div class="pairing-option">
+                <div class="option-header">
+                    <h3>Option B: Host Logo Pairing</h3>
+                    <span class="option-tag">For Co-Branding</span>
+                </div>
+                <div class="pairing-demo light">
+                    <div class="pairing-layout light">
+                        <div class="network-logo">
+                            <img src="../assets/sbdc-blue-2026.png" alt="SBDC">
+                        </div>
+                        <div class="separator"></div>
+                        <div class="host-logo">
+                            <!-- Placeholder for host institution logo -->
+                            <svg viewBox="0 0 120 40" style="height: 35px;">
+                                <rect x="0" y="5" width="120" height="30" rx="4" fill="#1e3a5f" opacity="0.1"/>
+                                <text x="60" y="26" text-anchor="middle" font-family="Arial" font-size="10" fill="#1e3a5f">Host Institution</text>
+                            </svg>
+                            <div class="host-subtext" style="color: #888;">University / College Logo</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="pairing-note">When host institution co-branding is required, their logo sits to the right of the separator. Both marks maintain equal visual weight.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 5: STATE NETWORK FLEXIBILITY
+    ================================================ -->
+    <section class="slide slide-networks">
+        <div class="slide-number meta-text" style="color: #ccc;">05 / 07</div>
+        <h2>Works Across <em>Every State Network</em></h2>
+        <p class="intro">The simplified mark adapts instantly to any state or regional network. Same iconic swoosh + star. Same bold SBDC. Just swap the region identifier above.</p>
+
+        <div class="networks-grid">
+            <div class="network-card">
+                <div class="state-name">CALIFORNIA</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 14px; color: white; letter-spacing: 0.15em; margin-bottom: -6px;">NORCAL</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Northern California</div>
+            </div>
+
+            <div class="network-card">
+                <div class="state-name">CALIFORNIA</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 14px; color: white; letter-spacing: 0.2em; margin-bottom: -6px;">OCIE</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Orange County / Inland Empire</div>
+            </div>
+
+            <div class="network-card">
+                <div class="state-name">CALIFORNIA</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 12px; color: white; letter-spacing: 0.1em; margin-bottom: -6px;">LOS ANGELES</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Los Angeles Region</div>
+            </div>
+
+            <div class="network-card" style="background: #2d5a27;">
+                <div class="state-name">TEXAS</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 14px; color: white; letter-spacing: 0.2em; margin-bottom: -6px;">TEXAS</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Statewide Network</div>
+            </div>
+
+            <div class="network-card" style="background: #8B4513;">
+                <div class="state-name">NEW YORK</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 13px; color: white; letter-spacing: 0.15em; margin-bottom: -6px;">NEW YORK</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Empire State Network</div>
+            </div>
+
+            <div class="network-card" style="background: #4a1e5f;">
+                <div class="state-name">FLORIDA</div>
+                <div class="network-logo-mock" style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 130px; height: auto; filter: brightness(0) invert(1); margin-bottom: -12px;">
+                    <div style="font-family: 'Berthold', serif; font-size: 14px; color: white; letter-spacing: 0.15em; margin-bottom: -6px;">FLORIDA</div>
+                    <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 42px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                </div>
+                <div class="region-tag">Sunshine State Network</div>
+            </div>
+        </div>
+
+        <div class="flexibility-callout">
+            <h3>One System. Infinite Applications.</h3>
+            <p>The swoosh + star is the constant. The region name above is the variable. This creates instant brand recognition while allowing each network to own their regional identity.</p>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 6: FULL SYSTEM EXAMPLES
+    ================================================ -->
+    <section class="slide slide-system">
+        <div class="slide-number meta-text">06 / 07</div>
+        <h2>Real-World <em>Applications</em></h2>
+        <p class="intro">See how the new pairing system works across different California SBDC centers.</p>
+
+        <div class="system-examples">
+            <div class="system-example">
+                <div class="example-header">
+                    <span>NorCal Network · Center Lockup</span>
+                </div>
+                <div class="example-content dark">
+                    <div class="network-mark">
+                        <img src="../assets/sbdc-white-2026.png" style="height: 45px;">
+                    </div>
+                    <div class="sep-bar"></div>
+                    <div class="center-info">
+                        <div class="center-name">Marin SBDC</div>
+                        <div class="center-type">at College of Marin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-example">
+                <div class="example-header">
+                    <span>NorCal Network · Center Lockup</span>
+                </div>
+                <div class="example-content light">
+                    <div class="network-mark">
+                        <img src="../assets/sbdc-blue-2026.png" style="height: 45px;">
+                    </div>
+                    <div class="sep-bar"></div>
+                    <div class="center-info">
+                        <div class="center-name">Silicon Valley SBDC</div>
+                        <div class="center-type">at Foothill College</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-example">
+                <div class="example-header">
+                    <span>OCIE Network · Center Lockup</span>
+                </div>
+                <div class="example-content dark">
+                    <div class="network-mark" style="display: flex; flex-direction: column; align-items: center;">
+                        <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 90px; height: auto; filter: brightness(0) invert(1); margin-bottom: -8px;">
+                        <div style="font-family: 'Berthold', serif; font-size: 10px; color: white; letter-spacing: 0.2em; margin-bottom: -4px;">OCIE</div>
+                        <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 28px; font-weight: 900; color: white; line-height: 0.9;">SBDC</div>
+                    </div>
+                    <div class="sep-bar"></div>
+                    <div class="center-info">
+                        <div class="center-name">Riverside SBDC</div>
+                        <div class="center-type">at UC Riverside</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-example">
+                <div class="example-header">
+                    <span>Los Angeles Network · Center Lockup</span>
+                </div>
+                <div class="example-content light">
+                    <div class="network-mark" style="display: flex; flex-direction: column; align-items: center;">
+                        <img src="../rising-star-SBDC@2x.png" alt="swoosh" style="width: 100px; height: auto; margin-bottom: -8px;">
+                        <div style="font-family: 'Berthold', serif; font-size: 9px; color: #1e3a5f; letter-spacing: 0.1em; margin-bottom: -4px;">LOS ANGELES</div>
+                        <div style="font-family: 'AkzidenzGrotesk Super', 'Arial Black', sans-serif; font-size: 28px; font-weight: 900; color: #1e3a5f; line-height: 0.9;">SBDC</div>
+                    </div>
+                    <div class="sep-bar"></div>
+                    <div class="center-info">
+                        <div class="center-name">Long Beach SBDC</div>
+                        <div class="center-type">at CSULB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SLIDE 7: CONCLUSION
+    ================================================ -->
+    <section class="slide slide-conclusion">
+        <div class="slide-number meta-text" style="color: rgba(255,255,255,0.4);">07 / 07</div>
+
+        <div class="logo-large">
+            <img src="../assets/sbdc-white-2026.png" alt="SBDC">
+        </div>
+
+        <h2>Complexity <em>solved.</em></h2>
+        <p class="summary">The new logo identity architecture eliminates 5+ competing elements, creates a flexible pairing system for centers, and scales consistently across all 63 state networks in America's SBDC.</p>
+
+        <div class="conclusion-grid">
+            <div class="conclusion-item">
+                <div class="icon">✓</div>
+                <h4>2 Elements</h4>
+                <p>Down from 5+ competing layers</p>
+            </div>
+            <div class="conclusion-item">
+                <div class="icon">|</div>
+                <h4>Clean Separator</h4>
+                <p>1px bar for center pairing</p>
+            </div>
+            <div class="conclusion-item">
+                <div class="icon">∞</div>
+                <h4>Infinite Flex</h4>
+                <p>Works for every state network</p>
+            </div>
+            <div class="conclusion-item">
+                <div class="icon">1</div>
+                <h4>Single Color</h4>
+                <p>Finally works everywhere</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-hint meta-text">Scroll ↓</div>
+
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner & Lender Outreach — Content Wall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --deep-navy: #152a45;
+            --navy: #1e3a5f;
+            --dusty-blue: #5d7a9c;
+            --mist: #8fa3be;
+            --cream: #f0ede6;
+            --ivory: #f5f3ed;
+            --brick: #b54a4a;
+            --white: #ffffff;
+
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+        
+        body {
+            font-family: var(--sans);
+            background: #0a0a0a;
+            padding: 48px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page-header {
+            margin-bottom: 48px;
+        }
+        
+        .page-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--brick);
+            margin-bottom: 12px;
+        }
+        
+        .page-title {
+            font-family: var(--serif);
+            font-size: 48px;
+            color: var(--cream);
+            font-style: italic;
+        }
+        
+        .page-subtitle {
+            font-family: var(--sans);
+            font-size: 16px;
+            color: var(--dusty-blue);
+            margin-top: 12px;
+            max-width: 600px;
+        }
+        
+        /* =============================================
+           CONTENT WALL GRID
+        ============================================= */
+        .content-wall {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        /* =============================================
+           AD CARD BASE
+        ============================================= */
+        .ad {
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .ad-square {
+            aspect-ratio: 1;
+        }
+        
+        /* Backgrounds */
+        .bg-navy { background: var(--navy); }
+        .bg-deep-navy { background: var(--deep-navy); }
+        .bg-cream { background: var(--cream); }
+        .bg-brick { background: var(--brick); }
+        .bg-dusty { background: var(--dusty-blue); }
+        .bg-ivory { background: var(--ivory); }
+        
+        /* Colors for text */
+        .text-white { color: var(--white); }
+        .text-cream { color: var(--cream); }
+        .text-navy { color: var(--deep-navy); }
+        .text-brick { color: var(--brick); }
+        
+        /* =============================================
+           AD LAYOUTS
+        ============================================= */
+        
+        /* Layout: Big Number */
+        .ad-bignumber {
+            padding: 32px;
+            justify-content: space-between;
+        }
+        
+        .ad-bignumber .ad-eyebrow {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+        
+        .ad-bignumber .ad-number {
+            font-family: var(--serif);
+            font-size: 72px;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+        
+        .ad-bignumber .ad-label {
+            font-family: var(--sans);
+            font-size: 13px;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+        
+        .ad-bignumber .ad-cta {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Layout: Quote */
+        .ad-quote {
+            padding: 32px;
+            justify-content: center;
+        }
+        
+        .ad-quote .ad-text {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-style: italic;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        
+        .ad-quote .ad-attribution {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+        }
+        
+        /* Layout: Headline */
+        .ad-headline {
+            padding: 32px;
+            justify-content: space-between;
+        }
+        
+        .ad-headline .ad-brand {
+            font-family: var(--sans);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            opacity: 0.8;
+        }
+        
+        .ad-headline .ad-text {
+            font-family: var(--serif);
+            font-size: 32px;
+            line-height: 1.15;
+        }
+        
+        .ad-headline .ad-subtext {
+            font-family: var(--sans);
+            font-size: 13px;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+        
+        .ad-headline .ad-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* Layout: Statement */
+        .ad-statement {
+            padding: 40px;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .ad-statement .ad-text {
+            font-family: var(--serif);
+            font-size: 28px;
+            font-style: italic;
+            line-height: 1.2;
+        }
+        
+        /* Layout: Split */
+        .ad-split {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+        
+        .ad-split-top {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .ad-split-bottom {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .ad-split .ad-number {
+            font-family: var(--serif);
+            font-size: 56px;
+            line-height: 0.9;
+        }
+        
+        .ad-split .ad-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        
+        .ad-split .ad-text {
+            font-family: var(--sans);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .ad-split .ad-cta {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        /* Layout: Minimal */
+        .ad-minimal {
+            padding: 32px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .ad-minimal .ad-text {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            line-height: 1.6;
+        }
+        
+        /* Layout: Badge */
+        .ad-badge {
+            padding: 32px;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .ad-badge .badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 2px solid currentColor;
+            padding: 8px 12px;
+            opacity: 0.8;
+        }
+        
+        .ad-badge .ad-text {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-style: italic;
+            line-height: 1.2;
+        }
+        
+        .ad-badge .ad-cta {
+            font-family: var(--sans);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Layout: List */
+        .ad-list {
+            padding: 28px;
+            justify-content: space-between;
+        }
+        
+        .ad-list .ad-brand {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        .ad-list .ad-title {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-style: italic;
+            margin: 12px 0;
+        }
+        
+        .ad-list ul {
+            list-style: none;
+            font-family: var(--sans);
+            font-size: 12px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+        
+        .ad-list ul li::before {
+            content: "→ ";
+            opacity: 0.5;
+        }
+        
+        .ad-list .ad-cta {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+        
+        /* =============================================
+           ROW LABELS
+        ============================================= */
+        .row-label {
+            grid-column: 1 / -1;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+            padding: 32px 0 16px;
+            border-top: 1px solid #222;
+            margin-top: 16px;
+        }
+        
+        .row-label:first-of-type {
+            margin-top: 0;
+            border-top: none;
+            padding-top: 0;
+        }
+        
+        /* =============================================
+           BILLBOARD
+        ============================================= */
+        .ad-billboard {
+            grid-column: span 4;
+            aspect-ratio: 4 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 48px 64px;
+            border-radius: 12px;
+        }
+        
+        .billboard-left {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .billboard-eyebrow {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+        
+        .billboard-number {
+            font-family: var(--serif);
+            font-size: 140px;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
+        }
+        
+        .billboard-right {
+            text-align: right;
+            max-width: 350px;
+        }
+        
+        .billboard-context {
+            font-family: var(--sans);
+            font-size: 24px;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        
+        .billboard-brand {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        
+        .billboard-tagline {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        /* Billboard with content */
+        .ad-billboard-content {
+            position: relative;
+            overflow: hidden;
+            justify-content: center;
+        }
+        
+        .billboard-bg {
+            position: absolute;
+            top: 50%;
+            right: -5%;
+            transform: translateY(-50%);
+            font-family: var(--serif);
+            font-size: 300px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.04);
+            line-height: 0.8;
+            pointer-events: none;
+        }
+        
+        .billboard-content {
+            position: relative;
+            z-index: 1;
+            max-width: 750px;
+        }
+        
+        .billboard-brand-top {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 24px;
+        }
+        
+        .billboard-headline {
+            font-family: var(--serif);
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        
+        .billboard-headline em {
+            font-style: italic;
+            color: var(--brick);
+        }
+        
+        .billboard-stats {
+            font-family: var(--sans);
+            font-size: 18px;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+        
+        /* Grain texture overlay */
+        .has-grain {
+            position: relative;
+        }
+        
+        .has-grain::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <div class="page-label">B2B Outreach</div>
+        <div class="page-title">Partner & Lender Content</div>
+        <div class="page-subtitle">Ads, one-pagers, and messaging for lenders, CDFIs, banks, economic development orgs, and referral partners.</div>
+    </div>
+
+    <div class="content-wall">
+        
+        <!-- ROW: BILLBOARDS -->
+        <div class="row-label">Billboards</div>
+        
+        <div class="ad ad-billboard bg-deep-navy text-cream has-grain">
+            <div class="billboard-left">
+                <div class="billboard-eyebrow">We Send You</div>
+                <div class="billboard-number">Loan-Ready</div>
+            </div>
+            <div class="billboard-right">
+                <div class="billboard-context">clients with clean financials, solid plans, and realistic asks.</div>
+                <div class="billboard-brand">norcalsbdc.org/partners</div>
+            </div>
+        </div>
+        
+        <div class="ad ad-billboard ad-billboard-content bg-navy text-cream has-grain">
+            <div class="billboard-bg">$58</div>
+            <div class="billboard-content">
+                <div class="billboard-brand-top">For Lenders & Partners</div>
+                <div class="billboard-headline">We do the prep work. <em>You close the deal.</em></div>
+                <div class="billboard-stats">Free loan packaging. Financial projections. Business plan review. All before they reach your desk.</div>
+            </div>
+        </div>
+        
+        <!-- ROW: VALUE TO LENDERS -->
+        <div class="row-label">Value to Lenders</div>
+        
+        <div class="ad ad-square ad-bignumber bg-navy text-cream has-grain">
+            <div class="ad-eyebrow">ROI</div>
+            <div>
+                <div class="ad-number">$58</div>
+                <div class="ad-label">return for every $1<br>invested in SBDC</div>
+            </div>
+            <div class="ad-cta">SBA verified →</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-cream text-navy">
+            <div class="ad-brand">FOR LENDERS</div>
+            <div>
+                <div class="ad-text">We don't compete with you.</div>
+                <div class="ad-subtext">We make your pipeline stronger.</div>
+            </div>
+            <div class="ad-cta">Partner with us →</div>
+        </div>
+        
+        <div class="ad ad-square ad-quote bg-brick text-white has-grain">
+            <div class="ad-text">"SBDC referrals close faster. The prep work is already done."</div>
+            <div class="ad-attribution">— Community Bank Lender</div>
+        </div>
+        
+        <div class="ad ad-square ad-bignumber bg-deep-navy text-cream">
+            <div class="ad-eyebrow">Last Year</div>
+            <div>
+                <div class="ad-number">$547M</div>
+                <div class="ad-label">Capital accessed<br>by our clients</div>
+            </div>
+            <div class="ad-cta">Be part of it →</div>
+        </div>
+        
+        <!-- ROW: WHAT WE DO FOR THEM -->
+        <div class="row-label">What We Do (For Lenders)</div>
+        
+        <div class="ad ad-square ad-list bg-ivory text-navy">
+            <div class="ad-brand">Before They Reach You</div>
+            <div class="ad-title">We prepare them.</div>
+            <ul>
+                <li>Clean financial statements</li>
+                <li>Realistic loan amounts</li>
+                <li>Complete documentation</li>
+                <li>Solid business plans</li>
+            </ul>
+            <div class="ad-cta">norcalsbdc.org/partners</div>
+        </div>
+        
+        <div class="ad ad-square ad-statement bg-dusty text-white has-grain">
+            <div class="ad-text">Less back-and-forth.<br>Faster closes.<br>Better clients.</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-navy text-cream">
+            <div class="ad-brand">FOR LENDERS</div>
+            <div>
+                <div class="ad-text">Your underwriters will thank you.</div>
+                <div class="ad-subtext">Complete packages. Realistic asks. Prepared borrowers.</div>
+            </div>
+            <div class="ad-cta">Learn more →</div>
+        </div>
+        
+        <div class="ad ad-square ad-split">
+            <div class="ad-split-top bg-brick text-white">
+                <div>
+                    <div class="ad-number">Free</div>
+                    <div class="ad-label">What we charge clients</div>
+                </div>
+            </div>
+            <div class="ad-split-bottom bg-deep-navy text-cream">
+                <div class="ad-text">They get expert prep. You get loan-ready referrals. Everyone wins.</div>
+                <div class="ad-cta">Partner now →</div>
+            </div>
+        </div>
+        
+        <!-- ROW: CDFI / MISSION LENDERS -->
+        <div class="row-label">CDFIs & Mission Lenders</div>
+        
+        <div class="ad ad-square ad-headline bg-deep-navy text-cream has-grain">
+            <div class="ad-brand">FOR CDFIs</div>
+            <div>
+                <div class="ad-text">Same mission. Different tools.</div>
+                <div class="ad-subtext">You lend. We advise. Together we build.</div>
+            </div>
+            <div class="ad-cta">Let's partner →</div>
+        </div>
+        
+        <div class="ad ad-square ad-bignumber bg-cream text-navy">
+            <div class="ad-eyebrow">Network</div>
+            <div>
+                <div class="ad-number">18</div>
+                <div class="ad-label">Centers across<br>Northern California</div>
+            </div>
+            <div class="ad-cta">Find your local center →</div>
+        </div>
+        
+        <div class="ad ad-square ad-quote bg-dusty text-white">
+            <div class="ad-text">"They're an extension of our team. We couldn't serve this many small businesses without them."</div>
+            <div class="ad-attribution">— CDFI Partner</div>
+        </div>
+        
+        <div class="ad ad-square ad-statement bg-brick text-white has-grain">
+            <div class="ad-text">We reach the businesses you want to fund.</div>
+        </div>
+        
+        <!-- ROW: ECONOMIC DEVELOPMENT -->
+        <div class="row-label">Economic Development Partners</div>
+        
+        <div class="ad ad-square ad-bignumber bg-navy text-cream has-grain">
+            <div class="ad-eyebrow">Coverage</div>
+            <div>
+                <div class="ad-number">36</div>
+                <div class="ad-label">Counties across<br>Northern California</div>
+            </div>
+            <div class="ad-cta">See our network →</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-ivory text-navy">
+            <div class="ad-brand">FOR CITIES & COUNTIES</div>
+            <div>
+                <div class="ad-text">Your constituents. Our advisors.</div>
+                <div class="ad-subtext">Free small business support for your community.</div>
+            </div>
+            <div class="ad-cta">Partner with us →</div>
+        </div>
+        
+        <div class="ad ad-square ad-list bg-deep-navy text-cream">
+            <div class="ad-brand">We Provide</div>
+            <div class="ad-title">At no cost to you.</div>
+            <ul>
+                <li>One-on-one advising</li>
+                <li>Workshops & training</li>
+                <li>Loan packaging</li>
+                <li>Disaster recovery support</li>
+            </ul>
+            <div class="ad-cta">norcalsbdc.org</div>
+        </div>
+        
+        <div class="ad ad-square ad-bignumber bg-brick text-white">
+            <div class="ad-eyebrow">Businesses</div>
+            <div>
+                <div class="ad-number">12.4K</div>
+                <div class="ad-label">Advised last year<br>across the network</div>
+            </div>
+            <div class="ad-cta">Join us →</div>
+        </div>
+        
+        <!-- ROW: REFERRAL PARTNERS -->
+        <div class="row-label">Referral Partners (CPAs, Attorneys, Chambers)</div>
+        
+        <div class="ad ad-square ad-headline bg-cream text-navy">
+            <div class="ad-brand">FOR CPAS & ATTORNEYS</div>
+            <div>
+                <div class="ad-text">Send us the ones you can't bill.</div>
+                <div class="ad-subtext">We'll get them ready for you.</div>
+            </div>
+            <div class="ad-cta">Refer a client →</div>
+        </div>
+        
+        <div class="ad ad-square ad-statement bg-navy text-cream has-grain">
+            <div class="ad-text">Free for them.<br>Free for you.<br>Funded by SBA.</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-dusty text-white">
+            <div class="ad-brand">FOR CHAMBERS</div>
+            <div>
+                <div class="ad-text">Add value to your membership.</div>
+                <div class="ad-subtext">Free expert advising for your members.</div>
+            </div>
+            <div class="ad-cta">Partner with SBDC →</div>
+        </div>
+        
+        <div class="ad ad-square ad-badge bg-deep-navy text-cream has-grain">
+            <div class="badge">20 Years</div>
+            <div class="ad-text">Trusted by partners across Northern California.</div>
+            <div class="ad-cta">norcalsbdc.org</div>
+        </div>
+        
+        <!-- ROW: THE ASK -->
+        <div class="row-label">The Ask</div>
+        
+        <div class="ad ad-square ad-headline bg-brick text-white has-grain">
+            <div class="ad-brand">NORCAL SBDC</div>
+            <div>
+                <div class="ad-text">Refer your clients.</div>
+                <div class="ad-subtext">We'll send them back ready.</div>
+            </div>
+            <div class="ad-cta">Start referring →</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-cream text-navy">
+            <div class="ad-brand">NORCAL SBDC</div>
+            <div>
+                <div class="ad-text">Co-host a workshop.</div>
+                <div class="ad-subtext">Your audience. Our expertise. Shared impact.</div>
+            </div>
+            <div class="ad-cta">Let's plan one →</div>
+        </div>
+        
+        <div class="ad ad-square ad-headline bg-navy text-cream">
+            <div class="ad-brand">NORCAL SBDC</div>
+            <div>
+                <div class="ad-text">Join our lender network.</div>
+                <div class="ad-subtext">Get referrals. Close more loans.</div>
+            </div>
+            <div class="ad-cta">Apply now →</div>
+        </div>
+        
+        <div class="ad ad-square ad-minimal bg-ivory text-navy">
+            <div class="ad-text">Questions?<br><br>partners@norcalsbdc.org</div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

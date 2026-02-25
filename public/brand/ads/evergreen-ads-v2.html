@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen Ads v2</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --navy: #1e3a5f;
+      --slate: #4a6580;
+      --mist: #c8d5e3;
+      --cream: #f8f7f4;
+      --forest: #2d4a4a;
+      --sage: #4a6a5d;
+      --pale-sage: #d4ddd6;
+      --red: #c23a3a;
+      
+      --mono: 'Roboto Mono', monospace;
+      --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: #0a0a0f;
+      color: white;
+      padding: 48px;
+    }
+    
+    h1 {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: #666;
+      margin-bottom: 48px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 360px);
+      gap: 32px;
+      margin-bottom: 64px;
+    }
+    
+    .label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    
+    /* ============================================
+       AD BASE
+    ============================================ */
+    
+    .ad {
+      width: 360px;
+      height: 360px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+    }
+    
+    .ad .wordmark {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+    
+    .ad .stat {
+      font-family: var(--sans);
+      font-size: 80px;
+      font-weight: 300;
+      line-height: 0.85;
+      letter-spacing: -3px;
+      margin-bottom: 8px;
+    }
+    
+    .ad .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin-bottom: 40px;
+    }
+    
+    .ad .headline {
+      font-size: 19px;
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+    
+    .ad .cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    
+    /* ============================================
+       CREAM + NAVY
+    ============================================ */
+    
+    .ad-1 {
+      background: var(--cream);
+    }
+    
+    .ad-1 .wordmark { color: var(--slate); opacity: 0.5; }
+    .ad-1 .stat { color: var(--navy); }
+    .ad-1 .stat span { color: var(--red); }
+    .ad-1 .stat-label { color: var(--slate); }
+    .ad-1 .headline { color: var(--navy); }
+    .ad-1 .cta { color: var(--red); }
+    
+    /* ============================================
+       FOREST + CREAM
+    ============================================ */
+    
+    .ad-2 {
+      background: var(--forest);
+    }
+    
+    .ad-2 .wordmark { color: var(--pale-sage); opacity: 0.5; }
+    .ad-2 .stat { color: var(--cream); }
+    .ad-2 .stat span { color: var(--pale-sage); }
+    .ad-2 .stat-label { color: var(--pale-sage); opacity: 0.7; }
+    .ad-2 .headline { color: var(--cream); opacity: 0.9; }
+    .ad-2 .cta { color: var(--pale-sage); }
+    
+    /* ============================================
+       NAVY + WHITE
+    ============================================ */
+    
+    .ad-3 {
+      background: var(--navy);
+    }
+    
+    .ad-3 .wordmark { color: var(--mist); opacity: 0.4; }
+    .ad-3 .stat { color: white; }
+    .ad-3 .stat span { color: var(--red); }
+    .ad-3 .stat-label { color: var(--mist); opacity: 0.6; }
+    .ad-3 .headline { color: white; opacity: 0.85; }
+    .ad-3 .cta { color: var(--red); }
+    
+    /* ============================================
+       MIST + NAVY
+    ============================================ */
+    
+    .ad-4 {
+      background: var(--mist);
+    }
+    
+    .ad-4 .wordmark { color: var(--navy); opacity: 0.4; }
+    .ad-4 .stat { color: var(--navy); }
+    .ad-4 .stat span { color: var(--red); }
+    .ad-4 .stat-label { color: var(--slate); }
+    .ad-4 .headline { color: var(--navy); opacity: 0.85; }
+    .ad-4 .cta { color: var(--red); }
+    
+    /* ============================================
+       PALE SAGE + FOREST
+    ============================================ */
+    
+    .ad-5 {
+      background: var(--pale-sage);
+    }
+    
+    .ad-5 .wordmark { color: var(--forest); opacity: 0.4; }
+    .ad-5 .stat { color: var(--forest); }
+    .ad-5 .stat span { color: var(--sage); }
+    .ad-5 .stat-label { color: var(--sage); }
+    .ad-5 .headline { color: var(--forest); opacity: 0.9; }
+    .ad-5 .cta { color: var(--forest); }
+    
+    /* ============================================
+       FOREST + MIST
+    ============================================ */
+    
+    .ad-6 {
+      background: var(--forest);
+    }
+    
+    .ad-6 .wordmark { color: var(--mist); opacity: 0.4; }
+    .ad-6 .stat { color: var(--mist); }
+    .ad-6 .stat span { color: var(--pale-sage); }
+    .ad-6 .stat-label { color: var(--pale-sage); opacity: 0.6; }
+    .ad-6 .headline { color: var(--mist); opacity: 0.9; }
+    .ad-6 .cta { color: var(--pale-sage); }
+    
+  </style>
+</head>
+<body>
+
+  <h1>EVERGREEN ADS — NO MOTIF, BETTER COPY</h1>
+  
+  <!-- ROW 1: FUNDING -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">CREAM + NAVY</div>
+      <div class="ad ad-1">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">$547<span>M</span></div>
+        <div class="stat-label">accessed by our clients</div>
+        <div class="headline">Not our money. Theirs.<br>We just opened the doors.</div>
+        <a href="#" class="cta">Find funding →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">FOREST + CREAM</div>
+      <div class="ad ad-2">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">$547<span>M</span></div>
+        <div class="stat-label">accessed by our clients</div>
+        <div class="headline">The capital's out there.<br>We help you find it.</div>
+        <a href="#" class="cta">Find funding →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">NAVY + WHITE</div>
+      <div class="ad ad-3">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">$547<span>M</span></div>
+        <div class="stat-label">accessed by our clients</div>
+        <div class="headline">We've never lent a dollar.<br>Our clients have accessed $547M.</div>
+        <a href="#" class="cta">Find funding →</a>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ROW 2: ADVISORS -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">MIST + NAVY</div>
+      <div class="ad ad-4">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">300<span>+</span></div>
+        <div class="stat-label">advisors</div>
+        <div class="headline">Former CFOs. Restaurant owners. People who've built what you're building.</div>
+        <a href="#" class="cta">Find yours →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">PALE SAGE + FOREST</div>
+      <div class="ad ad-5">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">300<span>+</span></div>
+        <div class="stat-label">advisors</div>
+        <div class="headline">Not consultants.<br>People who've done it.</div>
+        <a href="#" class="cta">Find yours →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">FOREST + MIST</div>
+      <div class="ad ad-6">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">300<span>+</span></div>
+        <div class="stat-label">advisors</div>
+        <div class="headline">Free. Confidential.<br>Actually useful.</div>
+        <a href="#" class="cta">Find yours →</a>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ROW 3: ALTERNATE MESSAGES -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">COST MESSAGE</div>
+      <div class="ad ad-1">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">$0</div>
+        <div class="stat-label">cost to you</div>
+        <div class="headline">Business advising that doesn't bill by the hour.</div>
+        <a href="#" class="cta">Get started →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">JOBS MESSAGE</div>
+      <div class="ad ad-2">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">23,456</div>
+        <div class="stat-label">jobs created</div>
+        <div class="headline">Behind every job is a business that figured it out.</div>
+        <a href="#" class="cta">Start building →</a>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">NETWORK MESSAGE</div>
+      <div class="ad ad-3">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="stat">18</div>
+        <div class="stat-label">centers across NorCal</div>
+        <div class="headline">From Redding to San Jose.<br>There's one near you.</div>
+        <a href="#" class="cta">Find your center →</a>
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+</html>

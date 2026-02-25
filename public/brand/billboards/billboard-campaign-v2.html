@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Momentum — Billboard Campaign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #1a2f42;
+            --bone: #f5f2eb;
+            --cream: #faf9f7;
+            --white: #ffffff;
+            
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            font-family: var(--sans);
+            background: #111;
+            padding: 32px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid #222;
+        }
+        
+        .page-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 16px;
+        }
+        
+        .page-title {
+            font-family: var(--serif);
+            font-size: 72px;
+            color: var(--white);
+            font-style: italic;
+            line-height: 1;
+        }
+        
+        .page-sub {
+            font-family: var(--sans);
+            font-size: 18px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 16px;
+            font-weight: 400;
+        }
+        
+        /* =============================================
+           BILLBOARD GRID
+        ============================================= */
+        .billboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .row-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #333;
+            padding: 64px 0 24px;
+        }
+        
+        /* =============================================
+           BILLBOARD BASE
+        ============================================= */
+        .billboard {
+            width: 100%;
+            aspect-ratio: 3.5 / 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        /* =============================================
+           STYLE 1: SPLIT
+        ============================================= */
+        .bb-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .bb-split .split-left {
+            background: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 48px 64px;
+            position: relative;
+        }
+        
+        .bb-split .split-right {
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 48px 64px;
+            position: relative;
+        }
+        
+        .bb-split .split-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        
+        .bb-split .split-left .split-label {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        .bb-split .split-right .split-label {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .bb-split .split-text {
+            font-family: var(--serif);
+            font-size: 42px;
+            font-style: italic;
+            line-height: 1.15;
+        }
+        
+        .bb-split .split-left .split-text {
+            color: var(--navy);
+        }
+        
+        .bb-split .split-right .split-text {
+            color: var(--white);
+        }
+        
+        .bb-split .split-number {
+            font-family: var(--sans);
+            font-size: 80px;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+        
+        .bb-split .split-left .split-number {
+            color: var(--navy);
+        }
+        
+        .bb-split .split-right .split-number {
+            color: var(--white);
+        }
+        
+        .bb-split .split-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+        
+        .bb-split .split-left .split-cta {
+            color: rgba(26,47,66,0.5);
+        }
+        
+        .bb-split .split-right .split-cta {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* Diagonal cut */
+        .bb-split.has-cut .split-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60px;
+            width: 120px;
+            height: 100%;
+            background: var(--navy);
+            transform: skewX(-6deg);
+        }
+        
+        /* Reverse colors */
+        .bb-split.reverse .split-left {
+            background: var(--navy);
+        }
+        
+        .bb-split.reverse .split-right {
+            background: var(--bone);
+        }
+        
+        .bb-split.reverse .split-left .split-label {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .bb-split.reverse .split-right .split-label {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        .bb-split.reverse .split-left .split-text,
+        .bb-split.reverse .split-left .split-number {
+            color: var(--white);
+        }
+        
+        .bb-split.reverse .split-right .split-text,
+        .bb-split.reverse .split-right .split-number {
+            color: var(--navy);
+        }
+        
+        .bb-split.reverse .split-left .split-cta {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .bb-split.reverse .split-right .split-cta {
+            color: rgba(26,47,66,0.5);
+        }
+        
+        .bb-split.reverse.has-cut .split-right::before {
+            background: var(--bone);
+        }
+
+        /* =============================================
+           STYLE 2: MASSIVE TYPE
+        ============================================= */
+        .bb-massive {
+            background: var(--navy);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px;
+        }
+        
+        .bb-massive.light {
+            background: var(--bone);
+        }
+        
+        .bb-massive .massive-text {
+            font-family: var(--sans);
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+        
+        .bb-massive.light .massive-text {
+            color: var(--navy);
+        }
+        
+        .bb-massive .massive-text em {
+            font-family: var(--serif);
+            font-style: italic;
+            font-weight: 400;
+            opacity: 0.5;
+        }
+        
+        .bb-massive .massive-sub {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-top: 32px;
+        }
+        
+        .bb-massive.light .massive-sub {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        /* =============================================
+           STYLE 3: NUMBER FOCUS
+        ============================================= */
+        .bb-number {
+            background: var(--navy);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+        }
+        
+        .bb-number.light {
+            background: var(--bone);
+        }
+        
+        .bb-number .number-big {
+            font-family: var(--sans);
+            font-size: 220px;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 0.8;
+            letter-spacing: -0.04em;
+            padding: 0 64px;
+        }
+        
+        .bb-number.light .number-big {
+            color: var(--navy);
+        }
+        
+        .bb-number .number-context {
+            padding: 48px 64px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .bb-number.light .number-context {
+            border-left-color: rgba(26,47,66,0.1);
+        }
+        
+        .bb-number .number-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 16px;
+        }
+        
+        .bb-number.light .number-label {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        .bb-number .number-text {
+            font-family: var(--serif);
+            font-size: 32px;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.2;
+            max-width: 400px;
+        }
+        
+        .bb-number.light .number-text {
+            color: var(--navy);
+        }
+        
+        .bb-number .number-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 24px;
+        }
+        
+        .bb-number.light .number-cta {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        /* =============================================
+           STYLE 4: QUOTE
+        ============================================= */
+        .bb-quote {
+            background: var(--bone);
+            flex-direction: column;
+            justify-content: center;
+            padding: 48px 120px;
+        }
+        
+        .bb-quote.dark {
+            background: var(--navy);
+        }
+        
+        .bb-quote .quote-mark {
+            font-family: var(--serif);
+            font-size: 120px;
+            color: var(--navy);
+            opacity: 0.15;
+            line-height: 0.5;
+            margin-bottom: 16px;
+        }
+        
+        .bb-quote.dark .quote-mark {
+            color: var(--white);
+        }
+        
+        .bb-quote .quote-text {
+            font-family: var(--serif);
+            font-size: 48px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.2;
+            max-width: 900px;
+        }
+        
+        .bb-quote.dark .quote-text {
+            color: var(--white);
+        }
+        
+        .bb-quote .quote-attr {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.5);
+            margin-top: 32px;
+        }
+        
+        .bb-quote.dark .quote-attr {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .bb-quote .quote-result {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--navy);
+            margin-top: 8px;
+        }
+        
+        .bb-quote.dark .quote-result {
+            color: var(--white);
+        }
+        
+        /* =============================================
+           STYLE 5: JOURNEY LINE
+        ============================================= */
+        .bb-journey {
+            background: var(--navy);
+            align-items: center;
+            padding: 48px 80px;
+            gap: 48px;
+        }
+        
+        .bb-journey .journey-start {
+            flex: 1;
+        }
+        
+        .bb-journey .journey-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 12px;
+        }
+        
+        .bb-journey .journey-text {
+            font-family: var(--serif);
+            font-size: 28px;
+            font-style: italic;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.25;
+        }
+        
+        .bb-journey .journey-line {
+            width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        
+        .bb-journey .journey-line .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, var(--white) 100%);
+        }
+        
+        .bb-journey .journey-line .arrow {
+            font-family: var(--sans);
+            font-size: 24px;
+            color: var(--white);
+            font-weight: 300;
+        }
+        
+        .bb-journey .journey-end {
+            flex: 1;
+        }
+        
+        .bb-journey .journey-end .journey-label {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .bb-journey .journey-end .journey-text {
+            color: var(--white);
+        }
+        
+        .bb-journey .journey-cta {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 12px;
+        }
+        
+        /* =============================================
+           STYLE 6: STACKED LINES
+        ============================================= */
+        .bb-stacked {
+            background: var(--navy);
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 48px 80px;
+        }
+        
+        .bb-stacked.light {
+            background: var(--bone);
+        }
+        
+        .bb-stacked .stacked-line {
+            font-family: var(--sans);
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .bb-stacked.light .stacked-line {
+            color: var(--navy);
+        }
+        
+        .bb-stacked .stacked-line.dim {
+            opacity: 0.25;
+        }
+        
+        .bb-stacked .stacked-line.serif {
+            font-family: var(--serif);
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        .bb-stacked .stacked-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.4);
+            margin-top: 32px;
+        }
+        
+        .bb-stacked.light .stacked-cta {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        /* =============================================
+           STYLE 7: FULL BLEED NUMBER
+        ============================================= */
+        .bb-fullbleed {
+            background: var(--bone);
+            position: relative;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 80px;
+        }
+        
+        .bb-fullbleed.dark {
+            background: var(--navy);
+        }
+        
+        .bb-fullbleed .bleed-number {
+            position: absolute;
+            left: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: var(--sans);
+            font-size: 400px;
+            font-weight: 900;
+            color: var(--navy);
+            opacity: 0.06;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+        }
+        
+        .bb-fullbleed.dark .bleed-number {
+            color: var(--white);
+            opacity: 0.05;
+        }
+        
+        .bb-fullbleed .bleed-content {
+            position: relative;
+            z-index: 1;
+            text-align: right;
+            max-width: 450px;
+        }
+        
+        .bb-fullbleed .bleed-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+            margin-bottom: 16px;
+        }
+        
+        .bb-fullbleed.dark .bleed-label {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .bb-fullbleed .bleed-text {
+            font-family: var(--serif);
+            font-size: 36px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.2;
+        }
+        
+        .bb-fullbleed.dark .bleed-text {
+            color: var(--white);
+        }
+        
+        .bb-fullbleed .bleed-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: rgba(26,47,66,0.5);
+            margin-top: 24px;
+        }
+        
+        .bb-fullbleed.dark .bleed-cta {
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* =============================================
+           STYLE 8: CENTERED STATEMENT
+        ============================================= */
+        .bb-centered {
+            background: var(--navy);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 80px;
+        }
+        
+        .bb-centered.light {
+            background: var(--bone);
+        }
+        
+        .bb-centered .centered-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 24px;
+        }
+        
+        .bb-centered.light .centered-label {
+            color: rgba(26,47,66,0.4);
+        }
+        
+        .bb-centered .centered-text {
+            font-family: var(--serif);
+            font-size: 56px;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.15;
+            max-width: 800px;
+        }
+        
+        .bb-centered.light .centered-text {
+            color: var(--navy);
+        }
+        
+        .bb-centered .centered-cta {
+            font-family: var(--sans);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-top: 32px;
+        }
+        
+        .bb-centered.light .centered-cta {
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <div class="page-label">NorCal SBDC — Billboard Campaign</div>
+        <div class="page-title">Add Momentum.</div>
+        <div class="page-sub">$0 Advice. $547M in client capital. Ambition needs momentum.</div>
+    </div>
+
+    <div class="billboard-grid">
+        
+        <!-- =============================================
+             HERO STATEMENTS
+        ============================================= -->
+        <div class="row-label">Hero Statements</div>
+        
+        <div class="billboard bb-massive">
+            <div>
+                <div class="massive-text"><em>Ambition needs</em> Momentum.</div>
+                <div class="massive-sub">norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-stacked">
+            <div class="stacked-line dim">$0 advice.</div>
+            <div class="stacked-line">$547M in results.</div>
+            <div class="stacked-cta">Free business advising — norcalsbdc.org</div>
+        </div>
+        
+        <div class="billboard bb-split has-cut">
+            <div class="split-left">
+                <div class="split-label">What We Charge</div>
+                <div class="split-number">$0</div>
+                <div class="split-cta">No cost. No catch.</div>
+            </div>
+            <div class="split-right">
+                <div class="split-label">What Clients Accessed</div>
+                <div class="split-number">$547M</div>
+                <div class="split-cta">Last year alone.</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-centered">
+            <div class="centered-label">The momentum you've been missing</div>
+            <div class="centered-text">Your ambition deserves more than advice. It deserves momentum.</div>
+            <div class="centered-cta">Add momentum. →</div>
+        </div>
+        
+        <!-- =============================================
+             VALUE PROPOSITION
+        ============================================= -->
+        <div class="row-label">Value Proposition</div>
+        
+        <div class="billboard bb-number">
+            <div class="number-big">$0</div>
+            <div class="number-context">
+                <div class="number-label">What We Charge</div>
+                <div class="number-text">Free business advising. Always has been. Always will be.</div>
+                <div class="number-cta">Your Business People — norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-fullbleed">
+            <div class="bleed-number">$547M</div>
+            <div class="bleed-content">
+                <div class="bleed-label">Client Capital 2025</div>
+                <div class="bleed-text">That's not our budget. That's what our clients accessed last year.</div>
+                <div class="bleed-cta">Add momentum. →</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-journey">
+            <div class="journey-start">
+                <div class="journey-label">You Have</div>
+                <div class="journey-text">The ambition. The idea. The late nights.</div>
+            </div>
+            <div class="journey-line">
+                <div class="line"></div>
+                <div class="arrow">→</div>
+            </div>
+            <div class="journey-end">
+                <div class="journey-label">You Need</div>
+                <div class="journey-text">The connections. The capital. The momentum.</div>
+                <div class="journey-cta">norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             ROSA'S STORY
+        ============================================= -->
+        <div class="row-label">Rosa — Food Truck → Restaurant</div>
+        
+        <div class="billboard bb-journey">
+            <div class="journey-start">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I had a food truck and a family recipe."</div>
+            </div>
+            <div class="journey-line">
+                <div class="line"></div>
+                <div class="arrow">→</div>
+            </div>
+            <div class="journey-end">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"I have three restaurants and twelve employees."</div>
+                <div class="journey-cta">— Rosa, Rosa's Cocina</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-number">
+            <div class="number-big">$250K</div>
+            <div class="number-context">
+                <div class="number-label">SBA Loan Secured</div>
+                <div class="number-text">Rosa's bank said no. Three times. Then she met her advisor.</div>
+                <div class="number-cta">Food truck → 3 locations in 18 months</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-quote">
+            <div class="quote-mark">"</div>
+            <div class="quote-text">Maria didn't just help me get a loan. She helped me see what my business could become.</div>
+            <div class="quote-attr">— Rosa, Rosa's Cocina</div>
+            <div class="quote-result">$250K SBA loan → 3 locations → 12 employees</div>
+        </div>
+        
+        <!-- =============================================
+             MARCUS'S STORY
+        ============================================= -->
+        <div class="row-label">Marcus — Solo → Crew of 8</div>
+        
+        <div class="billboard bb-split has-cut">
+            <div class="split-left">
+                <div class="split-label">Before</div>
+                <div class="split-text">Solo contractor. Every job, every bid, every invoice.</div>
+            </div>
+            <div class="split-right">
+                <div class="split-label">After</div>
+                <div class="split-text">Crew of 8. Booked solid. Finally a business owner.</div>
+                <div class="split-cta">— Marcus, M&R Construction</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-fullbleed dark">
+            <div class="bleed-number">8</div>
+            <div class="bleed-content">
+                <div class="bleed-label">Employees Now</div>
+                <div class="bleed-text">Marcus knew how to build. We helped him learn how to grow.</div>
+                <div class="bleed-cta">Add momentum. →</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             PRIYA'S STORY
+        ============================================= -->
+        <div class="row-label">Priya — Side Project → Funded Startup</div>
+        
+        <div class="billboard bb-number light">
+            <div class="number-big">$500K</div>
+            <div class="number-context">
+                <div class="number-label">Seed Round Closed</div>
+                <div class="number-text">Priya had the tech. We helped her build the pitch.</div>
+                <div class="number-cta">Side project → Funded startup</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-journey">
+            <div class="journey-start">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I'd been coding nights and weekends for two years."</div>
+            </div>
+            <div class="journey-line">
+                <div class="line"></div>
+                <div class="arrow">→</div>
+            </div>
+            <div class="journey-end">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"I quit my job. We just closed our seed round."</div>
+                <div class="journey-cta">— Priya, Founder</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             CHEN'S STORY
+        ============================================= -->
+        <div class="row-label">Chen — Local → Government Contracts</div>
+        
+        <div class="billboard bb-number">
+            <div class="number-big">$1.2M</div>
+            <div class="number-context">
+                <div class="number-label">Federal Contract</div>
+                <div class="number-text">20 years in manufacturing. Chen knew the work. We helped him navigate the system.</div>
+                <div class="number-cta">First federal contract secured</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-quote dark">
+            <div class="quote-mark">"</div>
+            <div class="quote-text">I knew we could do the work. I just couldn't figure out the paperwork.</div>
+            <div class="quote-attr">— Chen, Precision Manufacturing</div>
+            <div class="quote-result">Local shop → Certified federal contractor</div>
+        </div>
+        
+        <!-- =============================================
+             JAMES & DEJA
+        ============================================= -->
+        <div class="row-label">James & Deja — Online → Main Street</div>
+        
+        <div class="billboard bb-split reverse has-cut">
+            <div class="split-left">
+                <div class="split-label">The Ambition</div>
+                <div class="split-text">Shipping orders from the garage.</div>
+            </div>
+            <div class="split-right">
+                <div class="split-label">The Momentum</div>
+                <div class="split-text">Opening their own doors on Main Street.</div>
+                <div class="split-cta">$85K microloan secured</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             STATS
+        ============================================= -->
+        <div class="row-label">Stats</div>
+        
+        <div class="billboard bb-split">
+            <div class="split-left">
+                <div class="split-label">Businesses Advised</div>
+                <div class="split-number">12,400</div>
+                <div class="split-cta">Last year.</div>
+            </div>
+            <div class="split-right">
+                <div class="split-label">Capital Accessed</div>
+                <div class="split-number">$547M</div>
+                <div class="split-cta">That's momentum.</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-stacked light">
+            <div class="stacked-line dim">300+ advisors.</div>
+            <div class="stacked-line dim">18 centers.</div>
+            <div class="stacked-line">36 counties.</div>
+            <div class="stacked-cta">Your Business People — norcalsbdc.org</div>
+        </div>
+        
+        <div class="billboard bb-number light">
+            <div class="number-big">50</div>
+            <div class="number-context">
+                <div class="number-label">Years of Results</div>
+                <div class="number-text">Still free. Still here. Still building momentum.</div>
+                <div class="number-cta">Your Business People — Since 1974</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             CLOSERS
+        ============================================= -->
+        <div class="row-label">Closers</div>
+        
+        <div class="billboard bb-massive light">
+            <div>
+                <div class="massive-text">Add <em>momentum.</em></div>
+                <div class="massive-sub">Your Business People — norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard bb-centered light">
+            <div class="centered-label">Free Business Advising</div>
+            <div class="centered-text">The momentum you've been missing.</div>
+            <div class="centered-cta">norcalsbdc.org →</div>
+        </div>
+        
+        <div class="billboard bb-stacked">
+            <div class="stacked-line serif dim">Ambition gets you started.</div>
+            <div class="stacked-line">Momentum keeps you going.</div>
+            <div class="stacked-cta">$0 Advice. $547M in results. — norcalsbdc.org</div>
+        </div>
+        
+        <div class="billboard bb-massive">
+            <div>
+                <div class="massive-text"><em>$0 advice.</em> Real results.</div>
+                <div class="massive-sub">Your Business People — norcalsbdc.org</div>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

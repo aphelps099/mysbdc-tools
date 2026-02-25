@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Color Exploration</title>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            /* Foundations */
+            --ivory: #faf9f7;
+            --cream: #f0ede6;
+            --fog: #e5ebf1;
+            --warm-gray: #e8e6e1;
+            
+            /* Blues */
+            --mist: #c8d5e3;
+            --dusty-blue: #8fa3be;
+            --chambray: #5d7a9c;
+            --slate: #4a6580;
+            --navy: #1e3a5f;
+            --deep-navy: #152a45;
+            
+            /* Greens */
+            --pale-sage: #d4ddd6;
+            --sage: #7a9484;
+            --forest: #4a6b5a;
+            --deep-teal: #2d4a4a;
+            
+            /* Warms */
+            --blush: #e8d8d8;
+            --dusty-rose: #c4a3a3;
+            --wine: #6b2d3c;
+            --burgundy: #4a1f2a;
+            
+            /* Accent */
+            --brick: #b54a4a;
+            --terracotta: #c4856a;
+            --sand: #c9a86c;
+            
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            font-family: var(--sans);
+            background: var(--warm-gray);
+            padding: 60px;
+        }
+        
+        .page-title {
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 300;
+            color: #888;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-label {
+            text-align: center;
+            font-family: var(--sans);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        
+        /* ============================================
+           COLOR SWATCHES
+        ============================================ */
+        
+        .swatch-section {
+            margin-bottom: 80px;
+        }
+        
+        .swatch-row {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            overflow: hidden;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .swatch {
+            flex: 1;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 12px;
+            font-family: var(--sans);
+            font-size: 9px;
+        }
+        
+        .swatch .name { font-weight: 600; margin-bottom: 2px; }
+        .swatch .hex { opacity: 0.6; }
+        
+        /* ============================================
+           MONOCHROMATIC CARDS
+        ============================================ */
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto 80px;
+        }
+        
+        .mono-card {
+            aspect-ratio: 3/4;
+            border-radius: 6px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        }
+        
+        .mono-card .brand {
+            font-family: var(--sans);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.05;
+            margin-bottom: auto;
+        }
+        
+        .mono-card .middle {
+            margin-bottom: auto;
+        }
+        
+        .mono-card .product-name {
+            font-family: var(--sans);
+            font-size: 32px;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        
+        .mono-card .subtitle {
+            font-family: var(--sans);
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+        
+        .mono-card .footer {
+            font-family: var(--sans);
+            font-size: 8px;
+            padding-top: 16px;
+            border-top: 1px solid currentColor;
+            opacity: 0.4;
+        }
+        
+        /* Blue on Blue */
+        .card-fog-navy {
+            background: var(--fog);
+            color: var(--navy);
+        }
+        .card-fog-navy .footer { border-color: var(--navy); }
+        
+        .card-mist-navy {
+            background: var(--mist);
+            color: var(--deep-navy);
+        }
+        
+        .card-navy-mist {
+            background: var(--navy);
+            color: var(--mist);
+        }
+        
+        .card-slate-fog {
+            background: var(--slate);
+            color: var(--fog);
+        }
+        
+        /* Green on Cream */
+        .card-cream-forest {
+            background: var(--cream);
+            color: var(--forest);
+        }
+        
+        .card-pale-sage-forest {
+            background: var(--pale-sage);
+            color: var(--forest);
+        }
+        
+        .card-forest-cream {
+            background: var(--forest);
+            color: var(--cream);
+        }
+        
+        .card-teal-cream {
+            background: var(--deep-teal);
+            color: var(--cream);
+        }
+        
+        /* Wine / Burgundy */
+        .card-blush-wine {
+            background: var(--blush);
+            color: var(--wine);
+        }
+        
+        .card-fog-wine {
+            background: var(--fog);
+            color: var(--wine);
+        }
+        
+        .card-wine-blush {
+            background: var(--wine);
+            color: var(--blush);
+        }
+        
+        .card-burgundy-cream {
+            background: var(--burgundy);
+            color: var(--cream);
+        }
+        
+        /* ============================================
+           TESTIMONIAL / REVIEWS SECTION
+        ============================================ */
+        
+        .testimonial-section {
+            margin-bottom: 80px;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            padding: 48px 32px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .testimonial-card .label {
+            font-family: var(--sans);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        
+        .testimonial-card .big-number {
+            font-family: var(--sans);
+            font-size: 48px;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-card .big-text {
+            font-family: var(--sans);
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 32px;
+        }
+        
+        .testimonial-card .stars {
+            font-size: 18px;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-card .quote {
+            font-family: var(--sans);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-card .author {
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 300;
+        }
+        
+        /* Testimonial colors */
+        .test-fog-wine {
+            background: var(--fog);
+            color: var(--wine);
+        }
+        
+        .test-cream-forest {
+            background: var(--cream);
+            color: var(--forest);
+        }
+        
+        .test-mist-navy {
+            background: var(--mist);
+            color: var(--navy);
+        }
+        
+        /* ============================================
+           POUCH STYLE CARDS (label on cream)
+        ============================================ */
+        
+        .pouch-section {
+            margin-bottom: 80px;
+        }
+        
+        .pouch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .pouch-card {
+            background: var(--cream);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+        
+        .pouch-label {
+            padding: 24px 20px;
+        }
+        
+        .pouch-label .brand {
+            font-family: var(--sans);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.05;
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .pouch-label .product-name {
+            font-family: var(--sans);
+            font-size: 11px;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .pouch-label .product-sub {
+            font-family: var(--sans);
+            font-size: 8px;
+            opacity: 0.6;
+            line-height: 1.4;
+        }
+        
+        .pouch-body {
+            padding: 20px;
+            font-family: var(--sans);
+            font-size: 10px;
+            color: var(--slate);
+            line-height: 1.5;
+        }
+        
+        .pouch-body .price {
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        /* Pouch label colors */
+        .label-sage { background: var(--sage); color: var(--cream); }
+        .label-navy { background: var(--navy); color: var(--cream); }
+        .label-wine { background: var(--wine); color: var(--cream); }
+        .label-teal { background: var(--deep-teal); color: var(--cream); }
+        .label-dusty-blue { background: var(--dusty-blue); color: var(--cream); }
+        .label-forest { background: var(--forest); color: var(--cream); }
+        .label-burgundy { background: var(--burgundy); color: var(--cream); }
+        .label-slate { background: var(--slate); color: var(--cream); }
+        
+        /* ============================================
+           FULL WIDTH SECTIONS
+        ============================================ */
+        
+        .full-section {
+            margin: 0 -60px 80px;
+            padding: 80px 60px;
+        }
+        
+        .full-section .inner {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .full-section .label {
+            font-family: var(--sans);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        
+        .full-section .headline {
+            font-family: var(--sans);
+            font-size: 56px;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .full-section .subhead {
+            font-family: var(--sans);
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto 32px;
+            opacity: 0.8;
+        }
+        
+        .full-section .cta {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        /* Section colors */
+        .section-fog-navy {
+            background: var(--fog);
+            color: var(--navy);
+        }
+        .section-fog-navy .cta {
+            background: var(--navy);
+            color: var(--fog);
+        }
+        
+        .section-cream-forest {
+            background: var(--cream);
+            color: var(--forest);
+        }
+        .section-cream-forest .cta {
+            background: var(--forest);
+            color: var(--cream);
+        }
+        
+        .section-navy-mist {
+            background: var(--navy);
+            color: var(--mist);
+        }
+        .section-navy-mist .headline { color: var(--cream); }
+        .section-navy-mist .cta {
+            background: var(--brick);
+            color: var(--cream);
+        }
+        
+        .section-forest-cream {
+            background: var(--forest);
+            color: var(--pale-sage);
+        }
+        .section-forest-cream .headline { color: var(--cream); }
+        .section-forest-cream .cta {
+            background: var(--cream);
+            color: var(--forest);
+        }
+        
+        /* ============================================
+           STATS BAR VARIATIONS
+        ============================================ */
+        
+        .stats-section {
+            margin-bottom: 80px;
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 900px;
+            margin: 0 auto 24px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .stats-bar .stat {
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .stats-bar .stat .number {
+            font-family: var(--sans);
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 4px;
+        }
+        
+        .stats-bar .stat .label {
+            font-family: var(--sans);
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        /* Stats colors */
+        .stats-navy {
+            background: var(--navy);
+            color: var(--cream);
+        }
+        .stats-navy .stat .number { color: var(--mist); }
+        
+        .stats-forest {
+            background: var(--forest);
+            color: var(--cream);
+        }
+        .stats-forest .stat .number { color: var(--pale-sage); }
+        
+        .stats-fog {
+            background: var(--fog);
+            color: var(--navy);
+        }
+        .stats-fog .stat .number { color: var(--navy); }
+        
+        .stats-wine {
+            background: var(--wine);
+            color: var(--cream);
+        }
+        .stats-wine .stat .number { color: var(--blush); }
+        
+        /* ============================================
+           COLOR PALETTE SUMMARY
+        ============================================ */
+        
+        .palette-summary {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            background: var(--ivory);
+            border-radius: 8px;
+            padding: 48px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+        
+        .palette-summary h3 {
+            font-family: var(--sans);
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--navy);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .palette-group {
+            margin-bottom: 32px;
+        }
+        
+        .palette-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .palette-group-label {
+            font-family: var(--sans);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--dusty-blue);
+            margin-bottom: 12px;
+        }
+        
+        .palette-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .palette-chip {
+            flex: 1;
+            height: 48px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--sans);
+            font-size: 9px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 900px) {
+            body { padding: 24px; }
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .pouch-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .full-section { margin: 0 -24px 60px; padding: 60px 24px; }
+            .full-section .headline { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="page-title">NorCal SBDC — Color Exploration</div>
+    
+    <!-- COLOR SWATCHES -->
+    <div class="swatch-section">
+        <div class="section-label">Blue Range</div>
+        <div class="swatch-row">
+            <div class="swatch" style="background: var(--fog); color: var(--navy);"><span class="name">Fog</span><span class="hex">#e5ebf1</span></div>
+            <div class="swatch" style="background: var(--mist); color: var(--navy);"><span class="name">Mist</span><span class="hex">#c8d5e3</span></div>
+            <div class="swatch" style="background: var(--dusty-blue); color: var(--cream);"><span class="name">Dusty Blue</span><span class="hex">#8fa3be</span></div>
+            <div class="swatch" style="background: var(--chambray); color: var(--cream);"><span class="name">Chambray</span><span class="hex">#5d7a9c</span></div>
+            <div class="swatch" style="background: var(--slate); color: var(--cream);"><span class="name">Slate</span><span class="hex">#4a6580</span></div>
+            <div class="swatch" style="background: var(--navy); color: var(--cream);"><span class="name">Navy</span><span class="hex">#1e3a5f</span></div>
+            <div class="swatch" style="background: var(--deep-navy); color: var(--cream);"><span class="name">Deep Navy</span><span class="hex">#152a45</span></div>
+        </div>
+        
+        <div class="section-label">Green Range</div>
+        <div class="swatch-row">
+            <div class="swatch" style="background: var(--cream); color: var(--forest);"><span class="name">Cream</span><span class="hex">#f0ede6</span></div>
+            <div class="swatch" style="background: var(--pale-sage); color: var(--forest);"><span class="name">Pale Sage</span><span class="hex">#d4ddd6</span></div>
+            <div class="swatch" style="background: var(--sage); color: var(--cream);"><span class="name">Sage</span><span class="hex">#7a9484</span></div>
+            <div class="swatch" style="background: var(--forest); color: var(--cream);"><span class="name">Forest</span><span class="hex">#4a6b5a</span></div>
+            <div class="swatch" style="background: var(--deep-teal); color: var(--cream);"><span class="name">Deep Teal</span><span class="hex">#2d4a4a</span></div>
+        </div>
+        
+        <div class="section-label">Wine Range</div>
+        <div class="swatch-row">
+            <div class="swatch" style="background: var(--blush); color: var(--wine);"><span class="name">Blush</span><span class="hex">#e8d8d8</span></div>
+            <div class="swatch" style="background: var(--dusty-rose); color: var(--wine);"><span class="name">Dusty Rose</span><span class="hex">#c4a3a3</span></div>
+            <div class="swatch" style="background: var(--brick); color: var(--cream);"><span class="name">Brick</span><span class="hex">#b54a4a</span></div>
+            <div class="swatch" style="background: var(--wine); color: var(--cream);"><span class="name">Wine</span><span class="hex">#6b2d3c</span></div>
+            <div class="swatch" style="background: var(--burgundy); color: var(--cream);"><span class="name">Burgundy</span><span class="hex">#4a1f2a</span></div>
+        </div>
+    </div>
+    
+    <!-- BLUE ON BLUE -->
+    <div class="section-label">Blue on Blue</div>
+    <div class="card-grid">
+        <div class="mono-card card-fog-navy">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">People</div>
+                <div class="subtitle">300+ Expert Advisors</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-mist-navy">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Funded</div>
+                <div class="subtitle">$847M Capital Unlocked</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-navy-mist">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Connected</div>
+                <div class="subtitle">36 Counties Served</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-slate-fog">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Strategy</div>
+                <div class="subtitle">Business Planning</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+    </div>
+    
+    <!-- GREEN ON CREAM -->
+    <div class="section-label">Green on Cream</div>
+    <div class="card-grid">
+        <div class="mono-card card-cream-forest">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Capital</div>
+                <div class="subtitle">SBA Loans & Grants</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-pale-sage-forest">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Growth</div>
+                <div class="subtitle">Scale Your Business</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-forest-cream">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Funded</div>
+                <div class="subtitle">$847M Unlocked</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-teal-cream">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Launch</div>
+                <div class="subtitle">Start Your Business</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+    </div>
+    
+    <!-- WINE / BURGUNDY -->
+    <div class="section-label">Wine & Burgundy</div>
+    <div class="card-grid">
+        <div class="mono-card card-fog-wine">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Impact</div>
+                <div class="subtitle">23,456 Jobs Created</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-blush-wine">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Stories</div>
+                <div class="subtitle">Client Success</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-wine-blush">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Results</div>
+                <div class="subtitle">$58:1 ROI</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+        
+        <div class="mono-card card-burgundy-cream">
+            <div class="brand">NORCAL<br>SBDC</div>
+            <div class="middle">
+                <div class="product-name">Premium</div>
+                <div class="subtitle">Executive Advisory</div>
+            </div>
+            <div class="footer">norcalsbdc.org</div>
+        </div>
+    </div>
+    
+    <!-- TESTIMONIAL SECTIONS (Daily Spoon Reviews style) -->
+    <div class="testimonial-section">
+        <div class="section-label">Testimonial Sections</div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card test-fog-wine">
+                <div class="label">Impact</div>
+                <div class="big-number">$847M</div>
+                <div class="big-text">capital unlocked</div>
+                <div class="stars">★★★★★</div>
+                <div class="quote">"Marcus didn't just help me get a loan. He helped me think like a CEO."</div>
+                <div class="author">Sarah Chen</div>
+            </div>
+            
+            <div class="testimonial-card test-cream-forest">
+                <div class="label">Results</div>
+                <div class="big-number">23,456</div>
+                <div class="big-text">jobs created</div>
+                <div class="stars">★★★★★</div>
+                <div class="quote">"They believed in my business when the banks wouldn't."</div>
+                <div class="author">James Rodriguez</div>
+            </div>
+            
+            <div class="testimonial-card test-mist-navy">
+                <div class="label">Network</div>
+                <div class="big-number">300+</div>
+                <div class="big-text">expert advisors</div>
+                <div class="stars">★★★★★</div>
+                <div class="quote">"Real expertise from people who've actually built businesses."</div>
+                <div class="author">Maria Santos</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- POUCH STYLE (label on cream) -->
+    <div class="pouch-section">
+        <div class="section-label">Pouch Style — Label on Cream</div>
+        <div class="pouch-grid">
+            <div class="pouch-card">
+                <div class="pouch-label label-sage">
+                    <div class="brand">NORCAL<br>SBDC</div>
+                    <div class="product-name">Capital Access</div>
+                    <div class="product-sub">SBA loans, grants, investor connections</div>
+                </div>
+                <div class="pouch-body">
+                    Expert guidance on loan packaging, financial projections, and pitch refinement.
+                    <div class="price">Free advising</div>
+                </div>
+            </div>
+            
+            <div class="pouch-card">
+                <div class="pouch-label label-navy">
+                    <div class="brand">NORCAL<br>SBDC</div>
+                    <div class="product-name">Business Strategy</div>
+                    <div class="product-sub">Planning, growth, operations</div>
+                </div>
+                <div class="pouch-body">
+                    Work with advisors who've built businesses and solved the problems you're facing.
+                    <div class="price">Free advising</div>
+                </div>
+            </div>
+            
+            <div class="pouch-card">
+                <div class="pouch-label label-wine">
+                    <div class="brand">NORCAL<br>SBDC</div>
+                    <div class="product-name">Marketing</div>
+                    <div class="product-sub">Brand, digital, customer acquisition</div>
+                </div>
+                <div class="pouch-body">
+                    Develop strategies to reach customers and grow your market presence.
+                    <div class="price">Free advising</div>
+                </div>
+            </div>
+            
+            <div class="pouch-card">
+                <div class="pouch-label label-teal">
+                    <div class="brand">NORCAL<br>SBDC</div>
+                    <div class="product-name">Technology</div>
+                    <div class="product-sub">Digital tools, e-commerce, AI</div>
+                </div>
+                <div class="pouch-body">
+                    Modernize operations and leverage technology for competitive advantage.
+                    <div class="price">Free advising</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FULL SECTION - NAVY -->
+    <div class="full-section section-navy-mist">
+        <div class="inner">
+            <div class="label">Your Business People</div>
+            <div class="headline">Fortune 500 advisory.<br>Zero cost.</div>
+            <div class="subhead">Free business advising from people who've actually built businesses. No fees. No equity. Just expertise.</div>
+            <a href="#" class="cta">Schedule your consultation →</a>
+        </div>
+    </div>
+    
+    <!-- FULL SECTION - FOREST -->
+    <div class="full-section section-forest-cream">
+        <div class="inner">
+            <div class="label">Capital Access</div>
+            <div class="headline">Ready to capture capital?</div>
+            <div class="subhead">Our advisors have helped unlock $847 million in funding for businesses like yours.</div>
+            <a href="#" class="cta">Talk to an advisor →</a>
+        </div>
+    </div>
+    
+    <!-- FULL SECTION - FOG -->
+    <div class="full-section section-fog-navy">
+        <div class="inner">
+            <div class="label">Success Stories</div>
+            <div class="headline">The banks said no.<br>We said yes.</div>
+            <div class="subhead">See how NorCal SBDC advisors helped entrepreneurs overcome obstacles and build thriving businesses.</div>
+            <a href="#" class="cta">Read their stories →</a>
+        </div>
+    </div>
+    
+    <!-- STATS BARS -->
+    <div class="stats-section">
+        <div class="section-label">Stats Bar Variations</div>
+        
+        <div class="stats-bar stats-navy">
+            <div class="stat"><div class="number">$847M</div><div class="label">Capital</div></div>
+            <div class="stat"><div class="number">23,456</div><div class="label">Jobs</div></div>
+            <div class="stat"><div class="number">300+</div><div class="label">Advisors</div></div>
+            <div class="stat"><div class="number">$58:1</div><div class="label">ROI</div></div>
+        </div>
+        
+        <div class="stats-bar stats-forest">
+            <div class="stat"><div class="number">$847M</div><div class="label">Capital</div></div>
+            <div class="stat"><div class="number">23,456</div><div class="label">Jobs</div></div>
+            <div class="stat"><div class="number">300+</div><div class="label">Advisors</div></div>
+            <div class="stat"><div class="number">$58:1</div><div class="label">ROI</div></div>
+        </div>
+        
+        <div class="stats-bar stats-fog">
+            <div class="stat"><div class="number">$847M</div><div class="label">Capital</div></div>
+            <div class="stat"><div class="number">23,456</div><div class="label">Jobs</div></div>
+            <div class="stat"><div class="number">300+</div><div class="label">Advisors</div></div>
+            <div class="stat"><div class="number">$58:1</div><div class="label">ROI</div></div>
+        </div>
+        
+        <div class="stats-bar stats-wine">
+            <div class="stat"><div class="number">$847M</div><div class="label">Capital</div></div>
+            <div class="stat"><div class="number">23,456</div><div class="label">Jobs</div></div>
+            <div class="stat"><div class="number">300+</div><div class="label">Advisors</div></div>
+            <div class="stat"><div class="number">$58:1</div><div class="label">ROI</div></div>
+        </div>
+    </div>
+    
+    <!-- PALETTE SUMMARY -->
+    <div class="palette-summary">
+        <h3>Recommended Combinations</h3>
+        
+        <div class="palette-group">
+            <div class="palette-group-label">Primary — Blue Family</div>
+            <div class="palette-row">
+                <div class="palette-chip" style="background: var(--fog); color: var(--navy);">Fog + Navy</div>
+                <div class="palette-chip" style="background: var(--mist); color: var(--navy);">Mist + Navy</div>
+                <div class="palette-chip" style="background: var(--navy); color: var(--mist);">Navy + Mist</div>
+            </div>
+        </div>
+        
+        <div class="palette-group">
+            <div class="palette-group-label">Secondary — Green Family</div>
+            <div class="palette-row">
+                <div class="palette-chip" style="background: var(--cream); color: var(--forest);">Cream + Forest</div>
+                <div class="palette-chip" style="background: var(--pale-sage); color: var(--forest);">Pale Sage + Forest</div>
+                <div class="palette-chip" style="background: var(--forest); color: var(--cream);">Forest + Cream</div>
+            </div>
+        </div>
+        
+        <div class="palette-group">
+            <div class="palette-group-label">Accent — Wine Family</div>
+            <div class="palette-row">
+                <div class="palette-chip" style="background: var(--fog); color: var(--wine);">Fog + Wine</div>
+                <div class="palette-chip" style="background: var(--blush); color: var(--wine);">Blush + Wine</div>
+                <div class="palette-chip" style="background: var(--wine); color: var(--cream);">Wine + Cream</div>
+            </div>
+        </div>
+        
+        <div class="palette-group">
+            <div class="palette-group-label">CTA</div>
+            <div class="palette-row">
+                <div class="palette-chip" style="background: var(--brick); color: var(--cream);">Brick (Primary CTA)</div>
+                <div class="palette-chip" style="background: var(--navy); color: var(--cream);">Navy (Secondary)</div>
+                <div class="palette-chip" style="background: var(--forest); color: var(--cream);">Forest (Tertiary)</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

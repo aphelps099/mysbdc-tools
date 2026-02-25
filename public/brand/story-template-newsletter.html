@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsletter Template — NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype');
+      font-weight: 300;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America Mono';
+      src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --navy: #0f1c2e;
+      --royal: #1D5AA7;
+      --royal-dim: rgba(29,90,167,0.08);
+      --pool: #8FC5D9;
+      --cream: #f0efeb;
+      --white: #ffffff;
+      --brick: #a82039;
+      --dusty: #5d7a9c;
+      --text: #0a1528;
+      --text-secondary: #4a5568;
+      --text-tertiary: #8a8a8a;
+      --rule: rgba(0,0,0,0.12);
+      --rule-light: rgba(0,0,0,0.06);
+      --green: #16a34a;
+      --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+      --serif: 'Tobias', Georgia, serif;
+      --mono: 'GT America Mono', 'SF Mono', monospace;
+      --pad: clamp(32px, 5vw, 64px);
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--white);
+    }
+
+    .nav-left img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-left a {
+      font-size: 14px;
+      font-weight: 400;
+      font-family: var(--sans);
+      color: var(--white);
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .nav-left a:hover {
+      opacity: 0.8;
+    }
+
+    .nav-center {
+      text-align: center;
+    }
+
+    .nav-center h1 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .nav-center p {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--pool);
+      text-transform: uppercase;
+    }
+
+    /* Main content */
+    main {
+      margin-top: 56px;
+      padding: var(--pad) 0;
+    }
+
+    /* Section 1: Context */
+    .section-context {
+      background: var(--cream);
+      padding: var(--pad);
+      text-align: center;
+      animation: fadeInUp 0.6s var(--ease) both;
+    }
+
+    .section-context h2 {
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .section-context p {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    .annotation-bar {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--white);
+      border-left: 4px solid var(--pool);
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-align: left;
+      border-radius: 4px;
+    }
+
+    /* Section 2: Email mockup */
+    .section-email {
+      padding: var(--pad);
+      display: flex;
+      justify-content: center;
+      background: var(--cream);
+      animation: fadeInUp 0.8s var(--ease) 0.2s both;
+    }
+
+    .email-container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--white);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* Email Header */
+    .email-header {
+      background: var(--navy);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    .email-header img {
+      height: 28px;
+      margin-bottom: 16px;
+    }
+
+    .email-header-kicker {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--pool);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .email-header-org {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .email-header-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin-top: 16px;
+    }
+
+    /* Email Hero */
+    .email-hero {
+      padding: 40px;
+    }
+
+    .email-photo {
+      width: 100%;
+      height: 200px;
+      background: #efefef;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--text-tertiary);
+    }
+
+    .email-photo iconify-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .email-photo span {
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+
+    .email-hero-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--royal);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .email-hero-name {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .email-hero-tagline {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Email Body */
+    .email-body {
+      padding: 0 40px 40px;
+    }
+
+    .email-owner {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .email-narrative {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .email-quote-block {
+      border-left: 4px solid var(--pool);
+      padding-left: 20px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      margin: 24px 0;
+      font-family: var(--serif);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    .email-quote-attribution {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Results Bar */
+    .email-results {
+      background: var(--navy);
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .result-item {
+      flex: 1;
+    }
+
+    .result-number {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .result-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--pool);
+      text-transform: uppercase;
+    }
+
+    /* Email CTA */
+    .email-cta {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--pool);
+      color: var(--navy);
+      padding: 14px 32px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      transition: all 0.3s var(--ease);
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: #7db5c9;
+      transform: translateY(-2px);
+    }
+
+    .cta-subtext {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Email Footer */
+    .email-footer {
+      border-top: 1px solid var(--rule);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    .email-footer img {
+      height: 20px;
+      margin-bottom: 12px;
+    }
+
+    .email-footer p {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    .email-footer a {
+      color: var(--royal);
+      text-decoration: none;
+    }
+
+    /* Section 3: Guidelines */
+    .section-guidelines {
+      background: var(--white);
+      padding: var(--pad);
+      animation: fadeInUp 1s var(--ease) 0.4s both;
+    }
+
+    .guidelines-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .guidelines-header h3 {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .guideline-card {
+      background: var(--royal-dim);
+      padding: 32px;
+      border-radius: 4px;
+      border-top: 3px solid var(--royal);
+    }
+
+    .guideline-card h4 {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .guideline-card p {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    .page-footer {
+      background: var(--navy);
+      padding: 48px var(--pad);
+      text-align: center;
+      animation: fadeInUp 1.2s var(--ease) 0.6s both;
+    }
+
+    .footer-cta {
+      margin-bottom: 32px;
+    }
+
+    .footer-cta a {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--pool);
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 2px solid var(--pool);
+      border-radius: 4px;
+      transition: all 0.3s var(--ease);
+    }
+
+    .footer-cta a:hover {
+      background: var(--pool);
+      color: var(--navy);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .footer-content img {
+      height: 24px;
+    }
+
+    .footer-text {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-context h2 {
+        font-size: 32px;
+      }
+
+      .section-context p {
+        font-size: 16px;
+      }
+
+      .email-header {
+        padding: 24px 24px;
+      }
+
+      .email-hero {
+        padding: 24px;
+      }
+
+      .email-body {
+        padding: 0 24px 24px;
+      }
+
+      .email-results {
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px;
+      }
+
+      .email-cta {
+        padding: 24px;
+      }
+
+      .email-footer {
+        padding: 24px;
+      }
+
+      .guidelines-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 0 20px;
+      }
+
+      .nav-center h1 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <img src="assets/sbdc-white-2026.png" alt="SBDC">
+      <a href="success-stories.html">← Success Stories</a>
+    </div>
+    <div class="nav-center">
+      <h1>Newsletter Template</h1>
+      <p>Growth Story Format</p>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section-context">
+      <h2>Growth Story: Newsletter Format</h2>
+      <p>How to feature developing client stories in partner updates and newsletters. This mockup uses Yarrow Goods as the example.</p>
+      <div class="annotation-bar">
+        The template below represents a 600px HTML email — the standard format for partner newsletters.
+      </div>
+    </section>
+
+    <section class="section-email">
+      <div class="email-container">
+        <div class="email-header">
+          <img src="assets/sbdc-white-2026.png" alt="SBDC">
+          <div class="email-header-kicker">Partner Update</div>
+          <div class="email-header-org">NorCal SBDC</div>
+          <div class="email-header-divider"></div>
+        </div>
+
+        <div class="email-hero">
+          <div class="email-photo">
+            <iconify-icon icon="mdi:camera"></iconify-icon>
+            <span>Client Photo</span>
+          </div>
+          <div class="email-hero-tag">Growth Story</div>
+          <h3 class="email-hero-name">Yarrow Goods</h3>
+          <p class="email-hero-tagline">Handmade screen-printed ethical t-shirts, pivoted from brick-and-mortar during COVID.</p>
+        </div>
+
+        <div class="email-body">
+          <div class="email-owner">Oliver & Grace Estrada · Marin SBDC</div>
+          <p class="email-narrative">When the pandemic forced Oliver and Grace Estrada to close their brick-and-mortar stores, they followed their instinct to do what they love. Starting Yarrow Goods from a spare bedroom in 2020, they built a handmade screen-printed t-shirt brand with an emphasis on ethical manufacturing and sustainability. With guidance from Marin SBDC Advisor Richard Strezo, they secured capital from five different lenders and grew sales by 20%.</p>
+
+          <div class="email-quote-block">
+            "We would have closed our business if it were not for the help we received from the Marin SBDC."
+            <div class="email-quote-attribution">— Grace Estrada</div>
+          </div>
+        </div>
+
+        <div class="email-results">
+          <div class="result-item">
+            <div class="result-number">$138K</div>
+            <div class="result-label">Capital Accessed</div>
+          </div>
+          <div class="result-item">
+            <div class="result-number">5</div>
+            <div class="result-label">Lenders</div>
+          </div>
+          <div class="result-item">
+            <div class="result-number">20%</div>
+            <div class="result-label">Sales Growth</div>
+          </div>
+        </div>
+
+        <div class="email-cta">
+          <a href="#" class="cta-button">Read Full Story →</a>
+          <p class="cta-subtext">Learn more about NorCal SBDC at norcalsbdc.org</p>
+        </div>
+
+        <div class="email-footer">
+          <img src="assets/sbdc-blue-2026.png" alt="SBDC">
+          <p><strong>NorCal SBDC · 18 Centers · 36 Counties</strong></p>
+          <p>You're receiving this because you're a valued partner.</p>
+          <p><a href="#">Unsubscribe</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-guidelines">
+      <div class="guidelines-header">
+        <h3>Newsletter Template Guidelines</h3>
+      </div>
+
+      <div class="guidelines-grid">
+        <div class="guideline-card">
+          <h4>Photo First</h4>
+          <p>Always lead with a client photo — it drives 2× more engagement than text-only emails.</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Under 150 Words</h4>
+          <p>The narrative should be 3-4 sentences max. Link to the full story for the rest.</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>3 Metrics, Always</h4>
+          <p>Pick the 3 most compelling numbers. Capital accessed should always be one of them.</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Quote Block</h4>
+          <p>One direct quote from the business owner. Specific > generic.</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>CTA → Full Story</h4>
+          <p>Every newsletter feature should drive to the full story page on norcalsbdc.org</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Send Frequency</h4>
+          <p>Growth stories work best in monthly partner updates. Signature stories can be standalone sends.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-cta">
+      <a href="success-stories.html">See all success stories</a>
+    </div>
+    <div class="footer-content">
+      <img src="assets/sbdc-blue-2026.png" alt="SBDC">
+      <span class="footer-text">NorCal SBDC · Newsletter Template · 2026</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Marketing Plan 2025–2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #000;
+            --ink: #0a0a0a;
+            --charcoal: #171717;
+            --graphite: #262626;
+            --stone: #404040;
+            --gray: #737373;
+            --silver: #a3a3a3;
+            --mist: #d4d4d4;
+            --cloud: #e5e5e5;
+            --snow: #f5f5f5;
+            --white: #fff;
+            --cream: #faf8f5;
+            --warm: #f5f0e8;
+            --navy: #0F1C2E;
+            --teal: #1a8a7d;
+            --teal-light: #2bb5a4;
+            --orange: #e87c3e;
+            --orange-light: #f5a05c;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--white);
+            color: var(--charcoal);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === COVER === */
+        .cover {
+            min-height: 100vh;
+            background: var(--navy);
+            color: var(--white);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            padding: 3rem;
+        }
+
+        .cover-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+        }
+
+        .cover-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .cover-org {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cover-title em {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .cover-year {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1;
+            color: var(--teal-light);
+            margin-bottom: 2rem;
+        }
+
+        .cover-tagline {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: var(--silver);
+            margin-bottom: 0.5rem;
+        }
+
+        .cover-tagline strong {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        .cover-sub {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--silver);
+            max-width: 480px;
+            line-height: 1.7;
+        }
+
+        .cover-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .cover-stats {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .cover-stat { color: var(--silver); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .cover-stat strong {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--white);
+            text-transform: none;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+        }
+
+        .cover-meta {
+            text-align: right;
+            font-size: 0.8125rem;
+            color: var(--silver);
+            line-height: 1.7;
+        }
+
+        /* === TOC === */
+        .toc {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        .toc-left {
+            background: var(--cream);
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .toc-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .toc-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 2rem;
+        }
+
+        .toc-heading em { font-style: italic; }
+
+        .toc-intro {
+            font-size: 1rem;
+            color: var(--stone);
+            max-width: 400px;
+            line-height: 1.8;
+        }
+
+        .toc-right {
+            background: var(--white);
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .toc-list {
+            list-style: none;
+            counter-reset: toc;
+        }
+
+        .toc-item {
+            counter-increment: toc;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .toc-item a {
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: all 0.2s;
+        }
+
+        .toc-item a:hover { padding-left: 1rem; }
+
+        .toc-item a::before {
+            content: counter(toc, decimal-leading-zero);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--gray);
+            min-width: 1.5rem;
+        }
+
+        .toc-item a:hover::before { color: var(--teal); }
+
+        .toc-name { font-size: 1rem; font-weight: 500; }
+
+        @media (max-width: 900px) {
+            .toc { grid-template-columns: 1fr; }
+            .toc-left, .toc-right { padding: 3rem 2rem; }
+        }
+
+        /* === SECTION BASE === */
+        .section { scroll-margin-top: 2rem; }
+
+        /* === SPREAD LAYOUT === */
+        .spread {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        .spread-dark { background: var(--ink); color: var(--white); }
+        .spread-navy { background: var(--navy); color: var(--white); }
+        .spread-light { background: var(--cream); }
+        .spread-white { background: var(--white); }
+
+        .spread-content {
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .spread-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .spread-navy .spread-number,
+        .spread-dark .spread-number { color: var(--silver); }
+
+        .spread-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        .spread-title em { font-style: italic; }
+
+        .spread-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--stone);
+            max-width: 480px;
+        }
+
+        .spread-navy .spread-text,
+        .spread-dark .spread-text { color: var(--silver); }
+
+        .spread-data {
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media (max-width: 900px) {
+            .spread { grid-template-columns: 1fr; }
+            .spread-content, .spread-data { padding: 3rem 2rem; }
+        }
+
+        /* === STATS GRID === */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .stats-three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .stat-item {
+            border-left: 1px solid var(--cloud);
+            padding-left: 1.5rem;
+        }
+
+        .spread-dark .stat-item,
+        .spread-navy .stat-item { border-color: rgba(255,255,255,0.15); }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value-teal { color: var(--teal-light); }
+        .stat-value-orange { color: var(--orange); }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+        }
+
+        .spread-dark .stat-label,
+        .spread-navy .stat-label { color: var(--silver); }
+
+        /* === LIST STYLE === */
+        .content-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .content-list li {
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--cloud);
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .spread-dark .content-list li,
+        .spread-navy .content-list li { border-color: rgba(255,255,255,0.1); }
+
+        .content-list li::before {
+            content: '—';
+            color: var(--gray);
+        }
+
+        /* === FULL WIDTH SECTION === */
+        .full {
+            padding: 8rem 4rem;
+        }
+
+        .full-dark { background: var(--ink); color: var(--white); }
+        .full-navy { background: var(--navy); color: var(--white); }
+        .full-cream { background: var(--cream); }
+        .full-white { background: var(--white); }
+
+        .full-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .full-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .full-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            font-weight: 400;
+            line-height: 0.85;
+            color: var(--mist);
+        }
+
+        .full-dark .full-number,
+        .full-navy .full-number { color: rgba(255,255,255,0.1); }
+
+        .full-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .full-title em { font-style: italic; }
+
+        .full-text {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--stone);
+            max-width: 560px;
+        }
+
+        .full-dark .full-text,
+        .full-navy .full-text { color: var(--silver); }
+
+        @media (max-width: 900px) {
+            .full { padding: 4rem 2rem; }
+            .full-header { grid-template-columns: 1fr; gap: 2rem; }
+            .full-number { font-size: 4rem; }
+        }
+
+        /* === CARD GRID === */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .cards-grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 1000px) {
+            .cards-grid, .cards-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid, .cards-grid-4 { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2.5rem;
+            border: 1px solid var(--cloud);
+        }
+
+        .full-dark .card,
+        .full-navy .card {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .card-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        .full-dark .card-label,
+        .full-navy .card-label { color: var(--teal-light); }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.375rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            font-size: 0.875rem;
+            color: var(--stone);
+            line-height: 1.7;
+        }
+
+        .full-dark .card-text,
+        .full-navy .card-text { color: var(--silver); }
+
+        .card-list {
+            list-style: none;
+            font-size: 0.875rem;
+            color: var(--stone);
+        }
+
+        .full-dark .card-list,
+        .full-navy .card-list { color: var(--silver); }
+
+        .card-list li {
+            padding: 0.625rem 0;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .full-dark .card-list li,
+        .full-navy .card-list li { border-color: rgba(255,255,255,0.1); }
+
+        .card-list li:last-child { border-bottom: none; }
+
+        /* === TABLE === */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid var(--charcoal);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cloud);
+            color: var(--stone);
+        }
+
+        td:first-child {
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .full-dark th, .full-navy th { border-color: var(--white); color: var(--silver); }
+        .full-dark td, .full-navy td { border-color: rgba(255,255,255,0.1); color: var(--silver); }
+        .full-dark td:first-child, .full-navy td:first-child { color: var(--white); }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.25rem 0.625rem;
+            border-radius: 2px;
+        }
+
+        .tag-teal { background: #e6f7f5; color: #0d6b5e; }
+        .tag-orange { background: #fef2e8; color: #c55a1e; }
+
+        /* === CALLOUT === */
+        .callout {
+            background: var(--navy);
+            color: var(--white);
+            padding: 6rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .callout-content { max-width: 480px; }
+
+        .callout-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--teal-light);
+            margin-bottom: 1rem;
+        }
+
+        .callout-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .callout-title em { font-style: italic; color: var(--orange); }
+
+        .callout-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--silver);
+        }
+
+        .callout-stat { text-align: right; }
+
+        .callout-stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(6rem, 12vw, 10rem);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            color: var(--teal-light);
+        }
+
+        .callout-stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+        }
+
+        @media (max-width: 900px) {
+            .callout { grid-template-columns: 1fr; padding: 4rem 2rem; }
+            .callout-stat { text-align: left; margin-top: 2rem; }
+        }
+
+        /* === QUOTE SECTION === */
+        .quote-section {
+            background: var(--cream);
+            padding: 8rem 4rem;
+            text-align: center;
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quote-text em {
+            font-style: normal;
+            color: var(--teal);
+        }
+
+        /* === TIMELINE === */
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+
+        @media (max-width: 900px) { .timeline { grid-template-columns: 1fr; } }
+
+        .timeline-item {
+            padding: 2.5rem;
+            border-right: 1px solid var(--cloud);
+        }
+
+        .timeline-item:last-child { border-right: none; }
+
+        .full-dark .timeline-item,
+        .full-navy .timeline-item { border-color: rgba(255,255,255,0.1); }
+
+        @media (max-width: 900px) {
+            .timeline-item { border-right: none; border-bottom: 1px solid var(--cloud); }
+            .full-dark .timeline-item,
+            .full-navy .timeline-item { border-bottom-color: rgba(255,255,255,0.1); }
+        }
+
+        .timeline-phase {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-style: italic;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+        }
+
+        .full-dark .timeline-phase,
+        .full-navy .timeline-phase { color: var(--teal-light); }
+
+        .timeline-dates {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-list {
+            list-style: none;
+            font-size: 0.8125rem;
+            color: var(--stone);
+            line-height: 1.7;
+        }
+
+        .full-dark .timeline-list,
+        .full-navy .timeline-list { color: var(--silver); }
+
+        .timeline-list li { margin-bottom: 0.5rem; }
+
+        /* === TWO COL === */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; gap: 2rem; } }
+
+        .col-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .col-list {
+            list-style: none;
+            font-size: 0.9375rem;
+            color: var(--stone);
+        }
+
+        .full-dark .col-list,
+        .full-navy .col-list { color: var(--silver); }
+
+        .col-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .full-dark .col-list li,
+        .full-navy .col-list li { border-color: rgba(255,255,255,0.1); }
+
+        /* === ORGANIC ENGINES === */
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) { .engines-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .engines-grid { grid-template-columns: 1fr; } }
+
+        .engine-card {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .engine-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--teal-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .engine-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .engine-desc {
+            font-size: 0.8125rem;
+            color: var(--silver);
+            line-height: 1.6;
+        }
+
+        /* === PRINCIPLES === */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) { .principles-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .principles-grid { grid-template-columns: 1fr; } }
+
+        .principle-card {
+            padding: 2rem;
+            border-left: 3px solid var(--teal-light);
+        }
+
+        .principle-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--teal-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .principle-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .principle-text {
+            font-size: 0.8125rem;
+            color: var(--silver);
+            line-height: 1.7;
+        }
+
+        /* === PILLAR BRAND === */
+        .brand-pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 700px) { .brand-pillars { grid-template-columns: 1fr; } }
+
+        .brand-pillar {
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .brand-pillar-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--teal-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .brand-pillar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .brand-pillar-text {
+            font-size: 0.875rem;
+            color: var(--silver);
+            line-height: 1.7;
+        }
+
+        /* === STORY TIERS === */
+        .story-tiers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 700px) { .story-tiers { grid-template-columns: 1fr; } }
+
+        .story-tier {
+            padding: 2rem;
+            border: 1px solid var(--cloud);
+        }
+
+        .story-tier-badge {
+            display: inline-block;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .badge-quick { background: #e6f7f5; color: #0d6b5e; }
+        .badge-feature { background: #e8eef8; color: #2d5ca6; }
+        .badge-video { background: #fef2e8; color: #c55a1e; }
+
+        .story-tier-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .story-tier-text {
+            font-size: 0.8125rem;
+            color: var(--stone);
+            line-height: 1.7;
+        }
+
+        /* === NEWSLETTER COMPARISON === */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin-top: 3rem;
+            border: 1px solid var(--cloud);
+        }
+
+        @media (max-width: 700px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+        .comparison-col { padding: 2.5rem; }
+        .comparison-old { background: var(--snow); }
+        .comparison-new { background: var(--white); }
+
+        .comparison-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-label-old { color: var(--gray); }
+        .comparison-label-new { color: var(--teal); }
+
+        .comparison-list {
+            list-style: none;
+            font-size: 0.875rem;
+            color: var(--stone);
+        }
+
+        .comparison-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .comparison-list li:last-child { border-bottom: none; }
+
+        /* === NEXT STEPS === */
+        .next-steps-list {
+            list-style: none;
+            counter-reset: steps;
+            margin-top: 3rem;
+        }
+
+        .next-steps-list li {
+            counter-increment: steps;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--cloud);
+            font-size: 0.9375rem;
+            display: grid;
+            grid-template-columns: 2rem 1fr auto;
+            gap: 1.5rem;
+            align-items: baseline;
+        }
+
+        .next-steps-list li::before {
+            content: counter(steps, decimal-leading-zero);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--teal);
+        }
+
+        .step-date {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: var(--navy);
+            color: var(--white);
+            padding: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .footer-tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-style: italic;
+        }
+
+        .footer-tagline em { color: var(--orange); font-style: normal; }
+
+        .footer-meta {
+            font-size: 0.75rem;
+            color: var(--silver);
+        }
+
+        @media (max-width: 600px) {
+            .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+
+        /* === BACK LINK === */
+        .back-link {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 100;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--white); }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; Brand Assets</a>
+
+<!-- ============================== -->
+<!-- COVER -->
+<!-- ============================== -->
+<header class="cover">
+    <div class="cover-top">
+        <span>NorCal SBDC Network</span>
+        <span>Marketing Plan</span>
+    </div>
+    <div class="cover-center">
+        <div class="cover-org">NorCal SBDC Network</div>
+        <div class="cover-title">Marketing <em>Plan</em></div>
+        <div class="cover-year">2025–2026</div>
+        <p class="cover-tagline">Your Business People &nbsp;|&nbsp; Your Business Better</p>
+        <p class="cover-tagline">Serving 1.64 Million Small Businesses Across 36 Counties</p>
+        <p class="cover-tagline"><strong>100% Organic Growth Strategy — Zero Ad Budget</strong></p>
+    </div>
+    <div class="cover-bottom">
+        <div class="cover-stats">
+            <div class="cover-stat">
+                <strong>6</strong>
+                Pillars
+            </div>
+            <div class="cover-stat">
+                <strong>18</strong>
+                Centers
+            </div>
+            <div class="cover-stat">
+                <strong>300+</strong>
+                Advisors
+            </div>
+            <div class="cover-stat">
+                <strong>$0</strong>
+                Ad Budget
+            </div>
+        </div>
+        <div class="cover-meta">
+            Prepared by: Aaron Phelps<br>
+            Marketing &amp; Technology Director<br>
+            NorCal SBDC Network Lead Center<br>
+            February 2025
+        </div>
+    </div>
+</header>
+
+<!-- ============================== -->
+<!-- EXECUTIVE SUMMARY -->
+<!-- ============================== -->
+<section class="quote-section" id="summary">
+    <p class="quote-text">A zero-budget, 100% organic marketing plan. No paid ads, no media buys. Every tactic leverages what we already have: <em>a powerful network</em>, proven impact, and the channels we control.</p>
+</section>
+
+<section class="section full full-white" id="exec-summary">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number" style="color: var(--mist);">00</div>
+            <div>
+                <h2 class="full-title">Executive <em>Summary</em></h2>
+                <p class="full-text">This marketing plan unifies NorCal SBDC's key growth initiatives under one cohesive strategy for the 2025–2026 program year. It aligns six priority areas into a coordinated effort that strengthens our brand, drives engagement, and demonstrates measurable impact across our 18 centers.</p>
+            </div>
+        </div>
+        <div class="two-col">
+            <div>
+                <h3 class="col-title">Six Priority Areas</h3>
+                <ul class="col-list">
+                    <li>Tech Futures Group</li>
+                    <li>Manufacturing Program</li>
+                    <li>Certified Capital Advisors</li>
+                    <li>"Your Business People / Your Business Better" Campaign</li>
+                    <li>Elevated Client Success Stories</li>
+                    <li>Revamped Newsletter</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="col-title">The Constraint is Not Money</h3>
+                <p style="font-size: 0.9375rem; color: var(--stone); line-height: 1.8;">The constraint is coordination, consistency, and content quality. This plan solves for all three. Every tactic leverages a powerful network of 18 centers and 300+ advisors, $1 billion in proven TFG impact, 300+ validated client success stories, existing ecosystem partnerships, and owned distribution channels.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- THE ORGANIC ADVANTAGE -->
+<!-- ============================== -->
+<section class="section full full-navy" id="organic-advantage">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">00</div>
+            <div>
+                <h2 class="full-title" style="color: var(--white);">The Organic <em>Advantage</em></h2>
+                <p class="full-text">Most organizations assume effective marketing requires significant ad spend. NorCal SBDC has something better: a distributed network of trusted advisors, impact numbers that sell themselves, and a service that's free to the client.</p>
+            </div>
+        </div>
+
+        <div class="engines-grid">
+            <div class="engine-card">
+                <div class="engine-value">18</div>
+                <div class="engine-label">Centers</div>
+                <p class="engine-desc">Each one is a local marketing channel with its own community, events, and client base</p>
+            </div>
+            <div class="engine-card">
+                <div class="engine-value">300+</div>
+                <div class="engine-label">Advisors</div>
+                <p class="engine-desc">The most credible referral source—real people talking to real businesses daily</p>
+            </div>
+            <div class="engine-card">
+                <div class="engine-value">$0</div>
+                <div class="engine-label">Service Cost</div>
+                <p class="engine-desc">Free, no-equity advising is the ultimate conversion tool—the offer sells itself</p>
+            </div>
+            <div class="engine-card">
+                <div class="engine-value">$1B+</div>
+                <div class="engine-label">Impact</div>
+                <p class="engine-desc">TFG's track record earns attention without buying it</p>
+            </div>
+        </div>
+
+        <div class="principles-grid">
+            <div class="principle-card">
+                <div class="principle-num">01</div>
+                <div class="principle-title">Make advisors the marketing team</div>
+                <p class="principle-text">Every advisor interaction is a brand impression. Equip them with stories, talking points, and shareable content.</p>
+            </div>
+            <div class="principle-card">
+                <div class="principle-num">02</div>
+                <div class="principle-title">Let impact data do the selling</div>
+                <p class="principle-text">$1B raised. 57% SBIR win rate. These numbers earn press, partnerships, and word of mouth that money can't buy.</p>
+            </div>
+            <div class="principle-card">
+                <div class="principle-num">03</div>
+                <div class="principle-title">Cross-pollinate across 18 centers</div>
+                <p class="principle-text">One great success story, shared across 18 websites, 18 email lists, and 18 social accounts, reaches exponentially more people than any single ad.</p>
+            </div>
+            <div class="principle-card">
+                <div class="principle-num">04</div>
+                <div class="principle-title">Earn partnerships, not impressions</div>
+                <p class="principle-text">Co-marketing with universities, lenders, accelerators, and trade associations puts us in front of their audiences for free.</p>
+            </div>
+            <div class="principle-card">
+                <div class="principle-num">05</div>
+                <div class="principle-title">Obsess over email</div>
+                <p class="principle-text">Our newsletter is the single highest-leverage channel we own. Fixing it from 0.7% CTR to 3%+ is worth more than any ad campaign.</p>
+            </div>
+            <div class="principle-card">
+                <div class="principle-num">06</div>
+                <div class="principle-title">Tell better stories, more often</div>
+                <p class="principle-text">The best marketing is a real business owner saying "SBDC changed my life." Systematize the capture and distribution of those stories.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- BRAND FRAMEWORK -->
+<!-- ============================== -->
+<section class="section full full-dark" id="brand-framework">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">00</div>
+            <div>
+                <h2 class="full-title" style="color: var(--white);">Brand <em>Framework</em></h2>
+                <p class="full-text">Every initiative in this plan ladders up to our unified brand message, validated through analysis of 300+ client success stories and built on three pillars.</p>
+            </div>
+        </div>
+        <div class="brand-pillars">
+            <div class="brand-pillar">
+                <div class="brand-pillar-label">Pillar</div>
+                <div class="brand-pillar-title">People</div>
+                <p class="brand-pillar-text">Expert advisors who understand your business and walk alongside you at every stage.</p>
+            </div>
+            <div class="brand-pillar">
+                <div class="brand-pillar-label">Pillar</div>
+                <div class="brand-pillar-title">Funded</div>
+                <p class="brand-pillar-text">Access to capital, financial guidance, and certified advisors who help you secure the resources to grow.</p>
+            </div>
+            <div class="brand-pillar">
+                <div class="brand-pillar-label">Pillar</div>
+                <div class="brand-pillar-title">Connected</div>
+                <p class="brand-pillar-text">A network of 18 centers, industry partners, and community resources that expand your reach.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- TOC -->
+<!-- ============================== -->
+<nav class="toc">
+    <div class="toc-left">
+        <p class="toc-label">Six Pillars</p>
+        <h2 class="toc-heading">The <em>Plan</em></h2>
+        <p class="toc-intro">Six strategic pillars designed to strengthen our brand, drive engagement, and demonstrate measurable impact across the Northern California network—all through organic growth.</p>
+    </div>
+    <div class="toc-right">
+        <ol class="toc-list">
+            <li class="toc-item"><a href="#pillar-1"><span class="toc-name">Tech Futures Group — Aggressive Organic Growth</span></a></li>
+            <li class="toc-item"><a href="#pillar-2"><span class="toc-name">Manufacturing Program Launch</span></a></li>
+            <li class="toc-item"><a href="#pillar-3"><span class="toc-name">Certified Capital Advisors</span></a></li>
+            <li class="toc-item"><a href="#pillar-4"><span class="toc-name">Your Business People / Your Business Better Campaign</span></a></li>
+            <li class="toc-item"><a href="#pillar-5"><span class="toc-name">Client Success Stories</span></a></li>
+            <li class="toc-item"><a href="#pillar-6"><span class="toc-name">Newsletter Transformation</span></a></li>
+        </ol>
+    </div>
+</nav>
+
+<!-- ============================== -->
+<!-- PILLAR 1: TECH FUTURES GROUP -->
+<!-- ============================== -->
+<section id="pillar-1" class="section">
+    <div class="callout">
+        <div class="callout-content">
+            <p class="callout-label">Pillar 01</p>
+            <h2 class="callout-title">Tech Futures Group — <em>Aggressive Organic Growth</em></h2>
+            <p class="callout-text">TFG is NorCal SBDC's highest-impact program for capital infusion and economic impact. As a no-cost, no-equity venture platform, TFG has the kind of impact story that earns organic attention—if we put it in front of the right people, the right way.</p>
+        </div>
+        <div class="callout-stat">
+            <div class="callout-stat-value">$1B+</div>
+            <div class="callout-stat-label">Capital Raised for Founders</div>
+        </div>
+    </div>
+</section>
+
+<section class="section spread">
+    <div class="spread-data spread-navy">
+        <div class="stats stats-three">
+            <div class="stat-item">
+                <div class="stat-value stat-value-teal">$1B+</div>
+                <div class="stat-label">Capital Raised</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value stat-value-orange">57%</div>
+                <div class="stat-label">SBIR Win Rate (vs. 15%)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" style="color: var(--white);">$0</div>
+                <div class="stat-label">Cost to Founders</div>
+            </div>
+        </div>
+    </div>
+    <div class="spread-content spread-white">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 1.5rem;">TFG as the Impact <em style="font-style: italic;">Multiplier</em></h3>
+        <ul class="content-list">
+            <li>Every major SBDC presentation leads with TFG impact data</li>
+            <li>Success stories cross-promoted across all 18 center channels</li>
+            <li>$1B+ stat becomes a headline in all brand marketing</li>
+            <li>Quarterly impact dashboard shared with SBA, GO-Biz, and leadership</li>
+            <li>TFG founders featured in the YBP "Funded" pillar messaging</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section full full-white">
+    <div class="full-inner">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">Organic TFG Growth <em style="font-style: italic;">Tactics</em></h3>
+        <p style="font-size: 1rem; color: var(--stone); margin-bottom: 2rem;">Ten coordinated tactics to grow TFG applications and visibility without spending a dollar.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tactic</th>
+                        <th>Description</th>
+                        <th>Timeline / Metric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Founder Referral Engine</td>
+                        <td>Activate TFG alumni as referral sources. Create shareable one-pagers and email templates alumni can forward.</td>
+                        <td>Q1 2025 / 30% of new apps from referrals</td>
+                    </tr>
+                    <tr>
+                        <td>SBIR/STTR Content Hub</td>
+                        <td>Build a dedicated resource section on techfuturesgroup.org: grant guides, application tips, and the 57% win rate story. Optimize for organic search.</td>
+                        <td>Q1 2025 / Top 10 ranking within 6 months</td>
+                    </tr>
+                    <tr>
+                        <td>University &amp; Incubator Pipeline</td>
+                        <td>Direct outreach to entrepreneurship programs and tech transfer offices at UC Davis, Sac State, Chico State, Humboldt, and Bay Area schools.</td>
+                        <td>Q1–Q3 / 10+ active partnerships</td>
+                    </tr>
+                    <tr>
+                        <td>Advisor LinkedIn Strategy</td>
+                        <td>TFG advisors post 1–2x/week on LinkedIn: founder wins, startup insights, lessons learned. Each advisor's network becomes a reach multiplier.</td>
+                        <td>Q2 2025 / 50K+ monthly impressions</td>
+                    </tr>
+                    <tr>
+                        <td>Founder Story Engine</td>
+                        <td>Monthly flagship founder stories (written + phone-shot video). Focus on capital raised, grants won, growth milestones.</td>
+                        <td>Monthly / 12+ stories in Year 1</td>
+                    </tr>
+                    <tr>
+                        <td>Community Presence</td>
+                        <td>TFG advisors attend and present at local pitch nights, startup meetups, and tech events as speakers, judges, and mentors.</td>
+                        <td>Ongoing / 2+ events per month</td>
+                    </tr>
+                    <tr>
+                        <td>Cross-Center Referrals</td>
+                        <td>Every NorCal SBDC center actively refers tech clients to TFG. Simple screening checklist for advisors.</td>
+                        <td>Q1 2025 / All 18 centers referring</td>
+                    </tr>
+                    <tr>
+                        <td>TFG at EMERGE 2025</td>
+                        <td>Dedicated TFG founder showcase at EMERGE: live pitches, advisor panels, on-site application drive.</td>
+                        <td>Oct 2025 / 25+ applications from EMERGE</td>
+                    </tr>
+                    <tr>
+                        <td>SEO &amp; Website CRO</td>
+                        <td>Conversion-focused updates to techfuturesgroup.org: impact stats above the fold, founder testimonials, streamlined application.</td>
+                        <td>Q1–Q2 / 2x organic traffic and conversion</td>
+                    </tr>
+                    <tr>
+                        <td>Sector Outreach</td>
+                        <td>Targeted organic outreach per TFG vertical. Climate Tech: clean energy coalitions. BioTech: life science incubators. SaaS: developer communities.</td>
+                        <td>Quarterly / 30% of new apps from sectors</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- PILLAR 2: MANUFACTURING -->
+<!-- ============================== -->
+<section id="pillar-2" class="section spread">
+    <div class="spread-content spread-navy">
+        <p class="spread-number">02</p>
+        <h2 class="spread-title" style="color: var(--white);">Manufacturing Program <em>Launch</em></h2>
+        <p class="spread-text">The new Manufacturing Program positions NorCal SBDC as the go-to resource for small and mid-size manufacturers. All marketing is organic—built on partnerships, content, and direct outreach through existing channels.</p>
+    </div>
+    <div class="spread-data spread-white">
+        <div class="table-wrap" style="margin-top: 0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tactic</th>
+                        <th>Timeline / Metric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Program Branding — Logo lockup, one-pager, landing page on MySBDC</td>
+                        <td>Q1 2025 / Assets live by March</td>
+                    </tr>
+                    <tr>
+                        <td>Organic Launch Push — Coordinated announcement across all 18 centers</td>
+                        <td>Q1–Q2 / 500+ page visits in 60 days</td>
+                    </tr>
+                    <tr>
+                        <td>Partner Pipeline — Outreach to MEP centers, associations, workforce boards, EDOs</td>
+                        <td>Ongoing / 10+ partnerships by Q3</td>
+                    </tr>
+                    <tr>
+                        <td>Content Series — Monthly "Manufacturing Spotlight" in newsletter and social</td>
+                        <td>Monthly / 3x engagement vs. standard</td>
+                    </tr>
+                    <tr>
+                        <td>Workshops &amp; Roundtables — Manufacturing-specific workshops and advisor-led roundtables</td>
+                        <td>Q2–Q4 / 150+ attendees in Year 1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- PILLAR 3: CAPITAL ADVISORS -->
+<!-- ============================== -->
+<section id="pillar-3" class="section full full-cream">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">03</div>
+            <div>
+                <h2 class="full-title">Certified Capital <em>Advisors</em></h2>
+                <p class="full-text">Certified Capital Advisors are a key differentiator. This pillar elevates their visibility through organic content, partner co-promotion, and advisor-driven outreach.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tactic</th>
+                        <th>Description</th>
+                        <th>Timeline / Metric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Advisor Profiles</td>
+                        <td>Professional headshots, bios, and credential highlights on MySBDC, newsletters, and social. Advisors share through personal networks.</td>
+                        <td>Q1–Q2 / All profiles live by April</td>
+                    </tr>
+                    <tr>
+                        <td>"Meet Your Advisor" Videos</td>
+                        <td>Short videos (60–90 sec) shot on phones. Advisors introduce themselves and demystify capital access.</td>
+                        <td>Q2 2025 / 5+ videos; 5K+ organic views</td>
+                    </tr>
+                    <tr>
+                        <td>Capital Success Stories</td>
+                        <td>Dedicated story track: businesses that secured funding through SBDC advising. Tied to the "Funded" pillar.</td>
+                        <td>Quarterly / 8+ stories in Year 1</td>
+                    </tr>
+                    <tr>
+                        <td>Lender Co-Marketing</td>
+                        <td>Joint webinars and co-authored guides with lending partners (e.g., "5 Steps to SBA Loan Readiness").</td>
+                        <td>Q2–Q4 / 4+ co-marketing activations</td>
+                    </tr>
+                    <tr>
+                        <td>Credential Awareness</td>
+                        <td>FAQ content, infographics, and advisor intro emails explaining what "Certified Capital Advisor" means.</td>
+                        <td>Q1–Q2 / Credential page in top 10 visited</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- PILLAR 4: YBP CAMPAIGN -->
+<!-- ============================== -->
+<section id="pillar-4" class="section">
+    <div class="callout">
+        <div class="callout-content">
+            <p class="callout-label">Pillar 04</p>
+            <h2 class="callout-title">Your Business People / <em>Your Business Better</em></h2>
+            <p class="callout-text">The unifying brand campaign that ties all programs together. It shifts NorCal SBDC's public identity from a government program to a trusted business growth partner—entirely through organic channels and network coordination.</p>
+        </div>
+        <div class="callout-stat">
+            <div class="callout-stat-value" style="font-size: clamp(4rem, 8vw, 6rem);">YBP</div>
+            <div class="callout-stat-label">Brand Campaign</div>
+        </div>
+    </div>
+</section>
+
+<section class="section full full-white">
+    <div class="full-inner">
+        <div class="table-wrap" style="margin-top: 0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tactic</th>
+                        <th>Description</th>
+                        <th>Timeline / Metric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Campaign Creative</td>
+                        <td>Core asset library: tagline lockups, social templates, email headers, presentation decks, print collateral—all aligned to People-Funded-Connected pillars.</td>
+                        <td>Q1 2025 / Full library by March</td>
+                    </tr>
+                    <tr>
+                        <td>Network Rollout</td>
+                        <td>Adoption across all 18 centers: brand training sessions, templates in shared drive, one-page brand guidelines.</td>
+                        <td>Q1–Q2 / 100% adoption by June</td>
+                    </tr>
+                    <tr>
+                        <td>Organic Social Campaign</td>
+                        <td>Coordinated organic social across all center accounts. Shared content calendar with weekly YBP-branded posts.</td>
+                        <td>Q2–Q4 / 2x social engagement network-wide</td>
+                    </tr>
+                    <tr>
+                        <td>Client Touchpoint Audit</td>
+                        <td>Review and update all client-facing materials (intake forms, follow-up emails, workshop slides, signage) to reflect YBP branding.</td>
+                        <td>Q2 / Audit and updates by Q3</td>
+                    </tr>
+                    <tr>
+                        <td>Internal Evangelism</td>
+                        <td>Monthly "Brand Win" spotlight in internal comms. Celebrate centers and advisors who embody YBP in their client work.</td>
+                        <td>Monthly / +25% brand adoption scores</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- PILLAR 5: SUCCESS STORIES -->
+<!-- ============================== -->
+<section id="pillar-5" class="section spread">
+    <div class="spread-content spread-dark">
+        <p class="spread-number">05</p>
+        <h2 class="spread-title" style="color: var(--white);">Client Success <em>Stories</em></h2>
+        <p class="spread-text">Success stories are our most powerful marketing asset—and currently our most underutilized. This pillar creates a repeatable system for capturing, producing, and distributing high-impact stories.</p>
+        <ul class="content-list">
+            <li>Standardized intake form integrated into Neoserra workflow</li>
+            <li>Quarterly story collection drives: 2–3 leads per center</li>
+            <li>20-minute structured phone or video interviews</li>
+            <li>Simple photo/video guidelines for all 18 centers</li>
+            <li>TFG stories prioritized for flagship production</li>
+        </ul>
+    </div>
+    <div class="spread-data spread-light">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 400; margin-bottom: 2rem;">Story Production Tiers</h3>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="padding: 1.5rem; border: 1px solid var(--cloud); background: var(--white);">
+                <span class="story-tier-badge badge-quick">Quick Win</span>
+                <div style="font-weight: 500; margin-bottom: 0.25rem;">Social graphic + client quote</div>
+                <div style="font-size: 0.8125rem; color: var(--stone);">Produced in 30 minutes. High volume.</div>
+            </div>
+            <div style="padding: 1.5rem; border: 1px solid var(--cloud); background: var(--white);">
+                <span class="story-tier-badge badge-feature">Feature Story</span>
+                <div style="font-weight: 500; margin-bottom: 0.25rem;">500-word written profile with photos</div>
+                <div style="font-size: 0.8125rem; color: var(--stone);">Published on MySBDC and center sites.</div>
+            </div>
+            <div style="padding: 1.5rem; border: 1px solid var(--cloud); background: var(--white);">
+                <span class="story-tier-badge badge-video">Video Story</span>
+                <div style="font-weight: 500; margin-bottom: 0.25rem;">2–3 min video shot on phone or Zoom</div>
+                <div style="font-size: 0.8125rem; color: var(--stone);">Posted to YouTube and social.</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem;">
+            <h4 style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray); margin-bottom: 1rem;">Targets</h4>
+            <ul class="col-list" style="font-size: 0.875rem;">
+                <li>30+ new stories captured per year, with 12+ from TFG</li>
+                <li>Each center contributes at least 4 stories annually</li>
+                <li>Success stories become #1 engaged content type by Q4</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Story Distribution -->
+<section class="section full full-white">
+    <div class="full-inner">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 2rem;">Story Distribution <em style="font-style: italic;">Strategy</em></h3>
+        <div class="cards-grid cards-grid-4">
+            <div class="card">
+                <p class="card-label">Newsletter</p>
+                <h4 class="card-title">Email</h4>
+                <p class="card-text">1 featured story per issue + Quick Win sidebar</p>
+            </div>
+            <div class="card">
+                <p class="card-label">Social Media</p>
+                <h4 class="card-title">Social</h4>
+                <p class="card-text">2–3 story posts per week, repurposed from Feature and Quick Win tiers</p>
+            </div>
+            <div class="card">
+                <p class="card-label">Website</p>
+                <h4 class="card-title">Hub</h4>
+                <p class="card-text">Dedicated success stories hub on MySBDC with filtering by industry, county, and program</p>
+            </div>
+            <div class="card">
+                <p class="card-label">Stakeholder</p>
+                <h4 class="card-title">Presentations</h4>
+                <p class="card-text">Story bank for center directors, advisors, and leadership for meetings and proposals</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- PILLAR 6: NEWSLETTER -->
+<!-- ============================== -->
+<section id="pillar-6" class="section full full-navy">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">06</div>
+            <div>
+                <h2 class="full-title" style="color: var(--white);">Newsletter <em>Transformation</em></h2>
+                <p class="full-text">The current newsletter underperforms with a 0.7% click-through rate—well below industry benchmarks. The newsletter is our single highest-leverage owned channel and costs nothing to improve.</p>
+            </div>
+        </div>
+
+        <div class="comparison-grid" style="border-color: rgba(255,255,255,0.1);">
+            <div class="comparison-col" style="background: rgba(255,255,255,0.03);">
+                <div class="comparison-label comparison-label-old" style="color: var(--silver);">Current State</div>
+                <ul class="comparison-list" style="color: var(--silver);">
+                    <li style="border-color: rgba(255,255,255,0.1);">Generic, one-size-fits-all content</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Event listings dominate the content</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">No personalization or advisor connection</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Inconsistent send schedule</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">No clear brand voice</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">No TFG or program-specific content</li>
+                </ul>
+            </div>
+            <div class="comparison-col" style="background: rgba(255,255,255,0.08);">
+                <div class="comparison-label comparison-label-new" style="color: var(--teal-light);">New Approach</div>
+                <ul class="comparison-list" style="color: var(--white);">
+                    <li style="border-color: rgba(255,255,255,0.1);">Segmented by region, industry, and client stage</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Story-led content with events as secondary CTA</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Advisor spotlight + "reply to your advisor" prompt</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Bi-weekly cadence with consistent format</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">YBP tone: warm, knowledgeable, action-oriented</li>
+                    <li style="border-color: rgba(255,255,255,0.1);">Rotating spotlights: TFG, Manufacturing, Capital Advisors</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cards-grid" style="margin-top: 3rem;">
+            <div class="card">
+                <p class="card-label">Section 1</p>
+                <h4 class="card-title">Lead Story</h4>
+                <p class="card-text">Client success story or advisor profile — People/Funded/Connected pillar rotation</p>
+            </div>
+            <div class="card">
+                <p class="card-label">Section 2</p>
+                <h4 class="card-title">Quick Tip</h4>
+                <p class="card-text">One actionable business insight — tax deadline, SBA checklist, marketing tactic</p>
+            </div>
+            <div class="card">
+                <p class="card-label">Section 3</p>
+                <h4 class="card-title">Program Spotlight</h4>
+                <p class="card-text">Rotating feature — TFG, Manufacturing, Capital Advisors, or workshops</p>
+            </div>
+        </div>
+
+        <div class="two-col" style="margin-top: 3rem;">
+            <div>
+                <h4 style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal-light); margin-bottom: 1rem;">Also In Each Issue</h4>
+                <ul class="col-list">
+                    <li>Upcoming Events — Top 3–5 workshops/webinars with clear registration CTAs</li>
+                    <li>Community Connection — Partner highlight, local resource, or network news</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal-light); margin-bottom: 1rem;">Newsletter Targets</h4>
+                <ul class="col-list">
+                    <li>Click-through rate from 0.7% to 3%+ within 6 months</li>
+                    <li>Grow subscriber list by 20%</li>
+                    <li>Achieve 30%+ open rate consistently</li>
+                    <li>Become a measurable driver of registrations and inquiries</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- IMPLEMENTATION TIMELINE -->
+<!-- ============================== -->
+<section class="section full full-cream" id="timeline">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number" style="color: var(--mist);">07</div>
+            <div>
+                <h2 class="full-title">Implementation <em>Timeline</em></h2>
+                <p class="full-text">Three phases to manage capacity while building momentum.</p>
+            </div>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-phase">Phase 1</div>
+                <div class="timeline-dates">Feb – Apr 2025</div>
+                <div class="timeline-title">Foundation</div>
+                <ul class="timeline-list">
+                    <li>Brand assets &amp; YBP asset library live</li>
+                    <li>Newsletter redesign launched</li>
+                    <li>TFG website/SEO optimization</li>
+                    <li>Referral engine launch</li>
+                    <li>University outreach begins</li>
+                    <li>Manufacturing landing page published</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-phase">Phase 2</div>
+                <div class="timeline-dates">May – Aug 2025</div>
+                <div class="timeline-title">Activation</div>
+                <ul class="timeline-list">
+                    <li>Organic social coordinated across 18 centers</li>
+                    <li>5+ Capital Advisor videos produced</li>
+                    <li>TFG story pipeline producing monthly</li>
+                    <li>10+ ecosystem partnerships active</li>
+                    <li>Advisor LinkedIn strategy deployed</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-phase">Phase 3</div>
+                <div class="timeline-dates">Sep 2025 – Feb 2026</div>
+                <div class="timeline-title">Scale</div>
+                <ul class="timeline-list">
+                    <li>All 18 centers on-brand</li>
+                    <li>Newsletter CTR at 3%+</li>
+                    <li>30+ stories published</li>
+                    <li>TFG showcase at EMERGE</li>
+                    <li>Year 1 impact report published</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- METRICS -->
+<!-- ============================== -->
+<section class="section full full-dark" id="metrics">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">08</div>
+            <div>
+                <h2 class="full-title" style="color: var(--white);">Measurement &amp; <em>Success Metrics</em></h2>
+                <p class="full-text">Every initiative ties to measurable outcomes. We track monthly and report quarterly to network leadership.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Current Baseline</th>
+                        <th>6-Month Target</th>
+                        <th>12-Month Target</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TFG Qualified Applications</td>
+                        <td>Baseline</td>
+                        <td>50+/quarter</td>
+                        <td>75+/quarter</td>
+                    </tr>
+                    <tr>
+                        <td>TFG Referral-Driven Applications</td>
+                        <td>N/A</td>
+                        <td>30% of total</td>
+                        <td>40% of total</td>
+                    </tr>
+                    <tr>
+                        <td>TFG Founder Stories Published</td>
+                        <td>~2/year</td>
+                        <td>6</td>
+                        <td>12+</td>
+                    </tr>
+                    <tr>
+                        <td>TFG Ecosystem Partnerships</td>
+                        <td>~5</td>
+                        <td>10+</td>
+                        <td>20+</td>
+                    </tr>
+                    <tr>
+                        <td>Newsletter Click-Through Rate</td>
+                        <td>0.7%</td>
+                        <td>2.0%</td>
+                        <td>3.0%+</td>
+                    </tr>
+                    <tr>
+                        <td>Newsletter Subscriber Growth</td>
+                        <td>Baseline</td>
+                        <td>+10%</td>
+                        <td>+20%</td>
+                    </tr>
+                    <tr>
+                        <td>Total Success Stories Published</td>
+                        <td>~5/year</td>
+                        <td>15</td>
+                        <td>30+</td>
+                    </tr>
+                    <tr>
+                        <td>Manufacturing Program Inquiries</td>
+                        <td>N/A (new)</td>
+                        <td>75+</td>
+                        <td>200+</td>
+                    </tr>
+                    <tr>
+                        <td>Capital Advisor Video Views</td>
+                        <td>N/A (new)</td>
+                        <td>2,500+</td>
+                        <td>5,000+</td>
+                    </tr>
+                    <tr>
+                        <td>YBP Brand Adoption (Centers)</td>
+                        <td>0%</td>
+                        <td>75%</td>
+                        <td>100%</td>
+                    </tr>
+                    <tr>
+                        <td>Organic Social Engagement</td>
+                        <td>Baseline</td>
+                        <td>+50%</td>
+                        <td>+100%</td>
+                    </tr>
+                    <tr>
+                        <td>Workshop Registrations via Marketing</td>
+                        <td>Baseline</td>
+                        <td>+15%</td>
+                        <td>+30%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- NEXT STEPS -->
+<!-- ============================== -->
+<section class="section full full-white" id="next-steps">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number" style="color: var(--mist);">09</div>
+            <div>
+                <h2 class="full-title">Next <em>Steps</em></h2>
+                <p class="full-text">Immediate actions to get moving—all organic, all within current resources.</p>
+            </div>
+        </div>
+        <ol class="next-steps-list">
+            <li>
+                <span>Launch TFG founder referral engine: shareable one-pagers and alumni outreach</span>
+                <span class="step-date">February</span>
+            </li>
+            <li>
+                <span>Begin TFG website SEO and conversion optimization</span>
+                <span class="step-date">February</span>
+            </li>
+            <li>
+                <span>Start university and incubator partnership outreach for TFG pipeline</span>
+                <span class="step-date">February</span>
+            </li>
+            <li>
+                <span>Finalize YBP campaign creative assets and brand guidelines one-pager</span>
+                <span class="step-date">February</span>
+            </li>
+            <li>
+                <span>Launch redesigned newsletter with new content formula</span>
+                <span class="step-date">March</span>
+            </li>
+            <li>
+                <span>Complete Manufacturing Program branding and landing page</span>
+                <span class="step-date">March</span>
+            </li>
+            <li>
+                <span>Begin Certified Capital Advisor video production on smartphones</span>
+                <span class="step-date">April</span>
+            </li>
+            <li>
+                <span>Activate client success story capture system across all 18 centers</span>
+                <span class="step-date">April</span>
+            </li>
+            <li>
+                <span>Roll out advisor LinkedIn strategy for TFG team</span>
+                <span class="step-date">April</span>
+            </li>
+            <li>
+                <span>Coordinate organic social content calendar across all center accounts</span>
+                <span class="step-date">May</span>
+            </li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================== -->
+<!-- CLOSING -->
+<!-- ============================== -->
+<section class="quote-section" style="background: var(--navy); color: var(--white);">
+    <p class="quote-text" style="color: var(--white);">Your Business People. Your Business Better. <em style="font-style: normal; color: var(--orange);">Move Faster. Build Bigger.</em></p>
+</section>
+
+<!-- ============================== -->
+<!-- FOOTER -->
+<!-- ============================== -->
+<footer class="footer">
+    <div>
+        <div class="footer-brand">NorCal SBDC Network</div>
+        <div class="footer-tagline">Your Business People. <em>Your Business Better.</em></div>
+    </div>
+    <div class="footer-meta">Marketing Plan 2025–2026 — Confidential</div>
+</footer>
+
+</body>
+</html>

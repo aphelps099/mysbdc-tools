@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Guide — Wall Street Weird</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/helvetica-neue-55');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+            --white: #ffffff;
+            --black: #000000;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', 'Space Grotesk', -apple-system, sans-serif;
+            background: #000;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .section-divider {
+            text-align: center;
+            padding: 80px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 60px;
+        }
+        
+        .section-divider h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #444;
+        }
+        
+        .page-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .page-label span { color: var(--pool); }
+        
+        .page {
+            width: 816px;
+            height: 1056px;
+            margin: 0 auto 80px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        }
+        
+        .placeholder {
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.2);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .placeholder-dark {
+            border-color: rgba(0,0,0,0.15);
+            color: rgba(0,0,0,0.2);
+        }
+
+        /* =============================================
+           COVER — WALL STREET WEIRD
+        ============================================= */
+        .cover-wsw {
+            background: var(--black);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        
+        .cover-wsw .top {
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .cover-wsw .top .network {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #444;
+        }
+        
+        .cover-wsw .top .year {
+            font-size: 120px;
+            font-weight: 700;
+            color: #111;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+        }
+        
+        .cover-wsw .middle {
+            padding: 0 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .cover-wsw .headline {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            max-width: 600px;
+        }
+        
+        .cover-wsw .headline em {
+            font-style: normal;
+            color: var(--pool);
+        }
+        
+        .cover-wsw .sub {
+            font-size: 14px;
+            color: #666;
+            margin-top: 32px;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+        
+        .cover-wsw .bottom {
+            display: flex;
+        }
+        
+        .cover-wsw .tension {
+            flex: 1;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .cover-wsw .tension:first-child { background: var(--cream); }
+        .cover-wsw .tension:last-child { background: var(--maroon); }
+        
+        .cover-wsw .tension .num {
+            font-size: 80px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .cover-wsw .tension:first-child .num { color: var(--black); }
+        .cover-wsw .tension:last-child .num { color: var(--white); }
+        
+        .cover-wsw .tension .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        
+        .cover-wsw .tension:first-child .label { color: #666; }
+        .cover-wsw .tension:last-child .label { color: rgba(255,255,255,0.5); }
+
+        /* =============================================
+           DIRECTOR — ASYMMETRIC
+        ============================================= */
+        .director-wsw {
+            background: var(--cream);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .director-wsw .left {
+            background: var(--navy);
+            padding: 60px 48px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .director-wsw .left .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: auto;
+        }
+        
+        .director-wsw .left .photo {
+            width: 100%;
+            height: 320px;
+            margin-bottom: 24px;
+        }
+        
+        .director-wsw .left .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+        
+        .director-wsw .left .title {
+            font-size: 12px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .director-wsw .right {
+            padding: 60px 48px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .director-wsw .right .stats {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .director-wsw .right .stat .num {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        
+        .director-wsw .right .stat .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-top: 4px;
+        }
+        
+        .director-wsw .right .letter {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .director-wsw .right .letter p {
+            font-size: 15px;
+            color: var(--navy);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .director-wsw .right .letter .pull {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--maroon);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin: 32px 0;
+        }
+        
+        .director-wsw .right .sig {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 2px solid var(--navy);
+        }
+        
+        .director-wsw .right .sig-line {
+            font-size: 12px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           THE MATH — FULL BLEED
+        ============================================= */
+        .math-wsw {
+            background: var(--maroon);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        .math-wsw .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 60px;
+        }
+        
+        .math-wsw .equation {
+            display: flex;
+            align-items: baseline;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .math-wsw .num-block .num {
+            font-size: 140px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.05em;
+            line-height: 0.85;
+        }
+        
+        .math-wsw .num-block .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-top: 12px;
+        }
+        
+        .math-wsw .arrow {
+            font-size: 60px;
+            color: rgba(255,255,255,0.2);
+        }
+        
+        .math-wsw .punchline {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--white);
+            line-height: 1.4;
+            max-width: 500px;
+        }
+        
+        .math-wsw .punchline em {
+            font-style: normal;
+            color: var(--pool);
+        }
+
+        /* =============================================
+           SERVICES — BRUTALIST GRID
+        ============================================= */
+        .services-wsw {
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+        }
+        
+        .services-wsw .header {
+            grid-column: span 2;
+            background: var(--black);
+            padding: 48px;
+        }
+        
+        .services-wsw .header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.03em;
+        }
+        
+        .services-wsw .header p {
+            font-size: 14px;
+            color: #666;
+            margin-top: 12px;
+        }
+        
+        .services-wsw .card {
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .services-wsw .card:nth-child(2) { border-right: none; border-bottom: none; }
+        .services-wsw .card:nth-child(3) { border-bottom: none; }
+        .services-wsw .card:nth-child(4) { border-right: none; }
+        
+        .services-wsw .card .icon {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--maroon);
+            margin-bottom: 24px;
+            line-height: 1;
+        }
+        
+        .services-wsw .card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+        
+        .services-wsw .card ul {
+            list-style: none;
+        }
+        
+        .services-wsw .card li {
+            font-size: 13px;
+            color: #444;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .services-wsw .card li:last-child { border-bottom: none; }
+
+        /* =============================================
+           SPONSOR A — TESTIMONIAL WEIRD
+        ============================================= */
+        .sponsor-weird-a {
+            background: var(--black);
+            display: grid;
+            grid-template-rows: 1fr auto;
+        }
+        
+        .sponsor-weird-a .main {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+        }
+        
+        .sponsor-weird-a .photo-area {
+            position: relative;
+            background: #222;
+        }
+        
+        .sponsor-weird-a .photo-area .photo {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+        
+        .sponsor-weird-a .photo-area .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 48px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+        }
+        
+        .sponsor-weird-a .photo-area .quote {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-weird-a .photo-area .attr {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .sponsor-weird-a .photo-area .attr strong {
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .sponsor-weird-a .sidebar {
+            background: var(--cream);
+            padding: 48px 32px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-weird-a .sidebar .logo {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-weird-a .sidebar .headline {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        
+        .sponsor-weird-a .sidebar .services {
+            flex: 1;
+        }
+        
+        .sponsor-weird-a .sidebar .services span {
+            display: block;
+            font-size: 11px;
+            color: var(--navy);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(15,28,46,0.1);
+        }
+        
+        .sponsor-weird-a .sidebar .contact {
+            margin-top: auto;
+            padding-top: 24px;
+        }
+        
+        .sponsor-weird-a .sidebar .contact-photo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-weird-a .sidebar .contact-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        
+        .sponsor-weird-a .sidebar .contact-info {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .sponsor-weird-a .footer {
+            background: var(--maroon);
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sponsor-weird-a .footer .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--white);
+        }
+        
+        .sponsor-weird-a .footer .url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.1em;
+        }
+
+        /* =============================================
+           SPONSOR B — BRAND TAKEOVER
+        ============================================= */
+        .sponsor-weird-b {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-weird-b .brand {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            position: relative;
+        }
+        
+        .sponsor-weird-b .brand.bg-pool { background: var(--pool); }
+        .sponsor-weird-b .brand.bg-navy { background: var(--navy); }
+        
+        .sponsor-weird-b .brand .logo {
+            width: 300px;
+            height: 100px;
+            margin-bottom: 48px;
+        }
+        
+        .sponsor-weird-b .brand .tagline {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-weird-b .brand.bg-pool .tagline { color: var(--navy); }
+        .sponsor-weird-b .brand.bg-navy .tagline { color: var(--white); }
+        
+        .sponsor-weird-b .brand .body {
+            font-size: 15px;
+            line-height: 1.7;
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-weird-b .brand.bg-pool .body { color: var(--navy); opacity: 0.7; }
+        .sponsor-weird-b .brand.bg-navy .body { color: var(--sky); }
+        
+        .sponsor-weird-b .brand .quote {
+            font-size: 14px;
+            font-style: italic;
+            max-width: 450px;
+        }
+        
+        .sponsor-weird-b .brand.bg-pool .quote { color: var(--maroon); }
+        .sponsor-weird-b .brand.bg-navy .quote { color: var(--pool); }
+        
+        .sponsor-weird-b .bar {
+            height: 100px;
+            display: flex;
+        }
+        
+        .sponsor-weird-b .bar .block {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .sponsor-weird-b .bar .block:nth-child(1) { background: var(--cream); }
+        .sponsor-weird-b .bar .block:nth-child(2) { background: var(--maroon); }
+        
+        .sponsor-weird-b .bar .block span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+        }
+        
+        .sponsor-weird-b .bar .block:nth-child(1) span { color: var(--navy); }
+        .sponsor-weird-b .bar .block:nth-child(2) span { color: var(--white); }
+
+        /* =============================================
+           SPONSOR C — EDITORIAL COLUMN
+        ============================================= */
+        .sponsor-weird-c {
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+        }
+        
+        .sponsor-weird-c .article {
+            padding: 60px 48px;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .sponsor-weird-c .article .header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid var(--navy);
+        }
+        
+        .sponsor-weird-c .article .header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+        
+        .sponsor-weird-c .article .byline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-top: 16px;
+        }
+        
+        .sponsor-weird-c .article .body {
+            column-count: 2;
+            column-gap: 32px;
+        }
+        
+        .sponsor-weird-c .article .body p {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-weird-c .article .body p:first-of-type::first-letter {
+            font-size: 64px;
+            font-weight: 700;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+            margin-top: 4px;
+            color: var(--maroon);
+        }
+        
+        .sponsor-weird-c .sidebar {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-weird-c .sidebar .logo-area {
+            padding: 40px 32px;
+            background: var(--cream);
+            text-align: center;
+        }
+        
+        .sponsor-weird-c .sidebar .logo-area .logo {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-weird-c .sidebar .logo-area .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .sponsor-weird-c .sidebar .contact-area {
+            flex: 1;
+            padding: 32px;
+            background: var(--navy);
+        }
+        
+        .sponsor-weird-c .sidebar .contact-area .photo {
+            width: 100%;
+            height: 140px;
+            margin-bottom: 20px;
+        }
+        
+        .sponsor-weird-c .sidebar .contact-area .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .sponsor-weird-c .sidebar .contact-area .title {
+            font-size: 11px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .sponsor-weird-c .sidebar .contact-area .info {
+            font-size: 11px;
+            color: var(--sky);
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+        
+        .sponsor-weird-c .sidebar .services-area {
+            padding: 24px 32px;
+            background: var(--maroon);
+        }
+        
+        .sponsor-weird-c .sidebar .services-area h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-weird-c .sidebar .services-area span {
+            display: inline-block;
+            font-size: 10px;
+            color: var(--white);
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.1);
+            margin: 2px;
+        }
+
+        /* =============================================
+           SPONSOR D — HALF PAGE STACK
+        ============================================= */
+        .sponsor-weird-d {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-weird-d .header {
+            background: var(--black);
+            padding: 24px 48px;
+        }
+        
+        .sponsor-weird-d .header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        
+        .sponsor-half-weird {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 200px 1fr 160px;
+        }
+        
+        .sponsor-half-weird:first-of-type { background: var(--cream); }
+        .sponsor-half-weird:last-of-type { background: var(--sky); }
+        
+        .sponsor-half-weird .logo-col {
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .sponsor-half-weird .logo-col .logo {
+            width: 120px;
+            height: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-half-weird .logo-col .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: center;
+        }
+        
+        .sponsor-half-weird .content-col {
+            padding: 40px 32px;
+        }
+        
+        .sponsor-half-weird .content-col h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-half-weird .content-col p {
+            font-size: 13px;
+            color: var(--navy);
+            line-height: 1.6;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-half-weird .content-col .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .sponsor-half-weird .content-col .tags span {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--navy);
+            padding: 4px 10px;
+            background: rgba(15,28,46,0.1);
+        }
+        
+        .sponsor-half-weird .contact-col {
+            padding: 40px 24px;
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .sponsor-half-weird .contact-col .photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-half-weird .contact-col .name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .sponsor-half-weird .contact-col .info {
+            font-size: 10px;
+            color: var(--sky);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* =============================================
+           STORIES — MAGAZINE GRID
+        ============================================= */
+        .stories-wsw {
+            background: var(--black);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+        }
+        
+        .stories-wsw .header {
+            grid-column: span 2;
+            padding: 48px;
+            border-bottom: 1px solid #222;
+        }
+        
+        .stories-wsw .header .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 16px;
+        }
+        
+        .stories-wsw .header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.03em;
+        }
+        
+        .stories-wsw .header h2 em {
+            font-style: normal;
+            color: var(--pool);
+        }
+        
+        .stories-wsw .story {
+            padding: 40px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stories-wsw .story:nth-child(2) { border-right: none; border-bottom: none; }
+        .stories-wsw .story:nth-child(3) { border-bottom: none; }
+        .stories-wsw .story:nth-child(4) { border-right: none; }
+        
+        .stories-wsw .story:nth-child(2) { background: var(--cream); }
+        .stories-wsw .story:nth-child(3) { background: var(--maroon); }
+        .stories-wsw .story:nth-child(4) { background: var(--pool); }
+        .stories-wsw .story:nth-child(5) { background: var(--navy); }
+        
+        .stories-wsw .story .num {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+        
+        .stories-wsw .story:nth-child(2) .num { color: var(--navy); }
+        .stories-wsw .story:nth-child(3) .num { color: var(--white); }
+        .stories-wsw .story:nth-child(4) .num { color: var(--navy); }
+        .stories-wsw .story:nth-child(5) .num { color: var(--white); }
+        
+        .stories-wsw .story .quote {
+            font-size: 15px;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 20px;
+        }
+        
+        .stories-wsw .story:nth-child(2) .quote { color: var(--navy); }
+        .stories-wsw .story:nth-child(3) .quote { color: rgba(255,255,255,0.9); }
+        .stories-wsw .story:nth-child(4) .quote { color: var(--navy); }
+        .stories-wsw .story:nth-child(5) .quote { color: var(--sky); }
+        
+        .stories-wsw .story .attr {
+            font-size: 11px;
+        }
+        
+        .stories-wsw .story:nth-child(2) .attr { color: #666; }
+        .stories-wsw .story:nth-child(3) .attr { color: rgba(255,255,255,0.5); }
+        .stories-wsw .story:nth-child(4) .attr { color: var(--navy); opacity: 0.5; }
+        .stories-wsw .story:nth-child(5) .attr { color: var(--pool); }
+        
+        .stories-wsw .story .attr strong { font-weight: 600; }
+
+        /* =============================================
+           THANK YOU — MINIMAL
+        ============================================= */
+        .thanks-wsw {
+            background: var(--cream);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .thanks-wsw .header {
+            background: var(--navy);
+            padding: 48px;
+        }
+        
+        .thanks-wsw .header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.03em;
+        }
+        
+        .thanks-wsw .body {
+            flex: 1;
+            padding: 48px;
+        }
+        
+        .thanks-wsw .tier {
+            margin-bottom: 40px;
+        }
+        
+        .thanks-wsw .tier .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--navy);
+            display: inline-block;
+        }
+        
+        .thanks-wsw .tier .logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .thanks-wsw .tier .logos .logo {
+            height: 48px;
+            width: 120px;
+        }
+        
+        .thanks-wsw .tier .logos .logo.large {
+            height: 56px;
+            width: 160px;
+        }
+        
+        .thanks-wsw .tier .logos .logo.small {
+            height: 36px;
+            width: 80px;
+        }
+        
+        .thanks-wsw .footer {
+            background: var(--maroon);
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .thanks-wsw .footer .tagline {
+            font-size: 18px;
+            font-style: italic;
+            color: var(--white);
+        }
+        
+        .thanks-wsw .footer .url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.1em;
+        }
+
+        /* =============================================
+           BACK COVER — STARK
+        ============================================= */
+        .back-wsw {
+            background: var(--black);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .back-wsw .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        .back-wsw .main .logo {
+            width: 240px;
+            height: 70px;
+            margin-bottom: 48px;
+        }
+        
+        .back-wsw .main .network {
+            width: 160px;
+            margin-bottom: 40px;
+            opacity: 0.6;
+        }
+        
+        .back-wsw .main .url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--pool);
+            letter-spacing: 0.1em;
+            margin-bottom: 32px;
+        }
+        
+        .back-wsw .main .tagline {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--white);
+        }
+        
+        .back-wsw .main .year {
+            font-size: 120px;
+            font-weight: 700;
+            color: #111;
+            position: absolute;
+            bottom: 120px;
+            right: 48px;
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
+        
+        .back-wsw .bar {
+            height: 80px;
+            display: flex;
+        }
+        
+        .back-wsw .bar .block {
+            flex: 1;
+        }
+        
+        .back-wsw .bar .block:nth-child(1) { background: var(--cream); }
+        .back-wsw .bar .block:nth-child(2) { background: var(--sky); }
+        .back-wsw .bar .block:nth-child(3) { background: var(--pool); }
+        .back-wsw .bar .block:nth-child(4) { background: var(--maroon); }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Wall Street Weird — Pentagram 2028</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <!-- COVER -->
+    <div class="page-label">Cover <span>01</span></div>
+    <div class="page cover-wsw">
+        <div class="top">
+            <div class="network">NorCal SBDC Network</div>
+            <div class="year">26</div>
+        </div>
+        
+        <div class="middle">
+            <h1 class="headline">We don't lend money.<br><em>We help you get it.</em></h1>
+            <p class="sub">A guide to the lenders, partners, and people who turn business plans into business loans.</p>
+        </div>
+        
+        <div class="bottom">
+            <div class="tension">
+                <div class="num">$0</div>
+                <div class="label">We charge clients</div>
+            </div>
+            <div class="tension">
+                <div class="num">$547M</div>
+                <div class="label">They accessed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIRECTOR -->
+    <div class="page-label">Director <span>02</span></div>
+    <div class="page director-wsw">
+        <div class="left">
+            <div class="eyebrow">From the Director</div>
+            <div class="placeholder photo">[Photo]</div>
+            <div class="name">[Director Name]</div>
+            <div class="title">Center Director</div>
+        </div>
+        
+        <div class="right">
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">[XXX]</div>
+                    <div class="label">Clients</div>
+                </div>
+                <div class="stat">
+                    <div class="num">$[XX]M</div>
+                    <div class="label">Capital</div>
+                </div>
+            </div>
+            
+            <div class="letter">
+                <p>Let's skip the pleasantries. You're busy. I'm busy.</p>
+                
+                <p class="pull">By the time they reach your desk, they're ready.</p>
+                
+                <p>Complete package. Realistic expectations. Actual documentation. That's not charity. That's a service—to them, to you, and to the community.</p>
+            </div>
+            
+            <div class="sig">
+                <div class="sig-line">[Director Name], Center Director</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE MATH -->
+    <div class="page-label">The Math <span>03</span></div>
+    <div class="page math-wsw">
+        <div class="eyebrow">Last Year</div>
+        
+        <div class="equation">
+            <div class="num-block">
+                <div class="num">$0</div>
+                <div class="label">We charged</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="num-block">
+                <div class="num">$547M</div>
+                <div class="label">Clients accessed</div>
+            </div>
+        </div>
+        
+        <p class="punchline">Some of that came from you.<br><em>We'd like to make that happen more often.</em></p>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="page-label">Services <span>04</span></div>
+    <div class="page services-wsw">
+        <div class="header">
+            <h2>Your Access to Capital</h2>
+            <p>We prepare clients. You fund them.</p>
+        </div>
+        
+        <div class="card">
+            <div class="icon">01</div>
+            <h3>Business Planning</h3>
+            <ul>
+                <li>Business Plan Development</li>
+                <li>Financial Projections</li>
+                <li>Market Analysis</li>
+                <li>Competitive Positioning</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="icon">02</div>
+            <h3>Loan Preparation</h3>
+            <ul>
+                <li>Loan Package Assembly</li>
+                <li>SBA Loan Guidance</li>
+                <li>Lender Matching</li>
+                <li>Application Support</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="icon">03</div>
+            <h3>Financial Management</h3>
+            <ul>
+                <li>Cash Flow Analysis</li>
+                <li>Break-Even Calculations</li>
+                <li>Budget Development</li>
+                <li>Financial Statements</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="icon">04</div>
+            <h3>Alternative Financing</h3>
+            <ul>
+                <li>Microloans</li>
+                <li>Crowdfunding Guidance</li>
+                <li>Invoice Factoring</li>
+                <li>Grant Research</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format A — Testimonial</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Testimonial</span></div>
+    <div class="page sponsor-weird-a">
+        <div class="main">
+            <div class="photo-area">
+                <div class="placeholder photo">[Client Photo<br>Full bleed]</div>
+                <div class="overlay">
+                    <p class="quote">"They take the time to understand our business and provide solutions tailored to our needs."</p>
+                    <p class="attr"><strong>[Client Name]</strong>, President & CEO, [Business]</p>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="placeholder placeholder-dark logo">[Logo]</div>
+                <h3 class="headline">That's My Bank.</h3>
+                <div class="services">
+                    <span>SBA 7(a) & 504</span>
+                    <span>Business Lines of Credit</span>
+                    <span>Commercial Real Estate</span>
+                    <span>Equipment Financing</span>
+                    <span>Merchant Services</span>
+                </div>
+                <div class="contact">
+                    <div class="placeholder placeholder-dark contact-photo">[Photo]</div>
+                    <div class="contact-name">[Loan Officer]</div>
+                    <div class="contact-info">[Phone] · [Email]</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="tagline">"We're big believers in small business."</div>
+            <div class="url">[website] · Member FDIC</div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format B — Brand Takeover</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Brand — Light</span></div>
+    <div class="page sponsor-weird-b">
+        <div class="brand bg-pool">
+            <div class="placeholder placeholder-dark logo">[Logo]</div>
+            <h2 class="tagline">Not just service.<br>Solutions.</h2>
+            <p class="body">We are committed to providing financial services that build and support our customers. We look at each account opened or service offered as an opportunity to build a relationship and pathway toward our customers' financial success.</p>
+            <p class="quote">"We understand the special needs of small businesses because we are a small business ourselves."<br>— [Name], President & CEO</p>
+        </div>
+        
+        <div class="bar">
+            <div class="block"><span>[website]</span></div>
+            <div class="block"><span>[phone]</span></div>
+        </div>
+    </div>
+
+    <div class="page-label">Sponsor <span>Brand — Dark</span></div>
+    <div class="page sponsor-weird-b">
+        <div class="brand bg-navy">
+            <div class="placeholder logo">[Logo]</div>
+            <h2 class="tagline">Shared Vision.</h2>
+            <p class="body">We partner with entrepreneurs who share our vision for the region's future. We didn't fit the conventional loan formula. That's when we found [Lender]. They saw what was possible.</p>
+            <p class="quote">"What can we do for you?"</p>
+        </div>
+        
+        <div class="bar">
+            <div class="block"><span>[website]</span></div>
+            <div class="block"><span>[phone]</span></div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format C — Editorial</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Editorial</span></div>
+    <div class="page sponsor-weird-c">
+        <div class="article">
+            <div class="header">
+                <h2>We're ready to earn your business.</h2>
+                <div class="byline">By [Author Name], [Lender]</div>
+            </div>
+            
+            <div class="body">
+                <p>As our regional economy continues its upward pace, more businesses are expanding or retooling, and banks have funds to lend and solutions to offer.</p>
+                
+                <p>If you are considering applying for a loan, you deserve an experienced banker who takes the time to truly understand your company. Gone are the days when only the largest businesses can expect to have a dedicated team of bankers.</p>
+                
+                <p>This is your business we're talking about—you're all in—so insist your bank is too. That means trust and communication are essential.</p>
+                
+                <p>At [Lender], our bankers are homegrown, highly experienced and focused on your success. You can count on us to start by truly getting to know your business, understanding your day-to-day operating needs, and then craft a customized solution to help you achieve your goals.</p>
+                
+                <p>Like you, we're experts in our field. Our experienced bankers truly enjoy helping the region's business grow and succeed and we're ready to earn your business.</p>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="logo-area">
+                <div class="placeholder placeholder-dark logo">[Logo]</div>
+                <div class="tagline">Member FDIC</div>
+            </div>
+            
+            <div class="contact-area">
+                <div class="placeholder photo">[Photo]</div>
+                <div class="name">[Banker Name]</div>
+                <div class="title">[Title]</div>
+                <div class="info">[Phone]<br>[Email]<br>[Address]</div>
+            </div>
+            
+            <div class="services-area">
+                <h4>We Offer</h4>
+                <span>SBA Loans</span>
+                <span>Lines of Credit</span>
+                <span>Equipment</span>
+                <span>CRE</span>
+                <span>Treasury</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format D — Half Page</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Half Page ×2</span></div>
+    <div class="page sponsor-weird-d">
+        <div class="header">
+            <h2>Our Lending Partners</h2>
+        </div>
+        
+        <div class="sponsor-half-weird">
+            <div class="logo-col">
+                <div class="placeholder placeholder-dark logo">[Logo]</div>
+                <div class="tagline">[Tagline]</div>
+            </div>
+            <div class="content-col">
+                <h3>[Lender Name]</h3>
+                <p>[2-3 sentences about who they are and what they offer. Focus on small business lending.]</p>
+                <div class="tags">
+                    <span>SBA 7(a)</span>
+                    <span>Microloans</span>
+                    <span>Lines of Credit</span>
+                </div>
+            </div>
+            <div class="contact-col">
+                <div class="placeholder contact-photo">[Photo]</div>
+                <div class="name">[Contact]</div>
+                <div class="info">[Phone]<br>[Email]</div>
+            </div>
+        </div>
+        
+        <div class="sponsor-half-weird">
+            <div class="logo-col">
+                <div class="placeholder placeholder-dark logo">[Logo]</div>
+                <div class="tagline">[Tagline]</div>
+            </div>
+            <div class="content-col">
+                <h3>[Lender Name]</h3>
+                <p>[2-3 sentences about who they are and what they offer. Focus on small business lending.]</p>
+                <div class="tags">
+                    <span>Equipment</span>
+                    <span>Working Capital</span>
+                    <span>Factoring</span>
+                </div>
+            </div>
+            <div class="contact-col">
+                <div class="placeholder contact-photo">[Photo]</div>
+                <div class="name">[Contact]</div>
+                <div class="info">[Phone]<br>[Email]</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Success Stories</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Stories <span>05</span></div>
+    <div class="page stories-wsw">
+        <div class="header">
+            <div class="eyebrow">Partnership in Action</div>
+            <h2>They don't say "the program helped."<br><em>They say "Maria helped."</em></h2>
+        </div>
+        
+        <div class="story">
+            <div class="num">$250K</div>
+            <p class="quote">"My bank said no three times. Then I met my advisor. She connected me with [Lender]. Eighteen months later, I have three locations."</p>
+            <p class="attr"><strong>[Client]</strong>, [Business]</p>
+        </div>
+        
+        <div class="story">
+            <div class="num">$125K</div>
+            <p class="quote">"I had the idea. I had the work ethic. I didn't have the paperwork. They changed that."</p>
+            <p class="attr"><strong>[Client]</strong>, [Business]</p>
+        </div>
+        
+        <div class="story">
+            <div class="num">$500K</div>
+            <p class="quote">"We didn't fit the conventional formula. That's when we found [Lender]. They saw what was possible."</p>
+            <p class="attr"><strong>[Client]</strong>, [Business]</p>
+        </div>
+        
+        <div class="story">
+            <div class="num">$75K</div>
+            <p class="quote">"[Quote about the partnership that made their business possible.]"</p>
+            <p class="attr"><strong>[Client]</strong>, [Business]</p>
+        </div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div class="page-label">Thanks <span>06</span></div>
+    <div class="page thanks-wsw">
+        <div class="header">
+            <h2>Our Lending Partners</h2>
+        </div>
+        
+        <div class="body">
+            <div class="tier">
+                <div class="label">Premier</div>
+                <div class="logos">
+                    <div class="placeholder placeholder-dark logo large">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo large">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo large">[Logo]</div>
+                </div>
+            </div>
+            
+            <div class="tier">
+                <div class="label">Gold</div>
+                <div class="logos">
+                    <div class="placeholder placeholder-dark logo">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo">[Logo]</div>
+                </div>
+            </div>
+            
+            <div class="tier">
+                <div class="label">Silver & Bronze</div>
+                <div class="logos">
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                    <div class="placeholder placeholder-dark logo small">[Logo]</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="tagline">Your Business People.</div>
+            <div class="url">norcalsbdc.org</div>
+        </div>
+    </div>
+
+    <!-- BACK COVER -->
+    <div class="page-label">Back <span>07</span></div>
+    <div class="page back-wsw">
+        <div class="main">
+            <div class="placeholder logo">[Center Logo]</div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="network">
+            <p class="url">norcalsbdc.org</p>
+            <p class="tagline">Your Business People.</p>
+            <div class="year">26</div>
+        </div>
+        
+        <div class="bar">
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

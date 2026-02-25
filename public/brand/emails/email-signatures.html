@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Email Signatures + Fact Sheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .email-preview {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+        
+        .email-context {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* =============================================
+           SIGNATURE STYLES
+        ============================================= */
+        
+        /* S1: Text Only - Ultra Minimal */
+        .sig-s1 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .sig-s1 .name {
+            font-weight: bold;
+            color: #0F1C2E;
+        }
+        
+        .sig-s1 .title {
+            color: #666;
+        }
+        
+        .sig-s1 .divider {
+            color: #ccc;
+            margin: 0 6px;
+        }
+        
+        .sig-s1 .contact {
+            margin-top: 4px;
+        }
+        
+        .sig-s1 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+        
+        .sig-s1 .tagline {
+            margin-top: 8px;
+            font-style: italic;
+            color: #1D5AA7;
+            font-size: 12px;
+        }
+
+        /* S2: With Logo - Clean */
+        .sig-s2 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            display: flex;
+            gap: 16px;
+        }
+        
+        .sig-s2 .logo {
+            width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .sig-s2 .logo img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .sig-s2 .info {
+            border-left: 2px solid #0F1C2E;
+            padding-left: 16px;
+        }
+        
+        .sig-s2 .name {
+            font-weight: bold;
+            color: #0F1C2E;
+        }
+        
+        .sig-s2 .title {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .sig-s2 .contact {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        
+        .sig-s2 .contact div {
+            margin-bottom: 2px;
+        }
+        
+        .sig-s2 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+        
+        .sig-s2 .tagline {
+            margin-top: 8px;
+            font-style: italic;
+            color: #1D5AA7;
+            font-size: 11px;
+        }
+
+        /* S3: Gradient Line */
+        .sig-s3 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .sig-s3 .gradient-line {
+            height: 3px;
+            background: linear-gradient(90deg, #0F1C2E, #1D5AA7, #8FC5D9);
+            margin-bottom: 12px;
+            width: 200px;
+        }
+        
+        .sig-s3 .name {
+            font-weight: bold;
+            color: #0F1C2E;
+        }
+        
+        .sig-s3 .title {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .sig-s3 .org {
+            color: #1D5AA7;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .sig-s3 .contact {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        
+        .sig-s3 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+        
+        .sig-s3 .tagline {
+            margin-top: 8px;
+            font-style: italic;
+            color: #8A2432;
+            font-size: 11px;
+        }
+
+        /* S4: Logo + Gradient */
+        .sig-s4 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .sig-s4 .top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .sig-s4 .logo {
+            width: 100px;
+            flex-shrink: 0;
+        }
+        
+        .sig-s4 .logo img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .sig-s4 .details .name {
+            font-weight: bold;
+            color: #0F1C2E;
+        }
+        
+        .sig-s4 .details .title {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .sig-s4 .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #0F1C2E, #1D5AA7, #8FC5D9);
+            margin-bottom: 8px;
+            width: 280px;
+        }
+        
+        .sig-s4 .contact {
+            font-size: 12px;
+            display: flex;
+            gap: 16px;
+        }
+        
+        .sig-s4 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+        
+        .sig-s4 .tagline {
+            margin-top: 8px;
+            font-style: italic;
+            color: #1D5AA7;
+            font-size: 11px;
+        }
+
+        /* S5: Stacked Minimal */
+        .sig-s5 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .sig-s5 .name {
+            font-weight: bold;
+            color: #0F1C2E;
+            font-size: 15px;
+        }
+        
+        .sig-s5 .title {
+            color: #1D5AA7;
+            font-size: 12px;
+        }
+        
+        .sig-s5 .org {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .sig-s5 .contact {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .sig-s5 a {
+            color: #0F1C2E;
+            text-decoration: none;
+        }
+        
+        .sig-s5 .tagline {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-style: italic;
+            color: #1D5AA7;
+            font-size: 11px;
+        }
+
+        /* S6: Bold Card Style */
+        .sig-s6 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            background: #0F1C2E;
+            padding: 16px 20px;
+            border-radius: 4px;
+            max-width: 320px;
+        }
+        
+        .sig-s6 .name {
+            font-weight: bold;
+            color: white;
+            font-size: 15px;
+        }
+        
+        .sig-s6 .title {
+            color: #8FC5D9;
+            font-size: 12px;
+        }
+        
+        .sig-s6 .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 12px 0;
+        }
+        
+        .sig-s6 .contact {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .sig-s6 .contact div {
+            margin-bottom: 2px;
+        }
+        
+        .sig-s6 a {
+            color: #8FC5D9;
+            text-decoration: none;
+        }
+        
+        .sig-s6 .tagline {
+            margin-top: 12px;
+            font-style: italic;
+            color: #8FC5D9;
+            font-size: 11px;
+        }
+
+        /* S7: Horizontal with Logo */
+        .sig-s7 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sig-s7 .logo img {
+            height: 56px;
+            width: auto;
+        }
+
+        .sig-s7 .divider-v {
+            width: 2px;
+            height: 56px;
+            background: linear-gradient(180deg, #1D5AA7, #8A2432);
+        }
+
+        .sig-s7 .info {
+            flex: 1;
+        }
+
+        .sig-s7 .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .sig-s7 .title {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .sig-s7 .contact {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .sig-s7 .contact a {
+            color: #0F1C2E;
+            text-decoration: none;
+        }
+
+        .sig-s7 .tagline {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: #8A2432;
+        }
+
+        /* S8: Compact Row */
+        .sig-s8 {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .sig-s8 .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .sig-s8 .name {
+            font-weight: bold;
+            color: #0F1C2E;
+        }
+        
+        .sig-s8 .sep {
+            color: #8FC5D9;
+        }
+        
+        .sig-s8 .title {
+            color: #666;
+        }
+        
+        .sig-s8 .org {
+            color: #1D5AA7;
+        }
+        
+        .sig-s8 .contact-row {
+            margin-top: 4px;
+            font-size: 11px;
+        }
+        
+        .sig-s8 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+        
+        .sig-s8 .tagline {
+            margin-top: 6px;
+            font-style: italic;
+            color: #1D5AA7;
+            font-size: 10px;
+        }
+
+        /* Code block for copying */
+        .code-block {
+            background: #1a1a1a;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 16px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #888;
+            overflow-x: auto;
+        }
+        
+        .code-block .label {
+            color: var(--pool);
+            margin-bottom: 8px;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+        }
+
+        .notes {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #666;
+            margin-top: 12px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Email Signatures</div>
+    </div>
+
+    <!-- S1 -->
+    <div class="section">
+        <div class="section-label">S1 — Text Only (Ultra Minimal)</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s1">
+                <div><span class="name">Maria Santos</span><span class="divider">|</span><span class="title">Senior Business Advisor</span></div>
+                <div class="contact">530.898.4598<span class="divider">|</span><a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><span class="divider">|</span><a href="https://norcalsbdc.org">norcalsbdc.org</a></div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Gmail, Outlook, any client. No images = no loading issues.</div>
+        </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="section">
+        <div class="section-label">S2 — Logo + Divider</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s2">
+                <div class="logo">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC">
+                </div>
+                <div class="info">
+                    <div class="name">Maria Santos</div>
+                    <div class="title">Senior Business Advisor</div>
+                    <div class="contact">
+                        <div>530.898.4598</div>
+                        <div><a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a></div>
+                        <div><a href="https://norcalsbdc.org">norcalsbdc.org</a></div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="notes">Best for: Professional correspondence. Logo adds credibility.</div>
+        </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="section">
+        <div class="section-label">S3 — Gradient Line</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s3">
+                <div class="gradient-line"></div>
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="org">Northern California SBDC</div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Adding momentum without images. CSS gradient may not render in all clients—use image fallback.</div>
+        </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="section">
+        <div class="section-label">S4 — Logo + Gradient</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s4">
+                <div class="top">
+                    <div class="logo">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC">
+                    </div>
+                    <div class="details">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                </div>
+                <div class="gradient-line"></div>
+                <div class="contact">
+                    <span>530.898.4598</span>
+                    <span><a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a></span>
+                    <span><a href="https://norcalsbdc.org">norcalsbdc.org</a></span>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Full brand expression. Use gradient as hosted image for compatibility.</div>
+        </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="section">
+        <div class="section-label">S5 — Stacked Minimal</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s5">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="org">Northern California SBDC</div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Clean, no-image fallback. Works everywhere.</div>
+        </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="section">
+        <div class="section-label">S6 — Bold Card (Wild)</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s6">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="divider"></div>
+                <div class="contact">
+                    <div>530.898.4598</div>
+                    <div><a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a></div>
+                    <div><a href="https://norcalsbdc.org">norcalsbdc.org</a></div>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Standing out. May need to be an image for email compatibility.</div>
+        </div>
+    </div>
+
+    <!-- S7 -->
+    <div class="section">
+        <div class="section-label">S7 — Horizontal with Logo</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...I'll send over the SBA loan checklist by end of day.<br><br>
+                Thanks,
+            </div>
+            <div class="sig-s7">
+                <div class="logo">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC">
+                </div>
+                <div class="divider-v"></div>
+                <div class="info">
+                    <div class="name">Kristin Johnson</div>
+                    <div class="title">Executive Director</div>
+                    <div class="contact">
+                        707.496.7079 · <a href="mailto:kristin@norcalsbdc.org">kristin@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="notes">Best for: Maximum logo visibility. Gradient divider adds brand color. May need image fallback.</div>
+        </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="section">
+        <div class="section-label">S8 — Compact Row</div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s8">
+                <div class="row">
+                    <span class="name">Maria Santos</span>
+                    <span class="sep">·</span>
+                    <span class="title">Senior Business Advisor</span>
+                    <span class="sep">·</span>
+                    <span class="org">NorCal SBDC</span>
+                </div>
+                <div class="contact-row">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Mobile-friendly. Minimal vertical space.</div>
+        </div>
+    </div>
+
+    <!-- IMPLEMENTATION NOTES -->
+    <div class="section">
+        <div class="section-label">Implementation Notes</div>
+        <div class="email-preview">
+            <div style="font-size: 13px; line-height: 1.8; color: #333;">
+                <p><strong>For Gmail / Google Workspace:</strong></p>
+                <p style="margin-left: 16px; color: #666;">Settings → See all settings → General → Signature. Paste HTML or use rich text editor.</p>
+                <br>
+                <p><strong>For Outlook:</strong></p>
+                <p style="margin-left: 16px; color: #666;">File → Options → Mail → Signatures. Create new, paste content.</p>
+                <br>
+                <p><strong>For Apple Mail:</strong></p>
+                <p style="margin-left: 16px; color: #666;">Mail → Preferences → Signatures. Create in TextEdit as HTML, paste.</p>
+                <br>
+                <p><strong>Image hosting:</strong></p>
+                <p style="margin-left: 16px; color: #666;">Host logo and gradient images on norcalsbdc.org for reliable loading. Recommended: logo at 160px wide (2x for retina).</p>
+                <br>
+                <p><strong>Fallback:</strong></p>
+                <p style="margin-left: 16px; color: #666;">S1, S5, and S8 work without images. Use these if email clients strip formatting.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

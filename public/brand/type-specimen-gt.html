@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorCal SBDC — Type Specimen: GT America Extended Only</title>
+<style>
+/* GT America Extended */
+@font-face { font-family: 'GT America Extended'; src: url('new-fonts/GT-America/GT-America-Extended-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America Extended'; src: url('new-fonts/GT-America/GT-America-Extended-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+/* GT America Expanded Black for display */
+@font-face { font-family: 'GT America Expanded'; src: url('new-fonts/GT-America/GT-America-Expanded-Black.otf') format('opentype'); font-weight: 900; font-display: swap; }
+/* GT America Standard */
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+/* GT America Mono */
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+:root {
+  --navy: #0f1c2e;
+  --royal: #1D5AA7;
+  --pool: #8FC5D9;
+  --cream: #f5f3ee;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --text-2: #5c5c5c;
+  --text-3: #8a8a8a;
+  --rule: rgba(0,0,0,0.1);
+  --ext: 'GT America Extended', -apple-system, sans-serif;
+  --exp: 'GT America Expanded', -apple-system, sans-serif;
+  --std: 'GT America', -apple-system, sans-serif;
+  --mono: 'GT America Mono', monospace;
+}
+
+body { background: var(--cream); color: var(--text); }
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 80px clamp(40px, 8vw, 120px) 60px;
+  min-height: 50vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.hero-label {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 24px;
+}
+.hero-h1 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 1.05; letter-spacing: -0.02em;
+  max-width: 800px;
+}
+.hero-h1 em {
+  font-family: var(--std); font-weight: 300; font-style: normal;
+  color: var(--pool);
+}
+.hero-sub {
+  font-family: var(--std); font-weight: 400;
+  font-size: clamp(0.82rem, 1vw, 0.92rem);
+  line-height: 1.6; color: rgba(255,255,255,0.35);
+  max-width: 420px; margin-top: 24px;
+}
+
+/* ─── STATS ─── */
+.stats {
+  background: var(--navy);
+  padding: clamp(48px, 6vh, 72px) clamp(40px, 8vw, 120px);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+}
+.stat {
+  padding: 24px 32px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  color: var(--white); letter-spacing: -0.01em;
+  line-height: 1;
+}
+.stat-num em {
+  font-family: var(--std); font-weight: 300; font-style: normal;
+  color: var(--pool);
+}
+.stat-label {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-top: 10px;
+}
+
+/* ─── ARTICLE ─── */
+.article {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(60px, 8vh, 100px) clamp(24px, 6vw, 60px);
+}
+.article-label {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--royal); margin-bottom: 20px;
+}
+.article h2 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  line-height: 1.15; letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+.article h2 em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: var(--royal);
+}
+.article p {
+  font-family: var(--std); font-weight: 400;
+  font-size: 0.92rem; line-height: 1.75;
+  color: var(--text-2); margin-bottom: 16px;
+}
+.article p.lead {
+  font-family: var(--ext); font-weight: 400;
+  font-size: 1rem; line-height: 1.6;
+  color: var(--text); margin-bottom: 24px;
+}
+.article-rule {
+  width: 40px; height: 1px;
+  background: var(--rule); margin: 40px 0;
+}
+
+/* ─── PULL QUOTE ─── */
+.quote-section {
+  padding: clamp(60px, 8vh, 100px) clamp(40px, 8vw, 120px);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.quote {
+  font-family: var(--ext); font-weight: 400;
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  line-height: 1.4; letter-spacing: -0.005em;
+  color: var(--text);
+  max-width: 680px; margin: 0 auto 20px;
+}
+.quote em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: var(--royal);
+}
+.quote-attr {
+  font-family: var(--mono); font-weight: 400;
+  font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* ─── CARDS ─── */
+.cards-section {
+  padding: clamp(60px, 8vh, 100px) clamp(40px, 8vw, 120px);
+}
+.cards-section-label {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--royal); margin-bottom: 20px;
+}
+.cards-section h2 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.05; letter-spacing: -0.015em;
+  margin-bottom: 48px;
+}
+.cards-section h2 em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: var(--royal);
+}
+.card-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+}
+.card {
+  padding: 32px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.card:nth-child(3n) { border-right: none; }
+.card:nth-last-child(-n+3) { border-bottom: none; }
+.card-num {
+  font-family: var(--mono); font-size: 0.48rem;
+  letter-spacing: 0.06em; color: var(--text-3);
+  margin-bottom: 16px;
+}
+.card h3 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.88rem; line-height: 1.25;
+  letter-spacing: 0.01em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.card p {
+  font-family: var(--std); font-weight: 400;
+  font-size: 0.82rem; line-height: 1.65;
+  color: var(--text-2);
+}
+
+/* ─── TWO-COL ─── */
+.twocol {
+  max-width: 900px; margin: 0 auto;
+  padding: clamp(60px, 8vh, 100px) clamp(24px, 6vw, 60px);
+  display: grid; grid-template-columns: 280px 1fr; gap: 48px;
+  align-items: start;
+}
+.twocol-left-label {
+  font-family: var(--mono); font-size: 0.48rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-3); margin-bottom: 8px;
+}
+.twocol-left h3 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  line-height: 1.1; letter-spacing: -0.01em;
+}
+.twocol-left h3 em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: var(--royal);
+}
+.twocol-right p {
+  font-family: var(--std); font-weight: 400;
+  font-size: 0.88rem; line-height: 1.7;
+  color: var(--text-2);
+}
+.twocol-right p + p { margin-top: 14px; }
+
+/* ─── CTA ─── */
+.cta {
+  background: var(--royal);
+  color: var(--white);
+  padding: clamp(60px, 8vh, 100px) clamp(40px, 8vw, 120px);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 40px;
+}
+.cta h2 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.05; letter-spacing: -0.01em;
+}
+.cta h2 em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: rgba(255,255,255,0.5);
+}
+.cta-btn {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--royal); background: var(--white);
+  padding: 14px 32px; border-radius: 4px;
+  white-space: nowrap; text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.cta-btn:hover { opacity: 0.9; }
+
+/* ─── SOCIAL ─── */
+.social-mock {
+  padding: clamp(60px, 8vh, 100px) clamp(40px, 8vw, 120px);
+  border-top: 1px solid var(--rule);
+}
+.social-mock-label {
+  font-family: var(--ext); font-weight: 500;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--royal); margin-bottom: 32px;
+}
+.social-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.social-card {
+  aspect-ratio: 1;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(24px, 4vw, 40px);
+  position: relative; overflow: hidden;
+}
+.social-card-dark { background: var(--navy); color: var(--white); }
+.social-card-royal { background: var(--royal); color: var(--white); }
+.social-card-star {
+  position: absolute; top: -15%; right: -10%;
+  width: 55%; opacity: 0.04;
+}
+.social-card h3 {
+  font-family: var(--ext); font-weight: 500;
+  font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+  line-height: 1.1; letter-spacing: -0.01em;
+  position: relative; z-index: 1;
+}
+.social-card h3 em {
+  font-family: var(--std); font-weight: 300;
+  font-style: normal; color: var(--pool);
+  display: block;
+}
+.social-card-royal h3 em { color: rgba(255,255,255,0.5); }
+.social-card p {
+  font-family: var(--std); font-weight: 400;
+  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+  line-height: 1.55; color: rgba(255,255,255,0.4);
+  margin-top: 12px; max-width: 280px;
+  position: relative; z-index: 1;
+}
+.social-card-tag {
+  font-family: var(--mono); font-size: 0.45rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  position: absolute; top: clamp(16px, 3vw, 28px); left: clamp(16px, 3vw, 28px);
+  z-index: 1;
+}
+
+/* ─── DISPLAY BAND ─── */
+.display-band {
+  background: var(--navy);
+  color: var(--white);
+  padding: clamp(48px, 6vh, 72px) clamp(40px, 8vw, 120px);
+  text-align: center;
+}
+.display-band h2 {
+  font-family: var(--exp); font-weight: 900;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1; letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.display-band h2 span { color: var(--pool); }
+.display-band-sub {
+  font-family: var(--mono); font-size: 0.48rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); margin-top: 12px;
+}
+
+/* ─── FOOTER ─── */
+.foot {
+  padding: 28px clamp(40px, 8vw, 120px);
+  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between;
+}
+.foot span {
+  font-family: var(--mono); font-size: 0.48rem;
+  letter-spacing: 0.04em; color: var(--text-3);
+}
+
+@media (max-width: 768px) {
+  .stats { grid-template-columns: 1fr; }
+  .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .stat:last-child { border-bottom: none; }
+  .card-grid { grid-template-columns: 1fr; }
+  .card { border-right: none; }
+  .card:last-child { border-bottom: none; }
+  .twocol { grid-template-columns: 1fr; gap: 24px; }
+  .cta { flex-direction: column; text-align: center; }
+  .social-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">NorCal SBDC &mdash; 36 Counties</div>
+  <h1 class="hero-h1">Helping small businesses <em>add momentum.</em></h1>
+  <p class="hero-sub">Expert advising, capital access, and growth tools for entrepreneurs across Northern California. No cost, no catch.</p>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stat">
+    <div class="stat-num">$547<em>M+</em></div>
+    <div class="stat-label">Capital Accessed</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">7,500<em>+</em></div>
+    <div class="stat-label">Clients Served Annually</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">36</div>
+    <div class="stat-label">Counties Across NorCal</div>
+  </div>
+</section>
+
+<!-- ARTICLE -->
+<section class="article">
+  <div class="article-label">Our Mission</div>
+  <h2>Twenty years of building <em>what matters</em></h2>
+  <p class="lead">The Northern California SBDC exists for one reason: to give every entrepreneur in our region the advising, capital connections, and tools they need to grow.</p>
+  <p>We work across 36 counties, from the Bay Area to the Oregon border. Our advisors bring real-world business experience, not theory. They've built companies, secured funding, navigated regulations, and scaled operations.</p>
+  <p>Every engagement starts with listening. We meet entrepreneurs where they are &mdash; whether that's a kitchen-table idea or a $5M revenue plateau &mdash; and help them find the next step forward.</p>
+  <div class="article-rule"></div>
+  <p>Our model is simple: free, confidential, one-on-one advising supported by SBA funding and community partnerships. No sales pitch, no upsell. Just expertise, applied to your specific situation.</p>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="quote-section">
+  <div class="quote">&ldquo;They didn&rsquo;t just help me write a business plan. They helped me believe <em>I could actually do this.</em>&rdquo;</div>
+  <div class="quote-attr">Maria Torres &mdash; Sacramento, Client Since 2023</div>
+</section>
+
+<!-- DISPLAY BAND -->
+<section class="display-band">
+  <h2>Add <span>Momentum.</span></h2>
+  <div class="display-band-sub">GT America Expanded Black &mdash; For Display Use Only</div>
+</section>
+
+<!-- CARDS -->
+<section class="cards-section">
+  <div class="cards-section-label">What We Do</div>
+  <h2>Four ways we <em>help you grow</em></h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-num">01</div>
+      <h3>One-on-One Advising</h3>
+      <p>Confidential sessions with experienced advisors who understand your industry, market, and specific challenges.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">02</div>
+      <h3>Capital Access</h3>
+      <p>Loan readiness, investor preparation, grant navigation. We connect you to the right funding at the right time.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">03</div>
+      <h3>Training Programs</h3>
+      <p>Workshops on marketing, finance, operations, and growth strategy. Built for busy entrepreneurs, delivered in-person and online.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">04</div>
+      <h3>Market Research</h3>
+      <p>Data-driven insights about your customers, competitors, and industry trends to inform smarter decisions.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">05</div>
+      <h3>Government Contracting</h3>
+      <p>Certification guidance, bid preparation, and compliance support for businesses pursuing public-sector opportunities.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">06</div>
+      <h3>Specialty Programs</h3>
+      <p>Industry-focused initiatives for agriculture, tech, manufacturing, and rural economies across the region.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TWO-COL -->
+<section class="twocol">
+  <div class="twocol-left">
+    <div class="twocol-left-label">Our Approach</div>
+    <h3>Meet them <em>where they are</em></h3>
+  </div>
+  <div class="twocol-right">
+    <p>We don&rsquo;t hand entrepreneurs a generic playbook. Every advising engagement begins with a deep assessment of the business: its financials, its market position, its team, and the specific obstacles standing between now and the next milestone.</p>
+    <p>From there, we build a roadmap together. Some clients need one session. Others work with us for years. The relationship adapts because growth isn&rsquo;t linear.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Ready to <em>get started?</em></h2>
+  <a href="#" class="cta-btn">Find Your Advisor</a>
+</section>
+
+<!-- SOCIAL MOCKUPS -->
+<section class="social-mock">
+  <div class="social-mock-label">In Context &mdash; Social Media</div>
+  <div class="social-grid">
+    <div class="social-card social-card-dark">
+      <img src="assets/starwhite@4x.png" alt="" class="social-card-star">
+      <span class="social-card-tag">NorCal SBDC &middot; Instagram</span>
+      <h3>Your idea deserves <em>momentum.</em></h3>
+      <p>Free advising for entrepreneurs across 36 Northern California counties.</p>
+    </div>
+    <div class="social-card social-card-royal">
+      <span class="social-card-tag">NorCal SBDC &middot; LinkedIn</span>
+      <h3>$547M+ in capital <em>accessed.</em></h3>
+      <p>Helping small businesses find the right funding at the right time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <span>Type Specimen &mdash; GT America Family Only</span>
+  <span>NorCal SBDC &mdash; 2026</span>
+</footer>
+
+</body>
+</html>

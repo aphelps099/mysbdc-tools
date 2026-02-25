@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Spotlight Campaign — NorCal SBDC</title>
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* Ambition Brand Palette */
+            --deep-navy: #152a45;
+            --navy: #1e3a5f;
+            --slate: #4a6580;
+            --dusty-blue: #8fa3be;
+            --mist: #c8d5e3;
+            --fog: #e5ebf1;
+            --cream: #f5f3ed;
+            --ivory: #faf9f7;
+            --white: #ffffff;
+            --brick: #c23a3a;
+            --sage: #5a7a6b;
+            --pool: #8FC5D9;
+            --maroon: #8A2432;
+
+            /* Typography */
+            --serif: Georgia, 'Times New Roman', serif;
+            --sans: 'proxima-nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'JetBrains Mono', 'SF Mono', monospace;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: #1a1a1a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Campaign Header */
+        .campaign-header {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 60px 0;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+
+        .campaign-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+
+        .campaign-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .campaign-desc {
+            font-size: 16px;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Section Headers */
+        .section-header {
+            max-width: 900px;
+            margin: 80px auto 32px;
+            padding-top: 40px;
+            border-top: 1px solid #333;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dusty-blue);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-label span {
+            color: var(--dusty-blue);
+        }
+
+        /* Page container - 8.5x11 ratio */
+        .page {
+            width: 816px;
+            height: 1056px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+
+        .page-navy { background: var(--deep-navy); }
+        .page-cream { background: var(--cream); }
+
+        .grain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =============================================
+           PAGE 1: THE HOOK
+        ============================================= */
+        .page-1-content {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .page-1-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .page-1-header .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--pool);
+        }
+
+        .label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .label-pool { color: var(--pool); }
+        .label-maroon { color: var(--maroon); }
+        .label-navy { color: var(--deep-navy); }
+
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero .label {
+            margin-bottom: 24px;
+        }
+
+        .hero .massive-stat {
+            font-size: 200px;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+            margin-bottom: 16px;
+        }
+
+        .hero .massive-stat span {
+            color: var(--pool);
+        }
+
+        .hero .stat-label {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dusty-blue);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 48px;
+        }
+
+        .hero .subtitle {
+            font-size: 22px;
+            color: var(--dusty-blue);
+            max-width: 500px;
+            line-height: 1.5;
+        }
+
+        .page-1-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .mini-stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .mini-stat {
+            text-align: left;
+        }
+
+        .mini-stat .num {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+
+        .mini-stat .label {
+            font-size: 9px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+
+        .page-num {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+        }
+
+        /* =============================================
+           PAGE 2: THE OFFER
+        ============================================= */
+        .page-2-content {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .page-2-header {
+            margin-bottom: 60px;
+        }
+
+        .page-2-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--deep-navy);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-top: 16px;
+            max-width: 500px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            flex: 1;
+        }
+
+        .col-header {
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--deep-navy);
+        }
+
+        .col-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--deep-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 8px;
+        }
+
+        .col-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .col-item .arrow {
+            color: var(--maroon);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .col-item .text {
+            font-size: 15px;
+            color: var(--deep-navy);
+            line-height: 1.5;
+        }
+
+        /* Pricing Strip */
+        .pricing-strip {
+            background: var(--deep-navy);
+            margin: 0 -60px;
+            padding: 48px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: auto;
+        }
+
+        .price-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-block .tier-name {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--pool);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .price-block .price {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .price-block .desc {
+            font-size: 14px;
+            color: var(--dusty-blue);
+            line-height: 1.6;
+        }
+
+        .price-block .highlight {
+            color: var(--pool);
+            font-weight: 600;
+        }
+
+        /* CTA Strip */
+        .cta-strip {
+            background: var(--maroon);
+            margin: 0 -60px -60px;
+            padding: 32px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cta-strip .cta-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .cta-strip .cta-contact {
+            text-align: right;
+        }
+
+        .cta-strip .cta-contact .name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .cta-strip .cta-contact .details {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 2px;
+        }
+
+        /* =============================================
+           FLYER 1: AMBITION STYLE (Legacy)
+        ============================================= */
+        .f1-header {
+            padding: 36px 56px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .f1-logo {
+            height: 36px;
+            width: auto;
+        }
+
+        .f1-meta {
+            text-align: right;
+        }
+
+        .f1-meta .label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dusty-blue);
+            margin-bottom: 4px;
+        }
+
+        .f1-meta .tagline {
+            font-family: var(--sans);
+            font-size: 13px;
+            font-style: italic;
+            color: var(--cream);
+        }
+
+        .f1-hero {
+            padding: 0 56px 28px;
+        }
+
+        .f1-hero .eyebrow {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dusty-blue);
+            margin-bottom: 12px;
+        }
+
+        .f1-hero h1 {
+            font-family: var(--sans);
+            font-size: 40px;
+            font-weight: normal;
+            color: var(--cream);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .f1-hero h1 em {
+            font-style: italic;
+            color: var(--mist);
+        }
+
+        .f1-hero .subtitle {
+            font-family: var(--sans);
+            font-size: 13px;
+            color: var(--dusty-blue);
+            line-height: 1.5;
+            max-width: 560px;
+        }
+
+        .f1-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .f1-stats .stat {
+            padding: 18px 16px;
+            text-align: center;
+        }
+
+        .f1-stats .stat:nth-child(1) { background: var(--cream); }
+        .f1-stats .stat:nth-child(2) { background: var(--fog); }
+        .f1-stats .stat:nth-child(3) { background: var(--mist); }
+        .f1-stats .stat:nth-child(4) { background: var(--dusty-blue); }
+
+        .f1-stats .stat-num {
+            font-family: var(--sans);
+            font-size: 28px;
+            font-weight: normal;
+            color: var(--deep-navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .f1-stats .stat:nth-child(1) .stat-num { color: var(--brick); }
+
+        .f1-stats .stat-label {
+            font-family: var(--mono);
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--deep-navy);
+            opacity: 0.6;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .f1-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .f1-cols .col {
+            padding: 32px 40px;
+        }
+
+        .f1-cols .col-left { background: var(--ivory); }
+        .f1-cols .col-right { background: var(--navy); }
+
+        .f1-cols .col-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .f1-cols .col-left .col-label { color: var(--brick); }
+        .f1-cols .col-right .col-label { color: var(--dusty-blue); }
+
+        .f1-cols .col-title {
+            font-family: var(--sans);
+            font-size: 22px;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
+
+        .f1-cols .col-left .col-title { color: var(--deep-navy); }
+        .f1-cols .col-right .col-title { color: var(--cream); }
+
+        .f1-item {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .f1-item .arrow {
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .f1-cols .col-left .f1-item .arrow { color: var(--brick); }
+        .f1-cols .col-right .f1-item .arrow { color: var(--dusty-blue); }
+
+        .f1-item .text {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .f1-cols .col-left .f1-item .text { color: var(--slate); }
+        .f1-cols .col-right .f1-item .text { color: var(--mist); }
+
+        .f1-pricing {
+            padding: 28px 40px;
+            background: var(--ivory);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .f1-tier {
+            padding: 0 40px;
+        }
+
+        .f1-tier:first-child {
+            border-right: 1px solid var(--mist);
+        }
+
+        .f1-tier-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 6px;
+        }
+
+        .f1-tier-price {
+            font-family: var(--sans);
+            font-size: 36px;
+            font-weight: normal;
+            color: var(--deep-navy);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .f1-tier.featured .f1-tier-price {
+            color: var(--brick);
+        }
+
+        .f1-tier-benefits {
+            list-style: none;
+        }
+
+        .f1-tier-benefits li {
+            font-size: 12px;
+            color: var(--slate);
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .f1-tier-benefits li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--dusty-blue);
+            font-size: 11px;
+        }
+
+        .f1-tier-benefits .highlight {
+            color: var(--deep-navy);
+            font-weight: 500;
+        }
+
+        .f1-tier.featured .f1-tier-benefits .highlight {
+            color: var(--brick);
+        }
+
+        .f1-cta {
+            padding: 18px 56px;
+            background: var(--brick);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .f1-cta h3 {
+            font-family: var(--sans);
+            font-size: 18px;
+            font-weight: normal;
+            color: var(--cream);
+            margin-bottom: 2px;
+        }
+
+        .f1-cta p {
+            font-size: 11px;
+            color: rgba(250, 249, 247, 0.75);
+        }
+
+        .f1-cta .contact {
+            text-align: right;
+        }
+
+        .f1-cta .contact .name {
+            font-family: var(--sans);
+            font-size: 14px;
+            color: var(--cream);
+        }
+
+        .f1-cta .contact .details {
+            font-family: var(--mono);
+            font-size: 9px;
+            color: rgba(250, 249, 247, 0.7);
+            letter-spacing: 0.02em;
+        }
+
+        .f1-footer {
+            padding: 16px 56px;
+            background: var(--deep-navy);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            height: 24px;
+            width: auto;
+        }
+
+        .f1-footer .tagline {
+            font-family: var(--sans);
+            font-size: 13px;
+            font-style: italic;
+            color: var(--dusty-blue);
+        }
+
+        .f1-footer .disclaimer {
+            font-family: var(--mono);
+            font-size: 7px;
+            color: var(--slate);
+            max-width: 260px;
+            text-align: right;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+        }
+
+        /* =============================================
+           FLYER 2: BOLD STYLE (Original)
+        ============================================= */
+        .f2-header {
+            padding: 56px 60px 48px;
+            background: var(--deep-navy);
+        }
+
+        .f2-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .f2-header-top .logo {
+            height: 40px;
+        }
+
+        .f2-header-top .label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        .f2-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .f2-header h1 span {
+            color: var(--pool);
+        }
+
+        .f2-header .subtitle {
+            font-size: 17px;
+            color: var(--dusty-blue);
+            line-height: 1.5;
+            max-width: 580px;
+        }
+
+        .f2-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .f2-stats .stat {
+            padding: 28px 20px;
+            text-align: center;
+        }
+
+        .f2-stats .stat:nth-child(1) { background: var(--cream); }
+        .f2-stats .stat:nth-child(2) { background: #e8e5de; }
+        .f2-stats .stat:nth-child(3) { background: var(--mist); }
+        .f2-stats .stat:nth-child(4) { background: var(--pool); }
+
+        .f2-stats .stat-num {
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--deep-navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .f2-stats .stat:nth-child(1) .stat-num { color: var(--maroon); }
+
+        .f2-stats .stat-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--deep-navy);
+            opacity: 0.7;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .f2-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            flex: 1;
+        }
+
+        .f2-cols .col {
+            padding: 36px 40px;
+        }
+
+        .f2-cols .col-left { background: var(--cream); }
+        .f2-cols .col-right { background: var(--navy); }
+
+        .f2-cols .col-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .f2-cols .col-left .col-label { color: var(--maroon); }
+        .f2-cols .col-right .col-label { color: var(--pool); }
+
+        .f2-cols .col-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .f2-cols .col-left .col-title { color: var(--deep-navy); }
+        .f2-cols .col-right .col-title { color: var(--white); }
+
+        .f2-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .f2-item .arrow {
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .f2-cols .col-left .f2-item .arrow { color: var(--maroon); }
+        .f2-cols .col-right .f2-item .arrow { color: var(--pool); }
+
+        .f2-item .text {
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .f2-cols .col-left .f2-item .text { color: var(--deep-navy); }
+        .f2-cols .col-right .f2-item .text { color: var(--mist); }
+
+        .f2-item .text strong { font-weight: 700; }
+
+        .f2-pricing {
+            padding: 32px 60px;
+            background: var(--deep-navy);
+        }
+
+        .f2-pricing .label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+
+        .f2-tier-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .f2-tier-card {
+            padding: 24px;
+        }
+
+        .f2-tier-card.standard { background: var(--cream); }
+        .f2-tier-card.premium { background: var(--pool); }
+
+        .f2-tier-card .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .f2-tier-card .tier-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--deep-navy);
+        }
+
+        .f2-tier-card .tier-price {
+            font-size: 26px;
+            font-weight: 900;
+        }
+
+        .f2-tier-card.standard .tier-price { color: var(--maroon); }
+        .f2-tier-card.premium .tier-price { color: var(--deep-navy); }
+
+        .f2-tier-card .tier-benefits { list-style: none; }
+
+        .f2-tier-card .tier-benefits li {
+            font-size: 11px;
+            color: var(--deep-navy);
+            padding: 6px 0;
+            padding-left: 14px;
+            position: relative;
+            border-bottom: 1px solid rgba(21,42,69,0.1);
+        }
+
+        .f2-tier-card .tier-benefits li:last-child { border-bottom: none; }
+
+        .f2-tier-card .tier-benefits li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .f2-tier-card.standard .tier-benefits li::before { color: var(--maroon); }
+        .f2-tier-card.premium .tier-benefits li::before { color: var(--deep-navy); }
+
+        .f2-tier-card .highlight {
+            background: rgba(21,42,69,0.08);
+            margin: 0 -24px;
+            padding: 6px 24px;
+            font-weight: 600;
+        }
+
+        .f2-cta {
+            padding: 24px 60px;
+            background: var(--maroon);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .f2-cta h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 2px;
+        }
+
+        .f2-cta p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .f2-cta .contact {
+            text-align: right;
+        }
+
+        .f2-cta .contact .name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .f2-cta .contact .details {
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .f2-footer {
+            padding: 16px 60px;
+            background: var(--deep-navy);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .f2-footer .logos {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .f2-footer .logo-placeholder {
+            font-family: var(--mono);
+            font-size: 8px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            padding: 6px 10px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .f2-footer .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--pool);
+        }
+
+        .f2-footer .disclaimer {
+            font-size: 7px;
+            color: rgba(255,255,255,0.4);
+            max-width: 280px;
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        /* =============================================
+           EMAIL TEMPLATE
+        ============================================= */
+        .email-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .email-header {
+            background: var(--deep-navy);
+            padding: 32px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .email-logo {
+            height: 32px;
+            width: auto;
+        }
+
+        .email-meta {
+            text-align: right;
+        }
+
+        .email-meta .label {
+            font-family: var(--mono);
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--dusty-blue);
+            margin-bottom: 4px;
+        }
+
+        .email-meta .tagline {
+            font-family: var(--sans);
+            font-size: 12px;
+            font-style: italic;
+            color: var(--cream);
+        }
+
+        .email-hero {
+            background: var(--deep-navy);
+            padding: 0 40px 40px;
+        }
+
+        .email-hero h1 {
+            font-family: var(--sans);
+            font-size: 32px;
+            font-weight: normal;
+            color: var(--cream);
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .email-hero h1 em {
+            font-style: italic;
+            color: var(--mist);
+        }
+
+        .email-hero p {
+            font-size: 14px;
+            color: var(--dusty-blue);
+            line-height: 1.6;
+        }
+
+        .email-stats {
+            display: flex;
+            background: var(--fog);
+        }
+
+        .email-stats .stat {
+            flex: 1;
+            padding: 20px 16px;
+            text-align: center;
+            border-right: 1px solid var(--mist);
+        }
+
+        .email-stats .stat:last-child {
+            border-right: none;
+        }
+
+        .email-stats .stat-num {
+            font-family: var(--sans);
+            font-size: 24px;
+            font-weight: normal;
+            color: var(--deep-navy);
+            line-height: 1;
+        }
+
+        .email-stats .stat:first-child .stat-num {
+            color: var(--brick);
+        }
+
+        .email-stats .stat-label {
+            font-family: var(--mono);
+            font-size: 7px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 6px;
+        }
+
+        .email-body {
+            padding: 32px 40px;
+        }
+
+        .email-body h2 {
+            font-family: var(--sans);
+            font-size: 20px;
+            font-weight: normal;
+            color: var(--deep-navy);
+            margin-bottom: 16px;
+        }
+
+        .email-body .benefit-list {
+            list-style: none;
+            margin-bottom: 28px;
+        }
+
+        .email-body .benefit-list li {
+            font-size: 14px;
+            color: var(--slate);
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            border-bottom: 1px solid var(--fog);
+        }
+
+        .email-body .benefit-list li:last-child {
+            border-bottom: none;
+        }
+
+        .email-body .benefit-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--dusty-blue);
+        }
+
+        .email-pricing {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .email-price {
+            flex: 1;
+        }
+
+        .email-price .label {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 4px;
+        }
+
+        .email-price .amount {
+            font-family: var(--sans);
+            font-size: 28px;
+            color: var(--deep-navy);
+        }
+
+        .email-price.featured .amount {
+            color: var(--brick);
+        }
+
+        .email-cta {
+            display: inline-block;
+            background: var(--brick);
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 2px;
+            letter-spacing: 0.02em;
+        }
+
+        .email-cta-note {
+            font-size: 12px;
+            color: var(--slate);
+            margin-top: 12px;
+        }
+
+        .email-footer {
+            background: var(--deep-navy);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .email-footer .brand {
+            font-family: var(--sans);
+            font-size: 11px;
+            color: var(--cream);
+        }
+
+        .email-footer .tagline {
+            font-family: var(--sans);
+            font-size: 12px;
+            font-style: italic;
+            color: var(--dusty-blue);
+        }
+
+        .email-footer .links {
+            font-family: var(--mono);
+            font-size: 8px;
+            color: var(--slate);
+            letter-spacing: 0.05em;
+        }
+
+        .email-footer .links a {
+            color: var(--dusty-blue);
+            text-decoration: none;
+        }
+
+        /* =============================================
+           LINKEDIN CAROUSEL
+        ============================================= */
+        .carousel {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .slide {
+            width: 540px;
+            height: 675px;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .slide-navy { background: var(--deep-navy); }
+        .slide-cream { background: var(--cream); }
+        .slide-brick { background: var(--brick); }
+
+        .slide-logo {
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            height: 32px;
+            width: auto;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 32px;
+            right: 32px;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+
+        .slide-navy .slide-number { color: var(--slate); }
+        .slide-cream .slide-number { color: var(--dusty-blue); }
+        .slide-brick .slide-number { color: rgba(255,255,255,0.5); }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 40px 60px;
+        }
+
+        .slide-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .slide-navy .slide-label { color: var(--dusty-blue); }
+        .slide-cream .slide-label { color: var(--brick); }
+        .slide-brick .slide-label { color: rgba(255,255,255,0.7); }
+
+        .slide-headline {
+            font-family: var(--sans);
+            font-weight: normal;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-headline.large { font-size: 48px; }
+        .slide-headline.medium { font-size: 40px; }
+
+        .slide-navy .slide-headline { color: var(--cream); }
+        .slide-cream .slide-headline { color: var(--deep-navy); }
+        .slide-brick .slide-headline { color: var(--white); }
+
+        .slide-headline em { font-style: italic; }
+        .slide-navy .slide-headline em { color: var(--mist); }
+        .slide-cream .slide-headline em { color: var(--brick); }
+
+        .slide-subtext {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        .slide-navy .slide-subtext { color: var(--dusty-blue); }
+        .slide-cream .slide-subtext { color: var(--slate); }
+        .slide-brick .slide-subtext { color: rgba(255,255,255,0.8); }
+
+        .big-number {
+            font-family: var(--sans);
+            font-size: 120px;
+            font-weight: normal;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .slide-navy .big-number { color: var(--cream); }
+        .slide-cream .big-number { color: var(--brick); }
+
+        .big-number-label {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .slide-navy .big-number-label { color: var(--dusty-blue); }
+        .slide-cream .big-number-label { color: var(--slate); }
+
+        .slide-list {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .slide-list li {
+            font-size: 18px;
+            padding: 12px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.3;
+        }
+
+        .slide-navy .slide-list li {
+            color: var(--mist);
+            border-bottom: 1px solid var(--navy);
+        }
+
+        .slide-cream .slide-list li {
+            color: var(--slate);
+            border-bottom: 1px solid var(--fog);
+        }
+
+        .slide-list li:last-child { border-bottom: none; }
+
+        .slide-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+        }
+
+        .slide-navy .slide-list li::before { color: var(--dusty-blue); }
+        .slide-cream .slide-list li::before { color: var(--brick); }
+
+        .slide-footer {
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-navy .slide-footer { border-top: 1px solid var(--navy); }
+        .slide-cream .slide-footer { border-top: 1px solid var(--fog); }
+        .slide-brick .slide-footer { border-top: 1px solid rgba(255,255,255,0.2); }
+
+        .footer-tagline {
+            font-family: var(--sans);
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .slide-navy .footer-tagline { color: var(--dusty-blue); }
+        .slide-cream .footer-tagline { color: var(--slate); }
+        .slide-brick .footer-tagline { color: rgba(255,255,255,0.8); }
+
+        .footer-url {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+        }
+
+        .slide-navy .footer-url { color: var(--slate); }
+        .slide-cream .footer-url { color: var(--dusty-blue); }
+        .slide-brick .footer-url { color: rgba(255,255,255,0.6); }
+
+        .cta-content { text-align: center; }
+        .cta-content .slide-headline { margin-bottom: 24px; }
+
+        .cta-action {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: transparent;
+            border: 2px solid var(--white);
+            padding: 16px 32px;
+            margin-top: 32px;
+        }
+
+        .export-note {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: #555;
+            text-align: center;
+            margin-top: 32px;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Campaign Header -->
+<div class="campaign-header">
+    <div class="campaign-label">04 — Partnerships</div>
+    <h1 class="campaign-title">Lender Spotlight Campaign</h1>
+    <p class="campaign-desc">Complete campaign kit for pitching the Monthly Lender Spotlight Program to banks, CDFIs, and alternative lenders.</p>
+</div>
+
+
+<!-- ==========================================
+     SECTION 1: FLYERS
+========================================== -->
+<div class="section-header">
+    <div class="section-label">Print Collateral</div>
+    <h2 class="section-title">Sales Flyers</h2>
+    <p class="section-desc">Two 1-page flyer designs for print or PDF distribution</p>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- ==========================================
+         PAGE 1: THE HOOK
+    ========================================== -->
+    <div class="page-label">Page 1 <span>The Hook</span></div>
+    <div class="page page-navy grain">
+        <div class="page-content page-1-content">
+
+            <div class="page-1-header">
+                <div class="label label-pool">NorCal SBDC</div>
+                <span class="tagline">Your Business People.</span>
+            </div>
+
+            <div class="hero">
+                <div class="label label-pool">Monthly Lender Spotlight</div>
+                <div class="massive-stat">$10M<span>+</span></div>
+                <div class="stat-label">In Active Loan Demand</div>
+                <p class="subtitle">Borrowers who are prepared, qualified, and actively seeking capital. They're sitting in our offices right now.</p>
+            </div>
+
+            <div class="page-1-footer">
+                <div class="mini-stats">
+                    <div class="mini-stat">
+                        <div class="num">35</div>
+                        <div class="label">Capital Advisors</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="num">36</div>
+                        <div class="label">Counties</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="num">2,400+</div>
+                        <div class="label">Active Clients</div>
+                    </div>
+                </div>
+                <span class="page-num">01</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PAGE 2: THE OFFER
+    ========================================== -->
+    <div class="page-label">Page 2 <span>The Offer</span></div>
+    <div class="page page-cream grain">
+        <div class="page-content page-2-content">
+
+            <div class="page-2-header">
+                <div class="label label-maroon">Partnership Program</div>
+                <h2>Get in front of borrowers ready to close.</h2>
+            </div>
+
+            <div class="two-col">
+                <div class="col">
+                    <div class="col-header">
+                        <div class="label label-maroon">Who You'll Reach</div>
+                        <h3>Borrower Profile</h3>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">$25K – $500K loan sizes</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">2+ years in business</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">620+ credit (advisor-verified)</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">Financials organized, ready to close</span>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="col-header">
+                        <div class="label label-maroon">What You Get</div>
+                        <h3>Partnership Benefits</h3>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">60-min session with 35 advisors</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">Added to our Lender Matrix</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">Direct intros to matching clients</span>
+                    </div>
+                    <div class="col-item">
+                        <span class="arrow">→</span>
+                        <span class="text">Quarterly pipeline reports</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-strip">
+                <div class="price-block">
+                    <span class="tier-name">Monthly Spotlight</span>
+                    <span class="price">$3,000</span>
+                    <p class="desc">One training session. 12-month Lender Matrix listing. Referral tracking dashboard.</p>
+                </div>
+                <div class="price-block">
+                    <span class="tier-name">Premier Partner</span>
+                    <span class="price">$5,000</span>
+                    <p class="desc">Everything above, plus <span class="highlight">exclusive category lock</span>, quarterly 1:1s, and co-branded materials.</p>
+                </div>
+            </div>
+
+            <div class="cta-strip">
+                <span class="cta-text">One lender per month. Reserve yours.</span>
+                <div class="cta-contact">
+                    <p class="name">[Contact Name]</p>
+                    <p class="details">[email] · [phone]</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     SECTION 2: EMAIL TEMPLATE
+========================================== -->
+<div class="section-header">
+    <div class="section-label">Digital Outreach</div>
+    <h2 class="section-title">Email Template</h2>
+    <p class="section-desc">Constant Contact / Mailchimp ready email design</p>
+</div>
+
+<div class="page-wrapper">
+    <div class="page-label">Email <span>Constant Contact</span></div>
+
+    <div class="email-wrapper">
+        <div class="email-header">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="email-logo">
+            <div class="email-meta">
+                <div class="label">Partnership Program</div>
+                <div class="tagline">Your Business People</div>
+            </div>
+        </div>
+
+        <div class="email-hero">
+            <h1>Get in front of <em>$10M+</em> in active loan demand.</h1>
+            <p>Connect directly with borrowers who are prepared, qualified, and actively seeking capital.</p>
+        </div>
+
+        <div class="email-stats">
+            <div class="stat"><div class="stat-num">35</div><div class="stat-label">Capital Advisors</div></div>
+            <div class="stat"><div class="stat-num">2,400+</div><div class="stat-label">Active Clients</div></div>
+            <div class="stat"><div class="stat-num">73%</div><div class="stat-label">Loan-Ready</div></div>
+        </div>
+
+        <div class="email-body">
+            <h2>What you get</h2>
+            <ul class="benefit-list">
+                <li>60-min session with 35 advisors</li>
+                <li>Added to our Lender Matrix (the referral guide)</li>
+                <li>Direct intros to matching clients</li>
+                <li>Quarterly pipeline reports</li>
+            </ul>
+
+            <div class="email-pricing">
+                <div class="email-price">
+                    <div class="label">Monthly Spotlight</div>
+                    <div class="amount">$3,000</div>
+                </div>
+                <div class="email-price featured">
+                    <div class="label">Premier Partner</div>
+                    <div class="amount">$5,000</div>
+                </div>
+            </div>
+
+            <a href="#" class="email-cta">Reserve Your Spotlight</a>
+            <p class="email-cta-note">Limited to one lender per month.</p>
+        </div>
+
+        <div class="email-footer">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="footer-logo">
+            <div class="tagline">Your Business People.</div>
+            <div class="links"><a href="#">Unsubscribe</a> · <a href="#">View in browser</a></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ==========================================
+     SECTION 3: LINKEDIN CAROUSEL
+========================================== -->
+<div class="section-header">
+    <div class="section-label">Social Media</div>
+    <h2 class="section-title">LinkedIn Carousel</h2>
+    <p class="section-desc">6-slide carousel for LinkedIn posts. Export as 1080×1350px PNGs.</p>
+</div>
+
+<div class="page-label" style="max-width: 900px; margin: 0 auto;">LinkedIn Carousel <span>6 Slides</span></div>
+
+<div class="carousel">
+
+    <!-- Slide 1: Hook -->
+    <div class="slide slide-navy">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">01 / 06</div>
+        <div class="slide-content">
+            <div class="slide-label">Lender Partnership</div>
+            <h2 class="slide-headline large">$10M+ in loan demand.<br><em>One phone call away.</em></h2>
+            <p class="slide-subtext">Swipe to see how →</p>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Problem -->
+    <div class="slide slide-cream">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">02 / 06</div>
+        <div class="slide-content">
+            <div class="slide-label">The Challenge</div>
+            <h2 class="slide-headline medium">Finding qualified borrowers is expensive.</h2>
+            <p class="slide-subtext">Marketing. Lead gen. Underwriting time wasted on unqualified applicants.</p>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+    <!-- Slide 3: The Stat -->
+    <div class="slide slide-navy">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">03 / 06</div>
+        <div class="slide-content">
+            <div class="big-number">73%</div>
+            <div class="big-number-label">of our referrals are loan-ready on first contact.</div>
+            <p class="slide-subtext">Business plans reviewed. Financials organized. Credit verified.</p>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+    <!-- Slide 4: What You Get -->
+    <div class="slide slide-cream">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">04 / 06</div>
+        <div class="slide-content">
+            <div class="slide-label">What You Get</div>
+            <h2 class="slide-headline medium">Direct access to 35 capital advisors.</h2>
+            <ul class="slide-list">
+                <li>60-min training session</li>
+                <li>Added to our Lender Matrix</li>
+                <li>Direct client intros</li>
+                <li>Quarterly pipeline reports</li>
+            </ul>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+    <!-- Slide 5: The Numbers -->
+    <div class="slide slide-navy">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">05 / 06</div>
+        <div class="slide-content">
+            <div class="slide-label">By The Numbers</div>
+            <div class="big-number">2,400+</div>
+            <div class="big-number-label">clients actively seeking capital right now.</div>
+            <p class="slide-subtext">$25K – $500K loan sizes. Restaurants, retail, professional services, construction.</p>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+    <!-- Slide 6: CTA -->
+    <div class="slide slide-brick">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="slide-logo">
+        <div class="slide-number">06 / 06</div>
+        <div class="slide-content cta-content">
+            <div class="slide-label">Limited Availability</div>
+            <h2 class="slide-headline medium">One lender spotlight per month.</h2>
+            <p class="slide-subtext">Starting at $3,000.</p>
+            <div class="cta-action">Reserve Your Spot</div>
+        </div>
+        <div class="slide-footer">
+            <span class="footer-tagline">Your Business People</span>
+            <span class="footer-url">norcalsbdc.org</span>
+        </div>
+    </div>
+
+</div>
+
+<p class="export-note">Export each slide as 1080×1350px PNG or combine into PDF for LinkedIn upload</p>
+
+</body>
+</html>

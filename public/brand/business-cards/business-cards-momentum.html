@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Business Cards (Momentum)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .card-pair {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .card-container {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 200px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =============================================
+           M1: VELOCITY BARS
+           Horizontal speed lines
+        ============================================= */
+        .m1-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m1-front .bar {
+            position: absolute;
+            left: 0;
+            height: 3px;
+        }
+        
+        .m1-front .bar.b1 { top: 25%; width: 60%; background: var(--pool); }
+        .m1-front .bar.b2 { top: 35%; width: 80%; background: var(--sky); opacity: 0.6; }
+        .m1-front .bar.b3 { top: 45%; width: 45%; background: var(--maroon); }
+        .m1-front .bar.b4 { top: 55%; width: 90%; background: var(--pool); opacity: 0.3; }
+        .m1-front .bar.b5 { top: 65%; width: 55%; background: var(--royal); }
+        
+        .m1-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m1-front .logo {
+            width: 80px;
+        }
+        
+        .m1-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: white;
+        }
+        
+        .m1-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m1-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .m1-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .m1-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m1-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+        
+        .m1-back .contact-line.dim {
+            color: var(--sky);
+        }
+
+        /* =============================================
+           M2: GRADIENT SWEEP
+           Diagonal color transition
+        ============================================= */
+        .m2-front {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--royal) 50%, var(--pool) 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m2-front .logo {
+            width: 80px;
+        }
+        
+        .m2-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: white;
+        }
+        
+        .m2-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m2-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m2-back .title {
+            font-size: 11px;
+            color: var(--royal);
+            margin-top: 4px;
+        }
+        
+        .m2-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m2-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           M3: CORNER BURST
+           Color radiating from corner
+        ============================================= */
+        .m3-front {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m3-front .burst {
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--pool) 0%, var(--royal) 50%, var(--navy) 100%);
+        }
+        
+        .m3-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m3-front .logo {
+            width: 80px;
+        }
+        
+        .m3-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--navy);
+            max-width: 180px;
+        }
+        
+        .m3-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m3-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .m3-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .m3-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m3-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           M4: STACKED WAVES
+           Layered color bands
+        ============================================= */
+        .m4-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m4-front .wave {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 40px;
+        }
+        
+        .m4-front .wave.w1 { bottom: 0; background: var(--pool); }
+        .m4-front .wave.w2 { bottom: 30px; background: var(--sky); opacity: 0.5; }
+        .m4-front .wave.w3 { bottom: 55px; background: var(--royal); opacity: 0.3; }
+        
+        .m4-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m4-front .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .m4-front .logo {
+            width: 80px;
+        }
+        
+        .m4-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: white;
+            text-align: right;
+        }
+        
+        .m4-back {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m4-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m4-back .title {
+            font-size: 11px;
+            color: var(--navy);
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        
+        .m4-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m4-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           M5: SPLIT DIAGONAL
+           Two-tone with energy angle
+        ============================================= */
+        .m5-front {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m5-front .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(155deg, var(--maroon) 0%, var(--maroon) 45%, var(--pool) 45%);
+        }
+        
+        .m5-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m5-front .logo {
+            width: 80px;
+        }
+        
+        .m5-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: right;
+        }
+        
+        .m5-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .m5-back .accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--maroon);
+        }
+        
+        .m5-back .main {
+            padding-left: 16px;
+        }
+        
+        .m5-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m5-back .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 4px;
+        }
+        
+        .m5-back .contact {
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m5-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           M6: MOTION BLUR
+           Repeated fading elements
+        ============================================= */
+        .m6-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m6-front .blur-line {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 40px;
+            background: var(--pool);
+        }
+        
+        .m6-front .blur-line.l1 { left: 20%; opacity: 0.1; }
+        .m6-front .blur-line.l2 { left: 25%; opacity: 0.2; }
+        .m6-front .blur-line.l3 { left: 30%; opacity: 0.3; }
+        .m6-front .blur-line.l4 { left: 35%; opacity: 0.5; }
+        .m6-front .blur-line.l5 { left: 40%; opacity: 0.8; }
+        
+        .m6-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m6-front .logo {
+            width: 80px;
+        }
+        
+        .m6-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: white;
+        }
+        
+        .m6-back {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m6-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m6-back .title {
+            font-size: 11px;
+            color: var(--navy);
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        
+        .m6-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m6-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           M7: ARROW FORWARD
+           Directional energy
+        ============================================= */
+        .m7-front {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m7-front .arrow {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 80px solid transparent;
+            border-bottom: 80px solid transparent;
+            border-left: 100px solid var(--navy);
+        }
+        
+        .m7-front .arrow-2 {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 60px solid var(--pool);
+            opacity: 0.5;
+        }
+        
+        .m7-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m7-front .logo {
+            width: 80px;
+        }
+        
+        .m7-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--navy);
+            max-width: 160px;
+        }
+        
+        .m7-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m7-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .m7-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .m7-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m7-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           M8: CONCENTRIC
+           Expanding rings of color
+        ============================================= */
+        .m8-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .m8-front .ring {
+            position: absolute;
+            border-radius: 50%;
+            top: 50%;
+            left: -60%;
+            transform: translateY(-50%);
+        }
+        
+        .m8-front .ring.r1 { width: 300px; height: 300px; background: var(--royal); opacity: 0.2; }
+        .m8-front .ring.r2 { width: 220px; height: 220px; background: var(--pool); opacity: 0.3; margin-left: 40px; margin-top: 40px; }
+        .m8-front .ring.r3 { width: 140px; height: 140px; background: var(--sky); opacity: 0.4; margin-left: 80px; margin-top: 80px; }
+        
+        .m8-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .m8-front .logo {
+            width: 80px;
+        }
+        
+        .m8-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: white;
+            text-align: right;
+        }
+        
+        .m8-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m8-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m8-back .title {
+            font-size: 11px;
+            color: var(--royal);
+            margin-top: 4px;
+        }
+        
+        .m8-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m8-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           M9: STRIPE STACK
+           Vertical color bars
+        ============================================= */
+        .m9-front {
+            display: flex;
+        }
+        
+        .m9-front .stripe {
+            flex: 1;
+        }
+        
+        .m9-front .stripe.s1 { background: var(--navy); }
+        .m9-front .stripe.s2 { background: var(--royal); }
+        .m9-front .stripe.s3 { background: var(--pool); }
+        .m9-front .stripe.s4 { background: var(--sky); }
+        .m9-front .stripe.s5 { background: var(--cream); flex: 2; }
+        
+        .m9-front .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m9-front .logo {
+            width: 80px;
+        }
+        
+        .m9-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: right;
+        }
+        
+        .m9-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .m9-back .color-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--navy), var(--royal), var(--pool), var(--sky), var(--cream));
+        }
+        
+        .m9-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .m9-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .m9-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m9-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           M10: BOLD BLOCK
+           Large color field, confident
+        ============================================= */
+        .m10-front {
+            background: var(--maroon);
+            position: relative;
+        }
+        
+        .m10-front .block {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 45%;
+            height: 60%;
+            background: var(--pool);
+        }
+        
+        .m10-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .m10-front .logo {
+            width: 80px;
+        }
+        
+        .m10-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: white;
+            max-width: 140px;
+        }
+        
+        .m10-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .m10-back .corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: var(--maroon);
+        }
+        
+        .m10-back .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .m10-back .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 4px;
+        }
+        
+        .m10-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .m10-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Business Cards — Momentum</div>
+    </div>
+
+    <!-- M1 -->
+    <div class="section">
+        <div class="section-label">M1 — Velocity Bars</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m1-front">
+                    <div class="bar b1"></div>
+                    <div class="bar b2"></div>
+                    <div class="bar b3"></div>
+                    <div class="bar b4"></div>
+                    <div class="bar b5"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m1-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line dim">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M2 -->
+    <div class="section">
+        <div class="section-label">M2 — Gradient Sweep</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m2-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m2-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M3 -->
+    <div class="section">
+        <div class="section-label">M3 — Corner Burst</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m3-front">
+                    <div class="burst"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m3-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M4 -->
+    <div class="section">
+        <div class="section-label">M4 — Stacked Waves</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m4-front">
+                    <div class="wave w3"></div>
+                    <div class="wave w2"></div>
+                    <div class="wave w1"></div>
+                    <div class="content">
+                        <div class="top">
+                            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                            <div class="tagline">Your Business<br>People.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m4-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M5 -->
+    <div class="section">
+        <div class="section-label">M5 — Split Diagonal</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m5-front">
+                    <div class="bg"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m5-back">
+                    <div class="accent"></div>
+                    <div class="main">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M6 -->
+    <div class="section">
+        <div class="section-label">M6 — Motion Blur</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m6-front">
+                    <div class="blur-line l1"></div>
+                    <div class="blur-line l2"></div>
+                    <div class="blur-line l3"></div>
+                    <div class="blur-line l4"></div>
+                    <div class="blur-line l5"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m6-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M7 -->
+    <div class="section">
+        <div class="section-label">M7 — Arrow Forward</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m7-front">
+                    <div class="arrow-2"></div>
+                    <div class="arrow"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m7-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M8 -->
+    <div class="section">
+        <div class="section-label">M8 — Concentric</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m8-front">
+                    <div class="ring r1"></div>
+                    <div class="ring r2"></div>
+                    <div class="ring r3"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m8-back">
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M9 -->
+    <div class="section">
+        <div class="section-label">M9 — Stripe Stack</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m9-front">
+                    <div class="stripe s1"></div>
+                    <div class="stripe s2"></div>
+                    <div class="stripe s3"></div>
+                    <div class="stripe s4"></div>
+                    <div class="stripe s5"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m9-back">
+                    <div class="color-bar"></div>
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M10 -->
+    <div class="section">
+        <div class="section-label">M10 — Bold Block</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card m10-front">
+                    <div class="block"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card m10-back">
+                    <div class="corner"></div>
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

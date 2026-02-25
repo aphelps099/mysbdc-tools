@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Guide — Editorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --navy-90: rgba(15, 28, 46, 0.9);
+            --navy-70: rgba(15, 28, 46, 0.7);
+            --navy-50: rgba(15, 28, 46, 0.5);
+            --navy-20: rgba(15, 28, 46, 0.2);
+            --navy-10: rgba(15, 28, 46, 0.1);
+            
+            --sky: #9EC4E0;
+            --sky-70: rgba(158, 196, 224, 0.7);
+            --sky-50: rgba(158, 196, 224, 0.5);
+            --sky-30: rgba(158, 196, 224, 0.3);
+            
+            --pool: #8FC5D9;
+            --pool-70: rgba(143, 197, 217, 0.7);
+            --pool-50: rgba(143, 197, 217, 0.5);
+            --pool-30: rgba(143, 197, 217, 0.3);
+            
+            --cream: #F5F2EB;
+            --cream-dark: #E8E4DA;
+            
+            --maroon: #8A2432;
+            --maroon-90: rgba(138, 36, 50, 0.9);
+            --maroon-70: rgba(138, 36, 50, 0.7);
+            --maroon-50: rgba(138, 36, 50, 0.5);
+            --maroon-20: rgba(138, 36, 50, 0.2);
+            --maroon-10: rgba(138, 36, 50, 0.1);
+            
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a1a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .section-divider {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 40px;
+        }
+        
+        .section-divider h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #555;
+        }
+        
+        .page-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .page-label span { color: var(--pool); }
+        
+        .page {
+            width: 816px;
+            height: 1056px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+        
+        .placeholder {
+            border: 1px dashed rgba(15,28,46,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(15,28,46,0.25);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .placeholder-light {
+            border-color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* =============================================
+           COVER — LAYERED
+        ============================================= */
+        .cover-layer {
+            background: var(--cream);
+            position: relative;
+        }
+        
+        /* Multiply-style overlay in corner */
+        .cover-layer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: multiply;
+        }
+        
+        .cover-layer .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        
+        .cover-layer .top {
+            padding: 40px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .cover-layer .top .network {
+            height: 28px;
+        }
+        
+        .cover-layer .top .center-logo {
+            width: 160px;
+            height: 44px;
+        }
+        
+        .cover-layer .middle {
+            padding: 0 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .cover-layer .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 20px;
+        }
+        
+        .cover-layer .headline {
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            max-width: 520px;
+        }
+        
+        .cover-layer .headline span {
+            color: var(--maroon);
+        }
+        
+        .cover-layer .sub {
+            font-size: 17px;
+            color: var(--navy-70);
+            margin-top: 28px;
+            max-width: 420px;
+            line-height: 1.6;
+        }
+        
+        .cover-layer .bottom {
+            display: flex;
+            position: relative;
+        }
+        
+        /* Screen-style light overlay on tension blocks */
+        .cover-layer .tension {
+            flex: 1;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+        
+        .cover-layer .tension.cream-bg {
+            background: var(--cream-dark);
+        }
+        
+        .cover-layer .tension.cream-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--sky-30) 0%, transparent 100%);
+            mix-blend-mode: screen;
+        }
+        
+        .cover-layer .tension.maroon-bg {
+            background: var(--maroon);
+        }
+        
+        .cover-layer .tension.maroon-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-50) 0%, transparent 60%);
+            mix-blend-mode: overlay;
+        }
+        
+        .cover-layer .tension .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cover-layer .tension .num {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+        
+        .cover-layer .tension.cream-bg .num { color: var(--navy); }
+        .cover-layer .tension.maroon-bg .num { color: var(--white); }
+        
+        .cover-layer .tension .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        
+        .cover-layer .tension.cream-bg .label { color: var(--navy-50); }
+        .cover-layer .tension.maroon-bg .label { color: rgba(255,255,255,0.6); }
+        
+        .cover-layer .footer-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy) 0%, var(--pool) 50%, var(--maroon) 100%);
+        }
+
+        /* =============================================
+           DIRECTOR — OVERLAP PANELS
+        ============================================= */
+        .director-layer {
+            background: var(--cream);
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            position: relative;
+        }
+        
+        .director-layer .left {
+            background: var(--navy);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* Multiply overlay on photo area */
+        .director-layer .left::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+        
+        .director-layer .left .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .director-layer .left .photo {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .director-layer .left .name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .director-layer .left .title {
+            font-size: 13px;
+            color: var(--sky);
+            margin-top: 4px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .director-layer .left .stats {
+            margin-top: auto;
+            padding-top: 32px;
+            display: flex;
+            gap: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .director-layer .left .stat .num {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+        
+        .director-layer .left .stat .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-top: 2px;
+        }
+        
+        .director-layer .right {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* Soft overlay from left */
+        .director-layer .right::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 120px;
+            background: linear-gradient(90deg, var(--navy-10) 0%, transparent 100%);
+        }
+        
+        .director-layer .right .letter {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .director-layer .right .letter p {
+            font-size: 16px;
+            color: var(--navy);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+        
+        .director-layer .right .letter .pull {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--maroon);
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            margin: 28px 0;
+            padding-left: 24px;
+            border-left: 4px solid var(--maroon-50);
+        }
+        
+        .director-layer .right .sig {
+            position: relative;
+            z-index: 2;
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 2px solid var(--navy);
+        }
+        
+        .director-layer .right .sig-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .director-layer .right .sig-title {
+            font-size: 12px;
+            color: var(--navy-50);
+        }
+
+        /* =============================================
+           THE MATH — GRADIENT FIELD
+        ============================================= */
+        .math-layer {
+            background: var(--maroon);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        /* Complex layered gradients */
+        .math-layer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, var(--pool-50) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--navy-50) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+        
+        .math-layer::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, var(--maroon-90) 100%);
+        }
+        
+        .math-layer .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .math-layer .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 60px;
+        }
+        
+        .math-layer .equation {
+            display: flex;
+            align-items: baseline;
+            gap: 48px;
+            margin-bottom: 60px;
+        }
+        
+        .math-layer .num-block .num {
+            font-size: 120px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .math-layer .num-block .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-top: 12px;
+        }
+        
+        .math-layer .arrow {
+            font-size: 48px;
+            color: var(--pool);
+            font-weight: 300;
+        }
+        
+        .math-layer .punchline {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.5;
+            max-width: 480px;
+        }
+        
+        .math-layer .punchline span {
+            color: var(--pool);
+        }
+
+        /* =============================================
+           SERVICES — OVERLAPPING CARDS
+        ============================================= */
+        .services-layer {
+            background: var(--white);
+            position: relative;
+        }
+        
+        .services-layer .header {
+            background: var(--navy);
+            padding: 48px;
+            position: relative;
+        }
+        
+        .services-layer .header::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 40%;
+            background: linear-gradient(90deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: screen;
+        }
+        
+        .services-layer .header h2 {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .services-layer .header p {
+            font-size: 16px;
+            color: var(--sky);
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .services-layer .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--navy-10);
+            padding: 1px;
+        }
+        
+        .services-layer .card {
+            background: var(--white);
+            padding: 40px;
+            position: relative;
+        }
+        
+        /* Alternating soft color overlays */
+        .services-layer .card:nth-child(1)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--pool-30) 0%, transparent 60%);
+        }
+        
+        .services-layer .card:nth-child(2)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(225deg, var(--sky-30) 0%, transparent 60%);
+        }
+        
+        .services-layer .card:nth-child(3)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(315deg, var(--maroon-10) 0%, transparent 60%);
+        }
+        
+        .services-layer .card:nth-child(4)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, var(--pool-30) 0%, transparent 60%);
+        }
+        
+        .services-layer .card .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .services-layer .card .num {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--maroon-20);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+        
+        .services-layer .card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 20px;
+        }
+        
+        .services-layer .card ul {
+            list-style: none;
+        }
+        
+        .services-layer .card li {
+            font-size: 14px;
+            color: var(--navy);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--navy-10);
+        }
+        
+        .services-layer .card li:last-child { border-bottom: none; }
+        
+        .services-layer .locations {
+            background: var(--cream);
+            padding: 32px 48px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+        }
+        
+        .services-layer .locations::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--pool-30) 0%, transparent 30%, var(--maroon-10) 100%);
+        }
+        
+        .services-layer .locations .stat {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .services-layer .locations .stat .num {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+        }
+        
+        .services-layer .locations .stat .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--maroon);
+        }
+        
+        .services-layer .locations .list {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .services-layer .locations .list span {
+            font-size: 12px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           SPONSOR A — TESTIMONIAL
+        ============================================= */
+        .sponsor-layer-a {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            background: var(--cream);
+        }
+        
+        .sponsor-layer-a .photo-side {
+            position: relative;
+            background: #333;
+        }
+        
+        .sponsor-layer-a .photo-side .photo {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+        
+        /* Gradient overlay with color mixing */
+        .sponsor-layer-a .photo-side .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(to top, var(--navy) 0%, transparent 60%),
+                linear-gradient(to right, var(--maroon-50) 0%, transparent 50%);
+        }
+        
+        .sponsor-layer-a .photo-side .quote-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 48px;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-a .photo-side .headline {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-layer-a .photo-side .quote {
+            font-size: 17px;
+            font-style: italic;
+            color: var(--sky);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-layer-a .photo-side .attr {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .sponsor-layer-a .photo-side .attr strong {
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .sponsor-layer-a .info-side {
+            padding: 48px 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .sponsor-layer-a .info-side::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 40%);
+        }
+        
+        .sponsor-layer-a .info-side .inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .sponsor-layer-a .info-side .logo {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-layer-a .info-side .services-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-layer-a .info-side .services {
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-layer-a .info-side .services span {
+            display: block;
+            font-size: 13px;
+            color: var(--navy);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--navy-10);
+        }
+        
+        .sponsor-layer-a .info-side .contact {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 2px solid var(--navy);
+        }
+        
+        .sponsor-layer-a .info-side .contact .photo {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-layer-a .info-side .contact .name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .sponsor-layer-a .info-side .contact .title {
+            font-size: 12px;
+            color: var(--navy-50);
+        }
+        
+        .sponsor-layer-a .info-side .contact .info {
+            font-size: 12px;
+            color: var(--navy);
+            margin-top: 8px;
+        }
+        
+        .sponsor-layer-a .info-side .footer-tag {
+            margin-top: 24px;
+            font-size: 12px;
+            font-style: italic;
+            color: var(--maroon);
+        }
+
+        /* =============================================
+           SPONSOR B — BRAND SPLASH
+        ============================================= */
+        .sponsor-layer-b {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-layer-b .brand {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            position: relative;
+        }
+        
+        .sponsor-layer-b .brand.bg-pool {
+            background: var(--pool);
+        }
+        
+        .sponsor-layer-b .brand.bg-pool::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, var(--sky-50) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 80%, var(--cream) 0%, transparent 40%);
+            mix-blend-mode: overlay;
+        }
+        
+        .sponsor-layer-b .brand.bg-navy {
+            background: var(--navy);
+        }
+        
+        .sponsor-layer-b .brand.bg-navy::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, var(--pool-50) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, var(--maroon-50) 0%, transparent 40%);
+            mix-blend-mode: screen;
+        }
+        
+        .sponsor-layer-b .brand .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-b .brand .logo {
+            width: 280px;
+            height: 90px;
+            margin-bottom: 40px;
+        }
+        
+        .sponsor-layer-b .brand .tagline {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+        
+        .sponsor-layer-b .brand.bg-pool .tagline { color: var(--navy); }
+        .sponsor-layer-b .brand.bg-navy .tagline { color: var(--white); }
+        
+        .sponsor-layer-b .brand .body {
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 480px;
+            margin-bottom: 32px;
+        }
+        
+        .sponsor-layer-b .brand.bg-pool .body { color: var(--navy-70); }
+        .sponsor-layer-b .brand.bg-navy .body { color: var(--sky); }
+        
+        .sponsor-layer-b .brand .quote {
+            font-size: 15px;
+            font-style: italic;
+            max-width: 420px;
+        }
+        
+        .sponsor-layer-b .brand.bg-pool .quote { color: var(--maroon); }
+        .sponsor-layer-b .brand.bg-navy .quote { color: var(--pool); }
+        
+        .sponsor-layer-b .bar {
+            height: 100px;
+            display: flex;
+        }
+        
+        .sponsor-layer-b .bar .block {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .sponsor-layer-b .bar .block:nth-child(1) { background: var(--cream); }
+        .sponsor-layer-b .bar .block:nth-child(2) { background: var(--maroon); }
+        
+        .sponsor-layer-b .bar .block span {
+            font-size: 13px;
+        }
+        
+        .sponsor-layer-b .bar .block:nth-child(1) span { color: var(--navy); }
+        .sponsor-layer-b .bar .block:nth-child(2) span { color: var(--white); }
+
+        /* =============================================
+           SPONSOR C — EDITORIAL
+        ============================================= */
+        .sponsor-layer-c {
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 1fr 280px;
+        }
+        
+        .sponsor-layer-c .article {
+            padding: 48px;
+            position: relative;
+        }
+        
+        .sponsor-layer-c .article::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 100%);
+        }
+        
+        .sponsor-layer-c .article .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .article .header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--navy);
+        }
+        
+        .sponsor-layer-c .article .header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+        
+        .sponsor-layer-c .article .byline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-top: 12px;
+        }
+        
+        .sponsor-layer-c .article .body {
+            column-count: 2;
+            column-gap: 28px;
+        }
+        
+        .sponsor-layer-c .article .body p {
+            font-size: 13px;
+            color: var(--navy);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+        
+        .sponsor-layer-c .article .body p:first-of-type::first-letter {
+            font-size: 56px;
+            font-weight: 800;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+            margin-top: 4px;
+            color: var(--maroon);
+        }
+        
+        .sponsor-layer-c .sidebar {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-layer-c .sidebar .logo-area {
+            padding: 40px 32px;
+            background: var(--cream);
+            text-align: center;
+            position: relative;
+        }
+        
+        .sponsor-layer-c .sidebar .logo-area::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--sky-30) 0%, transparent 60%);
+        }
+        
+        .sponsor-layer-c .sidebar .logo-area .logo {
+            width: 100%;
+            height: 56px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .sidebar .logo-area .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--navy);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area {
+            flex: 1;
+            padding: 32px;
+            background: var(--navy);
+            position: relative;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 50%);
+            mix-blend-mode: screen;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area .photo {
+            width: 100%;
+            height: 140px;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area .name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area .title {
+            font-size: 12px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .sponsor-layer-c .sidebar .contact-area .info {
+            font-size: 12px;
+            color: var(--sky);
+            margin-top: 16px;
+            line-height: 1.7;
+        }
+        
+        .sponsor-layer-c .sidebar .services-area {
+            padding: 24px 32px;
+            background: var(--maroon);
+            position: relative;
+        }
+        
+        .sponsor-layer-c .sidebar .services-area::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--pool-30) 0%, transparent 60%);
+            mix-blend-mode: overlay;
+        }
+        
+        .sponsor-layer-c .sidebar .services-area h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .sidebar .services-area .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-layer-c .sidebar .services-area .tags span {
+            font-size: 10px;
+            color: var(--white);
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* =============================================
+           SPONSOR D — HALF PAGE
+        ============================================= */
+        .sponsor-layer-d {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sponsor-layer-d .header {
+            background: var(--navy);
+            padding: 24px 48px;
+            position: relative;
+        }
+        
+        .sponsor-layer-d .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: screen;
+        }
+        
+        .sponsor-layer-d .header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--white);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-half-layer {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 200px 1fr 180px;
+            position: relative;
+        }
+        
+        .sponsor-half-layer:first-of-type { background: var(--cream); }
+        .sponsor-half-layer:last-of-type { background: var(--sky); }
+        
+        /* Gradient overlays on half-page sponsors */
+        .sponsor-half-layer:first-of-type::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--pool-30) 0%, transparent 50%);
+        }
+        
+        .sponsor-half-layer:last-of-type::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(225deg, var(--cream) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+        
+        .sponsor-half-layer .logo-col {
+            padding: 40px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-half-layer .logo-col .logo {
+            width: 130px;
+            height: 52px;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-half-layer .logo-col .tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: center;
+        }
+        
+        .sponsor-half-layer .content-col {
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-half-layer .content-col h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+        
+        .sponsor-half-layer .content-col p {
+            font-size: 13px;
+            color: var(--navy-70);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-half-layer .content-col .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .sponsor-half-layer .content-col .tags span {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--navy);
+            padding: 5px 12px;
+            background: var(--navy-10);
+        }
+        
+        .sponsor-half-layer .contact-col {
+            padding: 40px 28px;
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .sponsor-half-layer .contact-col::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 60%);
+            mix-blend-mode: screen;
+        }
+        
+        .sponsor-half-layer .contact-col .inner {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sponsor-half-layer .contact-col .photo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+        }
+        
+        .sponsor-half-layer .contact-col .name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .sponsor-half-layer .contact-col .info {
+            font-size: 11px;
+            color: var(--sky);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* =============================================
+           STORIES — LAYERED GRID
+        ============================================= */
+        .stories-layer {
+            background: var(--navy);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            position: relative;
+        }
+        
+        .stories-layer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 0% 100%, var(--pool-30) 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 0%, var(--maroon-20) 0%, transparent 40%);
+            mix-blend-mode: screen;
+        }
+        
+        .stories-layer .header {
+            grid-column: span 2;
+            padding: 48px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stories-layer .header .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 12px;
+        }
+        
+        .stories-layer .header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+        
+        .stories-layer .header h2 span { color: var(--pool); }
+        
+        .stories-layer .story {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stories-layer .story:nth-child(2) { background: var(--cream); }
+        .stories-layer .story:nth-child(3) { background: var(--maroon); }
+        .stories-layer .story:nth-child(4) { background: var(--pool); }
+        .stories-layer .story:nth-child(5) { background: var(--sky); }
+        
+        /* Soft overlays on each story card */
+        .stories-layer .story:nth-child(2)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--pool-30) 0%, transparent 50%);
+        }
+        
+        .stories-layer .story:nth-child(3)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(225deg, var(--navy-20) 0%, transparent 50%);
+            mix-blend-mode: multiply;
+        }
+        
+        .stories-layer .story:nth-child(4)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(315deg, var(--sky-50) 0%, transparent 50%);
+        }
+        
+        .stories-layer .story:nth-child(5)::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, var(--cream) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+        
+        .stories-layer .story .inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .stories-layer .story .num {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+        
+        .stories-layer .story:nth-child(2) .num { color: var(--navy); }
+        .stories-layer .story:nth-child(3) .num { color: var(--white); }
+        .stories-layer .story:nth-child(4) .num { color: var(--navy); }
+        .stories-layer .story:nth-child(5) .num { color: var(--navy); }
+        
+        .stories-layer .story .quote {
+            font-size: 15px;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        
+        .stories-layer .story:nth-child(2) .quote { color: var(--navy); }
+        .stories-layer .story:nth-child(3) .quote { color: rgba(255,255,255,0.9); }
+        .stories-layer .story:nth-child(4) .quote { color: var(--navy); }
+        .stories-layer .story:nth-child(5) .quote { color: var(--navy); }
+        
+        .stories-layer .story .attr {
+            font-size: 12px;
+        }
+        
+        .stories-layer .story:nth-child(2) .attr { color: var(--navy-50); }
+        .stories-layer .story:nth-child(3) .attr { color: rgba(255,255,255,0.6); }
+        .stories-layer .story:nth-child(4) .attr { color: var(--navy-50); }
+        .stories-layer .story:nth-child(5) .attr { color: var(--navy-50); }
+        
+        .stories-layer .story .attr strong { font-weight: 600; }
+
+        /* =============================================
+           THANK YOU — CLEAN WITH OVERLAY
+        ============================================= */
+        .thanks-layer {
+            background: var(--cream);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .thanks-layer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(135deg, var(--pool-30) 0%, transparent 30%),
+                linear-gradient(315deg, var(--maroon-10) 0%, transparent 30%);
+        }
+        
+        .thanks-layer .header {
+            background: var(--navy);
+            padding: 48px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .thanks-layer .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: screen;
+        }
+        
+        .thanks-layer .header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .thanks-layer .body {
+            flex: 1;
+            padding: 48px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .thanks-layer .tier {
+            margin-bottom: 36px;
+        }
+        
+        .thanks-layer .tier .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--navy);
+            display: inline-block;
+        }
+        
+        .thanks-layer .tier .logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .thanks-layer .tier .logos .logo {
+            height: 48px;
+            width: 120px;
+        }
+        
+        .thanks-layer .tier .logos .logo.large {
+            height: 56px;
+            width: 150px;
+        }
+        
+        .thanks-layer .tier .logos .logo.small {
+            height: 36px;
+            width: 90px;
+        }
+        
+        .thanks-layer .footer {
+            background: var(--maroon);
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .thanks-layer .footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--pool-30) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+        
+        .thanks-layer .footer .tagline {
+            font-size: 18px;
+            font-style: italic;
+            color: var(--white);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .thanks-layer .footer .url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =============================================
+           BACK COVER — SIMPLE WITH COLOR BAR
+        ============================================= */
+        .back-layer {
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .back-layer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 50% 50%, var(--pool-30) 0%, transparent 60%);
+            mix-blend-mode: screen;
+        }
+        
+        .back-layer .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .back-layer .main .logo {
+            width: 220px;
+            height: 64px;
+            margin-bottom: 40px;
+        }
+        
+        .back-layer .main .network {
+            width: 160px;
+            margin-bottom: 32px;
+            opacity: 0.7;
+        }
+        
+        .back-layer .main .url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--pool);
+            letter-spacing: 0.08em;
+            margin-bottom: 32px;
+        }
+        
+        .back-layer .main .tagline {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        
+        .back-layer .main .since {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--sky);
+            letter-spacing: 0.2em;
+        }
+        
+        .back-layer .bar {
+            height: 80px;
+            display: flex;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .back-layer .bar .block {
+            flex: 1;
+            position: relative;
+        }
+        
+        .back-layer .bar .block:nth-child(1) { background: var(--cream); }
+        .back-layer .bar .block:nth-child(2) { background: var(--sky); }
+        .back-layer .bar .block:nth-child(3) { background: var(--pool); }
+        .back-layer .bar .block:nth-child(4) { background: var(--maroon); }
+        
+        /* Soft overlaps between color blocks */
+        .back-layer .bar .block:nth-child(1)::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -20px; bottom: 0; width: 40px;
+            background: linear-gradient(90deg, var(--cream) 0%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .back-layer .bar .block:nth-child(2)::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -20px; bottom: 0; width: 40px;
+            background: linear-gradient(90deg, var(--sky) 0%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .back-layer .bar .block:nth-child(3)::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -20px; bottom: 0; width: 40px;
+            background: linear-gradient(90deg, var(--pool) 0%, transparent 100%);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Lender Guide — Editorial Edition</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <!-- COVER -->
+    <div class="page-label">Cover <span>01</span></div>
+    <div class="page cover-layer">
+        <div class="content">
+            <div class="top">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="network">
+                <div class="placeholder center-logo">[Center Logo]</div>
+            </div>
+            
+            <div class="middle">
+                <div class="eyebrow">Lending Partners Guide 2026</div>
+                <h1 class="headline">We don't lend money.<br><span>We help you get it.</span></h1>
+                <p class="sub">A guide to the lenders, partners, and people who turn business plans into business loans.</p>
+            </div>
+            
+            <div class="bottom">
+                <div class="tension cream-bg">
+                    <div class="inner">
+                        <div class="num">$0</div>
+                        <div class="label">We charge clients</div>
+                    </div>
+                </div>
+                <div class="tension maroon-bg">
+                    <div class="inner">
+                        <div class="num">$547M</div>
+                        <div class="label">They accessed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bar"></div>
+    </div>
+
+    <!-- DIRECTOR -->
+    <div class="page-label">Director <span>02</span></div>
+    <div class="page director-layer">
+        <div class="left">
+            <div class="eyebrow">From the Director</div>
+            <div class="placeholder placeholder-light photo">[Director Photo]</div>
+            <div class="name">[Director Name]</div>
+            <div class="title">Center Director, [Center Name] SBDC</div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">[XXX]</div>
+                    <div class="label">Clients</div>
+                </div>
+                <div class="stat">
+                    <div class="num">$[XX]M</div>
+                    <div class="label">Capital</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right">
+            <div class="letter">
+                <p>Let's skip the pleasantries. You're busy. I'm busy. Here's what matters:</p>
+                
+                <p>We sit with business owners before they come to you. We review their numbers. We poke holes in their plans. We make them answer the hard questions.</p>
+                
+                <p class="pull">By the time they reach your desk, they're ready.</p>
+                
+                <p>Complete package. Realistic expectations. Actual documentation. That's not charity. That's a service—to them, to you, and to the community.</p>
+            </div>
+            
+            <div class="sig">
+                <div class="sig-name">[Director Name]</div>
+                <div class="sig-title">Center Director</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE MATH -->
+    <div class="page-label">The Math <span>03</span></div>
+    <div class="page math-layer">
+        <div class="content">
+            <div class="eyebrow">Last Year's Numbers</div>
+            
+            <div class="equation">
+                <div class="num-block">
+                    <div class="num">$0</div>
+                    <div class="label">We charged</div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="num-block">
+                    <div class="num">$547M</div>
+                    <div class="label">Clients accessed</div>
+                </div>
+            </div>
+            
+            <p class="punchline">Some of that came from you.<br><span>We'd like to make that happen more often.</span></p>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="page-label">Services <span>04</span></div>
+    <div class="page services-layer">
+        <div class="header">
+            <h2>Your Access to Capital</h2>
+            <p>We prepare clients. You fund them.</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="inner">
+                    <div class="num">01</div>
+                    <h3>Business Planning</h3>
+                    <ul>
+                        <li>Business Plan Development</li>
+                        <li>Financial Projections</li>
+                        <li>Market Analysis</li>
+                        <li>Competitive Positioning</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="inner">
+                    <div class="num">02</div>
+                    <h3>Loan Preparation</h3>
+                    <ul>
+                        <li>Loan Package Assembly</li>
+                        <li>SBA Loan Guidance</li>
+                        <li>Lender Matching</li>
+                        <li>Application Support</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="inner">
+                    <div class="num">03</div>
+                    <h3>Financial Management</h3>
+                    <ul>
+                        <li>Cash Flow Analysis</li>
+                        <li>Break-Even Calculations</li>
+                        <li>Budget Development</li>
+                        <li>Financial Statements</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="inner">
+                    <div class="num">04</div>
+                    <h3>Alternative Financing</h3>
+                    <ul>
+                        <li>Microloans</li>
+                        <li>Crowdfunding Guidance</li>
+                        <li>Invoice Factoring</li>
+                        <li>Grant Research</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="locations">
+            <div class="stat">
+                <div class="num">[X]</div>
+                <div class="label">County Hubs</div>
+            </div>
+            <div class="list">
+                <span>[Location 1]</span>
+                <span>[Location 2]</span>
+                <span>[Location 3]</span>
+                <span>[Location 4]</span>
+                <span>[Location 5]</span>
+                <span>[Location 6]</span>
+                <span>[Location 7]</span>
+                <span>[Location 8]</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format A — Testimonial</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Testimonial</span></div>
+    <div class="page sponsor-layer-a">
+        <div class="photo-side">
+            <div class="placeholder placeholder-light photo">[Client Photo — Full Bleed]</div>
+            <div class="overlay"></div>
+            <div class="quote-area">
+                <h3 class="headline">"That's My Bank."</h3>
+                <p class="quote">"As a family-owned business, we value the relationship we have with [Lender]. They take the time to understand our business."</p>
+                <p class="attr"><strong>[Client Name]</strong>, President & CEO, [Business]</p>
+            </div>
+        </div>
+        
+        <div class="info-side">
+            <div class="inner">
+                <div class="placeholder logo">[Lender Logo]</div>
+                
+                <div class="services-label">What We Offer</div>
+                <div class="services">
+                    <span>SBA 7(a) & 504 Loans</span>
+                    <span>Business Lines of Credit</span>
+                    <span>Commercial Real Estate</span>
+                    <span>Equipment Financing</span>
+                    <span>Merchant Services</span>
+                </div>
+                
+                <div class="contact">
+                    <div class="placeholder photo">[Photo]</div>
+                    <div class="name">[Loan Officer Name]</div>
+                    <div class="title">Small Business Loan Officer</div>
+                    <div class="info">[Phone] · [Email]</div>
+                </div>
+                
+                <div class="footer-tag">"We're big believers in small business."</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format B — Brand Splash</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Brand — Light</span></div>
+    <div class="page sponsor-layer-b">
+        <div class="brand bg-pool">
+            <div class="inner">
+                <div class="placeholder placeholder-dark logo">[Lender Logo]</div>
+                <h2 class="tagline">Not just service.<br>Solutions.</h2>
+                <p class="body">We are committed to providing financial services that build and support our customers. We look at each account opened or service offered as an opportunity to build a relationship.</p>
+                <p class="quote">"We understand the special needs of small businesses because we are a small business ourselves."<br>— [Name], President & CEO</p>
+            </div>
+        </div>
+        
+        <div class="bar">
+            <div class="block"><span>[website]</span></div>
+            <div class="block"><span>[phone]</span></div>
+        </div>
+    </div>
+
+    <div class="page-label">Sponsor <span>Brand — Dark</span></div>
+    <div class="page sponsor-layer-b">
+        <div class="brand bg-navy">
+            <div class="inner">
+                <div class="placeholder placeholder-light logo">[Lender Logo]</div>
+                <h2 class="tagline">Shared Vision.</h2>
+                <p class="body">We partner with entrepreneurs who share our vision for the region's future. We didn't fit the conventional loan formula. That's when we found [Lender]. They saw what was possible.</p>
+                <p class="quote">"What can we do for you?"</p>
+            </div>
+        </div>
+        
+        <div class="bar">
+            <div class="block"><span>[website]</span></div>
+            <div class="block"><span>[phone]</span></div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format C — Editorial</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Editorial</span></div>
+    <div class="page sponsor-layer-c">
+        <div class="article">
+            <div class="inner">
+                <div class="header">
+                    <h2>We're ready to earn your business.</h2>
+                    <div class="byline">By [Author Name], [Lender]</div>
+                </div>
+                
+                <div class="body">
+                    <p>As our regional economy continues its upward pace, more businesses are expanding or retooling, and banks have funds to lend and solutions to offer.</p>
+                    
+                    <p>If you are considering applying for a loan, you deserve an experienced banker who takes the time to truly understand your company. Gone are the days when only the largest businesses can expect to have a dedicated team.</p>
+                    
+                    <p>This is your business we're talking about—you're all in—so insist your bank is too. That means trust and communication are essential.</p>
+                    
+                    <p>At [Lender], our bankers are homegrown, highly experienced and focused on your success. You can count on us to start by truly getting to know your business and then craft a customized solution.</p>
+                    
+                    <p>Like you, we're experts in our field. Our experienced bankers truly enjoy helping the region's businesses grow and succeed.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="logo-area">
+                <div class="placeholder placeholder-dark logo">[Logo]</div>
+                <div class="tagline">Member FDIC</div>
+            </div>
+            
+            <div class="contact-area">
+                <div class="inner">
+                    <div class="placeholder placeholder-light photo">[Photo]</div>
+                    <div class="name">[Banker Name]</div>
+                    <div class="title">[Title]</div>
+                    <div class="info">[Phone]<br>[Email]<br>[Address]</div>
+                </div>
+            </div>
+            
+            <div class="services-area">
+                <h4>We Offer</h4>
+                <div class="tags">
+                    <span>SBA Loans</span>
+                    <span>Lines of Credit</span>
+                    <span>Equipment</span>
+                    <span>CRE</span>
+                    <span>Treasury</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Sponsor Format D — Half Page</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Sponsor <span>Half Page ×2</span></div>
+    <div class="page sponsor-layer-d">
+        <div class="header">
+            <h2>Our Lending Partners</h2>
+        </div>
+        
+        <div class="sponsor-half-layer">
+            <div class="logo-col">
+                <div class="placeholder logo">[Logo]</div>
+                <div class="tagline">[Tagline]</div>
+            </div>
+            <div class="content-col">
+                <h3>[Lender Name]</h3>
+                <p>[2-3 sentences about who they are and what they offer. Focus on small business lending and partnership with SBDC.]</p>
+                <div class="tags">
+                    <span>SBA 7(a)</span>
+                    <span>Microloans</span>
+                    <span>Lines of Credit</span>
+                </div>
+            </div>
+            <div class="contact-col">
+                <div class="inner">
+                    <div class="placeholder placeholder-light photo">[Photo]</div>
+                    <div class="name">[Contact Name]</div>
+                    <div class="info">[Phone]<br>[Email]</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sponsor-half-layer">
+            <div class="logo-col">
+                <div class="placeholder logo">[Logo]</div>
+                <div class="tagline">[Tagline]</div>
+            </div>
+            <div class="content-col">
+                <h3>[Lender Name]</h3>
+                <p>[2-3 sentences about who they are and what they offer. Focus on small business lending and partnership with SBDC.]</p>
+                <div class="tags">
+                    <span>Equipment</span>
+                    <span>Working Capital</span>
+                    <span>Factoring</span>
+                </div>
+            </div>
+            <div class="contact-col">
+                <div class="inner">
+                    <div class="placeholder placeholder-light photo">[Photo]</div>
+                    <div class="name">[Contact Name]</div>
+                    <div class="info">[Phone]<br>[Email]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <div class="section-divider">
+        <h2>Success Stories</h2>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="page-label">Stories <span>05</span></div>
+    <div class="page stories-layer">
+        <div class="header">
+            <div class="eyebrow">Partnership in Action</div>
+            <h2>They don't say "the program helped."<br><span>They say "Maria helped."</span></h2>
+        </div>
+        
+        <div class="story">
+            <div class="inner">
+                <div class="num">$250K</div>
+                <p class="quote">"My bank said no three times. Then I met my advisor. She connected me with [Lender]. Eighteen months later, I have three locations."</p>
+                <p class="attr"><strong>[Client]</strong>, [Business]</p>
+            </div>
+        </div>
+        
+        <div class="story">
+            <div class="inner">
+                <div class="num">$125K</div>
+                <p class="quote">"I had the idea. I had the work ethic. I didn't have the paperwork. They changed that."</p>
+                <p class="attr"><strong>[Client]</strong>, [Business]</p>
+            </div>
+        </div>
+        
+        <div class="story">
+            <div class="inner">
+                <div class="num">$500K</div>
+                <p class="quote">"We didn't fit the conventional formula. That's when we found [Lender]. They saw what was possible."</p>
+                <p class="attr"><strong>[Client]</strong>, [Business]</p>
+            </div>
+        </div>
+        
+        <div class="story">
+            <div class="inner">
+                <div class="num">$75K</div>
+                <p class="quote">"[Quote about the partnership that made their business possible.]"</p>
+                <p class="attr"><strong>[Client]</strong>, [Business]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div class="page-label">Thanks <span>06</span></div>
+    <div class="page thanks-layer">
+        <div class="header">
+            <h2>Our Lending Partners</h2>
+        </div>
+        
+        <div class="body">
+            <div class="tier">
+                <div class="label">Premier</div>
+                <div class="logos">
+                    <div class="placeholder logo large">[Logo]</div>
+                    <div class="placeholder logo large">[Logo]</div>
+                    <div class="placeholder logo large">[Logo]</div>
+                </div>
+            </div>
+            
+            <div class="tier">
+                <div class="label">Gold</div>
+                <div class="logos">
+                    <div class="placeholder logo">[Logo]</div>
+                    <div class="placeholder logo">[Logo]</div>
+                    <div class="placeholder logo">[Logo]</div>
+                    <div class="placeholder logo">[Logo]</div>
+                    <div class="placeholder logo">[Logo]</div>
+                </div>
+            </div>
+            
+            <div class="tier">
+                <div class="label">Silver & Bronze</div>
+                <div class="logos">
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                    <div class="placeholder logo small">[Logo]</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="tagline">Your Business People.</div>
+            <div class="url">norcalsbdc.org</div>
+        </div>
+    </div>
+
+    <!-- BACK COVER -->
+    <div class="page-label">Back <span>07</span></div>
+    <div class="page back-layer">
+        <div class="main">
+            <div class="placeholder placeholder-light logo">[Center Logo]</div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="network">
+            <p class="url">norcalsbdc.org</p>
+            <p class="tagline">Your Business People.</p>
+            <p class="since">Since 2006</p>
+        </div>
+        
+        <div class="bar">
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+            <div class="block"></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

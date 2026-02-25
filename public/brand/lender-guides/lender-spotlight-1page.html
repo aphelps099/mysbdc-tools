@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Spotlight Program — NorCal SBDC</title>
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --navy-light: #1a2d42;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'proxima-nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a1a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-label span {
+            color: var(--pool);
+        }
+
+        /* Page container - 8.5x11 ratio */
+        .page {
+            width: 816px;
+            height: 1056px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        /* Grain texture */
+        .grain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page-navy { background: var(--navy); }
+
+        .page-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Typography */
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .label-pool { color: var(--pool); }
+        .label-maroon { color: var(--maroon); }
+
+        /* =============================================
+           HEADER SECTION
+        ============================================= */
+        .header-section {
+            padding: 56px 60px 48px;
+            background: var(--navy);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .header-top .logo {
+            height: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .header-section h1 span {
+            color: var(--pool);
+        }
+
+        .header-section .subtitle {
+            font-size: 17px;
+            color: var(--sky);
+            line-height: 1.5;
+            max-width: 580px;
+        }
+
+        /* =============================================
+           STAT BAR
+        ============================================= */
+        .stat-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-bar .stat {
+            padding: 28px 20px;
+            text-align: center;
+        }
+
+        .stat-bar .stat:nth-child(1) { background: var(--cream); }
+        .stat-bar .stat:nth-child(2) { background: #e8e5de; }
+        .stat-bar .stat:nth-child(3) { background: var(--sky); }
+        .stat-bar .stat:nth-child(4) { background: var(--pool); }
+
+        .stat-bar .stat-num {
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .stat-bar .stat:nth-child(1) .stat-num { color: var(--maroon); }
+
+        .stat-bar .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--navy);
+            opacity: 0.7;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        /* =============================================
+           MAIN CONTENT GRID
+        ============================================= */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            flex: 1;
+        }
+
+        .main-grid .col {
+            padding: 36px 40px;
+            position: relative;
+        }
+
+        .main-grid .col::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+
+        .main-grid .col-left {
+            background: var(--cream);
+        }
+
+        .main-grid .col-right {
+            background: var(--navy-light);
+        }
+
+        .main-grid .col-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-grid .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .col-left .section-title { color: var(--navy); }
+        .col-right .section-title { color: var(--white); }
+
+        .list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .list-item .arrow {
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .col-left .list-item .arrow { color: var(--maroon); }
+        .col-right .list-item .arrow { color: var(--pool); }
+
+        .list-item .text {
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .col-left .list-item .text { color: var(--navy); }
+        .col-right .list-item .text { color: var(--sky); }
+
+        .list-item .text strong {
+            font-weight: 700;
+        }
+
+        /* =============================================
+           PRICING SECTION
+        ============================================= */
+        .pricing-section {
+            padding: 32px 60px;
+            background: var(--navy);
+        }
+
+        .pricing-section .label {
+            margin-bottom: 16px;
+        }
+
+        .tier-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .tier-card {
+            padding: 24px;
+            position: relative;
+        }
+
+        .tier-card.standard {
+            background: var(--cream);
+        }
+
+        .tier-card.premium {
+            background: var(--pool);
+        }
+
+        .tier-card .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .tier-card .tier-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .tier-card .tier-price {
+            font-size: 26px;
+            font-weight: 900;
+        }
+
+        .tier-card.standard .tier-price { color: var(--maroon); }
+        .tier-card.premium .tier-price { color: var(--navy); }
+
+        .tier-card .tier-benefits {
+            list-style: none;
+        }
+
+        .tier-card .tier-benefits li {
+            font-size: 11px;
+            color: var(--navy);
+            padding: 6px 0;
+            padding-left: 14px;
+            position: relative;
+            border-bottom: 1px solid rgba(15,28,46,0.1);
+        }
+
+        .tier-card .tier-benefits li:last-child {
+            border-bottom: none;
+        }
+
+        .tier-card .tier-benefits li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .tier-card.standard .tier-benefits li::before { color: var(--maroon); }
+        .tier-card.premium .tier-benefits li::before { color: var(--navy); }
+
+        .tier-card .highlight {
+            background: rgba(15, 28, 46, 0.08);
+            margin: 0 -24px;
+            padding: 6px 24px;
+            font-weight: 600;
+        }
+
+        /* =============================================
+           CTA SECTION
+        ============================================= */
+        .cta-section {
+            padding: 24px 60px;
+            background: var(--maroon);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cta-section .cta-text h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 2px;
+        }
+
+        .cta-section .cta-text p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .cta-section .cta-contact {
+            text-align: right;
+        }
+
+        .cta-section .cta-contact .name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .cta-section .cta-contact .details {
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        .footer {
+            padding: 16px 60px;
+            background: var(--navy);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer .logos {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .footer .logo-placeholder {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            padding: 6px 10px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .footer .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--pool);
+        }
+
+        .footer .disclaimer {
+            font-size: 7px;
+            color: rgba(255,255,255,0.4);
+            max-width: 280px;
+            text-align: right;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="page-label">Lender Spotlight Program <span>1-Page</span></div>
+
+    <div class="page page-navy grain">
+        <div class="page-content">
+
+            <!-- Header -->
+            <div class="header-section">
+                <div class="header-top">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="label label-pool">Monthly Lender Spotlight</div>
+                </div>
+                <h1>Access <span>$10M+</span> in active loan demand.</h1>
+                <p class="subtitle">Partner with the largest federally funded small business network in Northern California. Connect with borrowers who are prepared, qualified, and actively seeking capital.</p>
+            </div>
+
+            <!-- Stat Bar -->
+            <div class="stat-bar">
+                <div class="stat">
+                    <div class="stat-num">35</div>
+                    <div class="stat-label">Capital Advisors</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">36</div>
+                    <div class="stat-label">Counties Served</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">2,400+</div>
+                    <div class="stat-label">Clients Seeking Capital</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">73%</div>
+                    <div class="stat-label">Loan-Ready Day One</div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="main-grid">
+                <div class="col col-left">
+                    <div class="col-content">
+                        <div class="label label-maroon" style="margin-bottom: 12px;">Who You'll Reach</div>
+                        <h3 class="section-title">Borrower Profile</h3>
+
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text"><strong>Loan sizes:</strong> $25K – $500K</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text"><strong>Industries:</strong> Restaurants, retail, services, construction</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text"><strong>Stage:</strong> 2+ years operating, expansion-ready</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text"><strong>Prep:</strong> Business plans, financials, projections done</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text"><strong>Credit:</strong> 620+ verified before referral</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-right">
+                    <div class="col-content">
+                        <div class="label label-pool" style="margin-bottom: 12px;">What You Get</div>
+                        <h3 class="section-title">Partnership Benefits</h3>
+
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text">60-min live session with 35 advisors</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text">Added to internal Lender Matrix (referral guide)</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text">Direct client introductions matching your criteria</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text">Quarterly pipeline reports with deal flow data</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="arrow">→</span>
+                            <span class="text">Logo placement in capital access resources</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="pricing-section">
+                <div class="label label-pool">Investment Levels</div>
+
+                <div class="tier-cards">
+                    <div class="tier-card standard">
+                        <div class="tier-header">
+                            <span class="tier-name">Monthly Spotlight</span>
+                            <span class="tier-price">$3,000</span>
+                        </div>
+                        <ul class="tier-benefits">
+                            <li>60-minute advisor training session</li>
+                            <li>Lender Matrix placement (12 months)</li>
+                            <li>Referral tracking dashboard</li>
+                            <li>Session recording for advisor reference</li>
+                        </ul>
+                    </div>
+
+                    <div class="tier-card premium">
+                        <div class="tier-header">
+                            <span class="tier-name">Premier Partner</span>
+                            <span class="tier-price">$5,000</span>
+                        </div>
+                        <ul class="tier-benefits">
+                            <li>Everything in Monthly Spotlight, plus:</li>
+                            <li class="highlight">Category exclusivity (e.g., "SBA Microloans")</li>
+                            <li>Quarterly 1:1 with top advisors</li>
+                            <li>Co-branded client collateral</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="cta-text">
+                    <h3>Ready to access prepared borrowers?</h3>
+                    <p>Limited to one lender per month. Reserve your spotlight now.</p>
+                </div>
+                <div class="cta-contact">
+                    <p class="name">[Contact Name]</p>
+                    <p class="details">[email@norcalsbdc.org] · [phone]</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="logos">
+                    <span class="logo-placeholder">SBDC</span>
+                    <span class="logo-placeholder">SBA</span>
+                    <span class="logo-placeholder">CAL POLY</span>
+                </div>
+                <span class="tagline">Your Business People.</span>
+                <p class="disclaimer">Funded in part through a cooperative agreement with the U.S. Small Business Administration.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

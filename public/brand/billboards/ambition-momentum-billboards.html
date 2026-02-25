@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambition → Momentum — Billboard Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --deep-navy: #152a45;
+            --navy: #1e3a5f;
+            --dusty-blue: #5d7a9c;
+            --mist: #8fa3be;
+            --cream: #f0ede6;
+            --ivory: #f5f3ed;
+            --brick: #b54a4a;
+            --white: #ffffff;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+        
+        body {
+            font-family: var(--sans);
+            background: #0a0a0a;
+            padding: 48px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page-header {
+            margin-bottom: 64px;
+            max-width: 800px;
+        }
+        
+        .page-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--brick);
+            margin-bottom: 12px;
+        }
+        
+        .page-title {
+            font-family: var(--sans);
+            font-size: 56px;
+            color: var(--cream);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        
+        .page-title em {
+            color: var(--brick);
+        }
+        
+        .page-subtitle {
+            font-family: var(--sans);
+            font-size: 18px;
+            color: var(--dusty-blue);
+            line-height: 1.6;
+        }
+        
+        /* =============================================
+           BILLBOARD GRID
+        ============================================= */
+        .billboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .row-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+            padding: 48px 0 16px;
+            border-top: 1px solid #222;
+            margin-top: 32px;
+        }
+        
+        .row-label:first-of-type {
+            margin-top: 0;
+            border-top: none;
+            padding-top: 0;
+        }
+        
+        /* =============================================
+           BILLBOARD BASE
+        ============================================= */
+        .billboard {
+            width: 100%;
+            aspect-ratio: 3.5 / 1;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 64px 80px;
+        }
+        
+        /* Grain texture */
+        .has-grain::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        
+        /* Backgrounds */
+        .bg-navy { background: var(--navy); }
+        .bg-deep-navy { background: var(--deep-navy); }
+        .bg-cream { background: var(--cream); }
+        .bg-brick { background: var(--brick); }
+        .bg-dusty { background: var(--dusty-blue); }
+        .bg-ivory { background: var(--ivory); }
+        
+        /* =============================================
+           BILLBOARD: STORY STYLE
+        ============================================= */
+        .billboard-story {
+            justify-content: space-between;
+        }
+        
+        .billboard-story .story-left {
+            max-width: 55%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-story .story-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        
+        .billboard-story .story-ambition {
+            font-family: var(--sans);
+            font-size: 20px;
+            font-weight: 300;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .billboard-story .story-headline {
+            font-family: var(--sans);
+            font-size: 48px;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        
+        .billboard-story .story-headline em {
+            font-style: italic;
+            color: var(--brick);
+        }
+        
+        .billboard-story .story-subhead {
+            font-family: var(--sans);
+            font-size: 16px;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+        
+        .billboard-story .story-right {
+            text-align: right;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-story .story-stat {
+            font-family: var(--sans);
+            font-size: 80px;
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+        
+        .billboard-story .story-stat-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+        
+        .billboard-story .story-cta {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+        
+        /* Background watermark */
+        .billboard .bg-text {
+            position: absolute;
+            right: -3%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: var(--sans);
+            font-size: 350px;
+            font-weight: 300;
+            opacity: 0.04;
+            line-height: 0.8;
+            pointer-events: none;
+        }
+        
+        /* =============================================
+           BILLBOARD: JOURNEY STYLE (Before → After)
+        ============================================= */
+        .billboard-journey {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 48px;
+            align-items: center;
+            padding: 48px 64px;
+        }
+        
+        .billboard-journey .journey-before,
+        .billboard-journey .journey-after {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-journey .journey-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 12px;
+        }
+        
+        .billboard-journey .journey-text {
+            font-family: var(--sans);
+            font-size: 36px;
+            font-weight: 300;
+            line-height: 1.15;
+        }
+        
+        .billboard-journey .journey-arrow {
+            font-family: var(--sans);
+            font-size: 48px;
+            font-weight: 200;
+            opacity: 0.4;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.1em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .billboard-journey .journey-arrow::before {
+            content: '';
+            width: 80px;
+            height: 2px;
+            background: currentColor;
+            opacity: 0.4;
+        }
+        
+        .billboard-journey .journey-arrow::after {
+            content: '→';
+            font-size: 32px;
+            opacity: 0.6;
+        }
+        
+        .billboard-journey .journey-after .journey-text {
+            color: var(--brick);
+        }
+        
+        .billboard-journey .journey-cta {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 16px;
+            opacity: 0.8;
+        }
+        
+        /* =============================================
+           BILLBOARD: QUOTE STYLE
+        ============================================= */
+        .billboard-quote {
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            padding: 64px 120px;
+        }
+        
+        .billboard-quote .quote-text {
+            font-family: var(--sans);
+            font-size: 42px;
+            font-weight: 300;
+            line-height: 1.25;
+            max-width: 900px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-quote .quote-text em {
+            color: var(--brick);
+        }
+        
+        .billboard-quote .quote-attribution {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            opacity: 0.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-quote .quote-result {
+            font-family: var(--sans);
+            font-size: 14px;
+            opacity: 0.5;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* =============================================
+           BILLBOARD: STAT PAIR
+        ============================================= */
+        .billboard-statpair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .billboard-statpair .stat-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 48px 64px;
+        }
+        
+        .billboard-statpair .stat-side:first-child {
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .billboard-statpair .stat-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 12px;
+        }
+        
+        .billboard-statpair .stat-number {
+            font-family: var(--sans);
+            font-size: 96px;
+            font-weight: 300;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
+        }
+        
+        .billboard-statpair .stat-context {
+            font-family: var(--sans);
+            font-size: 16px;
+            opacity: 0.7;
+            margin-top: 12px;
+            line-height: 1.4;
+        }
+        
+        /* =============================================
+           BILLBOARD: FULL BLEED STATEMENT
+        ============================================= */
+        .billboard-statement {
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .billboard-statement .statement-brand {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-statement .statement-text {
+            font-family: var(--sans);
+            font-size: 64px;
+            font-weight: 300;
+            line-height: 1.1;
+            max-width: 1000px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .billboard-statement .statement-text em {
+            font-style: italic;
+            color: var(--brick);
+        }
+        
+        .billboard-statement .statement-cta {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 32px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Text colors */
+        .text-white { color: var(--white); }
+        .text-cream { color: var(--cream); }
+        .text-navy { color: var(--deep-navy); }
+        
+        /* Accent color for emphasis - context aware */
+        .billboard.bg-brick em,
+        .billboard.bg-brick .story-label {
+            color: var(--cream) !important;
+        }
+        
+        .billboard.bg-brick .story-stat,
+        .billboard.bg-brick .journey-after .journey-text {
+            color: var(--white) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <div class="page-label">Billboard Series</div>
+        <div class="page-title">Ambition → <em>Momentum</em></div>
+        <div class="page-subtitle">Success stories that show the journey. Every billboard follows the same arc: where they started, what they wanted, and how far they've come.</div>
+    </div>
+
+    <div class="billboard-grid">
+        
+        <!-- =============================================
+             HERO STATEMENTS
+        ============================================= -->
+        <div class="row-label">Hero Statements</div>
+        
+        <div class="billboard billboard-statement bg-deep-navy text-cream has-grain">
+            <div class="bg-text">→</div>
+            <div>
+                <div class="statement-brand">Northern California SBDC</div>
+                <div class="statement-text">You bring the ambition.<br>We build the <em>momentum.</em></div>
+                <div class="statement-cta">norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-statement bg-cream text-navy has-grain">
+            <div>
+                <div class="statement-brand">Northern California SBDC</div>
+                <div class="statement-text">Ambition gets you started.<br><em>Momentum</em> keeps you going.</div>
+                <div class="statement-cta">Free business advising → norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-statement bg-brick text-white has-grain">
+            <div class="bg-text">20</div>
+            <div>
+                <div class="statement-brand">20 Years of Building Momentum</div>
+                <div class="statement-text">$547M in capital accessed.<br>12,400 businesses advised. <em>Last year.</em></div>
+                <div class="statement-cta">Your Business People, Since 2006.</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             ROSA'S STORY
+        ============================================= -->
+        <div class="row-label">Rosa's Story — Food Truck → Restaurant</div>
+        
+        <div class="billboard billboard-story bg-navy text-cream has-grain">
+            <div class="bg-text">→</div>
+            <div class="story-left">
+                <div class="story-label text-brick">Ambition → Momentum</div>
+                <div class="story-ambition">The ambition: Open a real restaurant.</div>
+                <div class="story-headline">Rosa went from food truck to <em>three locations.</em></div>
+                <div class="story-subhead">Her bank said no. Three times. Then she met Maria Santos, one of our advisors.</div>
+            </div>
+            <div class="story-right">
+                <div class="story-stat">$250K</div>
+                <div class="story-stat-label">SBA Loan Secured</div>
+                <div class="story-cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-journey bg-cream text-navy has-grain">
+            <div class="journey-before">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I had a food truck and a family recipe."</div>
+            </div>
+            <div class="journey-arrow"></div>
+            <div class="journey-after">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"I have three restaurants and twelve employees."</div>
+                <div class="journey-cta">— Rosa, Rosa's Cocina</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-quote bg-deep-navy text-cream has-grain">
+            <div class="quote-text">"Maria didn't just help me get a loan. She helped me see <em>what my business could become.</em>"</div>
+            <div class="quote-attribution">— Rosa, Rosa's Cocina</div>
+            <div class="quote-result">Food truck → 3 locations in 18 months</div>
+        </div>
+        
+        <!-- =============================================
+             CONTRACTOR STORY
+        ============================================= -->
+        <div class="row-label">Marcus's Story — Solo Contractor → Crew of 8</div>
+        
+        <div class="billboard billboard-story bg-dusty text-white has-grain">
+            <div class="bg-text">8</div>
+            <div class="story-left">
+                <div class="story-label" style="color: var(--cream);">Ambition → Momentum</div>
+                <div class="story-ambition">The ambition: Stop working alone.</div>
+                <div class="story-headline">Marcus hired his first employee. <em>Then seven more.</em></div>
+                <div class="story-subhead">He knew how to build. We helped him learn how to grow.</div>
+            </div>
+            <div class="story-right">
+                <div class="story-stat">8</div>
+                <div class="story-stat-label">Employees now</div>
+                <div class="story-cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-journey bg-deep-navy text-cream has-grain">
+            <div class="journey-before">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I was doing everything myself. Bids, jobs, books, everything."</div>
+            </div>
+            <div class="journey-arrow"></div>
+            <div class="journey-after">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"Now I run a crew of eight and we're booked six months out."</div>
+                <div class="journey-cta">— Marcus, M&R Construction</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-quote bg-brick text-white has-grain">
+            <div class="quote-text">"They taught me the business side. The stuff no one tells you when you're just <em>good with your hands.</em>"</div>
+            <div class="quote-attribution">— Marcus, M&R Construction</div>
+            <div class="quote-result">Solo contractor → Crew of 8 in 2 years</div>
+        </div>
+        
+        <!-- =============================================
+             TECH STARTUP STORY
+        ============================================= -->
+        <div class="row-label">Priya's Story — Side Project → Funded Startup</div>
+        
+        <div class="billboard billboard-story bg-cream text-navy has-grain">
+            <div class="story-left">
+                <div class="story-label text-brick">Ambition → Momentum</div>
+                <div class="story-ambition">The ambition: Turn a side project into a real company.</div>
+                <div class="story-headline">Priya closed her first <em>$500K raise.</em></div>
+                <div class="story-subhead">She had the tech. We helped her build the pitch.</div>
+            </div>
+            <div class="story-right">
+                <div class="story-stat text-brick">$500K</div>
+                <div class="story-stat-label">Seed Round</div>
+                <div class="story-cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-journey bg-navy text-cream has-grain">
+            <div class="journey-before">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I'd been coding nights and weekends for two years."</div>
+            </div>
+            <div class="journey-arrow"></div>
+            <div class="journey-after">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"I quit my job. We just closed our seed round."</div>
+                <div class="journey-cta">— Priya, Founder</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             RETAIL / STOREFRONT STORY
+        ============================================= -->
+        <div class="row-label">James & Deja's Story — Online → Brick & Mortar</div>
+        
+        <div class="billboard billboard-story bg-deep-navy text-cream has-grain">
+            <div class="bg-text">→</div>
+            <div class="story-left">
+                <div class="story-label text-brick">Ambition → Momentum</div>
+                <div class="story-ambition">The ambition: A real storefront.</div>
+                <div class="story-headline">James & Deja went from Etsy to <em>Main Street.</em></div>
+                <div class="story-subhead">They had customers. They needed a location. We helped them get there.</div>
+            </div>
+            <div class="story-right">
+                <div class="story-stat">$85K</div>
+                <div class="story-stat-label">Microloan Secured</div>
+                <div class="story-cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-quote bg-dusty text-white has-grain">
+            <div class="quote-text">"We went from shipping out of our garage to <em>opening our own doors.</em>"</div>
+            <div class="quote-attribution">— James & Deja, Founders</div>
+            <div class="quote-result">Etsy shop → Downtown storefront</div>
+        </div>
+        
+        <!-- =============================================
+             MANUFACTURING STORY
+        ============================================= -->
+        <div class="row-label">Chen's Story — Local → Government Contracts</div>
+        
+        <div class="billboard billboard-story bg-navy text-cream has-grain">
+            <div class="story-left">
+                <div class="story-label text-brick">Ambition → Momentum</div>
+                <div class="story-ambition">The ambition: Land a government contract.</div>
+                <div class="story-headline">Chen won his first <em>federal contract.</em></div>
+                <div class="story-subhead">20 years in manufacturing. We helped him navigate the paperwork.</div>
+            </div>
+            <div class="story-right">
+                <div class="story-stat">$1.2M</div>
+                <div class="story-stat-label">Contract Value</div>
+                <div class="story-cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-journey bg-ivory text-navy has-grain">
+            <div class="journey-before">
+                <div class="journey-label">The Ambition</div>
+                <div class="journey-text">"I knew we could do the work. I just couldn't figure out the system."</div>
+            </div>
+            <div class="journey-arrow"></div>
+            <div class="journey-after">
+                <div class="journey-label">The Momentum</div>
+                <div class="journey-text">"We're now a certified federal contractor with three active bids."</div>
+                <div class="journey-cta">— Chen, Precision Manufacturing</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             STAT COMPARISONS
+        ============================================= -->
+        <div class="row-label">Stat Comparisons</div>
+        
+        <div class="billboard billboard-statpair bg-deep-navy text-cream has-grain">
+            <div class="stat-side">
+                <div class="stat-label">The Ambition</div>
+                <div class="stat-number">12,400</div>
+                <div class="stat-context">Businesses came to us last year with a dream.</div>
+            </div>
+            <div class="stat-side">
+                <div class="stat-label">The Momentum</div>
+                <div class="stat-number" style="color: var(--brick);">$547M</div>
+                <div class="stat-context">Capital they accessed to make it real.</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-statpair bg-cream text-navy has-grain">
+            <div class="stat-side" style="border-color: rgba(0,0,0,0.1);">
+                <div class="stat-label">What We Charge</div>
+                <div class="stat-number">$0</div>
+                <div class="stat-context">Free. Always has been.</div>
+            </div>
+            <div class="stat-side">
+                <div class="stat-label">What We Deliver</div>
+                <div class="stat-number text-brick">$58</div>
+                <div class="stat-context">Return for every $1 invested in SBDC.</div>
+            </div>
+        </div>
+        
+        <!-- =============================================
+             CLOSING STATEMENTS
+        ============================================= -->
+        <div class="row-label">Closing Statements</div>
+        
+        <div class="billboard billboard-statement bg-navy text-cream has-grain">
+            <div>
+                <div class="statement-brand">Northern California SBDC</div>
+                <div class="statement-text">Every big business started with <em>a small one.</em></div>
+                <div class="statement-cta">We help you get there. → norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-statement bg-brick text-white has-grain">
+            <div>
+                <div class="statement-brand">Free Business Advising</div>
+                <div class="statement-text">Your ambition. <em>Our momentum.</em></div>
+                <div class="statement-cta">norcalsbdc.org</div>
+            </div>
+        </div>
+        
+        <div class="billboard billboard-statement bg-cream text-navy has-grain">
+            <div class="bg-text">20</div>
+            <div>
+                <div class="statement-brand">20 Years</div>
+                <div class="statement-text">Still free. Still here. <em>Still building momentum.</em></div>
+                <div class="statement-cta">Your Business People, Since 2006.</div>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,3633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Brand Book</title>
+
+    <!-- Preconnect to font servers -->
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Load Typekit async -->
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css"></noscript>
+
+    <!-- Load Google Fonts async -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --deep-navy: #0f1c2e;
+            --navy: #1e3a5f;
+            --royal: #1D5AA7;
+            --cream: #f5f2eb;
+            --ivory: #faf9f7;
+            --brick: #b54a4a;
+            --maroon: #8A2432;
+            --pool: #8FC5D9;
+            --sky: #9EC4E0;
+            --mist: #c8d5e3;
+            --slate: #5a7389;
+            --dusty-blue: #5d7a9c;
+
+            --font-sans: "proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", "Roboto Mono", "SF Mono", monospace;
+            --font-serif: "Instrument Serif", Georgia, serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: #080808;
+            color: white;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        img[src*="sbdc"] {
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        /* ============================================
+           ANIMATIONS
+        ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUpStar {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 0.4;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInMomentum {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-up-delay-1 {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .animate-fade-up-delay-2 {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .animate-momentum {
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInMomentum 1s ease-out 0.6s forwards;
+        }
+
+        .animate-star {
+            opacity: 0;
+            animation: fadeInUpStar 1.2s ease-out 0.3s forwards;
+        }
+
+        .animate-number {
+            opacity: 0;
+            animation: countUp 0.8s ease-out forwards;
+        }
+
+        .animate-number:nth-child(1) { animation-delay: 0.1s; }
+        .animate-number:nth-child(2) { animation-delay: 0.2s; }
+        .animate-number:nth-child(3) { animation-delay: 0.3s; }
+        .animate-number:nth-child(4) { animation-delay: 0.4s; }
+
+        /* ============================================
+           GRAIN TEXTURE
+        ============================================ */
+        .has-grain::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ============================================
+           NAVIGATION
+        ============================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: #0a0a0a;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .nav-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            padding: 0 32px;
+        }
+
+        .nav-logo { display: flex; align-items: center; }
+        .nav-logo img { height: 24px; width: auto; max-width: 100px; object-fit: contain; }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        /* Hamburger Toggle */
+        .nav-toggle {
+            display: none;
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .nav-toggle span {
+            position: absolute;
+            left: 4px;
+            width: 24px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .nav-toggle span:nth-child(1) { top: 9px; }
+        .nav-toggle span:nth-child(2) { top: 15px; }
+        .nav-toggle span:nth-child(3) { top: 21px; }
+
+        /* Hamburger → X Animation */
+        .nav-toggle.active span:nth-child(1) {
+            top: 15px;
+            transform: rotate(45deg);
+        }
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .nav-toggle.active span:nth-child(3) {
+            top: 15px;
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #0a0a0a;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            .nav-links li {
+                transform: translateY(20px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            .nav-links.active li {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            .nav-links.active li:nth-child(1) { transition-delay: 0.05s; }
+            .nav-links.active li:nth-child(2) { transition-delay: 0.1s; }
+            .nav-links.active li:nth-child(3) { transition-delay: 0.15s; }
+            .nav-links.active li:nth-child(4) { transition-delay: 0.2s; }
+            .nav-links.active li:nth-child(5) { transition-delay: 0.25s; }
+            .nav-links.active li:nth-child(6) { transition-delay: 0.3s; }
+            .nav-links.active li:nth-child(7) { transition-delay: 0.35s; }
+            .nav-links.active li:nth-child(8) { transition-delay: 0.4s; }
+            .nav-links.active li:nth-child(9) { transition-delay: 0.45s; }
+            .nav-links a {
+                display: block;
+                padding: 12px 24px;
+                font-size: 14px;
+                letter-spacing: 0.15em;
+                color: rgba(255,255,255,0.6);
+            }
+            .nav-links a:hover {
+                color: white;
+                background: transparent;
+            }
+        }
+
+        /* ============================================
+           HERO - EDITORIAL STYLE
+        ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            padding-top: 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-left {
+            background: var(--deep-navy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .hero-left.has-grain::after { border-radius: 0; }
+
+        .hero-logo {
+            width: 180px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+
+        .hero-headline {
+            font-size: clamp(48px, 6vw, 72px);
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+
+        .hero-headline strong {
+            font-weight: 800;
+        }
+
+        .hero-headline em {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--pool);
+        }
+
+        .hero-cta {
+            margin-top: 48px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .hero-right {
+            display: grid;
+            grid-template-rows: 1.5fr 1fr;
+        }
+
+        .hero-right-top {
+            background: var(--pool);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-right-top.has-grain::after { border-radius: 0; }
+
+        .hero-star {
+            width: 160px;
+            height: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-right-bottom {
+            background: var(--cream);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-right-bottom.has-grain::after { border-radius: 0; }
+
+        .hero-stat-big {
+            font-size: 80px;
+            font-weight: 900;
+            color: var(--deep-navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+
+        .hero-stat-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--deep-navy);
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           SECTION FRAME STYLE
+        ============================================ */
+        .frame {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .frame-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--slate);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .section-intro {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--mist);
+            max-width: 600px;
+            margin-bottom: 56px;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           ANIMATED LINKS
+        ============================================ */
+        .link-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--brick);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .link-arrow:hover {
+            border-bottom-color: var(--brick);
+        }
+
+        .link-arrow .arrow {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .link-arrow:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ============================================
+           MODAL SYSTEM
+        ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .modal-title {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .modal-subtitle {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .modal-open-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            color: white;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .modal-open-tab:hover {
+            border-color: var(--pool);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-open-tab svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s ease;
+            color: white;
+        }
+
+        .modal-close:hover {
+            border-color: var(--pool);
+        }
+
+        .modal-close svg {
+            width: 16px;
+            height: 16px;
+            stroke: white;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ============================================
+           CAROUSEL - FULL BLEED
+        ============================================ */
+        .carousel-container {
+            position: relative;
+            overflow: visible;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            padding-left: max(32px, calc((100vw - 1136px) / 2));
+        }
+
+        .carousel-slide {
+            flex: 0 0 auto;
+            padding: 0 12px;
+        }
+
+        .carousel-slide:first-child {
+            padding-left: 0;
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+            padding: 0 32px;
+        }
+
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--brick);
+        }
+
+        /* ============================================
+           ASSET CAROUSEL
+        ============================================ */
+        .carousel-wrapper {
+            position: relative;
+        }
+
+        /* 1px scroll track line */
+        .carousel-wrapper::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 90px;
+            right: 100px;
+            height: 1px;
+            background: rgba(255,255,255,0.07);
+            z-index: 6;
+        }
+
+        /* Right fade overlay */
+        .carousel-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, #0a0a0a);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .asset-carousel {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 0 16px 90px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        /* Hide native scrollbar */
+        .asset-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .asset-carousel {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .asset-card {
+            flex: 0 0 384px;
+            background: #141414;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            scroll-snap-align: start;
+        }
+
+        .asset-card:last-child {
+            margin-right: 120px;
+        }
+
+        .asset-card:hover {
+            opacity: 0.85;
+        }
+
+        .asset-thumb {
+            height: 200px;
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Preview container - centered */
+        .asset-detail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .asset-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            padding: 4px 8px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        .asset-info {
+            padding: 14px 18px 18px;
+        }
+
+        .asset-title {
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .asset-meta {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.03em;
+        }
+
+        /* Mini Ad Preview Styles */
+        .mini-ad {
+            width: 220px;
+            height: 140px;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .mini-ad.bg-cream { background: var(--cream); color: var(--deep-navy); }
+        .mini-ad.bg-navy { background: var(--navy); color: white; }
+        .mini-ad.bg-brick { background: var(--brick); color: white; }
+        .mini-ad.bg-mist { background: var(--mist); color: var(--deep-navy); }
+        .mini-ad.bg-pool { background: var(--pool); color: var(--deep-navy); }
+
+        .mini-ad-brand {
+            font-family: var(--font-sans);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        .mini-ad-headline {
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .mini-ad-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-sans);
+            font-size: 8px;
+            opacity: 0.6;
+        }
+
+        .mini-ad-footer span:last-child {
+            font-size: 12px;
+        }
+
+        /* Mini Email Preview Styles */
+        .mini-email {
+            width: 180px;
+            height: 140px;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        .mini-email-header {
+            background: var(--deep-navy);
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mini-email-logo {
+            font-family: var(--font-sans);
+            font-size: 8px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.05em;
+        }
+
+        .mini-email-tag {
+            font-family: var(--font-mono);
+            font-size: 6px;
+            color: var(--pool);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .mini-email-body {
+            padding: 14px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mini-email-line {
+            height: 6px;
+            background: #e5e5e5;
+            border-radius: 3px;
+        }
+
+        .mini-email-line.short { width: 60%; }
+        .mini-email-line.medium { width: 85%; }
+        .mini-email-line.accent { background: var(--brick); width: 50%; }
+
+        .mini-email-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--navy);
+            border-radius: 50%;
+            margin: 4px 0;
+        }
+
+        /* Mini Card Preview Styles */
+        .mini-cards {
+            display: flex;
+            gap: 10px;
+            transform: scale(0.9);
+        }
+
+        .mini-biz-card {
+            width: 100px;
+            height: 60px;
+            border-radius: 4px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .mini-biz-card.navy { background: var(--navy); color: white; }
+        .mini-biz-card.cream { background: var(--cream); color: var(--deep-navy); }
+        .mini-biz-card.brick { background: var(--brick); color: white; }
+
+        .mini-biz-card-logo {
+            font-family: var(--font-sans);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .mini-biz-card-text {
+            font-family: var(--font-sans);
+            font-size: 6px;
+            opacity: 0.7;
+        }
+
+        /* Mini Partner Preview Styles */
+        .mini-partner {
+            width: 220px;
+            height: 140px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--deep-navy) 100%);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mini-partner-bg {
+            position: absolute;
+            font-family: var(--font-sans);
+            font-size: 72px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+            right: -8px;
+            bottom: -16px;
+        }
+
+        .mini-partner-text {
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Carousel responsive adjustments */
+        @media (max-width: 1200px) {
+            .asset-card {
+                flex: 0 0 360px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .asset-carousel {
+                padding: 0 0 20px 20px;
+            }
+            .carousel-wrapper::after {
+                width: 60px;
+            }
+            .asset-card {
+                flex: 0 0 320px;
+            }
+        }
+
+        /* ============================================
+           TRUST BOARD - SPLIT LAYOUT
+        ============================================ */
+        .trust-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .trust-left {
+            background: var(--cream);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .trust-left.has-grain::after { border-radius: 0; }
+
+        .trust-badge {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--deep-navy);
+            margin-bottom: 24px;
+        }
+
+        .trust-big-stat {
+            font-size: clamp(80px, 12vw, 160px);
+            font-weight: 900;
+            color: var(--deep-navy);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+            font-variant-numeric: tabular-nums;
+            min-width: 5ch;
+        }
+
+        /* Odometer fade-in from bottom */
+        .odometer {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .odometer.odometer-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .trust-context {
+            font-size: 20px;
+            color: var(--deep-navy);
+            opacity: 0.5;
+            margin-top: 12px;
+        }
+
+        .trust-right {
+            background: var(--deep-navy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .trust-right.has-grain::after { border-radius: 0; }
+
+        .trust-right-logo {
+            width: 160px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .trust-stat-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .trust-stat-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 24px;
+        }
+
+        .trust-stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .trust-stat-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .trust-stat-label {
+            font-size: 14px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+
+        .trust-star {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 160px;
+            opacity: 0.08;
+        }
+
+        /* ============================================
+           SERVICE PILLARS - SIMPLIFIED
+        ============================================ */
+        .pillars-section {
+            background: #0a0a0a;
+            padding: 80px 0;
+        }
+
+        .pillars-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .pillars-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .pillars-eyebrow {
+            font-size: 18px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .pillar-card {
+            background: var(--mist);
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+            position: relative;
+        }
+
+        .pillar-card.navy {
+            background: var(--deep-navy);
+            color: white;
+        }
+
+        .pillar-card.maroon {
+            background: #9a6b6b;
+            color: white;
+        }
+
+        .pillar-card.statement {
+            background: var(--maroon);
+            color: var(--cream);
+            justify-content: center;
+            text-align: right;
+            padding: 32px;
+        }
+
+        .pillar-logo {
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: 0.02em;
+            color: var(--deep-navy);
+            opacity: 0.9;
+        }
+
+        .pillar-card.navy .pillar-logo,
+        .pillar-card.maroon .pillar-logo {
+            color: white;
+        }
+
+        .pillar-word {
+            font-family: 'Proxima Nova', var(--font-display), sans-serif;
+            font-size: 48px;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--deep-navy);
+            line-height: 1;
+            margin: 12px 0;
+        }
+
+        .pillar-card.navy .pillar-word {
+            color: var(--cream);
+        }
+
+        .pillar-card.maroon .pillar-word {
+            color: var(--cream);
+        }
+
+        .pillar-tagline {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--deep-navy);
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+
+        .pillar-card.navy .pillar-tagline,
+        .pillar-card.maroon .pillar-tagline {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .pillar-desc {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--deep-navy);
+            opacity: 0.85;
+            flex: 1;
+        }
+
+        .pillar-card.navy .pillar-desc,
+        .pillar-card.maroon .pillar-desc {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .pillar-cta {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--deep-navy);
+            margin-top: 20px;
+        }
+
+        .pillar-card.navy .pillar-cta,
+        .pillar-card.maroon .pillar-cta {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .pillar-statement-text {
+            font-family: 'Proxima Nova', var(--font-display), sans-serif;
+            font-size: 32px;
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.25;
+        }
+
+        .pillar-statement-tag {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 400;
+            font-style: italic;
+            margin-top: 24px;
+            opacity: 0.9;
+        }
+
+        .pillars-closing {
+            margin-top: 48px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.5);
+            max-width: 800px;
+        }
+
+        @media (max-width: 1024px) {
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+            .pillar-card { min-height: 300px; }
+        }
+
+        @media (max-width: 600px) {
+            .pillars-section { padding: 60px 0; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .pillar-card { min-height: auto; }
+            .pillar-card.statement { min-height: 200px; }
+            .pillars-closing { font-size: 14px; }
+        }
+
+        /* ============================================
+           ADS SECTION - FULL BLEED
+        ============================================ */
+        .ads-section {
+            background: #0a0a0a;
+        }
+
+        .ads-section .section-inner {
+            max-width: none;
+            padding: 0;
+        }
+
+        .ads-section .section-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .ad-card {
+            width: 340px;
+            border-radius: 12px;
+            padding: 32px;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .ad-card:hover {
+            transform: scale(1.02);
+        }
+
+        .ad-card > * {
+            background: none !important;
+            background-color: transparent !important;
+        }
+
+        .ad-card .wordmark {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+
+        .ad-card .headline {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            font-style: italic;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+
+        .ad-card .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ad-card .tagline { font-size: 14px; font-weight: 500; }
+        .ad-card .cta { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+
+        .ad-cream { background: var(--cream); }
+        .ad-cream .wordmark { color: var(--slate); }
+        .ad-cream .headline { color: var(--deep-navy); }
+        .ad-cream .tagline { color: var(--deep-navy); }
+        .ad-cream .cta { color: var(--brick); }
+
+        .ad-navy { background: var(--deep-navy); }
+        .ad-navy .wordmark { color: var(--mist); }
+        .ad-navy .headline { color: white; }
+        .ad-navy .tagline { color: rgba(255,255,255,0.7); }
+        .ad-navy .cta { color: var(--pool); }
+
+        .ad-forest { background: #2d4a4a; }
+        .ad-forest .wordmark { color: rgba(255,255,255,0.6); }
+        .ad-forest .headline { color: var(--cream); }
+        .ad-forest .tagline { color: rgba(255,255,255,0.7); }
+        .ad-forest .cta { color: var(--pool); }
+
+        .ad-mist { background: var(--mist); }
+        .ad-mist .wordmark { color: var(--deep-navy); }
+        .ad-mist .headline { color: var(--deep-navy); }
+        .ad-mist .tagline { color: var(--deep-navy); }
+        .ad-mist .cta { color: var(--brick); }
+
+        /* ============================================
+           EMAIL SECTION - FULL BLEED
+        ============================================ */
+        .email-section {
+            background: #0a0a0a;
+        }
+
+        .email-section .section-inner {
+            max-width: none;
+            padding: 0;
+        }
+
+        .email-section .section-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .email-card {
+            width: 300px;
+            height: 320px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .email-card:hover { transform: translateY(-4px); }
+
+        .email-card-header {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .email-card-header .wordmark {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 500;
+            color: white;
+            letter-spacing: 0.05em;
+        }
+
+        .email-card-header .tag {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--brick);
+            letter-spacing: 0.05em;
+        }
+
+        .email-card-body {
+            background: white;
+            padding: 24px;
+            color: var(--deep-navy);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .email-card-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .email-card-excerpt {
+            font-size: 13px;
+            color: var(--slate);
+            line-height: 1.5;
+        }
+
+        .email-card-stat {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin: 16px 0 4px;
+        }
+
+        .email-card-stat span { color: var(--brick); }
+
+        .email-card-stat-label {
+            font-size: 12px;
+            color: var(--slate);
+        }
+
+        /* ============================================
+           BUSINESS CARDS SECTION - FULL BLEED
+        ============================================ */
+        .cards-section {
+            background: #0a0a0a;
+        }
+
+        .cards-section .section-inner {
+            max-width: none;
+            padding: 0;
+        }
+
+        .cards-section .section-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .cards-section .section-intro { color: var(--mist); }
+
+        .biz-card {
+            width: 280px;
+            height: 160px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .cards-section .carousel-slide {
+            padding: 0 16px;
+            flex-shrink: 0;
+        }
+
+        .card-slide-inner {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 24px;
+            width: 320px;
+        }
+
+        .card-slide-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+
+        .card-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* OPTION A — CLASSIC NAVY */
+        .card-a-front {
+            background: var(--deep-navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-a-front .logo { width: 70px; height: auto; }
+        .card-a-front .tagline { font-size: 11px; font-style: italic; color: var(--pool); }
+
+        .card-a-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-a-back .name { font-size: 16px; font-weight: 700; color: var(--deep-navy); }
+        .card-a-back .title { font-size: 10px; color: var(--royal); margin-top: 2px; }
+        .card-a-back .contact { font-family: var(--font-mono); font-size: 8px; color: var(--deep-navy); line-height: 1.6; }
+
+        /* OPTION F — POOL FORWARD */
+        .card-f-front {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-f-front .logo { width: 70px; height: auto; }
+        .card-f-front .tagline { font-size: 11px; font-style: italic; color: var(--deep-navy); }
+
+        .card-f-back {
+            background: var(--deep-navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-f-back .name { font-size: 16px; font-weight: 700; color: white; }
+        .card-f-back .title { font-size: 10px; color: var(--pool); margin-top: 2px; }
+        .card-f-back .contact { font-family: var(--font-mono); font-size: 8px; color: var(--pool); line-height: 1.6; }
+
+        /* Z5 — MONO GRADIENT */
+        .z5-front {
+            background: var(--deep-navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        .z5-front .logo { width: 70px; height: auto; }
+        .z5-front .tagline { font-size: 11px; font-style: italic; color: white; }
+        .z5-front .gradient-bar {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--pool), var(--royal), var(--maroon));
+        }
+
+        .z5-back {
+            background: var(--deep-navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .z5-back .name { font-size: 16px; font-weight: 700; color: white; }
+        .z5-back .title { font-size: 10px; color: var(--pool); margin-top: 2px; }
+        .z5-back .contact { font-family: var(--font-mono); font-size: 8px; color: white; line-height: 1.6; }
+
+        /* 05 — NAVY SWEEP */
+        .c05-front {
+            background: linear-gradient(135deg, var(--deep-navy) 0%, var(--deep-navy) 60%, #1a2d42 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .c05-front .logo { width: 70px; height: auto; }
+        .c05-front .tagline { font-size: 11px; font-style: italic; color: var(--pool); }
+
+        .c05-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .c05-back .name { font-size: 16px; font-weight: 700; color: var(--deep-navy); }
+        .c05-back .title { font-size: 10px; color: var(--royal); margin-top: 2px; }
+        .c05-back .contact { font-family: var(--font-mono); font-size: 8px; color: var(--deep-navy); line-height: 1.6; }
+
+        /* ZAG 11 — STACKED REPETITION */
+        .zag11-front {
+            background: var(--deep-navy);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0;
+        }
+        .zag11-front .name-line {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .zag11-front .name-line:nth-child(1) { color: white; }
+        .zag11-front .name-line:nth-child(2) { color: rgba(255,255,255,0.5); }
+        .zag11-front .name-line:nth-child(3) { color: rgba(255,255,255,0.25); }
+        .zag11-front .name-line:nth-child(4) { color: rgba(255,255,255,0.1); }
+
+        .zag11-back {
+            background: var(--deep-navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .zag11-back .logo { width: 70px; height: auto; }
+        .zag11-back .contact { font-family: var(--font-mono); font-size: 8px; color: white; line-height: 1.6; }
+
+        /* M2 — GRADIENT SWEEP */
+        .m2-front {
+            background: linear-gradient(135deg, var(--deep-navy) 0%, var(--royal) 50%, var(--pool) 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .m2-front .logo { width: 70px; height: auto; }
+        .m2-front .tagline { font-size: 11px; font-style: italic; color: white; }
+
+        .m2-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .m2-back .name { font-size: 16px; font-weight: 900; color: var(--deep-navy); }
+        .m2-back .title { font-size: 10px; color: var(--royal); margin-top: 2px; }
+        .m2-back .contact { font-family: var(--font-mono); font-size: 8px; color: var(--deep-navy); line-height: 1.6; }
+
+        /* ZAG 1 — NAME IS EVERYTHING */
+        .zag1-front {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zag1-front .giant-name {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--deep-navy);
+            letter-spacing: -0.03em;
+            text-align: center;
+        }
+
+        .zag1-back {
+            background: var(--deep-navy);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .zag1-back .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+        .zag1-back .logo { width: 60px; height: auto; }
+        .zag1-back .title { font-family: var(--font-mono); font-size: 8px; color: var(--pool); text-align: right; }
+        .zag1-back .contact { display: flex; gap: 16px; }
+        .zag1-back .contact-line { font-family: var(--font-mono); font-size: 8px; color: white; }
+
+        /* ZAG 9 — EDITORIAL */
+        .zag9-front {
+            background: white;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid var(--deep-navy);
+        }
+        .zag9-front .masthead {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--deep-navy);
+        }
+        .zag9-front .logo { width: 50px; height: auto; }
+        .zag9-front .label { font-family: var(--font-mono); font-size: 7px; font-weight: 600; letter-spacing: 0.1em; color: var(--deep-navy); text-transform: uppercase; }
+        .zag9-front .name { font-size: 22px; font-weight: 900; color: var(--deep-navy); letter-spacing: -0.02em; }
+        .zag9-front .title { font-size: 10px; color: var(--maroon); margin-top: 2px; }
+
+        .zag9-back {
+            background: white;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 2px solid var(--deep-navy);
+        }
+        .zag9-back .contact { font-family: var(--font-mono); font-size: 8px; color: var(--deep-navy); line-height: 1.6; }
+        .zag9-back .tagline { font-size: 10px; font-style: italic; color: var(--deep-navy); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--deep-navy); }
+
+        /* ZAG 10 — OVERSIZED INITIAL */
+        .zag10-front {
+            background: var(--deep-navy);
+            position: relative;
+            overflow: hidden;
+        }
+        .zag10-front .initial {
+            position: absolute;
+            top: -20px;
+            left: -8px;
+            font-size: 140px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+            line-height: 0.8;
+        }
+        .zag10-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .zag10-front .logo { width: 60px; height: auto; }
+        .zag10-front .name { font-size: 18px; font-weight: 900; color: white; letter-spacing: -0.02em; }
+        .zag10-front .title { font-family: var(--font-mono); font-size: 9px; color: var(--pool); margin-top: 2px; }
+
+        .zag10-back {
+            background: var(--deep-navy);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .zag10-back .contact { font-family: var(--font-mono); font-size: 8px; color: white; line-height: 1.6; }
+        .zag10-back .tagline { font-size: 11px; font-style: italic; color: var(--pool); margin-top: 16px; }
+
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 32px;
+            padding: 12px 24px;
+            background: var(--pool);
+            color: var(--deep-navy);
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .view-all-btn:hover { background: var(--sky); }
+
+        /* ============================================
+           PARTNERS & LENDERS SECTION
+        ============================================ */
+        .partners-section {
+            background: #0a0a0a;
+        }
+
+        .partners-section .section-inner {
+            max-width: none;
+            padding: 0;
+        }
+
+        .partners-section .section-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .partners-billboard {
+            background: var(--deep-navy);
+            border-radius: 12px;
+            padding: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partners-billboard.has-grain::after { border-radius: 12px; }
+
+        .partners-billboard-bg {
+            position: absolute;
+            top: 50%;
+            right: -5%;
+            transform: translateY(-50%);
+            font-family: var(--font-serif);
+            font-size: 200px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.03);
+            line-height: 0.8;
+            pointer-events: none;
+        }
+
+        .partners-billboard-left {
+            position: relative;
+            z-index: 2;
+        }
+
+        .partners-billboard-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pool);
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .partners-billboard-headline {
+            font-family: var(--font-serif);
+            font-size: 56px;
+            color: var(--cream);
+            line-height: 1.1;
+        }
+
+        .partners-billboard-headline em {
+            font-style: italic;
+            color: var(--brick);
+        }
+
+        .partners-billboard-right {
+            text-align: right;
+            max-width: 350px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partners-billboard-context {
+            font-size: 18px;
+            color: var(--cream);
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .partners-billboard-brand {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pool);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .partner-card {
+            border-radius: 8px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .partner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .partner-card:hover { transform: translateY(-4px); }
+
+        .partner-card.bg-navy { background: var(--navy); }
+        .partner-card.bg-cream { background: var(--cream); }
+        .partner-card.bg-brick { background: var(--brick); }
+        .partner-card.bg-dusty { background: var(--dusty-blue); }
+
+        .partner-card .eyebrow {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partner-card.bg-navy .eyebrow,
+        .partner-card.bg-brick .eyebrow,
+        .partner-card.bg-dusty .eyebrow { color: var(--cream); }
+        .partner-card.bg-cream .eyebrow { color: var(--navy); }
+
+        .partner-card .headline {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partner-card.bg-navy .headline,
+        .partner-card.bg-brick .headline,
+        .partner-card.bg-dusty .headline { color: white; }
+        .partner-card.bg-cream .headline { color: var(--navy); }
+
+        .partner-card .subtext {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partner-card.bg-navy .subtext,
+        .partner-card.bg-brick .subtext,
+        .partner-card.bg-dusty .subtext { color: var(--cream); }
+        .partner-card.bg-cream .subtext { color: var(--navy); }
+
+        .partner-card .cta {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partner-card.bg-navy .cta { color: var(--pool); }
+        .partner-card.bg-cream .cta { color: var(--brick); }
+        .partner-card.bg-brick .cta,
+        .partner-card.bg-dusty .cta { color: var(--cream); }
+
+        /* ============================================
+           LENDER GUIDES
+        ============================================ */
+        .guides {
+            background: #0a0a0a;
+        }
+
+        .guide-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 48px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 48px;
+            max-width: 900px;
+            align-items: center;
+        }
+
+        .guide-icon {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .guide-icon svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.4;
+        }
+
+        .guide-content h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .guide-content p {
+            font-size: 16px;
+            color: var(--mist);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* ============================================
+           BRAND EVOLUTION
+        ============================================ */
+        .brand-evolution {
+            background: linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-evolution::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            width: 400px;
+            height: 400px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231D5AA7' stroke-width='0.5'%3E%3Cpath d='M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z'/%3E%3C/svg%3E") center/contain no-repeat;
+            opacity: 0.04;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .evolution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 60px;
+            margin-bottom: 20px;
+        }
+
+        .evolution-header-text {
+            flex: 1;
+        }
+
+        .evolution-logo-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .evolution-logo-display img {
+            height: 80px;
+            width: auto;
+        }
+
+        .evolution-logo-display .logo-caption {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--mist);
+            opacity: 0.6;
+        }
+
+        .evolution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .evolution-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 40px 32px;
+            transition: all 0.3s ease;
+        }
+
+        .evolution-card:hover {
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+        }
+
+        .evolution-icon {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--royal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .evolution-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--royal);
+        }
+
+        .evolution-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .evolution-card p {
+            font-size: 15px;
+            color: var(--mist);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .evolution-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(29, 90, 167, 0.15);
+            color: var(--pool);
+        }
+
+        .evolution-learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 32px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pool);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .evolution-learn-more:hover {
+            color: #fff;
+            gap: 12px;
+        }
+
+        .evolution-learn-more .arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .evolution-learn-more:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 1024px) {
+            .evolution-grid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
+            .evolution-header { flex-direction: column; align-items: flex-start; }
+            .evolution-logo-display { align-self: center; margin-top: 20px; }
+            .brand-evolution::before { display: none; }
+        }
+
+        /* ============================================
+           LIBRARY
+        ============================================ */
+        .library {
+            background: #0a0a0a;
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .library-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .library-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+
+        .library-card-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--brick);
+            margin-bottom: 8px;
+        }
+
+        .library-card-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .library-card-desc {
+            font-size: 13px;
+            color: var(--slate);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .library-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--brick);
+        }
+
+        .library-card-link .arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .library-card:hover .library-card-link .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ============================================
+           FOOTER
+        ============================================ */
+        .footer {
+            background: var(--deep-navy);
+            padding: 72px 32px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .footer-logo {
+            height: 40px;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+        }
+
+        .footer-tagline {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .footer-sub {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: var(--brick);
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-left { min-height: 60vh; }
+            .hero-right { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+            .trust-board { grid-template-columns: 1fr; }
+            .trust-right { padding-top: 48px; }
+            .cards-gallery { grid-template-columns: repeat(2, 1fr); }
+            .partners-grid { grid-template-columns: repeat(2, 1fr); }
+            .guide-card { grid-template-columns: 1fr; text-align: center; }
+            .library-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-left { padding: 48px; }
+            .cards-gallery { grid-template-columns: 1fr; }
+            .partners-billboard { flex-direction: column; text-align: center; gap: 32px; }
+            .partners-billboard-right { text-align: center; }
+            .partners-grid { grid-template-columns: 1fr; }
+            .emerge-section { min-height: 70vh; }
+            .emerge-corner { bottom: 24px; right: 24px; left: 24px; max-width: none; }
+            .emerge-title { font-size: 28px; }
+        }
+
+        /* ============================================
+           EMERGE VIDEO SECTION
+        ============================================ */
+        .emerge-section {
+            position: relative;
+            min-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+
+        .emerge-video-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            z-index: 0;
+            transform: translateY(0);
+            will-change: transform;
+        }
+
+        .emerge-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) contrast(1.1);
+        }
+
+        .emerge-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(8, 8, 8, 0.3) 0%,
+                rgba(8, 8, 8, 0.1) 40%,
+                rgba(8, 8, 8, 0.4) 80%,
+                rgba(8, 8, 8, 0.9) 100%
+            );
+            z-index: 1;
+        }
+
+        .emerge-corner {
+            position: relative;
+            z-index: 2;
+            max-width: 480px;
+            padding: 48px;
+            margin: 48px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .emerge-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--pool);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .emerge-title {
+            font-family: var(--font-serif);
+            font-size: 42px;
+            font-weight: 400;
+            font-style: italic;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .emerge-date {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .emerge-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .emerge-tribute {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ============================================
+           SERVICE PILLARS
+        ============================================ */
+        .pillars-section {
+            background: #0a0a0a;
+            padding: 80px 48px;
+        }
+
+        .pillars-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pillars-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .pillars-title {
+            font-family: 'Proxima Nova', var(--font-sans), sans-serif;
+            font-size: 32px;
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 48px;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .pillar-card {
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            min-height: 320px;
+        }
+
+        .pillar-card.bg-cream { background: var(--cream); color: var(--deep-navy); }
+        .pillar-card.bg-navy { background: var(--navy); color: white; }
+        .pillar-card.bg-dusty { background: var(--dusty-blue); color: white; }
+        .pillar-card.bg-brick { background: var(--brick); color: white; }
+
+        .pillar-brand {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.3;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+
+        .pillar-name {
+            font-family: 'Proxima Nova', var(--font-sans), sans-serif;
+            font-size: 48px;
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .pillar-stat {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+
+        .pillar-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.85;
+            flex: 1;
+        }
+
+        .pillar-card.bg-navy .pillar-desc {
+            color: var(--pool);
+            opacity: 1;
+        }
+
+        .pillar-cta {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+
+        .pillar-card.statement {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .pillar-card.statement .pillar-name {
+            font-size: 36px;
+            margin-bottom: 0;
+            line-height: 1.3;
+        }
+
+        .pillars-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 48px;
+        }
+
+        .pillars-footer-text {
+            font-size: 18px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 900px;
+        }
+
+        .pillars-video-link {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            color: var(--pool);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: opacity 0.2s;
+        }
+
+        .pillars-video-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .video-modal-close {
+            position: absolute;
+            top: -48px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .video-modal-close:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .pillars-section { padding: 48px 24px; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .pillar-card { min-height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-header">
+            <div class="modal-header-left">
+                <span class="modal-title" id="modal-title">Preview</span>
+                <span class="modal-subtitle" id="modal-subtitle"></span>
+            </div>
+            <div class="modal-header-right">
+                <a href="#" class="modal-open-tab" id="modal-open-tab" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Open in New Tab
+                </a>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-content">
+                <iframe class="modal-iframe" id="modal-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div class="video-modal" id="videoModal" onclick="closeVideoModal(event)">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+            <iframe id="videoIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">
+                <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC">
+            </a>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#pillars">PILLARS</a></li>
+                <li><a href="#trust">TRUST</a></li>
+                <li><a href="#emerge">EMERGE</a></li>
+                <li><a href="#ads">ADS</a></li>
+                <li><a href="#emails">EMAIL</a></li>
+                <li><a href="#cards">CARDS</a></li>
+                <li><a href="#partners">PARTNERS</a></li>
+                <li><a href="#guides">GUIDES</a></li>
+                <li><a href="#evolution">EVOLUTION</a></li>
+                <li><a href="#library">LIBRARY</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO - EDITORIAL SPLIT -->
+    <section class="hero" id="hero">
+        <div class="hero-left has-grain">
+            <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="hero-logo animate-fade-up">
+            <div class="hero-content">
+                <div class="hero-eyebrow animate-fade-up-delay-1">SINCE 2006</div>
+                <h1 class="hero-headline animate-fade-up-delay-2">
+                    You have <strong>nothing to lose</strong><br>
+                    but <em class="animate-momentum">momentum.</em>
+                </h1>
+                <div class="hero-cta animate-fade-up-delay-2">Add momentum. →</div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-right-top has-grain">
+                <img src="assets/starblue@4x.png" alt="" class="hero-star animate-star">
+            </div>
+            <div class="hero-right-bottom has-grain">
+                <div class="hero-stat-big animate-number">$0</div>
+                <div class="hero-stat-label">COST OF EXPERT ADVICE</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICE PILLARS -->
+    <section class="pillars-section" id="pillars">
+        <div class="pillars-inner">
+            <div class="pillars-label">Service Pillars</div>
+            <h2 class="pillars-title">When someone asks what we do, this is the answer.</h2>
+
+            <div class="pillars-grid">
+                <div class="pillar-card bg-cream">
+                    <div class="pillar-brand">Your Business<br>People.</div>
+                    <div class="pillar-name">Advising</div>
+                    <div class="pillar-stat">300+ Expert Advisors</div>
+                    <div class="pillar-desc">Connect with advisors who've built businesses, raised capital, and solved the problems you're facing.</div>
+                    <div class="pillar-cta">norcalsbdc.org →</div>
+                </div>
+
+                <div class="pillar-card bg-navy">
+                    <div class="pillar-brand">Your Capital<br>Partners.</div>
+                    <div class="pillar-name">Capital</div>
+                    <div class="pillar-stat">$547M Capital Accessed</div>
+                    <div class="pillar-desc">SBA loans, grants, and investor connections. We help you capture the capital you need.</div>
+                    <div class="pillar-cta">norcalsbdc.org →</div>
+                </div>
+
+                <div class="pillar-card bg-dusty">
+                    <div class="pillar-brand">Your Business<br>Network.</div>
+                    <div class="pillar-name">Network</div>
+                    <div class="pillar-stat">36 Counties Served</div>
+                    <div class="pillar-desc">Partners, lenders, and community resources across Northern California.</div>
+                    <div class="pillar-cta">norcalsbdc.org →</div>
+                </div>
+
+                <div class="pillar-card bg-brick statement">
+                    <div class="pillar-name">Advising.<br>Capital.<br>Network.<br><br><em>That's what we do.</em></div>
+                </div>
+            </div>
+
+            <div class="pillars-footer">
+                <p class="pillars-footer-text">We've spent 20 years proving ourselves. Now the brand catches up. This refresh strips away the bureaucratic look and replaces it with something that matches our results. Direct language. Confident design. And a focus on what clients actually remember—not the logo, not the program, but the advisor who helped them.</p>
+                <span class="pillars-video-link" onclick="openVideoModal()">WATCH BRAND VIDEO →</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BOARD -->
+    <section id="trust" style="padding: 0;">
+        <div class="trust-board">
+            <div class="trust-left has-grain">
+                <div class="trust-badge">20 YEARS OF RESULTS</div>
+                <div class="trust-big-stat odometer" data-value="547" data-start="518" data-prefix="$" data-suffix="M">$518M</div>
+                <div class="trust-context">in client capital accessed | 2025</div>
+                <a href="NEW-IMPACT.html" style="color: #4a6580; text-decoration: underline; font-family: 'Roboto Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1rem; display: inline-block;">view 2025 impact report →</a>
+            </div>
+            <div class="trust-right has-grain">
+                <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="trust-right-logo">
+                <div class="trust-stat-grid">
+                    <div class="trust-stat-item">
+                        <div class="trust-stat-num">12,400</div>
+                        <div class="trust-stat-label">businesses served annually</div>
+                    </div>
+                    <div class="trust-stat-item">
+                        <div class="trust-stat-num">300+</div>
+                        <div class="trust-stat-label">expert advisors</div>
+                    </div>
+                    <div class="trust-stat-item">
+                        <div class="trust-stat-num">36</div>
+                        <div class="trust-stat-label">counties covered</div>
+                    </div>
+                </div>
+                <img src="assets/starwhite@4x.png" alt="" class="trust-star" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- EMERGE VIDEO SECTION -->
+    <section class="emerge-section" id="emerge">
+        <div class="emerge-video-wrapper" id="emerge-video-wrapper">
+            <video class="emerge-video" autoplay muted loop playsinline>
+                <source src="https://www.norcalsbdc.org/wp-content/uploads/2025/05/emerge-24-footage2.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="emerge-overlay"></div>
+        <div class="emerge-corner">
+            <div class="emerge-label">NorCal SBDC Professional Development</div>
+            <h2 class="emerge-title">emerge 2025</h2>
+            <div class="emerge-date">October 9, 2025 | Walnut Creek Marriott</div>
+            <p class="emerge-description">
+                Northern California's most influential business advisors came together for two transformative days. EMERGE 2025 brought together the region's top minds in capital formation and artificial intelligence.
+            </p>
+            <div class="emerge-tribute">Event Tribute Reel</div>
+        </div>
+    </section>
+
+    <!-- ADVERTISING CAROUSEL -->
+    <section class="ads-section" id="ads">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">01 — ADVERTISING</div>
+                <h2 class="section-title">Campaigns & Creative</h2>
+                <p class="section-intro">Evergreen ads, billboards, and anniversary campaigns—headline-driven creative for digital and print.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="asset-carousel">
+                    <div class="asset-card" onclick="openModal('ads/evergreen-ads-v3.html', 'Evergreen Ads')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-cream">
+                                <div class="mini-ad-brand">NorCal SBDC</div>
+                                <div class="mini-ad-headline">What would you do with the right advice?</div>
+                                <div class="mini-ad-footer"><span>Your Business People.</span><span>→</span></div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">7 Ads</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Evergreen Ads</div>
+                        <div class="asset-meta">Multi-format Campaign</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('ads/evergreen-ads-wall-v2.html', 'Content Wall')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-navy">
+                                <div class="mini-ad-brand">NorCal SBDC</div>
+                                <div class="mini-ad-headline">$549M in capital accessed last year</div>
+                                <div class="mini-ad-footer"><span>Your Business People.</span><span>→</span></div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">40+ Ads</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Content Wall</div>
+                        <div class="asset-meta">Full Ad Library</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('social/sbdc-day-grid.html', 'SBDC Day')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-brick">
+                                <div class="mini-ad-brand">March 18</div>
+                                <div class="mini-ad-headline">SBDC Day</div>
+                                <div class="mini-ad-footer"><span>#SBDCDay Campaign</span><span>→</span></div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">25 Posts</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">SBDC Day</div>
+                        <div class="asset-meta">Social Media Grid</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('billboards/ambition-momentum-billboards.html', 'Billboards')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-brick">
+                                <div class="mini-ad-brand">NorCal SBDC</div>
+                                <div class="mini-ad-headline">You bring the ambition.</div>
+                                <div class="mini-ad-footer"><span>We add momentum.</span><span>→</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Billboards</div>
+                        <div class="asset-meta">Outdoor Advertising</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('campaigns/momentum-creative.html', 'Momentum Creative')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-mist">
+                                <div class="mini-ad-brand">20 Years</div>
+                                <div class="mini-ad-headline">Add Momentum</div>
+                                <div class="mini-ad-footer"><span>Anniversary Campaign</span><span>→</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Momentum Creative</div>
+                        <div class="asset-meta">20th Anniversary</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EMAIL TEMPLATES CAROUSEL -->
+    <section class="email-section" id="emails">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">02 — EMAIL</div>
+                <h2 class="section-title">Templates & Campaigns</h2>
+                <p class="section-intro">Welcome series, SBDC Day, Small Business Week, and header systems.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="asset-carousel">
+                <div class="asset-card" onclick="openModal('emails/welcome-email-1.html', 'Welcome Series')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-email">
+                                <div class="mini-email-header">
+                                    <span class="mini-email-logo">NorCal SBDC</span>
+                                    <span class="mini-email-tag">Welcome</span>
+                                </div>
+                                <div class="mini-email-body">
+                                    <div class="mini-email-line short"></div>
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line short"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">3 Emails</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Welcome Series</div>
+                        <div class="asset-meta">Onboarding Sequence</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('emails/sbdc-day-email.html', 'SBDC Day')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-email">
+                                <div class="mini-email-header">
+                                    <span class="mini-email-logo">NorCal SBDC</span>
+                                    <span class="mini-email-tag">SBDC Day</span>
+                                </div>
+                                <div class="mini-email-body">
+                                    <div class="mini-email-circle"></div>
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line accent"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">SBDC Day</div>
+                        <div class="asset-meta">National Celebration</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('emails/sbw-email.html', 'Small Business Week')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-email">
+                                <div class="mini-email-header">
+                                    <span class="mini-email-logo">NorCal SBDC</span>
+                                    <span class="mini-email-tag">May 4-10</span>
+                                </div>
+                                <div class="mini-email-body">
+                                    <div class="mini-email-line short"></div>
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line accent"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Small Business Week</div>
+                        <div class="asset-meta">Annual Campaign</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('emails/email-header-options.html', 'Email Headers')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-email">
+                                <div class="mini-email-header">
+                                    <span class="mini-email-logo">NorCal SBDC</span>
+                                </div>
+                                <div class="mini-email-body">
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line short"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">7 Options</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Email Headers</div>
+                        <div class="asset-meta">Header Variations</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COLLATERAL CAROUSEL -->
+    <section class="cards-section" id="cards">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">03 — COLLATERAL</div>
+                <h2 class="section-title">Print & Digital Assets</h2>
+                <p class="section-intro">Business cards, email signatures, social templates, and client success stories.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="asset-carousel">
+                <div class="asset-card" onclick="openModal('business-cards/business-cards-zag.html', 'Business Cards')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-cards">
+                                <div class="mini-biz-card navy">
+                                    <div class="mini-biz-card-logo">SBDC</div>
+                                    <div class="mini-biz-card-text">Your Business People.</div>
+                                </div>
+                                <div class="mini-biz-card cream">
+                                    <div class="mini-biz-card-logo">Maria Santos</div>
+                                    <div class="mini-biz-card-text">530.898.4598</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">9 Designs</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Business Cards</div>
+                        <div class="asset-meta">Print Collateral</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('emails/email-signatures.html', 'Email Signatures')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-email">
+                                <div class="mini-email-body">
+                                    <div class="mini-email-line short" style="background: var(--navy);"></div>
+                                    <div class="mini-email-line medium"></div>
+                                    <div class="mini-email-line short"></div>
+                                    <div class="mini-email-line accent"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">6 Options</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Email Signatures</div>
+                        <div class="asset-meta">Professional Templates</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('social/social-templates.html', 'Social Templates')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-navy" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" style="margin-bottom: 8px;">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                    <rect x="2" y="9" width="4" height="12"/>
+                                    <circle cx="4" cy="4" r="2"/>
+                                </svg>
+                                <div class="mini-ad-brand" style="margin-bottom: 0;">Feed & Stories</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Social Templates</div>
+                        <div class="asset-meta">LinkedIn · Instagram</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('success-stories/success-story-templates.html', 'Success Stories')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-brick">
+                                <div class="mini-ad-brand">Client Story</div>
+                                <div class="mini-ad-headline">From idea to $500K</div>
+                                <div class="mini-ad-footer"><span>Real results.</span><span>→</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Success Stories</div>
+                        <div class="asset-meta">Client Frameworks</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS CAROUSEL -->
+    <section class="partners-section" id="partners">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">04 — PARTNERSHIPS</div>
+                <h2 class="section-title">Lenders & Strategy</h2>
+                <p class="section-intro">Partner content, lender guides, messaging frameworks, and campaign systems for CDFIs, banks, and referral partners.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="asset-carousel">
+                    <div class="asset-card" onclick="openModal('lender-guides/partner-lender-content-wall.html', 'Partner Content')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-partner">
+                                <div class="mini-partner-bg">$58</div>
+                                <div class="mini-partner-text">We do the prep work.<br>You close the deal.</div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">12 Assets</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Partner Content</div>
+                        <div class="asset-meta">Full Library</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('lender-guides/lender-guide-design.html', 'Lender Guide')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-navy">
+                                <div class="mini-ad-brand">Partner Guide</div>
+                                <div class="mini-ad-headline">Lender Referral Process</div>
+                                <div class="mini-ad-footer"><span>Co-branded</span><span>→</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Lender Guide</div>
+                        <div class="asset-meta">Partnership Materials</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('brand/messaging-boards.html', 'Messaging')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-cream">
+                                <div class="mini-ad-brand">Messaging</div>
+                                <div class="mini-ad-headline">Core Talking Points</div>
+                                <div class="mini-ad-footer"><span>Brand Voice</span><span>→</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Messaging Boards</div>
+                        <div class="asset-meta">Brand Voice</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('campaigns/add-momentum-fixed.html', 'Add Momentum')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-partner">
+                                <div class="mini-partner-bg">20</div>
+                                <div class="mini-partner-text">Add Momentum</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Add Momentum</div>
+                        <div class="asset-meta">Campaign System</div>
+                    </div>
+                </div>
+
+                <div class="asset-card" onclick="openModal('lender-guides/lender-spotlight-campaign.html', 'Lender Spotlight Campaign')">
+                    <div class="asset-thumb">
+                        <div class="asset-detail">
+                            <div class="mini-ad bg-navy">
+                                <div class="mini-ad-brand">Campaign Kit</div>
+                                <div class="mini-ad-headline">Lender Spotlight</div>
+                                <div class="mini-ad-footer"><span>Flyers · Email · Social</span><span>→</span></div>
+                            </div>
+                        </div>
+                        <div class="asset-badge">Full Kit</div>
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">Lender Spotlight</div>
+                        <div class="asset-meta">Campaign Kit</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRAND EVOLUTION -->
+    <section class="brand-evolution" id="evolution">
+        <div class="section-inner">
+            <div class="evolution-header">
+                <div class="evolution-header-text">
+                    <div class="section-label">06 — BRAND EVOLUTION</div>
+                    <h2 class="section-title">The New Identity</h2>
+                    <p class="section-intro">After 20 years of serving Northern California's small businesses, NorCal SBDC has evolved its brand to reflect two decades of impact and momentum.</p>
+                    <a href="#" class="evolution-learn-more" onclick="openModal('brand/logo-simplification.html', 'The Case for Simplification'); return false;">
+                        Learn more <span class="arrow">→</span>
+                    </a>
+                </div>
+                <div class="evolution-logo-display">
+                    <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC 2026">
+                    <span class="logo-caption">2026 Mark</span>
+                </div>
+            </div>
+
+            <div class="evolution-grid">
+                <div class="evolution-card">
+                    <div class="evolution-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3>20 Years of Impact</h3>
+                    <p>Two decades of empowering entrepreneurs across Northern California. From startup dreams to established enterprises, we've helped businesses secure over $547M in capital and create thousands of jobs.</p>
+                    <span class="evolution-tag">2005 – 2025</span>
+                </div>
+
+                <div class="evolution-card">
+                    <div class="evolution-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <h3>Ambition + Momentum</h3>
+                    <p>Our anniversary campaign celebrates the drive of every entrepreneur we serve. "Add Momentum" captures how we help transform business ambition into measurable results—one milestone at a time.</p>
+                    <span class="evolution-tag">Campaign 2025</span>
+                </div>
+
+                <div class="evolution-card">
+                    <div class="evolution-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/>
+                        </svg>
+                    </div>
+                    <h3>A Simplified Mark</h3>
+                    <p>The refreshed logo strips away complexity while honoring our heritage. A cleaner, more versatile identity that works across digital and print—built for the next 20 years of growth.</p>
+                    <span class="evolution-tag">Logo Update</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section class="library" id="library">
+        <div class="section-inner">
+            <div class="section-label">07 — DESIGN LIBRARY</div>
+            <h2 class="section-title">Full Asset Library</h2>
+            <p class="section-intro">Browse all design files. Click to preview.</p>
+
+            <div class="library-grid">
+                <div class="library-card" onclick="openModal('billboards/ambition-momentum-billboards.html', 'Billboards')">
+                    <div class="library-card-label">BILLBOARDS</div>
+                    <div class="library-card-title">Ambition Billboards</div>
+                    <div class="library-card-desc">Outdoor advertising and large-format designs.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('campaigns/momentum-creative.html', 'Momentum Creative')">
+                    <div class="library-card-label">CREATIVE</div>
+                    <div class="library-card-title">Momentum Creative</div>
+                    <div class="library-card-desc">20th anniversary campaign explorations.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('brand/messaging-boards.html', 'Messaging Boards')">
+                    <div class="library-card-label">MESSAGING</div>
+                    <div class="library-card-title">Messaging Boards</div>
+                    <div class="library-card-desc">Core messaging and hierarchy explorations.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('social/social-templates.html', 'Social Templates')">
+                    <div class="library-card-label">SOCIAL</div>
+                    <div class="library-card-title">Social Templates</div>
+                    <div class="library-card-desc">Feed posts, stories, and success formats.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('emails/email-header-options.html', 'Email Headers')">
+                    <div class="library-card-label">EMAIL</div>
+                    <div class="library-card-title">Email Header Options</div>
+                    <div class="library-card-desc">Header explorations for email campaigns.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('campaigns/add-momentum-fixed.html', 'Add Momentum Campaign')">
+                    <div class="library-card-label">CAMPAIGNS</div>
+                    <div class="library-card-title">Add Momentum</div>
+                    <div class="library-card-desc">Full campaign system and StoryBrand framework.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('success-stories/success-story-templates.html', 'Success Stories')">
+                    <div class="library-card-label">STORIES</div>
+                    <div class="library-card-title">Success Story Templates</div>
+                    <div class="library-card-desc">Client story frameworks.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('campaigns/20-years-landing.html', '20 Years Campaign')">
+                    <div class="library-card-label">CAMPAIGNS</div>
+                    <div class="library-card-title">20 Years Momentum</div>
+                    <div class="library-card-desc">Anniversary campaign materials.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+
+                <div class="library-card" onclick="openModal('brand/logo-identity-architecture.html', '20 Year Identity')">
+                    <div class="library-card-label">IDENTITY</div>
+                    <div class="library-card-title">20 Year Identity</div>
+                    <div class="library-card-desc">Logo architecture case study and network pairing system.</div>
+                    <span class="library-card-link">View files <span class="arrow">→</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="footer-logo" loading="lazy">
+        <div class="footer-tagline">Your Business People.</div>
+        <div class="footer-sub">SINCE 2006 · 20 YEARS OF MOMENTUM</div>
+    </footer>
+
+    <script>
+        // ============================================
+        // MOBILE NAV TOGGLE
+        // ============================================
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ============================================
+        // MODAL SYSTEM
+        // ============================================
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        const modalOpenTab = document.getElementById('modal-open-tab');
+        const modalIframe = document.getElementById('modal-iframe');
+
+        function openModal(url, title, subtitle) {
+            modalTitle.textContent = title;
+            modalSubtitle.textContent = subtitle || '';
+            modalOpenTab.href = url;
+            modalIframe.src = url;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modalIframe.src = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close on clicking the modal body (outside content)
+        document.querySelector('.modal-body').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-body')) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ============================================
+        // CAROUSEL
+        // ============================================
+        const carousels = {
+            ads: { current: 0, slidesPerView: 3 },
+            email: { current: 0, slidesPerView: 3 },
+            cards: { current: 0, slidesPerView: 3 }
+        };
+
+        function initCarousel(name) {
+            const track = document.getElementById(`${name}-track`);
+            const dotsContainer = document.getElementById(`${name}-dots`);
+            const slides = track.querySelectorAll('.carousel-slide');
+            const totalSlides = slides.length;
+            const slidesPerView = carousels[name].slidesPerView;
+            const totalPages = Math.ceil(totalSlides / slidesPerView);
+
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToPage(name, i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function moveCarousel(name, direction) {
+            const track = document.getElementById(`${name}-track`);
+            const slides = track.querySelectorAll('.carousel-slide');
+            const totalSlides = slides.length;
+            const slidesPerView = carousels[name].slidesPerView;
+            const totalPages = Math.ceil(totalSlides / slidesPerView);
+
+            carousels[name].current += direction;
+
+            if (carousels[name].current < 0) carousels[name].current = totalPages - 1;
+            if (carousels[name].current >= totalPages) carousels[name].current = 0;
+
+            updateCarousel(name);
+        }
+
+        function goToPage(name, page) {
+            carousels[name].current = page;
+            updateCarousel(name);
+        }
+
+        function updateCarousel(name) {
+            const track = document.getElementById(`${name}-track`);
+            const slides = track.querySelectorAll('.carousel-slide');
+            const dotsContainer = document.getElementById(`${name}-dots`);
+            const slideWidth = slides[0].offsetWidth;
+            const slidesPerView = carousels[name].slidesPerView;
+
+            const offset = -carousels[name].current * slideWidth * slidesPerView;
+            track.style.transform = `translateX(${offset}px)`;
+
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === carousels[name].current);
+            });
+        }
+
+        window.addEventListener('load', () => {
+            initCarousel('ads');
+            initCarousel('email');
+            initCarousel('cards');
+        });
+
+        window.addEventListener('resize', () => {
+            updateCarousel('ads');
+            updateCarousel('email');
+            updateCarousel('cards');
+        });
+
+        // ============================================
+        // ODOMETER / COUNT-UP ANIMATION (Big $547M only)
+        // ============================================
+        function animateValue(element, start, end, duration, prefix = '', suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Smooth ease-out curve
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                let current = Math.floor(easeOutCubic * (end - start) + start);
+                element.textContent = prefix + current + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function initOdometers() {
+            const odometers = document.querySelectorAll('.odometer');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                        entry.target.classList.add('animated');
+                        // Add fade-in class
+                        entry.target.classList.add('odometer-visible');
+
+                        const endValue = parseInt(entry.target.dataset.value, 10);
+                        const startValue = parseInt(entry.target.dataset.start, 10) || 0;
+                        const prefix = entry.target.dataset.prefix || '';
+                        const suffix = entry.target.dataset.suffix || '';
+
+                        // Slow count from start to end (2.5 seconds)
+                        animateValue(entry.target, startValue, endValue, 2500, prefix, suffix);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            odometers.forEach(el => observer.observe(el));
+        }
+
+        window.addEventListener('load', initOdometers);
+
+        // EMERGE Video Parallax
+        (function() {
+            const emergeSection = document.getElementById('emerge');
+            const emergeVideoWrapper = document.getElementById('emerge-video-wrapper');
+
+            if (!emergeSection || !emergeVideoWrapper) return;
+
+            let ticking = false;
+
+            function updateParallax() {
+                const rect = emergeSection.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+
+                // Only apply effect when section is in view
+                if (rect.bottom < 0 || rect.top > windowHeight) {
+                    ticking = false;
+                    return;
+                }
+
+                // Calculate parallax offset (slower movement for video)
+                const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+                const parallaxOffset = (scrollProgress - 0.5) * rect.height * 0.2;
+
+                emergeVideoWrapper.style.transform = `translateY(${parallaxOffset}px)`;
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            // Initial call
+            updateParallax();
+        })();
+
+        // Video Modal Functions
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = 'https://www.youtube.com/embed/5s8fBXxKaJc?autoplay=1';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = '';
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+
+        // Carousel scroll indicators
+        document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+            const carousel = wrapper.querySelector('.asset-carousel');
+            if (!carousel) return;
+
+            // Create scroll indicator
+            const indicator = document.createElement('div');
+            indicator.className = 'scroll-indicator';
+            indicator.style.cssText = `
+                position: absolute;
+                bottom: 0;
+                left: 90px;
+                height: 1px;
+                background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.7) 100%);
+                z-index: 7;
+                pointer-events: none;
+                transition: width 0.05s ease-out;
+            `;
+            wrapper.appendChild(indicator);
+
+            function updateIndicator() {
+                const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
+                const scrollLeft = carousel.scrollLeft;
+                const progress = scrollWidth > 0 ? scrollLeft / scrollWidth : 0;
+                const trackWidth = wrapper.offsetWidth - 190; // 90px left + 100px right fade
+                const indicatorWidth = Math.max(40, trackWidth * 0.15);
+                const maxTranslate = trackWidth - indicatorWidth;
+
+                indicator.style.width = indicatorWidth + 'px';
+                indicator.style.transform = `translateX(${progress * maxTranslate}px)`;
+            }
+
+            carousel.addEventListener('scroll', updateIndicator, { passive: true });
+            updateIndicator();
+        });
+    </script>
+
+</body>
+</html>

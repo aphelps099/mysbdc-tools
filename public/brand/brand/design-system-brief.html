@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Momentum — Design System Brief</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #1a2f42;
+            --bone: #f5f2eb;
+            --cream: #faf9f7;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--navy);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .page {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+            min-height: 11in;
+            padding: 0.75in;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        }
+        
+        /* Header */
+        .doc-header {
+            border-bottom: 2px solid var(--navy);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .doc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+            margin-bottom: 8px;
+        }
+        
+        .doc-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .doc-sub {
+            font-family: 'Instrument Serif', serif;
+            font-size: 18px;
+            font-style: italic;
+            color: rgba(26,47,66,0.6);
+            margin-top: 8px;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(26,47,66,0.3);
+            margin-bottom: 4px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+        
+        .section-intro {
+            font-size: 14px;
+            color: rgba(26,47,66,0.7);
+            margin-bottom: 20px;
+            max-width: 5.5in;
+        }
+        
+        /* Content blocks */
+        .principle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .principle {
+            background: var(--bone);
+            padding: 20px;
+        }
+        
+        .principle-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+            margin-bottom: 8px;
+        }
+        
+        .principle-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.4;
+        }
+        
+        .principle-note {
+            font-size: 12px;
+            color: rgba(26,47,66,0.6);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        
+        /* Color swatches */
+        .color-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .color-swatch {
+            flex: 1;
+        }
+        
+        .swatch-box {
+            height: 80px;
+            margin-bottom: 12px;
+        }
+        
+        .swatch-box.navy { background: var(--navy); }
+        .swatch-box.bone { background: var(--bone); border: 1px solid rgba(26,47,66,0.1); }
+        
+        .swatch-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .swatch-hex {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: rgba(26,47,66,0.5);
+            margin-top: 2px;
+        }
+        
+        .swatch-use {
+            font-size: 11px;
+            color: rgba(26,47,66,0.6);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        
+        /* Type specimens */
+        .type-specimen {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(26,47,66,0.1);
+        }
+        
+        .type-specimen:last-child {
+            border-bottom: none;
+        }
+        
+        .type-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+            margin-bottom: 12px;
+        }
+        
+        .type-sample-hero {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.95;
+            margin-bottom: 8px;
+        }
+        
+        .type-sample-serif {
+            font-family: 'Instrument Serif', serif;
+            font-size: 32px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        
+        .type-sample-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.5);
+        }
+        
+        .type-usage {
+            font-size: 12px;
+            color: rgba(26,47,66,0.6);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+        
+        /* Rules */
+        .rule-list {
+            list-style: none;
+        }
+        
+        .rule-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .rule-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .rule-icon.do {
+            background: var(--navy);
+            color: white;
+        }
+        
+        .rule-icon.dont {
+            background: rgba(26,47,66,0.1);
+            color: var(--navy);
+        }
+        
+        .rule-text {
+            color: var(--navy);
+            line-height: 1.5;
+        }
+        
+        /* Layout examples */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .layout-example {
+            aspect-ratio: 3.5 / 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .layout-example.split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .layout-example .left {
+            background: var(--bone);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .layout-example .right {
+            background: var(--navy);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .layout-example.centered {
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .layout-example.number {
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            padding: 8px;
+        }
+        
+        .layout-example .mini-text {
+            font-size: 6px;
+            line-height: 1.2;
+        }
+        
+        .layout-example .mini-text.white { color: white; }
+        .layout-example .mini-text.navy { color: var(--navy); }
+        .layout-example .mini-text.dim { opacity: 0.4; }
+        
+        .layout-example .mini-number {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+        }
+        
+        .layout-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: rgba(26,47,66,0.4);
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        /* Hierarchy diagram */
+        .hierarchy-stack {
+            background: var(--bone);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .hierarchy-item {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(26,47,66,0.1);
+        }
+        
+        .hierarchy-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .hierarchy-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(26,47,66,0.3);
+            width: 24px;
+        }
+        
+        .hierarchy-sample {
+            flex: 1;
+        }
+        
+        .hierarchy-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+            width: 80px;
+            flex-shrink: 0;
+        }
+        
+        /* Do/Don't comparison */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .compare-box {
+            padding: 20px;
+        }
+        
+        .compare-box.do {
+            background: var(--navy);
+        }
+        
+        .compare-box.dont {
+            background: rgba(26,47,66,0.05);
+            border: 1px dashed rgba(26,47,66,0.2);
+        }
+        
+        .compare-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .compare-box.do .compare-label { color: rgba(255,255,255,0.5); }
+        .compare-box.dont .compare-label { color: rgba(26,47,66,0.4); }
+        
+        .compare-sample {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .compare-box.do .compare-sample { color: white; }
+        .compare-box.dont .compare-sample { color: rgba(26,47,66,0.5); }
+        
+        /* Callout */
+        .callout {
+            background: var(--navy);
+            color: white;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .callout-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 8px;
+        }
+        
+        .callout-text {
+            font-family: 'Instrument Serif', serif;
+            font-size: 20px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        /* Message stack */
+        .message-row {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 16px;
+            align-items: baseline;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(26,47,66,0.1);
+        }
+        
+        .message-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(26,47,66,0.4);
+        }
+        
+        .message-text {
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .message-note {
+            font-size: 11px;
+            color: rgba(26,47,66,0.5);
+        }
+        
+        /* Page break helper */
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: OVERVIEW -->
+    <div class="page">
+        <div class="doc-header">
+            <div class="doc-label">NorCal SBDC — Design System Brief</div>
+            <div class="doc-title">Add Momentum.</div>
+            <div class="doc-sub">A guide to executing the campaign visual language.</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">01</div>
+            <div class="section-title">The Philosophy</div>
+            <div class="section-intro">This isn't decoration. Every design choice serves the message. Before you open Illustrator, understand these four principles.</div>
+            
+            <div class="principle-grid">
+                <div class="principle">
+                    <div class="principle-label">Paula Scher / Pentagram</div>
+                    <div class="principle-text">Type is image.</div>
+                    <div class="principle-note">Typography isn't just readable—it's the visual. Scale it massive. Let it dominate. The words ARE the design.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">StoryBrand</div>
+                    <div class="principle-text">Client is the hero.</div>
+                    <div class="principle-note">We are the guide, not the star. The client does the verb: "Add momentum." They act. We help.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">Marty Neumeier / ZAG</div>
+                    <div class="principle-text">When they zig, zag.</div>
+                    <div class="principle-note">"$0 Advice" is unexpected. Free services don't lead with free—we do. That's the zag.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">Collins / Minimalism</div>
+                    <div class="principle-text">Two colors. Maximum contrast.</div>
+                    <div class="principle-note">Navy and Bone. That's it. No gradients. No extra colors. Constraint creates power.</div>
+                </div>
+            </div>
+            
+            <div class="callout">
+                <div class="callout-label">Remember</div>
+                <div class="callout-text">If it doesn't serve the message, delete it. This style is about what you leave out, not what you add.</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">02</div>
+            <div class="section-title">The Message Stack</div>
+            <div class="section-intro">Every piece should use some combination of these messages. They work together as a system.</div>
+            
+            <div class="message-row">
+                <div class="message-role">Hook</div>
+                <div class="message-text" style="font-size: 24px;">$0 Advice.</div>
+                <div class="message-note">Stops the scroll. Unexpected.</div>
+            </div>
+            
+            <div class="message-row">
+                <div class="message-role">Proof</div>
+                <div class="message-text" style="font-size: 20px;">$547M in client capital.</div>
+                <div class="message-note">Hard number. Credibility.</div>
+            </div>
+            
+            <div class="message-row">
+                <div class="message-role">Philosophy</div>
+                <div class="message-text" style="font-size: 18px; font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400;">Ambition needs momentum.</div>
+                <div class="message-note">The why. Use serif italic.</div>
+            </div>
+            
+            <div class="message-row">
+                <div class="message-role">Action</div>
+                <div class="message-text" style="font-size: 18px;">Add momentum. →</div>
+                <div class="message-note">CTA. Verb-first. Client does this.</div>
+            </div>
+            
+            <div class="message-row">
+                <div class="message-role">Emotional</div>
+                <div class="message-text" style="font-size: 16px; font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400;">The momentum you've been missing.</div>
+                <div class="message-note">Deeper connection. Use sparingly.</div>
+            </div>
+            
+            <div class="message-row" style="border-bottom: none;">
+                <div class="message-role">Tagline</div>
+                <div class="message-text" style="font-size: 14px;">Your Business People</div>
+                <div class="message-note">Brand signature. Always last.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: COLOR & TYPE -->
+    <div class="page">
+        <div class="section">
+            <div class="section-num">03</div>
+            <div class="section-title">Color System</div>
+            <div class="section-intro">Two colors. No exceptions. This constraint is what makes the work feel unified and confident.</div>
+            
+            <div class="color-row">
+                <div class="color-swatch">
+                    <div class="swatch-box navy"></div>
+                    <div class="swatch-name">Navy</div>
+                    <div class="swatch-hex">#1a2f42</div>
+                    <div class="swatch-use">Primary. Headlines, backgrounds, text on light. This is the brand color—use it confidently.</div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="swatch-box bone"></div>
+                    <div class="swatch-name">Bone</div>
+                    <div class="swatch-hex">#f5f2eb</div>
+                    <div class="swatch-use">Secondary. Backgrounds, contrast panels. Warmer than white—feels more premium and approachable.</div>
+                </div>
+            </div>
+            
+            <ul class="rule-list">
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Use opacity for hierarchy.</strong> Navy at 100%, 50%, 25% creates levels without adding colors.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>High contrast only.</strong> Navy on Bone, White on Navy. Never Navy on Navy or Bone on Bone.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon dont">✗</span>
+                    <span class="rule-text"><strong>Never add accent colors.</strong> No red, no blue, no "just a little green." Two colors.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon dont">✗</span>
+                    <span class="rule-text"><strong>Never use pure black or pure white.</strong> Navy is our dark. Bone is our light.</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">04</div>
+            <div class="section-title">Typography</div>
+            <div class="section-intro">Three typefaces with clear roles. Never mix their jobs.</div>
+            
+            <div class="type-specimen">
+                <div class="type-name">DM Sans — Headlines & Numbers</div>
+                <div class="type-sample-hero">$547M in results.</div>
+                <div class="type-usage"><strong>Weight:</strong> 900 (Black) only for headlines. <strong>Use for:</strong> All headlines, statistics, CTAs, anything that needs to hit hard. <strong>Tracking:</strong> -0.03em to -0.04em (tighten it up).</div>
+            </div>
+            
+            <div class="type-specimen">
+                <div class="type-name">Instrument Serif — Philosophy & Quotes</div>
+                <div class="type-sample-serif">Ambition needs momentum.</div>
+                <div class="type-usage"><strong>Weight:</strong> Regular Italic only. <strong>Use for:</strong> Philosophical statements, client quotes, subheads that need warmth. <strong>Never:</strong> Use for headlines or CTAs.</div>
+            </div>
+            
+            <div class="type-specimen">
+                <div class="type-name">JetBrains Mono — Labels & Meta</div>
+                <div class="type-sample-mono">Your Business People — norcalsbdc.org</div>
+                <div class="type-usage"><strong>Weight:</strong> 600-700. <strong>Use for:</strong> Section labels, categories, URLs, small technical text. <strong>Always:</strong> Uppercase, letterspaced (+0.1em to +0.15em).</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">05</div>
+            <div class="section-title">Type Hierarchy</div>
+            <div class="section-intro">Scale creates hierarchy. The jump between levels should feel dramatic, not incremental.</div>
+            
+            <div class="hierarchy-stack">
+                <div class="hierarchy-item">
+                    <div class="hierarchy-num">01</div>
+                    <div class="hierarchy-sample" style="font-family: 'DM Sans', sans-serif; font-size: 48px; font-weight: 900; letter-spacing: -0.03em; line-height: 0.95; color: var(--navy);">$0 Advice.</div>
+                    <div class="hierarchy-role">Hero</div>
+                </div>
+                <div class="hierarchy-item">
+                    <div class="hierarchy-num">02</div>
+                    <div class="hierarchy-sample" style="font-family: 'Instrument Serif', serif; font-size: 28px; font-style: italic; color: var(--navy);">Ambition needs momentum.</div>
+                    <div class="hierarchy-role">Subhead</div>
+                </div>
+                <div class="hierarchy-item">
+                    <div class="hierarchy-num">03</div>
+                    <div class="hierarchy-sample" style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--navy);">Add momentum. →</div>
+                    <div class="hierarchy-role">CTA</div>
+                </div>
+                <div class="hierarchy-item">
+                    <div class="hierarchy-num">04</div>
+                    <div class="hierarchy-sample" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,47,66,0.5);">Your Business People — norcalsbdc.org</div>
+                    <div class="hierarchy-role">Meta</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: LAYOUTS -->
+    <div class="page">
+        <div class="section">
+            <div class="section-num">06</div>
+            <div class="section-title">Layout Patterns</div>
+            <div class="section-intro">These are your building blocks. Every piece should use one of these structures.</div>
+            
+            <div class="layout-grid">
+                <div>
+                    <div class="layout-example split">
+                        <div class="left">
+                            <div class="mini-text navy" style="font-weight: 900; font-size: 12px;">$0</div>
+                        </div>
+                        <div class="right">
+                            <div class="mini-text white" style="font-weight: 900; font-size: 12px;">$547M</div>
+                        </div>
+                    </div>
+                    <div class="layout-label">Split</div>
+                </div>
+                
+                <div>
+                    <div class="layout-example centered">
+                        <div class="mini-text white" style="font-weight: 900; font-size: 10px; text-align: center;">Add Momentum.</div>
+                    </div>
+                    <div class="layout-label">Centered</div>
+                </div>
+                
+                <div>
+                    <div class="layout-example number">
+                        <div class="mini-number" style="flex-shrink: 0;">$0</div>
+                        <div style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 8px; margin-left: 8px;">
+                            <div class="mini-text white dim" style="font-size: 5px;">WHAT WE CHARGE</div>
+                            <div class="mini-text white" style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 6px;">Free business advising.</div>
+                        </div>
+                    </div>
+                    <div class="layout-label">Number + Context</div>
+                </div>
+            </div>
+            
+            <ul class="rule-list">
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Split = Contrast.</strong> Use for before/after, cost/value, problem/solution. Always Bone left, Navy right (or reverse).</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Centered = Statement.</strong> Use for single powerful messages. Needs big scale to work.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Number + Context = Proof.</strong> Use when you have a stat that needs explanation. Number should be 3-4x larger than context.</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">07</div>
+            <div class="section-title">Spacing & Tension</div>
+            <div class="section-intro">Whitespace is not empty—it's active. Use it to create tension and focus.</div>
+            
+            <ul class="rule-list">
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Let type breathe.</strong> Headlines need room. Don't crowd them with other elements.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Push to edges.</strong> Type can start at the margin or even bleed slightly. This creates energy.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text"><strong>Anchor corners.</strong> Content should pull toward opposite corners—creates diagonal tension.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon dont">✗</span>
+                    <span class="rule-text"><strong>Never center everything.</strong> If the headline is centered, the CTA should be left or right. Create asymmetry.</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon dont">✗</span>
+                    <span class="rule-text"><strong>Never fill the space.</strong> If you feel like something is missing, it's probably right. Resist the urge to add.</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">08</div>
+            <div class="section-title">The Dim Technique</div>
+            <div class="section-intro">One of our signature moves: dim the setup, punch the payoff.</div>
+            
+            <div class="compare-grid">
+                <div class="compare-box do">
+                    <div class="compare-label">Do This</div>
+                    <div class="compare-sample">
+                        <span style="opacity: 0.4;">$0 advice.</span><br>
+                        <strong>$547M in results.</strong>
+                    </div>
+                </div>
+                
+                <div class="compare-box dont">
+                    <div class="compare-label">Not This</div>
+                    <div class="compare-sample">
+                        <strong>$0 advice.</strong><br>
+                        <strong>$547M in results.</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-intro" style="margin-top: 16px;">The first line sets up. The second line delivers. By dimming the setup (opacity: 25-40%), the payoff hits harder. Use this for:</div>
+            
+            <ul class="rule-list">
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text">Stacked headlines where the second line is the point</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text">Before/after journeys where "after" is the hero</span>
+                </li>
+                <li class="rule-item">
+                    <span class="rule-icon do">✓</span>
+                    <span class="rule-text">Labels and categories that shouldn't compete with content</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PAGE 4: DO'S AND DON'TS -->
+    <div class="page">
+        <div class="section">
+            <div class="section-num">09</div>
+            <div class="section-title">Critical Do's and Don'ts</div>
+            <div class="section-intro">These rules are non-negotiable. If you're unsure, refer back to this list.</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                <div>
+                    <div style="font-weight: 700; color: var(--navy); margin-bottom: 16px; font-size: 14px;">✓ Do</div>
+                    <ul class="rule-list">
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Make the headline the biggest thing by far</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Use serif italic for warmth, sans bold for impact</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Leave uncomfortable amounts of whitespace</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Put the URL and tagline in mono, small, dimmed</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Use the arrow (→) after CTAs</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Tighten headline tracking (-0.03em)</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon do">✓</span>
+                            <span class="rule-text">Let type touch or bleed off edges</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <div style="font-weight: 700; color: rgba(26,47,66,0.5); margin-bottom: 16px; font-size: 14px;">✗ Don't</div>
+                    <ul class="rule-list">
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Add photography or illustrations</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Use more than two colors</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Make everything the same size</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Use drop shadows or gradients</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Add decorative elements or icons</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Use more than 3-4 text elements per piece</span>
+                        </li>
+                        <li class="rule-item">
+                            <span class="rule-icon dont">✗</span>
+                            <span class="rule-text">Center-align body copy</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">10</div>
+            <div class="section-title">Applying to Other Formats</div>
+            <div class="section-intro">The system scales. Here's how to think about different applications.</div>
+            
+            <div class="principle-grid">
+                <div class="principle">
+                    <div class="principle-label">Social Posts</div>
+                    <div class="principle-text">One message per post.</div>
+                    <div class="principle-note">Don't try to fit the whole stack. Pick Hook OR Proof OR Philosophy. Let each post do one job well.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">Flyers / One-Pagers</div>
+                    <div class="principle-text">Split the page.</div>
+                    <div class="principle-note">Use the split layout vertically. Top half = hook. Bottom half = proof + CTA. Or left/right for horizontal formats.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">Event Banners</div>
+                    <div class="principle-text">Scale up the type.</div>
+                    <div class="principle-note">Whatever size feels too big—go bigger. From 20 feet away, only the headline matters. Everything else is texture.</div>
+                </div>
+                
+                <div class="principle">
+                    <div class="principle-label">Email Headers</div>
+                    <div class="principle-text">Navy background, white type.</div>
+                    <div class="principle-note">Keep it simple. One line. "Add momentum." or "$0 Advice. Real results." That's it.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="callout">
+            <div class="callout-label">When In Doubt</div>
+            <div class="callout-text">Ask yourself: "Would Paula Scher think this is bold enough?" If no, make it bigger. If still no, take something away. The power is in the contrast—big vs. small, dark vs. light, bold vs. dim. Not in adding more.</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-num">11</div>
+            <div class="section-title">Questions?</div>
+            <div class="section-intro">
+                This system is intentionally constrained. The constraints are the point—they create consistency and impact. If something doesn't fit these rules, ask whether you're solving the right problem, or whether the system needs to flex.<br><br>
+                
+                <strong>Reference materials:</strong><br>
+                • Paula Scher / Pentagram work<br>
+                • Collins agency case studies<br>
+                • "ZAG" by Marty Neumeier<br>
+                • "Building a StoryBrand" by Donald Miller
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

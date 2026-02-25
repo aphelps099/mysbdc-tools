@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — District Impact Report Mockups</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f5;
+            padding: 60px 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .mockup-header {
+            text-align: center;
+            padding: 40px 0 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .mockup-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 12px;
+        }
+        
+        .mockup-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        
+        .mockup-subtitle {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .mockup-row {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
+        
+        .mockup-item {
+            text-align: center;
+        }
+        
+        .mockup-item-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+        
+        .report {
+            width: 612px;
+            height: 792px;
+            background: white;
+            position: relative;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        /* =============================================
+           SHARED STYLES
+        ============================================= */
+        .zag {
+            background: var(--cream);
+        }
+        
+        .zag .logo {
+            width: 100px;
+        }
+        
+        .zag .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .zag .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .zag .footer-logo {
+            width: 70px;
+        }
+        
+        .zag .footer-tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .zag .footer-url {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--royal);
+            font-weight: 600;
+        }
+
+        /* =============================================
+           V1: ORIGINAL
+        ============================================= */
+        .v1 .bg-number {
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 420px;
+            font-weight: 700;
+            color: var(--navy);
+            opacity: 0.035;
+            line-height: 1;
+            z-index: 1;
+        }
+        
+        .v1 .top {
+            position: relative;
+            z-index: 2;
+            padding: 32px 40px 24px;
+        }
+        
+        .v1 .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .v1 .meta-right {
+            text-align: right;
+        }
+        
+        .v1 .district-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--royal);
+            text-transform: uppercase;
+        }
+        
+        .v1 .district-num {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1;
+        }
+        
+        .v1 .district-num span {
+            font-size: 16px;
+            color: var(--maroon);
+            vertical-align: super;
+        }
+        
+        .v1 .headline {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--navy);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .v1 .subhead {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 32px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.1;
+        }
+        
+        .v1 .hero-stat {
+            background: var(--navy);
+            margin: 0 40px;
+            padding: 28px 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .v1 .hero-stat .number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 72px;
+            font-style: italic;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .v1 .hero-stat .label {
+            font-size: 12px;
+            color: var(--pool);
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+        
+        .v1 .hero-stat .context {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+        
+        .v1 .data-section {
+            padding: 24px 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .v1 .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .v1 .data-col {
+            padding: 16px 0;
+        }
+        
+        .v1 .data-col.left {
+            padding-right: 20px;
+            border-right: 1px solid rgba(15,28,46,0.1);
+        }
+        
+        .v1 .data-col.right {
+            padding-left: 20px;
+        }
+        
+        .v1 .col-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--maroon);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .v1 .stat-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+        
+        .v1 .stat-number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 24px;
+            font-style: italic;
+            color: var(--navy);
+            min-width: 100px;
+            letter-spacing: -0.02em;
+        }
+        
+        .v1 .stat-label {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .v1 .data-col.right .stat-number {
+            font-size: 18px;
+            color: var(--royal);
+            min-width: 80px;
+        }
+        
+        .v1 .data-col.right .stat-label {
+            font-size: 9px;
+        }
+        
+        .v1 .roi-strip {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            display: flex;
+            z-index: 2;
+        }
+        
+        .v1 .roi-box {
+            flex: 1;
+            padding: 24px 32px;
+        }
+        
+        .v1 .roi-box.left {
+            background: var(--maroon);
+            color: white;
+        }
+        
+        .v1 .roi-box.right {
+            background: var(--navy);
+            color: white;
+        }
+        
+        .v1 .roi-box .number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 36px;
+            font-style: italic;
+            line-height: 1;
+        }
+        
+        .v1 .roi-box .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+        
+        .v1 .roi-box .desc {
+            font-size: 10px;
+            opacity: 0.8;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        /* =============================================
+           V2: CENTERED COMPOSITION
+        ============================================= */
+        .v2 .bg-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            font-family: 'Libre Baskerville', serif;
+            font-size: 500px;
+            font-weight: 700;
+            color: var(--navy);
+            opacity: 0.03;
+            line-height: 1;
+            z-index: 1;
+        }
+        
+        .v2 .top {
+            position: relative;
+            z-index: 2;
+            padding: 32px 40px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .v2 .meta-right {
+            text-align: right;
+        }
+        
+        .v2 .district-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--royal);
+            text-transform: uppercase;
+        }
+        
+        .v2 .district-num {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1;
+        }
+        
+        .v2 .district-num span {
+            font-size: 14px;
+            color: var(--maroon);
+            vertical-align: super;
+        }
+        
+        .v2 .headline-section {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 40px 24px;
+        }
+        
+        .v2 .headline {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--royal);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .v2 .subhead {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 36px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.1;
+        }
+        
+        .v2 .hero-row {
+            display: flex;
+            margin: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .v2 .hero-stat {
+            flex: 1;
+            padding: 20px 24px;
+            text-align: center;
+        }
+        
+        .v2 .hero-stat.primary {
+            background: var(--navy);
+        }
+        
+        .v2 .hero-stat.secondary {
+            background: var(--royal);
+        }
+        
+        .v2 .hero-stat .number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 42px;
+            font-style: italic;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .v2 .hero-stat .label {
+            font-size: 10px;
+            color: var(--pool);
+            margin-top: 6px;
+        }
+        
+        .v2 .data-section {
+            padding: 24px 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .v2 .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .v2 .data-col {
+            padding: 12px 0;
+        }
+        
+        .v2 .data-col.left {
+            padding-right: 20px;
+            border-right: 1px solid rgba(15,28,46,0.1);
+        }
+        
+        .v2 .data-col.right {
+            padding-left: 20px;
+        }
+        
+        .v2 .col-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--maroon);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .v2 .stat-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+        
+        .v2 .stat-number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 20px;
+            font-style: italic;
+            color: var(--navy);
+            min-width: 90px;
+            letter-spacing: -0.02em;
+        }
+        
+        .v2 .stat-label {
+            font-size: 9px;
+            color: #666;
+        }
+        
+        .v2 .data-col.right .stat-number {
+            font-size: 16px;
+            color: var(--royal);
+            min-width: 75px;
+        }
+        
+        .v2 .roi-strip {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            display: flex;
+            z-index: 2;
+        }
+        
+        .v2 .roi-box {
+            flex: 1;
+            padding: 20px 28px;
+        }
+        
+        .v2 .roi-box.left {
+            background: var(--maroon);
+            color: white;
+        }
+        
+        .v2 .roi-box.right {
+            background: var(--navy);
+            color: white;
+        }
+        
+        .v2 .roi-box .number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 32px;
+            font-style: italic;
+            line-height: 1;
+        }
+        
+        .v2 .roi-box .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+        
+        .v2 .roi-box .desc {
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* Notes section */
+        .notes-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        
+        .notes-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 20px;
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+        
+        .notes-col h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+        
+        .notes-col ul {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.8;
+            padding-left: 16px;
+        }
+        
+        .notes-col li {
+            margin-bottom: 4px;
+        }
+        
+        .data-table {
+            margin-top: 24px;
+            border-top: 1px solid #eee;
+            padding-top: 24px;
+        }
+        
+        .data-table h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+        
+        .data-table table {
+            width: 100%;
+            font-size: 11px;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            text-align: left;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            padding: 8px 12px;
+            border-bottom: 2px solid var(--pool);
+        }
+        
+        .data-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+        }
+        
+        .data-table td:first-child {
+            font-weight: 600;
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mockup-header">
+        <div class="mockup-label">NorCal SBDC · District Impact Report</div>
+        <div class="mockup-title">Type as Texture</div>
+        <div class="mockup-subtitle">Two directions for the annual district impact report.<br>Data: FFY 2022–2025 (NorCal SBDC Network)</div>
+    </div>
+
+    <div class="mockup-row">
+        <!-- V1 -->
+        <div class="mockup-item">
+            <div class="mockup-item-label">V1 — Corner Anchor</div>
+            <div class="report zag v1">
+                <div class="bg-number">16</div>
+                
+                <div class="top">
+                    <div class="meta-row">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="meta-right">
+                            <div class="district-label">Senate District</div>
+                            <div class="district-num">16<span>th</span></div>
+                        </div>
+                    </div>
+                    <div class="headline">Impact Report · FFY 2022–2025</div>
+                    <div class="subhead">Real results for<br>your district.</div>
+                </div>
+                
+                <div class="hero-stat">
+                    <div class="number">$22.40M</div>
+                    <div class="label">Capital accessed by businesses in your district</div>
+                    <div class="context">Loans & Equity Obtained</div>
+                </div>
+                
+                <div class="data-section">
+                    <div class="data-grid">
+                        <div class="data-col left">
+                            <div class="col-label">District Results</div>
+                            <div class="stat-row">
+                                <div class="stat-number">1,105</div>
+                                <div class="stat-label">Businesses Assisted</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">86</div>
+                                <div class="stat-label">New Businesses Started</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">4,019</div>
+                                <div class="stat-label">Local Jobs Supported</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$18.34M</div>
+                                <div class="stat-label">New Taxable Revenue</div>
+                            </div>
+                        </div>
+                        <div class="data-col right">
+                            <div class="col-label">NorCal Network</div>
+                            <div class="stat-row">
+                                <div class="stat-number">9,340</div>
+                                <div class="stat-label">Clients Counseled</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$236.8M</div>
+                                <div class="stat-label">Capital Infusion</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">959</div>
+                                <div class="stat-label">New Businesses</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">34,048</div>
+                                <div class="stat-label">Jobs Supported</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$121.1M</div>
+                                <div class="stat-label">Gov't Contracts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="roi-strip">
+                    <div class="roi-box left">
+                        <div class="number">$291</div>
+                        <div class="label">Return per $1</div>
+                        <div class="desc">Every state dollar invested returns $291 in capital</div>
+                    </div>
+                    <div class="roi-box right">
+                        <div class="number">2.4×</div>
+                        <div class="label">Growth Rate</div>
+                        <div class="desc">24% annual growth—double the national average</div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <div class="footer-left">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+                        <div class="footer-tagline">Your Business People.</div>
+                    </div>
+                    <div class="footer-url">norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- V2 -->
+        <div class="mockup-item">
+            <div class="mockup-item-label">V2 — Centered Composition</div>
+            <div class="report zag v2">
+                <div class="bg-number">16</div>
+                
+                <div class="top">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="meta-right">
+                        <div class="district-label">Senate District</div>
+                        <div class="district-num">16<span>th</span></div>
+                    </div>
+                </div>
+                
+                <div class="headline-section">
+                    <div class="headline">Impact Report · FFY 2022–2025</div>
+                    <div class="subhead">Real results for<br>your district.</div>
+                </div>
+                
+                <div class="hero-row">
+                    <div class="hero-stat primary">
+                        <div class="number">$22.4M</div>
+                        <div class="label">Capital Accessed</div>
+                    </div>
+                    <div class="hero-stat secondary">
+                        <div class="number">4,019</div>
+                        <div class="label">Jobs Supported</div>
+                    </div>
+                </div>
+                
+                <div class="data-section">
+                    <div class="data-grid">
+                        <div class="data-col left">
+                            <div class="col-label">District Results</div>
+                            <div class="stat-row">
+                                <div class="stat-number">1,105</div>
+                                <div class="stat-label">Businesses Assisted</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">86</div>
+                                <div class="stat-label">New Businesses Started</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$18.34M</div>
+                                <div class="stat-label">New Taxable Revenue</div>
+                            </div>
+                        </div>
+                        <div class="data-col right">
+                            <div class="col-label">NorCal Network</div>
+                            <div class="stat-row">
+                                <div class="stat-number">9,340</div>
+                                <div class="stat-label">Clients Counseled</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$236.8M</div>
+                                <div class="stat-label">Capital Infusion</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">959</div>
+                                <div class="stat-label">New Businesses</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">34,048</div>
+                                <div class="stat-label">Jobs Supported</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-number">$121.1M</div>
+                                <div class="stat-label">Gov't Contracts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="roi-strip">
+                    <div class="roi-box left">
+                        <div class="number">$291</div>
+                        <div class="label">Return per $1</div>
+                        <div class="desc">Every state dollar invested returns $291 in capital</div>
+                    </div>
+                    <div class="roi-box right">
+                        <div class="number">2.4×</div>
+                        <div class="label">Growth Rate</div>
+                        <div class="desc">24% annual growth—double the national average</div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <div class="footer-left">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+                        <div class="footer-tagline">Your Business People.</div>
+                    </div>
+                    <div class="footer-url">norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes-section">
+        <div class="notes-title">Design Notes</div>
+        <div class="notes-grid">
+            <div class="notes-col">
+                <h4>V1 — Corner Anchor</h4>
+                <ul>
+                    <li>District number anchored top-right at 420px</li>
+                    <li>Single hero stat block ($22.4M capital)</li>
+                    <li>Asymmetric, editorial feel</li>
+                    <li>Strong diagonal energy from number placement</li>
+                    <li>More breathing room in data section</li>
+                </ul>
+            </div>
+            <div class="notes-col">
+                <h4>V2 — Centered Composition</h4>
+                <ul>
+                    <li>District number centered at 500px</li>
+                    <li>Two hero stats side-by-side (navy + royal)</li>
+                    <li>Symmetric, balanced layout</li>
+                    <li>Number creates central focal point</li>
+                    <li>Slightly more compact data presentation</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="data-table">
+            <h4>NorCal SBDC Network Metrics (FFY 2022–2025)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Clients Counseled</td>
+                        <td>9,340</td>
+                        <td>Total clients receiving advising</td>
+                    </tr>
+                    <tr>
+                        <td>Capital Infusion</td>
+                        <td>$236,850,325</td>
+                        <td>Loans + Equity + Grants</td>
+                    </tr>
+                    <tr>
+                        <td>New Businesses Started</td>
+                        <td>959</td>
+                        <td>Business start impact</td>
+                    </tr>
+                    <tr>
+                        <td>Jobs Supported</td>
+                        <td>34,048</td>
+                        <td>Created + Retained</td>
+                    </tr>
+                    <tr>
+                        <td>Government Contracts</td>
+                        <td>$121,135,309</td>
+                        <td>312 contracts awarded</td>
+                    </tr>
+                    <tr>
+                        <td>Revenue Change</td>
+                        <td>$290,425,144</td>
+                        <td>YoY client revenue growth</td>
+                    </tr>
+                    <tr>
+                        <td>Training Attendees</td>
+                        <td>28,806</td>
+                        <td>Across 1,377 events</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

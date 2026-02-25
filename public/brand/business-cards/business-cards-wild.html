@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Business Cards (WILD)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+        
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 24px;
+        }
+        
+        .card-pair {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .card-container {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 12px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 200px;
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =============================================
+           W1: NAME IS THE CARD
+           Name fills entire space as texture
+        ============================================= */
+        .w1-front {
+            background: var(--maroon);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .w1-front .bg-name {
+            position: absolute;
+            font-size: 120px;
+            font-weight: 900;
+            color: white;
+            opacity: 0.1;
+            letter-spacing: -0.05em;
+            white-space: nowrap;
+            transform: rotate(-12deg);
+        }
+        
+        .w1-front .bg-name.n2 {
+            top: -20px;
+            left: -50px;
+        }
+        
+        .w1-front .bg-name.n3 {
+            bottom: -30px;
+            right: -100px;
+            font-size: 100px;
+            opacity: 0.05;
+        }
+        
+        .w1-front .main-name {
+            position: relative;
+            z-index: 2;
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            text-align: center;
+            line-height: 0.9;
+        }
+        
+        .w1-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .w1-back .stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--maroon);
+        }
+        
+        .w1-back .logo {
+            width: 70px;
+            margin-top: 12px;
+        }
+        
+        .w1-back .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .w1-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .w1-back .tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--maroon);
+            text-align: right;
+        }
+
+        /* =============================================
+           W2: SPLIT PERSONALITY
+           Name split across diagonal
+        ============================================= */
+        .w2-front {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w2-front .top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: var(--navy);
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 24px;
+        }
+        
+        .w2-front .top .name {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+        }
+        
+        .w2-front .bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: var(--pool);
+            clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+        
+        .w2-front .bottom .name {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+        }
+        
+        .w2-back {
+            background: linear-gradient(160deg, var(--navy) 50%, var(--pool) 50%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w2-back .logo {
+            width: 60px;
+        }
+        
+        .w2-back .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .w2-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .w2-back .tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: right;
+        }
+
+        /* =============================================
+           W3: FULL GRADIENT CHAOS
+           Every color, everywhere
+        ============================================= */
+        .w3-front {
+            background: linear-gradient(135deg, 
+                var(--navy) 0%, 
+                var(--maroon) 25%,
+                var(--royal) 50%,
+                var(--pool) 75%,
+                var(--cream) 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .w3-front .name {
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            line-height: 1.1;
+        }
+        
+        .w3-front .tagline {
+            position: absolute;
+            bottom: 16px;
+            left: 20px;
+            font-size: 10px;
+            font-style: italic;
+            color: white;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+        }
+        
+        .w3-back {
+            background: linear-gradient(315deg, 
+                var(--cream) 0%, 
+                var(--pool) 25%,
+                var(--royal) 50%,
+                var(--maroon) 75%,
+                var(--navy) 100%
+            );
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w3-back .logo {
+            width: 70px;
+        }
+        
+        .w3-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W4: STACKED CHAOS
+           Name repeated, rotated, layered
+        ============================================= */
+        .w4-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w4-front .layer {
+            position: absolute;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+        }
+        
+        .w4-front .layer.l1 { top: 10px; left: 10px; color: var(--pool); opacity: 0.2; transform: rotate(-5deg); }
+        .w4-front .layer.l2 { top: 30px; left: 20px; color: var(--royal); opacity: 0.3; transform: rotate(-3deg); }
+        .w4-front .layer.l3 { top: 50px; left: 15px; color: var(--sky); opacity: 0.4; transform: rotate(-1deg); }
+        .w4-front .layer.l4 { top: 70px; left: 10px; color: var(--pool); opacity: 0.6; transform: rotate(1deg); }
+        .w4-front .layer.l5 { top: 90px; left: 20px; color: white; opacity: 1; transform: rotate(0deg); font-size: 32px; }
+        
+        .w4-front .tagline {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .w4-back {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w4-back .logo {
+            width: 70px;
+        }
+        
+        .w4-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W5: THE VOID
+           Almost nothing. Unsettling emptiness.
+        ============================================= */
+        .w5-front {
+            background: var(--navy);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+        
+        .w5-front .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--pool);
+            border-radius: 50%;
+        }
+        
+        .w5-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .w5-back .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.1em;
+        }
+        
+        .w5-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: white;
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+
+        /* =============================================
+           W6: INVERTED EXPECTATIONS
+           White logo on maroon, reversed hierarchy
+        ============================================= */
+        .w6-front {
+            background: var(--maroon);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w6-front .url {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .w6-front .tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .w6-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w6-back .name {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--navy);
+            letter-spacing: 0.05em;
+        }
+        
+        .w6-back .logo {
+            width: 100px;
+        }
+
+        /* =============================================
+           W7: MONO BRUTALIST
+           All caps, all mono, all aggressive
+        ============================================= */
+        .w7-front {
+            background: white;
+            border: 4px solid var(--navy);
+            padding: 16px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w7-front .header {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--navy);
+            border-bottom: 1px solid var(--navy);
+            padding-bottom: 8px;
+        }
+        
+        .w7-front .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+        
+        .w7-front .role {
+            font-size: 10px;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+        }
+        
+        .w7-back {
+            background: var(--navy);
+            border: 4px solid white;
+            padding: 16px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w7-back .data {
+            font-size: 9px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .w7-back .data .label {
+            font-size: 7px;
+            letter-spacing: 0.1em;
+            opacity: 0.5;
+            text-transform: uppercase;
+        }
+        
+        .w7-back .tagline {
+            font-size: 10px;
+            color: var(--pool);
+            font-style: italic;
+            font-family: 'Proxima Nova', sans-serif;
+        }
+
+        /* =============================================
+           W8: COLOR FIELD
+           Rothko-inspired blocks
+        ============================================= */
+        .w8-front {
+            background: var(--cream);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .w8-front .block {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+        
+        .w8-front .block.navy { background: var(--navy); }
+        .w8-front .block.royal { background: var(--royal); }
+        .w8-front .block.pool { background: var(--pool); }
+        
+        .w8-front .block .text {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+        
+        .w8-front .block.pool .text { color: var(--navy); }
+        
+        .w8-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w8-back .logo {
+            width: 70px;
+        }
+        
+        .w8-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .w8-back .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+            margin-top: 12px;
+        }
+
+        /* =============================================
+           W9: GLITCH
+           Offset layers, broken
+        ============================================= */
+        .w9-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w9-front .glitch {
+            position: absolute;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            white-space: nowrap;
+        }
+        
+        .w9-front .glitch.cyan { 
+            top: 50%; 
+            left: 20px; 
+            transform: translateY(-50%);
+            color: var(--pool); 
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+        
+        .w9-front .glitch.white { 
+            top: 50%; 
+            left: 24px; 
+            transform: translateY(-50%);
+            color: white;
+            clip-path: polygon(0 33%, 100% 33%, 100% 66%, 0 66%);
+        }
+        
+        .w9-front .glitch.red { 
+            top: 50%; 
+            left: 16px; 
+            transform: translateY(-50%);
+            color: var(--maroon);
+            clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+        }
+        
+        .w9-front .tagline {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .w9-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w9-back .logo {
+            width: 70px;
+        }
+        
+        .w9-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W10: CIRCLE CROP
+           Name inside circle cutout
+        ============================================= */
+        .w10-front {
+            background: linear-gradient(135deg, var(--navy), var(--royal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .w10-front .circle {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .w10-front .circle .name {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        
+        .w10-front .circle .tagline {
+            font-size: 8px;
+            font-style: italic;
+            color: var(--royal);
+            margin-top: 6px;
+        }
+        
+        .w10-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w10-back .logo {
+            width: 70px;
+        }
+        
+        .w10-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W11: EXTREME VERTICAL
+           Everything rotated 90°
+        ============================================= */
+        .w11-front {
+            background: var(--pool);
+            position: relative;
+        }
+        
+        .w11-front .vert-name {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+        }
+        
+        .w11-front .tagline {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-size: 9px;
+            font-style: italic;
+            color: var(--navy);
+            writing-mode: vertical-rl;
+        }
+        
+        .w11-back {
+            background: var(--navy);
+            position: relative;
+        }
+        
+        .w11-back .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+        }
+        
+        .w11-back .contact {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+            white-space: nowrap;
+        }
+
+        /* =============================================
+           W12: DATA CARD
+           Looks like a data readout
+        ============================================= */
+        .w12-front {
+            background: #000;
+            padding: 16px;
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w12-front .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(143,197,217,0.03) 2px,
+                rgba(143,197,217,0.03) 4px
+            );
+            pointer-events: none;
+        }
+        
+        .w12-front .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        
+        .w12-front .label {
+            font-size: 8px;
+            color: var(--pool);
+            opacity: 0.6;
+        }
+        
+        .w12-front .value {
+            font-size: 8px;
+            color: var(--pool);
+        }
+        
+        .w12-front .name-block {
+            margin-top: 16px;
+        }
+        
+        .w12-front .name-block .label {
+            margin-bottom: 4px;
+        }
+        
+        .w12-front .name-block .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .w12-front .tagline {
+            position: absolute;
+            bottom: 12px;
+            font-size: 9px;
+            color: var(--pool);
+            font-style: italic;
+            font-family: 'Proxima Nova', sans-serif;
+        }
+        
+        .w12-back {
+            background: #000;
+            padding: 16px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .w12-back .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(143,197,217,0.03) 2px,
+                rgba(143,197,217,0.03) 4px
+            );
+            pointer-events: none;
+        }
+        
+        .w12-back .logo {
+            width: 70px;
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+        
+        .w12-back .data {
+            font-size: 9px;
+            color: var(--pool);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W13: OVERLAP MADNESS
+           Elements intentionally overlapping
+        ============================================= */
+        .w13-front {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w13-front .box1 {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 120px;
+            height: 80px;
+            background: var(--navy);
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
+        }
+        
+        .w13-front .box1 .text {
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .w13-front .box2 {
+            position: absolute;
+            top: 60px;
+            left: 80px;
+            width: 140px;
+            height: 100px;
+            background: var(--pool);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .w13-front .box2 .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            text-align: center;
+            line-height: 1;
+        }
+        
+        .w13-front .box3 {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 60px;
+            background: var(--maroon);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 8px;
+        }
+        
+        .w13-front .box3 .text {
+            font-size: 9px;
+            font-style: italic;
+            color: white;
+        }
+        
+        .w13-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w13-back .logo {
+            width: 70px;
+        }
+        
+        .w13-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W14: GIANT FIRST LETTER
+           M dominates
+        ============================================= */
+        .w14-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w14-front .letter {
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            font-size: 280px;
+            font-weight: 900;
+            color: var(--royal);
+            opacity: 0.3;
+            line-height: 0.8;
+        }
+        
+        .w14-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .w14-front .name {
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .w14-front .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .w14-back {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w14-back .logo {
+            width: 70px;
+        }
+        
+        .w14-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* =============================================
+           W15: NOISE STATIC
+           Full static texture
+        ============================================= */
+        .w15-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .w15-front .noise {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(var(--pool) 1px, transparent 1px),
+                radial-gradient(var(--pool) 1px, transparent 1px);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+            opacity: 0.15;
+        }
+        
+        .w15-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w15-front .logo {
+            width: 70px;
+        }
+        
+        .w15-front .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .w15-front .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .w15-front .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .w15-back {
+            background: var(--pool);
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w15-back .noise {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(var(--navy) 1px, transparent 1px),
+                radial-gradient(var(--navy) 1px, transparent 1px);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+            opacity: 0.08;
+        }
+        
+        .w15-back .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .w15-back .title {
+            font-size: 11px;
+            color: var(--navy);
+        }
+        
+        .w15-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">Break Everything</div>
+        <div class="gallery-title">WILD</div>
+    </div>
+
+    <!-- W1 -->
+    <div class="section">
+        <div class="section-label">W1 — Name Is The Card</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w1-front">
+                    <div class="bg-name n2">SANTOS</div>
+                    <div class="bg-name n3">MARIA</div>
+                    <div class="main-name">Maria<br>Santos</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w1-back">
+                    <div class="stripe"></div>
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="info">
+                        <div class="contact">
+                            <div>Senior Business Advisor</div>
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                        </div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W2 -->
+    <div class="section">
+        <div class="section-label">W2 — Split Personality</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w2-front">
+                    <div class="top"><div class="name">MARIA</div></div>
+                    <div class="bottom"><div class="name">SANTOS</div></div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w2-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="content">
+                        <div class="contact">
+                            <div>Senior Business Advisor</div>
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                        </div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W3 -->
+    <div class="section">
+        <div class="section-label">W3 — Full Gradient Chaos</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w3-front">
+                    <div class="name">Maria<br>Santos</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w3-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W4 -->
+    <div class="section">
+        <div class="section-label">W4 — Stacked Chaos</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w4-front">
+                    <div class="layer l1">Maria Santos</div>
+                    <div class="layer l2">Maria Santos</div>
+                    <div class="layer l3">Maria Santos</div>
+                    <div class="layer l4">Maria Santos</div>
+                    <div class="layer l5">Maria Santos</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w4-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W5 -->
+    <div class="section">
+        <div class="section-label">W5 — The Void</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w5-front">
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w5-back">
+                    <div class="name">MARIA SANTOS</div>
+                    <div class="contact">530.898.4598 · msantos@norcalsbdc.org · norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W6 -->
+    <div class="section">
+        <div class="section-label">W6 — Inverted Expectations</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w6-front">
+                    <div class="url">norcalsbdc.org</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w6-back">
+                    <div class="name">Maria Santos · Senior Business Advisor · 530.898.4598</div>
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W7 -->
+    <div class="section">
+        <div class="section-label">W7 — Mono Brutalist</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w7-front">
+                    <div class="header">NORCAL SBDC // YOUR BUSINESS PEOPLE</div>
+                    <div class="main">
+                        <div class="name">MARIA SANTOS</div>
+                        <div class="role">Senior Business Advisor</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w7-back">
+                    <div class="data">
+                        <div><span class="label">TEL</span> 530.898.4598</div>
+                        <div><span class="label">EMAIL</span> msantos@norcalsbdc.org</div>
+                        <div><span class="label">WEB</span> norcalsbdc.org</div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W8 -->
+    <div class="section">
+        <div class="section-label">W8 — Color Field</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w8-front">
+                    <div class="block navy"><span class="text">MARIA</span></div>
+                    <div class="block royal"><span class="text">SANTOS</span></div>
+                    <div class="block pool"><span class="text">ADVISOR</span></div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w8-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div>
+                        <div class="contact">
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                        </div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W9 -->
+    <div class="section">
+        <div class="section-label">W9 — Glitch</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w9-front">
+                    <div class="glitch cyan">Maria Santos</div>
+                    <div class="glitch white">Maria Santos</div>
+                    <div class="glitch red">Maria Santos</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w9-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W10 -->
+    <div class="section">
+        <div class="section-label">W10 — Circle Crop</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w10-front">
+                    <div class="circle">
+                        <div class="name">Maria<br>Santos</div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w10-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W11 -->
+    <div class="section">
+        <div class="section-label">W11 — Extreme Vertical</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w11-front">
+                    <div class="vert-name">Maria Santos</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w11-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">530.898.4598 · msantos@norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W12 -->
+    <div class="section">
+        <div class="section-label">W12 — Data Card</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w12-front">
+                    <div class="scanline"></div>
+                    <div class="row">
+                        <span class="label">ORG</span>
+                        <span class="value">NORCAL_SBDC</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">ROLE</span>
+                        <span class="value">SR_BUSINESS_ADVISOR</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">STATUS</span>
+                        <span class="value">ACTIVE</span>
+                    </div>
+                    <div class="name-block">
+                        <div class="label">CONTACT</div>
+                        <div class="name">Maria Santos</div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w12-back">
+                    <div class="scanline"></div>
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="data">
+                        <div>TEL: 530.898.4598</div>
+                        <div>EMAIL: msantos@norcalsbdc.org</div>
+                        <div>WEB: norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W13 -->
+    <div class="section">
+        <div class="section-label">W13 — Overlap Madness</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w13-front">
+                    <div class="box1"><span class="text">NORCAL SBDC</span></div>
+                    <div class="box2"><span class="name">Maria<br>Santos</span></div>
+                    <div class="box3"><span class="text">Your Business People.</span></div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w13-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W14 -->
+    <div class="section">
+        <div class="section-label">W14 — Giant First Letter</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w14-front">
+                    <div class="letter">M</div>
+                    <div class="content">
+                        <div class="name">Maria Santos</div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w14-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- W15 -->
+    <div class="section">
+        <div class="section-label">W15 — Noise Static</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card w15-front">
+                    <div class="noise"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="bottom">
+                            <div class="name">Maria Santos</div>
+                            <div class="tagline">Your Business People.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card w15-back">
+                    <div class="noise"></div>
+                    <div class="content">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="contact">
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                            <div>norcalsbdc.org</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

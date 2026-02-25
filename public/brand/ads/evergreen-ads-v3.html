@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evergreen Ads v3</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #1e3a5f;
+      --deep-navy: #0f1c2e;
+      --slate: #4a6580;
+      --mist: #c8d5e3;
+      --cream: #f8f7f4;
+      --forest: #2d4a4a;
+      --sage: #4a6a5d;
+      --pale-sage: #d4ddd6;
+      --red: #c23a3a;
+      --brick: #b54a4a;
+      --pool: #8FC5D9;
+
+      --mono: 'Roboto Mono', monospace;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: #0a0a0f;
+      color: white;
+      padding: 48px;
+    }
+    
+    h1 {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: #666;
+      margin-bottom: 48px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 360px);
+      gap: 32px;
+      margin-bottom: 64px;
+    }
+    
+    .label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    
+    /* ============================================
+       AD BASE
+    ============================================ */
+    
+    .ad {
+      width: 360px;
+      height: 360px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+    }
+    
+    .ad .wordmark {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      margin-bottom: 48px;
+    }
+
+    .ad .headline {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      flex: 1;
+    }
+
+    .ad .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .ad .tagline {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+
+    .ad .cta {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    
+    /* ============================================
+       QUOTE STYLE
+    ============================================ */
+    
+    .ad-quote {
+      justify-content: center;
+    }
+
+    .ad-quote .quote {
+      font-family: var(--sans);
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.35;
+      margin-bottom: 24px;
+    }
+
+    .ad-quote .attribution {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .ad-quote .wordmark {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+    }
+    
+    /* ============================================
+       COLORS
+    ============================================ */
+    
+    .cream { background: var(--cream); }
+    .cream .wordmark { color: var(--slate); opacity: 0.5; }
+    .cream .headline { color: var(--navy); }
+    .cream .tagline { color: var(--navy); }
+    .cream .cta { color: var(--red); }
+    .cream .quote { color: var(--navy); }
+    .cream .attribution { color: var(--slate); }
+    
+    .forest { background: var(--forest); }
+    .forest .wordmark { color: var(--pale-sage); opacity: 0.5; }
+    .forest .headline { color: var(--cream); }
+    .forest .tagline { color: var(--cream); opacity: 0.7; }
+    .forest .cta { color: var(--pale-sage); }
+    .forest .quote { color: var(--cream); }
+    .forest .attribution { color: var(--pale-sage); }
+    
+    .navy { background: var(--navy); }
+    .navy .wordmark { color: var(--mist); opacity: 0.4; }
+    .navy .headline { color: white; }
+    .navy .tagline { color: white; opacity: 0.6; }
+    .navy .cta { color: var(--red); }
+    .navy .quote { color: white; }
+    .navy .attribution { color: var(--mist); }
+    
+    .mist { background: var(--mist); }
+    .mist .wordmark { color: var(--navy); opacity: 0.4; }
+    .mist .headline { color: var(--navy); }
+    .mist .tagline { color: var(--navy); opacity: 0.7; }
+    .mist .cta { color: var(--red); }
+    
+    .pale-sage { background: var(--pale-sage); }
+    .pale-sage .wordmark { color: var(--forest); opacity: 0.4; }
+    .pale-sage .headline { color: var(--forest); }
+    .pale-sage .tagline { color: var(--forest); opacity: 0.7; }
+    .pale-sage .cta { color: var(--forest); }
+    
+  </style>
+</head>
+<body>
+
+  <h1>EVERGREEN ADS — HEADLINE-LED</h1>
+  
+  <!-- ROW 1: EMOTIONAL HOOKS -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">THE QUESTION</div>
+      <div class="ad cream">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">What would you do with the right advice at the right time?</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Find out →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">THE REFRAME</div>
+      <div class="ad forest">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">You don't need a business degree. You need someone who's done it.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Meet them →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">THE PERMISSION</div>
+      <div class="ad navy">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">It's okay to not know everything. That's what we're here for.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Get help →</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ROW 2: TENSION -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">THE CONTRAST</div>
+      <div class="ad mist">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Consultants bill. Advisors show up. We're advisors.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Free advising →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">THE TRUTH</div>
+      <div class="ad pale-sage">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Most businesses don't fail from bad ideas. They fail from bad timing.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Get ahead →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">THE ADMISSION</div>
+      <div class="ad forest">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">We can't guarantee success. But we can shorten the learning curve.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Start learning →</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ROW 3: CLIENT VOICE -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">QUOTE — SURPRISE</div>
+      <div class="ad ad-quote cream">
+        <div class="quote">"I expected a government program. I got someone in my corner."</div>
+        <div class="attribution">— Restaurant owner, Sacramento</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">QUOTE — SPECIFIC</div>
+      <div class="ad ad-quote navy">
+        <div class="quote">"Maria told me I wasn't ready for an SBA loan. She was right. Six months later, I was."</div>
+        <div class="attribution">— Contractor, Fresno</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">QUOTE — SIMPLE</div>
+      <div class="ad ad-quote forest">
+        <div class="quote">"I didn't know what I didn't know. Now I do."</div>
+        <div class="attribution">— Retail owner, Chico</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ROW 4: DIRECT -->
+  <div class="grid">
+    
+    <div>
+      <div class="label">SIMPLE ASK</div>
+      <div class="ad cream">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Got 30 minutes? That's enough to start.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Book a call →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">OBJECTION KILLER</div>
+      <div class="ad navy">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Yes, it's really free. No, there's no catch.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">See for yourself →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="label">LOCAL</div>
+      <div class="ad pale-sage">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">18 centers. 36 counties. There's one near you.</div>
+        <div class="footer">
+          <span class="tagline">Your Business People.</span>
+          <a href="#" class="cta">Find yours →</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+</html>

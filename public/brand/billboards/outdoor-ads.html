@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Billboards</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --navy: #1e3a5f;
+      --slate: #4a6580;
+      --mist: #c8d5e3;
+      --cream: #f8f7f4;
+      --forest: #2d4a4a;
+      --sage: #4a6a5d;
+      --pale-sage: #d4ddd6;
+      --red: #c23a3a;
+      
+      --mono: 'Roboto Mono', monospace;
+      --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: #0a0a0f;
+      color: white;
+      padding: 48px;
+    }
+    
+    h1 {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: #666;
+      margin-bottom: 48px;
+    }
+    
+    .section {
+      margin-bottom: 64px;
+    }
+    
+    .label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+    
+    /* ============================================
+       BILLBOARD BASE
+    ============================================ */
+    
+    .billboard {
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 3.5/1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 64px;
+      margin-bottom: 32px;
+    }
+    
+    .billboard .wordmark {
+      position: absolute;
+      top: 32px;
+      left: 64px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+    
+    .billboard .headline {
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.05;
+      max-width: 70%;
+    }
+    
+    .billboard .headline-xl { font-size: 72px; letter-spacing: -2px; }
+    .billboard .headline-lg { font-size: 56px; letter-spacing: -1px; }
+    .billboard .headline-md { font-size: 48px; }
+    
+    .billboard .right {
+      position: absolute;
+      right: 64px;
+      bottom: 32px;
+      text-align: right;
+    }
+    
+    .billboard .tagline {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    
+    .billboard .cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .billboard .stat {
+      font-family: var(--sans);
+      font-size: 120px;
+      font-weight: 300;
+      line-height: 0.85;
+      letter-spacing: -4px;
+      position: absolute;
+      right: 64px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    /* ============================================
+       COLORS
+    ============================================ */
+    
+    .cream { background: var(--cream); }
+    .cream .wordmark { color: var(--slate); opacity: 0.5; }
+    .cream .headline { color: var(--navy); }
+    .cream .tagline { color: var(--navy); opacity: 0.7; }
+    .cream .cta { color: var(--red); }
+    .cream .stat { color: var(--navy); opacity: 0.08; }
+    
+    .forest { background: var(--forest); }
+    .forest .wordmark { color: var(--pale-sage); opacity: 0.5; }
+    .forest .headline { color: var(--cream); }
+    .forest .tagline { color: var(--cream); opacity: 0.7; }
+    .forest .cta { color: var(--pale-sage); }
+    .forest .stat { color: var(--cream); opacity: 0.06; }
+    
+    .navy { background: var(--navy); }
+    .navy .wordmark { color: var(--mist); opacity: 0.4; }
+    .navy .headline { color: white; }
+    .navy .tagline { color: white; opacity: 0.6; }
+    .navy .cta { color: var(--red); }
+    .navy .stat { color: white; opacity: 0.06; }
+    
+    .mist { background: var(--mist); }
+    .mist .wordmark { color: var(--navy); opacity: 0.4; }
+    .mist .headline { color: var(--navy); }
+    .mist .tagline { color: var(--navy); opacity: 0.7; }
+    .mist .cta { color: var(--red); }
+    
+    .pale-sage { background: var(--pale-sage); }
+    .pale-sage .wordmark { color: var(--forest); opacity: 0.4; }
+    .pale-sage .headline { color: var(--forest); }
+    .pale-sage .tagline { color: var(--forest); opacity: 0.7; }
+    .pale-sage .cta { color: var(--forest); }
+    
+    /* ============================================
+       SPLIT LAYOUT
+    ============================================ */
+    
+    .billboard-split {
+      display: flex;
+      padding: 0;
+    }
+    
+    .billboard-split .left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 56px;
+    }
+    
+    .billboard-split .right-block {
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px;
+    }
+    
+    .billboard-split .stat-block {
+      text-align: center;
+    }
+    
+    .billboard-split .stat-number {
+      font-family: var(--sans);
+      font-size: 80px;
+      font-weight: 300;
+      line-height: 0.85;
+      letter-spacing: -3px;
+    }
+    
+    .billboard-split .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+    
+    .billboard-split .wordmark {
+      position: absolute;
+      top: 24px;
+      left: 56px;
+    }
+    
+    .billboard-split .headline {
+      max-width: 100%;
+    }
+    
+    .billboard-split .cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 24px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <h1>WEB BILLBOARDS — HOMEPAGE / LANDING</h1>
+  
+  <!-- ============================================
+       FULL WIDTH — HEADLINE ONLY
+  ============================================ -->
+  
+  <div class="section">
+    <div class="label">FULL WIDTH — HEADLINE DOMINANT</div>
+    
+    <div class="billboard cream">
+      <span class="wordmark">NORCAL SBDC</span>
+      <div class="headline headline-xl">Your business.<br>Your people.</div>
+      <div class="right">
+        <div class="tagline">Free advising for small businesses.</div>
+        <a href="#" class="cta">Find an advisor →</a>
+      </div>
+    </div>
+    
+    <div class="billboard navy">
+      <span class="wordmark">NORCAL SBDC</span>
+      <div class="headline headline-xl">Behind every small business is someone figuring it out.</div>
+      <div class="right">
+        <div class="tagline">You don't have to do it alone.</div>
+        <a href="#" class="cta">Get help →</a>
+      </div>
+    </div>
+    
+    <div class="billboard forest">
+      <span class="wordmark">NORCAL SBDC</span>
+      <div class="headline headline-xl">The hardest part isn't starting. It's knowing what to do next.</div>
+      <div class="right">
+        <div class="tagline">That's where we come in.</div>
+        <a href="#" class="cta">Talk to someone →</a>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ============================================
+       FULL WIDTH — WITH STAT WATERMARK
+  ============================================ -->
+  
+  <div class="section">
+    <div class="label">FULL WIDTH — STAT AS WATERMARK</div>
+    
+    <div class="billboard cream">
+      <span class="wordmark">NORCAL SBDC</span>
+      <div class="headline headline-lg">Not our money.<br>Theirs. We just<br>opened the doors.</div>
+      <div class="stat">$547M</div>
+      <div class="right" style="bottom: 32px;">
+        <a href="#" class="cta">Find funding →</a>
+      </div>
+    </div>
+    
+    <div class="billboard navy">
+      <span class="wordmark">NORCAL SBDC</span>
+      <div class="headline headline-lg">Former CFOs.<br>Restaurant owners.<br>People like you.</div>
+      <div class="stat">300+</div>
+      <div class="right" style="bottom: 32px;">
+        <a href="#" class="cta">Find yours →</a>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ============================================
+       SPLIT LAYOUT
+  ============================================ -->
+  
+  <div class="section">
+    <div class="label">SPLIT — HEADLINE + STAT BLOCK</div>
+    
+    <div class="billboard billboard-split">
+      <div class="left cream">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="headline headline-md">The capital's out there. We help you find it.</div>
+        <a href="#" class="cta">Find funding →</a>
+      </div>
+      <div class="right-block navy">
+        <div class="stat-block">
+          <div class="stat-number" style="color: white;">$547<span style="color: var(--red);">M</span></div>
+          <div class="stat-label" style="color: var(--mist);">accessed by our clients</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="billboard billboard-split">
+      <div class="left pale-sage">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="headline headline-md">You don't need a business degree. You need someone who's done it.</div>
+        <a href="#" class="cta">Meet them →</a>
+      </div>
+      <div class="right-block forest">
+        <div class="stat-block">
+          <div class="stat-number" style="color: var(--cream);">300<span style="color: var(--pale-sage);">+</span></div>
+          <div class="stat-label" style="color: var(--pale-sage);">advisors</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="billboard billboard-split">
+      <div class="left mist">
+        <span class="wordmark">NORCAL SBDC</span>
+        <div class="headline headline-md">From Redding to San Jose. There's one near you.</div>
+        <a href="#" class="cta">Find your center →</a>
+      </div>
+      <div class="right-block navy">
+        <div class="stat-block">
+          <div class="stat-number" style="color: white;">18</div>
+          <div class="stat-label" style="color: var(--mist);">centers</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- ============================================
+       MINIMAL — JUST THE LINE
+  ============================================ -->
+  
+  <div class="section">
+    <div class="label">MINIMAL — ONE LINE</div>
+    
+    <div class="billboard forest" style="justify-content: center; text-align: center;">
+      <span class="wordmark" style="left: 50%; transform: translateX(-50%);">NORCAL SBDC</span>
+      <div class="headline headline-xl" style="max-width: 100%;">Got 30 minutes?</div>
+      <div class="right" style="right: 50%; transform: translateX(50%); text-align: center;">
+        <a href="#" class="cta">Book a call →</a>
+      </div>
+    </div>
+    
+    <div class="billboard cream" style="justify-content: center; text-align: center;">
+      <span class="wordmark" style="left: 50%; transform: translateX(-50%);">NORCAL SBDC</span>
+      <div class="headline headline-xl" style="max-width: 100%;">Yes, it's free. No, there's no catch.</div>
+      <div class="right" style="right: 50%; transform: translateX(50%); text-align: center;">
+        <a href="#" class="cta">See for yourself →</a>
+      </div>
+    </div>
+    
+    <div class="billboard navy" style="justify-content: center; text-align: center;">
+      <span class="wordmark" style="left: 50%; transform: translateX(-50%);">NORCAL SBDC</span>
+      <div class="headline headline-xl" style="max-width: 100%;">Your Business People.</div>
+      <div class="right" style="right: 50%; transform: translateX(50%); text-align: center;">
+        <a href="#" class="cta">Find yours →</a>
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+</html>

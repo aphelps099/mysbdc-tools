@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — SBDC Day Email Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --warm: #FAF8F5;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e8e8e8;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto 60px;
+            background: white;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        
+        .email-label {
+            background: #0a0a0a;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .email-label-left {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .email-label-right {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: #666;
+        }
+        
+        /* Email Header Bar */
+        .email-meta {
+            background: #f5f5f5;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .email-meta-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .email-meta-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .email-meta-label {
+            width: 70px;
+            color: #888;
+            font-weight: 500;
+        }
+        
+        .email-meta-value {
+            color: #333;
+        }
+        
+        .email-meta-value strong {
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .email-hero {
+            background: var(--navy);
+            padding: 48px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .email-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .email-hero .logo {
+            width: 180px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero .hero-text {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero .big-number {
+            font-size: 120px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+            margin-bottom: 8px;
+        }
+        
+        .email-hero .hero-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .email-hero .star {
+            width: 60px;
+            margin-top: 32px;
+            opacity: 0.4;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Hero Alt - Split */
+        .email-hero-split {
+            display: flex;
+        }
+        
+        .email-hero-split .left {
+            flex: 1;
+            background: var(--cream);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .email-hero-split .left .stat {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+        
+        .email-hero-split .left .stat-label {
+            font-size: 14px;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+        
+        .email-hero-split .right {
+            flex: 1;
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .email-hero-split .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .email-hero-split .right .logo {
+            width: 160px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Email Body */
+        .email-body {
+            padding: 40px;
+        }
+        
+        .email-body p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .email-body p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .email-body p strong {
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .email-body .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 24px;
+        }
+        
+        .email-body .signature {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #eee;
+        }
+        
+        .email-body .signature p {
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+        
+        .email-body .signature .name {
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .email-body .signature .title {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--cream);
+            padding: 32px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stats-bar .stat-item {
+            text-align: center;
+        }
+        
+        .stats-bar .stat-num {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .stats-bar .stat-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 6px;
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            padding: 0 40px 40px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 16px 40px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+        
+        .cta-button:hover {
+            background: #1a2a3e;
+        }
+        
+        /* Pull Quote */
+        .pull-quote {
+            background: var(--navy);
+            padding: 40px;
+            margin: 0;
+        }
+        
+        .pull-quote blockquote {
+            font-size: 22px;
+            font-weight: 400;
+            font-style: italic;
+            color: white;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .pull-quote .attribution {
+            font-size: 14px;
+            color: var(--pool);
+        }
+        
+        .pull-quote .attribution strong {
+            font-weight: 700;
+        }
+        
+        /* Success Story Card */
+        .story-card {
+            background: var(--cream);
+            padding: 32px 40px;
+            margin: 24px 40px;
+            position: relative;
+        }
+        
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .story-card .story-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-card .story-headline {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-card .story-text {
+            font-size: 15px;
+            color: var(--navy);
+            line-height: 1.6;
+            opacity: 0.8;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-card .story-stat {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-card .story-stat-num {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .story-card .story-stat-label {
+            font-size: 13px;
+            color: var(--navy);
+            opacity: 0.6;
+        }
+        
+        /* Footer */
+        .email-footer {
+            background: #f5f5f5;
+            padding: 32px 40px;
+            text-align: center;
+        }
+        
+        .email-footer .footer-logo {
+            width: 120px;
+            margin-bottom: 16px;
+            opacity: 0.7;
+        }
+        
+        .email-footer p {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .email-footer .tagline {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.4;
+            margin-top: 16px;
+        }
+        
+        /* Divider */
+        .section-divider {
+            text-align: center;
+            padding: 80px 0;
+            background: #e8e8e8;
+        }
+        
+        .section-divider-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         EMAIL 1: KICK-OFF — 20 YEARS OF MOMENTUM
+    ========================================== -->
+    
+    <div class="email-label">
+        <div class="email-label-left">Email 1 of 2</div>
+        <div class="email-label-right">SBDC Day · Kick-Off</div>
+    </div>
+    
+    <div class="email-container">
+        
+        <!-- Email Meta -->
+        <div class="email-meta">
+            <div class="email-meta-row">
+                <div class="email-meta-label">From:</div>
+                <div class="email-meta-value"><strong>NorCal SBDC</strong> &lt;hello@norcalsbdc.org&gt;</div>
+            </div>
+            <div class="email-meta-row">
+                <div class="email-meta-label">Subject:</div>
+                <div class="email-meta-value"><strong>Twenty years. $547 million. And we're just getting started.</strong></div>
+            </div>
+            <div class="email-meta-row">
+                <div class="email-meta-label">Preview:</div>
+                <div class="email-meta-value">Happy SBDC Day — here's to twenty years of momentum.</div>
+            </div>
+        </div>
+        
+        <!-- Hero -->
+        <div class="email-hero">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="hero-text">
+                <div class="big-number">20</div>
+                <div class="hero-label">Years of Momentum</div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-num">$547M</div>
+                <div class="stat-label">Capital Accessed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">12,400</div>
+                <div class="stat-label">Businesses/Year</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">36</div>
+                <div class="stat-label">Counties</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">300+</div>
+                <div class="stat-label">Advisors</div>
+            </div>
+        </div>
+        
+        <!-- Body -->
+        <div class="email-body">
+            <p class="greeting">Happy SBDC Day!</p>
+            
+            <p>Today, we celebrate something bigger than a date on the calendar. We celebrate <strong>twenty years of showing up</strong>—in community centers, coffee shops, and conference rooms across Northern California—to help people turn ideas into businesses.</p>
+            
+            <p>Since 2006, our network of 300+ advisors across 18 centers has served <strong>over 150,000 small business owners</strong>. We've helped secure $547 million in capital. We've watched food trucks become restaurants. Side hustles become full-time dreams. Family recipes become retail empires.</p>
+            
+            <p>And here's what we've learned: <strong>ambition gets you started, but momentum gets you there.</strong></p>
+            
+            <p>That's what we do. We add momentum. Free advice. Real results. No catch. No pitch. Just people helping people build something that matters.</p>
+            
+            <p>This year, we're not just celebrating the past twenty years. We're positioning the next twenty. More resources. More reach. More ways to add momentum to your business.</p>
+            
+            <p><strong>You have nothing to lose but momentum.</strong></p>
+            
+            <div class="signature">
+                <p class="name">The NorCal SBDC Team</p>
+                <p class="title">Your Business People. Since 2006.</p>
+            </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="cta-section">
+            <a href="https://www.norcalsbdc.org" class="cta-button">Add momentum. →</a>
+        </div>
+        
+        <!-- Footer -->
+        <div class="email-footer">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+            <p>NorCal SBDC Network · Serving 36 counties across Northern California</p>
+            <p>Free, confidential business advising for entrepreneurs and small business owners.</p>
+            <div class="tagline">Your Business People</div>
+        </div>
+        
+    </div>
+    
+    <div class="section-divider">
+        <div class="section-divider-label">End Email 1 · Begin Email 2</div>
+    </div>
+    
+    <!-- ==========================================
+         EMAIL 2: SUCCESS STORIES
+    ========================================== -->
+    
+    <div class="email-label">
+        <div class="email-label-left">Email 2 of 2</div>
+        <div class="email-label-right">SBDC Day · Success Stories</div>
+    </div>
+    
+    <div class="email-container">
+        
+        <!-- Email Meta -->
+        <div class="email-meta">
+            <div class="email-meta-row">
+                <div class="email-meta-label">From:</div>
+                <div class="email-meta-value"><strong>NorCal SBDC</strong> &lt;hello@norcalsbdc.org&gt;</div>
+            </div>
+            <div class="email-meta-row">
+                <div class="email-meta-label">Subject:</div>
+                <div class="email-meta-value"><strong>The people behind the $547 million</strong></div>
+            </div>
+            <div class="email-meta-row">
+                <div class="email-meta-label">Preview:</div>
+                <div class="email-meta-value">Three stories. Three advisors. Twenty years of momentum.</div>
+            </div>
+        </div>
+        
+        <!-- Hero Split -->
+        <div class="email-hero-split">
+            <div class="left">
+                <div class="stat">$547M</div>
+                <div class="stat-label">in client capital accessed.</div>
+            </div>
+            <div class="right">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            </div>
+        </div>
+        
+        <!-- Body Intro -->
+        <div class="email-body">
+            <p class="greeting">The people behind the number.</p>
+            
+            <p>When we say $547 million in client capital, it's easy to get lost in the scale. But behind every dollar is a person. A dream. A risk that paid off.</p>
+            
+            <p>And behind every success story? <strong>An advisor who answered the phone.</strong></p>
+            
+            <p>Today, we're sharing three stories from the past twenty years. Not because they're exceptional—but because they're exactly what we do, every day, across 36 counties.</p>
+        </div>
+        
+        <!-- Story 1 -->
+        <div class="story-card">
+            <div class="story-label">Sacramento County</div>
+            <div class="story-headline">From food truck to three locations.</div>
+            <div class="story-text">Maria came to us with a food truck, a family recipe, and a question: "How do I grow?" Her advisor helped her build a business plan, secure an SBA loan, and navigate her first commercial lease. Five years later, she has three locations and 22 employees.</div>
+            <div class="story-stat">
+                <div class="story-stat-num">$380K</div>
+                <div class="story-stat-label">SBA loan secured</div>
+            </div>
+        </div>
+        
+        <!-- Story 2 -->
+        <div class="story-card">
+            <div class="story-label">Shasta County</div>
+            <div class="story-headline">A manufacturer finds new markets.</div>
+            <div class="story-text">When COVID shut down his primary customer, Tom thought he'd have to close his 15-year manufacturing business. His SBDC advisor helped him pivot—identifying new markets, reworking his supply chain, and connecting him with government contracts. Revenue is now 40% higher than pre-pandemic.</div>
+            <div class="story-stat">
+                <div class="story-stat-num">+40%</div>
+                <div class="story-stat-label">Revenue growth</div>
+            </div>
+        </div>
+        
+        <!-- Story 3 -->
+        <div class="story-card">
+            <div class="story-label">Butte County</div>
+            <div class="story-headline">Rebuilding after the fire.</div>
+            <div class="story-text">After the Camp Fire destroyed her downtown boutique, Sarah didn't know where to start. Her SBDC advisor helped her navigate insurance claims, apply for disaster loans, and rebuild—not just her business, but her confidence. She reopened 18 months later in a new location.</div>
+            <div class="story-stat">
+                <div class="story-stat-num">$125K</div>
+                <div class="story-stat-label">Disaster loan secured</div>
+            </div>
+        </div>
+        
+        <!-- Pull Quote -->
+        <div class="pull-quote">
+            <blockquote>"She didn't just help me get a loan. She helped me see what my business could become."</blockquote>
+            <div class="attribution">— <strong>Maria R.</strong>, Sacramento</div>
+        </div>
+        
+        <!-- Body Closing -->
+        <div class="email-body">
+            <p>These aren't outliers. They're Tuesday.</p>
+            
+            <p>Every week, our advisors have hundreds of conversations just like these. Free. Confidential. No strings attached. Just <strong>people helping people add momentum</strong>.</p>
+            
+            <p>That's what twenty years looks like. Not a number on a page—but 150,000 conversations that changed someone's trajectory.</p>
+            
+            <p><strong>Ready to add yours?</strong></p>
+            
+            <div class="signature">
+                <p class="name">The NorCal SBDC Team</p>
+                <p class="title">Your Business People. Since 2006.</p>
+            </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="cta-section">
+            <a href="https://www.norcalsbdc.org/get-advising" class="cta-button">Schedule your free session →</a>
+        </div>
+        
+        <!-- Footer -->
+        <div class="email-footer">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+            <p>NorCal SBDC Network · Serving 36 counties across Northern California</p>
+            <p>Free, confidential business advising for entrepreneurs and small business owners.</p>
+            <div class="tagline">Your Business People</div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

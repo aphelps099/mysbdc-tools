@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Graphics — NorCal SBDC</title>
+
+<script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   FONTS — Tobias + GT America (Chamber weight)
+   ═══════════════════════════════════════════ */
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+
+/* ═══════════════════════════════════════════
+   RESET + BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ═══════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  --navy: #0f1c2e;
+  --royal: #1D5AA7;
+  --royal-dim: rgba(29,90,167,0.08);
+  --pool: #8FC5D9;
+  --cream: #f0efeb;
+  --white: #ffffff;
+  --brick: #a82039;
+  --dusty: #5d7a9c;
+  --text: #0a1528;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8a8a8a;
+  --rule: rgba(0,0,0,0.12);
+  --rule-light: rgba(0,0,0,0.06);
+  --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+  --serif: 'Tobias', Georgia, serif;
+  --mono: 'GT America Mono', 'SF Mono', monospace;
+  --pad: clamp(32px, 5vw, 64px);
+  --max: 1080px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+iconify-icon { display: inline-flex; vertical-align: middle; }
+
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--pad);
+  background: var(--navy);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo { height: 18px; width: auto; }
+.nav-back {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color 0.2s ease;
+}
+.nav-back:hover { color: var(--white); }
+.nav-back iconify-icon { font-size: 14px; }
+.nav-links { display: flex; gap: 0; }
+.nav-links a {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s ease;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.8); }
+.nav-links a.active { color: var(--white); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 2px; background: var(--pool);
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  margin-top: 56px;
+  background: var(--navy);
+  padding: clamp(48px, 6vw, 80px) var(--pad);
+  position: relative;
+  overflow: hidden;
+}
+.hero-watermark {
+  position: absolute; right: 3%; top: 50%;
+  transform: translateY(-50%);
+  width: clamp(180px, 22vw, 340px);
+  opacity: 0.03;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  position: relative; z-index: 2;
+}
+.hero-breadcrumb {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+.hero-breadcrumb a { transition: color 0.2s ease; }
+.hero-breadcrumb a:hover { color: rgba(255,255,255,0.7); }
+.hero-h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.08;
+  margin-bottom: 16px;
+}
+.hero-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.6; color: rgba(255,255,255,0.4);
+  max-width: 520px;
+}
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 32px;
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--pool); line-height: 1;
+  margin-bottom: 4px;
+}
+.hero-stat-label {
+  font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.section { padding: clamp(48px, 6vw, 80px) var(--pad); }
+.container { max-width: var(--max); margin: 0 auto; }
+
+.section-header {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-bottom: 48px;
+}
+.section-header-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-header-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 8px; max-width: 560px;
+}
+
+/* ═══════════════════════════════════════════
+   TEMPLATE GALLERY GRID
+   ═══════════════════════════════════════════ */
+.template-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+}
+.template-card {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.25s ease;
+}
+.template-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.template-card-preview {
+  aspect-ratio: 16/10;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.template-card-body {
+  padding: 20px 24px; flex: 1;
+  display: flex; flex-direction: column;
+}
+.template-card-name {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 3px;
+}
+.template-card-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.8rem; line-height: 1.5;
+  color: var(--text-secondary); margin-bottom: 12px;
+}
+.template-card-meta {
+  font-family: var(--mono); font-size: 0.5rem; font-weight: 400;
+  color: var(--text-tertiary); margin-top: auto;
+}
+
+.tag {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid var(--rule);
+  color: var(--text-secondary);
+  display: inline-block;
+}
+.tag-pool { border-color: rgba(143,197,217,0.4); color: var(--pool); }
+.tag-royal { border-color: rgba(29,90,167,0.3); color: var(--royal); }
+.tag-brick { border-color: rgba(168,32,57,0.3); color: var(--brick); }
+
+.card-badge { position: absolute; top: 10px; right: 10px; }
+
+/* ═══════════════════════════════════════════
+   MINI CSS MOCKUPS
+   ═══════════════════════════════════════════ */
+.mini {
+  border-radius: 2px;
+  position: relative; overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   LIVE SAMPLE CONTAINERS
+   ═══════════════════════════════════════════ */
+.sample-wrap {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(28px, 4vw, 44px);
+  margin-bottom: 2px;
+}
+.sample-centered {
+  max-width: 420px;
+  margin: 0 auto;
+}
+.sample-full {
+  width: 100%;
+}
+
+/* Live flyer mockup */
+.flyer-mock {
+  background: var(--white);
+  border: 1px solid var(--rule-light);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.flyer-header {
+  background: var(--navy);
+  padding: 20px 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.flyer-logo-bar {
+  width: 80px; height: 10px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 1px;
+}
+.flyer-body { padding: 28px 24px; }
+.flyer-title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 1.5rem; color: var(--navy);
+  letter-spacing: -0.02em; line-height: 1.1;
+  margin-bottom: 6px;
+}
+.flyer-subtitle {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; color: var(--text-secondary);
+  margin-bottom: 20px; line-height: 1.4;
+}
+.flyer-meta-block {
+  background: var(--royal-dim);
+  border-radius: 2px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.flyer-meta-row {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.75rem; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px;
+}
+.flyer-meta-row:last-child { margin-bottom: 0; }
+.flyer-meta-row iconify-icon { color: var(--royal); font-size: 14px; }
+.flyer-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.flyer-section-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 10px;
+}
+.flyer-bullet {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.75rem; color: var(--text-secondary);
+  padding-left: 16px; position: relative;
+  margin-bottom: 6px; line-height: 1.4;
+}
+.flyer-bullet::before {
+  content: ''; position: absolute; left: 0; top: 6px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--pool);
+}
+.flyer-speaker {
+  display: flex; gap: 14px; align-items: center;
+  padding: 16px 0; margin: 16px 0;
+  border-top: 1px solid var(--rule-light);
+  border-bottom: 1px solid var(--rule-light);
+}
+.flyer-speaker-photo {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.flyer-speaker-photo iconify-icon { color: var(--text-tertiary); font-size: 20px; }
+.flyer-speaker-name {
+  font-family: var(--sans); font-weight: 500;
+  font-size: 0.78rem; color: var(--text);
+}
+.flyer-speaker-role {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.7rem; color: var(--text-tertiary);
+}
+.flyer-cta {
+  display: block; text-align: center;
+  background: var(--royal); color: var(--white);
+  font-family: var(--sans); font-weight: 500;
+  font-size: 0.82rem; padding: 12px 24px;
+  border-radius: 3px; margin: 20px 0;
+  letter-spacing: 0.01em;
+}
+.flyer-footer {
+  background: var(--cream);
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.flyer-footer-brand {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-tertiary);
+}
+.flyer-footer-url {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--royal);
+}
+
+/* Live banner mockup */
+.banner-mock {
+  aspect-ratio: 16/5;
+  background: var(--navy);
+  border-radius: 2px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 3vw, 40px) clamp(24px, 4vw, 48px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+.banner-star {
+  position: absolute; right: 4%; top: 50%;
+  transform: translateY(-50%);
+  width: 30%; opacity: 0.04;
+}
+.banner-logo-bar {
+  width: 90px; height: 12px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 1px;
+  margin-bottom: 16px;
+}
+.banner-title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--white); letter-spacing: -0.03em;
+  line-height: 1.05; margin-bottom: 4px;
+  position: relative; z-index: 2;
+}
+.banner-subtitle {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.7rem, 1vw, 0.85rem);
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 12px;
+  position: relative; z-index: 2;
+}
+.banner-details {
+  font-family: var(--mono); font-size: clamp(0.5rem, 0.8vw, 0.65rem);
+  color: var(--pool);
+  position: relative; z-index: 2;
+  margin-bottom: 12px;
+}
+.banner-stats-row {
+  font-family: var(--mono); font-size: clamp(0.45rem, 0.7vw, 0.55rem);
+  color: rgba(255,255,255,0.3);
+  position: relative; z-index: 2;
+}
+.banner-color-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 4px; display: flex;
+}
+.banner-color-bar div { flex: 1; }
+
+/* Badge mockups */
+.badge-set {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  max-width: 520px; margin: 0 auto;
+}
+.badge-mock {
+  aspect-ratio: 4/3;
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.badge-header {
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.badge-header-text {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.badge-body {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 16px;
+}
+.badge-name {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 1.1rem; letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.badge-title {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.7rem;
+}
+.badge-accent {
+  width: 40px; height: 2px;
+  border-radius: 1px; margin: 8px 0;
+}
+.badge-tag {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.45rem; text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px; border-radius: 2px;
+  margin-top: 6px;
+}
+
+/* Social series */
+.social-series {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  max-width: 600px; margin: 0 auto;
+}
+.social-mock {
+  aspect-ratio: 1/1;
+  border-radius: 2px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 16px; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+/* ═══════════════════════════════════════════
+   GUIDELINES
+   ═══════════════════════════════════════════ */
+.guide-card {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(28px, 4vw, 44px);
+  margin-bottom: 2px;
+}
+.guide-card-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.guide-card-title iconify-icon { color: var(--royal); font-size: 16px; }
+
+/* Size table */
+.size-table {
+  width: 100%; border-collapse: collapse;
+}
+.size-table th {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-tertiary);
+  text-align: left; padding: 10px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.size-table td {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; color: var(--text-secondary);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.size-table td:first-child {
+  font-weight: 500; color: var(--text);
+}
+.size-table tbody tr:last-child td { border-bottom: none; }
+
+/* Logo rules grid */
+.logo-rules-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.logo-rule-item {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.logo-rule-preview {
+  aspect-ratio: 16/9;
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.logo-rule-label {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 6px;
+}
+.logo-rule-label.do { color: #16a34a; }
+.logo-rule-label.dont { color: var(--brick); }
+.logo-rule-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Color palette */
+.palette-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.palette-chip {
+  display: flex; align-items: center; gap: 10px;
+  flex: 1; min-width: 180px;
+  padding: 12px 14px;
+  background: var(--cream);
+  border-radius: 2px;
+}
+.palette-swatch {
+  width: 36px; height: 36px;
+  border-radius: 2px; flex-shrink: 0;
+  border: 1px solid var(--rule-light);
+}
+.palette-name {
+  font-family: var(--sans); font-weight: 500;
+  font-size: 0.78rem; color: var(--text);
+}
+.palette-hex {
+  font-family: var(--mono); font-size: 0.55rem;
+  color: var(--text-tertiary);
+}
+.palette-use {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.7rem; color: var(--text-secondary);
+}
+
+/* Typography rules */
+.type-rule-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.type-rule-cell {
+  background: var(--cream);
+  padding: 20px;
+  border-radius: 2px;
+}
+.type-rule-label {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.type-rule-example {
+  margin-bottom: 6px;
+}
+.type-rule-spec {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+/* Checklist */
+.checklist {
+  list-style: none; padding: 0;
+}
+.checklist li {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.85rem; color: var(--text-secondary);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-light);
+  display: flex; align-items: center; gap: 10px;
+  line-height: 1.4;
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li iconify-icon {
+  color: #16a34a; font-size: 16px; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   CTA BAR + FOOTER
+   ═══════════════════════════════════════════ */
+.cta-bar {
+  background: var(--navy);
+  padding: 48px var(--pad);
+}
+.cta-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.cta-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; color: rgba(255,255,255,0.5);
+}
+.cta-text strong {
+  font-weight: 400; color: var(--white);
+}
+.cta-link {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+  color: var(--pool);
+  padding: 10px 20px;
+  border: 1px solid rgba(143,197,217,0.3);
+  border-radius: 3px;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s ease;
+}
+.cta-link:hover { background: rgba(143,197,217,0.1); }
+
+.footer {
+  padding: 32px var(--pad);
+  background: var(--white);
+  border-top: 1px solid var(--rule-light);
+}
+.footer-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { height: 16px; }
+.footer-text {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .template-grid { grid-template-columns: repeat(2, 1fr); }
+  .badge-set { grid-template-columns: 1fr 1fr; }
+  .social-series { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .template-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .cta-inner { flex-direction: column; text-align: center; }
+  .logo-rules-grid { grid-template-columns: 1fr; }
+  .badge-set { grid-template-columns: 1fr; }
+  .social-series { grid-template-columns: 1fr; }
+  .type-rule-grid { grid-template-columns: 1fr; }
+  .palette-row { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="brand-house.html"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="nav-logo"></a>
+    <a href="brand-house.html" class="nav-back"><iconify-icon icon="carbon:arrow-left"></iconify-icon> Brand House</a>
+  </div>
+  <div class="nav-links">
+    <a href="#templates" class="active">Templates</a>
+    <a href="#samples">Samples</a>
+    <a href="#guidelines">Guidelines</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="assets/starwhite@4x.png" alt="" class="hero-watermark" aria-hidden="true">
+  <div class="hero-inner">
+    <div class="hero-breadcrumb"><a href="brand-house.html">Brand House</a> / Event Graphics</div>
+    <h1 class="hero-h1">Event Graphics</h1>
+    <p class="hero-desc">Templates, live samples, and guidelines for creating on-brand event collateral. From workshop flyers and banners to name badges and social graphics, every piece reinforces the NorCal SBDC identity.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">9</div>
+        <div class="hero-stat-label">Templates</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Live Samples</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Guidelines</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Size Specs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 1: TEMPLATE GALLERY
+     ═══════════════════════════════════════════════════ -->
+<section class="section" id="templates">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Template Gallery</div>
+      <div class="section-header-sub">Mini CSS mockups of every standard event graphic template. Each follows the NorCal SBDC brand system precisely.</div>
+    </div>
+
+    <div class="template-grid reveal">
+
+      <!-- A. Event Banner (Wide) -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: var(--navy);">
+          <span class="tag tag-pool card-badge">Wide</span>
+          <div class="mini" style="width: 80%; height: 60%; background: var(--navy); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; justify-content: center; padding: 8px 12px;">
+            <div style="width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 1px; margin-bottom: 8px;"></div>
+            <div style="font-family: var(--serif); font-size: 11px; color: var(--white); letter-spacing: -0.02em; text-align: center; margin-bottom: 4px;">SBDC Day 2026</div>
+            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 6px;">
+              <div style="font-family: var(--mono); font-size: 5px; color: var(--pool);">June 14, 2026</div>
+              <div style="font-family: var(--mono); font-size: 5px; color: rgba(255,255,255,0.3);">Sacramento, CA</div>
+            </div>
+            <div style="height: 3px; display: flex; position: absolute; bottom: 0; left: 0; right: 0;">
+              <div style="flex: 1; background: var(--pool);"></div>
+              <div style="flex: 1; background: var(--cream);"></div>
+              <div style="flex: 1; background: var(--dusty);"></div>
+              <div style="flex: 1; background: var(--brick);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Event Banner (Wide)</div>
+          <div class="template-card-desc">Full-width banner for event pages, email headers, and digital signage. Navy background with serif headline and four-color accent bar.</div>
+          <div class="template-card-meta">2400 &times; 600 px &middot; 150 DPI &middot; PNG/PDF</div>
+        </div>
+      </div>
+
+      <!-- B. Workshop Flyer (Portrait) -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: #e8e7e3;">
+          <span class="tag tag-royal card-badge">Portrait</span>
+          <div class="mini" style="width: 42%; height: 76%; background: var(--white); display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="height: 18%; background: var(--navy); display: flex; align-items: center; padding: 0 6px;">
+              <div style="width: 30px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 1px;"></div>
+            </div>
+            <div style="padding: 6px; flex: 1; display: flex; flex-direction: column;">
+              <div style="font-family: var(--serif); font-size: 7px; color: var(--navy); margin-bottom: 2px; letter-spacing: -0.02em;">Cash Flow Masterclass</div>
+              <div style="width: 60%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 80%; height: 2px; background: rgba(0,0,0,0.04); border-radius: 1px; margin-bottom: 1px;"></div>
+              <div style="width: 70%; height: 2px; background: rgba(0,0,0,0.04); border-radius: 1px; margin-bottom: 1px;"></div>
+              <div style="width: 85%; height: 2px; background: rgba(0,0,0,0.04); border-radius: 1px; margin-bottom: 4px;"></div>
+              <div style="width: 60%; height: 8px; background: var(--royal); border-radius: 1px; margin: auto auto 0 auto;"></div>
+            </div>
+            <div style="height: 10%; background: var(--cream); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 20px; height: 3px; background: var(--navy); border-radius: 1px; opacity: 0.3;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Workshop Flyer (Portrait)</div>
+          <div class="template-card-desc">Standard 8.5 &times; 11 flyer for workshops and classes. Navy header, serif title, event details, and royal CTA button.</div>
+          <div class="template-card-meta">8.5 &times; 11 in &middot; 300 DPI &middot; PDF</div>
+        </div>
+      </div>
+
+      <!-- C. Table Banner (Tall Vertical) -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: var(--navy);">
+          <span class="tag tag-pool card-badge">Print</span>
+          <div class="mini" style="width: 22%; height: 78%; background: var(--navy); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 4px;">
+            <div style="width: 14px; height: 14px; opacity: 0.08;">
+              <div style="width: 100%; height: 100%; background: var(--white); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-family: var(--serif); font-size: 6px; color: var(--white); letter-spacing: -0.02em; line-height: 1.1;">Your Business,</div>
+              <div style="font-family: var(--serif); font-size: 6px; color: var(--white); letter-spacing: -0.02em;">Better.</div>
+            </div>
+            <div>
+              <div style="font-family: var(--mono); font-size: 4px; color: rgba(255,255,255,0.3); text-align: center; margin-bottom: 4px;">norcalsbdc.org</div>
+              <div style="height: 3px; width: 100%; display: flex; gap: 0;">
+                <div style="flex: 1; background: var(--pool);"></div>
+                <div style="flex: 1; background: var(--cream);"></div>
+                <div style="flex: 1; background: var(--dusty);"></div>
+                <div style="flex: 1; background: var(--brick);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Table Banner (Tall Vertical)</div>
+          <div class="template-card-desc">Retractable table banner for events and conferences. Star watermark, brand tagline, and four-color accent bar at base.</div>
+          <div class="template-card-meta">33 &times; 80 in &middot; 150 DPI &middot; PDF</div>
+        </div>
+      </div>
+
+      <!-- D. Name Badge -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: #e8e7e3;">
+          <span class="tag card-badge">Badge</span>
+          <div class="mini" style="width: 52%; height: 56%; background: var(--white); display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+            <div style="height: 26%; background: var(--navy); display: flex; align-items: center; justify-content: center;">
+              <div style="font-family: var(--sans); font-size: 5px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; text-transform: uppercase;">NorCal SBDC</div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
+              <div style="font-family: var(--serif); font-size: 9px; color: var(--navy); margin-bottom: 1px;">[Name]</div>
+              <div style="font-family: var(--sans); font-size: 5px; font-weight: 300; color: var(--text-secondary);">[Title]</div>
+              <div style="width: 20px; height: 2px; background: var(--pool); border-radius: 1px; margin-top: 4px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Name Badge</div>
+          <div class="template-card-desc">Standard event name badge with navy header, serif name, light sans title, and pool accent line. Print-ready at 4 &times; 3 inches.</div>
+          <div class="template-card-meta">4 &times; 3 in &middot; 300 DPI &middot; PDF</div>
+        </div>
+      </div>
+
+      <!-- E. Social Media Event Graphic -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: var(--navy);">
+          <span class="tag tag-pool card-badge">Social</span>
+          <div class="mini" style="width: 50%; aspect-ratio: 1/1; background: var(--navy); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; position: relative;">
+            <div style="position: absolute; top: 6px; left: 6px; right: 6px; display: flex; gap: 2px;">
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.04);"></div>
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></div>
+            </div>
+            <div style="position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; gap: 2px;">
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></div>
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.04);"></div>
+              <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
+            </div>
+            <div style="font-family: var(--serif); font-size: 8px; color: var(--white); text-align: center; letter-spacing: -0.02em; margin-bottom: 3px;">SBDC Day 2026</div>
+            <div style="font-family: var(--mono); font-size: 4px; color: var(--pool);">June 14, 2026</div>
+            <div style="position: absolute; bottom: 12px; width: 20px; height: 3px; background: rgba(255,255,255,0.15); border-radius: 1px;"></div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Social Media Event Graphic</div>
+          <div class="template-card-desc">Square-format graphic for Instagram, LinkedIn, and Facebook event promotion. Abstract line pattern with serif title and pool date accent.</div>
+          <div class="template-card-meta">1080 &times; 1080 px &middot; 72 DPI &middot; PNG</div>
+        </div>
+      </div>
+
+      <!-- F. Zoom Background -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: var(--navy);">
+          <span class="tag card-badge">Virtual</span>
+          <div class="mini" style="width: 68%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--navy), #1a2d45); border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; position: relative;">
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 50%; aspect-ratio: 1/1; opacity: 0.04;">
+              <div style="width: 100%; height: 100%; background: var(--white); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></div>
+            </div>
+            <div style="font-family: var(--serif); font-size: 7px; color: var(--white); letter-spacing: -0.02em; position: relative; z-index: 1;">Your Business, Better.</div>
+            <div style="position: absolute; bottom: 5px; right: 8px; font-family: var(--mono); font-size: 4px; color: rgba(255,255,255,0.2);">norcalsbdc.org</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Zoom Background</div>
+          <div class="template-card-desc">Virtual meeting background with gradient navy, semi-transparent star watermark, and tagline. Unobtrusive yet branded for video calls.</div>
+          <div class="template-card-meta">1920 &times; 1080 px &middot; 72 DPI &middot; PNG</div>
+        </div>
+      </div>
+
+      <!-- G. Email Invitation Header -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: #e8e7e3;">
+          <span class="tag tag-royal card-badge">Email</span>
+          <div class="mini" style="width: 52%; height: 72%; background: var(--white); display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
+            <div style="height: 12%; background: var(--navy); display: flex; align-items: center; padding: 0 6px;">
+              <div style="width: 24px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 1px;"></div>
+            </div>
+            <div style="height: 30%; background: var(--pool); display: flex; align-items: center; justify-content: center; padding: 4px;">
+              <div style="font-family: var(--serif); font-size: 6px; color: var(--navy); letter-spacing: -0.02em;">Workshop Invite</div>
+            </div>
+            <div style="flex: 1; padding: 5px 6px;">
+              <div style="width: 90%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 75%; height: 2px; background: rgba(0,0,0,0.04); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 85%; height: 2px; background: rgba(0,0,0,0.04); border-radius: 1px; margin-bottom: 4px;"></div>
+              <div style="width: 50%; height: 6px; background: var(--royal); border-radius: 1px; margin: 0 auto;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Email Invitation Header</div>
+          <div class="template-card-desc">600px-width email header with navy logo bar, pool hero section, and white body with CTA button. Optimized for major email clients.</div>
+          <div class="template-card-meta">600 &times; 200 px &middot; 72 DPI &middot; PNG</div>
+        </div>
+      </div>
+
+      <!-- H. Pull-Up Banner -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: var(--navy);">
+          <span class="tag tag-pool card-badge">Print</span>
+          <div class="mini" style="width: 22%; height: 78%; background: var(--navy); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 4px;">
+            <div style="width: 20px; height: 3px; background: rgba(255,255,255,0.25); border-radius: 1px;"></div>
+            <div style="text-align: center;">
+              <div style="font-family: var(--serif); font-size: 14px; color: var(--pool); line-height: 1; letter-spacing: -0.02em;">$547M</div>
+              <div style="font-family: var(--sans); font-size: 4px; font-weight: 300; color: rgba(255,255,255,0.4); margin-top: 2px;">Capital Accessed by</div>
+              <div style="font-family: var(--sans); font-size: 4px; font-weight: 300; color: rgba(255,255,255,0.4);">NorCal Clients</div>
+            </div>
+            <div>
+              <div style="font-family: var(--serif); font-size: 5px; color: var(--white); text-align: center; margin-bottom: 2px;">Your Business, Better.</div>
+              <div style="height: 3px; display: flex;">
+                <div style="flex: 1; background: var(--pool);"></div>
+                <div style="flex: 1; background: var(--cream);"></div>
+                <div style="flex: 1; background: var(--dusty);"></div>
+                <div style="flex: 1; background: var(--brick);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Pull-Up Banner</div>
+          <div class="template-card-desc">Tall retractable banner for conferences and expos. Large impact statistic, tagline, and four-color base bar for maximum visibility.</div>
+          <div class="template-card-meta">33 &times; 80 in &middot; 150 DPI &middot; PDF</div>
+        </div>
+      </div>
+
+      <!-- I. Podium Sign -->
+      <div class="template-card">
+        <div class="template-card-preview" style="background: #e8e7e3;">
+          <span class="tag card-badge">Signage</span>
+          <div class="mini" style="width: 50%; aspect-ratio: 1/1; background: var(--cream); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 60%; aspect-ratio: 1/1; opacity: 0.04;">
+              <div style="width: 100%; height: 100%; background: var(--navy); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></div>
+            </div>
+            <div style="width: 36px; height: 10px; background: var(--navy); border-radius: 1px; position: relative; z-index: 1; margin-bottom: 4px;"></div>
+            <div style="font-family: var(--mono); font-size: 4px; color: var(--text-tertiary); position: relative; z-index: 1;">norcalsbdc.org</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <div class="template-card-name">Podium Sign</div>
+          <div class="template-card-desc">Square podium or table sign with cream background, centered navy logo, subtle star watermark, and URL in monospace.</div>
+          <div class="template-card-meta">12 &times; 12 in &middot; 300 DPI &middot; PDF</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 2: LIVE SAMPLES
+     ═══════════════════════════════════════════════════ -->
+<section class="section" id="samples">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Live Samples</div>
+      <div class="section-header-sub">Detailed CSS renderings of completed event graphics. These show exactly how final production pieces should appear.</div>
+    </div>
+
+    <!-- LIVE SAMPLE A: Workshop Flyer -->
+    <div class="section-header reveal" style="margin-top: 0;">
+      <div class="section-header-title" style="font-size: 0.95rem;">
+        <iconify-icon icon="carbon:document" style="color: var(--royal); margin-right: 4px;"></iconify-icon>
+        Workshop Flyer
+      </div>
+      <div class="section-header-sub">Full-detail rendering of a standard workshop flyer at production quality.</div>
+    </div>
+
+    <div class="sample-wrap reveal">
+      <div class="sample-centered">
+        <div class="flyer-mock">
+          <div class="flyer-header">
+            <div class="flyer-logo-bar"></div>
+          </div>
+          <div class="flyer-body">
+            <div class="flyer-title">Cash Flow Masterclass</div>
+            <div class="flyer-subtitle">Building Financial Resilience for Small Business</div>
+            <div class="flyer-meta-block">
+              <div class="flyer-meta-row">
+                <iconify-icon icon="carbon:calendar"></iconify-icon>
+                Thursday, March 19, 2026
+              </div>
+              <div class="flyer-meta-row">
+                <iconify-icon icon="carbon:time"></iconify-icon>
+                10:00 AM &ndash; 12:30 PM PT
+              </div>
+              <div class="flyer-meta-row">
+                <iconify-icon icon="carbon:location"></iconify-icon>
+                NorCal SBDC &mdash; Sacramento Center
+              </div>
+            </div>
+            <div class="flyer-desc">Join our no-fee workshop designed to help small business owners master the fundamentals of cash flow management. Learn proven strategies to forecast revenue, manage expenses, and build the financial resilience your business needs to thrive in any economic climate.</div>
+            <div class="flyer-section-title">What You'll Learn</div>
+            <div class="flyer-bullet">Cash flow forecasting and projection techniques</div>
+            <div class="flyer-bullet">Strategies for managing accounts receivable</div>
+            <div class="flyer-bullet">Building a 90-day cash reserve plan</div>
+            <div class="flyer-bullet">Tools for tracking and automating cash flow</div>
+            <div class="flyer-speaker">
+              <div class="flyer-speaker-photo">
+                <iconify-icon icon="carbon:user-avatar"></iconify-icon>
+              </div>
+              <div>
+                <div class="flyer-speaker-name">Maria Gonzalez, CPA</div>
+                <div class="flyer-speaker-role">Senior Business Advisor, NorCal SBDC</div>
+              </div>
+            </div>
+            <div class="flyer-cta">Register Now &mdash; It's No-Fee</div>
+          </div>
+          <div class="flyer-footer">
+            <div class="flyer-footer-brand">NorCal SBDC</div>
+            <div class="flyer-footer-url">norcalsbdc.org</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE SAMPLE B: Event Banner -->
+    <div class="section-header reveal" style="margin-top: 48px;">
+      <div class="section-header-title" style="font-size: 0.95rem;">
+        <iconify-icon icon="carbon:image" style="color: var(--royal); margin-right: 4px;"></iconify-icon>
+        Event Banner
+      </div>
+      <div class="section-header-sub">Full-width digital banner at 16:5 aspect ratio for event pages and signage.</div>
+    </div>
+
+    <div class="sample-wrap reveal" style="padding: clamp(16px, 2vw, 24px);">
+      <div class="banner-mock">
+        <img src="assets/starwhite@4x.png" alt="" class="banner-star" aria-hidden="true">
+        <div class="banner-logo-bar"></div>
+        <div class="banner-title">SBDC Day 2026</div>
+        <div class="banner-subtitle">Celebrating 20 Years of Small Business Impact</div>
+        <div class="banner-details">June 14, 2026 &nbsp;&middot;&nbsp; 9:00 AM &ndash; 4:00 PM &nbsp;&middot;&nbsp; Sacramento Convention Center</div>
+        <div class="banner-stats-row">18 Centers &nbsp;&middot;&nbsp; 36 Counties &nbsp;&middot;&nbsp; $547M Impact</div>
+        <div class="banner-color-bar">
+          <div style="background: var(--pool);"></div>
+          <div style="background: var(--cream);"></div>
+          <div style="background: var(--dusty);"></div>
+          <div style="background: var(--brick);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE SAMPLE C: Name Badge Set -->
+    <div class="section-header reveal" style="margin-top: 48px;">
+      <div class="section-header-title" style="font-size: 0.95rem;">
+        <iconify-icon icon="carbon:identification" style="color: var(--royal); margin-right: 4px;"></iconify-icon>
+        Name Badge Set
+      </div>
+      <div class="section-header-sub">Standard attendee badge and VIP/Speaker badge variation side by side.</div>
+    </div>
+
+    <div class="sample-wrap reveal">
+      <div class="badge-set">
+        <!-- Standard Badge -->
+        <div class="badge-mock" style="background: var(--white); border: 1px solid var(--rule-light);">
+          <div class="badge-header" style="background: var(--navy);">
+            <div class="badge-header-text" style="color: rgba(255,255,255,0.7);">NorCal SBDC</div>
+          </div>
+          <div class="badge-body">
+            <div class="badge-name" style="color: var(--navy);">Sarah Mitchell</div>
+            <div class="badge-title" style="color: var(--text-secondary);">Owner, Blue Oak Bakery</div>
+            <div class="badge-accent" style="background: var(--pool);"></div>
+            <div style="font-family: var(--mono); font-size: 0.45rem; color: var(--text-tertiary);">SBDC Day 2026 &middot; Attendee</div>
+          </div>
+        </div>
+        <!-- VIP/Speaker Badge -->
+        <div class="badge-mock" style="background: var(--navy);">
+          <div class="badge-header" style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <div class="badge-header-text" style="color: var(--pool);">NorCal SBDC</div>
+          </div>
+          <div class="badge-body">
+            <div class="badge-name" style="color: var(--white);">James Ortega</div>
+            <div class="badge-title" style="color: rgba(255,255,255,0.4);">Regional Director, NorCal SBDC</div>
+            <div class="badge-accent" style="background: var(--pool);"></div>
+            <div class="badge-tag" style="background: var(--pool); color: var(--navy);">Speaker</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE SAMPLE D: Social Series -->
+    <div class="section-header reveal" style="margin-top: 48px;">
+      <div class="section-header-title" style="font-size: 0.95rem;">
+        <iconify-icon icon="carbon:share" style="color: var(--royal); margin-right: 4px;"></iconify-icon>
+        Social Series
+      </div>
+      <div class="section-header-sub">Three coordinated square graphics for social media campaigns.</div>
+    </div>
+
+    <div class="sample-wrap reveal">
+      <div class="social-series">
+        <!-- Social 1: SBDC Day Announcement -->
+        <div class="social-mock" style="background: var(--navy);">
+          <div style="position: absolute; top: 12px; left: 12px; width: 30px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 1px;"></div>
+          <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column;">
+            <div style="position: absolute; top: 20%; left: 8%; right: 8%; display: flex; flex-direction: column; gap: 2px;">
+              <div style="height: 1px; background: rgba(255,255,255,0.04);"></div>
+              <div style="height: 1px; background: rgba(255,255,255,0.03);"></div>
+            </div>
+            <div style="position: absolute; bottom: 20%; left: 8%; right: 8%; display: flex; flex-direction: column; gap: 2px;">
+              <div style="height: 1px; background: rgba(255,255,255,0.03);"></div>
+              <div style="height: 1px; background: rgba(255,255,255,0.04);"></div>
+            </div>
+          </div>
+          <div style="font-family: var(--serif); font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--white); letter-spacing: -0.02em; line-height: 1.1; position: relative; z-index: 1;">SBDC Day</div>
+          <div style="font-family: var(--serif); font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--white); letter-spacing: -0.02em; line-height: 1.1; position: relative; z-index: 1;">2026</div>
+          <div style="font-family: var(--mono); font-size: 0.45rem; color: var(--pool); margin-top: 6px; position: relative; z-index: 1;">June 14 &middot; Sacramento</div>
+          <div style="position: absolute; bottom: 10px; width: 24px; height: 3px; background: rgba(255,255,255,0.15); border-radius: 1px;"></div>
+        </div>
+
+        <!-- Social 2: Client Spotlight -->
+        <div class="social-mock" style="background: var(--white); border: 1px solid var(--rule-light);">
+          <div style="position: absolute; top: 12px; left: 12px; font-family: var(--sans); font-size: 0.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--royal);">Client Spotlight</div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--cream); margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+            <iconify-icon icon="carbon:user-avatar" style="color: var(--text-tertiary); font-size: 18px;"></iconify-icon>
+          </div>
+          <div style="font-family: var(--serif); font-size: 0.82rem; color: var(--navy); letter-spacing: -0.02em;">[Client Name]</div>
+          <div style="font-family: var(--sans); font-weight: 300; font-size: 0.55rem; color: var(--text-secondary); margin-top: 2px;">[Business Name]</div>
+          <div style="width: 24px; height: 2px; background: var(--pool); border-radius: 1px; margin-top: 8px;"></div>
+          <div style="position: absolute; bottom: 10px; font-family: var(--mono); font-size: 0.4rem; color: var(--text-tertiary);">norcalsbdc.org</div>
+        </div>
+
+        <!-- Social 3: Impact Stat -->
+        <div class="social-mock" style="background: var(--navy);">
+          <div style="position: absolute; top: 12px; left: 12px; font-family: var(--sans); font-size: 0.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--pool);">Impact</div>
+          <div style="font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 1.8rem); color: var(--pool); letter-spacing: -0.03em; line-height: 1; position: relative; z-index: 1;">$58</div>
+          <div style="font-family: var(--sans); font-weight: 300; font-size: 0.6rem; color: rgba(255,255,255,0.5); margin-top: 4px; text-align: center; line-height: 1.3; position: relative; z-index: 1;">return on every<br>$1 invested</div>
+          <div style="position: absolute; bottom: 10px; width: 24px; height: 3px; background: rgba(255,255,255,0.15); border-radius: 1px;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 3: USAGE GUIDELINES
+     ═══════════════════════════════════════════════════ -->
+<section class="section" id="guidelines">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Usage Guidelines</div>
+      <div class="section-header-sub">Sizing specifications, placement rules, color usage, typography standards, and the branding checklist for all event materials.</div>
+    </div>
+
+    <!-- A. Size Reference Table -->
+    <div class="guide-card reveal">
+      <div class="guide-card-title">
+        <iconify-icon icon="carbon:ruler"></iconify-icon>
+        Size Reference
+      </div>
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Dimensions</th>
+            <th>Resolution</th>
+            <th>File Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Event Banner</td>
+            <td>2400 &times; 600 px</td>
+            <td>150 DPI</td>
+            <td>PNG / PDF</td>
+          </tr>
+          <tr>
+            <td>Workshop Flyer</td>
+            <td>8.5 &times; 11 in</td>
+            <td>300 DPI</td>
+            <td>PDF</td>
+          </tr>
+          <tr>
+            <td>Social Graphic</td>
+            <td>1080 &times; 1080 px</td>
+            <td>72 DPI</td>
+            <td>PNG</td>
+          </tr>
+          <tr>
+            <td>Zoom Background</td>
+            <td>1920 &times; 1080 px</td>
+            <td>72 DPI</td>
+            <td>PNG</td>
+          </tr>
+          <tr>
+            <td>Table Banner</td>
+            <td>33 &times; 80 in</td>
+            <td>150 DPI</td>
+            <td>PDF</td>
+          </tr>
+          <tr>
+            <td>Name Badge</td>
+            <td>4 &times; 3 in</td>
+            <td>300 DPI</td>
+            <td>PDF</td>
+          </tr>
+          <tr>
+            <td>Pull-Up Banner</td>
+            <td>33 &times; 80 in</td>
+            <td>150 DPI</td>
+            <td>PDF</td>
+          </tr>
+          <tr>
+            <td>Email Header</td>
+            <td>600 &times; 200 px</td>
+            <td>72 DPI</td>
+            <td>PNG</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- B. Logo Placement Rules -->
+    <div class="guide-card reveal">
+      <div class="guide-card-title">
+        <iconify-icon icon="carbon:logo-github"></iconify-icon>
+        Logo Placement Rules
+      </div>
+      <div class="logo-rules-grid">
+        <!-- DO: Top-left or centered -->
+        <div class="logo-rule-item">
+          <div class="logo-rule-preview" style="background: var(--navy);">
+            <div style="position: absolute; top: 14px; left: 16px; width: 52px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 1px;"></div>
+            <div style="position: absolute; top: 14px; left: 16px; width: 68px; height: 24px; border: 1px dashed rgba(143,197,217,0.3); border-radius: 2px;"></div>
+          </div>
+          <div>
+            <div class="logo-rule-label do">
+              <iconify-icon icon="carbon:checkmark-filled"></iconify-icon>
+              Do: Top-left with clear space
+            </div>
+            <div class="logo-rule-desc">Position logo in top-left or centered with at least 1x logo-height of clear space on all sides.</div>
+          </div>
+        </div>
+        <!-- DO: White on dark, blue on light -->
+        <div class="logo-rule-item">
+          <div class="logo-rule-preview" style="background: linear-gradient(to right, var(--navy) 50%, var(--cream) 50%);">
+            <div style="position: absolute; left: 12%; top: 50%; transform: translateY(-50%); width: 44px; height: 7px; background: rgba(255,255,255,0.5); border-radius: 1px;"></div>
+            <div style="position: absolute; right: 12%; top: 50%; transform: translateY(-50%); width: 44px; height: 7px; background: var(--royal); border-radius: 1px; opacity: 0.6;"></div>
+          </div>
+          <div>
+            <div class="logo-rule-label do">
+              <iconify-icon icon="carbon:checkmark-filled"></iconify-icon>
+              Do: Correct color contrast
+            </div>
+            <div class="logo-rule-desc">Use white logo on dark backgrounds, blue logo on light backgrounds. Never reverse this pairing.</div>
+          </div>
+        </div>
+        <!-- DON'T: Stretch or rotate -->
+        <div class="logo-rule-item">
+          <div class="logo-rule-preview" style="background: var(--cream);">
+            <div style="width: 56px; height: 12px; background: var(--royal); border-radius: 1px; opacity: 0.3; transform: skewX(-15deg) scaleY(1.4);"></div>
+            <div style="position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; border: 2px solid var(--brick); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 20px; height: 2px; background: var(--brick); transform: rotate(45deg);"></div>
+            </div>
+          </div>
+          <div>
+            <div class="logo-rule-label dont">
+              <iconify-icon icon="carbon:close-filled"></iconify-icon>
+              Don't: Stretch, rotate, or recolor
+            </div>
+            <div class="logo-rule-desc">Never distort the logo proportions, rotate it, or apply colors outside the approved palette.</div>
+          </div>
+        </div>
+        <!-- DON'T: Busy backgrounds -->
+        <div class="logo-rule-item">
+          <div class="logo-rule-preview" style="background: repeating-linear-gradient(45deg, #ddd, #ddd 4px, #ccc 4px, #ccc 8px);">
+            <div style="width: 44px; height: 7px; background: rgba(29,90,167,0.3); border-radius: 1px;"></div>
+            <div style="position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; border: 2px solid var(--brick); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 20px; height: 2px; background: var(--brick); transform: rotate(45deg);"></div>
+            </div>
+          </div>
+          <div>
+            <div class="logo-rule-label dont">
+              <iconify-icon icon="carbon:close-filled"></iconify-icon>
+              Don't: Place on busy backgrounds
+            </div>
+            <div class="logo-rule-desc">Avoid placing the logo on patterned, photographic, or low-contrast backgrounds without a solid backing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C. Color Usage for Events -->
+    <div class="guide-card reveal">
+      <div class="guide-card-title">
+        <iconify-icon icon="carbon:color-palette"></iconify-icon>
+        Color Usage for Events
+      </div>
+      <div class="palette-row" style="margin-bottom: 12px;">
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--navy);"></div>
+          <div>
+            <div class="palette-name">Navy</div>
+            <div class="palette-hex">#0f1c2e</div>
+            <div class="palette-use">Backgrounds, headers</div>
+          </div>
+        </div>
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--pool);"></div>
+          <div>
+            <div class="palette-name">Pool</div>
+            <div class="palette-hex">#8FC5D9</div>
+            <div class="palette-use">Highlights, dates, CTAs</div>
+          </div>
+        </div>
+      </div>
+      <div class="palette-row" style="margin-bottom: 12px;">
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--royal);"></div>
+          <div>
+            <div class="palette-name">Royal</div>
+            <div class="palette-hex">#1D5AA7</div>
+            <div class="palette-use">Buttons, links</div>
+          </div>
+        </div>
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--brick);"></div>
+          <div>
+            <div class="palette-name">Brick</div>
+            <div class="palette-hex">#a82039</div>
+            <div class="palette-use">Urgent notices only</div>
+          </div>
+        </div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--cream);"></div>
+          <div>
+            <div class="palette-name">Cream</div>
+            <div class="palette-hex">#f0efeb</div>
+            <div class="palette-use">Light layouts, backgrounds</div>
+          </div>
+        </div>
+        <div class="palette-chip">
+          <div class="palette-swatch" style="background: var(--dusty);"></div>
+          <div>
+            <div class="palette-name">Dusty</div>
+            <div class="palette-hex">#5d7a9c</div>
+            <div class="palette-use">Supporting, accents</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D. Typography for Print -->
+    <div class="guide-card reveal">
+      <div class="guide-card-title">
+        <iconify-icon icon="carbon:text-font"></iconify-icon>
+        Typography for Print
+      </div>
+      <div class="type-rule-grid">
+        <div class="type-rule-cell">
+          <div class="type-rule-label">Headlines</div>
+          <div class="type-rule-example" style="font-family: var(--serif); font-weight: 400; font-size: 1.4rem; color: var(--navy); letter-spacing: -0.02em;">Tobias Regular</div>
+          <div class="type-rule-spec">Tobias 400 &middot; Minimum 24pt &middot; Letter-spacing: -0.02em</div>
+        </div>
+        <div class="type-rule-cell">
+          <div class="type-rule-label">Body Text</div>
+          <div class="type-rule-example" style="font-family: var(--sans); font-weight: 300; font-size: 0.95rem; color: var(--text-secondary);">GT America Light</div>
+          <div class="type-rule-spec">GT America 300 &middot; Minimum 10pt &middot; Line-height: 1.5</div>
+        </div>
+        <div class="type-rule-cell">
+          <div class="type-rule-label">Metadata</div>
+          <div class="type-rule-example" style="font-family: var(--mono); font-weight: 400; font-size: 0.78rem; color: var(--text-tertiary);">GT America Mono</div>
+          <div class="type-rule-spec">GT America Mono 400 &middot; 7&ndash;8pt &middot; Dates, specs, URLs</div>
+        </div>
+        <div class="type-rule-cell">
+          <div class="type-rule-label">Important</div>
+          <div class="type-rule-example" style="font-family: var(--sans); font-weight: 300; font-size: 0.85rem; color: var(--brick);">Never use bold Tobias</div>
+          <div class="type-rule-spec">Tobias Bold is not available &middot; Use 400 weight only</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E. Branding Checklist -->
+    <div class="guide-card reveal">
+      <div class="guide-card-title">
+        <iconify-icon icon="carbon:task-complete"></iconify-icon>
+        Branding Checklist
+      </div>
+      <ul class="checklist">
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          Logo present and correctly placed
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          <span><strong style="font-weight: 500;">norcalsbdc.org</strong> URL included on every piece</span>
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          <span><strong style="font-weight: 500;">"No-fee"</strong> language used (never "free")</span>
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          <span>Tagline present: <em style="font-family: var(--serif); font-style: italic;">Your Business, Better.</em></span>
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          Correct fonts: Tobias (headlines) + GT America (body)
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          Color palette matches brand tokens (Navy, Pool, Royal, Brick, Cream)
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          <span>Contact info included: <strong style="font-weight: 500;">phelps@norcalsbdc.org</strong></span>
+        </li>
+        <li>
+          <iconify-icon icon="carbon:checkbox-checked-filled"></iconify-icon>
+          Print files exported at 300 DPI minimum
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <div class="cta-inner">
+    <div class="cta-text"><strong>Your Business, Better.</strong> Need custom event graphics or have questions about brand compliance?</div>
+    <a href="mailto:phelps@norcalsbdc.org" class="cta-link"><iconify-icon icon="carbon:email"></iconify-icon> phelps@norcalsbdc.org</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+    <span class="footer-text">NorCal SBDC &middot; Event Graphics &middot; 2026</span>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  if (!reduced && revealEls.length) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(function(el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Nav scroll tracking
+  var navLinks = document.querySelectorAll('.nav-links a');
+  var sections = [];
+  navLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var sec = document.getElementById(id);
+    if (sec) sections.push({ el: sec, link: link });
+  });
+  function updateNav() {
+    var scrollY = window.pageYOffset + 80;
+    var current = sections[0];
+    sections.forEach(function(s) { if (s.el.offsetTop <= scrollY) current = s; });
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  var navTicking = false;
+  window.addEventListener('scroll', function() {
+    if (!navTicking) { requestAnimationFrame(function() { updateNav(); navTicking = false; }); navTicking = true; }
+  }, { passive: true });
+  updateNav();
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

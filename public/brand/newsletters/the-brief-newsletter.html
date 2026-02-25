@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Brief — NorCal SBDC Newsletter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --warm: #FAF8F5;
+            --maroon: #8A2432;
+            --light-gray: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e0e0e0;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .newsletter {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.1);
+        }
+        
+        /* =============================================
+           MASTHEAD
+        ============================================= */
+        .masthead {
+            background: var(--navy);
+            padding: 32px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .masthead::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .masthead-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .masthead-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .masthead-logo {
+            width: 120px;
+        }
+        
+        .masthead-divider {
+            width: 1px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .masthead-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .masthead-right {
+            text-align: right;
+        }
+        
+        .masthead-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .masthead-issue {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+        
+        /* =============================================
+           HERO STORY
+        ============================================= */
+        .hero-story {
+            padding: 40px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 12px;
+        }
+        
+        .hero-headline {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+        
+        .hero-excerpt {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .hero-link {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+        
+        .hero-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* =============================================
+           STATS STRIP
+        ============================================= */
+        .stats-strip {
+            background: var(--cream);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .stats-strip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stat-num {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+        
+        /* =============================================
+           SECTION HEADER
+        ============================================= */
+        .section-header {
+            padding: 32px 40px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 2px solid var(--navy);
+            margin: 0 40px;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        
+        .section-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: #999;
+        }
+        
+        /* =============================================
+           NEWS ITEMS
+        ============================================= */
+        .news-list {
+            padding: 0 40px;
+        }
+        
+        .news-item {
+            padding: 24px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 8px;
+        }
+        
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .news-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .news-title a:hover {
+            text-decoration: underline;
+        }
+        
+        .news-excerpt {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* =============================================
+           EVENTS SECTION
+        ============================================= */
+        .events-section {
+            background: var(--light-gray);
+            padding: 32px 40px;
+            margin-top: 16px;
+        }
+        
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--navy);
+        }
+        
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .event-item {
+            display: flex;
+            gap: 16px;
+            background: white;
+            padding: 16px;
+        }
+        
+        .event-date {
+            min-width: 56px;
+            text-align: center;
+            padding: 8px;
+            background: var(--navy);
+        }
+        
+        .event-date .month {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .event-date .day {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            margin-top: 2px;
+        }
+        
+        .event-content {
+            flex: 1;
+        }
+        
+        .event-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        
+        .event-details {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .event-location {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: #999;
+            margin-top: 6px;
+        }
+        
+        /* =============================================
+           SPOTLIGHT / FEATURE BOX
+        ============================================= */
+        .spotlight {
+            margin: 32px 40px;
+            background: var(--navy);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spotlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .spotlight-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .spotlight-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .spotlight-headline {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        
+        .spotlight-text {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .spotlight-cta {
+            display: inline-block;
+            background: white;
+            color: var(--navy);
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .spotlight-star {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 120px;
+            opacity: 0.08;
+        }
+        
+        /* =============================================
+           QUICK LINKS
+        ============================================= */
+        .quick-links {
+            padding: 32px 40px;
+            border-top: 1px solid #eee;
+        }
+        
+        .quick-links-header {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--navy);
+            text-decoration: none;
+            padding: 12px;
+            background: var(--light-gray);
+            transition: background 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: #eee;
+        }
+        
+        .quick-link-arrow {
+            color: var(--maroon);
+            font-weight: 700;
+        }
+        
+        /* =============================================
+           FOOTER
+        ============================================= */
+        .footer {
+            background: var(--navy);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-logo {
+            width: 140px;
+            margin-bottom: 16px;
+        }
+        
+        .footer-tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .footer-link {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer-legal {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.6;
+        }
+        
+        .footer-legal a {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* =============================================
+           ANNIVERSARY BADGE (for 20 years)
+        ============================================= */
+        .anniversary-strip {
+            background: var(--maroon);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .anniversary-strip .badge-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: white;
+        }
+        
+        .anniversary-strip .star {
+            width: 16px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="newsletter">
+        
+        <!-- Anniversary Strip -->
+        <div class="anniversary-strip">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+            <span class="badge-text">Celebrating 20 Years of Momentum</span>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+        </div>
+        
+        <!-- Masthead -->
+        <div class="masthead">
+            <div class="masthead-content">
+                <div class="masthead-left">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="masthead-logo">
+                    <div class="masthead-divider"></div>
+                    <div class="masthead-title">The Brief</div>
+                </div>
+                <div class="masthead-right">
+                    <div class="masthead-date">January 2026</div>
+                    <div class="masthead-issue">Issue 47</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero Story -->
+        <div class="hero-story">
+            <div class="hero-label">20th Anniversary</div>
+            <h1 class="hero-headline">Twenty years. $547 million. And we're just getting started.</h1>
+            <p class="hero-excerpt">This year marks two decades of NorCal SBDC serving small business owners across Northern California. From a single center in 2006 to a network of 18 centers and 300+ advisors, here's how we got here—and where we're going next.</p>
+            <a href="#" class="hero-link">Read the full story →</a>
+        </div>
+        
+        <!-- Stats Strip -->
+        <div class="stats-strip">
+            <div class="stat-item">
+                <div class="stat-num">$547M</div>
+                <div class="stat-label">Capital Accessed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">12,400</div>
+                <div class="stat-label">Businesses/Yr</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">36</div>
+                <div class="stat-label">Counties</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">300+</div>
+                <div class="stat-label">Advisors</div>
+            </div>
+        </div>
+        
+        <!-- News Section -->
+        <div class="section-header">
+            <div class="section-title">Network News</div>
+            <div class="section-count">3 stories</div>
+        </div>
+        
+        <div class="news-list">
+            <div class="news-item">
+                <div class="news-meta">Funding</div>
+                <h3 class="news-title"><a href="#">SBA announces $2.3M in additional funding for California SBDC network</a></h3>
+                <p class="news-excerpt">New federal funding will expand advising capacity across rural Northern California counties, with a focus on disaster preparedness and recovery services.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-meta">Recognition</div>
+                <h3 class="news-title"><a href="#">Chico Center advisor named State Star</a></h3>
+                <p class="news-excerpt">Maria Santos, lead business advisor at the Chico SBDC, has been recognized as California's 2026 State Star for her work helping Camp Fire survivors rebuild their businesses.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-meta">Program Launch</div>
+                <h3 class="news-title"><a href="#">New AI tools training series launches in February</a></h3>
+                <p class="news-excerpt">A six-part workshop series will help small business owners leverage AI tools for marketing, operations, and customer service—at no cost.</p>
+            </div>
+        </div>
+        
+        <!-- Spotlight -->
+        <div class="spotlight">
+            <div class="spotlight-content">
+                <div class="spotlight-label">Success Story</div>
+                <h3 class="spotlight-headline">From food truck to three locations: Maria's story</h3>
+                <p class="spotlight-text">When Maria R. came to NorCal SBDC, she had a food truck and a dream. Five years and $380K in SBA loans later, she has three restaurant locations and 22 employees.</p>
+                <a href="#" class="spotlight-cta">Read her story →</a>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="spotlight-star">
+        </div>
+        
+        <!-- Events Section -->
+        <div class="events-section">
+            <div class="events-header">
+                <div class="section-title">Upcoming Events</div>
+                <div class="section-count">4 events</div>
+            </div>
+            
+            <div class="events-list">
+                <div class="event-item">
+                    <div class="event-date">
+                        <div class="month">Jan</div>
+                        <div class="day">15</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Small Business Basics Workshop</div>
+                        <div class="event-details">9:00 AM – 12:00 PM · Free</div>
+                        <div class="event-location">Sacramento SBDC · Virtual</div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <div class="month">Jan</div>
+                        <div class="day">22</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Access to Capital: SBA Loans 101</div>
+                        <div class="event-details">1:00 PM – 3:00 PM · Free</div>
+                        <div class="event-location">Fresno SBDC · In-Person</div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <div class="month">Jan</div>
+                        <div class="day">28</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Marketing on a Budget</div>
+                        <div class="event-details">10:00 AM – 11:30 AM · Free</div>
+                        <div class="event-location">Chico SBDC · Virtual</div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <div class="month">Feb</div>
+                        <div class="day">05</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">AI Tools for Small Business</div>
+                        <div class="event-details">2:00 PM – 4:00 PM · Free</div>
+                        <div class="event-location">Network-Wide · Virtual</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <div class="quick-links-header">Quick Links</div>
+            <div class="quick-links-grid">
+                <a href="#" class="quick-link">
+                    <span class="quick-link-arrow">→</span>
+                    Schedule Free Advising
+                </a>
+                <a href="#" class="quick-link">
+                    <span class="quick-link-arrow">→</span>
+                    Find Your Local Center
+                </a>
+                <a href="#" class="quick-link">
+                    <span class="quick-link-arrow">→</span>
+                    Browse All Events
+                </a>
+                <a href="#" class="quick-link">
+                    <span class="quick-link-arrow">→</span>
+                    Success Stories
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="footer-logo">
+                <div class="footer-tagline">Your Business People · Since 2006</div>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Website</a>
+                    <a href="#" class="footer-link">Get Advising</a>
+                    <a href="#" class="footer-link">Events</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+                
+                <div class="footer-social">
+                    <a href="#">Li</a>
+                    <a href="#">Fb</a>
+                    <a href="#">Ig</a>
+                    <a href="#">X</a>
+                </div>
+                
+                <div class="footer-legal">
+                    NorCal SBDC Network · Serving 36 counties across Northern California<br>
+                    <a href="#">Unsubscribe</a> · <a href="#">Update preferences</a> · <a href="#">View in browser</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

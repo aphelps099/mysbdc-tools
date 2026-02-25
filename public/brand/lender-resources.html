@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lender Resources — NorCal SBDC</title>
+
+<script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   FONTS — Tobias + GT America (Chamber weight)
+   ═══════════════════════════════════════════ */
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+
+/* ═══════════════════════════════════════════
+   RESET + BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ═══════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  --navy: #0f1c2e;
+  --royal: #1D5AA7;
+  --royal-dim: rgba(29,90,167,0.08);
+  --pool: #8FC5D9;
+  --cream: #f0efeb;
+  --white: #ffffff;
+  --text: #0a1528;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8a8a8a;
+  --rule: rgba(0,0,0,0.12);
+  --rule-light: rgba(0,0,0,0.06);
+  --green: #16a34a;
+  --red: #a82039;
+  --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+  --serif: 'Tobias', Georgia, serif;
+  --mono: 'GT America Mono', 'SF Mono', monospace;
+  --pad: clamp(32px, 5vw, 64px);
+  --max: 1080px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+iconify-icon { display: inline-flex; vertical-align: middle; }
+
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--pad);
+  background: var(--navy);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo { height: 18px; width: auto; }
+.nav-back {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color 0.2s ease;
+}
+.nav-back:hover { color: var(--white); }
+.nav-back iconify-icon { font-size: 14px; }
+.nav-links { display: flex; gap: 0; }
+.nav-links a {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s ease;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.8); }
+.nav-links a.active { color: var(--white); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 2px; background: var(--pool);
+}
+
+/* ═══════════════════════════════════════════
+   HERO — Interior page (compact)
+   ═══════════════════════════════════════════ */
+.hero {
+  margin-top: 56px;
+  background: var(--navy);
+  padding: clamp(48px, 6vw, 80px) var(--pad);
+  position: relative;
+  overflow: hidden;
+}
+.hero-watermark {
+  position: absolute; right: 3%; top: 50%;
+  transform: translateY(-50%);
+  width: clamp(180px, 22vw, 340px);
+  opacity: 0.03;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  position: relative; z-index: 2;
+}
+.hero-breadcrumb {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+.hero-breadcrumb a { transition: color 0.2s ease; }
+.hero-breadcrumb a:hover { color: rgba(255,255,255,0.7); }
+.hero-h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.08;
+  margin-bottom: 16px;
+}
+.hero-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.6; color: rgba(255,255,255,0.4);
+  max-width: 520px;
+}
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 32px;
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--pool); line-height: 1;
+  margin-bottom: 4px;
+}
+.hero-stat-label {
+  font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.section { padding: clamp(48px, 6vw, 80px) var(--pad); }
+.container { max-width: var(--max); margin: 0 auto; }
+
+.section-header {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-bottom: 48px;
+}
+.section-header-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-header-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 8px; max-width: 560px;
+}
+
+/* ═══════════════════════════════════════════
+   RESOURCE CARDS
+   ═══════════════════════════════════════════ */
+.resource-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+}
+.resource-card {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  text-decoration: none; color: inherit;
+  transition: box-shadow 0.25s ease;
+}
+.resource-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.resource-card-preview {
+  aspect-ratio: 16/10;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.resource-card-badge { position: absolute; top: 10px; right: 10px; }
+.resource-card-body { padding: 20px 24px; flex: 1; display: flex; flex-direction: column; }
+.resource-card-name {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 3px;
+}
+.resource-card-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.8rem; line-height: 1.5;
+  color: var(--text-secondary); margin-bottom: 12px;
+}
+.resource-card-meta {
+  font-family: var(--mono); font-size: 0.5rem; font-weight: 400;
+  color: var(--text-tertiary); margin-top: auto;
+}
+
+/* ═══════════════════════════════════════════
+   TAGS
+   ═══════════════════════════════════════════ */
+.tag {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid var(--rule);
+  color: var(--text-secondary);
+  display: inline-block;
+}
+.tag-pool { border-color: rgba(143,197,217,0.4); color: var(--pool); }
+.tag-royal { border-color: rgba(29,90,167,0.3); color: var(--royal); }
+.tag-green { border-color: rgba(22,163,74,0.3); color: var(--green); }
+
+/* ═══════════════════════════════════════════
+   VALUE PROPOSITION GRID
+   ═══════════════════════════════════════════ */
+.value-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+}
+.value-cell {
+  background: var(--white);
+  padding: 32px;
+}
+.value-cell-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: var(--royal); line-height: 1;
+  margin-bottom: 8px;
+}
+.value-cell-label {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════
+   TALKING POINTS
+   ═══════════════════════════════════════════ */
+.talk-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.talk-cell {
+  background: var(--white);
+  padding: 28px 32px;
+}
+.talk-cell-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.talk-cell-title iconify-icon { color: var(--royal); font-size: 14px; }
+.talk-cell-body {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.88rem; line-height: 1.6;
+  color: var(--text-secondary);
+}
+.talk-cell-body strong {
+  font-weight: 500; color: var(--text);
+}
+
+/* Copy button */
+.copy-btn {
+  font-family: var(--mono); font-size: 0.52rem; font-weight: 400;
+  color: var(--text-tertiary);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 2px;
+  background: var(--cream);
+  transition: all 0.15s ease;
+}
+.copy-btn:hover { color: var(--royal); background: var(--royal-dim); }
+
+/* ═══════════════════════════════════════════
+   QUICK-COPY PHRASES
+   ═══════════════════════════════════════════ */
+.phrase-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+}
+.phrase-card {
+  background: var(--white);
+  padding: 24px 28px;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+}
+.phrase-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.phrase-card-label {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-tertiary); margin-bottom: 6px;
+}
+.phrase-card-text {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  color: var(--text); line-height: 1.3;
+}
+.phrase-card-copy {
+  position: absolute; top: 12px; right: 12px;
+}
+
+/* ═══════════════════════════════════════════
+   MINI CSS MOCKUPS
+   ═══════════════════════════════════════════ */
+.mini {
+  width: 58%; height: 68%;
+  border-radius: 2px;
+  position: relative; overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT / CTA
+   ═══════════════════════════════════════════ */
+.cta-bar {
+  background: var(--navy);
+  padding: 48px var(--pad);
+}
+.cta-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.cta-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; color: rgba(255,255,255,0.5);
+}
+.cta-text strong {
+  font-weight: 400; color: var(--white);
+}
+.cta-link {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+  color: var(--pool);
+  padding: 10px 20px;
+  border: 1px solid rgba(143,197,217,0.3);
+  border-radius: 3px;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s ease;
+}
+.cta-link:hover { background: rgba(143,197,217,0.1); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.footer {
+  padding: 32px var(--pad);
+  background: var(--white);
+  border-top: 1px solid var(--rule-light);
+}
+.footer-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { height: 16px; }
+.footer-text {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy); color: var(--white);
+  font-family: var(--mono); font-size: 0.6rem;
+  padding: 10px 20px; border-radius: 4px;
+  opacity: 0; transition: all 0.25s ease;
+  z-index: 200; display: flex; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); }
+  .value-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .resource-grid, .value-grid, .talk-grid, .phrase-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .cta-inner { flex-direction: column; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="brand-house.html"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="nav-logo"></a>
+    <a href="brand-house.html" class="nav-back"><iconify-icon icon="carbon:arrow-left"></iconify-icon> Brand House</a>
+  </div>
+  <div class="nav-links">
+    <a href="#resources" class="active">Resources</a>
+    <a href="#value">Value Prop</a>
+    <a href="#talking">Talking Points</a>
+    <a href="#phrases">Quick Copy</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="assets/starwhite@4x.png" alt="" class="hero-watermark" aria-hidden="true">
+  <div class="hero-inner">
+    <div class="hero-breadcrumb"><a href="brand-house.html">Brand House</a> / Lender Resources</div>
+    <h1 class="hero-h1">Lender &amp; Partner Resources</h1>
+    <p class="hero-desc">Guides, spotlights, outreach tools, and talking points for lender partnerships, CDFIs, and economic development organizations. Everything your team needs to build and maintain lending relationships.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">$547M</div>
+        <div class="hero-stat-label">Capital Accessed</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">$58</div>
+        <div class="hero-stat-label">Return per $1 Invested</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">18</div>
+        <div class="hero-stat-label">Centers Statewide</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">36</div>
+        <div class="hero-stat-label">Counties Served</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Resource Library</div>
+      <div class="section-header-sub">Guides, spotlight campaigns, email templates, and outreach content. Click to view each resource.</div>
+    </div>
+
+    <div class="resource-grid reveal">
+
+      <!-- Lender Guide (Design v2) -->
+      <a href="lender-guides/lender-guide-design-v2.html" class="resource-card" target="_blank">
+        <div class="resource-card-preview" style="background: var(--navy);">
+          <div class="mini" style="background: var(--white); width: 38%; height: 74%; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <div style="height: 28%; background: linear-gradient(135deg, var(--royal), var(--pool)); display: flex; align-items: flex-end; padding: 5px;">
+              <div style="width: 45%; height: 3px; background: var(--white); border-radius: 1px;"></div>
+            </div>
+            <div style="padding: 5px; flex: 1;">
+              <div style="width: 70%; height: 2px; background: var(--navy); border-radius: 1px; margin-bottom: 3px;"></div>
+              <div style="width: 90%; height: 2px; background: rgba(0,0,0,0.08); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 75%; height: 2px; background: rgba(0,0,0,0.08); border-radius: 1px; margin-bottom: 4px;"></div>
+              <div style="display: flex; gap: 3px;">
+                <div style="flex: 1; height: 10px; background: var(--royal-dim); border-radius: 1px;"></div>
+                <div style="flex: 1; height: 10px; background: var(--royal-dim); border-radius: 1px;"></div>
+              </div>
+            </div>
+          </div>
+          <span class="tag tag-pool resource-card-badge">Multi-Page</span>
+        </div>
+        <div class="resource-card-body">
+          <div class="resource-card-name">Lender Partnership Guide</div>
+          <div class="resource-card-desc">Comprehensive sponsorship and partnership guide with value propositions, impact data, and partnership tiers.</div>
+          <div class="resource-card-meta">8.5 &times; 11 &middot; PDF</div>
+        </div>
+      </a>
+
+      <!-- Lender Guide (Editorial) -->
+      <a href="lender-guides/lender-guide-editorial.html" class="resource-card" target="_blank">
+        <div class="resource-card-preview" style="background: #e8e7e3;">
+          <div class="mini" style="background: var(--white); width: 38%; height: 74%; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+            <div style="height: 22%; background: var(--navy); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 30%; height: 2px; background: rgba(255,255,255,0.4); border-radius: 1px;"></div>
+            </div>
+            <div style="padding: 6px; flex: 1;">
+              <div style="width: 85%; height: 2px; background: rgba(0,0,0,0.12); border-radius: 1px; margin-bottom: 3px;"></div>
+              <div style="width: 90%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 70%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 80%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 65%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px;"></div>
+            </div>
+          </div>
+          <span class="tag resource-card-badge">Editorial</span>
+        </div>
+        <div class="resource-card-body">
+          <div class="resource-card-name">Editorial Guide</div>
+          <div class="resource-card-desc">Long-form editorial version with narrative content, data storytelling, and detailed partnership framework.</div>
+          <div class="resource-card-meta">Multi-page &middot; PDF</div>
+        </div>
+      </a>
+
+      <!-- Spotlight Campaign -->
+      <a href="lender-guides/lender-spotlight-campaign.html" class="resource-card" target="_blank">
+        <div class="resource-card-preview" style="background: var(--royal);">
+          <div class="mini" style="background: transparent; width: 62%; height: 62%; border: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 2px;">
+            <div style="width: 18%; height: 3px; background: var(--pool); border-radius: 1px; margin-bottom: 4px;"></div>
+            <div style="width: 50%; height: 3px; background: var(--white); border-radius: 1px; margin-bottom: 2px;"></div>
+            <div style="width: 35%; height: 3px; background: var(--white); border-radius: 1px; margin-bottom: 5px;"></div>
+            <div style="width: 25%; height: 2px; background: rgba(255,255,255,0.3); border-radius: 1px;"></div>
+          </div>
+          <span class="tag tag-pool resource-card-badge">Campaign</span>
+        </div>
+        <div class="resource-card-body">
+          <div class="resource-card-name">Spotlight Campaign</div>
+          <div class="resource-card-desc">Multi-page lender spotlight campaign with hero layouts, stat highlights, and testimonial sections.</div>
+          <div class="resource-card-meta">Multiple formats</div>
+        </div>
+      </a>
+
+      <!-- Content Wall -->
+      <a href="lender-guides/partner-lender-content-wall.html" class="resource-card" target="_blank">
+        <div class="resource-card-preview" style="background: #1a1a1a;">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; width: 62%; height: 62%;">
+            <div style="background: var(--navy); border-radius: 1px;"></div>
+            <div style="background: var(--cream); border-radius: 1px;"></div>
+            <div style="background: var(--royal); border-radius: 1px;"></div>
+            <div style="background: #b54a4a; border-radius: 1px;"></div>
+            <div style="background: #5d7a9c; border-radius: 1px;"></div>
+            <div style="background: var(--navy); border-radius: 1px;"></div>
+          </div>
+          <span class="tag tag-pool resource-card-badge">Ad Grid</span>
+        </div>
+        <div class="resource-card-body">
+          <div class="resource-card-name">Content Wall</div>
+          <div class="resource-card-desc">Full grid of outreach ad concepts — billboards, value props, CDFI messaging, and social content for all partner segments.</div>
+          <div class="resource-card-meta">Ads &middot; Multiple Formats</div>
+        </div>
+      </a>
+
+      <!-- 20 Years Email -->
+      <a href="lender-guides/20-years-partnership-email.html" class="resource-card" target="_blank">
+        <div class="resource-card-preview" style="background: #e8e7e3;">
+          <div class="mini" style="background: var(--white); width: 38%; height: 76%; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+            <div style="height: 10%; background: var(--navy);"></div>
+            <div style="height: 24%; background: linear-gradient(to bottom, var(--pool), var(--royal)); display: flex; align-items: center; justify-content: center;">
+              <div style="font-family: var(--serif); font-size: 10px; color: var(--white); font-weight: 400;">20</div>
+            </div>
+            <div style="padding: 4px; flex: 1;">
+              <div style="width: 80%; height: 2px; background: rgba(0,0,0,0.12); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 90%; height: 2px; background: rgba(0,0,0,0.06); border-radius: 1px; margin-bottom: 2px;"></div>
+              <div style="width: 35%; height: 4px; background: var(--pool); border-radius: 1px;"></div>
+            </div>
+            <div style="height: 6%; background: var(--navy);"></div>
+          </div>
+          <span class="tag resource-card-badge">Email</span>
+        </div>
+        <div class="resource-card-body">
+          <div class="resource-card-name">20 Years Partnership Email</div>
+          <div class="resource-card-desc">Anniversary milestone email template celebrating 20 years of lending partnerships with NorCal SBDC.</div>
+          <div class="resource-card-meta">HTML Email &middot; 600px</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROPOSITION -->
+<section class="section" id="value">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Value Proposition</div>
+      <div class="section-header-sub">The numbers that matter when talking to lenders and partners.</div>
+    </div>
+
+    <div class="value-grid reveal">
+      <div class="value-cell">
+        <div class="value-cell-num">$58</div>
+        <div class="value-cell-label">Return for every $1 invested in SBDC — SBA verified</div>
+      </div>
+      <div class="value-cell">
+        <div class="value-cell-num">$547M</div>
+        <div class="value-cell-label">Capital accessed by NorCal SBDC clients last year</div>
+      </div>
+      <div class="value-cell">
+        <div class="value-cell-num">7,500+</div>
+        <div class="value-cell-label">Entrepreneurs served annually across the network</div>
+      </div>
+      <div class="value-cell">
+        <div class="value-cell-num">20 yrs</div>
+        <div class="value-cell-label">Partnering with lenders across Northern California</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TALKING POINTS -->
+<section class="section" id="talking">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Talking Points</div>
+      <div class="section-header-sub">Use these when reaching out to lenders, CDFIs, and economic development partners.</div>
+    </div>
+
+    <div class="talk-grid reveal">
+      <div class="talk-cell">
+        <div class="talk-cell-title"><iconify-icon icon="carbon:partnership"></iconify-icon> For Banks &amp; Lenders</div>
+        <div class="talk-cell-body"><strong>We don't compete with you — we make your pipeline stronger.</strong> SBDC referrals come with clean financials, solid business plans, and realistic loan amounts. Our advisors do the prep work so your underwriters can close faster.</div>
+      </div>
+      <div class="talk-cell">
+        <div class="talk-cell-title"><iconify-icon icon="carbon:finance"></iconify-icon> For CDFIs</div>
+        <div class="talk-cell-body"><strong>Same mission, different tools.</strong> You lend, we advise. Together we reach the businesses that need capital most. Our 18 centers across NorCal are embedded in the communities you serve.</div>
+      </div>
+      <div class="talk-cell">
+        <div class="talk-cell-title"><iconify-icon icon="carbon:government"></iconify-icon> For Cities &amp; Counties</div>
+        <div class="talk-cell-body"><strong>Your constituents, our advisors.</strong> No-fee small business support for your community. We serve 36 counties and generate measurable economic impact: job creation, revenue growth, and business starts.</div>
+      </div>
+      <div class="talk-cell">
+        <div class="talk-cell-title"><iconify-icon icon="carbon:chart-line"></iconify-icon> The ROI Conversation</div>
+        <div class="talk-cell-body"><strong>$58 back for every $1 invested</strong> — that's the SBA-verified return. Our no-fee advising model doesn't just help entrepreneurs, it creates measurable economic impact that benefits the entire lending ecosystem.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK-COPY PHRASES -->
+<section class="section" id="phrases">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Quick Copy</div>
+      <div class="section-header-sub">Approved phrases for lender-facing communications. Click any card to copy.</div>
+    </div>
+
+    <div class="phrase-grid reveal">
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Headline</div>
+        <div class="phrase-card-text">We send you loan-ready clients.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Headline</div>
+        <div class="phrase-card-text">We do the prep work. You close the deal.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Value</div>
+        <div class="phrase-card-text">Less back-and-forth. Faster closes. Better clients.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Trust</div>
+        <div class="phrase-card-text">Complete packages. Realistic asks. Prepared borrowers.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">CTA</div>
+        <div class="phrase-card-text">Your business, funded.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Mission</div>
+        <div class="phrase-card-text">We reach the businesses you want to fund.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Scale</div>
+        <div class="phrase-card-text">18 centers. 36 counties. One network.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Impact</div>
+        <div class="phrase-card-text">$547M in capital accessed. That&rsquo;s your pipeline, strengthened.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <div class="cta-inner">
+    <div class="cta-text"><strong>Ready to partner?</strong> Questions about lender resources, co-branded materials, or partnership opportunities.</div>
+    <a href="mailto:phelps@norcalsbdc.org" class="cta-link"><iconify-icon icon="carbon:email"></iconify-icon> phelps@norcalsbdc.org</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+    <span class="footer-text">NorCal SBDC &middot; Lender Resources &middot; 2026</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Toast
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  window.showToast = function(msg) {
+    clearTimeout(toastTimer);
+    toastEl.innerHTML = '<iconify-icon icon="carbon:checkmark" style="font-size:14px"></iconify-icon> ' + msg;
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+  };
+
+  // Copy phrases
+  window.copyPhrase = function(card) {
+    var text = card.querySelector('.phrase-card-text').textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      showToast('Copied: ' + text);
+    });
+  };
+
+  // Reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  if (!reduced && revealEls.length) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(function(el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Nav scroll tracking
+  var navLinks = document.querySelectorAll('.nav-links a');
+  var sections = [];
+  navLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var sec = document.getElementById(id);
+    if (sec) sections.push({ el: sec, link: link });
+  });
+  function updateNav() {
+    var scrollY = window.pageYOffset + 80;
+    var current = sections[0];
+    sections.forEach(function(s) { if (s.el.offsetTop <= scrollY) current = s; });
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  var navTicking = false;
+  window.addEventListener('scroll', function() {
+    if (!navTicking) { requestAnimationFrame(function() { updateNav(); navTicking = false; }); navTicking = true; }
+  }, { passive: true });
+  updateNav();
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

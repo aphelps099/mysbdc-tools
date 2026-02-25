@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Case for Simplification | NorCal SBDC 20th Anniversary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset & Variables */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #1e3a5f;
+            --royal: #1D5AA7;
+            --wine: #8A2432;
+            --black: #0a0a0f;
+            --ice: #f0f4f8;
+            --text-gray: #888;
+            --pool: #8FC5D9;
+            --cream: #f5f2eb;
+            --ivory: #faf9f7;
+            --mist: #c8d5e3;
+            --sky: #9EC4E0;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: white;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        /* Typography Helpers */
+        h1, h2, h3 { font-weight: 800; line-height: 1; }
+        em { color: var(--pool); font-style: normal; }
+
+        .meta-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        /* Layout */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 80px;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            color: #444;
+        }
+
+        /* Animations */
+        @keyframes fadeInBlur {
+            0% { opacity: 0; filter: blur(20px); transform: scale(0.95); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 40px rgba(143, 197, 217, 0.3), 0 0 80px rgba(143, 197, 217, 0.2); }
+            50% { box-shadow: 0 0 60px rgba(143, 197, 217, 0.5), 0 0 120px rgba(143, 197, 217, 0.3); }
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- SLIDE 1: Title --- */
+        .slide-1 {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            text-align: center;
+            align-items: center;
+        }
+
+        .slide-1 h1 { font-size: 80px; margin: 24px 0; }
+        .slide-1 .subtitle { font-size: 22px; color: var(--text-gray); max-width: 600px; font-weight: 400; margin-bottom: 100px; }
+        .slide-1 .hint-logo {
+            height: 60px;
+            opacity: 0.15;
+            filter: blur(2px);
+            transition: all 0.3s ease;
+        }
+        .slide-1 .hint-logo:hover {
+            opacity: 0.3;
+            filter: blur(0px);
+        }
+
+        /* --- SLIDE 2: Grand Reveal --- */
+        .slide-reveal {
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 100%);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .reveal-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo-stage {
+            position: relative;
+            padding: 80px 120px;
+            background: linear-gradient(135deg, rgba(143, 197, 217, 0.05) 0%, rgba(29, 90, 167, 0.08) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(143, 197, 217, 0.2);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .logo-stage img {
+            height: 140px;
+            animation: fadeInBlur 1.5s ease-out forwards;
+        }
+
+        .anniversary-badge {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            background: var(--royal);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(29, 90, 167, 0.4);
+            animation: badgeFloat 3s ease-in-out infinite;
+        }
+
+        .reveal-text {
+            font-size: 28px;
+            color: var(--pool);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            animation: fadeInBlur 1.5s ease-out 0.5s forwards;
+        }
+
+        /* --- SLIDE 3: Color Palette --- */
+        .slide-palette {
+            background: white;
+            color: var(--black);
+        }
+
+        .slide-palette h2 {
+            font-size: 56px;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+
+        .slide-palette .intro {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 700px;
+        }
+
+        .palette-display {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .color-block {
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .color-block:hover {
+            transform: translateY(-5px);
+        }
+
+        .color-block.primary {
+            flex: 2;
+            background: var(--pool);
+        }
+
+        .color-block.navy { flex: 1; background: var(--navy); }
+        .color-block.royal { flex: 1; background: var(--royal); }
+        .color-block.cream { flex: 1; background: var(--cream); color: var(--navy); }
+
+        .color-name {
+            font-family: var(--mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .sample-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .sample-card {
+            aspect-ratio: 3/2;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .sample-card img {
+            height: 50px;
+            width: auto;
+        }
+
+        .sample-card.dark { background: var(--navy); }
+        .sample-card.light { background: white; border: 2px solid #e0e0e0; }
+        .sample-card.colored { background: var(--pool); }
+        .sample-card.gradient {
+            background: linear-gradient(135deg, var(--royal) 0%, var(--pool) 100%);
+        }
+
+        .sample-label {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-family: var(--mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        /* --- SLIDE 4: Problem --- */
+        .slide-problem {
+            background: #fff;
+            color: var(--black);
+        }
+
+        .slide-problem .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .slide-problem h2 {
+            font-size: 56px;
+            margin-bottom: 32px;
+            color: var(--black);
+        }
+
+        .slide-problem h2 em { color: var(--wine); }
+        .slide-problem p { font-size: 20px; color: #555; margin-bottom: 16px; }
+
+        .problem-list {
+            margin-top: 32px;
+            list-style: none;
+        }
+
+        .problem-list li {
+            margin-bottom: 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            color: var(--wine);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .problem-list li::before {
+            content: "×";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .logos-container {
+            background: #f5f5f5;
+            padding: 40px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .logos-container img {
+            max-height: 100px;
+            object-fit: contain;
+            align-self: flex-start;
+        }
+
+        /* --- SLIDE 5: Solution --- */
+        .slide-solution {
+            background: var(--royal);
+            color: white;
+            text-align: center;
+        }
+
+        .slide-solution h2 {
+            font-size: 64px;
+            margin-bottom: 60px;
+        }
+
+        .slide-solution em {
+            color: #fff;
+            text-decoration: underline;
+            text-decoration-thickness: 4px;
+        }
+
+        .comparison {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo-box {
+            padding: 48px;
+            border-radius: 16px;
+            background: white;
+            min-width: 280px;
+        }
+
+        .logo-box.old {
+            background: rgba(0,0,0,0.2);
+            opacity: 0.6;
+        }
+
+        .logo-box img {
+            height: 100px;
+            width: auto;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 80px;
+        }
+
+        .stat-number {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        /* --- SLIDE 6: Why Now --- */
+        .slide-why {
+            background: var(--black);
+        }
+
+        .slide-why .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .slide-why h2 {
+            font-size: 140px;
+            line-height: 0.9;
+            color: var(--pool);
+        }
+
+        .slide-why h2 span {
+            display: block;
+            font-size: 32px;
+            color: white;
+            letter-spacing: 0.05em;
+            margin-top: 10px;
+        }
+
+        .reasons {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .reason {
+            padding-left: 24px;
+            border-left: 3px solid var(--pool);
+        }
+
+        .reason h3 {
+            color: var(--pool);
+            margin-bottom: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .reason p {
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        /* --- SLIDE 7: Strategy Bridge --- */
+        .slide-bridge {
+            background: var(--navy);
+            color: white;
+        }
+
+        .slide-bridge .container {
+            display: flex;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .slide-bridge .left {
+            flex: 1;
+        }
+
+        .slide-bridge h2 {
+            font-size: 56px;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .slide-bridge p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .slide-bridge .visual-demo {
+            flex: 1;
+            background: #0a0a0f;
+            border-radius: 12px;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .demo-row {
+            margin-bottom: 40px;
+            opacity: 0.4;
+            filter: blur(1px);
+            transition: all 0.3s ease;
+        }
+
+        .demo-row.active {
+            opacity: 1;
+            filter: none;
+            transform: scale(1.05);
+            margin-bottom: 0;
+        }
+
+        .demo-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .demo-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .demo-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .demo-text {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .demo-stat {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--pool);
+            margin-top: 8px;
+        }
+
+        /* --- SLIDE 8: Real Examples - Email & Cards --- */
+        .slide-examples {
+            background: white;
+            color: var(--black);
+        }
+
+        .slide-examples h2 {
+            font-size: 48px;
+            color: var(--navy);
+            margin-bottom: 40px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .example-section {
+            background: #f8f8f8;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .example-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--royal);
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Email Signature Styles */
+        .sig-s4, .sig-s7 {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .sig-s4 .top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .sig-s4 .logo {
+            width: 100px;
+            flex-shrink: 0;
+        }
+
+        .sig-s4 .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .sig-s4 .details .name {
+            font-weight: bold;
+            color: #0F1C2E;
+            font-size: 14px;
+        }
+
+        .sig-s4 .details .title {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .sig-s4 .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #0F1C2E, #1D5AA7, #8FC5D9);
+            margin-bottom: 8px;
+            width: 280px;
+        }
+
+        .sig-s4 .contact {
+            font-size: 11px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .sig-s4 a {
+            color: #1D5AA7;
+            text-decoration: none;
+        }
+
+        .sig-s7 {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sig-s7 .logo img {
+            height: 56px;
+            width: auto;
+        }
+
+        .sig-s7 .divider-v {
+            width: 2px;
+            height: 56px;
+            background: linear-gradient(180deg, #1D5AA7, #8A2432);
+        }
+
+        .sig-s7 .info {
+            flex: 1;
+        }
+
+        .sig-s7 .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .sig-s7 .title {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .sig-s7 .contact {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .sig-s7 .contact a {
+            color: #0F1C2E;
+            text-decoration: none;
+        }
+
+        /* Business Card Styles */
+        .card-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            width: 100%;
+            aspect-ratio: 7/4;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            font-size: 10px;
+        }
+
+        .zag-1-front {
+            background: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zag-1-front .giant-name {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .zag-3-front {
+            background: var(--navy);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .zag-3-front .name {
+            font-size: 18px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .zag-3-front .role {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--pool);
+            margin-top: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .pool-forward-front {
+            background: var(--pool);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pool-forward-front .logo {
+            width: 50px;
+        }
+
+        .pool-forward-front .logo img {
+            width: 100%;
+        }
+
+        .pool-forward-front .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+
+        /* --- SLIDE 9: Social Media --- */
+        .slide-social {
+            background: #f0f4f8;
+            color: var(--black);
+        }
+
+        .slide-social h2 {
+            font-size: 48px;
+            color: var(--navy);
+            margin-bottom: 40px;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .social-square {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        /* Square Quote */
+        .square-quote {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .square-quote .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .square-quote .logo {
+            width: 50px;
+        }
+
+        .square-quote .logo img {
+            width: 100%;
+        }
+
+        .square-quote .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        .square-quote .quote {
+            font-size: 15px;
+            font-weight: 400;
+            font-style: italic;
+            color: white;
+            line-height: 1.35;
+            margin: 16px 0;
+        }
+
+        .square-quote .name {
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .square-quote .result {
+            font-size: 10px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+
+        /* Square Stat */
+        .square-stat {
+            background: var(--cream);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .square-stat .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--wine);
+        }
+
+        .square-stat .stat {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+
+        .square-stat .stat-context {
+            font-size: 12px;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        .square-stat .story {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.3;
+        }
+
+        .square-stat .logo {
+            width: 50px;
+        }
+
+        /* Square Journey */
+        .square-journey {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .square-journey .before {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .square-journey .after {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .square-journey .year {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-bottom: 6px;
+        }
+
+        .square-journey .before .year { color: var(--navy); opacity: 0.4; }
+        .square-journey .after .year { color: var(--pool); }
+
+        .square-journey .state {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .square-journey .before .state { color: var(--navy); opacity: 0.7; }
+        .square-journey .after .state { color: white; }
+
+        .square-journey .logo {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 40px;
+        }
+
+        /* Square Split */
+        .square-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .square-split .left {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .square-split .right {
+            background: var(--sky);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .square-split .logo {
+            width: 40px;
+        }
+
+        .square-split .left .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 8px;
+        }
+
+        .square-split .left .headline {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .square-split .left .headline span {
+            color: var(--pool);
+        }
+
+        .square-split .right .stat {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+        }
+
+        /* --- SLIDE 10: Email Headers --- */
+        .slide-headers {
+            background: white;
+            color: var(--black);
+        }
+
+        .slide-headers h2 {
+            font-size: 48px;
+            color: var(--navy);
+            margin-bottom: 40px;
+        }
+
+        .headers-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .header-example {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        }
+
+        /* Header Crop */
+        .header-crop {
+            background: var(--navy);
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-crop .content {
+            position: relative;
+            z-index: 2;
+            padding: 32px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header-crop .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header-crop .logo {
+            width: 120px;
+        }
+
+        .header-crop .logo img {
+            width: 100%;
+        }
+
+        .header-crop .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+
+        .header-crop .hero-block {
+            max-width: 400px;
+        }
+
+        .header-crop .line-1 {
+            font-size: 36px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .header-crop .line-2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--pool);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .header-crop .bg-text {
+            position: absolute;
+            font-size: 400px;
+            font-weight: 900;
+            color: white;
+            opacity: 0.04;
+            letter-spacing: -0.05em;
+            line-height: 0.7;
+            top: -60px;
+            left: -30px;
+        }
+
+        /* Header Stacked */
+        .header-stacked {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-stacked .top-bar {
+            background: var(--navy);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-stacked .logo {
+            width: 120px;
+        }
+
+        .header-stacked .logo img {
+            width: 100%;
+        }
+
+        .header-stacked .date-badge {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+
+        .header-stacked .hero-area {
+            padding: 40px 32px;
+        }
+
+        .header-stacked .stack-line {
+            display: block;
+            line-height: 0.95;
+        }
+
+        .header-stacked .stack-line.num {
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+        }
+
+        .header-stacked .stack-line.years {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.4;
+            margin-top: 6px;
+            margin-bottom: 20px;
+        }
+
+        .header-stacked .stack-line.hook {
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+
+        .header-stacked .stack-line.hook strong {
+            font-weight: 800;
+        }
+
+        .header-stacked .stack-line.hook span {
+            color: var(--wine);
+            font-weight: 800;
+        }
+
+        .scroll-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            opacity: 0.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .slide { padding: 40px; }
+            .slide-1 h1 { font-size: 48px; }
+            .slide-problem .content,
+            .slide-why .content,
+            .slide-bridge .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .examples-grid { grid-template-columns: 1fr; }
+            .social-grid { grid-template-columns: repeat(2, 1fr); }
+            .card-showcase { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Title -->
+    <section class="slide slide-1">
+        <div class="slide-number meta-text">01 / 10</div>
+        <div class="meta-text" style="color: var(--pool); margin-bottom: 20px;">20th Anniversary - Logo Proposal</div>
+        <h1>The Case for<br><em>Simplification</em></h1>
+        <p class="subtitle">Why decluttering our logo isn't losing identity—it's finally finding it.</p>
+        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="NorCal SBDC" class="hint-logo">
+    </section>
+
+    <!-- SLIDE 2: Grand Reveal -->
+    <section class="slide slide-reveal">
+        <div class="slide-number meta-text">02 / 10</div>
+        <div class="reveal-container">
+            <div class="logo-stage">
+                <div class="anniversary-badge">20 Years of Momentum</div>
+                <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Simplified SBDC Logo">
+            </div>
+            <p class="reveal-text">The logo Northern California SBDC deserves.</p>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: Color Palette -->
+    <section class="slide slide-palette">
+        <div class="slide-number meta-text">03 / 10</div>
+        <h2>The <em>Ambition</em> Palette</h2>
+        <p class="intro">Pool leads. The simplified logo works across every context—dark, light, colored, and gradient backgrounds. One mark. Infinite flexibility.</p>
+
+        <div class="palette-display">
+            <div class="color-block primary">
+                <div class="color-name">Pool (Primary)</div>
+            </div>
+            <div class="color-block navy">
+                <div class="color-name">Navy</div>
+            </div>
+            <div class="color-block royal">
+                <div class="color-name">Royal</div>
+            </div>
+            <div class="color-block cream">
+                <div class="color-name">Cream</div>
+            </div>
+        </div>
+
+        <div class="sample-cards">
+            <div class="sample-card dark">
+                <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo on dark">
+                <div class="sample-label" style="color: rgba(255,255,255,0.5);">On Dark</div>
+            </div>
+            <div class="sample-card light">
+                <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-blue-2026.png" alt="Logo on light">
+                <div class="sample-label">On Light</div>
+            </div>
+            <div class="sample-card colored">
+                <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo on color">
+                <div class="sample-label" style="color: rgba(255,255,255,0.7);">On Color</div>
+            </div>
+            <div class="sample-card gradient">
+                <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo on gradient">
+                <div class="sample-label" style="color: rgba(255,255,255,0.7);">On Gradient</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: Problem -->
+    <section class="slide slide-problem">
+        <div class="slide-number meta-text">04 / 10</div>
+        <div class="content">
+            <div class="text">
+                <h2>Our current logo asks too much of <em>everyone</em></h2>
+                <p>Four levels of hierarchy. Three colors. Two parent organizations. One confused audience.</p>
+                <p>Every time someone sees our logo, their eye has to navigate: America's SBDC → California → Northern CA Network. It's too much.</p>
+
+                <ul class="problem-list">
+                    <li>4 text elements competing</li>
+                    <li>Too small at social sizes</li>
+                    <li>Red bar creates noise</li>
+                    <li>Fails in single-color</li>
+                </ul>
+            </div>
+            <div class="logos-container">
+                <div>
+                    <div class="meta-text" style="color: #999; margin-bottom:10px;">Current Network Logo</div>
+                    <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" alt="Current Logo">
+                </div>
+                <div>
+                    <div class="meta-text" style="color: #999; margin-bottom:10px;">Center Example: Marin</div>
+                    <img src="https://www.marinsbdc.org/wp-content/uploads/sites/9/2021/04/Marin-SBDC-Logo-Color-1536x640.png" alt="Marin SBDC">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: Solution -->
+    <section class="slide slide-solution">
+        <div class="slide-number meta-text">05 / 10</div>
+        <div class="content">
+            <h2>Simplify. Strengthen. <em>Own it.</em></h2>
+
+            <div class="comparison">
+                <div class="logo-box old">
+                    <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" alt="Old Logo">
+                    <div class="meta-text" style="margin-top:20px; color:#444;">Before: 4 elements</div>
+                </div>
+                <div style="font-size: 40px; opacity: 0.5;">→</div>
+                <div class="logo-box">
+                    <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-blue-2026.png" alt="New Logo">
+                    <div class="meta-text" style="margin-top:20px; color:var(--royal);">After: 2 elements</div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">50%</div>
+                    <div class="meta-text">Less clutter</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="meta-text">Color needed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="meta-text">More versatile</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: Why Now -->
+    <section class="slide slide-why">
+        <div class="slide-number meta-text">06 / 10</div>
+        <div class="content">
+            <div>
+                <h2>20<span>Years</span></h2>
+            </div>
+            <div class="reasons">
+                <div class="reason">
+                    <h3>Milestone Moment</h3>
+                    <p>Twenty years of service. $547M in capital accessed. This isn't a rebrand—it's an earned evolution.</p>
+                </div>
+                <div class="reason">
+                    <h3>Digital Reality</h3>
+                    <p>In 2026, logos live in 32×32 pixel favicons. Complexity doesn't scale down. Simplicity does.</p>
+                </div>
+                <div class="reason">
+                    <h3>Brand Recognition</h3>
+                    <p>The swoosh with the star is our brand asset. Let it breathe. Let it be remembered.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: Strategy Bridge -->
+    <section class="slide slide-bridge">
+        <div class="slide-number meta-text" style="color: rgba(255,255,255,0.5);">07 / 10</div>
+        <div class="container">
+            <div class="left">
+                <div class="meta-text" style="color: var(--pool); margin-bottom: 20px;">The Strategy</div>
+                <h2>A quiet mark for a <em>loud message.</em></h2>
+                <p>We didn't just simplify the logo for aesthetics. We did it to create space.</p>
+                <p>When the logo screams for attention (like our old one), the headline has to whisper. By quieting our mark, we allow our 20th Anniversary campaign to roar.</p>
+            </div>
+            <div class="visual-demo">
+                <div class="demo-row">
+                    <div class="demo-label">The Old Way (Fighting for space)</div>
+                    <div class="demo-content">
+                        <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" style="height: 50px;">
+                        <span class="demo-text" style="font-size: 20px; color: #666;">Your Business People.</span>
+                    </div>
+                </div>
+                <div class="demo-row active">
+                    <div class="demo-label">The New Way (Message is Hero)</div>
+                    <div class="demo-content">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" class="demo-logo">
+                        <div>
+                            <span class="demo-text">Your Business People.</span>
+                            <div class="demo-stat">$547M in capital for our clients — last year</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: Real Examples - Email & Cards -->
+    <section class="slide slide-examples">
+        <div class="slide-number meta-text">08 / 10</div>
+        <h2>In Practice: Email & Business Cards</h2>
+
+        <div class="examples-grid">
+            <!-- Email Signatures Column -->
+            <div class="example-section">
+                <div class="example-label">Email Signatures</div>
+
+                <!-- S4: Logo + Gradient -->
+                <div class="sig-s4">
+                    <div class="top">
+                        <div class="logo">
+                            <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-blue-2026.png" alt="Logo">
+                        </div>
+                        <div class="details">
+                            <div class="name">Sarah Martinez</div>
+                            <div class="title">Business Advisor</div>
+                        </div>
+                    </div>
+                    <div class="gradient-line"></div>
+                    <div class="contact">
+                        <span>916.555.1234</span>
+                        <span><a href="mailto:smartinez@norcalsbdc.org">smartinez@norcalsbdc.org</a></span>
+                    </div>
+                </div>
+
+                <!-- S7: Horizontal -->
+                <div class="sig-s7">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-blue-2026.png" alt="Logo">
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="info">
+                        <div class="name">Michael Chen</div>
+                        <div class="title">Regional Director</div>
+                        <div class="contact">
+                            <a href="mailto:mchen@norcalsbdc.org">mchen@norcalsbdc.org</a> • 415.555.6789
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Cards Column -->
+            <div class="example-section">
+                <div class="example-label">Business Cards</div>
+                <div class="card-showcase">
+                    <!-- ZAG 1 -->
+                    <div class="card zag-1-front">
+                        <div class="giant-name">Sarah<br>Martinez</div>
+                    </div>
+
+                    <!-- ZAG 3 -->
+                    <div class="card zag-3-front">
+                        <div class="name">Michael Chen</div>
+                        <div class="role">Regional Director</div>
+                    </div>
+
+                    <!-- Pool Forward -->
+                    <div class="card pool-forward-front">
+                        <div class="logo">
+                            <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                        </div>
+                        <div class="tagline">Your Business People</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: Social Media -->
+    <section class="slide slide-social">
+        <div class="slide-number meta-text">09 / 10</div>
+        <h2>In Practice: Social Media (1:1)</h2>
+
+        <div class="social-grid">
+            <!-- A: Quote Focus -->
+            <div class="social-square square-quote">
+                <div class="top">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                    </div>
+                    <div class="label">Client Story</div>
+                </div>
+                <div class="quote">"She didn't help me get a loan. She helped me see what my business could become."</div>
+                <div class="attribution">
+                    <div class="name">Maria R.</div>
+                    <div class="result">Food truck → 3 restaurants. 5 years.</div>
+                </div>
+            </div>
+
+            <!-- B: Stat Hero -->
+            <div class="social-square square-stat">
+                <div class="label">Client Result</div>
+                <div class="stat-block">
+                    <div class="stat">$380K</div>
+                    <div class="stat-context">SBA loan secured</div>
+                </div>
+                <div class="story">Maria R. · Sacramento<br><span>22 new jobs created</span></div>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-blue-2026.png" alt="Logo">
+                </div>
+            </div>
+
+            <!-- C: Before/After -->
+            <div class="social-square square-journey">
+                <div class="before">
+                    <div class="year">2019</div>
+                    <div class="state">One food truck.<br>One dream.</div>
+                </div>
+                <div class="after">
+                    <div class="year">2024</div>
+                    <div class="state">Three locations.<br>22 employees.</div>
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- D: Split Stats -->
+            <div class="social-square square-split">
+                <div class="left">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                    </div>
+                    <div class="content">
+                        <div class="label">Success Story</div>
+                        <div class="headline">From shutdown to <span>+40% revenue.</span></div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="stat">+40%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 10: Email Headers -->
+    <section class="slide slide-headers">
+        <div class="slide-number meta-text">10 / 10</div>
+        <h2>In Practice: Email Marketing</h2>
+
+        <div class="headers-showcase">
+            <!-- Option A: Massive Crop -->
+            <div class="header-example header-crop">
+                <div class="bg-text">20</div>
+                <div class="content">
+                    <div class="top-row">
+                        <div class="logo">
+                            <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                        </div>
+                        <div class="badge">SBDC DAY 2026</div>
+                    </div>
+                    <div class="hero-block">
+                        <div class="line-1">You have nothing to lose</div>
+                        <div class="line-2">but momentum.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option C: Stacked Bold -->
+            <div class="header-example header-stacked">
+                <div class="top-bar">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/aphelps099/brand-sbdc/claude/pitch-deck-logo-redesign-wUeuM/assets/sbdc-white-2026.png" alt="Logo">
+                    </div>
+                    <div class="date-badge">MARCH 19, 2026</div>
+                </div>
+                <div class="hero-area">
+                    <span class="stack-line num">20</span>
+                    <span class="stack-line years">Years Strong</span>
+                    <span class="stack-line hook">Every great business needs <strong>momentum.</strong> <span>We've got yours.</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-hint meta-text">Scroll to navigate →</div>
+
+</body>
+</html>

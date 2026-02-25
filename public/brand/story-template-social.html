@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Templates — NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype');
+      font-weight: 300;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America Mono';
+      src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --navy: #0f1c2e;
+      --royal: #1D5AA7;
+      --royal-dim: rgba(29,90,167,0.08);
+      --pool: #8FC5D9;
+      --cream: #f0efeb;
+      --white: #ffffff;
+      --brick: #a82039;
+      --dusty: #5d7a9c;
+      --text: #0a1528;
+      --text-secondary: #4a5568;
+      --text-tertiary: #8a8a8a;
+      --rule: rgba(0,0,0,0.12);
+      --rule-light: rgba(0,0,0,0.06);
+      --green: #16a34a;
+      --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+      --serif: 'Tobias', Georgia, serif;
+      --mono: 'GT America Mono', 'SF Mono', monospace;
+      --pad: clamp(32px, 5vw, 64px);
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--white);
+    }
+
+    .nav-left img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-left a {
+      font-size: 14px;
+      font-weight: 400;
+      font-family: var(--sans);
+      color: var(--white);
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .nav-left a:hover {
+      opacity: 0.8;
+    }
+
+    .nav-center {
+      text-align: center;
+    }
+
+    .nav-center h1 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .nav-center p {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--pool);
+      text-transform: uppercase;
+    }
+
+    /* Main content */
+    main {
+      margin-top: 56px;
+      padding: var(--pad) 0;
+    }
+
+    /* Section 1: Context */
+    .section-context {
+      background: var(--cream);
+      padding: var(--pad);
+      text-align: center;
+      animation: fadeInUp 0.6s var(--ease) both;
+    }
+
+    .section-context h2 {
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .section-context p {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Section 2: Instagram Grid */
+    .section-instagram {
+      background: var(--cream);
+      padding: var(--pad);
+      animation: fadeInUp 0.8s var(--ease) 0.2s both;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* Post mockups */
+    .post-square {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      position: relative;
+      transition: transform 0.3s var(--ease);
+    }
+
+    .post-square:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Post 1: Quote Card */
+    .post-1 {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .post-1-logo {
+      font-size: 12px;
+      height: auto;
+    }
+
+    .post-1-quote {
+      font-family: var(--serif);
+      font-size: 48px;
+      color: var(--pool);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: -8px;
+    }
+
+    .post-1-text {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .post-1-attr {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--pool);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .post-1-stripe {
+      display: flex;
+      height: 3px;
+      gap: 0;
+      margin-top: 16px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .stripe-1 { flex: 1; background: var(--pool); }
+    .stripe-2 { flex: 1; background: var(--cream); }
+    .stripe-3 { flex: 1; background: var(--dusty); }
+    .stripe-4 { flex: 1; background: var(--brick); }
+
+    /* Post 2: Stat Card */
+    .post-2 {
+      background: linear-gradient(135deg, #8FC5D9 0%, #6aafc3 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .post-2-stat {
+      font-family: var(--serif);
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .post-2-subtext {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--navy);
+      margin-bottom: 24px;
+    }
+
+    .post-2-brand {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .post-2-star {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 32px;
+      opacity: 0.15;
+    }
+
+    /* Post 3: Story Carousel */
+    .post-3 {
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    .post-3-kicker {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--brick);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .post-3-name {
+      font-family: var(--serif);
+      font-size: 32px;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+
+    .post-3-desc {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-bottom: auto;
+      line-height: 1.4;
+    }
+
+    .post-3-cta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--royal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 16px;
+    }
+
+    .post-3-logo {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      opacity: 0.4;
+    }
+
+    /* Post 4: Behind the Scenes */
+    .post-4 {
+      background: var(--cream);
+      padding: 24px;
+    }
+
+    .post-4-photo {
+      width: 100%;
+      height: 140px;
+      background: var(--navy);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .post-4-photo iconify-icon {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+
+    .post-4-kicker {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--royal);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .post-4-title {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .post-4-brand {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Post 5: Did You Know */
+    .post-5 {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .post-5-question {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--pool);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .post-5-text {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .post-5-attr {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dusty);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Post 6: Bilingual */
+    .post-6 {
+      background: var(--cream);
+      display: flex;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .post-6-left {
+      flex: 1;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .post-6-right {
+      flex: 1;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .post-6-text {
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .post-6-attr {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .post-6-right .post-6-attr {
+      color: var(--dusty);
+    }
+
+    /* Post 7: Impact Summary */
+    .post-7 {
+      background: var(--royal);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .post-7-number {
+      font-family: var(--serif);
+      font-size: 96px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .post-7-text {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .post-7-tagline {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--pool);
+    }
+
+    /* Post 8: SBDC Day */
+    .post-8 {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-8::before {
+      content: '★';
+      position: absolute;
+      font-size: 180px;
+      color: rgba(143, 197, 217, 0.08);
+      opacity: 0.5;
+    }
+
+    .post-8-title {
+      font-family: var(--sans);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--pool);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post-8-stats {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post-8-text {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.4;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Post 9: Testimonials */
+    .post-9 {
+      background: var(--cream);
+    }
+
+    .testimonials-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .testimonial-item {
+      padding-left: 12px;
+      border-left: 3px solid var(--pool);
+      font-family: var(--serif);
+      font-size: 12px;
+      font-style: italic;
+      color: var(--navy);
+      line-height: 1.4;
+    }
+
+    .testimonial-attr {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    .post-9-footer {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+    }
+
+    .post-9-brand {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .post-9-tagline {
+      font-family: var(--serif);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--navy);
+    }
+
+    /* Section 3: Stories / Vertical */
+    .section-stories {
+      background: var(--white);
+      padding: var(--pad);
+      animation: fadeInUp 1s var(--ease) 0.4s both;
+    }
+
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .post-vertical {
+      aspect-ratio: 9 / 16;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      position: relative;
+      transition: transform 0.3s var(--ease);
+    }
+
+    .post-vertical:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Story 1: Quick Hit */
+    .story-1 {
+      background: var(--navy);
+      color: var(--white);
+      justify-content: center;
+      text-align: center;
+    }
+
+    .story-1-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .story-1-title {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .story-1-text {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .story-1-cta {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--pool);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Story 2: Photo */
+    .story-2 {
+      background: linear-gradient(180deg, var(--navy) 0%, rgba(15,28,46,0.8) 100%);
+      color: var(--white);
+      position: relative;
+    }
+
+    .story-2::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--navy);
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .story-2-photo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dusty);
+      color: var(--white);
+      font-size: 48px;
+      z-index: 0;
+    }
+
+    .story-2-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .story-2-name {
+      font-family: var(--serif);
+      font-size: 24px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .story-2-desc {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.3;
+    }
+
+    /* Story 3: Spotlight Series */
+    .story-3 {
+      background: var(--royal);
+      color: var(--white);
+    }
+
+    .story-3-kicker {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--pool);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .story-3-featured {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--pool);
+      margin-bottom: 8px;
+    }
+
+    .story-3-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .story-3-desc {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: auto;
+    }
+
+    .story-3-cta {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--pool);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+    }
+
+    /* Story 4: Impact Stat */
+    .story-4 {
+      background: linear-gradient(135deg, #8FC5D9 0%, #6aafc3 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--navy);
+    }
+
+    .story-4-number {
+      font-family: var(--serif);
+      font-size: 52px;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .story-4-text {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .story-4-tagline {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--navy);
+    }
+
+    /* Section 4: Guidelines */
+    .section-guidelines {
+      background: var(--cream);
+      padding: var(--pad);
+      animation: fadeInUp 1.2s var(--ease) 0.6s both;
+    }
+
+    .guidelines-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .guidelines-header h3 {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .guideline-card {
+      background: var(--white);
+      padding: 32px;
+      border-radius: 4px;
+      border-top: 3px solid var(--royal);
+    }
+
+    .guideline-card h4 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .guideline-card p {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .guideline-card em {
+      display: block;
+      font-style: italic;
+      font-family: var(--sans);
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    /* Footer */
+    .page-footer {
+      background: var(--navy);
+      padding: 48px var(--pad);
+      text-align: center;
+      animation: fadeInUp 1.4s var(--ease) 0.8s both;
+    }
+
+    .footer-cta {
+      margin-bottom: 32px;
+    }
+
+    .footer-cta a {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--pool);
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 2px solid var(--pool);
+      border-radius: 4px;
+      transition: all 0.3s var(--ease);
+    }
+
+    .footer-cta a:hover {
+      background: var(--pool);
+      color: var(--navy);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .footer-content img {
+      height: 24px;
+    }
+
+    .footer-text {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-context h2 {
+        font-size: 32px;
+      }
+
+      .section-context p {
+        font-size: 16px;
+      }
+
+      .instagram-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .post-square {
+        aspect-ratio: auto;
+        min-height: 280px;
+      }
+
+      .stories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .post-vertical {
+        aspect-ratio: auto;
+        min-height: 320px;
+      }
+
+      .guidelines-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 0 20px;
+      }
+
+      .nav-center h1 {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .instagram-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stories-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .post-1-text {
+        font-size: 20px;
+      }
+
+      .post-2-stat {
+        font-size: 44px;
+      }
+
+      .post-7-number {
+        font-size: 72px;
+      }
+
+      .story-4-number {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <img src="assets/sbdc-white-2026.png" alt="SBDC">
+      <a href="success-stories.html">← Success Stories</a>
+    </div>
+    <div class="nav-center">
+      <h1>Social Media Templates</h1>
+      <p>Community Spotlight Format</p>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section-context">
+      <h2>Community Spotlights: Social Media Format</h2>
+      <p>How to turn lighter-impact client stories into engaging social media posts. Three story types, nine post formats.</p>
+    </section>
+
+    <section class="section-instagram">
+      <h3 class="section-title">Instagram & Square Posts (1:1 Format)</h3>
+      <div class="instagram-grid">
+
+        <!-- Post 1: Quote Card -->
+        <div class="post-square post-1">
+          <div></div>
+          <div>
+            <div class="post-1-quote">"</div>
+            <p class="post-1-text">The SBDC gave me the confidence to dream bigger.</p>
+            <div class="post-1-attr">Angel Rodriguez · Cha-Cha Sweets</div>
+          </div>
+          <div class="post-1-stripe">
+            <div class="stripe-1"></div>
+            <div class="stripe-2"></div>
+            <div class="stripe-3"></div>
+            <div class="stripe-4"></div>
+          </div>
+        </div>
+
+        <!-- Post 2: Stat Card -->
+        <div class="post-square post-2">
+          <div class="post-2-stat">SIX-FIGURE SALES</div>
+          <div class="post-2-subtext">in just 3 years</div>
+          <div class="post-2-brand">Cha-Cha Sweets · Solano-Napa SBDC</div>
+          <div class="post-2-star">★</div>
+        </div>
+
+        <!-- Post 3: Story Carousel -->
+        <div class="post-square post-3">
+          <div class="post-3-kicker">Meet the Entrepreneur</div>
+          <div>
+            <h4 class="post-3-name">Angel Rodriguez</h4>
+            <p class="post-3-desc">Started at age 18 from his bedroom</p>
+            <div class="post-3-cta">
+              Cha-Cha Sweets
+              <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+            </div>
+          </div>
+          <div class="post-3-logo" style="background: var(--royal); border-radius: 4px;"></div>
+        </div>
+
+        <!-- Post 4: Behind the Scenes -->
+        <div class="post-square post-4">
+          <div>
+            <div class="post-4-photo">
+              <iconify-icon icon="mdi:camera"></iconify-icon>
+              <span>Photo</span>
+            </div>
+            <div class="post-4-kicker">Behind the Scenes</div>
+            <h4 class="post-4-title">From hobby to patent-pending product</h4>
+            <div class="post-4-brand">Glory Grove Organics</div>
+          </div>
+        </div>
+
+        <!-- Post 5: Did You Know -->
+        <div class="post-square post-5">
+          <div>
+            <div class="post-5-question">Did You Know?</div>
+            <p class="post-5-text">NorCal SBDC helps entrepreneurs at every stage — from idea to prototype to market.</p>
+            <div class="post-5-attr">Linda Allivato · Glory Grove Organics</div>
+          </div>
+        </div>
+
+        <!-- Post 6: Bilingual -->
+        <div class="post-square post-6">
+          <div class="post-6-left">
+            <p class="post-6-text">My dream, realized.</p>
+            <div class="post-6-attr">Carmen Jimenez Martinez</div>
+          </div>
+          <div class="post-6-right">
+            <p class="post-6-text">Mi sueño, hecho realidad.</p>
+            <div class="post-6-attr">El Papalote</div>
+          </div>
+        </div>
+
+        <!-- Post 7: Impact Summary -->
+        <div class="post-square post-7">
+          <div class="post-7-number">13</div>
+          <p class="post-7-text">Client stories. Real businesses. Measurable impact.</p>
+          <p class="post-7-tagline">Your Business, Better.</p>
+        </div>
+
+        <!-- Post 8: SBDC Day -->
+        <div class="post-square post-8">
+          <div class="post-8-title">SBDC Day 2026</div>
+          <div class="post-8-stats">18 Centers · 36 Counties · $547M Impact</div>
+          <p class="post-8-text">Celebrating the entrepreneurs who make Northern California thrive.</p>
+          <div style="font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: auto;">norcalsbdc.org</div>
+        </div>
+
+        <!-- Post 9: Testimonials -->
+        <div class="post-square post-9">
+          <div class="testimonials-list">
+            <div class="testimonial-item">
+              The SBDC gave me the confidence to dream bigger.
+              <div class="testimonial-attr">— Angel</div>
+            </div>
+            <div class="testimonial-item">
+              They helped me believe in myself and make my dream a reality.
+              <div class="testimonial-attr">— Carmen</div>
+            </div>
+            <div class="testimonial-item">
+              I couldn't have done it without them.
+              <div class="testimonial-attr">— Linda</div>
+            </div>
+          </div>
+          <div class="post-9-footer">
+            <div class="post-9-brand">NorCal SBDC</div>
+            <p class="post-9-tagline">Your Business, Better.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section-stories">
+      <h3 class="section-title">Stories & Vertical Format (9:16 Ratio)</h3>
+      <div class="stories-grid">
+
+        <!-- Story 1: Quick Hit -->
+        <div class="post-vertical story-1">
+          <div></div>
+          <div style="text-align: center;">
+            <div class="story-1-emoji">🔥</div>
+            <h4 class="story-1-title">FROM BEDROOM TO SIX FIGURES</h4>
+            <p class="story-1-text">Angel Rodriguez started @chachasweets at 18</p>
+            <div class="story-1-cta">Swipe up to read more</div>
+          </div>
+          <div style="text-align: center; font-size: 10px; opacity: 0.3;">SBDC</div>
+        </div>
+
+        <!-- Story 2: Photo Story -->
+        <div class="post-vertical story-2">
+          <div class="story-2-photo">
+            <iconify-icon icon="mdi:account-circle"></iconify-icon>
+          </div>
+          <div class="story-2-content">
+            <h4 class="story-2-name">Meet Carmen</h4>
+            <p class="story-2-desc">She launched a daycare in the Tenderloin and reached full capacity in months</p>
+          </div>
+        </div>
+
+        <!-- Story 3: Spotlight Series -->
+        <div class="post-vertical story-3">
+          <div></div>
+          <div>
+            <div class="story-3-kicker">Client Spotlight</div>
+            <div class="story-3-featured">This week:</div>
+            <h4 class="story-3-title">Glory Grove Organics</h4>
+            <p class="story-3-desc">Patent-pending eco products</p>
+            <div class="story-3-cta">Tap to learn more</div>
+          </div>
+          <div></div>
+        </div>
+
+        <!-- Story 4: Impact Stat -->
+        <div class="post-vertical story-4">
+          <div></div>
+          <div>
+            <div class="story-4-number">$547M</div>
+            <p class="story-4-text">in capital accessed by NorCal SBDC clients</p>
+            <p class="story-4-tagline">Your Business, Better.</p>
+          </div>
+          <div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section-guidelines">
+      <div class="guidelines-header">
+        <h3>Social Media Posting Guidelines</h3>
+      </div>
+
+      <div class="guidelines-grid">
+        <div class="guideline-card">
+          <h4>Platform Sizing</h4>
+          <p>Instagram Feed<em>1080 × 1080 px</em></p>
+          <p>Instagram Stories<em>1080 × 1920 px</em></p>
+          <p>LinkedIn<em>1200 × 627 px</em></p>
+          <p>Facebook<em>1200 × 630 px</em></p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Brand Voice on Social</h4>
+          <p>Warm, confident, action-oriented</p>
+          <p style="margin-top: 12px;">Use "no-fee" (never "free")</p>
+          <p>Tag: @norcalsbdc on all platforms</p>
+          <p>Include norcalsbdc.org link</p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Hashtag Strategy</h4>
+          <p>#YourBusinessBetter<em>Primary</em></p>
+          <p>#NorCalSBDC</p>
+          <p>#SmallBusinessSuccess</p>
+          <p>#SBDCDay<em>Campaigns</em></p>
+        </div>
+
+        <div class="guideline-card">
+          <h4>Posting Cadence</h4>
+          <p>3-4 posts per week minimum</p>
+          <p>1 client spotlight per week</p>
+          <p>1 impact stat per week</p>
+          <p>1 community/behind-scenes per week</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-cta">
+      <a href="success-stories.html">See all success stories</a>
+    </div>
+    <div class="footer-content">
+      <img src="assets/sbdc-blue-2026.png" alt="SBDC">
+      <span class="footer-text">NorCal SBDC · Social Templates · 2026</span>
+    </div>
+  </footer>
+</body>
+</html>

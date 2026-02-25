@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Email Signatures | AMBITION System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            /* Traditional */
+            --navy: #1e3a5f;
+            --deep-navy: #152a45;
+            --slate: #4a6580;
+            --wine: #b54a4a;
+            --cream: #f0ede6;
+            --ivory: #faf9f7;
+            
+            /* Digital */
+            --black: #0a0a0f;
+            --charcoal: #1e1e24;
+            --graphite: #2a2a32;
+            --electric: #0066ff;
+            --ice: #f0f4f8;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--ice);
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header */
+        .gallery-header {
+            padding: 80px 60px;
+            border-bottom: 1px solid var(--graphite);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .gallery-header h1 {
+            font-family: Georgia, serif;
+            font-size: 48px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .gallery-header h1 span {
+            font-style: italic;
+            color: var(--electric);
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        
+        /* Section */
+        .section {
+            padding: 60px;
+            border-bottom: 1px solid var(--graphite);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--electric);
+        }
+        
+        .section-use {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #555;
+        }
+        
+        /* Email Preview Container */
+        .email-preview {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            color: #333;
+        }
+        
+        .email-context {
+            font-family: Georgia, serif;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* ========================================
+           SIGNATURE STYLES
+        ======================================== */
+        
+        /* S1: Clean Line */
+        .sig-s1 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+        .sig-s1 .name {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+        .sig-s1 .title {
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .sig-s1 .org {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .sig-s1 .divider {
+            width: 40px;
+            height: 2px;
+            background: var(--electric);
+            margin: 12px 0;
+        }
+        .sig-s1 .contact {
+            font-size: 13px;
+            color: #666;
+        }
+        .sig-s1 .contact a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .sig-s1 .tagline {
+            margin-top: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--wine);
+        }
+        
+        /* S2: Minimal Mono */
+        .sig-s2 {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .sig-s2 .name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .sig-s2 .meta {
+            color: #888;
+        }
+        .sig-s2 .contact {
+            margin-top: 8px;
+            color: #666;
+        }
+        .sig-s2 .contact a {
+            color: #333;
+            text-decoration: none;
+        }
+        .sig-s2 .tagline {
+            margin-top: 12px;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--electric);
+        }
+        
+        /* S3: Two Column */
+        .sig-s3 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            display: flex;
+            gap: 24px;
+        }
+        .sig-s3 .col-left {
+            padding-right: 24px;
+            border-right: 2px solid var(--navy);
+        }
+        .sig-s3 .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+        .sig-s3 .title {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .sig-s3 .org {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-top: 4px;
+        }
+        .sig-s3 .col-right {
+            font-size: 13px;
+            color: #666;
+        }
+        .sig-s3 .col-right a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .sig-s3 .tagline {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--wine);
+        }
+        
+        /* S4: Bold Block */
+        .sig-s4 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            background: var(--navy);
+            color: white;
+            padding: 20px 24px;
+            display: inline-block;
+        }
+        .sig-s4 .name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .sig-s4 .title {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+        .sig-s4 .contact {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .sig-s4 .contact a {
+            color: white;
+            text-decoration: none;
+        }
+        .sig-s4 .tagline {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+        
+        /* S5: ZAG Editorial */
+        .sig-s5 {
+            font-family: Georgia, serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .sig-s5 .name {
+            font-size: 18px;
+            font-style: italic;
+            color: #222;
+            margin-bottom: 4px;
+        }
+        .sig-s5 .title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 12px;
+        }
+        .sig-s5 .contact {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 13px;
+            color: #666;
+        }
+        .sig-s5 .contact a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .sig-s5 .tagline {
+            margin-top: 16px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--wine);
+        }
+        
+        /* S6: Digital ZAG */
+        .sig-s6 {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            background: var(--black);
+            color: var(--ice);
+            padding: 24px;
+            display: inline-block;
+        }
+        .sig-s6 .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        .sig-s6 .title {
+            color: #666;
+            margin-bottom: 16px;
+        }
+        .sig-s6 .divider {
+            width: 32px;
+            height: 2px;
+            background: var(--electric);
+            margin: 16px 0;
+        }
+        .sig-s6 .contact {
+            font-size: 11px;
+            color: #888;
+        }
+        .sig-s6 .contact a {
+            color: var(--electric);
+            text-decoration: none;
+        }
+        .sig-s6 .tagline {
+            margin-top: 16px;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .sig-s6 .tagline span {
+            color: var(--electric);
+        }
+        
+        /* S7: Gradient Accent */
+        .sig-s7 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 14px;
+            padding-left: 16px;
+            border-left: 3px solid;
+            border-image: linear-gradient(180deg, var(--electric), var(--wine)) 1;
+        }
+        .sig-s7 .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+        .sig-s7 .title {
+            font-size: 13px;
+            color: #666;
+        }
+        .sig-s7 .org {
+            font-size: 12px;
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .sig-s7 .contact {
+            font-size: 12px;
+            color: #888;
+        }
+        .sig-s7 .contact a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .sig-s7 .tagline {
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--wine);
+        }
+        
+        /* S8: Compact Row */
+        .sig-s8 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 13px;
+            color: #444;
+        }
+        .sig-s8 .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sig-s8 .name {
+            font-weight: 700;
+            color: #222;
+        }
+        .sig-s8 .sep {
+            color: #ccc;
+        }
+        .sig-s8 .title {
+            color: #666;
+        }
+        .sig-s8 .contact {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #888;
+        }
+        .sig-s8 .contact a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .sig-s8 .tagline {
+            margin-top: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--electric);
+        }
+        
+        /* Notes */
+        .notes {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        /* Footer */
+        .gallery-footer {
+            padding: 60px;
+            text-align: center;
+        }
+        .gallery-footer .brand {
+            font-family: Georgia, serif;
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        .gallery-footer p {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #555;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="gallery-header">
+        <div>
+            <h1>Email <span>Signatures</span></h1>
+        </div>
+        <div class="gallery-label">NorCal SBDC · AMBITION System</div>
+    </header>
+    
+    <!-- S1: Clean Line -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S1 — Clean Line</span>
+            <span class="section-use">Recommended default · Works everywhere</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...looking forward to our meeting next week. Let me know if you have any questions before then.<br><br>
+                Best,
+            </div>
+            <div class="sig-s1">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="org">Northern California SBDC</div>
+                <div class="divider"></div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Everyday use. Maximum email client compatibility.</div>
+        </div>
+    </section>
+    
+    <!-- S2: Minimal Mono -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S2 — Minimal Mono</span>
+            <span class="section-use">Tech-forward · Clean aesthetic</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...let me know if you need any additional documentation for the loan application.<br><br>
+                Thanks,
+            </div>
+            <div class="sig-s2">
+                <div class="name">Maria Santos</div>
+                <div class="meta">Senior Business Advisor · Northern California SBDC</div>
+                <div class="contact">
+                    530.898.4598<br>
+                    <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Tech clients, AI training communications, EMERGE follow-ups.</div>
+        </div>
+    </section>
+    
+    <!-- S3: Two Column -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S3 — Two Column</span>
+            <span class="section-use">Professional · Structured</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...I've attached the financial projections template we discussed. Happy to review together.<br><br>
+                Best,
+            </div>
+            <div class="sig-s3">
+                <div class="col-left">
+                    <div class="name">Maria Santos</div>
+                    <div class="title">Senior Business Advisor</div>
+                    <div class="org">Northern California SBDC</div>
+                </div>
+                <div class="col-right">
+                    530.898.4598<br>
+                    <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="notes">Best for: Formal communications, funder correspondence, partner emails.</div>
+        </div>
+    </section>
+    
+    <!-- S4: Bold Block -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S4 — Bold Block</span>
+            <span class="section-use">High impact · Standing out</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...excited to help you with your business plan. Let's schedule a time to meet.<br><br>
+                Talk soon,
+            </div>
+            <div class="sig-s4">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Cold outreach, networking follow-ups. Requires image for most clients.</div>
+        </div>
+    </section>
+    
+    <!-- S5: ZAG Editorial -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S5 — ZAG Editorial</span>
+            <span class="section-use">Warm · Human · Distinctive</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...it was great meeting you at the workshop. I'd love to learn more about your business.<br><br>
+                Warmly,
+            </div>
+            <div class="sig-s5">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor · Northern California SBDC</div>
+                <div class="contact">
+                    530.898.4598<br>
+                    <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Personal relationship-building, success story follow-ups, warm leads.</div>
+        </div>
+    </section>
+    
+    <!-- S6: Digital ZAG -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S6 — Digital ZAG</span>
+            <span class="section-use">Bold · Tech-forward · Statement</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...the AI training session is confirmed for next Thursday. See you there.<br><br>
+                —
+            </div>
+            <div class="sig-s6">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="divider"></div>
+                <div class="contact">
+                    530.898.4598<br>
+                    <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                    <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline"><span>Your Business People.</span></div>
+            </div>
+            <div class="notes">Best for: EMERGE, AI training, ecommerce programs. Requires image for compatibility.</div>
+        </div>
+    </section>
+    
+    <!-- S7: Gradient Accent -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S7 — Gradient Accent</span>
+            <span class="section-use">Modern · Subtle brand expression</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...I'll send over the SBA loan checklist by end of day.<br><br>
+                Thanks,
+            </div>
+            <div class="sig-s7">
+                <div class="name">Maria Santos</div>
+                <div class="title">Senior Business Advisor</div>
+                <div class="org">Northern California SBDC</div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Balance of personality and professionalism. Gradient may need image fallback.</div>
+        </div>
+    </section>
+    
+    <!-- S8: Compact Row -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">S8 — Compact Row</span>
+            <span class="section-use">Space-efficient · Quick emails</span>
+        </div>
+        <div class="email-preview">
+            <div class="email-context">
+                ...sounds good, see you then!<br><br>
+                —
+            </div>
+            <div class="sig-s8">
+                <div class="row">
+                    <span class="name">Maria Santos</span>
+                    <span class="sep">·</span>
+                    <span class="title">Senior Business Advisor, Northern California SBDC</span>
+                </div>
+                <div class="contact">
+                    530.898.4598 · <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                </div>
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="notes">Best for: Quick replies, mobile-friendly, high-volume correspondence.</div>
+        </div>
+    </section>
+    
+    <!-- Implementation Guide -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-title">Implementation Notes</span>
+            <span class="section-use">Setup guidance</span>
+        </div>
+        <div class="email-preview">
+            <h3 style="font-family: Georgia, serif; font-size: 20px; font-weight: 400; margin-bottom: 24px; color: #222;">Quick Setup Guide</h3>
+            
+            <div style="margin-bottom: 24px;">
+                <h4 style="font-family: 'Roboto Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px;">For Gmail / Outlook (Web)</h4>
+                <ol style="font-size: 14px; color: #666; line-height: 1.8; padding-left: 20px;">
+                    <li>Go to Settings → Signatures</li>
+                    <li>Copy the signature HTML directly from this preview</li>
+                    <li>Paste into the signature editor</li>
+                    <li>Replace placeholder info with your details</li>
+                </ol>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <h4 style="font-family: 'Roboto Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px;">For Bold/Dark Signatures (S4, S6)</h4>
+                <ol style="font-size: 14px; color: #666; line-height: 1.8; padding-left: 20px;">
+                    <li>These work best as images for maximum compatibility</li>
+                    <li>Export as PNG at 2x resolution</li>
+                    <li>Insert as image in your email signature settings</li>
+                    <li>Link the image to norcalsbdc.org</li>
+                </ol>
+            </div>
+            
+            <div style="padding: 20px; background: #f5f5f5; border-left: 3px solid var(--electric);">
+                <h4 style="font-family: 'Roboto Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin-bottom: 8px;">Recommendation</h4>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>S1 (Clean Line)</strong> for everyday use — it works across all email clients without issues.<br>
+                    <strong>S5 (ZAG Editorial)</strong> for relationship-building — warm and human.<br>
+                    <strong>S6 (Digital ZAG)</strong> for tech programs — bold statement piece.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="gallery-footer">
+        <div class="brand">Northern California SBDC</div>
+        <p>Your Business People · Email Signatures v2.0 · AMBITION Brand System</p>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Letterhead System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 900px;
+            margin: 0 auto 100px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .letterhead {
+            width: 612px; /* 8.5" at 72dpi */
+            height: 792px; /* 11" at 72dpi */
+            background: white;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
+        
+        .sample-content {
+            position: absolute;
+            top: 180px;
+            left: 72px;
+            right: 72px;
+            font-size: 11px;
+            line-height: 1.7;
+            color: #333;
+        }
+        
+        .sample-content .date {
+            margin-bottom: 24px;
+            color: #666;
+        }
+        
+        .sample-content .recipient {
+            margin-bottom: 24px;
+        }
+        
+        .sample-content .body {
+            color: #444;
+        }
+        
+        .sample-content .signature {
+            margin-top: 36px;
+        }
+        
+        .sample-content .sig-name {
+            font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px;
+        }
+        
+        .sample-content .sig-title {
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* =============================================
+           L1: PENTAGRAM MINIMAL
+           Logo top left, line bottom
+        ============================================= */
+        .l1 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l1 .logo {
+            width: 120px;
+        }
+        
+        .l1 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l1 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l1 .footer-line {
+            height: 2px;
+            background: var(--navy);
+            margin-bottom: 12px;
+        }
+        
+        .l1 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L2: GRADIENT LINE
+           Momentum in a single line
+        ============================================= */
+        .l2 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l2 .logo {
+            width: 120px;
+        }
+        
+        .l2 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l2 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l2 .footer-line {
+            height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--royal), var(--pool));
+            margin-bottom: 12px;
+        }
+        
+        .l2 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L3: EDGE ACCENT
+           Vertical gradient bar on left
+        ============================================= */
+        .l3 .edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--navy), var(--royal), var(--pool));
+        }
+        
+        .l3 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l3 .logo {
+            width: 120px;
+        }
+        
+        .l3 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l3 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L4: CORNER FADE
+           Subtle gradient in corner
+        ============================================= */
+        .l4 .corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle at top right, var(--pool) 0%, transparent 70%);
+            opacity: 0.25;
+        }
+        
+        .l4 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l4 .logo {
+            width: 120px;
+        }
+        
+        .l4 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l4 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l4 .footer-line {
+            height: 1px;
+            background: var(--navy);
+            opacity: 0.2;
+            margin-bottom: 12px;
+        }
+        
+        .l4 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L5: SPLIT HEADER
+           Navy block for logo
+        ============================================= */
+        .l5 .header-block {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 72px;
+        }
+        
+        .l5 .logo {
+            width: 120px;
+        }
+        
+        .l5 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .l5 .sample-content {
+            top: 140px;
+        }
+        
+        .l5 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L6: DIAGONAL MOMENTUM
+           Subtle diagonal element
+        ============================================= */
+        .l6 .diagonal {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--pool), var(--royal));
+            clip-path: polygon(100% 0, 0 0, 100% 15%);
+            opacity: 0.15;
+        }
+        
+        .l6 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l6 .logo {
+            width: 120px;
+        }
+        
+        .l6 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l6 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l6 .footer-line {
+            height: 2px;
+            background: var(--navy);
+            margin-bottom: 12px;
+        }
+        
+        .l6 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L7: CREAM BASE
+           Warm paper tone
+        ============================================= */
+        .l7 {
+            background: var(--cream);
+        }
+        
+        .l7 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l7 .logo {
+            width: 120px;
+        }
+        
+        .l7 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l7 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l7 .footer-line {
+            height: 2px;
+            background: var(--navy);
+            margin-bottom: 12px;
+        }
+        
+        .l7 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L8: RISING LINES
+           Three lines building up
+        ============================================= */
+        .l8 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l8 .logo {
+            width: 120px;
+        }
+        
+        .l8 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l8 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l8 .footer-lines {
+            margin-bottom: 12px;
+        }
+        
+        .l8 .footer-lines .ln1 { height: 1px; background: var(--pool); margin-bottom: 3px; opacity: 0.4; }
+        .l8 .footer-lines .ln2 { height: 1px; background: var(--royal); margin-bottom: 3px; opacity: 0.6; }
+        .l8 .footer-lines .ln3 { height: 2px; background: var(--navy); }
+        
+        .l8 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L9: FULL SWEEP
+           Gradient header bar
+        ============================================= */
+        .l9 .header-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--navy), var(--royal), var(--pool), var(--cream));
+        }
+        
+        .l9 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l9 .logo {
+            width: 120px;
+        }
+        
+        .l9 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l9 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L10: MAROON ACCENT
+           Bold color pop
+        ============================================= */
+        .l10 .accent {
+            position: absolute;
+            top: 48px;
+            right: 72px;
+            width: 10px;
+            height: 10px;
+            background: var(--maroon);
+            border-radius: 50%;
+        }
+        
+        .l10 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+        }
+        
+        .l10 .logo {
+            width: 120px;
+        }
+        
+        .l10 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+            margin-top: 8px;
+        }
+        
+        .l10 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l10 .footer-line {
+            height: 2px;
+            background: var(--maroon);
+            margin-bottom: 12px;
+        }
+        
+        .l10 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L11: WILD - GRADIENT BLEED
+           Gradient corner takeover
+        ============================================= */
+        .l11 .gradient-corner {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, transparent 0%, transparent 40%, var(--pool) 70%, var(--royal) 100%);
+            opacity: 0.15;
+        }
+        
+        .l11 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l11 .logo {
+            width: 120px;
+        }
+        
+        .l11 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l11 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+        }
+        
+        .l11 .footer-line {
+            height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--royal), var(--pool));
+            margin-bottom: 12px;
+        }
+        
+        .l11 .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           L12: WILD - RING EMERGENCE
+           Expanding circles from corner
+        ============================================= */
+        .l12 .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid var(--royal);
+        }
+        
+        .l12 .ring.r1 { width: 150px; height: 150px; top: -75px; right: -75px; opacity: 0.2; }
+        .l12 .ring.r2 { width: 250px; height: 250px; top: -125px; right: -125px; opacity: 0.15; }
+        .l12 .ring.r3 { width: 350px; height: 350px; top: -175px; right: -175px; opacity: 0.1; }
+        .l12 .ring.r4 { width: 450px; height: 450px; top: -225px; right: -225px; opacity: 0.05; }
+        
+        .l12 .header {
+            position: absolute;
+            top: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .l12 .logo {
+            width: 120px;
+        }
+        
+        .l12 .tagline {
+            font-size: 10px;
+            font-style: italic;
+            color: var(--navy);
+        }
+        
+        .l12 .footer {
+            position: absolute;
+            bottom: 48px;
+            left: 72px;
+            right: 72px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Letterhead System</div>
+    </div>
+
+    <!-- L1 -->
+    <div class="section">
+        <div class="section-label">L1 — Pentagram Minimal</div>
+        <div class="letterhead l1">
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L2 -->
+    <div class="section">
+        <div class="section-label">L2 — Gradient Line</div>
+        <div class="letterhead l2">
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L3 -->
+    <div class="section">
+        <div class="section-label">L3 — Edge Accent</div>
+        <div class="letterhead l3">
+            <div class="edge"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <span>Northern California SBDC</span>
+                <span>norcalsbdc.org</span>
+                <span>info@norcalsbdc.org</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- L4 -->
+    <div class="section">
+        <div class="section-label">L4 — Corner Fade</div>
+        <div class="letterhead l4">
+            <div class="corner"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L5 -->
+    <div class="section">
+        <div class="section-label">L5 — Split Header</div>
+        <div class="letterhead l5">
+            <div class="header-block">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <span>Northern California SBDC</span>
+                <span>norcalsbdc.org</span>
+                <span>info@norcalsbdc.org</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- L6 -->
+    <div class="section">
+        <div class="section-label">L6 — Diagonal Momentum</div>
+        <div class="letterhead l6">
+            <div class="diagonal"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L7 -->
+    <div class="section">
+        <div class="section-label">L7 — Cream Base</div>
+        <div class="letterhead l7">
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L8 -->
+    <div class="section">
+        <div class="section-label">L8 — Rising Lines</div>
+        <div class="letterhead l8">
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-lines">
+                    <div class="ln1"></div>
+                    <div class="ln2"></div>
+                    <div class="ln3"></div>
+                </div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L9 -->
+    <div class="section">
+        <div class="section-label">L9 — Full Sweep</div>
+        <div class="letterhead l9">
+            <div class="header-bar"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <span>Northern California SBDC</span>
+                <span>norcalsbdc.org</span>
+                <span>info@norcalsbdc.org</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- L10 -->
+    <div class="section">
+        <div class="section-label">L10 — Maroon Accent</div>
+        <div class="letterhead l10">
+            <div class="accent"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L11 -->
+    <div class="section">
+        <div class="section-label">L11 — Gradient Bleed (Wild)</div>
+        <div class="letterhead l11">
+            <div class="gradient-corner"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-line"></div>
+                <div class="footer-content">
+                    <span>Northern California SBDC</span>
+                    <span>norcalsbdc.org</span>
+                    <span>info@norcalsbdc.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- L12 -->
+    <div class="section">
+        <div class="section-label">L12 — Ring Emergence (Wild)</div>
+        <div class="letterhead l12">
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+            <div class="ring r3"></div>
+            <div class="ring r4"></div>
+            <div class="header">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="tagline">Your Business People.</div>
+            </div>
+            <div class="sample-content">
+                <div class="date">January 7, 2026</div>
+                <div class="recipient">
+                    Jane Doe<br>
+                    Acme Small Business<br>
+                    123 Main Street<br>
+                    Sacramento, CA 95814
+                </div>
+                <div class="body">
+                    <p>Dear Jane,</p>
+                    <br>
+                    <p>Thank you for meeting with me last week to discuss your business expansion plans. I was impressed by your vision for growth and the solid foundation you've built over the past three years.</p>
+                    <br>
+                    <p>As we discussed, I've identified several funding opportunities that align with your goals. The SBA 7(a) loan program could provide the working capital you need, and I've also found two grant programs specifically designed for businesses in your industry.</p>
+                    <br>
+                    <p>I'd like to schedule a follow-up meeting to review these options in detail and begin the application process. Please let me know your availability next week.</p>
+                </div>
+                <div class="signature">
+                    Best regards,
+                    <div class="sig-name">Maria Santos</div>
+                    <div class="sig-title">Senior Business Advisor</div>
+                </div>
+            </div>
+            <div class="footer">
+                <span>Northern California SBDC</span>
+                <span>norcalsbdc.org</span>
+                <span>info@norcalsbdc.org</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBDC Marketing Plan 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #000;
+            --ink: #0a0a0a;
+            --charcoal: #171717;
+            --graphite: #262626;
+            --stone: #404040;
+            --gray: #737373;
+            --silver: #a3a3a3;
+            --mist: #d4d4d4;
+            --cloud: #e5e5e5;
+            --snow: #f5f5f5;
+            --white: #fff;
+            --cream: #faf8f5;
+            --warm: #f5f0e8;
+            --accent: #1a56db;
+            --accent-light: #3b82f6;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--white);
+            color: var(--charcoal);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === COVER === */
+        .cover {
+            min-height: 100vh;
+            background: var(--ink);
+            color: var(--white);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            padding: 3rem;
+        }
+
+        .cover-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+        }
+
+        .cover-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .cover-year {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(8rem, 20vw, 16rem);
+            font-weight: 400;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .cover-title em {
+            font-style: italic;
+        }
+
+        .cover-sub {
+            font-size: 1.125rem;
+            font-weight: 300;
+            color: var(--silver);
+            max-width: 480px;
+            line-height: 1.7;
+        }
+
+        .cover-bottom {
+            display: flex;
+            gap: 4rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cover-stat { color: var(--silver); }
+        .cover-stat strong {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--white);
+            text-transform: none;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+        }
+
+        /* === TOC === */
+        .toc {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        .toc-left {
+            background: var(--cream);
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .toc-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .toc-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 2rem;
+        }
+
+        .toc-heading em { font-style: italic; }
+
+        .toc-intro {
+            font-size: 1rem;
+            color: var(--stone);
+            max-width: 400px;
+            line-height: 1.8;
+        }
+
+        .toc-right {
+            background: var(--white);
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .toc-list {
+            list-style: none;
+            counter-reset: toc;
+        }
+
+        .toc-item {
+            counter-increment: toc;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .toc-item a {
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: all 0.2s;
+        }
+
+        .toc-item a:hover {
+            padding-left: 1rem;
+        }
+
+        .toc-item a::before {
+            content: counter(toc, decimal-leading-zero);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--gray);
+            min-width: 1.5rem;
+        }
+
+        .toc-item a:hover::before {
+            color: var(--accent);
+        }
+
+        .toc-name {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .toc { grid-template-columns: 1fr; }
+            .toc-left, .toc-right { padding: 3rem 2rem; }
+        }
+
+        /* === SECTION BASE === */
+        .section {
+            scroll-margin-top: 2rem;
+        }
+
+        /* === SPREAD LAYOUT === */
+        .spread {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        .spread-dark { background: var(--ink); color: var(--white); }
+        .spread-light { background: var(--cream); }
+        .spread-white { background: var(--white); }
+
+        .spread-content {
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .spread-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .spread-dark .spread-number { color: var(--silver); }
+
+        .spread-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        .spread-title em { font-style: italic; }
+
+        .spread-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--stone);
+            max-width: 480px;
+        }
+
+        .spread-dark .spread-text { color: var(--silver); }
+
+        .spread-data {
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media (max-width: 900px) {
+            .spread { grid-template-columns: 1fr; }
+            .spread-content, .spread-data { padding: 3rem 2rem; }
+        }
+
+        /* === STATS GRID === */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .stat-item {
+            border-left: 1px solid var(--cloud);
+            padding-left: 1.5rem;
+        }
+
+        .spread-dark .stat-item { border-color: var(--graphite); }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+        }
+
+        .spread-dark .stat-label { color: var(--silver); }
+
+        /* === LIST STYLE === */
+        .content-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .content-list li {
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--cloud);
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .spread-dark .content-list li { border-color: var(--graphite); }
+
+        .content-list li::before {
+            content: '—';
+            color: var(--gray);
+        }
+
+        /* === FULL WIDTH SECTION === */
+        .full {
+            padding: 8rem 4rem;
+        }
+
+        .full-dark { background: var(--ink); color: var(--white); }
+        .full-cream { background: var(--cream); }
+        .full-white { background: var(--white); }
+
+        .full-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .full-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .full-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            font-weight: 400;
+            line-height: 0.85;
+            color: var(--mist);
+        }
+
+        .full-dark .full-number { color: var(--graphite); }
+
+        .full-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .full-title em { font-style: italic; }
+
+        .full-text {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--stone);
+            max-width: 560px;
+        }
+
+        .full-dark .full-text { color: var(--silver); }
+
+        @media (max-width: 900px) {
+            .full { padding: 4rem 2rem; }
+            .full-header { grid-template-columns: 1fr; gap: 2rem; }
+            .full-number { font-size: 4rem; }
+        }
+
+        /* === CARD GRID === */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 1000px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2.5rem;
+            border: 1px solid var(--cloud);
+        }
+
+        .full-dark .card {
+            background: var(--charcoal);
+            border-color: var(--graphite);
+        }
+
+        .card-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.375rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .card-list {
+            list-style: none;
+            font-size: 0.875rem;
+            color: var(--stone);
+        }
+
+        .full-dark .card-list { color: var(--silver); }
+
+        .card-list li {
+            padding: 0.625rem 0;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .full-dark .card-list li { border-color: var(--graphite); }
+
+        .card-list li:last-child { border-bottom: none; }
+
+        /* === TIMELINE === */
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .timeline { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .timeline { grid-template-columns: 1fr; }
+        }
+
+        .timeline-item {
+            padding: 2.5rem;
+            border-right: 1px solid var(--cloud);
+        }
+
+        .timeline-item:last-child { border-right: none; }
+
+        .spread-dark .timeline-item { border-color: var(--graphite); }
+
+        @media (max-width: 900px) {
+            .timeline-item { border-bottom: 1px solid var(--cloud); }
+            .timeline-item:nth-child(2n) { border-right: none; }
+            .spread-dark .timeline-item { border-bottom-color: var(--graphite); }
+        }
+
+        .timeline-q {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-list {
+            list-style: none;
+            font-size: 0.8125rem;
+            color: var(--stone);
+            line-height: 1.7;
+        }
+
+        .spread-dark .timeline-list { color: var(--silver); }
+
+        .timeline-list li { margin-bottom: 0.5rem; }
+
+        /* === TABLE === */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid var(--charcoal);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cloud);
+            color: var(--stone);
+        }
+
+        td:first-child {
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .full-dark th { border-color: var(--white); color: var(--silver); }
+        .full-dark td { border-color: var(--graphite); color: var(--silver); }
+        .full-dark td:first-child { color: var(--white); }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.25rem 0.625rem;
+            border-radius: 2px;
+        }
+
+        .tag-high { background: #fef2f2; color: #dc2626; }
+        .tag-med { background: #fffbeb; color: #d97706; }
+
+        /* === FEATURE CALLOUT === */
+        .callout {
+            background: var(--ink);
+            color: var(--white);
+            padding: 6rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .callout-content {
+            max-width: 480px;
+        }
+
+        .callout-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--silver);
+            margin-bottom: 1rem;
+        }
+
+        .callout-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .callout-title em { font-style: italic; }
+
+        .callout-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--silver);
+        }
+
+        .callout-stat {
+            text-align: right;
+        }
+
+        .callout-stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(6rem, 12vw, 10rem);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+
+        .callout-stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+        }
+
+        @media (max-width: 900px) {
+            .callout { grid-template-columns: 1fr; padding: 4rem 2rem; }
+            .callout-stat { text-align: left; margin-top: 2rem; }
+        }
+
+        /* === TWO COL TEXT === */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 800px) {
+            .two-col { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        .col-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .col-list {
+            list-style: none;
+            font-size: 0.9375rem;
+            color: var(--stone);
+        }
+
+        .full-dark .col-list { color: var(--silver); }
+
+        .col-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--cloud);
+        }
+
+        .full-dark .col-list li { border-color: var(--graphite); }
+
+        /* === BIG QUOTE === */
+        .quote-section {
+            background: var(--cream);
+            padding: 8rem 4rem;
+            text-align: center;
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quote-text em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: var(--ink);
+            color: var(--white);
+            padding: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .footer-meta {
+            font-size: 0.75rem;
+            color: var(--silver);
+        }
+
+        @media (max-width: 600px) {
+            .footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER -->
+<header class="cover">
+    <div class="cover-top">
+        <span>NorCal SBDC</span>
+        <span>Marketing Plan</span>
+    </div>
+    <div class="cover-center">
+        <div class="cover-year">2026</div>
+        <h1 class="cover-title">Building <em>Momentum</em></h1>
+        <p class="cover-sub">A strategic marketing plan for the Northern California Small Business Development Center. Eleven initiatives to amplify impact and celebrate success.</p>
+    </div>
+    <div class="cover-bottom">
+        <div class="cover-stat">
+            <strong>11</strong>
+            Initiatives
+        </div>
+        <div class="cover-stat">
+            <strong>4</strong>
+            Quarters
+        </div>
+        <div class="cover-stat">
+            <strong>FY26</strong>
+            Fiscal Year
+        </div>
+    </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+    <div class="toc-left">
+        <p class="toc-label">Overview</p>
+        <h2 class="toc-heading">The <em>Plan</em></h2>
+        <p class="toc-intro">Eleven strategic initiatives designed to strengthen partnerships, increase visibility, and demonstrate the impact of SBDC services across Northern California.</p>
+    </div>
+    <div class="toc-right">
+        <ol class="toc-list">
+            <li class="toc-item"><a href="#lenders"><span class="toc-name">Lender Engagement</span></a></li>
+            <li class="toc-item"><a href="#stakeholders"><span class="toc-name">Stakeholder Communications</span></a></li>
+            <li class="toc-item"><a href="#milestones"><span class="toc-name">Milestone Collection</span></a></li>
+            <li class="toc-item"><a href="#mysbdc"><span class="toc-name">MySBDC Platform</span></a></li>
+            <li class="toc-item"><a href="#tfg"><span class="toc-name">TFG Marketing</span></a></li>
+            <li class="toc-item"><a href="#ybp"><span class="toc-name">Your Business People</span></a></li>
+            <li class="toc-item"><a href="#sbdc-day"><span class="toc-name">SBDC Day</span></a></li>
+            <li class="toc-item"><a href="#sbw"><span class="toc-name">Small Business Week</span></a></li>
+            <li class="toc-item"><a href="#manufacturing"><span class="toc-name">Manufacturing Program</span></a></li>
+            <li class="toc-item"><a href="#newsletter"><span class="toc-name">Newsletter Redesign</span></a></li>
+            <li class="toc-item"><a href="#social"><span class="toc-name">Social Media</span></a></li>
+        </ol>
+    </div>
+</nav>
+
+<!-- 01 LENDERS -->
+<section id="lenders" class="section spread">
+    <div class="spread-content spread-dark">
+        <p class="spread-number">01</p>
+        <h2 class="spread-title">Lender <em>Engagement</em></h2>
+        <p class="spread-text">Strengthen relationships with lending partners to increase capital access for small businesses through consistent communication, mutual value creation, and measurable outcomes.</p>
+        <ul class="content-list">
+            <li>Quarterly lender appreciation events</li>
+            <li>Co-branded marketing materials</li>
+            <li>Referral tracking implementation</li>
+            <li>Joint webinars on lending programs</li>
+            <li>Lender spotlights in newsletter</li>
+        </ul>
+    </div>
+    <div class="spread-data spread-light">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">25+</div>
+                <div class="stat-label">Active Partners</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">$15M</div>
+                <div class="stat-label">Capital Goal</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Annual Events</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Satisfaction</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 02 STAKEHOLDERS -->
+<section id="stakeholders" class="section full full-white">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">02</div>
+            <div>
+                <h2 class="full-title">Stakeholder <em>Communications</em></h2>
+                <p class="full-text">Quarterly touchpoints that build trust and demonstrate value to funders, partners, and community leaders. A structured approach ensures no stakeholder is left behind.</p>
+            </div>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-q">Q1</div>
+                <div class="timeline-title">Year in Review</div>
+                <ul class="timeline-list">
+                    <li>Annual impact report</li>
+                    <li>Strategic priorities memo</li>
+                    <li>Stakeholder survey</li>
+                    <li>Board presentation</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-q">Q2</div>
+                <div class="timeline-title">SBW Focus</div>
+                <ul class="timeline-list">
+                    <li>Event invitations</li>
+                    <li>Success story showcase</li>
+                    <li>Legislative outreach</li>
+                    <li>Partner appreciation</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-q">Q3</div>
+                <div class="timeline-title">Mid-Year Report</div>
+                <ul class="timeline-list">
+                    <li>Six-month metrics</li>
+                    <li>Program spotlights</li>
+                    <li>Manufacturing updates</li>
+                    <li>Feedback integration</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-q">Q4</div>
+                <div class="timeline-title">Year-End</div>
+                <ul class="timeline-list">
+                    <li>Holiday appreciation</li>
+                    <li>Milestone celebration</li>
+                    <li>Initiative preview</li>
+                    <li>Funding renewal</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 03 MILESTONES -->
+<section id="milestones" class="section">
+    <div class="callout">
+        <div class="callout-content">
+            <p class="callout-label">Campaign Goal</p>
+            <h2 class="callout-title">Capture <em>verified client milestones</em> for impact storytelling</h2>
+            <p class="callout-text">A systematic approach to collecting success metrics and transforming them into compelling stories that demonstrate SBDC impact across the region.</p>
+        </div>
+        <div class="callout-stat">
+            <div class="callout-stat-value">100+</div>
+            <div class="callout-stat-label">Target Milestones</div>
+        </div>
+    </div>
+    <div class="full full-cream">
+        <div class="full-inner">
+            <div class="cards-grid">
+                <div class="card">
+                    <p class="card-label">Phase 1</p>
+                    <h3 class="card-title">System Setup</h3>
+                    <ul class="card-list">
+                        <li>CRM milestone fields</li>
+                        <li>Advisor training</li>
+                        <li>Consent templates</li>
+                        <li>Follow-up sequences</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <p class="card-label">Phase 2</p>
+                    <h3 class="card-title">Outreach</h3>
+                    <ul class="card-list">
+                        <li>Email campaigns</li>
+                        <li>Monthly touchpoints</li>
+                        <li>Social callouts</li>
+                        <li>Advisor conversations</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <p class="card-label">Phase 3</p>
+                    <h3 class="card-title">Content</h3>
+                    <ul class="card-list">
+                        <li>Story templates</li>
+                        <li>Video testimonials</li>
+                        <li>Social graphics</li>
+                        <li>Report integration</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Milestone Type</th>
+                            <th>Target</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Business Started</td>
+                            <td>25+</td>
+                            <td><span class="tag tag-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td>Jobs Created</td>
+                            <td>200+</td>
+                            <td><span class="tag tag-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td>Capital Accessed</td>
+                            <td>40+</td>
+                            <td><span class="tag tag-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td>Revenue Growth</td>
+                            <td>30+</td>
+                            <td><span class="tag tag-med">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td>Contracts Awarded</td>
+                            <td>15+</td>
+                            <td><span class="tag tag-med">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 04 MYSBDC -->
+<section id="mysbdc" class="section spread">
+    <div class="spread-data spread-white">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">75%</div>
+                <div class="stat-label">Adoption Target</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2×</div>
+                <div class="stat-label">Portal Logins</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50%</div>
+                <div class="stat-label">Self-Service</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4.5</div>
+                <div class="stat-label">User Rating</div>
+            </div>
+        </div>
+    </div>
+    <div class="spread-content spread-dark">
+        <p class="spread-number">04</p>
+        <h2 class="spread-title"><em>MySBDC</em> Platform</h2>
+        <p class="spread-text">Drive adoption of the client portal to improve outcomes and operational efficiency through targeted marketing and onboarding support.</p>
+        <ul class="content-list">
+            <li>Email announcement campaign</li>
+            <li>Website banner and landing page</li>
+            <li>Video tutorial series</li>
+            <li>Live webinar walk-throughs</li>
+            <li>Monthly usage tips</li>
+        </ul>
+    </div>
+</section>
+
+<!-- 05 TFG -->
+<section id="tfg" class="section quote-section">
+    <p class="quote-text">Position TFG as the <em>premier resource</em> for specialized financial guidance across Northern California.</p>
+</section>
+
+<section class="section full full-white">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">05</div>
+            <div>
+                <h2 class="full-title">TFG <em>Marketing</em></h2>
+                <p class="full-text">Strategic support for Technical Financial Group initiatives, ensuring consistent messaging and maximum reach for specialized services.</p>
+            </div>
+        </div>
+        <div class="cards-grid">
+            <div class="card">
+                <p class="card-label">Positioning</p>
+                <h3 class="card-title">Brand Integration</h3>
+                <ul class="card-list">
+                    <li>Service description refinement</li>
+                    <li>Co-branded collateral</li>
+                    <li>Website optimization</li>
+                    <li>Cross-promotion</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="card-label">Outreach</p>
+                <h3 class="card-title">Target Marketing</h3>
+                <ul class="card-list">
+                    <li>Industry email campaigns</li>
+                    <li>Partner referral program</li>
+                    <li>LinkedIn outreach</li>
+                    <li>Workshop series</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="card-label">Content</p>
+                <h3 class="card-title">Thought Leadership</h3>
+                <ul class="card-list">
+                    <li>Monthly blog posts</li>
+                    <li>Quarterly webinars</li>
+                    <li>Case studies</li>
+                    <li>Guest articles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 06 YOUR BUSINESS PEOPLE -->
+<section id="ybp" class="section spread">
+    <div class="spread-content spread-light">
+        <p class="spread-number">06</p>
+        <h2 class="spread-title">Your Business <em>People</em></h2>
+        <p class="spread-text">Humanize the SBDC brand by showcasing the advisors, staff, and partners who make small business success possible. People connect with people.</p>
+    </div>
+    <div class="spread-data spread-white">
+        <div class="two-col" style="margin-top: 0;">
+            <div>
+                <h3 class="col-title">Team Profiles</h3>
+                <ul class="col-list">
+                    <li>Professional headshots</li>
+                    <li>Video introductions</li>
+                    <li>Expertise highlights</li>
+                    <li>Testimonial integration</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="col-title">Social Content</h3>
+                <ul class="col-list">
+                    <li>Weekly advisor spotlights</li>
+                    <li>Day-in-the-life stories</li>
+                    <li>Team celebrations</li>
+                    <li>Award announcements</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 07 SBDC DAY -->
+<section id="sbdc-day" class="section">
+    <div class="callout">
+        <div class="callout-content">
+            <p class="callout-label">2026 Theme</p>
+            <h2 class="callout-title">Building Tomorrow's <em>Economy</em> Today</h2>
+            <p class="callout-text">Maximize visibility during the annual SBDC Day celebration with a coordinated campaign to engage legislators, media, partners, and the public.</p>
+        </div>
+        <div class="callout-stat">
+            <div class="callout-stat-value">07</div>
+            <div class="callout-stat-label">SBDC Day</div>
+        </div>
+    </div>
+    <div class="full full-white">
+        <div class="full-inner">
+            <div class="cards-grid">
+                <div class="card">
+                    <p class="card-label">Pre-Event</p>
+                    <h3 class="card-title">Build-Up</h3>
+                    <ul class="card-list">
+                        <li>2-week social countdown</li>
+                        <li>Stakeholder email series</li>
+                        <li>Press release</li>
+                        <li>Legislative outreach</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <p class="card-label">Event Day</p>
+                    <h3 class="card-title">Activation</h3>
+                    <ul class="card-list">
+                        <li>Social media blitz</li>
+                        <li>Live streaming</li>
+                        <li>Recognition ceremony</li>
+                        <li>Testimonial videos</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <p class="card-label">Post-Event</p>
+                    <h3 class="card-title">Follow-Up</h3>
+                    <ul class="card-list">
+                        <li>Thank you communications</li>
+                        <li>Event recap</li>
+                        <li>Media compilation</li>
+                        <li>Impact metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 08 SMALL BUSINESS WEEK -->
+<section id="sbw" class="section full full-dark">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">08</div>
+            <div>
+                <h2 class="full-title">Small Business <em>Week</em></h2>
+                <p class="full-text">Leverage National Small Business Week to amplify SBDC visibility and celebrate small business impact in Northern California.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Theme</th>
+                        <th>Key Activities</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Kickoff</td>
+                        <td>Awards, proclamations, social launch</td>
+                    </tr>
+                    <tr>
+                        <td>Tuesday</td>
+                        <td>Capital</td>
+                        <td>Lender spotlight, financing workshop</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>Innovation</td>
+                        <td>Manufacturing feature, tech highlights</td>
+                    </tr>
+                    <tr>
+                        <td>Thursday</td>
+                        <td>Community</td>
+                        <td>Local features, partner appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>Celebration</td>
+                        <td>Wrap-up event, gratitude posts</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- 09 MANUFACTURING -->
+<section id="manufacturing" class="section spread">
+    <div class="spread-content spread-white">
+        <p class="spread-number">09</p>
+        <h2 class="spread-title">Manufacturing <em>Program</em></h2>
+        <p class="spread-text">Launch marketing for the manufacturing consulting program, targeting small and mid-sized manufacturers across the region with specialized support services.</p>
+        <ul class="content-list">
+            <li>Program branding and collateral</li>
+            <li>Association partnerships</li>
+            <li>Trade show presence</li>
+            <li>Industry publication ads</li>
+            <li>Webinar series</li>
+        </ul>
+    </div>
+    <div class="spread-data spread-light">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Manufacturers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Counties</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Workshops</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Trade Shows</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 10 NEWSLETTER -->
+<section id="newsletter" class="section full full-cream">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">10</div>
+            <div>
+                <h2 class="full-title">Newsletter <em>Redesign</em></h2>
+                <p class="full-text">Refresh "The Brief" to increase engagement, improve readability, and better serve clients, partners, and stakeholders.</p>
+            </div>
+        </div>
+        <div class="two-col">
+            <div>
+                <h3 class="col-title">Design & Content</h3>
+                <ul class="col-list">
+                    <li>Mobile-first responsive template</li>
+                    <li>Improved typography hierarchy</li>
+                    <li>Client spotlight section</li>
+                    <li>Resource of the month</li>
+                    <li>Partner highlights</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="col-title">Distribution</h3>
+                <ul class="col-list">
+                    <li>A/B subject line testing</li>
+                    <li>Send time optimization</li>
+                    <li>Segmented audience lists</li>
+                    <li>Click tracking & analytics</li>
+                    <li>Preference center</li>
+                </ul>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Current</th>
+                        <th>Target</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Open Rate</td>
+                        <td>22%</td>
+                        <td>35%</td>
+                    </tr>
+                    <tr>
+                        <td>Click Rate</td>
+                        <td>3%</td>
+                        <td>8%</td>
+                    </tr>
+                    <tr>
+                        <td>Subscriber Growth</td>
+                        <td>2%/mo</td>
+                        <td>5%/mo</td>
+                    </tr>
+                    <tr>
+                        <td>Unsubscribe Rate</td>
+                        <td>0.8%</td>
+                        <td>&lt;0.3%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- 11 SOCIAL -->
+<section id="social" class="section full full-dark">
+    <div class="full-inner">
+        <div class="full-header">
+            <div class="full-number">11</div>
+            <div>
+                <h2 class="full-title">Social Media <em>Plan</em></h2>
+                <p class="full-text">Comprehensive strategy to increase brand awareness, engage with small businesses, and drive service inquiries across platforms.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Focus</th>
+                        <th>Frequency</th>
+                        <th>Content</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LinkedIn</td>
+                        <td>Professional</td>
+                        <td>4-5×/week</td>
+                        <td>Stories, tips, events</td>
+                    </tr>
+                    <tr>
+                        <td>Facebook</td>
+                        <td>Community</td>
+                        <td>3-4×/week</td>
+                        <td>Events, features</td>
+                    </tr>
+                    <tr>
+                        <td>Instagram</td>
+                        <td>Visual</td>
+                        <td>3-4×/week</td>
+                        <td>Behind-scenes</td>
+                    </tr>
+                    <tr>
+                        <td>X</td>
+                        <td>News</td>
+                        <td>5-7×/week</td>
+                        <td>Tips, updates</td>
+                    </tr>
+                    <tr>
+                        <td>YouTube</td>
+                        <td>Educational</td>
+                        <td>2×/month</td>
+                        <td>Webinars, tutorials</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="cards-grid" style="margin-top: 3rem;">
+            <div class="card">
+                <p class="card-label">Content Pillars</p>
+                <h3 class="card-title">Themes</h3>
+                <ul class="card-list">
+                    <li>Educate — Tips & resources</li>
+                    <li>Inspire — Success stories</li>
+                    <li>Connect — Events</li>
+                    <li>Humanize — Team features</li>
+                    <li>Celebrate — Wins</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="card-label">Weekly Series</p>
+                <h3 class="card-title">Recurring</h3>
+                <ul class="card-list">
+                    <li>#MilestoneMonday</li>
+                    <li>#TipTuesday</li>
+                    <li>#WednesdayWisdom</li>
+                    <li>#ThrowbackThursday</li>
+                    <li>#FeatureFriday</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="card-label">2026 Goals</p>
+                <h3 class="card-title">Targets</h3>
+                <ul class="card-list">
+                    <li>25% follower growth</li>
+                    <li>5% engagement rate</li>
+                    <li>50+ inquiries via social</li>
+                    <li>100+ UGC shares</li>
+                    <li>10+ media pickups</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-brand">NorCal SBDC</div>
+    <div class="footer-meta">Marketing Plan 2026 — Confidential</div>
+</footer>
+
+</body>
+</html>
