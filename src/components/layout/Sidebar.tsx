@@ -127,9 +127,13 @@ export default function Sidebar({ onClose }: SidebarProps) {
       <div className="mt-auto">
         <div className="h-px bg-[var(--rule-on-dark)] mx-6" />
         <div className="px-6 py-4">
-          <p className="text-[11px] font-[var(--mono)] text-white/20 tracking-wider uppercase">
-            NorCal SBDC
-          </p>
+          <Link
+            href="/milestone-log"
+            onClick={() => onClose?.()}
+            className="text-[12px] font-[var(--mono)] text-white/25 hover:text-white/50 tracking-wider uppercase transition-colors duration-[var(--duration-fast)]"
+          >
+            Milestone Log
+          </Link>
         </div>
       </div>
     </aside>
