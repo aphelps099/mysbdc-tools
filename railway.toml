@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm ci && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static"
+buildCommand = "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static"
 
 [build.nixpacksConfig]
 nodeVersion = "20"
