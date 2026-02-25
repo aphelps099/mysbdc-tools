@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════
-   Brand House — Animations & Utilities
-   Prefix: bh-  (avoids collisions with other components)
+   Brand House — Premium Creative System
+   Prefix: bh-  (collision-free)
    ═══════════════════════════════════════════════════════ */
 
-/* ── Scroll-triggered section reveal ── */
+/* ── Scroll-triggered reveal — editorial pace ── */
 @keyframes bhReveal {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: none; }
 }
 
@@ -14,48 +14,96 @@
 }
 
 .bh-section.bh-visible {
-  animation: bhReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: bhReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ── Stagger children within revealed sections ── */
-.bh-stagger-1.bh-visible { animation-delay: 0.05s; }
-.bh-stagger-2.bh-visible { animation-delay: 0.1s; }
-.bh-stagger-3.bh-visible { animation-delay: 0.15s; }
-.bh-stagger-4.bh-visible { animation-delay: 0.2s; }
-.bh-stagger-5.bh-visible { animation-delay: 0.25s; }
+/* ── Stagger within revealed sections ── */
+.bh-stagger-1.bh-visible { animation-delay: 0.06s; }
+.bh-stagger-2.bh-visible { animation-delay: 0.12s; }
+.bh-stagger-3.bh-visible { animation-delay: 0.18s; }
+.bh-stagger-4.bh-visible { animation-delay: 0.24s; }
+.bh-stagger-5.bh-visible { animation-delay: 0.30s; }
 
-/* ── Hero scroll indicator bounce ── */
+/* ── Hero — cinematic entrance ── */
+@keyframes bhHeroType {
+  from { opacity: 0; transform: translateY(48px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes bhLineGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes bhFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.bh-hero-title {
+  animation: bhHeroType 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.bh-hero-rule {
+  transform-origin: center;
+  animation: bhLineGrow 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+.bh-hero-sub {
+  animation: bhFadeIn 0.8s ease 1.2s both;
+}
+
+/* ── Scroll indicator ── */
 @keyframes bhBounce {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50%      { transform: translateY(6px); opacity: 1; }
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50%      { transform: translateY(8px); opacity: 0.7; }
 }
 
 .bh-scroll-indicator {
-  animation: bhBounce 2s ease-in-out infinite;
+  animation: bhBounce 2.5s ease-in-out infinite;
 }
 
-/* ── Color swatch hover lift ── */
+/* ── Grain texture overlay ── */
+@keyframes bhGrain {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-1%, -2%); }
+  50% { transform: translate(2%, 1%); }
+  75% { transform: translate(-1%, 2%); }
+}
+
+.bh-grain::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  animation: bhGrain 8s steps(10) infinite;
+}
+
+/* ── Color swatches ── */
 .bh-swatch {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.3s ease;
   cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease;
 }
 .bh-swatch:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
 }
 
-/* ── Copy feedback ── */
 @keyframes bhCopyPulse {
   0%   { transform: scale(1); }
-  50%  { transform: scale(1.04); }
+  50%  { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
 .bh-copy-success {
   animation: bhCopyPulse 0.3s ease;
 }
 
-/* ── Sticky section nav — hide scrollbar ── */
+/* ── Sticky nav ── */
 .bh-nav {
   scrollbar-width: none;
 }
@@ -63,53 +111,96 @@
   display: none;
 }
 
-/* ── Section nav active indicator ── */
 .bh-nav-item {
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.25s ease;
 }
 .bh-nav-item::after {
   content: '';
   position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--p-navy, #162d50);
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 1.5px;
+  background: var(--p-ink, #1a1a1a);
   transform: scaleX(0);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bh-nav-item.bh-active::after {
   transform: scaleX(1);
 }
 
 /* ── Typography specimen blocks ── */
-.bh-type-specimen {
+.bh-type-block {
   border-left: 2px solid var(--p-line, #e7e2da);
-  padding-left: 24px;
-  transition: border-color 0.3s ease;
+  padding-left: 32px;
+  transition: border-color 0.4s ease;
 }
-.bh-type-specimen:hover {
+.bh-type-block:hover {
   border-left-color: var(--p-blue, #2456e3);
 }
 
-/* ── Logo grid item ── */
+/* ── Logo grid items ── */
 .bh-logo-item {
-  transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: box-shadow 0.4s ease,
+              transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bh-logo-item:hover {
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
-/* ── Voice grid: stack on mobile ── */
-@media (max-width: 640px) {
-  .bh-voice-grid {
-    grid-template-columns: 1fr !important;
-  }
+/* ── Voice card hover ── */
+.bh-voice-card {
+  transition: background 0.3s ease;
+  border-radius: 4px;
+}
+
+/* ── Journey stage hover ── */
+.bh-stage {
+  transition: background 0.3s ease;
+  border-radius: 8px;
+}
+
+/* ── Program cards ── */
+.bh-program-card {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
+}
+.bh-program-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.1);
+  border-color: var(--p-blue, #2456e3);
 }
 
 /* ── Smooth scroll ── */
 .bh-scroll {
   scroll-behavior: smooth;
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  .bh-color-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .bh-voice-layout {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  .bh-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .bh-support-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bh-partner-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .bh-color-grid {
+    grid-template-columns: 1fr !important;
+  }
 }

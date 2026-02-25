@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import './brand.css';
 
 /* ═══════════════════════════════════════════════════════
    BrandHouse — NorCal SBDC Visual Identity Reference
-   Single-page scrollable brand guide with 7 sections.
+   Collins & Co / Pentagram caliber brand guide.
    ═══════════════════════════════════════════════════════ */
 
 // ── Section IDs ──
@@ -28,63 +28,8 @@ const PALETTE = [
   { name: 'Navy',  hex: '#0f1c2e', css: '--navy',  text: '#ffffff', usage: 'Primary backgrounds, headers, authority' },
   { name: 'Royal', hex: '#1D5AA7', css: '--royal', text: '#ffffff', usage: 'CTAs, links, interactive elements' },
   { name: 'Pool',  hex: '#8FC5D9', css: '--pool',  text: '#0f1c2e', usage: 'Accents, highlights, secondary actions' },
-  { name: 'Cream', hex: '#f0efeb', css: '--cream', text: '#0f1c2e', usage: 'Page backgrounds, cards, subtle surfaces' },
-  { name: 'Brick', hex: '#a82039', css: '--brick', text: '#ffffff', usage: 'Alerts, warnings, emphasis moments' },
-] as const;
-
-// ── Font Families ──
-const FONTS = [
-  {
-    name: 'GT Era Display',
-    css: '--display',
-    role: 'Display & Headlines',
-    weights: [
-      { label: 'Thin', value: 100 },
-      { label: 'Light', value: 300 },
-      { label: 'Medium', value: 500 },
-    ],
-    sample: 'Empowering Northern California Small Businesses',
-    description: 'The hero font. Used for page titles, section headings, and brand moments.',
-  },
-  {
-    name: 'GT Era Text',
-    css: '--era-text',
-    role: 'Body Text',
-    weights: [
-      { label: 'Thin', value: 100 },
-      { label: 'Medium', value: 400 },
-      { label: 'Bold', value: 700 },
-      { label: 'Heavy', value: 900 },
-    ],
-    sample: 'The NorCal SBDC provides free, confidential business advising to entrepreneurs across 36 counties.',
-    description: 'The workhorse. Used for body copy, form labels, descriptions, and extended reading.',
-  },
-  {
-    name: 'GT America',
-    css: '--sans',
-    role: 'UI & Navigation',
-    weights: [
-      { label: 'Light', value: 300 },
-      { label: 'Regular', value: 400 },
-      { label: 'Medium', value: 500 },
-      { label: 'Bold', value: 700 },
-    ],
-    sample: 'Navigation elements, buttons, form inputs, and system-level UI.',
-    description: 'The system sans. Used for navigation, buttons, metadata, and small UI text.',
-  },
-  {
-    name: 'Tobias',
-    css: '--serif',
-    role: 'Editorial & Accent',
-    weights: [
-      { label: 'Regular', value: 400 },
-      { label: 'Regular Italic', value: 400, style: 'italic' as const },
-      { label: 'Medium', value: 500 },
-      { label: 'Bold', value: 700 },
-    ],
-    sample: 'Stories of real impact, told with warmth and credibility.',
-    description: 'The editorial serif. Used for callouts, testimonials, and moments that need warmth.',
-  },
+  { name: 'Cream', hex: '#f0efeb', css: '--cream', text: '#0f1c2e', usage: 'Page backgrounds, cards, surfaces' },
+  { name: 'Brick', hex: '#a82039', css: '--brick', text: '#ffffff', usage: 'Alerts, emphasis, critical moments' },
 ] as const;
 
 // ── Voice Attributes ──
@@ -102,7 +47,7 @@ const VOICE_ATTRIBUTES = [
   {
     trait: 'Confident',
     contrast: 'not boastful',
-    description: 'We let our impact numbers speak. $547M in capital accessed. 7,500+ entrepreneurs served. We state facts clearly without overselling or hedging.',
+    description: 'We let our impact numbers speak. $240M+ in capital accessed. 8,500+ entrepreneurs served. We state facts clearly without overselling.',
   },
   {
     trait: 'Action-oriented',
@@ -115,52 +60,58 @@ const VOICE_ATTRIBUTES = [
 const JOURNEY_STAGES = [
   {
     stage: 'Discover',
-    description: 'Business owners learn about SBDC services through outreach, referrals, and online presence.',
-    touchpoints: ['Website', 'Events', 'Partner referrals', 'Marketing'],
+    description: 'Business owners learn about SBDC services through outreach, referrals, and digital presence.',
+    touchpoints: ['Website', 'Events', 'Partner Referrals', 'Marketing'],
     color: '#8FC5D9',
     link: null,
   },
   {
     stage: 'Intake',
-    description: 'New clients complete the guided SBA 641 intake form, capturing their business profile and goals.',
-    touchpoints: ['Smart 641 Wizard', 'SBA 641 Form', 'Center assignment'],
+    description: 'New clients complete the guided SBA 641 intake form — capturing business profile, goals, and needs.',
+    touchpoints: ['Smart 641 Wizard', 'Center Assignment'],
     color: '#1D5AA7',
     link: '/intake',
   },
   {
     stage: 'Advising',
-    description: 'Free, confidential one-on-one business consulting. Capital access support, specialist referrals, and accountability.',
-    touchpoints: ['Advisory sessions', 'Action plans', 'Specialist referrals'],
+    description: 'Free, confidential one-on-one business consulting. Capital access, strategy, compliance, and growth.',
+    touchpoints: ['Advisory Sessions', 'Action Plans', 'Specialist Referrals'],
     color: '#0f1c2e',
     link: null,
   },
   {
     stage: 'Milestones',
-    description: 'Track concrete outcomes \u2014 capital accessed, jobs created, revenue growth, business starts.',
-    touchpoints: ['Milestone wizard', 'Neoserra sync', 'Impact data'],
+    description: 'Track concrete outcomes — capital accessed, jobs created, revenue growth, business starts.',
+    touchpoints: ['Milestone Wizard', 'Neoserra Sync', 'Impact Data'],
     color: '#a82039',
     link: '/milestones',
   },
   {
     stage: 'Impact',
-    description: 'Aggregated data tells the story of SBDC impact across Northern California.',
-    touchpoints: ['Atlas dashboard', 'SBA reporting', 'Success stories'],
+    description: 'Aggregated data tells the full story of SBDC impact across Northern California.',
+    touchpoints: ['Atlas Dashboard', 'SBA Reporting', 'Success Stories'],
     color: '#16a34a',
     link: '/atlas',
   },
 ] as const;
 
-// ── Programs ──
-const SPECIAL_PROGRAMS = [
-  { name: 'TFG / FAST', description: 'SBIR/STTR application support. 57% win rate, $1B+ capital raised.', badge: 'Technology' },
-  { name: 'Finance Center', description: 'Centralized capital access hub. Loan packaging, lender matching, SBA navigation. $240M+ capital accessed.', badge: 'Capital' },
-  { name: 'Beauty Boss', description: 'Industry-specific program for beauty and personal care entrepreneurs. Branding, licensing, product development.', badge: 'Industry' },
-  { name: 'APEX Accelerator', description: 'Federal contracting support. Helps businesses pursue DoD and other federal contract opportunities.', badge: 'Contracting' },
+// ── Special Programs ──
+const PROGRAMS = [
+  { name: 'TFG / FAST',       category: 'Technology',   description: 'SBIR/STTR application support. 57% win rate, $1B+ capital raised.' },
+  { name: 'AI University',     category: 'Technology',   description: 'AI readiness training and implementation guidance for small businesses.' },
+  { name: 'Finance Center',    category: 'Capital',      description: 'Centralized capital access hub. Loan packaging, lender matching, SBA loan navigation.' },
+  { name: 'SSBCI',             category: 'Capital',      description: 'State Small Business Credit Initiative — federal funds for underserved markets.' },
+  { name: 'APEX Accelerator',  category: 'Contracting',  description: 'Federal contracting support for DoD and government contract opportunities.' },
+  { name: 'Beauty Boss',       category: 'Industry',     description: 'Beauty and personal care entrepreneurs — branding, licensing, product development.' },
+  { name: 'SBDC Health',       category: 'Industry',     description: 'Healthcare business advising — compliance, operations, growth strategy.' },
+  { name: 'SBDC Eats',         category: 'Industry',     description: 'Food and beverage entrepreneurs — permitting, scaling, market access.' },
+  { name: 'ProBiz',            category: 'Community',    description: 'Multilingual business support — serving diverse entrepreneur communities.' },
+  { name: 'PRIME',             category: 'Community',    description: 'Microenterprise development — low-income and disadvantaged entrepreneurs.' },
 ] as const;
 
 const NETWORK_STATS = [
-  { num: '14', label: 'Centers' },
-  { num: '63', label: 'Advisors' },
+  { num: '16',     label: 'Centers' },
+  { num: '200+',   label: 'Advisors' },
   { num: '8,500+', label: 'Clients Served' },
   { num: '$240M+', label: 'Capital Accessed' },
 ] as const;
@@ -178,7 +129,7 @@ function useScrollReveal() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' },
+      { threshold: 0.12, rootMargin: '0px 0px -80px 0px' },
     );
     const targets = document.querySelectorAll('.bh-section');
     targets.forEach((t) => observer.observe(t));
@@ -234,39 +185,47 @@ export default function BrandHouse() {
       <nav
         className="bh-nav sticky top-0 z-40 flex items-center overflow-x-auto"
         style={{
-          height: 48,
+          height: 56,
           background: 'var(--p-cream, #faf8f4)',
           borderBottom: '1px solid var(--p-line, #e7e2da)',
           padding: '0 24px',
-          gap: 0,
         }}
       >
         <a
           href="/"
-          className="shrink-0 no-underline transition-colors duration-150"
-          style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #a8a29e)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 16 }}
+          className="shrink-0 no-underline"
+          style={{
+            fontFamily: 'var(--mono)',
+            color: 'var(--p-muted, #a8a29e)',
+            fontSize: 10,
+            fontWeight: 400,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase' as const,
+            marginRight: 20,
+            transition: 'color 0.2s ease',
+          }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--p-ink, #1a1a1a)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--p-muted, #a8a29e)'; }}
         >
-          &larr; Back
+          &larr; Tools
         </a>
-        <div className="shrink-0" style={{ width: 1, height: 16, background: 'var(--p-line, #e7e2da)', marginRight: 8 }} />
+        <div className="shrink-0" style={{ width: 1, height: 20, background: 'var(--p-line, #e7e2da)', marginRight: 8 }} />
         {SECTIONS.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => scrollTo(id)}
             className={`bh-nav-item cursor-pointer whitespace-nowrap shrink-0 ${activeSection === id ? 'bh-active' : ''}`}
             style={{
-              fontFamily: 'var(--sans)',
-              fontSize: 11,
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
               fontWeight: activeSection === id ? 700 : 400,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              padding: '14px 10px',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase' as const,
+              padding: '20px 12px',
               background: 'none',
               border: 'none',
               color: activeSection === id ? 'var(--p-ink, #1a1a1a)' : 'var(--p-muted, #a8a29e)',
-              transition: 'color 0.2s ease',
+              transition: 'color 0.25s ease',
             }}
           >
             {label}
@@ -278,62 +237,79 @@ export default function BrandHouse() {
       </nav>
 
       {/* ════════════════════════════════════════════
-         S1: HERO
+         S1: HERO — Cinematic
          ════════════════════════════════════════════ */}
       <section
         id="hero"
-        className="relative flex flex-col items-center justify-center"
-        style={{ minHeight: 'calc(100dvh - 48px)', background: 'var(--p-sand, #f3efe8)', padding: '80px 24px 48px' }}
+        className="relative bh-grain flex flex-col items-center justify-center"
+        style={{
+          minHeight: 'calc(100dvh - 56px)',
+          background: 'var(--p-sand, #f3efe8)',
+          padding: '80px 24px 48px',
+          overflow: 'hidden',
+        }}
       >
-        <div className="pv-stagger-1" style={{ marginBottom: 48 }}>
+        <div className="pv-stagger-1" style={{ marginBottom: 64 }}>
           <Image
             src="/sbdc-blue-2026.png"
             alt="NorCal SBDC"
-            width={280}
-            height={72}
-            style={{ height: 64, width: 'auto' }}
+            width={180}
+            height={48}
+            style={{ height: 44, width: 'auto', opacity: 0.8 }}
             priority
           />
         </div>
 
         <h1
-          className="pv-stagger-2"
+          className="bh-hero-title"
           style={{
             fontFamily: 'var(--display)',
-            fontSize: 'clamp(32px, 6vw, 56px)',
-            fontWeight: 300,
-            letterSpacing: '-0.03em',
-            lineHeight: 1.1,
+            fontSize: 'clamp(52px, 12vw, 140px)',
+            fontWeight: 100,
+            letterSpacing: '-0.045em',
+            lineHeight: 0.88,
             color: 'var(--p-ink, #1a1a1a)',
             textAlign: 'center',
             margin: 0,
           }}
         >
-          Brand House
+          Brand<br />House
         </h1>
 
-        <p
-          className="pv-stagger-3"
+        {/* Animated rule */}
+        <div
+          className="bh-hero-rule"
           style={{
-            fontFamily: 'var(--era-text)',
-            fontSize: 16,
+            width: 56,
+            height: 1,
+            background: 'var(--p-muted, #a8a29e)',
+            margin: '48px 0 36px',
+          }}
+        />
+
+        <p
+          className="bh-hero-sub"
+          style={{
+            fontFamily: 'var(--serif)',
+            fontSize: 'clamp(15px, 2vw, 19px)',
             fontWeight: 400,
+            fontStyle: 'italic',
             color: 'var(--p-mid, #57534e)',
             textAlign: 'center',
-            maxWidth: 480,
-            marginTop: 16,
-            lineHeight: 1.6,
+            maxWidth: 400,
+            margin: 0,
+            lineHeight: 1.5,
           }}
         >
-          Visual identity, voice, and design system for NorCal SBDC.
+          Visual identity, voice &amp; design system for NorCal SBDC
         </p>
 
         {/* Scroll indicator */}
         <div
           className="bh-scroll-indicator absolute"
-          style={{ bottom: 40, color: 'var(--p-muted, #a8a29e)' }}
+          style={{ bottom: 32, color: 'var(--p-muted, #a8a29e)' }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
             <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
           </svg>
         </div>
@@ -342,21 +318,21 @@ export default function BrandHouse() {
       {/* ════════════════════════════════════════════
          S2: COLORS
          ════════════════════════════════════════════ */}
-      <section id="colors" className="bh-section" style={{ padding: '96px 24px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="colors" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Visual Identity</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
-          lineHeight: 1.15,
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
+          lineHeight: 1.05,
           color: 'var(--p-ink)',
-          margin: '12px 0 48px',
+          margin: '16px 0 72px',
         }}>
           Color Palette
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16 }}>
+        <div className="bh-color-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
           {PALETTE.map((color) => (
             <button
               key={color.hex}
@@ -364,23 +340,58 @@ export default function BrandHouse() {
               onClick={() => copyHex(color.hex)}
               style={{
                 background: color.hex,
-                borderRadius: 12,
-                padding: '32px 20px 20px',
+                borderRadius: 16,
+                padding: '56px 24px 24px',
                 border: 'none',
                 textAlign: 'left',
-                position: 'relative',
+                minHeight: 220,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
               }}
             >
-              <span style={{ fontFamily: 'var(--display)', fontSize: 18, fontWeight: 500, color: color.text, display: 'block' }}>
+              <span style={{
+                fontFamily: 'var(--display)',
+                fontSize: 32,
+                fontWeight: 300,
+                color: color.text,
+                display: 'block',
+                letterSpacing: '-0.02em',
+              }}>
                 {color.name}
               </span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.06em', color: color.text, opacity: 0.7, display: 'block', marginTop: 4 }}>
+              <span style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 11,
+                letterSpacing: '0.06em',
+                color: color.text,
+                opacity: 0.6,
+                display: 'block',
+                marginTop: 10,
+              }}>
                 {copiedHex === color.hex ? 'Copied!' : color.hex}
               </span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: color.text, opacity: 0.45, display: 'block', marginTop: 2 }}>
-                {color.css}
+              <span style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 9,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
+                color: color.text,
+                opacity: 0.35,
+                display: 'block',
+                marginTop: 2,
+              }}>
+                var({color.css})
               </span>
-              <span style={{ fontFamily: 'var(--era-text)', fontSize: 12, color: color.text, opacity: 0.6, display: 'block', marginTop: 12, lineHeight: 1.4 }}>
+              <span style={{
+                fontFamily: 'var(--era-text)',
+                fontSize: 12,
+                color: color.text,
+                opacity: 0.5,
+                display: 'block',
+                marginTop: 16,
+                lineHeight: 1.4,
+              }}>
                 {color.usage}
               </span>
             </button>
@@ -389,141 +400,238 @@ export default function BrandHouse() {
       </section>
 
       {/* ════════════════════════════════════════════
-         S3: TYPOGRAPHY
+         S3: TYPOGRAPHY — GT Era Display + Tobias
          ════════════════════════════════════════════ */}
-      <section id="typography" className="bh-section" style={{ padding: '96px 24px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="typography" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Visual Identity</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
-          lineHeight: 1.15,
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
+          lineHeight: 1.05,
           color: 'var(--p-ink)',
-          margin: '12px 0 48px',
+          margin: '16px 0 24px',
         }}>
           Typography
         </h2>
+        <p style={{
+          fontFamily: 'var(--era-text)',
+          fontSize: 15,
+          color: 'var(--p-mid)',
+          lineHeight: 1.7,
+          maxWidth: 520,
+          marginBottom: 96,
+        }}>
+          GT Era Display is the voice of the brand — geometric, modern, unmistakable.
+          Tobias provides editorial warmth for moments that need a human touch.
+        </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
-          {FONTS.map((font) => (
-            <div key={font.name} className="bh-type-specimen">
-              <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 8 }}>
-                <h3 style={{ fontFamily: `var(${font.css})`, fontSize: 20, fontWeight: 500, color: 'var(--p-ink)', margin: 0 }}>
-                  {font.name}
-                </h3>
-                <span className="learn-label" style={{ color: 'var(--p-muted)' }}>{font.role}</span>
+        {/* ── GT Era Display — Primary ── */}
+        <div className="bh-type-block" style={{ marginBottom: 96 }}>
+          <div className="flex items-baseline gap-4 flex-wrap" style={{ marginBottom: 12 }}>
+            <h3 style={{ fontFamily: 'var(--display)', fontSize: 18, fontWeight: 500, color: 'var(--p-ink)', margin: 0, letterSpacing: '-0.01em' }}>
+              GT Era Display
+            </h3>
+            <span className="learn-label" style={{ color: 'var(--p-blue, #2456e3)' }}>Primary — Display &amp; Headlines</span>
+          </div>
+
+          {/* Massive glyph */}
+          <div style={{
+            fontFamily: 'var(--display)',
+            fontSize: 'clamp(80px, 16vw, 200px)',
+            fontWeight: 100,
+            letterSpacing: '-0.05em',
+            lineHeight: 0.85,
+            color: 'var(--p-ink)',
+            margin: '24px 0 56px',
+          }}>
+            Aa
+          </div>
+
+          {/* Weight specimens */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {[
+              { label: 'Thin', weight: 100, sample: 'Empowering Northern California' },
+              { label: 'Light', weight: 300, sample: 'Empowering Northern California' },
+              { label: 'Medium', weight: 500, sample: 'Empowering Northern California' },
+            ].map((w) => (
+              <div key={w.label} className="flex items-baseline gap-6 flex-wrap">
+                <span style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--p-muted)',
+                  width: 80, flexShrink: 0, letterSpacing: '0.04em',
+                }}>
+                  {w.label} {w.weight}
+                </span>
+                <span style={{
+                  fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3.5vw, 36px)', fontWeight: w.weight,
+                  color: 'var(--p-ink)', lineHeight: 1.15, letterSpacing: '-0.025em',
+                }}>
+                  {w.sample}
+                </span>
               </div>
-
-              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', marginBottom: 24, maxWidth: 520, lineHeight: 1.5 }}>
-                {font.description}
-              </p>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {font.weights.map((w) => (
-                  <div key={w.label} className="flex items-baseline gap-4 flex-wrap">
-                    <span style={{
-                      fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 400, color: 'var(--p-muted)',
-                      width: 120, flexShrink: 0, letterSpacing: '0.04em',
-                    }}>
-                      {w.label} ({w.value})
-                    </span>
-                    <span style={{
-                      fontFamily: `var(${font.css})`, fontSize: 22, fontWeight: w.value,
-                      fontStyle: ('style' in w ? w.style : 'normal') as string,
-                      color: 'var(--p-ink)', lineHeight: 1.3,
-                    }}>
-                      {font.sample}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Type Scale */}
-        <div style={{ marginTop: 64 }}>
-          <h3 style={{ fontFamily: 'var(--display)', fontSize: 24, fontWeight: 500, color: 'var(--p-ink)', marginBottom: 24 }}>
-            Type Scale
-          </h3>
-          {[
-            { cls: '.learn-display', font: 'var(--display)', size: '48px', weight: 300, tracking: '-0.035em', sample: 'Display heading' },
-            { cls: '.text-heading',  font: 'var(--serif)',   size: '28px', weight: 500, tracking: '0', sample: 'Section heading' },
-            { cls: '.text-body',     font: 'var(--sans)',    size: '15px', weight: 300, tracking: '0', sample: 'Body text \u2014 the workhorse of the design system.' },
-            { cls: '.text-label',    font: 'var(--mono)',    size: '11px', weight: 400, tracking: '0.08em', sample: 'LABEL TEXT' },
-            { cls: '.text-kicker',   font: 'var(--mono)',    size: '12px', weight: 400, tracking: '0.06em', sample: 'KICKER TEXT' },
-          ].map((t) => (
-            <div key={t.cls} className="flex items-baseline gap-6 flex-wrap" style={{ marginBottom: 16, borderBottom: '1px solid var(--p-line)', paddingBottom: 16 }}>
-              <code style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--p-blue, #2456e3)', width: 110, flexShrink: 0 }}>{t.cls}</code>
-              <span style={{ fontFamily: t.font, fontSize: t.size, fontWeight: t.weight, letterSpacing: t.tracking, color: 'var(--p-ink)' }}>
-                {t.sample}
-              </span>
-            </div>
-          ))}
+        {/* ── Tobias — Pairing Font ── */}
+        <div className="bh-type-block" style={{ marginBottom: 96 }}>
+          <div className="flex items-baseline gap-4 flex-wrap" style={{ marginBottom: 12 }}>
+            <h3 style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 500, color: 'var(--p-ink)', margin: 0 }}>
+              Tobias
+            </h3>
+            <span className="learn-label" style={{ color: 'var(--p-muted)' }}>Pairing — Editorial &amp; Accent</span>
+          </div>
+
+          {/* Large italic glyph */}
+          <div style={{
+            fontFamily: 'var(--serif)',
+            fontSize: 'clamp(64px, 12vw, 160px)',
+            fontWeight: 400,
+            fontStyle: 'italic',
+            letterSpacing: '-0.03em',
+            lineHeight: 0.9,
+            color: 'var(--p-ink)',
+            margin: '24px 0 56px',
+          }}>
+            Aa
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {[
+              { label: 'Regular', weight: 400, style: 'normal' as const, sample: 'Stories of real impact, told with warmth.' },
+              { label: 'Italic', weight: 400, style: 'italic' as const, sample: 'Stories of real impact, told with warmth.' },
+              { label: 'Medium', weight: 500, style: 'normal' as const, sample: 'Stories of real impact, told with warmth.' },
+            ].map((w) => (
+              <div key={w.label} className="flex items-baseline gap-6 flex-wrap">
+                <span style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--p-muted)',
+                  width: 80, flexShrink: 0, letterSpacing: '0.04em',
+                }}>
+                  {w.label} {w.weight}
+                </span>
+                <span style={{
+                  fontFamily: 'var(--serif)', fontSize: 'clamp(18px, 2.5vw, 28px)', fontWeight: w.weight,
+                  fontStyle: w.style, color: 'var(--p-ink)', lineHeight: 1.35,
+                }}>
+                  {w.sample}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Supporting Fonts — Brief ── */}
+        <div style={{
+          borderTop: '1px solid var(--p-line)',
+          paddingTop: 40,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 40,
+        }}
+          className="bh-support-grid"
+        >
+          <div>
+            <h4 style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, color: 'var(--p-ink)', margin: '0 0 8px' }}>
+              GT America
+            </h4>
+            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: '0 0 16px' }}>
+              System sans-serif for navigation, buttons, form inputs, and UI text.
+            </p>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'var(--p-ink)', display: 'block' }}>
+              The quick brown fox jumps over the lazy dog
+            </span>
+          </div>
+          <div>
+            <h4 style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 400, color: 'var(--p-ink)', margin: '0 0 8px' }}>
+              GT America Mono
+            </h4>
+            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: '0 0 16px' }}>
+              Monospace for labels, kickers, metadata, and data display.
+            </p>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 400, color: 'var(--p-ink)', display: 'block', letterSpacing: '0.02em' }}>
+              8,500+ clients &middot; $240M capital &middot; 16 centers
+            </span>
+          </div>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════
          S4: LOGO USAGE
          ════════════════════════════════════════════ */}
-      <section id="logo" className="bh-section" style={{ padding: '96px 24px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="logo" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Identity</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
           color: 'var(--p-ink)',
-          margin: '12px 0 48px',
+          margin: '16px 0 72px',
         }}>
           Logo Usage
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {/* Blue on White */}
-          <div className="bh-logo-item" style={{ background: '#ffffff', borderRadius: 12, padding: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--p-line)', position: 'relative' }}>
-            <Image src="/sbdc-blue-2026.png" alt="SBDC Blue Logo" width={200} height={50} style={{ height: 44, width: 'auto' }} />
-            <span className="learn-label" style={{ position: 'absolute', bottom: 12, left: 16, color: '#a8a29e' }}>Blue on White</span>
+          <div className="bh-logo-item" style={{
+            background: '#ffffff', borderRadius: 16, padding: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '1px solid var(--p-line)', position: 'relative', minHeight: 200,
+          }}>
+            <Image src="/sbdc-blue-2026.png" alt="SBDC Blue Logo" width={220} height={56} style={{ height: 48, width: 'auto' }} />
+            <span className="learn-label" style={{ position: 'absolute', bottom: 16, left: 20, color: '#a8a29e' }}>Blue on White</span>
           </div>
 
           {/* White on Navy */}
-          <div className="bh-logo-item" style={{ background: '#0f1c2e', borderRadius: 12, padding: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-            <Image src="/sbdc-white-2026.png" alt="SBDC White Logo" width={200} height={50} style={{ height: 44, width: 'auto' }} />
-            <span className="learn-label" style={{ position: 'absolute', bottom: 12, left: 16, color: 'rgba(255,255,255,0.45)' }}>White on Navy</span>
+          <div className="bh-logo-item" style={{
+            background: '#0f1c2e', borderRadius: 16, padding: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', minHeight: 200,
+          }}>
+            <Image src="/sbdc-white-2026.png" alt="SBDC White Logo" width={220} height={56} style={{ height: 48, width: 'auto' }} />
+            <span className="learn-label" style={{ position: 'absolute', bottom: 16, left: 20, color: 'rgba(255,255,255,0.35)' }}>White on Navy</span>
           </div>
 
           {/* White on Royal */}
-          <div className="bh-logo-item" style={{ background: '#1D5AA7', borderRadius: 12, padding: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-            <Image src="/sbdc-white-2026.png" alt="SBDC White Logo on Royal" width={200} height={50} style={{ height: 44, width: 'auto' }} />
-            <span className="learn-label" style={{ position: 'absolute', bottom: 12, left: 16, color: 'rgba(255,255,255,0.45)' }}>White on Royal</span>
+          <div className="bh-logo-item" style={{
+            background: '#1D5AA7', borderRadius: 16, padding: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', minHeight: 200,
+          }}>
+            <Image src="/sbdc-white-2026.png" alt="SBDC White Logo on Royal" width={220} height={56} style={{ height: 48, width: 'auto' }} />
+            <span className="learn-label" style={{ position: 'absolute', bottom: 16, left: 20, color: 'rgba(255,255,255,0.35)' }}>White on Royal</span>
           </div>
 
           {/* Blue on Cream */}
-          <div className="bh-logo-item" style={{ background: '#f0efeb', borderRadius: 12, padding: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--p-line)', position: 'relative' }}>
-            <Image src="/sbdc-blue-2026.png" alt="SBDC Blue Logo on Cream" width={200} height={50} style={{ height: 44, width: 'auto' }} />
-            <span className="learn-label" style={{ position: 'absolute', bottom: 12, left: 16, color: '#a8a29e' }}>Blue on Cream</span>
+          <div className="bh-logo-item" style={{
+            background: '#f0efeb', borderRadius: 16, padding: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '1px solid var(--p-line)', position: 'relative', minHeight: 200,
+          }}>
+            <Image src="/sbdc-blue-2026.png" alt="SBDC Blue Logo on Cream" width={220} height={56} style={{ height: 48, width: 'auto' }} />
+            <span className="learn-label" style={{ position: 'absolute', bottom: 16, left: 20, color: '#a8a29e' }}>Blue on Cream</span>
           </div>
         </div>
 
         {/* Guidelines */}
-        <div style={{ marginTop: 56, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24 }}>
+        <div style={{ marginTop: 72, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }} className="bh-support-grid">
           <div>
-            <h3 style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 700, color: 'var(--p-ink)', marginBottom: 8 }}>Clear Space</h3>
-            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6 }}>
-              Maintain minimum clear space equal to the height of the &ldquo;S&rdquo; in SBDC around all sides of the logo.
+            <h3 style={{ fontFamily: 'var(--display)', fontSize: 17, fontWeight: 500, color: 'var(--p-ink)', marginBottom: 10, letterSpacing: '-0.01em' }}>Clear Space</h3>
+            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+              Maintain minimum clear space equal to the height of the &ldquo;S&rdquo; in SBDC around all sides.
             </p>
           </div>
           <div>
-            <h3 style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 700, color: 'var(--p-ink)', marginBottom: 8 }}>Minimum Size</h3>
-            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6 }}>
-              Never smaller than 120px wide for digital or 1.5 inches for print to ensure legibility.
+            <h3 style={{ fontFamily: 'var(--display)', fontSize: 17, fontWeight: 500, color: 'var(--p-ink)', marginBottom: 10, letterSpacing: '-0.01em' }}>Minimum Size</h3>
+            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+              120px minimum width for digital. 1.5 inches for print to ensure legibility.
             </p>
           </div>
           <div>
-            <h3 style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 700, color: 'var(--p-ink)', marginBottom: 8 }}>Don&apos;ts</h3>
-            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6 }}>
-              Do not stretch, rotate, add effects, change colors arbitrarily, or place on busy backgrounds.
+            <h3 style={{ fontFamily: 'var(--display)', fontSize: 17, fontWeight: 500, color: 'var(--p-ink)', marginBottom: 10, letterSpacing: '-0.01em' }}>Don&apos;ts</h3>
+            <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+              Never stretch, rotate, recolor, add effects, or place on busy backgrounds.
             </p>
           </div>
         </div>
@@ -532,39 +640,57 @@ export default function BrandHouse() {
       {/* ════════════════════════════════════════════
          S5: BRAND VOICE
          ════════════════════════════════════════════ */}
-      <section id="voice" className="bh-section" style={{ padding: '96px 24px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="voice" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Tone</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
           color: 'var(--p-ink)',
-          margin: '12px 0 48px',
+          margin: '16px 0 72px',
         }}>
           Brand Voice
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {VOICE_ATTRIBUTES.map((attr) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {VOICE_ATTRIBUTES.map((attr, i) => (
             <div
               key={attr.trait}
+              className="bh-voice-card bh-voice-layout"
               style={{
-                background: 'var(--p-cream, #faf8f4)',
-                borderRadius: 12,
-                padding: '28px 28px 24px',
-                border: '1px solid var(--p-line, #e7e2da)',
+                padding: '44px 0',
+                borderBottom: i < VOICE_ATTRIBUTES.length - 1 ? '1px solid var(--p-line, #e7e2da)' : 'none',
+                display: 'grid',
+                gridTemplateColumns: '200px 1fr',
+                gap: 32,
+                alignItems: 'baseline',
               }}
             >
-              <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 12 }}>
-                <h3 style={{ fontFamily: 'var(--display)', fontSize: 20, fontWeight: 500, color: 'var(--p-ink)', margin: 0 }}>
+              <div>
+                <h3 style={{
+                  fontFamily: 'var(--display)',
+                  fontSize: 'clamp(26px, 3.5vw, 40px)',
+                  fontWeight: 300,
+                  color: 'var(--p-ink)',
+                  margin: 0,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.1,
+                }}>
                   {attr.trait}
                 </h3>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.06em', color: 'var(--p-muted)', textTransform: 'uppercase' }}>
+                <span style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em',
+                  color: 'var(--p-muted)', textTransform: 'uppercase' as const,
+                  display: 'block', marginTop: 6,
+                }}>
                   {attr.contrast}
                 </span>
               </div>
-              <p style={{ fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+              <p style={{
+                fontFamily: 'var(--era-text)', fontSize: 15, color: 'var(--p-mid)',
+                lineHeight: 1.7, margin: 0, maxWidth: 520,
+              }}>
                 {attr.description}
               </p>
             </div>
@@ -575,15 +701,15 @@ export default function BrandHouse() {
       {/* ════════════════════════════════════════════
          S6: CLIENT JOURNEY
          ════════════════════════════════════════════ */}
-      <section id="journey" className="bh-section" style={{ padding: '96px 24px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="journey" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Architecture</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
           color: 'var(--p-ink)',
-          margin: '12px 0 48px',
+          margin: '16px 0 72px',
         }}>
           Client Journey
         </h2>
@@ -592,33 +718,37 @@ export default function BrandHouse() {
           {JOURNEY_STAGES.map((stage, i) => (
             <div
               key={stage.stage}
+              className="bh-stage"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: 20,
-                padding: '24px 0',
+                gap: 24,
+                padding: '36px 0',
                 borderBottom: i < JOURNEY_STAGES.length - 1 ? '1px solid var(--p-line)' : 'none',
               }}
             >
-              {/* Stage number */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, paddingTop: 4, flexShrink: 0 }}>
+              {/* Stage indicator */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, paddingTop: 8, flexShrink: 0 }}>
                 <div style={{
-                  width: 32, height: 32, borderRadius: '50%', background: stage.color,
+                  width: 40, height: 40, borderRadius: '50%', background: stage.color,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: '#fff' }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, color: '#fff' }}>
                     {i + 1}
                   </span>
                 </div>
                 {i < JOURNEY_STAGES.length - 1 && (
-                  <div style={{ width: 1, height: 24, background: 'var(--p-line)' }} />
+                  <div style={{ width: 1, height: 36, background: 'var(--p-line)' }} />
                 )}
               </div>
 
               {/* Content */}
               <div style={{ flex: 1 }}>
-                <div className="flex items-baseline gap-3 flex-wrap">
-                  <h3 style={{ fontFamily: 'var(--display)', fontSize: 20, fontWeight: 500, color: 'var(--p-ink)', margin: 0 }}>
+                <div className="flex items-baseline gap-4 flex-wrap">
+                  <h3 style={{
+                    fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 300,
+                    color: 'var(--p-ink)', margin: 0, letterSpacing: '-0.015em',
+                  }}>
                     {stage.stage}
                   </h3>
                   {stage.link && (
@@ -626,23 +756,24 @@ export default function BrandHouse() {
                       href={stage.link}
                       style={{
                         fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em',
-                        textTransform: 'uppercase', color: 'var(--p-blue, #2456e3)', textDecoration: 'none',
+                        textTransform: 'uppercase' as const, color: 'var(--p-blue, #2456e3)', textDecoration: 'none',
                       }}
                     >
                       View tool &rarr;
                     </a>
                   )}
                 </div>
-                <p style={{ fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)', lineHeight: 1.6, margin: '8px 0 12px' }}>
+                <p style={{ fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)', lineHeight: 1.7, margin: '10px 0 16px' }}>
                   {stage.description}
                 </p>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {stage.touchpoints.map((tp) => (
                     <span
                       key={tp}
                       style={{
                         fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 400, letterSpacing: '0.04em',
-                        padding: '3px 10px', borderRadius: 99, background: 'var(--p-tint, #eae5dd)', color: 'var(--p-mid)',
+                        padding: '4px 12px', borderRadius: 99,
+                        background: 'var(--p-tint, #eae5dd)', color: 'var(--p-mid)',
                       }}
                     >
                       {tp}
@@ -658,79 +789,147 @@ export default function BrandHouse() {
       {/* ════════════════════════════════════════════
          S7: PROGRAMS NETWORK
          ════════════════════════════════════════════ */}
-      <section id="programs" className="bh-section" style={{ padding: '96px 24px 128px', maxWidth: 960, margin: '0 auto' }}>
+      <section id="programs" className="bh-section" style={{ padding: '140px 24px 180px', maxWidth: 1080, margin: '0 auto' }}>
         <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Network</span>
         <h2 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: 500,
-          letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 6vw, 64px)',
+          fontWeight: 100,
+          letterSpacing: '-0.035em',
           color: 'var(--p-ink)',
-          margin: '12px 0 16px',
+          margin: '16px 0 20px',
+          lineHeight: 1.05,
         }}>
-          14 Centers. 36 Counties. One Network.
+          16 Centers.<br />36 Counties.<br />One Network.
         </h2>
-        <p style={{ fontFamily: 'var(--era-text)', fontSize: 15, color: 'var(--p-mid)', lineHeight: 1.6, maxWidth: 640, marginBottom: 40 }}>
-          NorCal SBDC operates 14 service centers spanning Northern California &mdash; from the Oregon border to the Sacramento Valley.
+        <p style={{
+          fontFamily: 'var(--era-text)', fontSize: 15, color: 'var(--p-mid)',
+          lineHeight: 1.7, maxWidth: 520, marginBottom: 64,
+        }}>
+          NorCal SBDC operates 16 service centers spanning Northern California &mdash; from the Oregon border to the Sacramento Valley and the coast.
         </p>
 
-        {/* Stats row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 16, marginBottom: 48 }}>
+        {/* Stats */}
+        <div className="bh-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 96 }}>
           {NETWORK_STATS.map((stat) => (
             <div key={stat.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'var(--display)', fontSize: 28, fontWeight: 500, color: 'var(--p-ink)', letterSpacing: '-0.02em' }}>
+              <div style={{
+                fontFamily: 'var(--display)',
+                fontSize: 'clamp(32px, 5vw, 56px)',
+                fontWeight: 100,
+                color: 'var(--p-ink)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1,
+              }}>
                 {stat.num}
               </div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--p-muted)', marginTop: 4 }}>
+              <div style={{
+                fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const, color: 'var(--p-muted)', marginTop: 10,
+              }}>
                 {stat.label}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Special Programs */}
-        <h3 style={{ fontFamily: 'var(--display)', fontSize: 22, fontWeight: 500, color: 'var(--p-ink)', marginBottom: 20 }}>
-          Special Programs
+        {/* Programs */}
+        <h3 style={{
+          fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
+          color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
+        }}>
+          Programs &amp; Initiatives
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
-          {SPECIAL_PROGRAMS.map((prog) => (
+        <div className="bh-programs-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+          {PROGRAMS.map((prog) => (
             <div
               key={prog.name}
-              className="learn-card-hover"
+              className="bh-program-card"
               style={{
                 background: 'var(--p-cream, #faf8f4)',
-                borderRadius: 12,
+                borderRadius: 16,
                 padding: '24px 24px 20px',
                 border: '1px solid var(--p-line, #e7e2da)',
               }}
             >
               <span className="learn-label" style={{ color: 'var(--p-blue, #2456e3)', marginBottom: 8, display: 'block' }}>
-                {prog.badge}
+                {prog.category}
               </span>
-              <h4 style={{ fontFamily: 'var(--display)', fontSize: 17, fontWeight: 500, color: 'var(--p-ink)', margin: '0 0 8px' }}>
+              <h4 style={{
+                fontFamily: 'var(--display)', fontSize: 17, fontWeight: 500,
+                color: 'var(--p-ink)', margin: '0 0 8px', letterSpacing: '-0.01em',
+              }}>
                 {prog.name}
               </h4>
-              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.5, margin: 0 }}>
+              <p style={{
+                fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)',
+                lineHeight: 1.5, margin: 0,
+              }}>
                 {prog.description}
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Partner Ecosystem */}
+        <div style={{ marginTop: 80, borderTop: '1px solid var(--p-line)', paddingTop: 48 }}>
+          <h3 style={{
+            fontFamily: 'var(--display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 300,
+            color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
+          }}>
+            Partner Ecosystem
+          </h3>
+          <div className="bh-partner-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 40 }}>
+            <div>
+              <h4 style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'var(--p-muted)', marginBottom: 10 }}>
+                Federal &amp; State
+              </h4>
+              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+                SBA, California Governor&apos;s Office of Business and Economic Development (GO-Biz), Employment Development Department
+              </p>
+            </div>
+            <div>
+              <h4 style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'var(--p-muted)', marginBottom: 10 }}>
+                Lending &amp; Capital
+              </h4>
+              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+                CDFIs, SBA-preferred lenders, community banks, microloan intermediaries
+              </p>
+            </div>
+            <div>
+              <h4 style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'var(--p-muted)', marginBottom: 10 }}>
+                Higher Education
+              </h4>
+              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+                CSU, Chico (host institution), community colleges, university extension programs across Northern California
+              </p>
+            </div>
+            <div>
+              <h4 style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'var(--p-muted)', marginBottom: 10 }}>
+                Local &amp; Regional
+              </h4>
+              <p style={{ fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)', lineHeight: 1.6, margin: 0 }}>
+                Chambers of commerce, economic development corporations, workforce development boards, tribal organizations
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
       <footer
         style={{
-          padding: 24,
+          padding: '36px 24px',
           textAlign: 'center',
-          fontFamily: 'var(--era-text)',
-          fontSize: 11,
+          fontFamily: 'var(--mono)',
+          fontSize: 10,
           color: 'var(--p-muted, #a8a29e)',
           borderTop: '1px solid var(--p-line, #e7e2da)',
-          letterSpacing: '0.02em',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase' as const,
         }}
       >
-        NorCal SBDC Brand House &mdash; Internal reference
+        NorCal SBDC &mdash; Brand House &mdash; Internal Reference
       </footer>
     </div>
   );
