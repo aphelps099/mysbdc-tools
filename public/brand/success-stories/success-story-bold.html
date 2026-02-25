@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Success Story Bold</title>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --black: #0a0a0a;
+            --off-black: #1a1a1a;
+            --charcoal: #2a2a2a;
+            --white: #fafafa;
+            --cream: #f5f2eb;
+            --navy: #1a3347;
+            --electric: #0055ff;
+            --forest: #2d5a3d;
+            --wine: #8b3a3a;
+            --gold: #c4a035;
+            
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            font-family: var(--sans);
+            background: #333;
+            padding: 40px;
+        }
+        
+        .layout-label {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            margin-top: 80px;
+        }
+        
+        .layout-label:first-of-type { margin-top: 0; }
+        
+        .page {
+            width: 8.5in;
+            height: 11in;
+            margin: 0 auto;
+            box-shadow: 0 8px 60px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* ============================================
+           LAYOUT P1: Type as Hero
+           - Massive $2.3M dominates
+           - Story wraps around number
+           - High contrast black/white
+        ============================================ */
+        
+        .p1 {
+            background: var(--black);
+            color: var(--white);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        
+        .p1 .header {
+            padding: 0.4in 0.5in;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .p1 .brand {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .p1 .tagline {
+            font-family: var(--sans);
+            font-size: 11px;
+            font-weight: 300;
+            opacity: 0.5;
+        }
+        
+        .p1 .main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+        
+        /* Giant number */
+        .p1 .big-type {
+            position: absolute;
+            top: -0.3in;
+            left: -0.1in;
+            font-size: 280px;
+            font-weight: 900;
+            line-height: 0.85;
+            color: var(--white);
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .p1 .left-col {
+            padding: 0.5in;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .p1 .eyebrow {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--electric);
+            margin-bottom: 16px;
+        }
+        
+        .p1 .impact {
+            margin-bottom: 24px;
+        }
+        
+        .p1 .impact-number {
+            font-size: 96px;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--white) 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .p1 .impact-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+        
+        .p1 .title {
+            font-family: var(--sans);
+            font-size: 42px;
+            font-weight: 300;
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+        
+        .p1 .client {
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.5;
+            margin-bottom: auto;
+        }
+        
+        .p1 .stats-row {
+            display: flex;
+            gap: 32px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .p1 .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        
+        .p1 .stat-label {
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-top: 4px;
+        }
+        
+        .p1 .right-col {
+            padding: 0.5in;
+            background: var(--off-black);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .p1 .photo-area {
+            height: 2.2in;
+            background: var(--charcoal);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.3;
+        }
+        
+        .p1 .story h3 {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: var(--electric);
+        }
+        
+        .p1 .story p {
+            font-size: 11px;
+            line-height: 1.7;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        
+        .p1 .quote {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .p1 .quote p {
+            font-family: var(--sans);
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            opacity: 1;
+        }
+        
+        .p1 .quote .author {
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+        
+        .p1 .footer {
+            padding: 0.3in 0.5in;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .p1 .footer-brand {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            opacity: 0.4;
+        }
+        
+        .p1 .cta {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--electric);
+        }
+        
+        /* ============================================
+           LAYOUT P2: Diagonal Energy
+           - Angled type
+           - Color blocking
+           - Dynamic composition
+        ============================================ */
+        
+        .p2 {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Diagonal color block */
+        .p2 .diagonal-block {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 65%;
+            height: 100%;
+            background: var(--navy);
+            clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+            z-index: 0;
+        }
+        
+        .p2 .diagonal-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.3;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+        
+        .p2 .content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 0.5in;
+        }
+        
+        .p2 .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4in;
+        }
+        
+        .p2 .brand {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: var(--navy);
+        }
+        
+        .p2 .eyebrow {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--wine);
+            padding: 6px 12px;
+        }
+        
+        .p2 .hero-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .p2 .hero-left {
+            width: 45%;
+        }
+        
+        .p2 .tagline {
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-bottom: 16px;
+        }
+        
+        .p2 .title {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: var(--navy);
+            margin-bottom: 24px;
+        }
+        
+        .p2 .title span {
+            display: block;
+        }
+        
+        .p2 .title .highlight {
+            color: var(--wine);
+        }
+        
+        .p2 .client {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--navy);
+            opacity: 0.6;
+        }
+        
+        .p2 .hero-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-left: 0.5in;
+        }
+        
+        .p2 .big-number {
+            font-size: 140px;
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            color: var(--white);
+            text-align: right;
+            margin-bottom: 8px;
+        }
+        
+        .p2 .big-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            text-align: right;
+        }
+        
+        .p2 .photo-block {
+            width: 2.4in;
+            height: 2in;
+            background: rgba(255,255,255,0.1);
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+        
+        .p2 .bottom-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.4in;
+            padding-top: 0.4in;
+            border-top: 2px solid var(--navy);
+        }
+        
+        .p2 .col h3 {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid currentColor;
+            display: inline-block;
+        }
+        
+        .p2 .col.people h3 { color: var(--navy); }
+        .p2 .col.funded h3 { color: var(--forest); }
+        .p2 .col.connected h3 { color: var(--wine); }
+        
+        .p2 .col p {
+            font-size: 10px;
+            line-height: 1.6;
+            color: var(--navy);
+            opacity: 0.7;
+        }
+        
+        .p2 .footer {
+            padding-top: 0.3in;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .p2 .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .p2 .footer-brand {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: var(--navy);
+        }
+        
+        .p2 .footer-tagline {
+            font-family: var(--sans);
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--navy);
+            opacity: 0.5;
+        }
+        
+        .p2 .cta {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--wine);
+        }
+        
+        /* ============================================
+           LAYOUT P3: Stacked Type Wall
+           - Typography dominates entire page
+           - Minimal photography
+           - Words as texture
+        ============================================ */
+        
+        .p3 {
+            background: var(--forest);
+            color: var(--white);
+            position: relative;
+        }
+        
+        .p3::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.25;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+        
+        .p3 .content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 0.45in;
+        }
+        
+        .p3 .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.2in;
+        }
+        
+        .p3 .brand {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+        }
+        
+        .p3 .brand span {
+            display: block;
+            font-family: var(--sans);
+            font-weight: 300;
+            letter-spacing: 0;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+        
+        .p3 .eyebrow {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+        
+        /* Giant stacked type */
+        .p3 .type-wall {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .p3 .type-line {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+        
+        .p3 .type-line.outline {
+            -webkit-text-stroke: 2px var(--white);
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .p3 .type-line.small {
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-top: 16px;
+        }
+        
+        .p3 .type-line .accent {
+            color: var(--gold);
+            -webkit-text-fill-color: var(--gold);
+        }
+        
+        .p3 .type-line.serif {
+            font-family: var(--sans);
+            font-weight: 300;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        
+        .p3 .stats-strip {
+            display: flex;
+            gap: 0.5in;
+            margin: 0.3in 0;
+            padding: 0.25in 0;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .p3 .stat {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        
+        .p3 .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+        }
+        
+        .p3 .stat-label {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        .p3 .bottom-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.5in;
+        }
+        
+        .p3 .story p {
+            font-size: 12px;
+            line-height: 1.7;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+        
+        .p3 .story p strong {
+            font-weight: 700;
+            opacity: 1;
+        }
+        
+        .p3 .sidebar {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .p3 .photo-area {
+            height: 1.8in;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.3;
+        }
+        
+        .p3 .quote {
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+        
+        .p3 .quote .author {
+            font-family: var(--sans);
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 600;
+            margin-top: 8px;
+            opacity: 0.5;
+        }
+        
+        .p3 .footer {
+            padding-top: 0.25in;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        
+        .p3 .pillars {
+            display: flex;
+            gap: 24px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        
+        .p3 .cta {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        
+        /* PRINT */
+        @media print {
+            body { background: none; padding: 0; }
+            .page { box-shadow: none; page-break-after: always; }
+            .layout-label { display: none; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ============================================
+         P1: Type as Hero - Black
+    ============================================ -->
+    
+    <div class="layout-label">P1 — Type as Hero</div>
+    
+    <div class="page p1">
+        <div class="header">
+            <div class="brand">NORCAL SBDC</div>
+            <div class="tagline">Your Business People</div>
+        </div>
+        
+        <div class="main">
+            <div class="big-type">$2.3M</div>
+            
+            <div class="left-col">
+                <div class="eyebrow">Success Story</div>
+                
+                <div class="impact">
+                    <div class="impact-number">$2.3M</div>
+                    <div class="impact-label">Capital Secured</div>
+                </div>
+                
+                <h1 class="title">From food truck to franchise</h1>
+                <p class="client">Chen's Kitchen · Sacramento</p>
+                
+                <div class="stats-row">
+                    <div class="stat">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Jobs</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Locations</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">60</div>
+                        <div class="stat-label">Days</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-col">
+                <div class="photo-area">Photo</div>
+                
+                <div class="story">
+                    <h3>People</h3>
+                    <p>Sarah Chen built Sacramento's most popular food truck. Five banks rejected her expansion loan. Then she met SBDC advisor Marcus Thompson.</p>
+                    
+                    <h3>Funded</h3>
+                    <p>Marcus restructured her financials and connected her with a community bank. 60 days later: $2.3M SBA loan approved.</p>
+                    
+                    <h3>Connected</h3>
+                    <p>Today: 3 locations, 47 employees, fourth location planned. From food truck to regional restaurant empire.</p>
+                </div>
+                
+                <div class="quote">
+                    <p>"He helped me think like a CEO."</p>
+                    <div class="author">— Sarah Chen</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-brand">People · Funded · Connected</div>
+            <div class="cta">norcalsbdc.org →</div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+         P2: Diagonal Energy
+    ============================================ -->
+    
+    <div class="layout-label">P2 — Diagonal Energy</div>
+    
+    <div class="page p2">
+        <div class="diagonal-block"></div>
+        
+        <div class="content">
+            <div class="header">
+                <div class="brand">NORCAL SBDC</div>
+                <div class="eyebrow">Success Story</div>
+            </div>
+            
+            <div class="hero-area">
+                <div class="hero-left">
+                    <div class="tagline">Your Business People</div>
+                    <h1 class="title">
+                        <span>From</span>
+                        <span>food truck</span>
+                        <span>to <span class="highlight">franchise</span></span>
+                    </h1>
+                    <p class="client">Chen's Kitchen · Sacramento · Restaurant</p>
+                </div>
+                
+                <div class="hero-right">
+                    <div class="big-number">$2.3M</div>
+                    <div class="big-label">Capital Secured</div>
+                    <div class="photo-block">Photo</div>
+                </div>
+            </div>
+            
+            <div class="bottom-area">
+                <div class="col people">
+                    <h3>People</h3>
+                    <p>Sarah Chen built Sacramento's most popular food truck. Five banks rejected her. Then she met Marcus Thompson—an SBDC advisor who understood restaurants.</p>
+                </div>
+                <div class="col funded">
+                    <h3>Funded</h3>
+                    <p>Marcus restructured her financials and connected her with the right lender. 60 days later: $2.3M SBA loan approved for expansion.</p>
+                </div>
+                <div class="col connected">
+                    <h3>Connected</h3>
+                    <p>Today Chen's Kitchen operates 3 locations, employs 47 people, and is planning a fourth. From truck to empire.</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="footer-left">
+                    <div class="footer-brand">NORCAL SBDC</div>
+                    <div class="footer-tagline">Your Business People</div>
+                </div>
+                <div class="cta">Start your story →</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+         P3: Stacked Type Wall
+    ============================================ -->
+    
+    <div class="layout-label">P3 — Type Wall</div>
+    
+    <div class="page p3">
+        <div class="content">
+            <div class="header">
+                <div class="brand">
+                    NORCAL SBDC
+                    <span>Your Business People</span>
+                </div>
+                <div class="eyebrow">Success Story</div>
+            </div>
+            
+            <div class="type-wall">
+                <div class="type-line">From</div>
+                <div class="type-line outline">Food Truck</div>
+                <div class="type-line">To <span class="accent">$2.3M</span></div>
+                <div class="type-line serif">franchise</div>
+                <div class="type-line small">Chen's Kitchen · Sacramento</div>
+            </div>
+            
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-number">47</div>
+                    <div class="stat-label">Jobs Created</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Locations</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">60</div>
+                    <div class="stat-label">Days to Funding</div>
+                </div>
+            </div>
+            
+            <div class="bottom-content">
+                <div class="story">
+                    <p><strong>Sarah Chen built Sacramento's most popular food truck.</strong> $400K annual revenue. Lines around the block. Five banks still said no to her expansion loan.</p>
+                    <p>Then she met <strong>Marcus Thompson</strong>, an SBDC advisor with 20 years in the restaurant industry. He restructured her financials, connected her with the right lender, and 60 days later she closed on $2.3M in SBA funding.</p>
+                    <p>Today: three locations, 47 employees, fourth location planned.</p>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="photo-area">Photo</div>
+                    <div class="quote">
+                        "He helped me think like a CEO. That shift was worth more than any loan."
+                        <div class="author">— Sarah Chen, Founder</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="pillars">
+                    <span>People</span>
+                    <span>Funded</span>
+                    <span>Connected</span>
+                </div>
+                <div class="cta">norcalsbdc.org →</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

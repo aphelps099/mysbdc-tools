@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Success Stories — NorCal SBDC</title>
+
+<script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   FONTS — Tobias + GT America (Chamber weight)
+   ═══════════════════════════════════════════ */
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+
+/* ═══════════════════════════════════════════
+   RESET + BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ═══════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  --navy: #0f1c2e;
+  --royal: #1D5AA7;
+  --royal-dim: rgba(29,90,167,0.08);
+  --pool: #8FC5D9;
+  --cream: #f0efeb;
+  --white: #ffffff;
+  --brick: #a82039;
+  --dusty: #5d7a9c;
+  --text: #0a1528;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8a8a8a;
+  --rule: rgba(0,0,0,0.12);
+  --rule-light: rgba(0,0,0,0.06);
+  --green: #16a34a;
+  --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+  --serif: 'Tobias', Georgia, serif;
+  --mono: 'GT America Mono', 'SF Mono', monospace;
+  --pad: clamp(32px, 5vw, 64px);
+  --max: 1080px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+iconify-icon { display: inline-flex; vertical-align: middle; }
+
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--pad);
+  background: var(--navy);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo { height: 18px; width: auto; }
+.nav-back {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color 0.2s ease;
+}
+.nav-back:hover { color: var(--white); }
+.nav-back iconify-icon { font-size: 14px; }
+.nav-links { display: flex; gap: 0; }
+.nav-links a {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s ease;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.8); }
+.nav-links a.active { color: var(--white); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 2px; background: var(--pool);
+}
+
+/* ═══════════════════════════════════════════
+   HERO — Interior page (compact)
+   ═══════════════════════════════════════════ */
+.hero {
+  margin-top: 56px;
+  background: var(--navy);
+  padding: clamp(48px, 6vw, 80px) var(--pad);
+  position: relative;
+  overflow: hidden;
+}
+.hero-watermark {
+  position: absolute; right: 3%; top: 50%;
+  transform: translateY(-50%);
+  width: clamp(180px, 22vw, 340px);
+  opacity: 0.03;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  position: relative; z-index: 2;
+}
+.hero-breadcrumb {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+.hero-breadcrumb a { transition: color 0.2s ease; }
+.hero-breadcrumb a:hover { color: rgba(255,255,255,0.7); }
+.hero-h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.08;
+  margin-bottom: 16px;
+}
+.hero-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.6; color: rgba(255,255,255,0.4);
+  max-width: 580px;
+}
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 32px;
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--pool); line-height: 1;
+  margin-bottom: 4px;
+}
+.hero-stat-label {
+  font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.section { padding: clamp(48px, 6vw, 80px) var(--pad); }
+.container { max-width: var(--max); margin: 0 auto; }
+
+.section-header {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-bottom: 48px;
+}
+.section-header-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-header-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 8px; max-width: 640px;
+}
+
+/* ═══════════════════════════════════════════
+   SIGNATURE STORY CARDS — 2-col grid
+   ═══════════════════════════════════════════ */
+.sig-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+}
+.sig-card {
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+.sig-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.06); }
+.sig-accent { height: 3px; width: 100%; }
+.sig-accent-royal { background: var(--royal); }
+.sig-accent-pool { background: var(--pool); }
+.sig-accent-dusty { background: var(--dusty); }
+.sig-accent-brick { background: var(--brick); }
+
+.sig-body { padding: 28px 32px 24px; flex: 1; display: flex; flex-direction: column; }
+
+.sig-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.sig-info { flex: 1; min-width: 0; }
+.sig-biz {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 2px;
+}
+.sig-owner {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.sig-center {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+.sig-metric {
+  text-align: right; flex-shrink: 0; padding-left: 20px;
+}
+.sig-metric-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1; letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.sig-metric-label {
+  font-family: var(--mono); font-size: 0.48rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+.sig-tagline {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: 0.92rem; line-height: 1.4;
+  color: var(--text); margin-bottom: 16px;
+}
+
+.sig-quote {
+  font-family: var(--sans); font-weight: 300; font-style: italic;
+  font-size: 0.82rem; line-height: 1.55;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  border-left: 2px solid var(--rule-light);
+  margin-bottom: 20px;
+}
+.sig-quote-mark {
+  font-family: var(--serif); font-size: 1.4rem;
+  color: var(--pool); line-height: 0.8;
+  margin-right: 2px;
+}
+.sig-quote-attr {
+  font-family: var(--mono); font-size: 0.48rem;
+  color: var(--text-tertiary);
+  font-style: normal; margin-top: 8px;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+.sig-metrics-row {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 16px;
+}
+.sig-chip {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-secondary);
+  padding: 4px 10px; border-radius: 2px;
+  background: var(--cream);
+  white-space: nowrap;
+}
+
+.sig-footer {
+  display: flex; justify-content: flex-end;
+  margin-top: auto; padding-top: 8px;
+  border-top: 1px solid var(--rule-light);
+}
+.sig-link {
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 400;
+  color: var(--royal);
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.sig-link:hover { gap: 8px; }
+.sig-link iconify-icon { font-size: 12px; }
+
+/* ═══════════════════════════════════════════
+   GROWTH STORY CARDS — single column
+   ═══════════════════════════════════════════ */
+.growth-grid {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.growth-card {
+  background: var(--white);
+  border-radius: 2px;
+  padding: 28px 32px;
+  display: grid; grid-template-columns: 1fr 1.2fr auto;
+  gap: 32px; align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+.growth-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+.growth-info { min-width: 0; }
+.growth-biz {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 4px;
+}
+.growth-owner {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.growth-center {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary); margin-bottom: 10px;
+}
+.growth-tagline {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: 0.85rem; line-height: 1.4;
+  color: var(--text);
+}
+
+.growth-results { min-width: 0; }
+.growth-results-title {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-tertiary); margin-bottom: 10px;
+}
+.growth-result-item {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; line-height: 1.5;
+  color: var(--text-secondary);
+  padding-left: 14px; position: relative;
+  margin-bottom: 4px;
+}
+.growth-result-item::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--pool);
+}
+.growth-quote {
+  font-family: var(--sans); font-weight: 300; font-style: italic;
+  font-size: 0.78rem; line-height: 1.5;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  padding-top: 10px; border-top: 1px solid var(--rule-light);
+}
+
+.growth-actions {
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 12px; flex-shrink: 0;
+}
+.growth-issue-tag {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--brick);
+  padding: 4px 10px; border-radius: 2px;
+  border: 1px solid rgba(168,32,57,0.2);
+  background: rgba(168,32,57,0.04);
+  white-space: nowrap;
+}
+.growth-link {
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 400;
+  color: var(--royal);
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: color 0.2s ease, gap 0.2s ease;
+  white-space: nowrap;
+}
+.growth-link:hover { gap: 8px; }
+.growth-link iconify-icon { font-size: 12px; }
+
+/* ═══════════════════════════════════════════
+   COMMUNITY SPOTLIGHT CARDS — 3-col grid
+   ═══════════════════════════════════════════ */
+.spot-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+}
+.spot-card {
+  background: var(--white);
+  border-radius: 2px;
+  padding: 28px 28px 24px;
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+.spot-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+.spot-biz {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 2px;
+}
+.spot-owner {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.spot-center {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary); margin-bottom: 14px;
+}
+.spot-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.85rem; line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 16px; flex: 1;
+}
+.spot-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 16px;
+}
+.spot-tag {
+  font-family: var(--mono); font-size: 0.48rem;
+  color: var(--dusty);
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid rgba(93,122,156,0.25);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.spot-link {
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 400;
+  color: var(--royal);
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: color 0.2s ease, gap 0.2s ease;
+  padding-top: 12px; border-top: 1px solid var(--rule-light);
+}
+.spot-link:hover { gap: 8px; }
+.spot-link iconify-icon { font-size: 12px; }
+
+/* ═══════════════════════════════════════════
+   RUBRIC TABLE
+   ═══════════════════════════════════════════ */
+.rubric-card {
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.rubric-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--sans);
+}
+.rubric-table th {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.58rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-tertiary);
+  padding: 16px 20px; text-align: left;
+  border-bottom: 1px solid var(--rule);
+  background: var(--cream);
+}
+.rubric-table th:first-child { width: 16%; }
+.rubric-table th:not(:first-child) { width: 28%; }
+.rubric-table th.th-sig { color: var(--royal); }
+.rubric-table th.th-growth { color: var(--dusty); }
+.rubric-table th.th-spot { color: var(--text-tertiary); }
+
+.rubric-table td {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; line-height: 1.5;
+  color: var(--text-secondary);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule-light);
+  vertical-align: top;
+}
+.rubric-table td:first-child {
+  font-weight: 700; font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text); vertical-align: top;
+}
+.rubric-table tr:last-child td { border-bottom: none; }
+
+.rubric-score-guide {
+  background: var(--white);
+  border-radius: 2px;
+  padding: 28px 32px;
+  margin-top: 2px;
+}
+.rubric-score-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 16px;
+}
+.score-item {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 10px;
+}
+.score-range {
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--white); padding: 3px 10px;
+  border-radius: 2px; white-space: nowrap;
+  min-width: 72px; text-align: center;
+}
+.score-range-sig { background: var(--royal); }
+.score-range-growth { background: var(--dusty); }
+.score-range-spot { background: var(--text-tertiary); }
+.score-label {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.85rem; color: var(--text-secondary);
+}
+.score-label strong {
+  font-weight: 700; color: var(--text);
+}
+
+/* ═══════════════════════════════════════════
+   TOOLKIT
+   ═══════════════════════════════════════════ */
+.toolkit-block {
+  background: var(--white);
+  border-radius: 2px;
+  padding: 32px 36px;
+  margin-bottom: 2px;
+}
+.toolkit-block-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--royal);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.toolkit-block-title iconify-icon { font-size: 14px; }
+
+/* Story template */
+.template-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-light);
+}
+.template-row:last-child { border-bottom: none; }
+.template-label {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.03em;
+  min-width: 100px; flex-shrink: 0;
+  padding-top: 2px;
+}
+.template-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.85rem; line-height: 1.5;
+  color: var(--text-secondary);
+}
+.template-desc strong {
+  font-weight: 500; color: var(--text);
+}
+
+/* Do/Don't grid */
+.dodont-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.dodont-col {
+  padding: 0;
+}
+.dodont-header {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 0 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.dodont-header-do { color: var(--green); }
+.dodont-header-dont { color: var(--brick); }
+.dodont-header iconify-icon { font-size: 14px; }
+.dodont-item {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; line-height: 1.5;
+  color: var(--text-secondary);
+  padding: 6px 0 6px 20px;
+  position: relative;
+}
+.dodont-item::before {
+  position: absolute; left: 0; top: 8px;
+  font-size: 10px;
+}
+.dodont-do .dodont-item::before {
+  content: '+'; color: var(--green);
+  font-family: var(--mono); font-weight: 400;
+}
+.dodont-dont .dodont-item::before {
+  content: '\2013'; color: var(--brick);
+  font-family: var(--mono); font-weight: 400;
+}
+
+/* Metric priority */
+.metric-priority-list {
+  counter-reset: metric;
+}
+.metric-priority-item {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule-light);
+  counter-increment: metric;
+}
+.metric-priority-item:last-child { border-bottom: none; }
+.metric-priority-item::before {
+  content: counter(metric);
+  font-family: var(--serif); font-weight: 400;
+  font-size: 1.1rem; color: var(--royal);
+  min-width: 20px; text-align: right;
+}
+.metric-priority-name {
+  font-family: var(--sans); font-weight: 400;
+  font-size: 0.85rem; color: var(--text);
+}
+.metric-priority-detail {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-tertiary);
+  margin-left: auto;
+}
+.metric-note {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.82rem; line-height: 1.55;
+  color: var(--text-secondary);
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.metric-note strong {
+  font-weight: 500; color: var(--text);
+}
+
+/* ═══════════════════════════════════════════
+   CTA BAR
+   ═══════════════════════════════════════════ */
+.cta-bar {
+  background: var(--navy);
+  padding: 48px var(--pad);
+}
+.cta-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.cta-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; color: rgba(255,255,255,0.5);
+}
+.cta-text strong {
+  font-weight: 400; color: var(--white);
+}
+.cta-link {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+  color: var(--pool);
+  padding: 10px 20px;
+  border: 1px solid rgba(143,197,217,0.3);
+  border-radius: 3px;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s ease;
+}
+.cta-link:hover { background: rgba(143,197,217,0.1); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.footer {
+  padding: 32px var(--pad);
+  background: var(--white);
+  border-top: 1px solid var(--rule-light);
+}
+.footer-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { height: 16px; }
+.footer-text {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy); color: var(--white);
+  font-family: var(--mono); font-size: 0.6rem;
+  padding: 10px 20px; border-radius: 4px;
+  opacity: 0; transition: all 0.25s ease;
+  z-index: 200; display: flex; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════
+   TAGS (generic)
+   ═══════════════════════════════════════════ */
+.tag {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid var(--rule);
+  color: var(--text-secondary);
+  display: inline-block;
+}
+.tag-pool { border-color: rgba(143,197,217,0.4); color: var(--pool); }
+.tag-royal { border-color: rgba(29,90,167,0.3); color: var(--royal); }
+.tag-green { border-color: rgba(22,163,74,0.3); color: var(--green); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .sig-grid { grid-template-columns: 1fr; }
+  .growth-card { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .growth-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .sig-grid { grid-template-columns: 1fr; }
+  .growth-card { grid-template-columns: 1fr; gap: 16px; }
+  .growth-actions { flex-direction: row; }
+  .spot-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .cta-inner { flex-direction: column; text-align: center; }
+  .dodont-grid { grid-template-columns: 1fr; }
+  .rubric-table { font-size: 0.72rem; }
+  .rubric-table th, .rubric-table td { padding: 12px 12px; }
+  .sig-top { flex-direction: column; }
+  .sig-metric { text-align: left; padding-left: 0; margin-top: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="brand-house.html"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="nav-logo"></a>
+    <a href="brand-house.html" class="nav-back"><iconify-icon icon="carbon:arrow-left"></iconify-icon> Brand House</a>
+  </div>
+  <div class="nav-links">
+    <a href="#signature" class="active">Signature</a>
+    <a href="#growth">Growth</a>
+    <a href="#spotlights">Spotlights</a>
+    <a href="#rubric">Rubric</a>
+    <a href="#toolkit">Toolkit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="assets/starwhite@4x.png" alt="" class="hero-watermark" aria-hidden="true">
+  <div class="hero-inner">
+    <div class="hero-breadcrumb"><a href="brand-house.html">Brand House</a> / Success Stories</div>
+    <h1 class="hero-h1">Success Stories</h1>
+    <p class="hero-desc">Real businesses. Measurable impact. Organized by story tier to help you find the right client narrative for any audience &mdash; from board presentations to social media.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">Signature Stories</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Growth Stories</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Community Spotlights</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">13</div>
+        <div class="hero-stat-label">Total Stories</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: SIGNATURE STORIES
+     ═══════════════════════════════════════════ -->
+<section class="section" id="signature">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Signature Stories</div>
+      <div class="section-header-sub">Highest impact. Strong structure. Clear metrics and photography. Use for annual reports, board presentations, lender pitches, and campaign hero stories.</div>
+      <a href="story-template-signature.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-family: var(--mono); font-size: 0.6rem; color: var(--royal); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(29,90,167,0.3); border-radius: 2px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--royal-dim)'" onmouseout="this.style.background='transparent'"><iconify-icon icon="carbon:view" style="font-size: 13px;"></iconify-icon> VIEW STORY TEMPLATE — Marin Auto Works</a>
+    </div>
+
+    <div class="sig-grid">
+
+      <!-- Card 1: ReJoule -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-royal"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">ReJoule</div>
+              <div class="sig-owner">Zora Chung, CFO</div>
+              <div class="sig-center">Tech Futures Group</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">$27M</div>
+              <div class="sig-metric-label">Total Funding</div>
+            </div>
+          </div>
+          <div class="sig-tagline">Fast, accurate battery health diagnostics enabling reuse, repurposing, and recycling at scale.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>The advice we received from Pitch Global has been extremely valuable, and the exposure to their network is unmatched.&rdquo;
+            <div class="sig-quote-attr">&mdash; Zora Chung, CFO</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">$27M Total Funding</span>
+            <span class="sig-chip">$25M Non-Dilutive Grants</span>
+            <span class="sig-chip">90% Cost Reduction</span>
+            <span class="sig-chip">2,000+ Service Centers</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/impact-2025/rejoule/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Marin Auto Works -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-pool"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">Marin Auto Works</div>
+              <div class="sig-owner">Chris Aguirre, Owner</div>
+              <div class="sig-center">Marin SBDC</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">$559K</div>
+              <div class="sig-metric-label">Capital Secured</div>
+            </div>
+          </div>
+          <div class="sig-tagline">From technician to owner &mdash; navigating complex SBA financing to acquire a beloved community auto shop.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>I thought getting a loan would be easy &mdash; like in the movies. After being rejected by the big banks, I was referred to the SBDC.&rdquo;
+            <div class="sig-quote-attr">&mdash; Chris Aguirre, Owner</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">$559K Capital</span>
+            <span class="sig-chip">$503K SBA Loan</span>
+            <span class="sig-chip">4 Jobs Created</span>
+            <span class="sig-chip">$75K First Month Sales</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/impact-2025/marin-auto-works/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Seal Rock Dental Care -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-dusty"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">Seal Rock Dental Care</div>
+              <div class="sig-owner">Dr. Joshua Sanchez, Owner</div>
+              <div class="sig-center">San Francisco SBDC</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">21</div>
+              <div class="sig-metric-label">Jobs Retained &amp; Created</div>
+            </div>
+          </div>
+          <div class="sig-tagline">Patient-centered dental practice with a special focus on serving those who experience dental anxiety.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>The SBDC has guided every step of our journey. I feel more confident taking on new challenges knowing I have this organization to help me.&rdquo;
+            <div class="sig-quote-attr">&mdash; Dr. Joshua Sanchez, Owner</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">21 Jobs</span>
+            <span class="sig-chip">$300K Sales Growth</span>
+            <span class="sig-chip">$115K SBA Loan</span>
+            <span class="sig-chip">70+ New Patients/Month</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/impact-2025/seal-rock-dental/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Rep It Out -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-brick"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">Rep It Out</div>
+              <div class="sig-owner">David Cruz, CEO</div>
+              <div class="sig-center">Solano-Napa SBDC</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">$713K</div>
+              <div class="sig-metric-label">Total Capital</div>
+            </div>
+          </div>
+          <div class="sig-tagline">Vallejo&rsquo;s premier indoor baseball and softball training facility for athletes of all ages.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>I could not have accomplished my goal of starting a business and fulfilling my dream without the SBDC.&rdquo;
+            <div class="sig-quote-attr">&mdash; David Cruz, CEO</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">$713K Total Capital</span>
+            <span class="sig-chip">$230K SBA Loan</span>
+            <span class="sig-chip">$483K Private Funding</span>
+            <span class="sig-chip">2 Jobs Created</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/impact-2025/rep-it-out/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Circosphere -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-royal"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">Circosphere</div>
+              <div class="sig-owner">Kristen Parks, Founder &amp; Owner</div>
+              <div class="sig-center">East Bay SBDC</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">$469K</div>
+              <div class="sig-metric-label">Sales Growth</div>
+            </div>
+          </div>
+          <div class="sig-tagline">Woman-owned cirque entertainment creating unforgettable performances for special events.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>My SBDC advisor played a pivotal role in helping the business recover from COVID-19 and supporting its growth.&rdquo;
+            <div class="sig-quote-attr">&mdash; Kristen Parks, Founder &amp; Owner</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">$874K Annual Revenue</span>
+            <span class="sig-chip">$469K Sales Growth</span>
+            <span class="sig-chip">11 Employees</span>
+            <span class="sig-chip">WBE Certified</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/impact-2025/circosphere/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Scoot Science -->
+      <div class="sig-card reveal">
+        <div class="sig-accent sig-accent-pool"></div>
+        <div class="sig-body">
+          <div class="sig-top">
+            <div class="sig-info">
+              <div class="sig-biz">Scoot Science</div>
+              <div class="sig-owner">Jonathan LaRiviere, Founder</div>
+              <div class="sig-center">Tech Futures Group</div>
+            </div>
+            <div class="sig-metric">
+              <div class="sig-metric-num">$2M</div>
+              <div class="sig-metric-label">Capital Raised</div>
+            </div>
+          </div>
+          <div class="sig-tagline">Ocean intelligence platform helping aquaculture producers make data-driven decisions.</div>
+          <div class="sig-quote">
+            <span class="sig-quote-mark">&ldquo;</span>I couldn&rsquo;t be happier with the support we&rsquo;ve gotten from Tech Futures Group. Without this help, we wouldn&rsquo;t have realized the successes that we have today.&rdquo;
+            <div class="sig-quote-attr">&mdash; Jonathan LaRiviere, Founder</div>
+          </div>
+          <div class="sig-metrics-row">
+            <span class="sig-chip">$2M Capital Raised</span>
+            <span class="sig-chip">1&rarr;11 Team Growth</span>
+            <span class="sig-chip">10&times; Team Size</span>
+            <span class="sig-chip">Top 10 Salmon Producers as Clients</span>
+          </div>
+          <div class="sig-footer">
+            <a href="https://www.norcalsbdc.org/client-stories/scoot-science/" target="_blank" rel="noopener" class="sig-link">View Full Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sig-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: GROWTH STORIES
+     ═══════════════════════════════════════════ -->
+<section class="section" id="growth">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Growth Stories</div>
+      <div class="section-header-sub">Good narrative, developing structure. These stories show real progress but may need tighter metrics or editing before use in formal presentations. Best for newsletters, blog posts, and partner updates.</div>
+      <a href="story-template-newsletter.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-family: var(--mono); font-size: 0.6rem; color: var(--royal); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(29,90,167,0.3); border-radius: 2px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--royal-dim)'" onmouseout="this.style.background='transparent'"><iconify-icon icon="carbon:email" style="font-size: 13px;"></iconify-icon> VIEW NEWSLETTER TEMPLATE — Yarrow Goods</a>
+    </div>
+
+    <div class="growth-grid">
+
+      <!-- Growth 1: Yarrow Goods -->
+      <div class="growth-card reveal">
+        <div class="growth-info">
+          <div class="growth-biz">Yarrow Goods</div>
+          <div class="growth-owner">Oliver &amp; Grace Estrada</div>
+          <div class="growth-center">Marin SBDC</div>
+          <div class="growth-tagline">Handmade screen-printed ethical t-shirts, pivoted from brick-and-mortar during COVID.</div>
+        </div>
+        <div class="growth-results">
+          <div class="growth-results-title">Key Results</div>
+          <div class="growth-result-item">$138K total capital from 5 lenders</div>
+          <div class="growth-result-item">20% sales increase</div>
+          <div class="growth-quote">&ldquo;We would have closed our business if it were not for the help we received from the Marin SBDC.&rdquo;</div>
+        </div>
+        <div class="growth-actions">
+          <span class="growth-issue-tag"><iconify-icon icon="carbon:warning-alt" style="font-size:10px; margin-right:2px;"></iconify-icon> Results buried in text</span>
+          <a href="https://www.norcalsbdc.org/shared/client-stories/yarrow-goods/" target="_blank" rel="noopener" class="growth-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+        </div>
+      </div>
+
+      <!-- Growth 2: The Early Rise -->
+      <div class="growth-card reveal">
+        <div class="growth-info">
+          <div class="growth-biz">The Early Rise</div>
+          <div class="growth-owner">Laila O&rsquo;Boyle, Founder</div>
+          <div class="growth-center">San Francisco SBDC</div>
+          <div class="growth-tagline">From local sourdough bakery to global education hub with 500K+ followers.</div>
+        </div>
+        <div class="growth-results">
+          <div class="growth-results-title">Key Results</div>
+          <div class="growth-result-item">500K social followers</div>
+          <div class="growth-result-item">4,000 Substack subscribers</div>
+          <div class="growth-result-item">3&times; revenue growth</div>
+          <div class="growth-quote">&ldquo;The SBDC helped me early on to get into the dream fund and receive a grant!&rdquo;</div>
+        </div>
+        <div class="growth-actions">
+          <span class="growth-issue-tag"><iconify-icon icon="carbon:warning-alt" style="font-size:10px; margin-right:2px;"></iconify-icon> Social metrics, not capital</span>
+          <a href="https://www.norcalsbdc.org/shared/client-stories/from-oven-to-online-local-baker-scales-to-global-reach/" target="_blank" rel="noopener" class="growth-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+        </div>
+      </div>
+
+      <!-- Growth 3: Thistle & Tonic -->
+      <div class="growth-card reveal">
+        <div class="growth-info">
+          <div class="growth-biz">Thistle &amp; Tonic</div>
+          <div class="growth-owner">Yvette Cotter</div>
+          <div class="growth-center">San Mateo SBDC</div>
+          <div class="growth-tagline">Non-toxic wellness bar and boutique in Pacifica, California.</div>
+        </div>
+        <div class="growth-results">
+          <div class="growth-results-title">Key Results</div>
+          <div class="growth-result-item">$40K Working Solutions loan</div>
+          <div class="growth-result-item">LLC formation</div>
+          <div class="growth-result-item">Retail location secured</div>
+          <div class="growth-quote">&ldquo;I recommend the SBDC to everyone &mdash; I really do. I couldn&rsquo;t have done it without them.&rdquo;</div>
+        </div>
+        <div class="growth-actions">
+          <span class="growth-issue-tag"><iconify-icon icon="carbon:warning-alt" style="font-size:10px; margin-right:2px;"></iconify-icon> Too much text, needs editing</span>
+          <a href="https://www.norcalsbdc.org/shared/client-stories/thistle-tonic/" target="_blank" rel="noopener" class="growth-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+        </div>
+      </div>
+
+      <!-- Growth 4: Sweet Bean Coffee House -->
+      <div class="growth-card reveal">
+        <div class="growth-info">
+          <div class="growth-biz">Sweet Bean Coffee House</div>
+          <div class="growth-owner">Ronda Moore-Gambone &amp; Sarah Goings</div>
+          <div class="growth-center">Butte College SBDC</div>
+          <div class="growth-tagline">Mother-daughter Italian coffee-inspired caf&eacute; in downtown Chico.</div>
+        </div>
+        <div class="growth-results">
+          <div class="growth-results-title">Key Results</div>
+          <div class="growth-result-item">15 jobs created</div>
+          <div class="growth-result-item">Launched with full staff from day one</div>
+          <div class="growth-quote">&ldquo;The SBDC&rsquo;s personalized consulting was absolutely crucial to turning our family dream into reality.&rdquo;</div>
+        </div>
+        <div class="growth-actions">
+          <span class="growth-issue-tag"><iconify-icon icon="carbon:warning-alt" style="font-size:10px; margin-right:2px;"></iconify-icon> Needs more structure</span>
+          <a href="https://www.norcalsbdc.org/shared/client-stories/sweet-bean-coffee-house-mother-daughter-dream-brews-success-in-chico/" target="_blank" rel="noopener" class="growth-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+        </div>
+      </div>
+
+    </div><!-- /growth-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3: COMMUNITY SPOTLIGHTS
+     ═══════════════════════════════════════════ -->
+<section class="section" id="spotlights">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Community Spotlights</div>
+      <div class="section-header-sub">Inspiring personal stories with lighter economic impact. Best for social media highlights, newsletter human-interest pieces, and community engagement content.</div>
+      <a href="story-template-social.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-family: var(--mono); font-size: 0.6rem; color: var(--royal); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(29,90,167,0.3); border-radius: 2px; transition: all 0.2s ease;" onmouseover="this.style.background='var(--royal-dim)'" onmouseout="this.style.background='transparent'"><iconify-icon icon="carbon:social-media" style="font-size: 13px;"></iconify-icon> VIEW SOCIAL MEDIA TEMPLATES</a>
+    </div>
+
+    <div class="spot-grid">
+
+      <!-- Spotlight 1: Cha-Cha Sweets -->
+      <div class="spot-card reveal">
+        <div class="spot-biz">Cha-Cha Sweets</div>
+        <div class="spot-owner">Angel Rodriguez</div>
+        <div class="spot-center">Solano-Napa SBDC</div>
+        <div class="spot-desc">18-year-old entrepreneur built a chamoy candy company from his bedroom to six-figure sales.</div>
+        <div class="spot-tags">
+          <span class="spot-tag">Social Media</span>
+          <span class="spot-tag">Youth Entrepreneurship</span>
+        </div>
+        <a href="https://www.norcalsbdc.org/shared/client-stories/cha-cha-sweets/" target="_blank" rel="noopener" class="spot-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+      </div>
+
+      <!-- Spotlight 2: Glory Grove Organics -->
+      <div class="spot-card reveal">
+        <div class="spot-biz">Glory Grove Organics</div>
+        <div class="spot-owner">Linda Allivato</div>
+        <div class="spot-center">Silicon Valley SBDC</div>
+        <div class="spot-desc">Eco-conscious consumer products startup in patent and prototype phase.</div>
+        <div class="spot-tags">
+          <span class="spot-tag">Newsletter</span>
+          <span class="spot-tag">Early-Stage</span>
+        </div>
+        <a href="https://www.norcalsbdc.org/shared/client-stories/glory-grove-organics/" target="_blank" rel="noopener" class="spot-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+      </div>
+
+      <!-- Spotlight 3: El Papalote Childcare Services -->
+      <div class="spot-card reveal">
+        <div class="spot-biz">El Papalote Childcare Services</div>
+        <div class="spot-owner">Carmen Jimenez Martinez</div>
+        <div class="spot-center">San Francisco SBDC</div>
+        <div class="spot-desc">Licensed in-home daycare in SF&rsquo;s Tenderloin, reached full capacity within months of launch.</div>
+        <div class="spot-tags">
+          <span class="spot-tag">Social Media</span>
+          <span class="spot-tag">Community Impact</span>
+        </div>
+        <a href="https://www.norcalsbdc.org/shared/client-stories/el-papalote-childcare-services/" target="_blank" rel="noopener" class="spot-link">View Story <iconify-icon icon="carbon:arrow-right"></iconify-icon></a>
+      </div>
+
+    </div><!-- /spot-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4: STORY SCORING RUBRIC
+     ═══════════════════════════════════════════ -->
+<section class="section" id="rubric">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Story Scoring Rubric</div>
+      <div class="section-header-sub">Use this rubric to evaluate and classify new client stories. Every story should be scored before publishing.</div>
+    </div>
+
+    <div class="rubric-card reveal">
+      <table class="rubric-table">
+        <thead>
+          <tr>
+            <th>Criteria</th>
+            <th class="th-sig"><iconify-icon icon="carbon:star-filled" style="font-size:10px; margin-right:3px;"></iconify-icon> Signature (4&ndash;5 pts)</th>
+            <th class="th-growth"><iconify-icon icon="carbon:growth" style="font-size:10px; margin-right:3px;"></iconify-icon> Growth (2&ndash;3 pts)</th>
+            <th class="th-spot"><iconify-icon icon="carbon:flash" style="font-size:10px; margin-right:3px;"></iconify-icon> Spotlight (0&ndash;1 pts)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Economic Impact</td>
+            <td>$100K+ capital accessed, OR 5+ jobs, OR major revenue growth</td>
+            <td>$10K&ndash;$100K capital, OR 1&ndash;4 jobs, OR moderate growth</td>
+            <td>Under $10K, or no quantified impact</td>
+          </tr>
+          <tr>
+            <td>Structure</td>
+            <td>Clear Challenge &rarr; Solution &rarr; Results arc with metrics front and center</td>
+            <td>Has the arc but results are buried or text is too long</td>
+            <td>Missing structure, feelings-heavy, or no clear arc</td>
+          </tr>
+          <tr>
+            <td>Quote Quality</td>
+            <td>Specific, attributable, mentions SBDC by name, speaks to measurable outcome</td>
+            <td>Positive but generic (&ldquo;couldn&rsquo;t have done it without them&rdquo;)</td>
+            <td>Only emotional / no business substance</td>
+          </tr>
+          <tr>
+            <td>Photography</td>
+            <td>Professional headshot or business photography available</td>
+            <td>Has some imagery but not professional</td>
+            <td>No photography available</td>
+          </tr>
+          <tr>
+            <td>Reusability</td>
+            <td>Can headline an annual report, board presentation, or lender pitch</td>
+            <td>Works for newsletters, blog posts, partner updates with light editing</td>
+            <td>Best for social media posts and community engagement</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rubric-score-guide reveal">
+      <div class="rubric-score-title"><iconify-icon icon="carbon:meter" style="font-size:14px; margin-right:4px;"></iconify-icon> Quick Score Guide</div>
+      <div class="score-item">
+        <span class="score-range score-range-sig">20&ndash;25</span>
+        <span class="score-label"><strong>Signature Story</strong> &mdash; ready for prime time</span>
+      </div>
+      <div class="score-item">
+        <span class="score-range score-range-growth">12&ndash;19</span>
+        <span class="score-label"><strong>Growth Story</strong> &mdash; needs tightening before formal use</span>
+      </div>
+      <div class="score-item">
+        <span class="score-range score-range-spot">0&ndash;11</span>
+        <span class="score-label"><strong>Community Spotlight</strong> &mdash; use for social media and community content</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5: STORY TOOLKIT
+     ═══════════════════════════════════════════ -->
+<section class="section" id="toolkit">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Story Toolkit</div>
+      <div class="section-header-sub">Templates and guidelines for writing new success stories to the Signature standard.</div>
+    </div>
+
+    <!-- A. Story Structure Template -->
+    <div class="toolkit-block reveal">
+      <div class="toolkit-block-title"><iconify-icon icon="carbon:document"></iconify-icon> A. Story Structure Template</div>
+
+      <div class="template-row">
+        <div class="template-label">Kicker</div>
+        <div class="template-desc"><strong>NorCal SBDC Success Story</strong> &mdash; appears above the headline, establishes context</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">Business Name</div>
+        <div class="template-desc"><strong>Large, bold headline</strong> &mdash; the business name displayed prominently</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">Tagline</div>
+        <div class="template-desc">One sentence describing what the business does &mdash; clear and concise</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">Hero Metric</div>
+        <div class="template-desc"><strong>The single most impressive number, displayed large</strong> &mdash; this is the anchor of the story</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">Quote</div>
+        <div class="template-desc">Direct quote from the business owner &mdash; specific and mentioning SBDC</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">The Challenge</div>
+        <div class="template-desc">2&ndash;3 sentences max. What was the obstacle?</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">The Solution</div>
+        <div class="template-desc">2&ndash;3 sentences max. What did SBDC do specifically?</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">The Results</div>
+        <div class="template-desc"><strong>Lead with numbers.</strong> 3&ndash;4 metric boxes displayed prominently.</div>
+      </div>
+      <div class="template-row">
+        <div class="template-label">Partner CTA</div>
+        <div class="template-desc">Link to the NorCal SBDC center that helped &mdash; drives visitors back to the network</div>
+      </div>
+    </div>
+
+    <!-- B. Writing Rules -->
+    <div class="toolkit-block reveal">
+      <div class="toolkit-block-title"><iconify-icon icon="carbon:edit"></iconify-icon> B. Writing Rules</div>
+
+      <div class="dodont-grid">
+        <div class="dodont-col dodont-do">
+          <div class="dodont-header dodont-header-do"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Do</div>
+          <div class="dodont-item">Lead with the most impressive metric</div>
+          <div class="dodont-item">Keep the total story under 400 words</div>
+          <div class="dodont-item">Use &ldquo;no-fee&rdquo; never &ldquo;free&rdquo;</div>
+          <div class="dodont-item">Name the specific NorCal SBDC center and advisor</div>
+          <div class="dodont-item">Include at least 3 quantified outcomes</div>
+          <div class="dodont-item">Get a direct, specific quote about business results</div>
+          <div class="dodont-item">Use Challenge &rarr; Solution &rarr; Results structure</div>
+        </div>
+        <div class="dodont-col dodont-dont">
+          <div class="dodont-header dodont-header-dont"><iconify-icon icon="carbon:close-filled"></iconify-icon> Don&rsquo;t</div>
+          <div class="dodont-item">Bury results at the bottom</div>
+          <div class="dodont-item">Write more than 3 sentences per section</div>
+          <div class="dodont-item">Focus on feelings without tangible outcomes</div>
+          <div class="dodont-item">Use generic quotes (&ldquo;great experience&rdquo;)</div>
+          <div class="dodont-item">Lead with the business backstory</div>
+          <div class="dodont-item">Forget photography &mdash; always capture a portrait</div>
+          <div class="dodont-item">Use &ldquo;SBDC&rdquo; without &ldquo;NorCal&rdquo; prefix</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C. Metric Priority Guide -->
+    <div class="toolkit-block reveal">
+      <div class="toolkit-block-title"><iconify-icon icon="carbon:chart-bar"></iconify-icon> C. Metric Priority Guide</div>
+
+      <div class="metric-priority-list">
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Capital Accessed</span>
+          <span class="metric-priority-detail">$ amount</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Jobs Created or Retained</span>
+          <span class="metric-priority-detail">headcount</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Revenue / Sales Growth</span>
+          <span class="metric-priority-detail">$ or %</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Loans Secured</span>
+          <span class="metric-priority-detail">$ amount + lender</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Cost Reduction</span>
+          <span class="metric-priority-detail">%</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Certifications Obtained</span>
+          <span class="metric-priority-detail">WBE, MBE, etc.</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Clients / Customers Gained</span>
+          <span class="metric-priority-detail">headcount</span>
+        </div>
+        <div class="metric-priority-item">
+          <span class="metric-priority-name">Social / Digital Growth</span>
+          <span class="metric-priority-detail">followers, traffic</span>
+        </div>
+      </div>
+
+      <div class="metric-note"><strong>Stories with metrics ranked 1&ndash;4 as primary are almost always Signature-quality.</strong> Stories led by metrics 5&ndash;8 need supporting capital/jobs data to reach Signature tier.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <div class="cta-inner">
+    <div class="cta-text"><strong>Have a client story to share?</strong> Submit your story for review and scoring against the rubric.</div>
+    <a href="mailto:phelps@norcalsbdc.org" class="cta-link"><iconify-icon icon="carbon:email"></iconify-icon> phelps@norcalsbdc.org</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+    <span class="footer-text">NorCal SBDC &middot; Success Stories &middot; 2026</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Toast ────────────────────────────── */
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  window.showToast = function(msg) {
+    clearTimeout(toastTimer);
+    toastEl.innerHTML = '<iconify-icon icon="carbon:checkmark" style="font-size:14px"></iconify-icon> ' + msg;
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+  };
+
+  /* ── Reveal ───────────────────────────── */
+  var revealEls = document.querySelectorAll('.reveal');
+  if (!reduced && revealEls.length) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(function(el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  /* ── Nav scroll tracking ──────────────── */
+  var navLinks = document.querySelectorAll('.nav-links a');
+  var sections = [];
+  navLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var sec = document.getElementById(id);
+    if (sec) sections.push({ el: sec, link: link });
+  });
+  function updateNav() {
+    var scrollY = window.pageYOffset + 80;
+    var current = sections[0];
+    sections.forEach(function(s) { if (s.el.offsetTop <= scrollY) current = s; });
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  var navTicking = false;
+  window.addEventListener('scroll', function() {
+    if (!navTicking) { requestAnimationFrame(function() { updateNav(); navTicking = false; }); navTicking = true; }
+  }, { passive: true });
+  updateNav();
+
+  /* ── Smooth scroll ────────────────────── */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

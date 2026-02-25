@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NorCal SBDC — Social Templates</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #1e3a5f;
+      --slate: #4a6580;
+      --mist: #c8d5e3;
+      --fog: #e5ebf1;
+      --cream: #f8f7f4;
+      --red: #c23a3a;
+
+      --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Roboto Mono', monospace;
+    }
+    
+    body {
+      font-family: var(--sans);
+      background: #1a1a1a;
+      padding: 48px;
+      color: white;
+    }
+    
+    h1 {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 64px;
+    }
+    
+    .label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+    
+    /* ============================================
+       SQUARE POSTS (1080x1080)
+    ============================================ */
+    
+    .post-square {
+      width: 360px;
+      height: 360px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Template 1: Stat Hero */
+    .stat-hero {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    .stat-hero .eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 16px;
+    }
+    
+    .stat-hero .number {
+      font-family: var(--sans);
+      font-size: 96px;
+      font-weight: 300;
+      color: white;
+      line-height: 0.85;
+      letter-spacing: -3px;
+      margin-bottom: 12px;
+    }
+    
+    .stat-hero .number span {
+      color: var(--red);
+    }
+    
+    .stat-hero .context {
+      font-size: 18px;
+      color: var(--mist);
+      line-height: 1.3;
+    }
+    
+    .stat-hero .wordmark {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Template 2: Quote */
+    .quote-card {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+    }
+    
+    .quote-card .quote {
+      font-family: var(--sans);
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.25;
+      flex: 1;
+    }
+    
+    .quote-card .attribution {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--slate);
+      margin-top: 24px;
+    }
+    
+    .quote-card .divider {
+      width: 32px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 16px;
+    }
+    
+    .quote-card .wordmark {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+      margin-top: 24px;
+    }
+    
+    /* Template 3: Gradient Statement */
+    .gradient-statement {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--slate) 60%, var(--red) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+    }
+    
+    .gradient-statement .headline {
+      font-family: var(--sans);
+      font-size: 42px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    
+    .gradient-statement .subhead {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+    }
+    
+    .gradient-statement .wordmark {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Template 4: Mist Minimal */
+    .mist-minimal {
+      background: var(--mist);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 48px;
+    }
+    
+    .mist-minimal .headline {
+      font-family: var(--sans);
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.0;
+      margin-bottom: 20px;
+    }
+    
+    .mist-minimal .divider {
+      width: 32px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 20px;
+    }
+    
+    .mist-minimal .subhead {
+      font-size: 14px;
+      color: var(--slate);
+    }
+    
+    .mist-minimal .wordmark {
+      position: absolute;
+      bottom: 40px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Template 5: Split Color */
+    .split-color {
+      display: flex;
+    }
+    
+    .split-color .left {
+      flex: 1;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px;
+    }
+    
+    .split-color .right {
+      flex: 1;
+      background: var(--red);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+    }
+    
+    .split-color .stat {
+      font-family: var(--sans);
+      font-size: 64px;
+      font-weight: 300;
+      color: white;
+      line-height: 0.9;
+    }
+    
+    .split-color .label-text {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    
+    .split-color .message {
+      font-family: var(--sans);
+      font-size: 24px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.2;
+    }
+    
+    /* Template 6: Tip Card */
+    .tip-card {
+      background: var(--fog);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .tip-card .tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 24px;
+    }
+    
+    .tip-card .tip-text {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.2;
+      flex: 1;
+    }
+    
+    .tip-card .cta {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--red);
+      margin-top: 24px;
+    }
+    
+    .tip-card .wordmark {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+      margin-top: 16px;
+    }
+    
+    /* ============================================
+       STORY FORMAT (1080x1920)
+    ============================================ */
+    
+    .stories-grid {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    
+    .post-story {
+      width: 220px;
+      height: 390px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    
+    /* Story 1: Stat */
+    .story-stat {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 32px;
+    }
+    
+    .story-stat .eyebrow {
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 16px;
+    }
+    
+    .story-stat .number {
+      font-family: var(--sans);
+      font-size: 72px;
+      font-weight: 300;
+      color: white;
+      line-height: 0.85;
+      letter-spacing: -2px;
+    }
+    
+    .story-stat .number span {
+      color: var(--red);
+    }
+    
+    .story-stat .context {
+      font-size: 14px;
+      color: var(--mist);
+      margin-top: 12px;
+      line-height: 1.3;
+    }
+    
+    .story-stat .wordmark {
+      position: absolute;
+      bottom: 24px;
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Story 2: Quote */
+    .story-quote {
+      background: linear-gradient(180deg, var(--mist) 0%, var(--fog) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px;
+    }
+    
+    .story-quote .divider {
+      width: 24px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 20px;
+    }
+    
+    .story-quote .quote {
+      font-family: var(--sans);
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+    
+    .story-quote .attribution {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--slate);
+      margin-top: 20px;
+    }
+    
+    .story-quote .wordmark {
+      position: absolute;
+      bottom: 24px;
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Story 3: CTA */
+    .story-cta {
+      background: linear-gradient(180deg, var(--navy) 0%, var(--slate) 50%, var(--red) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      text-align: center;
+    }
+    
+    .story-cta .headline {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    
+    .story-cta .button {
+      background: white;
+      color: var(--navy);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 4px;
+      display: inline-block;
+      letter-spacing: 0.05em;
+    }
+    
+    .story-cta .wordmark {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 8px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+    }
+    
+    /* Story 4: Event */
+    .story-event {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      padding: 32px;
+    }
+    
+    .story-event .tag {
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 20px;
+    }
+    
+    .story-event .date {
+      font-family: var(--sans);
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+    
+    .story-event .month {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    
+    .story-event .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-top: auto;
+    }
+    
+    .story-event .details {
+      font-size: 12px;
+      color: var(--slate);
+      margin-top: 8px;
+    }
+    
+    .story-event .wordmark {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+      margin-top: 24px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <h1>Square Posts — 1080×1080</h1>
+  
+  <div class="grid">
+    
+    <!-- Stat Hero -->
+    <div>
+      <div class="label">01 — Stat Hero</div>
+      <div class="post-square stat-hero">
+        <div class="eyebrow">2024 Impact</div>
+        <div class="number">$547<span>M</span></div>
+        <div class="context">capital accessed<br>by our clients</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <!-- Quote -->
+    <div>
+      <div class="label">02 — Quote</div>
+      <div class="post-square quote-card">
+        <div class="divider"></div>
+        <div class="quote">"I expected a government program. I got someone in my corner."</div>
+        <div class="attribution">— Sacramento client</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <!-- Gradient Statement -->
+    <div>
+      <div class="label">03 — Gradient Statement</div>
+      <div class="post-square gradient-statement">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Your Business People.</div>
+        <div class="subhead">Free advising for small businesses across Northern California.</div>
+      </div>
+    </div>
+    
+    <!-- Mist Minimal -->
+    <div>
+      <div class="label">04 — Mist Minimal</div>
+      <div class="post-square mist-minimal">
+        <div class="headline">This week<br>is yours.</div>
+        <div class="divider"></div>
+        <div class="subhead">Small Business Week 2026</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <!-- Split Color -->
+    <div>
+      <div class="label">05 — Split</div>
+      <div class="post-square split-color">
+        <div class="left">
+          <div class="stat">300+</div>
+          <div class="label-text">Advisors</div>
+        </div>
+        <div class="right">
+          <div class="message">Ready to help.</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tip Card -->
+    <div>
+      <div class="label">06 — Tip Card</div>
+      <div class="post-square tip-card">
+        <div class="tag">Quick Tip</div>
+        <div class="tip-text">Your business plan doesn't need to be 40 pages. It needs to be clear.</div>
+        <div class="cta">More tips →</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <h1>Stories — 1080×1920</h1>
+  
+  <div class="stories-grid">
+    
+    <!-- Story Stat -->
+    <div>
+      <div class="label">01 — Stat</div>
+      <div class="post-story story-stat">
+        <div class="eyebrow">By the numbers</div>
+        <div class="number">$547<span>M</span></div>
+        <div class="context">capital accessed</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <!-- Story Quote -->
+    <div>
+      <div class="label">02 — Quote</div>
+      <div class="post-story story-quote">
+        <div class="divider"></div>
+        <div class="quote">"I expected a government program. I got someone in my corner."</div>
+        <div class="attribution">— Sacramento client</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+    <!-- Story CTA -->
+    <div>
+      <div class="label">03 — CTA</div>
+      <div class="post-story story-cta">
+        <div class="wordmark">NORCAL SBDC</div>
+        <div class="headline">Ready to start?</div>
+        <div class="button">GET ADVISING</div>
+      </div>
+    </div>
+    
+    <!-- Story Event -->
+    <div>
+      <div class="label">04 — Event</div>
+      <div class="post-story story-event">
+        <div class="tag">Workshop</div>
+        <div class="date">15</div>
+        <div class="month">January</div>
+        <div class="title">SBA Loan Prep Workshop</div>
+        <div class="details">Sacramento · 10am · Free</div>
+        <div class="wordmark">NORCAL SBDC</div>
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+</html>

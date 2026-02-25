@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Years — Northern California SBDC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --cream: #f5f4f0;
+            --gray: #888;
+            --light-gray: #e5e5e5;
+            --brick: #b54a4a;
+            --navy: #1e3a5f;
+            --deep-navy: #152a45;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background: var(--cream);
+            color: var(--black);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 48px;
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .brand {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .hero-years {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 900px;
+            padding: 80px 0;
+        }
+        
+        .hero-number {
+            font-family: var(--serif);
+            font-size: clamp(200px, 35vw, 400px);
+            font-weight: 400;
+            line-height: 0.75;
+            letter-spacing: -0.04em;
+        }
+        
+        .hero-label {
+            font-family: var(--serif);
+            font-size: clamp(48px, 8vw, 96px);
+            font-style: italic;
+            color: var(--gray);
+            margin-top: 16px;
+        }
+        
+        .hero-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .hero-tagline {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .hero-scroll {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        /* === STATS === */
+        .stats {
+            background: var(--white);
+            padding: 120px 48px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: var(--serif);
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1;
+            color: var(--black);
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 12px;
+            line-height: 1.4;
+        }
+        
+        /* === TIMELINE === */
+        .timeline {
+            background: var(--cream);
+            padding: 120px 48px;
+        }
+        
+        .timeline-header {
+            max-width: 600px;
+            margin-bottom: 80px;
+        }
+        
+        .timeline-header h2 {
+            font-family: var(--serif);
+            font-size: 48px;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        
+        .timeline-header p {
+            font-size: 18px;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        .timeline-items {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+        }
+        
+        .timeline-item {
+            padding: 32px;
+            background: var(--white);
+        }
+        
+        .timeline-year {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--brick);
+            margin-bottom: 16px;
+        }
+        
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+        
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        /* === QUOTE === */
+        .quote-section {
+            background: var(--deep-navy);
+            color: var(--white);
+            padding: 120px 48px;
+        }
+        
+        .quote-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .quote-text {
+            font-family: var(--serif);
+            font-size: 36px;
+            font-style: italic;
+            line-height: 1.4;
+            margin-bottom: 32px;
+        }
+        
+        .quote-attribution {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        /* === LOOKING FORWARD === */
+        .forward {
+            background: var(--white);
+            padding: 120px 48px;
+        }
+        
+        .forward-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .forward-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brick);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+        }
+        
+        .forward h2 {
+            font-family: var(--serif);
+            font-size: 56px;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 32px;
+        }
+        
+        .forward h2 em {
+            font-style: italic;
+        }
+        
+        .forward p {
+            font-size: 18px;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        
+        .forward-cta {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 2px solid var(--black);
+            padding-bottom: 4px;
+            margin-top: 16px;
+        }
+        
+        /* === FOOTER === */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 64px 48px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .footer-brand {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        
+        .footer-tagline {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .footer-right {
+            text-align: right;
+        }
+        
+        .footer-link {
+            font-size: 14px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer-legal {
+            font-size: 10px;
+            color: var(--gray);
+            margin-top: 16px;
+            max-width: 300px;
+        }
+        
+        /* === RESPONSIVE === */
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .timeline-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero, .stats, .timeline, .quote-section, .forward, footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .stat-value {
+                font-size: 48px;
+            }
+            
+            .timeline-header h2 {
+                font-size: 36px;
+            }
+            
+            .quote-text {
+                font-size: 24px;
+            }
+            
+            .forward h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-header">
+            <div class="brand">Northern California SBDC</div>
+            <div class="hero-years">Since 2006</div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-number">20</div>
+            <div class="hero-label">years</div>
+        </div>
+        
+        <div class="hero-footer">
+            <div class="hero-tagline">Your Business People</div>
+            <div class="hero-scroll">Scroll ↓</div>
+        </div>
+    </section>
+    
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-value">$547M</div>
+                <div class="stat-label">Capital accessed<br>last year</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">20</div>
+                <div class="stat-label">Years of<br>doing this</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">18</div>
+                <div class="stat-label">Centers across<br>Northern California</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$0</div>
+                <div class="stat-label">What we charge<br>always</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- TIMELINE -->
+    <section class="timeline">
+        <div class="timeline-header">
+            <h2>Twenty years of showing up.</h2>
+            <p>Recessions, pandemics, fires, floods. We've been here through all of it — helping businesses survive, adapt, and grow.</p>
+        </div>
+        
+        <div class="timeline-items">
+            <div class="timeline-item">
+                <div class="timeline-year">2006</div>
+                <div class="timeline-title">The Beginning</div>
+                <div class="timeline-desc">Northern California SBDC network launches with a handful of centers and a simple mission: help small businesses succeed.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2008</div>
+                <div class="timeline-title">The Recession</div>
+                <div class="timeline-desc">When banks stopped lending, we helped businesses find capital, restructure, and survive the worst financial crisis in decades.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-title">The Pandemic</div>
+                <div class="timeline-desc">PPP applications, pivots to e-commerce, survival planning. Our advisors worked overtime to keep businesses alive.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-title">Still Here</div>
+                <div class="timeline-desc">18 centers. 300+ advisors. $547M in capital accessed last year. Free. Always.</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- QUOTE -->
+    <section class="quote-section">
+        <div class="quote-content">
+            <p class="quote-text">"When clients talk about us, they don't say 'the program helped me.' They say 'Maria helped me.'"</p>
+            <p class="quote-attribution">— The insight that drives everything we do</p>
+        </div>
+    </section>
+    
+    <!-- LOOKING FORWARD -->
+    <section class="forward">
+        <div class="forward-content">
+            <div class="forward-label">The Next 20</div>
+            <h2>We're just <em>getting started.</em></h2>
+            <p>Twenty years taught us that small businesses are the backbone of Northern California. The taco trucks and tech startups. The family shops and first-time founders.</p>
+            <p>They don't need programs. They need people. Advisors who pick up the phone, know their industry, and stay with them until they get where they're going.</p>
+            <p>That's what we do. That's what we'll keep doing.</p>
+            <a href="#" class="forward-cta">Work with us →</a>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">Northern California SBDC</div>
+                <div class="footer-tagline">Your Business People · Since 2006</div>
+            </div>
+            <div class="footer-right">
+                <a href="#" class="footer-link">norcalsbdc.org</a>
+                <p class="footer-legal">Funded by the U.S. Small Business Administration and California Governor's Office of Business and Economic Development.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

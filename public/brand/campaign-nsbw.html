@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Small Business Week Campaign Toolkit | NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype');
+      font-weight: 300;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America Mono';
+      src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --navy: #0f1c2e;
+      --royal: #1D5AA7;
+      --royal-dim: rgba(29,90,167,0.08);
+      --pool: #8FC5D9;
+      --cream: #f0efeb;
+      --white: #ffffff;
+      --brick: #a82039;
+      --dusty: #5d7a9c;
+      --text: #0a1528;
+      --text-secondary: #4a5568;
+      --text-tertiary: #8a8a8a;
+      --rule: rgba(0,0,0,0.12);
+      --rule-light: rgba(0,0,0,0.06);
+      --green: #16a34a;
+      --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+      --serif: 'Tobias', Georgia, serif;
+      --mono: 'GT America Mono', 'SF Mono', monospace;
+      --pad: clamp(32px, 5vw, 64px);
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 300;
+      color: var(--text);
+      background-color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── Nav ── */
+    nav.top-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 44px; background: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad); z-index: 1000;
+      border-bottom: 1px solid var(--rule-light);
+    }
+    .nav-logo { flex-shrink: 0; height: 14px; }
+    .nav-logo img { height: 100%; width: auto; opacity: 0.25; }
+    .nav-links { display: flex; gap: 2rem; margin-left: auto; align-items: center; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-tertiary);
+      text-decoration: none; transition: color 200ms var(--ease);
+    }
+    .nav-links a:hover { color: var(--text); }
+    main { margin-top: 44px; }
+
+    /* ── Utility ── */
+    section { padding: var(--pad) 0; }
+    section > * { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .section-header { border-top: 1px solid var(--rule); padding-top: 1rem; margin-bottom: 2.5rem; }
+    .section-kicker {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 0.5rem; display: block;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 400; color: var(--text); line-height: 1.1;
+    }
+
+    /* ══════════════ HERO ══════════════ */
+    section#hero {
+      background: var(--navy); color: var(--white);
+      padding: 5rem var(--pad) 3.5rem;
+    }
+    section#hero > div { max-width: var(--max); margin: 0 auto; }
+    .hero-title {
+      font-family: var(--serif); font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 400; margin-bottom: 0.75rem; line-height: 1.05;
+    }
+    .hero-date {
+      font-family: var(--mono); font-size: 1rem;
+      letter-spacing: 0.05em; margin-bottom: 1.25rem; opacity: 0.7;
+    }
+    .hero-tagline {
+      font-size: 1.15rem; font-weight: 300; max-width: 520px;
+      line-height: 1.5; opacity: 0.9; margin-bottom: 0.75rem;
+    }
+    .hero-sba-note {
+      font-size: 0.8rem; opacity: 0.5; font-style: italic;
+    }
+    .hero-strip {
+      display: flex; gap: 0; margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 1.5rem;
+    }
+    .hero-strip .hs-item { flex: 1; text-align: center; }
+    .hero-strip .hs-item:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.15); }
+    .hs-num { font-family: var(--serif); font-size: 1.5rem; }
+    .hs-label { font-size: 0.75rem; opacity: 0.6; margin-top: 0.2rem; }
+
+    /* ══════════════ STRATEGY ══════════════ */
+    section#strategy { background: var(--cream); }
+    .strategy-goals { margin-bottom: 2rem; }
+    .goal-item {
+      display: grid; grid-template-columns: 56px 1fr; gap: 1.25rem;
+      padding: 1.75rem 0; border-bottom: 1px solid var(--rule-light); align-items: start;
+    }
+    .goal-item:last-child { border-bottom: none; }
+    .goal-number {
+      font-family: var(--serif); font-size: 2.5rem;
+      font-weight: 400; color: var(--text); line-height: 1;
+    }
+    .goal-content h3 {
+      font-family: var(--serif); font-size: 1.35rem;
+      font-weight: 400; color: var(--text); margin-bottom: 0.4rem; line-height: 1.2;
+    }
+    .goal-content p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65; }
+    .key-messages {
+      margin-top: 2rem; padding: 1.5rem 0;
+      border-top: 1px solid var(--rule-light);
+    }
+    .key-messages h3 {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 1.25rem;
+    }
+    .km-item {
+      border-left: 2px solid var(--brick); padding-left: 1.25rem;
+      margin-bottom: 1.25rem; font-size: 0.95rem; color: var(--text);
+      line-height: 1.55; font-weight: 400;
+    }
+    .hashtags {
+      margin-top: 1.5rem; font-family: var(--mono); font-size: 0.8rem;
+      color: var(--royal); letter-spacing: 0.02em;
+    }
+
+    /* ══════════════ CALENDAR ══════════════ */
+    section#calendar { background: var(--white); }
+    .timeline { position: relative; margin-top: 2.5rem; padding-left: 36px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--navy);
+    }
+    .tl-node { position: relative; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule-light); }
+    .tl-node:last-child { border-bottom: none; }
+    .tl-dot {
+      position: absolute; left: -20px; top: 2px; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--navy); border: 2px solid var(--white);
+    }
+    .tl-node.highlight .tl-dot { width: 18px; height: 18px; left: -23px; background: var(--brick); }
+    .tl-header {
+      font-family: var(--serif); font-size: 1.2rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.15rem;
+    }
+    .tl-theme {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--royal); margin-bottom: 0.6rem;
+    }
+    .tl-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+    .tl-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.6rem; }
+    .tl-tag {
+      font-family: var(--mono); font-size: 0.6rem; background: var(--royal-dim);
+      color: var(--royal); padding: 0.25rem 0.5rem; border-radius: 2px;
+    }
+
+    /* ══════════════ SOCIAL — ART GALLERY ══════════════ */
+    section#social { background: var(--cream); padding: var(--pad) 0 calc(var(--pad) + 1rem); }
+    .gallery-wall {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem; margin-top: 2.5rem;
+    }
+    .gallery-frame { display: flex; flex-direction: column; }
+    .artwork {
+      aspect-ratio: 1 / 1; border-radius: 2px; overflow: hidden;
+      position: relative; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; padding: 2rem 1.75rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+    .artwork .bg-icon {
+      position: absolute; font-size: 180px; opacity: 0.04; z-index: 0;
+      pointer-events: none;
+    }
+    .artwork .bg-icon.top-right { top: -30px; right: -30px; }
+    .artwork .bg-icon.bottom-left { bottom: -30px; left: -30px; }
+    .artwork .bg-icon.center { top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 240px; }
+    .artwork > * { position: relative; z-index: 1; }
+    .artwork.navy-bg { background: var(--navy); color: var(--white); }
+    .artwork.brick-bg { background: var(--brick); color: var(--white); }
+    .artwork.cream-bg { background: var(--cream); color: var(--text); border: 1px solid var(--rule); }
+    .artwork.pool-bg { background: linear-gradient(145deg, #6db3cc 0%, var(--pool) 100%); color: var(--white); }
+    .artwork.white-bg { background: var(--white); color: var(--text); border: 1px solid var(--rule); }
+    .artwork.royal-bg { background: var(--royal); color: var(--white); }
+    .artwork .art-headline {
+      font-family: var(--serif); font-size: 1.75rem; font-weight: 400;
+      line-height: 1.15; margin-bottom: 0.75rem;
+    }
+    .artwork .art-stat {
+      font-family: var(--serif); font-size: 3rem; font-weight: 400;
+      line-height: 1; margin-bottom: 0.35rem;
+    }
+    .artwork .art-sub { font-size: 0.85rem; opacity: 0.85; line-height: 1.4; }
+    .artwork .art-quote {
+      font-family: var(--serif); font-style: italic;
+      font-size: 1.15rem; line-height: 1.45; margin-bottom: 0.75rem;
+    }
+    .artwork .art-badge {
+      position: absolute; bottom: 1rem; left: 1.5rem; right: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.06em; opacity: 0.55;
+    }
+    .artwork .art-logo-mark {
+      position: absolute; top: 1.25rem; left: 1.5rem;
+      font-family: var(--sans); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.02em; opacity: 0.7;
+    }
+    .plaque { margin-top: 0.75rem; }
+    .plaque-title {
+      font-family: var(--sans); font-size: 0.8rem; font-weight: 500;
+      color: var(--text); margin-bottom: 0.15rem;
+    }
+    .plaque-detail {
+      font-family: var(--mono); font-size: 0.6rem; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .captions-section { margin-top: 3rem; }
+    .captions-section h3 {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 1.5rem;
+    }
+    .caption-block { margin-bottom: 2rem; }
+    .caption-label {
+      font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.5rem; display: block;
+    }
+    .caption-text {
+      font-family: var(--mono); font-size: 0.82rem; background: var(--navy);
+      color: var(--cream); padding: 1.25rem; border-radius: 2px; line-height: 1.55;
+      white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* ══════════════ EMAIL ══════════════ */
+    section#email { background: var(--white); }
+    .email-mockups { display: grid; gap: 3.5rem; margin-top: 2.5rem; }
+    .email-mockup { max-width: 600px; margin: 0 auto; }
+    .email-label {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 0.75rem; display: block;
+    }
+    .email-container {
+      background: var(--white); border-radius: 3px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08); overflow: hidden;
+    }
+    .email-header {
+      background: linear-gradient(135deg, var(--navy) 0%, rgba(15,28,46,0.9) 100%);
+      color: var(--white); padding: 2rem; text-align: center;
+    }
+    .email-header h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 0.4rem; }
+    .email-preview { font-size: 0.82rem; opacity: 0.8; font-style: italic; }
+    .email-body { padding: 2rem; font-size: 0.92rem; line-height: 1.7; }
+    .email-body h4 { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; margin: 1.5rem 0 0.75rem; }
+    .email-body p { margin-bottom: 0.85rem; }
+    .email-body ul { margin: 0.75rem 0; padding-left: 1.25rem; }
+    .email-body li { margin-bottom: 0.4rem; }
+    .email-cta {
+      display: inline-block; background: var(--royal); color: var(--white);
+      padding: 0.65rem 1.25rem; border-radius: 2px; text-decoration: none;
+      font-weight: 500; margin-top: 0.5rem; font-family: var(--sans); font-size: 0.9rem;
+    }
+    .email-footer {
+      background: var(--cream); padding: 1.25rem; font-size: 0.8rem;
+      color: var(--text-secondary); text-align: center; border-top: 1px solid var(--rule-light);
+    }
+    .email-footer a { color: var(--royal); text-decoration: none; }
+
+    /* ══════════════ EVENTS — STARTER KIT ══════════════ */
+    section#events { background: var(--cream); }
+    .starter-intro {
+      font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;
+      max-width: 640px; margin-bottom: 2.5rem;
+    }
+    .starter-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      background: var(--rule-light); border: 1px solid var(--rule-light);
+      border-radius: 2px; overflow: hidden;
+    }
+    .starter-idea { background: var(--white); padding: 1.75rem; }
+    .si-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .si-name {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem;
+    }
+    .si-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+    .si-tags { margin-top: 0.75rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .si-tag {
+      font-family: var(--mono); font-size: 0.55rem; padding: 0.2rem 0.45rem;
+      background: var(--cream); color: var(--text-tertiary); border-radius: 2px;
+    }
+
+    /* ══════════════ GRAPHIC SPECS ══════════════ */
+    section#specs { background: var(--white); }
+    .specs-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; margin-top: 2.5rem;
+    }
+    .spec-mockup { display: flex; flex-direction: column; }
+    .spec-rect {
+      background: var(--navy); border-radius: 2px; position: relative;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; overflow: hidden;
+    }
+    .spec-rect .spec-bg-icon {
+      position: absolute; font-size: 80px; opacity: 0.06; color: var(--white);
+      pointer-events: none;
+    }
+    .spec-rect-label {
+      font-family: var(--serif); font-size: 0.95rem; font-weight: 400; color: var(--white);
+      position: relative; z-index: 1;
+    }
+    .spec-rect-dims {
+      font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.5);
+      position: relative; z-index: 1; margin-top: 0.25rem;
+    }
+    .spec-info { margin-top: 0.6rem; }
+    .spec-name { font-family: var(--sans); font-size: 0.8rem; font-weight: 500; color: var(--text); }
+    .spec-use {
+      font-family: var(--mono); font-size: 0.6rem; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-top: 0.15rem;
+    }
+
+    /* ══════════════ BRAND — VISUAL FIRST ══════════════ */
+    section#brand { background: var(--cream); }
+    .type-specimen {
+      margin-top: 2.5rem; margin-bottom: 3rem;
+      padding: 2.5rem; background: var(--white); border-radius: 2px;
+      border: 1px solid var(--rule-light);
+    }
+    .type-row {
+      display: flex; align-items: baseline; gap: 2rem;
+      padding: 1.25rem 0; border-bottom: 1px solid var(--rule-light);
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-sample { flex: 1; }
+    .type-meta {
+      flex-shrink: 0; width: 140px; text-align: right;
+      font-family: var(--mono); font-size: 0.6rem; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.6;
+    }
+    .color-band {
+      display: flex; gap: 0; margin-bottom: 3rem; border-radius: 2px; overflow: hidden;
+      height: 100px;
+    }
+    .color-band-swatch {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 0.75rem;
+    }
+    .cbs-name { font-family: var(--mono); font-size: 0.6rem; opacity: 0.8; margin-bottom: 0.15rem; }
+    .cbs-hex { font-family: var(--mono); font-size: 0.7rem; font-weight: 500; }
+    .photo-direction {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--rule-light); border-radius: 2px; overflow: hidden;
+      margin-bottom: 3rem;
+    }
+    .pd-cell {
+      aspect-ratio: 4/3; background: var(--navy); position: relative;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .pd-cell .pd-icon { font-size: 2rem; color: var(--white); opacity: 0.15; }
+    .pd-cell .pd-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(15,28,46,0.85); color: var(--white);
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 0.5rem 0.75rem;
+    }
+    .brand-notes { }
+    .brand-note { padding: 1.25rem 0; border-bottom: 1px solid var(--rule-light); }
+    .brand-note:last-child { border-bottom: none; }
+    .brand-note h4 {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .brand-note p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ══════════════ METRICS ══════════════ */
+    section#metrics {
+      background: var(--navy); color: var(--white);
+      padding: calc(var(--pad) * 0.8) 0;
+    }
+    section#metrics .section-header { border-top: 1px solid rgba(255,255,255,0.15); }
+    section#metrics .section-title { color: var(--white); }
+    section#metrics .section-kicker { color: rgba(255,255,255,0.5); }
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+      margin-top: 2rem;
+    }
+    .mr-item { background: var(--navy); padding: 1.5rem; text-align: center; }
+    .mr-num { font-family: var(--serif); font-size: 1.75rem; margin-bottom: 0.2rem; }
+    .mr-label { font-size: 0.78rem; opacity: 0.6; }
+    .mr-target {
+      font-family: var(--mono); font-size: 0.6rem; opacity: 0.4;
+      margin-top: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .metrics-note {
+      margin-top: 1.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer {
+      background: var(--navy); color: var(--white);
+      padding: 2.5rem var(--pad) 1.5rem; text-align: center;
+    }
+    .footer-content { max-width: var(--max); margin: 0 auto; }
+    .footer-cta {
+      display: inline-block; background: var(--white); color: var(--navy);
+      padding: 0.75rem 1.5rem; border-radius: 2px; text-decoration: none;
+      font-weight: 500; margin-bottom: 1.5rem; font-family: var(--sans);
+      transition: background 200ms var(--ease);
+    }
+    .footer-cta:hover { background: var(--cream); }
+    .footer-bottom {
+      padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.75rem; opacity: 0.5;
+    }
+    .footer-logo { height: 18px; margin-bottom: 0.75rem; }
+    .footer-logo img { height: 100%; width: auto; margin: 0 auto; }
+
+    /* ── Animations ── */
+    .reveal { opacity: 0; transform: translateY(16px); }
+    .reveal.active { animation: revealIn 0.5s var(--ease) forwards; }
+    @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav.top-bar { height: auto; padding: 0.6rem var(--pad); flex-wrap: wrap; }
+      .nav-links { width: 100%; margin-left: 0; margin-top: 0.4rem; gap: 1.25rem; }
+      .gallery-wall { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+      .specs-grid { grid-template-columns: 1fr 1fr; }
+      .starter-grid { grid-template-columns: 1fr; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      .hero-strip { flex-wrap: wrap; }
+      .hero-strip .hs-item { flex: 0 0 50%; padding: 0.75rem 0; }
+      .hero-strip .hs-item:not(:last-child) { border-right: none; }
+      .type-row { flex-direction: column; gap: 0.5rem; }
+      .type-meta { width: auto; text-align: left; }
+      .photo-direction { grid-template-columns: 1fr; }
+      .color-band { height: 80px; }
+    }
+    @media (max-width: 480px) {
+      .gallery-wall { max-width: 100%; }
+      .specs-grid { grid-template-columns: 1fr; }
+      .metrics-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="top-bar">
+    <div class="nav-logo">
+      <img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC">
+    </div>
+    <div class="nav-links">
+      <a href="brand-house.html">Back to Brand House</a>
+      <a href="#strategy">Strategy</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#social">Social</a>
+      <a href="#email">Email</a>
+      <a href="#events">Events</a>
+      <a href="#specs">Specs</a>
+      <a href="#brand">Brand</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+      <div class="reveal">
+        <h1 class="hero-title">National Small Business Week</h1>
+        <p class="hero-date">May 4–10, 2026</p>
+        <p class="hero-tagline">A full week celebrating the entrepreneurs, advisors, and communities that power Northern California.</p>
+        <p class="hero-sba-note">In partnership with the U.S. Small Business Administration</p>
+        <div class="hero-strip">
+          <div class="hs-item"><div class="hs-num">14</div><div class="hs-label">Centers</div></div>
+          <div class="hs-item"><div class="hs-num">$240M+</div><div class="hs-label">Capital Accessed</div></div>
+          <div class="hs-item"><div class="hs-num">8,500+</div><div class="hs-label">Clients Served</div></div>
+          <div class="hs-item"><div class="hs-num">1,900+</div><div class="hs-label">Jobs Created</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ STRATEGY ═══ -->
+    <section id="strategy">
+      <div class="section-header reveal">
+        <span class="section-kicker">Campaign Framework</span>
+        <h2 class="section-title">Strategy</h2>
+      </div>
+      <div class="strategy-goals reveal">
+        <div class="goal-item">
+          <div class="goal-number">01</div>
+          <div class="goal-content">
+            <h3>Visibility</h3>
+            <p>Elevate NorCal SBDC's role in small business success. Media, social, partner amplification.</p>
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-number">02</div>
+          <div class="goal-content">
+            <h3>Engagement</h3>
+            <p>Drive workshop registrations, consultation bookings, and social engagement across all 14 centers.</p>
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-number">03</div>
+          <div class="goal-content">
+            <h3>Impact</h3>
+            <p>Showcase measurable outcomes: capital accessed, jobs created, businesses started.</p>
+          </div>
+        </div>
+      </div>
+      <div class="key-messages reveal">
+        <h3>Key Messages</h3>
+        <div class="km-item">"Behind every thriving small business is a trusted advisor. NorCal SBDC has been that partner for 8,500+ entrepreneurs."</div>
+        <div class="km-item">"From startup to scale-up, NorCal SBDC provides no-fee, expert business consulting across Northern California."</div>
+        <div class="km-item">"This National Small Business Week, we celebrate the entrepreneurs — and the advisors — who power our communities."</div>
+        <div class="hashtags">#SmallBusinessWeek  #NorCalSBDC  #YourBusinessBetter  #NSBW2026  #SBAGov</div>
+      </div>
+    </section>
+
+    <!-- ═══ CALENDAR ═══ -->
+    <section id="calendar">
+      <div class="section-header reveal">
+        <span class="section-kicker">Week of May 4–10</span>
+        <h2 class="section-title">Content Calendar</h2>
+      </div>
+      <div class="timeline reveal">
+        <div class="tl-node highlight">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Monday</h3>
+          <p class="tl-theme">Campaign Launch</p>
+          <p class="tl-desc">Announce NSBW, unveil hero graphic, preview the week ahead. Coordinated 9am launch across all centers.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Instagram</span><span class="tl-tag">LinkedIn</span><span class="tl-tag">Facebook</span>
+          </div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Tuesday</h3>
+          <p class="tl-theme">Client Spotlight</p>
+          <p class="tl-desc">Feature a Signature Story. Client testimonial video, quote graphic, founder interview.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Instagram</span><span class="tl-tag">LinkedIn</span><span class="tl-tag">Facebook</span>
+          </div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Wednesday</h3>
+          <p class="tl-theme">Advisor Appreciation</p>
+          <p class="tl-desc">Spotlight SBDC advisors. Behind-the-scenes content, "Meet the Advisor" profiles, team photos.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Instagram</span><span class="tl-tag">LinkedIn</span><span class="tl-tag">X</span>
+          </div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Thursday</h3>
+          <p class="tl-theme">Data & Impact</p>
+          <p class="tl-desc">Share the numbers. Impact infographics, stat cards, data visualization carousel.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">LinkedIn</span><span class="tl-tag">Facebook</span><span class="tl-tag">X</span>
+          </div>
+        </div>
+        <div class="tl-node highlight">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Friday</h3>
+          <p class="tl-theme">Community & Celebration</p>
+          <p class="tl-desc">Week wrap-up. Award winners, partner shoutouts, celebration video, thank-you message.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Instagram</span><span class="tl-tag">LinkedIn</span><span class="tl-tag">Facebook</span>
+          </div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <h3 class="tl-header">Weekend</h3>
+          <p class="tl-theme">Extended Reach</p>
+          <p class="tl-desc">Amplify top-performing posts. Re-share stories, thank supporters, consultation CTA.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Instagram</span><span class="tl-tag">Facebook</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SOCIAL — ART GALLERY ═══ -->
+    <section id="social">
+      <div class="section-header reveal">
+        <span class="section-kicker">Ready-to-Post Content</span>
+        <h2 class="section-title">Social Media Kit</h2>
+      </div>
+
+      <div class="gallery-wall reveal">
+        <!-- Post 1: Launch -->
+        <div class="gallery-frame">
+          <div class="artwork navy-bg">
+            <iconify-icon class="bg-icon top-right" icon="carbon:flag"></iconify-icon>
+            <iconify-icon class="bg-icon bottom-left" icon="carbon:star-filled"></iconify-icon>
+            <div class="art-logo-mark">NorCal SBDC</div>
+            <div class="art-headline">It's National Small Business Week</div>
+            <p class="art-sub">May 4–10 | Celebrating the entrepreneurs powering NorCal.</p>
+            <div class="art-badge"><span>May 4–10, 2026</span><span>#NSBW2026</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Campaign Launch</div>
+            <div class="plaque-detail">IG / LI / FB / X &middot; Monday</div>
+          </div>
+        </div>
+
+        <!-- Post 2: Impact Stat -->
+        <div class="gallery-frame">
+          <div class="artwork brick-bg">
+            <iconify-icon class="bg-icon center" icon="carbon:finance"></iconify-icon>
+            <div class="art-logo-mark">NorCal SBDC</div>
+            <div class="art-stat">$240M+</div>
+            <p class="art-sub">Capital accessed by NorCal SBDC clients</p>
+            <div class="art-badge"><span>By the Numbers</span><span>#SmallBusinessWeek</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Capital Impact</div>
+            <div class="plaque-detail">LI / FB / IG &middot; Thursday</div>
+          </div>
+        </div>
+
+        <!-- Post 3: Client Quote -->
+        <div class="gallery-frame">
+          <div class="artwork cream-bg">
+            <iconify-icon class="bg-icon top-right" icon="carbon:quotes"></iconify-icon>
+            <div class="art-logo-mark" style="color: var(--text);">NorCal SBDC</div>
+            <div class="art-quote">"NorCal SBDC showed me how to turn my passion into a sustainable business."</div>
+            <p class="art-sub" style="color: var(--text-secondary);">— NorCal SBDC Client</p>
+            <div class="art-badge" style="color: var(--text-tertiary);"><span>Client Story</span><span>#YourBusinessBetter</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Client Testimonial</div>
+            <div class="plaque-detail">IG / FB &middot; Tuesday</div>
+          </div>
+        </div>
+
+        <!-- Post 4: Advisor Spotlight -->
+        <div class="gallery-frame">
+          <div class="artwork pool-bg">
+            <iconify-icon class="bg-icon center" icon="carbon:user-avatar-filled-alt"></iconify-icon>
+            <div class="art-logo-mark">NorCal SBDC</div>
+            <div class="art-headline" style="font-size: 1.5rem;">Meet Our<br>SBDC Advisor</div>
+            <p class="art-sub">Championing local entrepreneurship</p>
+            <div class="art-badge"><span>Advisor Profile</span><span>#NorCalSBDC</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Advisor Spotlight</div>
+            <div class="plaque-detail">LI / IG &middot; Wednesday</div>
+          </div>
+        </div>
+
+        <!-- Post 5: Jobs Created -->
+        <div class="gallery-frame">
+          <div class="artwork white-bg">
+            <iconify-icon class="bg-icon bottom-left" icon="carbon:group"></iconify-icon>
+            <div class="art-logo-mark" style="color: var(--text);">NorCal SBDC</div>
+            <div class="art-stat" style="color: var(--brick); font-size: 2.5rem;">1,900+</div>
+            <p class="art-sub" style="color: var(--text-secondary);">Jobs created and retained by our clients across Northern California</p>
+            <div class="art-badge" style="color: var(--text-tertiary);"><span>Impact</span><span>#SBAGov</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Jobs Impact</div>
+            <div class="plaque-detail">LI / X &middot; Thursday</div>
+          </div>
+        </div>
+
+        <!-- Post 6: Thank You -->
+        <div class="gallery-frame">
+          <div class="artwork royal-bg">
+            <iconify-icon class="bg-icon top-right" icon="carbon:favorite-filled"></iconify-icon>
+            <iconify-icon class="bg-icon bottom-left" icon="carbon:partnership"></iconify-icon>
+            <div class="art-logo-mark">NorCal SBDC</div>
+            <div class="art-headline">Thank You</div>
+            <p class="art-sub">Here's to the entrepreneurs, advisors, and partners who make NorCal thrive.</p>
+            <div class="art-badge"><span>Celebration</span><span>#SmallBusinessWeek</span></div>
+          </div>
+          <div class="plaque">
+            <div class="plaque-title">Week Wrap-Up</div>
+            <div class="plaque-detail">IG / FB &middot; Friday</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Captions -->
+      <div class="captions-section reveal">
+        <h3>Copy-Paste Captions</h3>
+        <div class="caption-block">
+          <span class="caption-label">Campaign Launch</span>
+          <div class="caption-text">This National Small Business Week, we're celebrating the entrepreneurs and advisors who power Northern California. For over 40 years, NorCal SBDC has helped 8,500+ small business owners access capital, grow teams, and build dreams. No-fee consulting. Real results.
+
+Join us May 4–10 for workshops, networking, and inspiration.
+
+#SmallBusinessWeek #NorCalSBDC #YourBusinessBetter #NSBW2026</div>
+        </div>
+        <div class="caption-block">
+          <span class="caption-label">Client Spotlight</span>
+          <div class="caption-text">Meet [Client Name], founder of [Business]. From idea to impact — NorCal SBDC was there every step of the way. Through no-fee consulting and strategic planning, [Client] grew [Business] and created [X] local jobs.
+
+What's your entrepreneurial story? Link in bio to connect with an advisor.
+
+#SmallBusinessWeek #NorCalSBDC</div>
+        </div>
+        <div class="caption-block">
+          <span class="caption-label">Impact Stats</span>
+          <div class="caption-text">$240M+ in capital accessed. 8,500+ clients served. 1,900+ jobs created. 14 centers across NorCal.
+
+But the real story? It's the businesses that thrived. The founders who achieved their goals. The communities strengthened by local entrepreneurship.
+
+No-fee consulting to help you grow. Link in bio.
+
+#SmallBusinessWeek #SBAGov #NorCalSBDC</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EMAIL ═══ -->
+    <section id="email">
+      <div class="section-header reveal">
+        <span class="section-kicker">Campaign Communications</span>
+        <h2 class="section-title">Email Templates</h2>
+      </div>
+      <div class="email-mockups reveal">
+        <!-- Email 1: Pre-Week -->
+        <div class="email-mockup">
+          <span class="email-label">Email 01 — Pre-Week Announcement</span>
+          <div class="email-container">
+            <div class="email-header">
+              <h3>National Small Business Week</h3>
+              <p class="email-preview">May 4–10 | Celebrating Entrepreneurs & Advisors</p>
+            </div>
+            <div class="email-body">
+              <p>Hi [First Name],</p>
+              <p>This week, we're celebrating something special: YOU. The entrepreneurs who dream big. The small business owners who power Northern California.</p>
+              <h4>What's Happening</h4>
+              <p>National Small Business Week is May 4–10, and NorCal SBDC is marking the occasion with workshops, spotlights, and stories celebrating our entrepreneurial community.</p>
+              <ul>
+                <li>No-fee workshops on capital access and growth strategies</li>
+                <li>Virtual networking mixer (Wednesday, 5pm PT)</li>
+                <li>Award ceremony honoring local entrepreneurs (Friday)</li>
+                <li>Daily client spotlights across social</li>
+              </ul>
+              <h4>Get Involved</h4>
+              <p>Whether you're a current client, considering our services, or passionate about local entrepreneurship — there's a place for you this week.</p>
+              <p style="margin-top: 1.25rem;"><a href="#" class="email-cta">Learn About Events</a></p>
+              <p style="margin-top: 1.25rem;">In partnership,<br><strong>NorCal SBDC</strong><br>Your Business, Better.</p>
+            </div>
+            <div class="email-footer">
+              <p>&copy; 2026 NorCal SBDC. All rights reserved. | <a href="#">Manage Preferences</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email 2: Mid-Week -->
+        <div class="email-mockup">
+          <span class="email-label">Email 02 — Mid-Week Client Spotlight</span>
+          <div class="email-container">
+            <div class="email-header">
+              <h3>This Week's Spotlight</h3>
+              <p class="email-preview">A founder's journey to scale-up success</p>
+            </div>
+            <div class="email-body">
+              <p>Hi [First Name],</p>
+              <p>During National Small Business Week, we're sharing the stories of entrepreneurs who've built thriving businesses with help from NorCal SBDC.</p>
+              <h4>Meet [Founder Name]</h4>
+              <p>[She/He/They] started [Business] with a clear vision but needed expert guidance to scale. Through no-fee consulting, [she/he/they] learned how to secure capital, manage growth, and build a sustainable team.</p>
+              <ul>
+                <li>Grew revenue from $X to $2M+</li>
+                <li>Created 15 local jobs</li>
+                <li>Accessed $500K in capital through SBA programs</li>
+                <li>Expanded to 3 locations across NorCal</li>
+              </ul>
+              <h4>Your Story Matters Too</h4>
+              <p>Whether you're starting out or scaling up, NorCal SBDC provides the no-fee expertise you need. We've helped 8,500+ entrepreneurs.</p>
+              <p style="margin-top: 1.25rem;"><a href="#" class="email-cta">Book a No-Fee Consultation</a></p>
+              <p style="margin-top: 1.25rem;">Best,<br><strong>NorCal SBDC Team</strong></p>
+            </div>
+            <div class="email-footer">
+              <p>&copy; 2026 NorCal SBDC. All rights reserved. | <a href="#">Manage Preferences</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email 3: Post-Week -->
+        <div class="email-mockup">
+          <span class="email-label">Email 03 — Post-Week Recap</span>
+          <div class="email-container">
+            <div class="email-header">
+              <h3>NSBW 2026 Recap</h3>
+              <p class="email-preview">Here's what we celebrated together</p>
+            </div>
+            <div class="email-body">
+              <p>Hi [First Name],</p>
+              <p>What a week. National Small Business Week 2026 brought our entire entrepreneurial community together.</p>
+              <h4>By the Numbers</h4>
+              <ul>
+                <li>[X] workshop attendees across 14 centers</li>
+                <li>[X] social media interactions</li>
+                <li>[X] new consultation bookings</li>
+                <li>[X] entrepreneurs honored at our awards ceremony</li>
+              </ul>
+              <h4>What's Next</h4>
+              <p>NSBW may be over, but our commitment to your success never stops. No matter the time of year, NorCal SBDC is here with no-fee consulting, workshops, and resources tailored to your goals.</p>
+              <p style="margin-top: 1.25rem;"><a href="#" class="email-cta">Explore Our Services</a></p>
+              <p style="margin-top: 1.25rem;">Until next year,<br><strong>NorCal SBDC</strong><br>Your Business, Better.</p>
+            </div>
+            <div class="email-footer">
+              <p>&copy; 2026 NorCal SBDC. All rights reserved. | <a href="#">Manage Preferences</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EVENTS — STARTER KIT ═══ -->
+    <section id="events">
+      <div class="section-header reveal">
+        <span class="section-kicker">Week-Long Activities</span>
+        <h2 class="section-title">Event Starter Kit</h2>
+      </div>
+      <div class="reveal">
+        <p class="starter-intro">NSBW is a full week — centers should pick 2–4 activities that work for their team and audience. Mix in-person with virtual for maximum reach.</p>
+        <div class="starter-grid">
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:education"></iconify-icon>
+            <div class="si-name">Capital Access Workshop</div>
+            <div class="si-desc">90-min hybrid session on SBA loans, grants, and alternative funding. 60 min content + 30 min Q&A. Great for startup and growth-stage founders.</div>
+            <div class="si-tags"><span class="si-tag">Hybrid</span><span class="si-tag">90 min</span><span class="si-tag">Mon/Tue</span></div>
+          </div>
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:growth"></iconify-icon>
+            <div class="si-name">Scaling Your Team Webinar</div>
+            <div class="si-desc">Virtual-only session on hiring, systems, and sustainable growth. 45 min content + 15 min Q&A. Target scale-up and mid-market founders.</div>
+            <div class="si-tags"><span class="si-tag">Virtual</span><span class="si-tag">60 min</span><span class="si-tag">Wed</span></div>
+          </div>
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:events"></iconify-icon>
+            <div class="si-name">Networking Mixer</div>
+            <div class="si-desc">Evening event — founders, advisors, and partners. Light appetizers, informal networking. 2 hours, low-lift, high-energy.</div>
+            <div class="si-tags"><span class="si-tag">In-Person</span><span class="si-tag">Evening</span><span class="si-tag">Wed</span></div>
+          </div>
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:trophy"></iconify-icon>
+            <div class="si-name">Awards Ceremony</div>
+            <div class="si-desc">Honor exceptional entrepreneurs with hybrid ceremony. Nominee spotlights, keynote, recognition. Livestream for virtual attendees.</div>
+            <div class="si-tags"><span class="si-tag">Hybrid</span><span class="si-tag">Evening</span><span class="si-tag">Fri</span></div>
+          </div>
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:microphone"></iconify-icon>
+            <div class="si-name">Client Story Videos</div>
+            <div class="si-desc">Pre-record 60-second clips with 3–5 clients sharing their SBDC experience. Release one per day across social channels.</div>
+            <div class="si-tags"><span class="si-tag">Content</span><span class="si-tag">Pre-Record</span><span class="si-tag">Daily</span></div>
+          </div>
+          <div class="starter-idea">
+            <iconify-icon class="si-icon" icon="carbon:phone"></iconify-icon>
+            <div class="si-name">Social Media Takeover</div>
+            <div class="si-desc">Different center takes over the NorCal SBDC account each day. Behind-the-scenes, advisor intros, local flavor.</div>
+            <div class="si-tags"><span class="si-tag">Digital</span><span class="si-tag">All Week</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ GRAPHIC SPECS ═══ -->
+    <section id="specs">
+      <div class="section-header reveal">
+        <span class="section-kicker">Asset Dimensions</span>
+        <h2 class="section-title">Graphic Specifications</h2>
+      </div>
+      <div class="specs-grid reveal">
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 1 / 1;">
+            <iconify-icon class="spec-bg-icon" icon="carbon:image" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Social Post</div>
+            <div class="spec-rect-dims">1080 &times; 1080</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">Feed Post</div>
+            <div class="spec-use">IG / FB / LI</div>
+          </div>
+        </div>
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 16 / 9;">
+            <iconify-icon class="spec-bg-icon" icon="carbon:presentation-file" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Event Banner</div>
+            <div class="spec-rect-dims">1920 &times; 1080</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">Landscape Banner</div>
+            <div class="spec-use">Print / Digital / Zoom BG</div>
+          </div>
+        </div>
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 9 / 16; max-height: 320px;">
+            <iconify-icon class="spec-bg-icon" icon="carbon:phone" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Story / Reel</div>
+            <div class="spec-rect-dims">1080 &times; 1920</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">IG / FB Story</div>
+            <div class="spec-use">Daily Content / Teasers</div>
+          </div>
+        </div>
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 1.91 / 1;">
+            <iconify-icon class="spec-bg-icon" icon="carbon:link" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Link Preview</div>
+            <div class="spec-rect-dims">1200 &times; 628</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">OG / Meta Image</div>
+            <div class="spec-use">URL Shares / Registration</div>
+          </div>
+        </div>
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 3 / 1;">
+            <iconify-icon class="spec-bg-icon" icon="carbon:email" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Email Header</div>
+            <div class="spec-rect-dims">600 &times; 200</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">Email Banner</div>
+            <div class="spec-use">Campaign Emails</div>
+          </div>
+        </div>
+        <div class="spec-mockup">
+          <div class="spec-rect" style="aspect-ratio: 1 / 1; background: linear-gradient(135deg, var(--navy) 0%, #1a2e4a 100%);">
+            <iconify-icon class="spec-bg-icon" icon="carbon:trophy" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></iconify-icon>
+            <div class="spec-rect-label">Nominee Card</div>
+            <div class="spec-rect-dims">1080 &times; 1080</div>
+          </div>
+          <div class="spec-info">
+            <div class="spec-name">Award Spotlight</div>
+            <div class="spec-use">Nominee Series / Awards</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ BRAND — VISUAL FIRST ═══ -->
+    <section id="brand">
+      <div class="section-header reveal">
+        <span class="section-kicker">Design Direction</span>
+        <h2 class="section-title">Brand Assets</h2>
+      </div>
+
+      <!-- Color Band -->
+      <div class="reveal">
+        <div class="color-band">
+          <div class="color-band-swatch" style="background: var(--navy); color: var(--white);">
+            <div class="cbs-name">Navy</div>
+            <div class="cbs-hex">#0f1c2e</div>
+          </div>
+          <div class="color-band-swatch" style="background: var(--brick); color: var(--white);">
+            <div class="cbs-name">Brick</div>
+            <div class="cbs-hex">#a82039</div>
+          </div>
+          <div class="color-band-swatch" style="background: var(--royal); color: var(--white);">
+            <div class="cbs-name">Royal</div>
+            <div class="cbs-hex">#1D5AA7</div>
+          </div>
+          <div class="color-band-swatch" style="background: var(--pool); color: var(--white);">
+            <div class="cbs-name">Pool</div>
+            <div class="cbs-hex">#8FC5D9</div>
+          </div>
+          <div class="color-band-swatch" style="background: var(--cream); color: var(--text);">
+            <div class="cbs-name">Cream</div>
+            <div class="cbs-hex">#f0efeb</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type Specimen -->
+      <div class="type-specimen reveal">
+        <div class="type-row">
+          <div class="type-sample" style="font-family: var(--serif); font-size: 2.25rem; line-height: 1.1;">Small Business Week 2026</div>
+          <div class="type-meta">Tobias Regular<br>Headlines</div>
+        </div>
+        <div class="type-row">
+          <div class="type-sample" style="font-family: var(--serif); font-style: italic; font-size: 1.5rem; line-height: 1.3; color: var(--text-secondary);">"Your business, better."</div>
+          <div class="type-meta">Tobias Italic<br>Pull Quotes</div>
+        </div>
+        <div class="type-row">
+          <div class="type-sample" style="font-family: var(--sans); font-weight: 300; font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">Behind every thriving small business is a trusted advisor. NorCal SBDC has been that partner for 8,500+ entrepreneurs.</div>
+          <div class="type-meta">GT America 300<br>Body Copy</div>
+        </div>
+        <div class="type-row">
+          <div class="type-sample" style="font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary);">Campaign Framework &middot; May 2026</div>
+          <div class="type-meta">GT America Mono<br>Kickers &amp; Labels</div>
+        </div>
+      </div>
+
+      <!-- Photo Direction -->
+      <div class="reveal">
+        <div style="font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 0.75rem;">Photo Direction</div>
+        <div class="photo-direction">
+          <div class="pd-cell">
+            <iconify-icon class="pd-icon" icon="carbon:user-avatar-filled-alt"></iconify-icon>
+            <div class="pd-label">Founders at Work</div>
+          </div>
+          <div class="pd-cell" style="background: #1a2e4a;">
+            <iconify-icon class="pd-icon" icon="carbon:collaborate"></iconify-icon>
+            <div class="pd-label">Advisor Consultations</div>
+          </div>
+          <div class="pd-cell" style="background: #12243b;">
+            <iconify-icon class="pd-icon" icon="carbon:events"></iconify-icon>
+            <div class="pd-label">Workshops & Events</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand Notes -->
+      <div class="brand-notes reveal">
+        <div class="brand-note">
+          <h4>Campaign Lockup</h4>
+          <p>NorCal SBDC logo stacked above "National Small Business Week 2026." Horizontal variant for wide formats. Abbreviated "NSBW 2026" for small spaces. 20px minimum clear space.</p>
+        </div>
+        <div class="brand-note">
+          <h4>Photography</h4>
+          <p>Real over stock. Entrepreneurs in their workspaces, candid consultation moments, workshop action shots. Diverse founders reflecting NorCal's communities.</p>
+        </div>
+        <div class="brand-note">
+          <h4>SBA Co-Branding</h4>
+          <p>Include "In partnership with the U.S. Small Business Administration" on major graphics. SBA seal in hero (lower right, 120px). NorCal SBDC primary, SBA supporting.</p>
+        </div>
+        <div class="brand-note">
+          <h4>Tone & Language</h4>
+          <p>Headlines in Tobias: bold, inspirational. Body in GT America Light: clear, conversational. Always "no-fee" — never "free." Close with "Your Business, Better."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ METRICS ═══ -->
+    <section id="metrics">
+      <div class="section-header reveal">
+        <span class="section-kicker">Success Measurement</span>
+        <h2 class="section-title">Key Metrics</h2>
+      </div>
+      <div class="reveal">
+        <div class="metrics-row">
+          <div class="mr-item">
+            <div class="mr-num">250K+</div>
+            <div class="mr-label">Social Impressions</div>
+            <div class="mr-target">Target: all platforms</div>
+          </div>
+          <div class="mr-item">
+            <div class="mr-num">3.5–5%</div>
+            <div class="mr-label">Engagement Rate</div>
+            <div class="mr-target">Target: IG + LI</div>
+          </div>
+          <div class="mr-item">
+            <div class="mr-num">28–32%</div>
+            <div class="mr-label">Email Open Rate</div>
+            <div class="mr-target">Target: all sends</div>
+          </div>
+          <div class="mr-item">
+            <div class="mr-num">40–50</div>
+            <div class="mr-label">New Consultations</div>
+            <div class="mr-target">Target: bookings</div>
+          </div>
+        </div>
+        <p class="metrics-note">Track daily metrics May 4–10. Weekly summary due Friday. Post-campaign report due May 17 covering social reach, email performance, website traffic, event attendance, media mentions, and consultation pipeline. Full reporting template available in the Brand House.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="reveal">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="assets/sbdc-white-2026.png" alt="NorCal SBDC">
+        </div>
+        <a href="brand-house.html" class="footer-cta">Back to Brand House</a>
+        <div class="footer-bottom">
+          <p>&copy; 2026 NorCal Small Business Development Center. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Reveal animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  </script>
+</body>
+</html>

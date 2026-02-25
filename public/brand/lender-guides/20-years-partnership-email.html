@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Years - NorCal SBDC Partnership Email</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --navy-70: rgba(15, 28, 46, 0.7);
+            --navy-50: rgba(15, 28, 46, 0.5);
+            --navy-10: rgba(15, 28, 46, 0.1);
+            --sky: #9EC4E0;
+            --sky-30: rgba(158, 196, 224, 0.3);
+            --pool: #8FC5D9;
+            --pool-50: rgba(143, 197, 217, 0.5);
+            --pool-30: rgba(143, 197, 217, 0.3);
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+            --maroon-20: rgba(138, 36, 50, 0.2);
+            --maroon-10: rgba(138, 36, 50, 0.1);
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a1a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .section-label span { color: var(--pool); }
+
+        /* =============================================
+           EMAIL CONTAINER
+        ============================================= */
+        .email {
+            width: 600px;
+            margin: 0 auto 60px;
+            background: var(--white);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        /* =============================================
+           HEADER
+        ============================================= */
+        .email-header {
+            background: var(--navy);
+            padding: 32px 40px;
+            position: relative;
+        }
+
+        .email-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, var(--pool-30) 100%);
+            mix-blend-mode: screen;
+        }
+
+        .email-header .inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .email-header .logo {
+            height: 28px;
+        }
+
+        .email-header .date {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+            letter-spacing: 0.1em;
+        }
+
+        /* =============================================
+           HERO
+        ============================================= */
+        .email-hero {
+            background: var(--cream);
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .email-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, var(--pool-30) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, var(--maroon-10) 0%, transparent 50%);
+        }
+
+        .email-hero .inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .email-hero .year-badge {
+            display: inline-block;
+            background: var(--maroon);
+            color: var(--white);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            padding: 8px 20px;
+            margin-bottom: 24px;
+        }
+
+        .email-hero .number {
+            font-size: 140px;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            margin-bottom: 8px;
+        }
+
+        .email-hero .years {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 24px;
+        }
+
+        .email-hero .headline {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .email-hero .headline span {
+            color: var(--maroon);
+        }
+
+        /* =============================================
+           INTRO
+        ============================================= */
+        .email-intro {
+            padding: 48px 40px;
+            background: var(--white);
+        }
+
+        .email-intro p {
+            font-size: 16px;
+            color: var(--navy);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .email-intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        .email-intro .highlight {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--maroon);
+            line-height: 1.35;
+            margin: 28px 0;
+            padding-left: 20px;
+            border-left: 4px solid var(--pool);
+        }
+
+        /* =============================================
+           STATS BAR
+        ============================================= */
+        .email-stats {
+            display: flex;
+            background: var(--navy);
+            position: relative;
+        }
+
+        .email-stats::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--pool-30) 0%, transparent 50%, var(--maroon-20) 100%);
+            mix-blend-mode: screen;
+        }
+
+        .email-stats .stat {
+            flex: 1;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .email-stats .stat:not(:last-child) {
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .email-stats .stat .num {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .email-stats .stat .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-top: 8px;
+        }
+
+        /* =============================================
+           TIMELINE
+        ============================================= */
+        .email-timeline {
+            padding: 48px 40px;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .email-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 40%);
+        }
+
+        .email-timeline .inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .email-timeline .section-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 32px;
+        }
+
+        .email-timeline .milestone {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--navy-10);
+        }
+
+        .email-timeline .milestone:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .email-timeline .milestone .year {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pool);
+            background: var(--navy);
+            padding: 6px 12px;
+            height: fit-content;
+        }
+
+        .email-timeline .milestone .content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .email-timeline .milestone .content p {
+            font-size: 14px;
+            color: var(--navy-70);
+            line-height: 1.5;
+        }
+
+        /* =============================================
+           QUOTE
+        ============================================= */
+        .email-quote {
+            background: var(--maroon);
+            padding: 48px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .email-quote::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, var(--pool-50) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--navy-50) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+
+        .email-quote .inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .email-quote .mark {
+            font-size: 72px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.15);
+            line-height: 0.5;
+            margin-bottom: 16px;
+        }
+
+        .email-quote blockquote {
+            font-size: 22px;
+            font-weight: 600;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.4;
+            max-width: 440px;
+            margin: 0 auto 20px;
+        }
+
+        .email-quote .attribution {
+            font-size: 13px;
+            color: var(--pool);
+        }
+
+        .email-quote .attribution strong {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* =============================================
+           CTA
+        ============================================= */
+        .email-cta {
+            padding: 48px 40px;
+            background: var(--white);
+            text-align: center;
+        }
+
+        .email-cta h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .email-cta p {
+            font-size: 15px;
+            color: var(--navy-70);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .email-cta .button {
+            display: inline-block;
+            background: var(--maroon);
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 16px 40px;
+            letter-spacing: 0.02em;
+            position: relative;
+        }
+
+        .email-cta .button::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--pool-30) 0%, transparent 50%);
+            mix-blend-mode: overlay;
+        }
+
+        .email-cta .button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .email-cta .secondary {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--navy-50);
+        }
+
+        .email-cta .secondary a {
+            color: var(--maroon);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        .email-footer {
+            background: var(--navy);
+            padding: 40px;
+            position: relative;
+        }
+
+        .email-footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, var(--pool-30) 0%, transparent 50%);
+            mix-blend-mode: screen;
+        }
+
+        .email-footer .inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .email-footer .logo {
+            height: 32px;
+            margin-bottom: 20px;
+        }
+
+        .email-footer .tagline {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .email-footer .since {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+            letter-spacing: 0.2em;
+            margin-bottom: 24px;
+        }
+
+        .email-footer .social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .email-footer .social a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .email-footer .legal {
+            font-size: 11px;
+            color: var(--sky);
+            line-height: 1.6;
+        }
+
+        .email-footer .legal a {
+            color: var(--pool);
+            text-decoration: none;
+        }
+
+        .email-footer .color-bar {
+            display: flex;
+            margin-top: 32px;
+            height: 4px;
+        }
+
+        .email-footer .color-bar span {
+            flex: 1;
+        }
+
+        .email-footer .color-bar span:nth-child(1) { background: var(--cream); }
+        .email-footer .color-bar span:nth-child(2) { background: var(--sky); }
+        .email-footer .color-bar span:nth-child(3) { background: var(--pool); }
+        .email-footer .color-bar span:nth-child(4) { background: var(--maroon); }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <div class="section-label">04 — Partnerships <span>20 Years Anniversary Email</span></div>
+
+    <div class="email">
+        <!-- HEADER -->
+        <div class="email-header">
+            <div class="inner">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <span class="date">January 2026</span>
+            </div>
+        </div>
+
+        <!-- HERO -->
+        <div class="email-hero">
+            <div class="inner">
+                <div class="year-badge">2006 — 2026</div>
+                <div class="number">20</div>
+                <div class="years">Years</div>
+                <h1 class="headline">Two decades of dreams<br><span>that didn't die on a spreadsheet.</span></h1>
+            </div>
+        </div>
+
+        <!-- INTRO -->
+        <div class="email-intro">
+            <p>Twenty years ago, we opened our doors with a simple belief: every entrepreneur deserves someone in their corner.</p>
+
+            <p class="highlight">Not a website. Not a chatbot. A person. Someone who picks up the phone. Someone who stays late. Someone who cares whether your dream survives.</p>
+
+            <p>That belief hasn't changed. What's changed is how many people we've been able to help because of partners like you.</p>
+        </div>
+
+        <!-- STATS -->
+        <div class="email-stats">
+            <div class="stat">
+                <div class="num">[XX]K+</div>
+                <div class="label">Clients Served</div>
+            </div>
+            <div class="stat">
+                <div class="num">$[X]B</div>
+                <div class="label">Capital Accessed</div>
+            </div>
+            <div class="stat">
+                <div class="num">[XX]K</div>
+                <div class="label">Jobs Created</div>
+            </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="email-timeline">
+            <div class="inner">
+                <div class="section-title">The Journey</div>
+
+                <div class="milestone">
+                    <div class="year">2006</div>
+                    <div class="content">
+                        <h4>We opened our doors</h4>
+                        <p>One center. A handful of advisors. A mission to help small businesses succeed.</p>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <div class="year">2010</div>
+                    <div class="content">
+                        <h4>Network expansion</h4>
+                        <p>Grew to serve multiple counties across Northern California.</p>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <div class="year">2020</div>
+                    <div class="content">
+                        <h4>COVID response</h4>
+                        <p>Pivoted overnight. Helped thousands navigate PPP, EIDL, and survival.</p>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <div class="year">2026</div>
+                    <div class="content">
+                        <h4>20 years strong</h4>
+                        <p>18 centers. 36 counties. 1.64 million small businesses we're here to serve.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUOTE -->
+        <div class="email-quote">
+            <div class="inner">
+                <div class="mark">"</div>
+                <blockquote>They don't say "the program helped." They say "Maria helped." That's what twenty years of this work looks like.</blockquote>
+                <p class="attribution"><strong>[Director Name]</strong>, Executive Director</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="email-cta">
+            <h3>Here's to the next 20.</h3>
+            <p>We're celebrating all year. Events, stories, and a few surprises. Want in?</p>
+            <a href="#" class="button"><span>See What's Coming</span></a>
+            <p class="secondary">Or <a href="#">share your SBDC story</a> with us.</p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="email-footer">
+            <div class="inner">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <p class="tagline">Your Business People.</p>
+                <p class="since">SINCE 2006</p>
+
+                <div class="social">
+                    <a href="#">Li</a>
+                    <a href="#">Fb</a>
+                    <a href="#">Ig</a>
+                    <a href="#">X</a>
+                </div>
+
+                <p class="legal">
+                    NorCal SBDC Network Lead Center<br>
+                    [Address] · [City, State ZIP]<br><br>
+                    <a href="#">Unsubscribe</a> · <a href="#">View in browser</a> · <a href="#">Privacy</a>
+                </p>
+
+                <div class="color-bar">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

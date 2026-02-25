@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Case for Simplification | NorCal SBDC 20th Anniversary Logo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #1e3a5f;
+            --electric: #0066ff;
+            --wine: #b54a4a;
+            --black: #0a0a0f;
+            --ice: #f0f4f8;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, sans-serif;
+            background: var(--black);
+            color: white;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            color: #444;
+        }
+        
+        /* ========================================
+           SLIDE 1: TITLE
+        ======================================== */
+        
+        .slide-1 {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            text-align: center;
+        }
+        
+        .slide-1 .overline {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--electric);
+            margin-bottom: 24px;
+        }
+        
+        .slide-1 h1 {
+            font-family: Georgia, serif;
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 32px;
+        }
+        
+        .slide-1 h1 em {
+            font-style: italic;
+            color: var(--electric);
+        }
+        
+        .slide-1 .subtitle {
+            font-size: 20px;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .slide-1 .logo-preview {
+            margin-top: 60px;
+        }
+        
+        .slide-1 .logo-preview img {
+            height: 80px;
+            width: auto;
+        }
+        
+        /* ========================================
+           SLIDE 2: THE PROBLEM
+        ======================================== */
+        
+        .slide-2 {
+            background: #fff;
+            color: var(--black);
+        }
+        
+        .slide-2 .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .slide-2 .text h2 {
+            font-family: Georgia, serif;
+            font-size: 48px;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 32px;
+        }
+        
+        .slide-2 .text h2 em {
+            font-style: italic;
+            color: var(--wine);
+        }
+        
+        .slide-2 .text p {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        .slide-2 .logos {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            padding: 40px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .slide-2 .logos img {
+            max-width: 100%;
+            height: auto;
+            max-height: 120px;
+            object-fit: contain;
+        }
+        
+        .slide-2 .logo-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .problem-list {
+            margin-top: 32px;
+            list-style: none;
+        }
+        
+        .problem-list li {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            color: var(--wine);
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .problem-list li::before {
+            content: "×";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        /* ========================================
+           SLIDE 3: THE SOLUTION
+        ======================================== */
+        
+        .slide-3 {
+            background: var(--electric);
+            color: white;
+        }
+        
+        .slide-3 .content {
+            text-align: center;
+        }
+        
+        .slide-3 h2 {
+            font-family: Georgia, serif;
+            font-size: 56px;
+            font-weight: 400;
+            margin-bottom: 60px;
+        }
+        
+        .slide-3 .comparison {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .slide-3 .logo-box {
+            padding: 48px;
+            border-radius: 8px;
+        }
+        
+        .slide-3 .logo-box.old {
+            background: rgba(0,0,0,0.2);
+            opacity: 0.6;
+        }
+        
+        .slide-3 .logo-box.new {
+            background: white;
+        }
+        
+        .slide-3 .logo-box img {
+            height: 100px;
+            width: auto;
+        }
+        
+        .slide-3 .logo-box .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+        
+        .slide-3 .logo-box.new .label {
+            color: var(--electric);
+        }
+        
+        .slide-3 .arrow {
+            font-size: 48px;
+            opacity: 0.5;
+        }
+        
+        .slide-3 .stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 60px;
+        }
+        
+        .slide-3 .stat {
+            text-align: center;
+        }
+        
+        .slide-3 .stat-number {
+            font-family: Georgia, serif;
+            font-size: 64px;
+            font-weight: 400;
+        }
+        
+        .slide-3 .stat-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+        
+        /* ========================================
+           SLIDE 4: WHY NOW
+        ======================================== */
+        
+        .slide-4 {
+            background: var(--black);
+        }
+        
+        .slide-4 .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .slide-4 h2 {
+            font-family: Georgia, serif;
+            font-size: 120px;
+            font-weight: 400;
+            line-height: 0.9;
+            color: var(--electric);
+        }
+        
+        .slide-4 h2 span {
+            display: block;
+            font-size: 32px;
+            color: white;
+            margin-top: 16px;
+            letter-spacing: 0.05em;
+        }
+        
+        .slide-4 .reasons {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .slide-4 .reason {
+            padding-left: 24px;
+            border-left: 2px solid var(--electric);
+        }
+        
+        .slide-4 .reason h3 {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--electric);
+            margin-bottom: 8px;
+        }
+        
+        .slide-4 .reason p {
+            font-size: 18px;
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        /* ========================================
+           SLIDE 5: THE EVIDENCE
+        ======================================== */
+        
+        .slide-5 {
+            background: #fff;
+            color: var(--black);
+        }
+        
+        .slide-5 h2 {
+            font-family: Georgia, serif;
+            font-size: 48px;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        
+        .slide-5 .subtitle {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 60px;
+        }
+        
+        .slide-5 .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+        
+        .slide-5 .logo-card {
+            background: #0a0a0f;
+            padding: 40px 24px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .slide-5 .logo-card img {
+            height: 60px;
+            width: auto;
+            margin-bottom: 16px;
+        }
+        
+        .slide-5 .logo-card .name {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        
+        .slide-5 .takeaway {
+            margin-top: 60px;
+            padding: 32px;
+            background: var(--electric);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .slide-5 .takeaway p {
+            font-family: Georgia, serif;
+            font-size: 24px;
+            font-style: italic;
+        }
+        
+        /* ========================================
+           SLIDE 6: CLOSE
+        ======================================== */
+        
+        .slide-6 {
+            background: linear-gradient(135deg, var(--navy) 0%, #0a1628 100%);
+            text-align: center;
+        }
+        
+        .slide-6 .logo-large {
+            margin-bottom: 60px;
+        }
+        
+        .slide-6 .logo-large img {
+            height: 120px;
+            width: auto;
+        }
+        
+        .slide-6 h2 {
+            font-family: Georgia, serif;
+            font-size: 48px;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+        
+        .slide-6 h2 em {
+            font-style: italic;
+            color: var(--electric);
+        }
+        
+        .slide-6 .tagline {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 40px;
+        }
+        
+        .slide-6 .benefits {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+        
+        .slide-6 .benefit {
+            text-align: center;
+        }
+        
+        .slide-6 .benefit-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .slide-6 .benefit p {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #888;
+        }
+        
+        /* Navigation hint */
+        .scroll-hint {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide slide-1">
+        <div class="slide-number">01 / 06</div>
+        <div class="overline">20th Anniversary · Logo Proposal</div>
+        <h1>The Case for<br><em>Simplification</em></h1>
+        <p class="subtitle">Why decluttering our logo isn't losing identity—it's finally finding it.</p>
+        <div class="logo-preview">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC">
+        </div>
+    </section>
+    
+    <!-- SLIDE 2: THE PROBLEM -->
+    <section class="slide slide-2">
+        <div class="slide-number" style="color: #ccc;">02 / 06</div>
+        <div class="content">
+            <div class="text">
+                <h2>Our current logo asks too much of <em>everyone</em></h2>
+                <p>Four levels of hierarchy. Three colors. Two parent organizations. One confused audience.</p>
+                <p>Every time someone sees our logo, their eye has to navigate: America's → SBDC → California → Northern CA Network. That's a lot of cognitive load for a brand that should feel <strong>immediate</strong>.</p>
+                
+                <ul class="problem-list">
+                    <li>4 text elements competing for attention</li>
+                    <li>Too small at social media sizes</li>
+                    <li>Red bar creates visual noise</li>
+                    <li>Doesn't work in single-color applications</li>
+                    <li>Individual centers add MORE complexity</li>
+                </ul>
+            </div>
+            <div class="logos">
+                <div>
+                    <div class="logo-label">Current Network Logo</div>
+                    <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" alt="Current Logo">
+                </div>
+                <div>
+                    <div class="logo-label">Center Example: Marin</div>
+                    <img src="https://www.marinsbdc.org/wp-content/uploads/sites/9/2021/04/Marin-SBDC-Logo-Color-1536x640.png" alt="Marin SBDC">
+                </div>
+                <div>
+                    <div class="logo-label">Center Example: Monarch</div>
+                    <img src="https://centralcasbdc.com/wp-content/uploads/2025/11/Monarch-SBDC_Color_Vertical-3-1536x1342.png" alt="Monarch SBDC" style="max-height: 100px;">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SLIDE 3: THE SOLUTION -->
+    <section class="slide slide-3">
+        <div class="slide-number">03 / 06</div>
+        <div class="content">
+            <h2>Simplify. Strengthen. Own it.</h2>
+            
+            <div class="comparison">
+                <div class="logo-box old">
+                    <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" alt="Old Logo">
+                    <div class="label">Before: 4 elements</div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="logo-box new">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="New Logo">
+                    <div class="label">After: 2 elements</div>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">50%</div>
+                    <div class="stat-label">Less visual clutter</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Color needed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">More versatile</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SLIDE 4: WHY NOW -->
+    <section class="slide slide-4">
+        <div class="slide-number">04 / 06</div>
+        <div class="content">
+            <div>
+                <h2>20<span>Years</span></h2>
+            </div>
+            <div class="reasons">
+                <div class="reason">
+                    <h3>Milestone Moment</h3>
+                    <p>Twenty years of service. $547M in capital accessed last year alone. This isn't a rebrand—it's an earned evolution. We've proven ourselves. Now our logo should reflect that confidence.</p>
+                </div>
+                <div class="reason">
+                    <h3>Digital Reality</h3>
+                    <p>In 2006, logos lived on letterheads. In 2026, they live in 32×32 pixel favicons, social avatars, and email signatures. Complexity doesn't scale down. Simplicity does.</p>
+                </div>
+                <div class="reason">
+                    <h3>Brand Recognition</h3>
+                    <p>The swoosh with the star is our brand asset. Not "America's." Not "California." The swoosh. Let it breathe. Let it be remembered.</p>
+                </div>
+                <div class="reason">
+                    <h3>Network Alignment</h3>
+                    <p>Other California SBDC networks are already moving this direction. We're not being radical—we're catching up to modern brand standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SLIDE 5: THE EVIDENCE -->
+    <section class="slide slide-5">
+        <div class="slide-number" style="color: #ccc;">05 / 06</div>
+        <h2>We're not alone in this thinking</h2>
+        <p class="subtitle">California SBDC networks are all moving toward simplified, bold marks.</p>
+        
+        <div class="logo-grid">
+            <div class="logo-card">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal">
+                <div class="name">NorCal</div>
+            </div>
+            <div class="logo-card" style="background: #1e3a5f;">
+                <div style="font-family: Impact, sans-serif; font-size: 36px; color: white; margin-bottom: 16px;">
+                    <span style="font-size: 14px; letter-spacing: 0.2em; display: block; font-family: Arial; font-weight: normal;">O C I E</span>
+                    SBDC
+                </div>
+                <div class="name">Orange County IE</div>
+            </div>
+            <div class="logo-card" style="background: #1e3a5f;">
+                <div style="font-family: Impact, sans-serif; font-size: 36px; color: white; margin-bottom: 16px;">
+                    <span style="font-size: 14px; letter-spacing: 0.2em; display: block; font-family: Arial; font-weight: normal;">S A N &nbsp; D I E G O</span>
+                    SBDC
+                </div>
+                <div class="name">San Diego</div>
+            </div>
+            <div class="logo-card" style="background: #1e3a5f;">
+                <div style="font-family: Impact, sans-serif; font-size: 36px; color: white; margin-bottom: 16px;">
+                    <span style="font-size: 14px; letter-spacing: 0.2em; display: block; font-family: Arial; font-weight: normal;">L O S &nbsp; A N G E L E S</span>
+                    SBDC
+                </div>
+                <div class="name">Los Angeles</div>
+            </div>
+        </div>
+        
+        <div class="takeaway">
+            <p>"Great brands don't explain themselves. They announce themselves."</p>
+        </div>
+    </section>
+    
+    <!-- SLIDE 6: CLOSE -->
+    <section class="slide slide-6">
+        <div class="slide-number">06 / 06</div>
+        <div class="logo-large">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC">
+        </div>
+        <h2>20 years of results.<br><em>One clear mark.</em></h2>
+        <div class="tagline">Your Business People.</div>
+        
+        <div class="benefits">
+            <div class="benefit">
+                <div class="benefit-icon">✓</div>
+                <p>Works at any size</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">✓</div>
+                <p>Single color ready</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">✓</div>
+                <p>Instantly recognized</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">✓</div>
+                <p>Modern & confident</p>
+            </div>
+        </div>
+    </section>
+    
+    <div class="scroll-hint">Scroll to navigate ↓</div>
+    
+</body>
+</html>

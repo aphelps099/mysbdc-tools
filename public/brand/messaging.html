@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messaging Guide — NorCal SBDC</title>
+
+<script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   FONTS — Tobias + GT America (Chamber weight)
+   ═══════════════════════════════════════════ */
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tobias'; src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'GT America'; src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'GT America Mono'; src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+
+/* ═══════════════════════════════════════════
+   RESET + BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ═══════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  --navy: #0f1c2e;
+  --royal: #1D5AA7;
+  --royal-dim: rgba(29,90,167,0.08);
+  --pool: #8FC5D9;
+  --cream: #f0efeb;
+  --white: #ffffff;
+  --brick: #a82039;
+  --dusty: #5d7a9c;
+  --text: #0a1528;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8a8a8a;
+  --rule: rgba(0,0,0,0.12);
+  --rule-light: rgba(0,0,0,0.06);
+  --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+  --serif: 'Tobias', Georgia, serif;
+  --mono: 'GT America Mono', 'SF Mono', monospace;
+  --pad: clamp(32px, 5vw, 64px);
+  --max: 1080px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+iconify-icon { display: inline-flex; vertical-align: middle; }
+
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--pad);
+  background: var(--navy);
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo { height: 18px; width: auto; }
+.nav-back {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color 0.2s ease;
+}
+.nav-back:hover { color: var(--white); }
+.nav-back iconify-icon { font-size: 14px; }
+.nav-links { display: flex; gap: 0; }
+.nav-links a {
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center;
+  position: relative; transition: color 0.2s ease;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.8); }
+.nav-links a.active { color: var(--white); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 2px; background: var(--pool);
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  margin-top: 56px;
+  background: var(--navy);
+  padding: clamp(48px, 6vw, 80px) var(--pad);
+  position: relative;
+  overflow: hidden;
+}
+.hero-watermark {
+  position: absolute; right: 3%; top: 50%;
+  transform: translateY(-50%);
+  width: clamp(180px, 22vw, 340px);
+  opacity: 0.03;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  position: relative; z-index: 2;
+}
+.hero-breadcrumb {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+.hero-breadcrumb a { transition: color 0.2s ease; }
+.hero-breadcrumb a:hover { color: rgba(255,255,255,0.7); }
+.hero-h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.08;
+  margin-bottom: 16px;
+}
+.hero-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.6; color: rgba(255,255,255,0.4);
+  max-width: 520px;
+}
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 32px;
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--pool); line-height: 1;
+  margin-bottom: 4px;
+}
+.hero-stat-label {
+  font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.section { padding: clamp(48px, 6vw, 80px) var(--pad); }
+.container { max-width: var(--max); margin: 0 auto; }
+
+.section-header {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-bottom: 48px;
+}
+.section-header-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-header-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 8px; max-width: 560px;
+}
+
+/* ═══════════════════════════════════════════
+   TAGS
+   ═══════════════════════════════════════════ */
+.tag {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid var(--rule);
+  color: var(--text-secondary);
+  display: inline-block;
+}
+.tag-pool { border-color: rgba(143,197,217,0.4); color: var(--pool); }
+.tag-royal { border-color: rgba(29,90,167,0.3); color: var(--royal); }
+
+/* ═══════════════════════════════════════════
+   PRIMARY TAGLINE HERO DISPLAY
+   ═══════════════════════════════════════════ */
+.tagline-display {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(40px, 6vw, 72px) clamp(28px, 4vw, 44px);
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease;
+  position: relative;
+}
+.tagline-display:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.tagline-display-text {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  color: var(--text); letter-spacing: -0.03em;
+  line-height: 1.08; margin-bottom: 16px;
+}
+.tagline-display-hint {
+  font-family: var(--mono); font-size: 0.55rem;
+  color: var(--text-tertiary);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.tagline-variants {
+  display: flex; gap: 2px; margin-top: 2px;
+}
+.tagline-variant {
+  background: var(--white);
+  border-radius: 2px;
+  padding: 24px 28px;
+  flex: 1;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease;
+  text-align: center;
+}
+.tagline-variant:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.tagline-variant-label {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-tertiary); margin-bottom: 6px;
+}
+.tagline-variant-text {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  color: var(--text); line-height: 1.2;
+}
+.tagline-notes {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(28px, 4vw, 44px);
+  margin-top: 2px;
+}
+.tagline-notes-title {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 12px;
+}
+.tagline-notes-list {
+  list-style: none;
+}
+.tagline-notes-list li {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.88rem; line-height: 1.6;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--rule-light);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.tagline-notes-list li:last-child { border-bottom: none; }
+.tagline-notes-list iconify-icon {
+  color: var(--royal); font-size: 14px; margin-top: 3px; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   VOICE & TONE GRID
+   ═══════════════════════════════════════════ */
+.voice-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+}
+.voice-cell {
+  background: var(--white);
+  padding: clamp(28px, 4vw, 40px);
+}
+.voice-cell-title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: var(--text); line-height: 1.2;
+  margin-bottom: 4px;
+}
+.voice-cell-contrast {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.voice-cell-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.88rem; line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════
+   ELEVATOR PITCH CARDS
+   ═══════════════════════════════════════════ */
+.pitch-card {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(28px, 4vw, 44px);
+  margin-bottom: 2px;
+  position: relative;
+}
+.pitch-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.pitch-card-audience {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+}
+.pitch-card-audience iconify-icon { color: var(--royal); font-size: 14px; }
+.pitch-card-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  line-height: 1.7; color: var(--text-secondary);
+}
+.pitch-card-text strong {
+  font-weight: 500; color: var(--text);
+}
+
+/* Copy button */
+.copy-btn {
+  font-family: var(--mono); font-size: 0.52rem; font-weight: 400;
+  color: var(--text-tertiary);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 2px;
+  background: var(--cream);
+  transition: all 0.15s ease;
+}
+.copy-btn:hover { color: var(--royal); background: var(--royal-dim); }
+
+/* ═══════════════════════════════════════════
+   DO/DON'T TABLE
+   ═══════════════════════════════════════════ */
+.lang-table-wrap {
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.lang-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+}
+.lang-table thead th {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-tertiary);
+  text-align: left;
+  padding: 16px clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid var(--rule);
+  background: var(--cream);
+}
+.lang-table tbody td {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.88rem; line-height: 1.5;
+  color: var(--text-secondary);
+  padding: 14px clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid var(--rule-light);
+  vertical-align: top;
+}
+.lang-table tbody tr:last-child td { border-bottom: none; }
+.lang-table .use-this {
+  font-weight: 500; color: var(--text);
+}
+.lang-table .instead-of {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,0,0,0.15);
+}
+.lang-table .why-col {
+  font-size: 0.82rem; color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   QUICK-COPY PHRASES
+   ═══════════════════════════════════════════ */
+.phrase-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+}
+.phrase-card {
+  background: var(--white);
+  padding: 24px 28px;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+}
+.phrase-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.phrase-card-label {
+  font-family: var(--sans); font-size: 0.55rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-tertiary); margin-bottom: 6px;
+}
+.phrase-card-text {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  color: var(--text); line-height: 1.3;
+}
+.phrase-card-copy {
+  position: absolute; top: 12px; right: 12px;
+}
+
+/* ═══════════════════════════════════════════
+   VISUAL MOCKUPS
+   ═══════════════════════════════════════════ */
+.mockup-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+}
+.mockup-card {
+  background: var(--white);
+  border-radius: 2px;
+  padding: clamp(28px, 4vw, 44px);
+}
+.mockup-card-label {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text);
+  margin-bottom: 4px;
+}
+.mockup-card-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.78rem; color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+.mockup-frame {
+  background: #e8e7e3;
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+/* Social media mockup */
+.mock-social {
+  width: 80%; max-width: 280px;
+  background: var(--white);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin: 24px auto;
+}
+.mock-social-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+}
+.mock-social-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-social-avatar-star {
+  width: 10px; height: 10px; opacity: 0.6;
+}
+.mock-social-name {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 0.55rem; color: var(--text);
+}
+.mock-social-handle {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.48rem; color: var(--text-tertiary);
+}
+.mock-social-image {
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--navy) 0%, #1a2d4a 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+.mock-social-image-star {
+  position: absolute; top: 12px; right: 12px;
+  width: 16px; height: 16px; opacity: 0.08;
+}
+.mock-social-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 13px; color: var(--white);
+  text-align: center; line-height: 1.2;
+}
+.mock-social-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 6px; color: var(--pool);
+  margin-top: 6px; text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.mock-social-actions {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--rule-light);
+}
+.mock-social-actions iconify-icon {
+  font-size: 12px; color: var(--text-tertiary);
+}
+.mock-social-caption {
+  padding: 0 12px 10px;
+}
+.mock-social-caption-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.45rem; color: var(--text-secondary);
+  line-height: 1.4;
+}
+.mock-social-caption-text strong { font-weight: 700; color: var(--text); }
+
+/* Email mockup */
+.mock-email {
+  width: 80%; max-width: 280px;
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin: 24px auto;
+}
+.mock-email-nav {
+  height: 18px; background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-email-logo {
+  width: 40px; height: 2px; background: rgba(255,255,255,0.4);
+  border-radius: 1px;
+}
+.mock-email-hero {
+  background: linear-gradient(135deg, var(--pool), #6eb3cc);
+  padding: 20px 16px;
+  text-align: center;
+}
+.mock-email-hero-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 12px; color: var(--navy);
+  line-height: 1.2;
+}
+.mock-email-hero-sub {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 5px; color: rgba(15,28,46,0.5);
+  margin-top: 4px;
+}
+.mock-email-body {
+  padding: 12px 16px;
+}
+.mock-email-line {
+  height: 2px; border-radius: 1px; margin-bottom: 4px;
+}
+.mock-email-cols {
+  display: flex; gap: 8px; margin: 8px 0;
+}
+.mock-email-col {
+  flex: 1;
+}
+.mock-email-cta {
+  display: flex; justify-content: center; padding: 8px 0;
+}
+.mock-email-cta-btn {
+  background: var(--royal);
+  border-radius: 2px;
+  padding: 3px 10px;
+  font-family: var(--sans); font-weight: 700;
+  font-size: 5px; color: var(--white);
+  letter-spacing: 0.04em;
+}
+.mock-email-footer {
+  height: 14px; background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-email-footer-text {
+  font-family: var(--mono); font-size: 3px;
+  color: rgba(255,255,255,0.3);
+}
+
+/* Billboard mockup */
+.mock-billboard {
+  width: 92%; max-width: 400px;
+  aspect-ratio: 3/1;
+  background: var(--navy);
+  border-radius: 2px;
+  display: flex; align-items: center;
+  padding: 0 8%;
+  position: relative;
+  overflow: hidden;
+  margin: 24px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.mock-billboard-star {
+  position: absolute; right: 5%; top: 50%;
+  transform: translateY(-50%);
+  width: 20%; opacity: 0.04;
+}
+.mock-billboard-content { position: relative; z-index: 2; }
+.mock-billboard-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(14px, 2.5vw, 22px);
+  color: var(--white); line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.mock-billboard-url {
+  font-family: var(--mono); font-weight: 400;
+  font-size: clamp(5px, 0.8vw, 7px);
+  color: var(--pool); margin-top: 6px;
+}
+
+/* Event signage mockup */
+.mock-signage {
+  width: 55%; max-width: 160px;
+  aspect-ratio: 1/2.2;
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex; flex-direction: column;
+  margin: 24px auto;
+}
+.mock-signage-top {
+  flex: 0 0 35%;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 10px;
+  position: relative;
+}
+.mock-signage-logo {
+  width: 45%; height: 3px; background: rgba(255,255,255,0.5);
+  border-radius: 1px; margin-bottom: 8px;
+}
+.mock-signage-star {
+  width: 20px; height: 20px; opacity: 0.08;
+}
+.mock-signage-middle {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 12px;
+  text-align: center;
+}
+.mock-signage-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 10px; color: var(--text);
+  line-height: 1.2; margin-bottom: 8px;
+}
+.mock-signage-accent {
+  width: 40px; height: 2px;
+  background: var(--pool);
+  border-radius: 1px; margin-bottom: 8px;
+}
+.mock-signage-desc {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 5px; color: var(--text-tertiary);
+  line-height: 1.4;
+}
+.mock-signage-bottom {
+  flex: 0 0 12%;
+  background: var(--pool);
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-signage-bottom-text {
+  font-family: var(--mono); font-weight: 400;
+  font-size: 4px; color: var(--navy);
+  letter-spacing: 0.04em;
+}
+
+/* Business card mockup */
+.mock-bizcard-wrap {
+  display: flex; gap: 12px; margin: 24px auto;
+  width: 90%; max-width: 380px;
+  justify-content: center;
+}
+.mock-bizcard {
+  flex: 1;
+  aspect-ratio: 3.5/2;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.mock-bizcard-front {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 12px;
+  height: 100%;
+}
+.mock-bizcard-front-top {}
+.mock-bizcard-front-logo {
+  width: 36%; height: 3px; background: var(--royal);
+  border-radius: 1px; margin-bottom: 10px;
+}
+.mock-bizcard-front-name {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 7px; color: var(--text);
+  margin-bottom: 1px;
+}
+.mock-bizcard-front-title {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 5px; color: var(--text-tertiary);
+}
+.mock-bizcard-front-bottom {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.mock-bizcard-front-line {
+  font-family: var(--mono); font-weight: 400;
+  font-size: 4px; color: var(--text-secondary);
+}
+.mock-bizcard-back {
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.mock-bizcard-back-star {
+  width: 28px; height: 28px; opacity: 0.06;
+  margin-bottom: 6px;
+}
+.mock-bizcard-back-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 7px; color: var(--white);
+  line-height: 1.2;
+}
+.mock-bizcard-back-url {
+  font-family: var(--mono); font-weight: 400;
+  font-size: 4px; color: var(--pool);
+  margin-top: 4px;
+}
+
+/* Letterhead mockup */
+.mock-letterhead {
+  width: 55%; max-width: 200px;
+  aspect-ratio: 8.5/11;
+  background: var(--white);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  display: flex; flex-direction: column;
+  padding: 14px 14px 10px;
+  margin: 24px auto;
+}
+.mock-lh-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mock-lh-logo {
+  width: 30%; height: 3px; background: var(--royal);
+  border-radius: 1px;
+}
+.mock-lh-address {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+}
+.mock-lh-address-line {
+  width: 40px; height: 1.5px;
+  background: rgba(0,0,0,0.08); border-radius: 1px;
+}
+.mock-lh-body { flex: 1; padding-top: 10px; }
+.mock-lh-greeting {
+  width: 35%; height: 2px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 1px; margin-bottom: 8px;
+}
+.mock-lh-text-line {
+  height: 1.5px; border-radius: 1px;
+  background: rgba(0,0,0,0.06);
+  margin-bottom: 3px;
+}
+.mock-lh-rule {
+  height: 1px; background: var(--rule-light);
+  margin: 10px 0 8px;
+}
+.mock-lh-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mock-lh-footer-tagline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 5px; color: var(--text-tertiary);
+  font-style: italic;
+}
+.mock-lh-footer-url {
+  font-family: var(--mono); font-weight: 400;
+  font-size: 4px; color: var(--pool);
+}
+
+/* ═══════════════════════════════════════════
+   CTA + FOOTER
+   ═══════════════════════════════════════════ */
+.cta-bar {
+  background: var(--navy);
+  padding: 48px var(--pad);
+}
+.cta-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.cta-text {
+  font-family: var(--sans); font-weight: 300;
+  font-size: 0.95rem; color: rgba(255,255,255,0.5);
+}
+.cta-text strong {
+  font-weight: 400; color: var(--white);
+}
+.cta-link {
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+  color: var(--pool);
+  padding: 10px 20px;
+  border: 1px solid rgba(143,197,217,0.3);
+  border-radius: 3px;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s ease;
+}
+.cta-link:hover { background: rgba(143,197,217,0.1); }
+
+.footer {
+  padding: 32px var(--pad);
+  background: var(--white);
+  border-top: 1px solid var(--rule-light);
+}
+.footer-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { height: 16px; }
+.footer-text {
+  font-family: var(--mono); font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy); color: var(--white);
+  font-family: var(--mono); font-size: 0.6rem;
+  padding: 10px 20px; border-radius: 4px;
+  opacity: 0; transition: all 0.25s ease;
+  z-index: 200; display: flex; align-items: center; gap: 8px;
+  pointer-events: none;
+  max-width: 90vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .mockup-grid { grid-template-columns: repeat(2, 1fr); }
+  .voice-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mockup-grid, .voice-grid, .phrase-grid { grid-template-columns: 1fr; }
+  .tagline-variants { flex-direction: column; }
+  .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .cta-inner { flex-direction: column; text-align: center; }
+  .mock-bizcard-wrap { flex-direction: column; align-items: center; }
+  .mock-bizcard-wrap .mock-bizcard { width: 70%; flex: none; }
+  .lang-table { font-size: 0.82rem; }
+  .lang-table thead th, .lang-table tbody td { padding: 10px 14px; }
+}
+@media (max-width: 560px) {
+  .lang-table .why-col { display: none; }
+  .lang-table thead th:last-child { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="brand-house.html"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC" class="nav-logo"></a>
+    <a href="brand-house.html" class="nav-back"><iconify-icon icon="carbon:arrow-left"></iconify-icon> Brand House</a>
+  </div>
+  <div class="nav-links">
+    <a href="#tagline" class="active">Tagline</a>
+    <a href="#voice">Voice</a>
+    <a href="#pitches">Pitches</a>
+    <a href="#language">Language</a>
+    <a href="#phrases">Phrases</a>
+    <a href="#mockups">Mockups</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="assets/starwhite@4x.png" alt="" class="hero-watermark" aria-hidden="true">
+  <div class="hero-inner">
+    <div class="hero-breadcrumb"><a href="brand-house.html">Brand House</a> / Messaging Guide</div>
+    <h1 class="hero-h1">Messaging Guide</h1>
+    <p class="hero-desc">Approved taglines, voice attributes, elevator pitches, and messaging applied in context. Everything your team needs to communicate the NorCal SBDC brand consistently.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">1</div>
+        <div class="hero-stat-label">Primary Tagline</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Tagline Variants</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Voice Attributes</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">Visual Mockups</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: PRIMARY TAGLINE
+     ═══════════════════════════════════════════ -->
+<section class="section" id="tagline">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Primary Tagline</div>
+      <div class="section-header-sub">The core brand line. Click to copy. Use it everywhere.</div>
+    </div>
+
+    <div class="tagline-display reveal" onclick="copyText('Your Business, Better.')">
+      <div class="tagline-display-text">Your Business, Better.</div>
+      <div class="tagline-display-hint">
+        <iconify-icon icon="carbon:copy"></iconify-icon> Click to copy
+      </div>
+    </div>
+
+    <div class="tagline-variants reveal">
+      <div class="tagline-variant" onclick="copyText('Your Business, People.')">
+        <div class="tagline-variant-label">Variant &middot; People</div>
+        <div class="tagline-variant-text">Your Business, People.</div>
+      </div>
+      <div class="tagline-variant" onclick="copyText('Your Business, Funded.')">
+        <div class="tagline-variant-label">Variant &middot; Funded</div>
+        <div class="tagline-variant-text">Your Business, Funded.</div>
+      </div>
+      <div class="tagline-variant" onclick="copyText('Your Business, Connected.')">
+        <div class="tagline-variant-label">Variant &middot; Connected</div>
+        <div class="tagline-variant-text">Your Business, Connected.</div>
+      </div>
+    </div>
+
+    <div class="tagline-notes reveal">
+      <div class="tagline-notes-title">Usage Notes</div>
+      <ul class="tagline-notes-list">
+        <li><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> <span>Use the primary tagline (<strong>Your Business, Better.</strong>) as the default in all brand collateral, presentations, and external messaging.</span></li>
+        <li><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> <span>Deploy <strong>People</strong> when emphasizing advising relationships, mentorship, or the human side of the network.</span></li>
+        <li><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> <span>Use <strong>Funded</strong> in lender-facing materials, capital access campaigns, and financial readiness messaging.</span></li>
+        <li><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> <span>Use <strong>Connected</strong> when highlighting partnerships, referral networks, or ecosystem collaboration.</span></li>
+        <li><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> <span>Always include the period. Always include the comma before the final word. The structure is: <strong>Your Business, [Word].</strong></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: VOICE & TONE
+     ═══════════════════════════════════════════ -->
+<section class="section" id="voice">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Voice &amp; Tone</div>
+      <div class="section-header-sub">Four attributes that define how NorCal SBDC sounds in every communication.</div>
+    </div>
+
+    <div class="voice-grid reveal">
+      <div class="voice-cell">
+        <div class="voice-cell-title">Expert</div>
+        <div class="voice-cell-contrast">not academic</div>
+        <div class="voice-cell-desc">We know small business inside and out. We share knowledge practically, using language entrepreneurs actually use. No jargon, no theory for theory's sake.</div>
+      </div>
+      <div class="voice-cell">
+        <div class="voice-cell-title">Warm</div>
+        <div class="voice-cell-contrast">not casual</div>
+        <div class="voice-cell-desc">We care about the people behind the businesses. Our tone is approachable and encouraging, but always professional. We are advisors, not buddies.</div>
+      </div>
+      <div class="voice-cell">
+        <div class="voice-cell-title">Confident</div>
+        <div class="voice-cell-contrast">not boastful</div>
+        <div class="voice-cell-desc">We let our impact numbers speak. $547M in capital accessed. 7,500+ entrepreneurs served. We state facts clearly without overselling or hedging.</div>
+      </div>
+      <div class="voice-cell">
+        <div class="voice-cell-title">Action-oriented</div>
+        <div class="voice-cell-contrast">not passive</div>
+        <div class="voice-cell-desc">Every piece of messaging should move someone toward a next step. We connect, prepare, advise, and grow. Our language does something.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3: ELEVATOR PITCHES
+     ═══════════════════════════════════════════ -->
+<section class="section" id="pitches">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Elevator Pitches</div>
+      <div class="section-header-sub">Three audience-specific pitches. Copy the one you need.</div>
+    </div>
+
+    <div class="pitch-card reveal">
+      <div class="pitch-card-header">
+        <div class="pitch-card-audience"><iconify-icon icon="carbon:user-multiple"></iconify-icon> For Entrepreneurs</div>
+        <button class="copy-btn" onclick="copyText('NorCal SBDC provides no-fee, confidential business advising and training across 36 counties in Northern California. Whether you\'re starting up or scaling, we connect you with expert advisors, capital resources, and the tools to grow.')"><iconify-icon icon="carbon:copy"></iconify-icon> Copy</button>
+      </div>
+      <div class="pitch-card-text">NorCal SBDC provides <strong>no-fee, confidential business advising and training</strong> across 36 counties in Northern California. Whether you're starting up or scaling, we connect you with expert advisors, capital resources, and the tools to grow.</div>
+    </div>
+
+    <div class="pitch-card reveal">
+      <div class="pitch-card-header">
+        <div class="pitch-card-audience"><iconify-icon icon="carbon:government"></iconify-icon> For Stakeholders &amp; Legislators</div>
+        <button class="copy-btn" onclick="copyText('The NorCal SBDC network has helped small businesses access over $547M in capital and serves 7,500+ clients annually across 36 Northern California counties. Our no-fee advising model generates measurable ROI through job creation, revenue growth, and business starts.')"><iconify-icon icon="carbon:copy"></iconify-icon> Copy</button>
+      </div>
+      <div class="pitch-card-text">The NorCal SBDC network has helped small businesses access over <strong>$547M in capital</strong> and serves <strong>7,500+ clients annually</strong> across 36 Northern California counties. Our no-fee advising model generates measurable ROI through job creation, revenue growth, and business starts.</div>
+    </div>
+
+    <div class="pitch-card reveal">
+      <div class="pitch-card-header">
+        <div class="pitch-card-audience"><iconify-icon icon="carbon:partnership"></iconify-icon> For Lenders &amp; Partners</div>
+        <button class="copy-btn" onclick="copyText('We prepare loan-ready clients with complete packages, realistic expectations, and solid financials. Our 18 centers across Northern California send you borrowers who are ready to close.')"><iconify-icon icon="carbon:copy"></iconify-icon> Copy</button>
+      </div>
+      <div class="pitch-card-text">We prepare <strong>loan-ready clients</strong> with complete packages, realistic expectations, and solid financials. Our 18 centers across Northern California send you borrowers who are ready to close.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4: APPROVED LANGUAGE
+     ═══════════════════════════════════════════ -->
+<section class="section" id="language">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Approved Language</div>
+      <div class="section-header-sub">Consistent terminology strengthens the brand. Use these substitutions across all communications.</div>
+    </div>
+
+    <div class="lang-table-wrap reveal">
+      <table class="lang-table">
+        <thead>
+          <tr>
+            <th>Use This</th>
+            <th>Instead Of</th>
+            <th class="why-col">Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="use-this">Your business, better</td>
+            <td class="instead-of">Add momentum</td>
+            <td class="why-col">Our brand tagline &mdash; own it</td>
+          </tr>
+          <tr>
+            <td class="use-this">No-fee advising</td>
+            <td class="instead-of">Free consulting</td>
+            <td class="why-col">Value without devaluing</td>
+          </tr>
+          <tr>
+            <td class="use-this">Entrepreneurs</td>
+            <td class="instead-of">Clients / customers</td>
+            <td class="why-col">Centers the person</td>
+          </tr>
+          <tr>
+            <td class="use-this">Expert advisors</td>
+            <td class="instead-of">Counselors</td>
+            <td class="why-col">Positions as knowledgeable peers</td>
+          </tr>
+          <tr>
+            <td class="use-this">Capital access</td>
+            <td class="instead-of">Loans / funding</td>
+            <td class="why-col">Broader financial pathways</td>
+          </tr>
+          <tr>
+            <td class="use-this">NorCal SBDC</td>
+            <td class="instead-of">The SBDC</td>
+            <td class="why-col">Consistent brand name</td>
+          </tr>
+          <tr>
+            <td class="use-this">Serving 36 counties</td>
+            <td class="instead-of">Regional</td>
+            <td class="why-col">Specificity builds credibility</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5: QUICK-COPY PHRASES
+     ═══════════════════════════════════════════ -->
+<section class="section" id="phrases">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Quick-Copy Phrases</div>
+      <div class="section-header-sub">Approved phrases for any channel. Click any card to copy.</div>
+    </div>
+
+    <div class="phrase-grid reveal">
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Primary Tagline</div>
+        <div class="phrase-card-text">Your Business, Better.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Variant &middot; People</div>
+        <div class="phrase-card-text">Your Business, People.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Variant &middot; Funded</div>
+        <div class="phrase-card-text">Your Business, Funded.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Variant &middot; Connected</div>
+        <div class="phrase-card-text">Your Business, Connected.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Value Statement</div>
+        <div class="phrase-card-text">No-fee business advising. Expert advisors. Real results.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Scale</div>
+        <div class="phrase-card-text">18 centers. 36 counties. One network.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Impact</div>
+        <div class="phrase-card-text">$547M in capital accessed. That&rsquo;s your pipeline, strengthened.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+      <div class="phrase-card" onclick="copyPhrase(this)">
+        <div class="phrase-card-label">Mission</div>
+        <div class="phrase-card-text">We don&rsquo;t just advise. We connect, prepare, and grow.</div>
+        <button class="copy-btn phrase-card-copy"><iconify-icon icon="carbon:copy"></iconify-icon></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6: VISUAL MOCKUPS
+     ═══════════════════════════════════════════ -->
+<section class="section" id="mockups">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header-title">Messaging in Context</div>
+      <div class="section-header-sub">How the brand messaging looks applied to real-world formats. Pure CSS mockups for reference.</div>
+    </div>
+
+    <div class="mockup-grid">
+
+      <!-- A. Social Media Post -->
+      <div class="mockup-card reveal">
+        <div class="mockup-card-label">Social Media Post</div>
+        <div class="mockup-card-sub">Instagram / LinkedIn format</div>
+        <div class="mockup-frame">
+          <div class="mock-social">
+            <div class="mock-social-header">
+              <div class="mock-social-avatar">
+                <img src="assets/starwhite@4x.png" alt="" class="mock-social-avatar-star">
+              </div>
+              <div>
+                <div class="mock-social-name">NorCal SBDC</div>
+                <div class="mock-social-handle">@norcalsbdc</div>
+              </div>
+            </div>
+            <div class="mock-social-image">
+              <img src="assets/starwhite@4x.png" alt="" class="mock-social-image-star">
+              <div class="mock-social-tagline">Your Business, Better.</div>
+              <div class="mock-social-sub">NorCal SBDC</div>
+            </div>
+            <div class="mock-social-actions">
+              <iconify-icon icon="carbon:favorite"></iconify-icon>
+              <iconify-icon icon="carbon:chat"></iconify-icon>
+              <iconify-icon icon="carbon:share"></iconify-icon>
+              <iconify-icon icon="carbon:bookmark" style="margin-left: auto;"></iconify-icon>
+            </div>
+            <div class="mock-social-caption">
+              <div class="mock-social-caption-text"><strong>norcalsbdc</strong> No-fee business advising. Expert advisors. Real results. 18 centers across Northern California.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. Email Header -->
+      <div class="mockup-card reveal">
+        <div class="mockup-card-label">Email Template</div>
+        <div class="mockup-card-sub">Marketing email header + layout</div>
+        <div class="mockup-frame">
+          <div class="mock-email">
+            <div class="mock-email-nav">
+              <div class="mock-email-logo"></div>
+            </div>
+            <div class="mock-email-hero">
+              <div class="mock-email-hero-tagline">Your Business, Better.</div>
+              <div class="mock-email-hero-sub">NO-FEE BUSINESS ADVISING ACROSS 36 COUNTIES</div>
+            </div>
+            <div class="mock-email-body">
+              <div class="mock-email-line" style="width: 60%; background: rgba(0,0,0,0.12);"></div>
+              <div class="mock-email-line" style="width: 100%; background: rgba(0,0,0,0.06);"></div>
+              <div class="mock-email-line" style="width: 95%; background: rgba(0,0,0,0.06);"></div>
+              <div class="mock-email-line" style="width: 80%; background: rgba(0,0,0,0.06);"></div>
+              <div class="mock-email-cols">
+                <div class="mock-email-col">
+                  <div class="mock-email-line" style="width: 100%; background: rgba(0,0,0,0.04); height: 20px;"></div>
+                  <div class="mock-email-line" style="width: 100%; background: rgba(0,0,0,0.06);"></div>
+                  <div class="mock-email-line" style="width: 85%; background: rgba(0,0,0,0.06);"></div>
+                </div>
+                <div class="mock-email-col">
+                  <div class="mock-email-line" style="width: 100%; background: rgba(0,0,0,0.04); height: 20px;"></div>
+                  <div class="mock-email-line" style="width: 100%; background: rgba(0,0,0,0.06);"></div>
+                  <div class="mock-email-line" style="width: 90%; background: rgba(0,0,0,0.06);"></div>
+                </div>
+              </div>
+              <div class="mock-email-cta">
+                <div class="mock-email-cta-btn">GET STARTED</div>
+              </div>
+            </div>
+            <div class="mock-email-footer">
+              <div class="mock-email-footer-text">norcalsbdc.org</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. Billboard / Banner -->
+      <div class="mockup-card reveal" style="grid-column: 1 / -1;">
+        <div class="mockup-card-label">Billboard / Banner</div>
+        <div class="mockup-card-sub">Wide-format outdoor or digital banner</div>
+        <div class="mockup-frame" style="padding: 32px 0;">
+          <div class="mock-billboard">
+            <img src="assets/starwhite@4x.png" alt="" class="mock-billboard-star">
+            <div class="mock-billboard-content">
+              <div class="mock-billboard-tagline">Your Business, Better.</div>
+              <div class="mock-billboard-url">norcalsbdc.org</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- D. Event Signage -->
+      <div class="mockup-card reveal">
+        <div class="mockup-card-label">Event Signage</div>
+        <div class="mockup-card-sub">Pull-up banner / podium sign</div>
+        <div class="mockup-frame" style="padding: 24px 0;">
+          <div class="mock-signage">
+            <div class="mock-signage-top">
+              <div class="mock-signage-logo"></div>
+              <img src="assets/starwhite@4x.png" alt="" class="mock-signage-star">
+            </div>
+            <div class="mock-signage-middle">
+              <div class="mock-signage-tagline">Your Business,<br>Better.</div>
+              <div class="mock-signage-accent"></div>
+              <div class="mock-signage-desc">No-fee small business advising<br>across 36 Northern California counties</div>
+            </div>
+            <div class="mock-signage-bottom">
+              <div class="mock-signage-bottom-text">norcalsbdc.org</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- E. Business Card -->
+      <div class="mockup-card reveal">
+        <div class="mockup-card-label">Business Card</div>
+        <div class="mockup-card-sub">Front and back, 3.5 &times; 2 in</div>
+        <div class="mockup-frame" style="padding: 24px 0; flex-direction: column;">
+          <div class="mock-bizcard-wrap">
+            <div class="mock-bizcard">
+              <div class="mock-bizcard-front">
+                <div class="mock-bizcard-front-top">
+                  <div class="mock-bizcard-front-logo"></div>
+                  <div style="height: 8px;"></div>
+                  <div class="mock-bizcard-front-name">Jane Advisor</div>
+                  <div class="mock-bizcard-front-title">Business Advisor, Chico Center</div>
+                </div>
+                <div class="mock-bizcard-front-bottom">
+                  <div class="mock-bizcard-front-line">jane@norcalsbdc.org</div>
+                  <div class="mock-bizcard-front-line">(530) 555-0142</div>
+                  <div class="mock-bizcard-front-line">norcalsbdc.org</div>
+                </div>
+              </div>
+            </div>
+            <div class="mock-bizcard">
+              <div class="mock-bizcard-back">
+                <img src="assets/starwhite@4x.png" alt="" class="mock-bizcard-back-star">
+                <div class="mock-bizcard-back-tagline">Your Business, Better.</div>
+                <div class="mock-bizcard-back-url">norcalsbdc.org</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- F. Letterhead -->
+      <div class="mockup-card reveal" style="grid-column: 1 / -1;">
+        <div class="mockup-card-label">Letterhead</div>
+        <div class="mockup-card-sub">Standard 8.5 &times; 11 letterhead with brand elements</div>
+        <div class="mockup-frame" style="padding: 32px 0;">
+          <div class="mock-letterhead">
+            <div class="mock-lh-header">
+              <div class="mock-lh-logo"></div>
+              <div class="mock-lh-address">
+                <div class="mock-lh-address-line"></div>
+                <div class="mock-lh-address-line" style="width: 32px;"></div>
+                <div class="mock-lh-address-line" style="width: 28px;"></div>
+              </div>
+            </div>
+            <div class="mock-lh-body">
+              <div class="mock-lh-greeting"></div>
+              <div class="mock-lh-text-line" style="width: 100%;"></div>
+              <div class="mock-lh-text-line" style="width: 95%;"></div>
+              <div class="mock-lh-text-line" style="width: 100%;"></div>
+              <div class="mock-lh-text-line" style="width: 88%;"></div>
+              <div class="mock-lh-text-line" style="width: 70%;"></div>
+              <div style="height: 10px;"></div>
+              <div class="mock-lh-text-line" style="width: 100%;"></div>
+              <div class="mock-lh-text-line" style="width: 97%;"></div>
+              <div class="mock-lh-text-line" style="width: 92%;"></div>
+              <div class="mock-lh-text-line" style="width: 100%;"></div>
+              <div class="mock-lh-text-line" style="width: 60%;"></div>
+              <div style="height: 10px;"></div>
+              <div class="mock-lh-text-line" style="width: 30%; background: rgba(0,0,0,0.1);"></div>
+              <div class="mock-lh-text-line" style="width: 22%; margin-top: 2px;"></div>
+            </div>
+            <div class="mock-lh-rule"></div>
+            <div class="mock-lh-footer">
+              <div class="mock-lh-footer-tagline">Your Business, Better.</div>
+              <div class="mock-lh-footer-url">norcalsbdc.org</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <div class="cta-inner">
+    <div class="cta-text"><strong>Your Business, Better.</strong> Questions about messaging, brand voice, or approved language.</div>
+    <a href="mailto:phelps@norcalsbdc.org" class="cta-link"><iconify-icon icon="carbon:email"></iconify-icon> phelps@norcalsbdc.org</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC" class="footer-logo">
+    <span class="footer-text">NorCal SBDC &middot; Messaging Guide &middot; 2026</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Toast
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  window.showToast = function(msg) {
+    clearTimeout(toastTimer);
+    toastEl.innerHTML = '<iconify-icon icon="carbon:checkmark" style="font-size:14px"></iconify-icon> ' + msg;
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+  };
+
+  // Copy arbitrary text
+  window.copyText = function(text) {
+    navigator.clipboard.writeText(text).then(function() {
+      showToast('Copied: ' + text);
+    });
+  };
+
+  // Copy phrases from card
+  window.copyPhrase = function(card) {
+    var text = card.querySelector('.phrase-card-text').textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      showToast('Copied: ' + text);
+    });
+  };
+
+  // Reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  if (!reduced && revealEls.length) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(function(el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Nav scroll tracking
+  var navLinks = document.querySelectorAll('.nav-links a');
+  var sections = [];
+  navLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var sec = document.getElementById(id);
+    if (sec) sections.push({ el: sec, link: link });
+  });
+  function updateNav() {
+    var scrollY = window.pageYOffset + 80;
+    var current = sections[0];
+    sections.forEach(function(s) { if (s.el.offsetTop <= scrollY) current = s; });
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  var navTicking = false;
+  window.addEventListener('scroll', function() {
+    if (!navTicking) { requestAnimationFrame(function() { updateNav(); navTicking = false; }); navTicking = true; }
+  }, { passive: true });
+  updateNav();
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

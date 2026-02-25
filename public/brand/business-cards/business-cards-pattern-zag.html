@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Business Cards (Pattern ZAG)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .card-pair {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .card-container {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 200px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =============================================
+           Z1: GRADIENT TAKEOVER
+           Gradient IS the card. Name floats.
+        ============================================= */
+        .z1-front {
+            background: linear-gradient(135deg, 
+                var(--navy) 0%, 
+                var(--royal) 25%, 
+                var(--pool) 50%,
+                var(--sky) 75%,
+                var(--cream) 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .z1-front .name {
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 20px rgba(15, 28, 46, 0.4);
+        }
+        
+        .z1-back {
+            background: linear-gradient(135deg, 
+                var(--cream) 0%, 
+                var(--sky) 25%, 
+                var(--pool) 50%,
+                var(--royal) 75%,
+                var(--navy) 100%
+            );
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z1-back .logo {
+            width: 80px;
+        }
+        
+        .z1-back .info {
+            text-align: right;
+        }
+        
+        .z1-back .title {
+            font-size: 11px;
+            color: white;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+        }
+        
+        .z1-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+            margin-top: 8px;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+        }
+        
+        .z1-back .tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           Z2: BLEED EVERYTHING
+           Pattern bleeds, text bleeds, chaos
+        ============================================= */
+        .z2-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z2-front .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--pool);
+        }
+        
+        .z2-front .ring.r1 { width: 400px; height: 400px; top: -200px; left: -200px; opacity: 0.3; }
+        .z2-front .ring.r2 { width: 300px; height: 300px; top: -150px; left: -150px; opacity: 0.4; }
+        .z2-front .ring.r3 { width: 200px; height: 200px; top: -100px; left: -100px; opacity: 0.5; }
+        
+        .z2-front .bleed-name {
+            position: absolute;
+            bottom: -20px;
+            right: -10px;
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+            opacity: 0.15;
+        }
+        
+        .z2-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z2-front .tagline {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .z2-front .name {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .z2-back {
+            background: var(--pool);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z2-back .bleed-ring {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid var(--navy);
+            bottom: -150px;
+            right: -150px;
+            opacity: 0.2;
+        }
+        
+        .z2-back .logo {
+            width: 80px;
+        }
+        
+        .z2-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z3: VERTICAL GRADIENT
+           90° rotation. Name reads up.
+        ============================================= */
+        .z3-front {
+            background: linear-gradient(180deg, 
+                var(--navy) 0%, 
+                var(--royal) 50%,
+                var(--pool) 100%
+            );
+            position: relative;
+        }
+        
+        .z3-front .vert-name {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center center;
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+        }
+        
+        .z3-front .content {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .z3-front .logo {
+            width: 70px;
+        }
+        
+        .z3-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--cream);
+            text-align: right;
+            writing-mode: vertical-rl;
+        }
+        
+        .z3-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z3-back .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--royal);
+        }
+        
+        .z3-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z4: NEGATIVE SPACE
+           Gradient only in corner. Rest empty.
+        ============================================= */
+        .z4-front {
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z4-front .corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(160deg, 
+                var(--pool) 0%,
+                var(--royal) 50%,
+                var(--navy) 100%
+            );
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+        }
+        
+        .z4-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z4-front .name {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .z4-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--navy);
+            max-width: 140px;
+        }
+        
+        .z4-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z4-back .logo {
+            width: 80px;
+        }
+        
+        .z4-back .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .z4-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .z4-back .title {
+            font-size: 10px;
+            color: var(--pool);
+            text-align: right;
+        }
+
+        /* =============================================
+           Z5: MONO GRADIENT
+           All monospace. Gradient as accent only.
+        ============================================= */
+        .z5-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z5-front .gradient-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--pool), var(--royal), var(--maroon));
+        }
+        
+        .z5-front .content {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .z5-front .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .z5-front .logo {
+            width: 70px;
+        }
+        
+        .z5-front .label {
+            font-size: 9px;
+            color: var(--pool);
+            letter-spacing: 0.1em;
+        }
+        
+        .z5-front .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .z5-front .tagline {
+            font-size: 11px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .z5-back {
+            background: var(--navy);
+            padding: 20px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .z5-back .gradient-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--maroon), var(--royal), var(--pool));
+        }
+        
+        .z5-back .line {
+            font-size: 11px;
+            color: white;
+        }
+        
+        .z5-back .line.dim {
+            color: var(--sky);
+        }
+
+        /* =============================================
+           Z6: SPLIT GRADIENT
+           Hard 50/50 with different gradients
+        ============================================= */
+        .z6-front {
+            display: flex;
+        }
+        
+        .z6-front .left {
+            flex: 1;
+            background: linear-gradient(180deg, var(--navy) 0%, var(--royal) 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .z6-front .logo {
+            width: 70px;
+        }
+        
+        .z6-front .right {
+            flex: 1;
+            background: linear-gradient(180deg, var(--pool) 0%, var(--cream) 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .z6-front .name {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            text-align: right;
+        }
+        
+        .z6-front .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--navy);
+            text-align: right;
+        }
+        
+        .z6-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .z6-back .split-bar {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--navy), var(--royal), var(--pool), var(--cream));
+            transform: translateX(-50%);
+        }
+        
+        .z6-back .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--royal);
+        }
+        
+        .z6-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z7: PERSPECTIVE + NAME
+           Grid converges TO the name
+        ============================================= */
+        .z7-front {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z7-front .line {
+            position: absolute;
+            background: var(--navy);
+            height: 1px;
+            transform-origin: right center;
+        }
+        
+        .z7-front .line.l1 { width: 100%; top: 20%; right: 0; transform: rotate(-8deg); opacity: 0.1; }
+        .z7-front .line.l2 { width: 100%; top: 35%; right: 0; transform: rotate(-5deg); opacity: 0.15; }
+        .z7-front .line.l3 { width: 100%; top: 50%; right: 0; transform: rotate(-2deg); opacity: 0.2; }
+        .z7-front .line.l4 { width: 100%; top: 65%; right: 0; transform: rotate(2deg); opacity: 0.15; }
+        .z7-front .line.l5 { width: 100%; top: 80%; right: 0; transform: rotate(5deg); opacity: 0.1; }
+        
+        .z7-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .z7-front .name {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            text-align: right;
+        }
+        
+        .z7-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z7-back .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .z7-back .logo {
+            width: 80px;
+        }
+        
+        .z7-back .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--pool);
+            text-align: right;
+        }
+        
+        .z7-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z8: GLOW NAME
+           Name with gradient glow behind
+        ============================================= */
+        .z8-front {
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .z8-front .glow {
+            position: absolute;
+            width: 250px;
+            height: 100px;
+            background: radial-gradient(ellipse, var(--pool) 0%, transparent 70%);
+            opacity: 0.5;
+            filter: blur(20px);
+        }
+        
+        .z8-front .name {
+            position: relative;
+            z-index: 2;
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .z8-front .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 70px;
+        }
+        
+        .z8-front .tagline {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            font-style: italic;
+            color: var(--pool);
+        }
+        
+        .z8-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z8-back .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--pool) 0%, transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+        
+        .z8-back .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z8-back .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--royal);
+        }
+        
+        .z8-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z9: GRADIENT FRAME
+           Gradient as border only
+        ============================================= */
+        .z9-front {
+            background: white;
+            padding: 6px;
+            position: relative;
+        }
+        
+        .z9-front .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--navy), var(--royal), var(--pool), var(--cream));
+        }
+        
+        .z9-front .inner {
+            position: relative;
+            z-index: 2;
+            background: white;
+            height: 100%;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z9-front .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .z9-front .logo {
+            width: 70px;
+        }
+        
+        .z9-front .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.1em;
+            color: var(--royal);
+        }
+        
+        .z9-front .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .z9-front .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .z9-front .tagline {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--royal);
+        }
+        
+        .z9-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z9-back .title {
+            font-size: 11px;
+            color: var(--pool);
+        }
+        
+        .z9-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        /* =============================================
+           Z10: FULL NOISE + GRADIENT
+           Dense pattern meets smooth gradient
+        ============================================= */
+        .z10-front {
+            background: linear-gradient(145deg, var(--navy) 0%, var(--maroon) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .z10-front .noise {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(var(--pool) 1px, transparent 1px),
+                radial-gradient(var(--pool) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.08;
+        }
+        
+        .z10-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z10-front .logo {
+            width: 80px;
+        }
+        
+        .z10-front .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .z10-front .name {
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .z10-front .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .z10-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .z10-back .accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--navy), var(--maroon));
+        }
+        
+        .z10-back .main {
+            padding-left: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .z10-back .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--maroon);
+        }
+        
+        .z10-back .contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Business Cards — Pattern ZAG</div>
+    </div>
+
+    <!-- Z1 -->
+    <div class="section">
+        <div class="section-label">Z1 — Gradient Takeover</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z1-front">
+                    <div class="name">Maria Santos</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z1-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="info">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="contact">530.898.4598 · msantos@norcalsbdc.org</div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z2 -->
+    <div class="section">
+        <div class="section-label">Z2 — Bleed Everything</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z2-front">
+                    <div class="ring r1"></div>
+                    <div class="ring r2"></div>
+                    <div class="ring r3"></div>
+                    <div class="bleed-name">Santos</div>
+                    <div class="content">
+                        <div class="tagline">Your Business People.</div>
+                        <div class="name">Maria Santos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z2-back">
+                    <div class="bleed-ring"></div>
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                        <div>norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z3 -->
+    <div class="section">
+        <div class="section-label">Z3 — Vertical Gradient</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z3-front">
+                    <div class="vert-name">Maria Santos</div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z3-back">
+                    <div class="title">Senior Business Advisor</div>
+                    <div class="contact">
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                        <div>norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z4 -->
+    <div class="section">
+        <div class="section-label">Z4 — Negative Space</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z4-front">
+                    <div class="corner"></div>
+                    <div class="content">
+                        <div class="name">Maria Santos</div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z4-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="info">
+                        <div class="contact">
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                            <div>norcalsbdc.org</div>
+                        </div>
+                        <div class="title">Senior Business<br>Advisor</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z5 -->
+    <div class="section">
+        <div class="section-label">Z5 — Mono Gradient</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z5-front">
+                    <div class="gradient-bar"></div>
+                    <div class="content">
+                        <div class="top">
+                            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                            <div class="label">ADVISOR</div>
+                        </div>
+                        <div class="info">
+                            <div class="name">Maria Santos</div>
+                            <div class="tagline">Your Business People.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z5-back">
+                    <div class="gradient-bar"></div>
+                    <div class="line dim">Senior Business Advisor</div>
+                    <div class="line">530.898.4598</div>
+                    <div class="line">msantos@norcalsbdc.org</div>
+                    <div class="line dim">norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z6 -->
+    <div class="section">
+        <div class="section-label">Z6 — Split Gradient</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z6-front">
+                    <div class="left">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    </div>
+                    <div class="right">
+                        <div class="name">Maria<br>Santos</div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z6-back">
+                    <div class="split-bar"></div>
+                    <div class="title">Senior Business Advisor</div>
+                    <div class="contact">
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                        <div>norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z7 -->
+    <div class="section">
+        <div class="section-label">Z7 — Perspective Name</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z7-front">
+                    <div class="line l1"></div>
+                    <div class="line l2"></div>
+                    <div class="line l3"></div>
+                    <div class="line l4"></div>
+                    <div class="line l5"></div>
+                    <div class="content">
+                        <div class="name">Maria<br>Santos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z7-back">
+                    <div class="top">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                    <div class="contact">
+                        <div>Senior Business Advisor</div>
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z8 -->
+    <div class="section">
+        <div class="section-label">Z8 — Glow Name</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z8-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="glow"></div>
+                    <div class="name">Maria Santos</div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z8-back">
+                    <div class="glow"></div>
+                    <div class="content">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="contact">
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                            <div>norcalsbdc.org</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z9 -->
+    <div class="section">
+        <div class="section-label">Z9 — Gradient Frame</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z9-front">
+                    <div class="frame"></div>
+                    <div class="inner">
+                        <div class="top">
+                            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                            <div class="label">ADVISOR</div>
+                        </div>
+                        <div class="bottom">
+                            <div class="name">Maria Santos</div>
+                            <div class="tagline">Your Business People.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z9-back">
+                    <div class="title">Senior Business Advisor</div>
+                    <div class="contact">
+                        <div>530.898.4598</div>
+                        <div>msantos@norcalsbdc.org</div>
+                        <div>norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z10 -->
+    <div class="section">
+        <div class="section-label">Z10 — Noise + Gradient</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z10-front">
+                    <div class="noise"></div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="bottom">
+                            <div class="name">Maria Santos</div>
+                            <div class="tagline">Your Business People.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z10-back">
+                    <div class="accent"></div>
+                    <div class="main">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="contact">
+                            <div>530.898.4598</div>
+                            <div>msantos@norcalsbdc.org</div>
+                            <div>norcalsbdc.org</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

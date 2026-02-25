@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programs &amp; Network Map | NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype');
+      font-weight: 400; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype');
+      font-weight: 300; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype');
+      font-weight: 500; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype');
+      font-weight: 700; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America Mono';
+      src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+
+    :root {
+      --navy: #0f1c2e;
+      --royal: #1D5AA7;
+      --royal-dim: rgba(29,90,167,0.08);
+      --pool: #8FC5D9;
+      --cream: #f0efeb;
+      --white: #ffffff;
+      --brick: #a82039;
+      --dusty: #5d7a9c;
+      --text: #0a1528;
+      --text-secondary: #4a5568;
+      --text-tertiary: #8a8a8a;
+      --rule: rgba(0,0,0,0.12);
+      --rule-light: rgba(0,0,0,0.06);
+      --green: #16a34a;
+      --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+      --serif: 'Tobias', Georgia, serif;
+      --mono: 'GT America Mono', 'SF Mono', monospace;
+      --pad: clamp(32px, 5vw, 64px);
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); font-weight: 300; color: var(--text); background: var(--white); line-height: 1.6; }
+
+    /* ── Nav ── */
+    nav.top-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 44px; background: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad); z-index: 1000; border-bottom: 1px solid var(--rule-light);
+    }
+    .nav-logo { flex-shrink: 0; height: 14px; }
+    .nav-logo img { height: 100%; width: auto; opacity: 0.25; }
+    .nav-links { display: flex; gap: 2rem; margin-left: auto; align-items: center; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-tertiary); text-decoration: none;
+      transition: color 200ms var(--ease);
+    }
+    .nav-links a:hover { color: var(--text); }
+    main { margin-top: 44px; }
+
+    /* ── Utility ── */
+    section { padding: var(--pad) 0; }
+    section > * { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    /* Fix: prevent grid background from bleeding into section padding */
+    section > .grid-1px, section > .two-col-core, section > .network-grid { padding: 0; max-width: calc(var(--max) - var(--pad) * 2); }
+    .section-header { border-top: 1px solid var(--rule); padding-top: 1rem; margin-bottom: 2.5rem; }
+    .section-kicker {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 0.5rem; display: block;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 400; color: var(--text); line-height: 1.1;
+    }
+
+    /* ══════════════ HERO ══════════════ */
+    section#hero { background: var(--navy); color: var(--white); padding: 5rem var(--pad) 3.5rem; }
+    section#hero > div { max-width: var(--max); margin: 0 auto; }
+    .hero-title {
+      font-family: var(--serif); font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 400; margin-bottom: 0.75rem; line-height: 1.05;
+    }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 1rem; letter-spacing: 0.05em;
+      margin-bottom: 1.25rem; opacity: 0.7;
+    }
+    .hero-tagline {
+      font-size: 1.15rem; font-weight: 300; max-width: 560px; line-height: 1.5; opacity: 0.9;
+    }
+    .hero-strip {
+      display: flex; gap: 0; margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem;
+    }
+    .hero-strip .hs-item { flex: 1; text-align: center; }
+    .hero-strip .hs-item:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.15); }
+    .hs-num { font-family: var(--serif); font-size: 1.5rem; }
+    .hs-label { font-size: 0.75rem; opacity: 0.6; margin-top: 0.2rem; }
+
+    /* ══════════════ SHARED GRID PATTERNS ══════════════ */
+    .grid-1px {
+      display: grid; gap: 1px; background: var(--rule-light);
+      border: 1px solid var(--rule-light); border-radius: 2px; overflow: hidden;
+    }
+    .grid-1px > * { background: var(--white); }
+
+    /* ══════════════ CORE SERVICES ══════════════ */
+    section#core { background: var(--cream); }
+
+    .two-col-core { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 2.5rem; }
+
+    .core-block { padding: 2.5rem 2rem; }
+    .core-icon { font-size: 1.75rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .core-name {
+      font-family: var(--serif); font-size: 1.5rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem;
+    }
+    .core-desc {
+      font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;
+    }
+    .competency-label {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.6rem;
+    }
+    .competency-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .c-tag {
+      font-family: var(--mono); font-size: 0.6rem; padding: 0.25rem 0.55rem;
+      background: var(--cream); border: 1px solid var(--rule-light);
+      color: var(--text-secondary); border-radius: 2px;
+    }
+    .c-tag.coming { border-style: dashed; color: var(--royal); background: var(--royal-dim); }
+
+    /* ══════════════ SPECIALTY PROGRAMS ══════════════ */
+    section#specialty { background: var(--white); }
+
+    .sp-cluster { margin-bottom: 3rem; }
+    .sp-cluster:last-child { margin-bottom: 0; }
+    .sp-cluster-label {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule-light);
+    }
+    .sp-grid { grid-template-columns: repeat(3, 1fr); }
+    .sp-grid.sp-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+    .sp-card { padding: 1.75rem 1.5rem; display: flex; flex-direction: column; }
+    .sp-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 0.25rem 0.5rem;
+      border-radius: 2px; width: fit-content; margin-bottom: 0.75rem;
+    }
+    .badge-blue { background: var(--royal-dim); color: var(--royal); }
+    .badge-red { background: rgba(168,32,57,0.08); color: var(--brick); }
+    .badge-teal { background: rgba(143,197,217,0.2); color: #3a8ba8; }
+    .badge-green { background: rgba(22,163,74,0.1); color: var(--green); }
+    .badge-navy { background: rgba(15,28,46,0.08); color: var(--navy); }
+    .sp-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.25rem; line-height: 1.2;
+    }
+    .sp-desc {
+      font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55;
+    }
+    .sp-stat-row {
+      margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--rule-light);
+      display: flex; gap: 1.25rem; margin-top: 1rem;
+    }
+    .sp-stat-num {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--text); line-height: 1;
+    }
+    .sp-stat-label {
+      font-family: var(--mono); font-size: 0.5rem; color: var(--text-tertiary);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.15rem;
+    }
+    .sp-note {
+      font-size: 0.78rem; color: var(--text-tertiary); font-style: italic; margin-top: 0.5rem;
+    }
+
+    /* ══════════════ CLIENT JOURNEY ══════════════ */
+    section#journey { background: var(--cream); }
+
+    .journey-track {
+      grid-template-columns: repeat(5, 1fr); margin-top: 2.5rem;
+    }
+    .journey-step { padding: 1.75rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .js-number {
+      font-family: var(--serif); font-size: 2rem; font-weight: 400;
+      color: var(--text); line-height: 1; margin-bottom: 0.5rem;
+    }
+    .js-number.active { color: var(--brick); }
+    .js-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; }
+    .js-title {
+      font-family: var(--serif); font-size: 0.95rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .js-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Segmentation note */
+    .seg-note {
+      margin-top: 2rem; padding: 1.5rem; background: var(--white);
+      border: 1px solid var(--rule-light); border-radius: 2px;
+    }
+    .seg-note strong { font-weight: 500; color: var(--text); }
+    .seg-bar {
+      display: flex; height: 8px; border-radius: 4px; overflow: hidden;
+      margin: 0.75rem 0 0.5rem; gap: 2px;
+    }
+    .seg-bar-existing { flex: 60; background: var(--navy); border-radius: 4px 0 0 4px; }
+    .seg-bar-preventure { flex: 40; background: var(--pool); border-radius: 0 4px 4px 0; }
+    .seg-labels {
+      display: flex; justify-content: space-between;
+      font-family: var(--mono); font-size: 0.6rem; color: var(--text-tertiary);
+    }
+
+    /* ══════════════ NETWORK INFRASTRUCTURE ══════════════ */
+    section#network { background: var(--white); }
+
+    .network-grid {
+      display: grid; grid-template-columns: 2fr 1fr; gap: 1px;
+      background: var(--rule-light); border: 1px solid var(--rule-light);
+      border-radius: 2px; overflow: hidden; margin-top: 2.5rem;
+    }
+    .network-main {
+      background: var(--navy); color: var(--white);
+      padding: 3rem 2.5rem; position: relative; overflow: hidden;
+    }
+    .network-main .nm-bg-icon {
+      position: absolute; font-size: 300px; opacity: 0.03;
+      top: -40px; right: -60px; color: var(--white); pointer-events: none;
+    }
+    .network-main > * { position: relative; z-index: 1; }
+    .nm-headline {
+      font-family: var(--serif); font-size: 2rem; font-weight: 400;
+      line-height: 1.15; margin-bottom: 1.25rem;
+    }
+    .nm-desc { font-size: 0.92rem; opacity: 0.8; line-height: 1.65; margin-bottom: 2rem; }
+    .nm-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+    }
+    .nm-stat { background: var(--navy); padding: 1.25rem; text-align: center; }
+    .nm-stat-num { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 0.15rem; }
+    .nm-stat-label { font-size: 0.72rem; opacity: 0.55; }
+    .network-sidebar { background: var(--white); display: flex; flex-direction: column; }
+    .ns-cell {
+      flex: 1; padding: 1.5rem; border-bottom: 1px solid var(--rule-light);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .ns-cell:last-child { border-bottom: none; }
+    .ns-cell-icon { font-size: 1.25rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .ns-cell-title {
+      font-family: var(--serif); font-size: 1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.25rem;
+    }
+    .ns-cell-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ══════════════ ECOSYSTEM ══════════════ */
+    section#ecosystem { background: var(--cream); }
+    .eco-grid { grid-template-columns: repeat(2, 1fr); margin-top: 2.5rem; }
+    .eco-cell { padding: 2rem 1.75rem; }
+    .eco-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .eco-title {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem;
+    }
+    .eco-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+    .eco-examples {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--text-tertiary); line-height: 1.7;
+    }
+
+    /* ══════════════ SATISFACTION & KPIS ══════════════ */
+    section#kpis { background: var(--white); }
+
+    .kpi-cols {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem;
+    }
+    .kpi-col-label {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule-light);
+    }
+    .kpi-item {
+      display: grid; grid-template-columns: 40px 1fr; gap: 0.75rem;
+      padding: 0.75rem 0; border-bottom: 1px solid var(--rule-light); align-items: center;
+    }
+    .kpi-item:last-child { border-bottom: none; }
+    .kpi-icon { font-size: 1.1rem; color: var(--navy); text-align: center; }
+    .kpi-name { font-size: 0.88rem; color: var(--text); line-height: 1.4; }
+    .kpi-name span { display: block; font-family: var(--mono); font-size: 0.6rem; color: var(--text-tertiary); margin-top: 0.1rem; }
+
+    .survey-note {
+      margin-top: 2rem; padding: 1.5rem; background: var(--cream);
+      border: 1px solid var(--rule-light); border-radius: 2px;
+    }
+    .survey-note strong { font-weight: 500; color: var(--text); }
+    .survey-note p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.5rem; }
+    .survey-note p:last-child { margin-bottom: 0; }
+    .survey-questions {
+      margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--rule-light);
+    }
+    .survey-q {
+      font-family: var(--serif); font-style: italic; font-size: 0.95rem;
+      color: var(--text); line-height: 1.5; margin-bottom: 0.4rem;
+    }
+
+    /* ══════════════ PLATFORMS ══════════════ */
+    section#tools { background: var(--cream); }
+    .tools-grid { grid-template-columns: repeat(3, 1fr); margin-top: 2.5rem; }
+    .tool-card { padding: 2rem 1.5rem; }
+    .tool-type {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--brick); margin-bottom: 0.5rem;
+    }
+    .tool-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem;
+    }
+    .tool-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ══════════════ AT A GLANCE ══════════════ */
+    section#glance {
+      background: var(--navy); color: var(--white); padding: calc(var(--pad) * 0.8) 0;
+    }
+    section#glance .section-header { border-top: 1px solid rgba(255,255,255,0.15); }
+    section#glance .section-title { color: var(--white); }
+    section#glance .section-kicker { color: rgba(255,255,255,0.5); }
+    .glance-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-top: 2rem;
+    }
+    .glance-item { background: var(--navy); padding: 1.75rem 1.25rem; text-align: center; }
+    .gi-icon { font-size: 1.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+    .gi-num { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 0.15rem; }
+    .gi-label { font-size: 0.75rem; opacity: 0.6; margin-bottom: 0.35rem; }
+    .gi-detail {
+      font-family: var(--mono); font-size: 0.6rem; opacity: 0.35;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .glance-note {
+      margin-top: 1.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy); color: var(--white);
+      padding: 2.5rem var(--pad) 1.5rem; text-align: center;
+    }
+    .footer-content { max-width: var(--max); margin: 0 auto; }
+    .footer-cta {
+      display: inline-block; background: var(--white); color: var(--navy);
+      padding: 0.75rem 1.5rem; border-radius: 2px; text-decoration: none;
+      font-weight: 500; margin-bottom: 1.5rem; font-family: var(--sans);
+      transition: background 200ms var(--ease);
+    }
+    .footer-cta:hover { background: var(--cream); }
+    .footer-bottom {
+      padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.75rem; opacity: 0.5;
+    }
+    .footer-logo { height: 18px; margin-bottom: 0.75rem; }
+    .footer-logo img { height: 100%; width: auto; margin: 0 auto; }
+
+    /* ── Animations ── */
+    .reveal { opacity: 0; transform: translateY(16px); }
+    .reveal.active { animation: revealIn 0.5s var(--ease) forwards; }
+    @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav.top-bar { height: auto; padding: 0.6rem var(--pad); flex-wrap: wrap; }
+      .nav-links { width: 100%; margin-left: 0; margin-top: 0.4rem; gap: 1.25rem; }
+      .two-col-core { grid-template-columns: 1fr; }
+      .sp-grid { grid-template-columns: 1fr !important; }
+      .journey-track { grid-template-columns: 1fr !important; }
+      .network-grid { grid-template-columns: 1fr; }
+      .eco-grid { grid-template-columns: 1fr !important; }
+      .tools-grid { grid-template-columns: 1fr !important; }
+      .glance-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-cols { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-strip { flex-wrap: wrap; }
+      .hero-strip .hs-item { flex: 0 0 50%; padding: 0.75rem 0; }
+      .hero-strip .hs-item:not(:last-child) { border-right: none; }
+      .nm-stats { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .glance-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-bar">
+    <div class="nav-logo"><img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC"></div>
+    <div class="nav-links">
+      <a href="brand-house.html">Brand House</a>
+      <a href="#core">Core</a>
+      <a href="#specialty">Programs</a>
+      <a href="#journey">Journey</a>
+      <a href="#network">Network</a>
+      <a href="#ecosystem">Partners</a>
+      <a href="#kpis">KPIs</a>
+      <a href="#tools">Tools</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+      <div class="reveal">
+        <h1 class="hero-title">The Network</h1>
+        <p class="hero-kicker">Services &middot; Programs &middot; Operations</p>
+        <p class="hero-tagline">Everything NorCal SBDC is — the services, specialty programs, client journey, network infrastructure, and performance framework that make "Your Business, Better" real.</p>
+        <div class="hero-strip">
+          <div class="hs-item"><div class="hs-num">2</div><div class="hs-label">Core Services</div></div>
+          <div class="hs-item"><div class="hs-num">12+</div><div class="hs-label">Specialty Programs</div></div>
+          <div class="hs-item"><div class="hs-num">14</div><div class="hs-label">Centers</div></div>
+          <div class="hs-item"><div class="hs-num">36</div><div class="hs-label">Counties</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CORE SERVICES ═══ -->
+    <section id="core">
+      <div class="section-header reveal">
+        <span class="section-kicker">The Foundation</span>
+        <h2 class="section-title">Core Services</h2>
+      </div>
+      <div class="grid-1px two-col-core reveal">
+        <!-- Advising -->
+        <div class="core-block">
+          <iconify-icon class="core-icon" icon="carbon:collaborate"></iconify-icon>
+          <div class="core-name">Advising</div>
+          <div class="core-desc">One-on-one, no-fee business consulting. An experienced advisor sits across the table from an entrepreneur and helps them solve real problems. No time limits. As many sessions as you need. Every center in the network delivers advising across six core competency areas.</div>
+          <div class="competency-label">Core Competency Areas</div>
+          <div class="competency-tags">
+            <span class="c-tag">Startup Assistance</span>
+            <span class="c-tag">Business Planning</span>
+            <span class="c-tag">Access to Capital — Loans</span>
+            <span class="c-tag">Financial Management / Accounting</span>
+            <span class="c-tag">Marketing</span>
+            <span class="c-tag coming">AI (Jan 2026)</span>
+          </div>
+        </div>
+        <!-- Training -->
+        <div class="core-block">
+          <iconify-icon class="core-icon" icon="carbon:events"></iconify-icon>
+          <div class="core-name">Training</div>
+          <div class="core-desc">200+ workshops and training events every year — from startup fundamentals to advanced growth strategy. Delivered in-person at centers, online via webinar, and through multi-session cohort programs. Training also serves as the primary client attraction channel: events bring in new clients for advising.</div>
+          <div class="competency-label">Delivery Formats</div>
+          <div class="competency-tags">
+            <span class="c-tag">In-Person Workshops</span>
+            <span class="c-tag">Webinars</span>
+            <span class="c-tag">Cohort Programs</span>
+            <span class="c-tag">Partner Co-Hosted</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SPECIALTY PROGRAMS ═══ -->
+    <section id="specialty">
+      <div class="section-header reveal">
+        <span class="section-kicker">Focused Expertise</span>
+        <h2 class="section-title">Specialty Programs</h2>
+      </div>
+
+      <!-- Cluster: Technology & Innovation -->
+      <div class="sp-cluster reveal">
+        <div class="sp-cluster-label">Technology &amp; Innovation</div>
+        <div class="grid-1px sp-grid">
+          <div class="sp-card">
+            <div class="sp-badge badge-blue"><iconify-icon icon="carbon:rocket"></iconify-icon> Flagship</div>
+            <div class="sp-name">Tech Futures Group</div>
+            <div class="sp-desc">No-cost, no-equity venture platform for technology startups. SBIR/STTR grant support, capital raising, and commercialization strategy. Vertical focus: Climate Tech, BioTech, SaaS, deep tech.</div>
+            <div class="sp-stat-row">
+              <div><div class="sp-stat-num">$1B+</div><div class="sp-stat-label">Capital Raised</div></div>
+              <div><div class="sp-stat-num">57%</div><div class="sp-stat-label">SBIR Win Rate</div></div>
+            </div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-blue"><iconify-icon icon="carbon:flash"></iconify-icon> TFG</div>
+            <div class="sp-name">FAST</div>
+            <div class="sp-desc">Specialized SBIR/STTR application support through the Federal and State Technology Partnership Program. Helps tech founders navigate federal grant applications with high success rates.</div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-blue"><iconify-icon icon="carbon:machine-learning-model"></iconify-icon> New</div>
+            <div class="sp-name">AI U</div>
+            <div class="sp-desc">Artificial intelligence education and adoption program. Helps small businesses understand, evaluate, and implement AI tools for operations, marketing, customer service, and growth.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster: Access to Capital -->
+      <div class="sp-cluster reveal">
+        <div class="sp-cluster-label">Access to Capital</div>
+        <div class="grid-1px sp-grid sp-grid-2">
+          <div class="sp-card">
+            <div class="sp-badge badge-red"><iconify-icon icon="carbon:finance"></iconify-icon> Capital</div>
+            <div class="sp-name">Finance Center</div>
+            <div class="sp-desc">Centralized capital access hub with Certified Capital Advisors. Loan packaging, lender matching, SBA program navigation, financial projections, and cash flow planning. The engine behind $240M+ in capital accessed.</div>
+            <div class="sp-stat-row">
+              <div><div class="sp-stat-num">$240M+</div><div class="sp-stat-label">Capital Accessed</div></div>
+              <div><div class="sp-stat-num">50+</div><div class="sp-stat-label">Lender Partners</div></div>
+            </div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-red"><iconify-icon icon="carbon:currency-dollar"></iconify-icon> State</div>
+            <div class="sp-name">SSBCI</div>
+            <div class="sp-desc">State Small Business Credit Initiative coordination. Connects entrepreneurs with state-administered capital programs, including loan guarantees and equity investments designed to expand access for underserved communities.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster: Contracting -->
+      <div class="sp-cluster reveal">
+        <div class="sp-cluster-label">Contracting &amp; Procurement</div>
+        <div class="grid-1px sp-grid sp-grid-2">
+          <div class="sp-card">
+            <div class="sp-badge badge-teal"><iconify-icon icon="carbon:document"></iconify-icon> State + Local</div>
+            <div class="sp-name">ProBiz</div>
+            <div class="sp-desc">State and local government contracting program. Helps small businesses navigate procurement processes, find contract opportunities, prepare bids, and build compliance capacity for public-sector work.</div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-teal"><iconify-icon icon="carbon:government"></iconify-icon> Federal</div>
+            <div class="sp-name">APEX Accelerator</div>
+            <div class="sp-desc">Federal contracting support through the APEX Accelerator (formerly PTAC). A sister program that helps businesses pursue Department of Defense and other federal contract opportunities.</div>
+            <div class="sp-note">Sister program — referral relationship</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster: Industry-Specific -->
+      <div class="sp-cluster reveal">
+        <div class="sp-cluster-label">Industry-Specific</div>
+        <div class="grid-1px sp-grid">
+          <div class="sp-card">
+            <div class="sp-badge badge-green"><iconify-icon icon="carbon:health-cross"></iconify-icon> Healthcare</div>
+            <div class="sp-name">SBDC Health</div>
+            <div class="sp-desc">Specialized advising for healthcare businesses — private practices, clinics, medical startups, and health-tech. Navigating compliance, licensing, payer contracts, and growth in a highly regulated industry.</div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-green"><iconify-icon icon="carbon:restaurant"></iconify-icon> Food &amp; Beverage</div>
+            <div class="sp-name">SBDC Eats</div>
+            <div class="sp-desc">Dedicated program for food businesses and restaurants. Menu to market: permitting, commercial kitchen sourcing, distribution strategy, food safety, and scaling from farmers market to retail shelf.</div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-green"><iconify-icon icon="carbon:star"></iconify-icon> Beauty &amp; Personal Care</div>
+            <div class="sp-name">Beauty Boss</div>
+            <div class="sp-desc">Industry-specific program for beauty and personal care entrepreneurs. Branding, licensing, product development, retail distribution, and scaling a beauty business from concept to shelf.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster: Other Programs -->
+      <div class="sp-cluster reveal">
+        <div class="sp-cluster-label">Additional Programs</div>
+        <div class="grid-1px sp-grid sp-grid-2">
+          <div class="sp-card">
+            <div class="sp-badge badge-navy"><iconify-icon icon="carbon:location-heart"></iconify-icon> Rural</div>
+            <div class="sp-name">PRIME</div>
+            <div class="sp-desc">Program for Rural &amp; Isolated Micro Entrepreneurs. Tailored support for businesses in underserved and rural communities across Northern California's most remote counties.</div>
+          </div>
+          <div class="sp-card">
+            <div class="sp-badge badge-navy"><iconify-icon icon="carbon:shopping-cart"></iconify-icon> E-Commerce</div>
+            <div class="sp-name">California Shop Small</div>
+            <div class="sp-desc">E-commerce enablement program. Helps brick-and-mortar businesses build online storefronts, optimize digital presence, and develop omnichannel sales strategies.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CLIENT JOURNEY ═══ -->
+    <section id="journey">
+      <div class="section-header reveal">
+        <span class="section-kicker">Centralized Intake Process</span>
+        <h2 class="section-title">Client Journey</h2>
+      </div>
+      <div class="grid-1px journey-track reveal">
+        <div class="journey-step">
+          <div class="js-number active">01</div>
+          <iconify-icon class="js-icon" icon="carbon:document"></iconify-icon>
+          <div class="js-title">Online Application</div>
+          <div class="js-desc">Client submits an online application, generating a signed SBA 641 form automatically captured in Neoserra.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">02</div>
+          <iconify-icon class="js-icon" icon="carbon:phone"></iconify-icon>
+          <div class="js-title">Phone Intake</div>
+          <div class="js-desc">Client books a 20-minute phone intake via Calendly. CI Specialist gathers baseline data, assesses readiness, and explains EI collection.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">03</div>
+          <iconify-icon class="js-icon" icon="carbon:arrows-horizontal"></iconify-icon>
+          <div class="js-title">Match or Refer</div>
+          <div class="js-desc">Ready clients are matched with an advisor by goals, industry, language, and location. Others are referred to workshops or partners and can return later.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">04</div>
+          <iconify-icon class="js-icon" icon="carbon:collaborate"></iconify-icon>
+          <div class="js-title">Ongoing Advising</div>
+          <div class="js-desc">No-fee sessions as often as needed. Capital access support, specialist referrals, workshop recommendations, and accountability toward milestones.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">05</div>
+          <iconify-icon class="js-icon" icon="carbon:star-filled"></iconify-icon>
+          <div class="js-title">Impact &amp; Growth</div>
+          <div class="js-desc">Milestones are tracked via Neoserra: capital secured, jobs created, revenue grown. EI data captured through the Milestone Attribution API.</div>
+        </div>
+      </div>
+
+      <!-- Segmentation -->
+      <div class="seg-note reveal">
+        <strong>Client Segmentation</strong>
+        <div class="seg-bar">
+          <div class="seg-bar-existing"></div>
+          <div class="seg-bar-preventure"></div>
+        </div>
+        <div class="seg-labels">
+          <span>Existing Businesses &gt; 60%</span>
+          <span>Pre-Venture &lt; 40%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ NETWORK INFRASTRUCTURE ═══ -->
+    <section id="network">
+      <div class="section-header reveal">
+        <span class="section-kicker">Reach &amp; Scale</span>
+        <h2 class="section-title">Network Infrastructure</h2>
+      </div>
+      <div class="network-grid reveal">
+        <div class="network-main">
+          <iconify-icon class="nm-bg-icon" icon="carbon:location"></iconify-icon>
+          <div class="nm-headline">14 Centers.<br>36 Counties.<br>One Network.</div>
+          <div class="nm-desc">NorCal SBDC operates 14 service centers spanning Northern California — from the Oregon border to the Sacramento Valley. Each center serves its local community with advisors who know the regional economy, the local lenders, and the unique challenges businesses face in their area. The contractor model enables flexible staffing with specialized expertise.</div>
+          <div class="nm-stats">
+            <div class="nm-stat"><div class="nm-stat-num">63</div><div class="nm-stat-label">Advisors</div></div>
+            <div class="nm-stat"><div class="nm-stat-num">8,500+</div><div class="nm-stat-label">Clients Served</div></div>
+            <div class="nm-stat"><div class="nm-stat-num">$240M+</div><div class="nm-stat-label">Capital Accessed</div></div>
+            <div class="nm-stat"><div class="nm-stat-num">1,900+</div><div class="nm-stat-label">Jobs Created</div></div>
+          </div>
+        </div>
+        <div class="network-sidebar">
+          <div class="ns-cell">
+            <iconify-icon class="ns-cell-icon" icon="carbon:translate"></iconify-icon>
+            <div class="ns-cell-title">Bilingual Advisors</div>
+            <div class="ns-cell-desc">Multilingual advisors serving diverse communities. Centers can "Red Carpet" clients who speak languages not supported by Centralized Intake.</div>
+          </div>
+          <div class="ns-cell">
+            <iconify-icon class="ns-cell-icon" icon="carbon:laptop"></iconify-icon>
+            <div class="ns-cell-title">Virtual Access</div>
+            <div class="ns-cell-desc">Every service available remotely — Zoom consultations, online workshops, and digital resources for rural and underserved areas.</div>
+          </div>
+          <div class="ns-cell">
+            <iconify-icon class="ns-cell-icon" icon="carbon:industry"></iconify-icon>
+            <div class="ns-cell-title">Industry Specialists</div>
+            <div class="ns-cell-desc">Deep expertise in manufacturing, technology, food &amp; beverage, healthcare, beauty, construction, and professional services.</div>
+          </div>
+          <div class="ns-cell">
+            <iconify-icon class="ns-cell-icon" icon="carbon:arrows-horizontal"></iconify-icon>
+            <div class="ns-cell-title">Cross-Referral</div>
+            <div class="ns-cell-desc">Clients access any specialist across the 14-center network regardless of intake location. The network operates as one team.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PARTNER ECOSYSTEM ═══ -->
+    <section id="ecosystem">
+      <div class="section-header reveal">
+        <span class="section-kicker">Who We Work With</span>
+        <h2 class="section-title">Partner Ecosystem</h2>
+      </div>
+      <div class="grid-1px eco-grid reveal">
+        <div class="eco-cell">
+          <iconify-icon class="eco-icon" icon="carbon:government"></iconify-icon>
+          <div class="eco-title">Federal &amp; State</div>
+          <div class="eco-desc">Funded by and operating in coordination with the SBA and the California Governor's Office of Business and Economic Development (GO-Biz). Part of America's SBDC national network.</div>
+          <div class="eco-examples">SBA &middot; GO-Biz &middot; America's SBDC &middot; CSBDC</div>
+        </div>
+        <div class="eco-cell">
+          <iconify-icon class="eco-icon" icon="carbon:finance"></iconify-icon>
+          <div class="eco-title">Lending Partners</div>
+          <div class="eco-desc">50+ banks, credit unions, CDFIs, and micro-lenders. Advisors match clients to the right lender and prepare loan packages that get approved.</div>
+          <div class="eco-examples">Banks &middot; Credit Unions &middot; CDFIs &middot; Micro-Lenders &middot; SBA Lenders</div>
+        </div>
+        <div class="eco-cell">
+          <iconify-icon class="eco-icon" icon="carbon:education"></iconify-icon>
+          <div class="eco-title">Universities &amp; Incubators</div>
+          <div class="eco-desc">Referral pipelines with entrepreneurship programs, tech transfer offices, and startup incubators. Key source for TFG applicants.</div>
+          <div class="eco-examples">UC Davis &middot; Sac State &middot; Chico State &middot; Humboldt &middot; Incubators</div>
+        </div>
+        <div class="eco-cell">
+          <iconify-icon class="eco-icon" icon="carbon:partnership"></iconify-icon>
+          <div class="eco-title">Local &amp; Regional</div>
+          <div class="eco-desc">Chambers, cities, EDOs, workforce boards, MEP centers, and industry associations. Co-marketing, co-events, and mutual referral pathways.</div>
+          <div class="eco-examples">Chambers &middot; Cities &middot; EDOs &middot; Workforce Boards &middot; MEP Centers</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ KPIs & SATISFACTION ═══ -->
+    <section id="kpis">
+      <div class="section-header reveal">
+        <span class="section-kicker">Performance Framework</span>
+        <h2 class="section-title">KPIs &amp; Measurement</h2>
+      </div>
+      <div class="kpi-cols reveal">
+        <!-- KPIs -->
+        <div>
+          <div class="kpi-col-label">Key Performance Indicators (KPIs)</div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:collaborate"></iconify-icon>
+            <div class="kpi-name">Counseling Clients<span>Unique clients served</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:time"></iconify-icon>
+            <div class="kpi-name">Counseling Hours<span>Total advising hours delivered</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:chart-line-data"></iconify-icon>
+            <div class="kpi-name">% Achieving Economic Impact<span>Clients with measurable EI per year</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:rocket"></iconify-icon>
+            <div class="kpi-name">New Business Starts<span>Businesses launched with SBDC support</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:user-multiple"></iconify-icon>
+            <div class="kpi-name">Jobs Created<span>New positions attributed to advising</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:currency-dollar"></iconify-icon>
+            <div class="kpi-name">Capital Infusion ($)<span>Dollar amount secured by clients</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:checkmark-outline"></iconify-icon>
+            <div class="kpi-name">Capital Infusion (Count)<span>Number of funding events</span></div>
+          </div>
+        </div>
+        <!-- Other Metrics -->
+        <div>
+          <div class="kpi-col-label">Other Performance Measures</div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:events"></iconify-icon>
+            <div class="kpi-name">Training Sessions<span>Workshops and events delivered</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:group"></iconify-icon>
+            <div class="kpi-name">Training Attendees<span>Total workshop participants</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:meter"></iconify-icon>
+            <div class="kpi-name">Client Mix<span>% pre-venture vs. existing businesses</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:timer"></iconify-icon>
+            <div class="kpi-name">Hours Split<span>% counseling hours by segment</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:login"></iconify-icon>
+            <div class="kpi-name">Monthly Intakes<span>New client applications per month</span></div>
+          </div>
+          <div class="kpi-item">
+            <iconify-icon class="kpi-icon" icon="carbon:thumbs-up"></iconify-icon>
+            <div class="kpi-name">Client Satisfaction<span>Survey-based satisfaction scores</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Satisfaction Surveys -->
+      <div class="survey-note reveal">
+        <strong>Client Satisfaction Framework</strong>
+        <p>Three survey touchpoints for advising clients: after the 3rd session, annually in April, and every 10 reportable hours. Training attendees receive a separate survey. All responses captured in Neoserra.</p>
+        <div class="survey-questions">
+          <div class="survey-q">"Would you use the SBDC again?"</div>
+          <div class="survey-q">"Would you recommend us to a friend?"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PLATFORMS & TOOLS ═══ -->
+    <section id="tools">
+      <div class="section-header reveal">
+        <span class="section-kicker">How We Operate</span>
+        <h2 class="section-title">Platforms &amp; Tools</h2>
+      </div>
+      <div class="grid-1px tools-grid reveal">
+        <div class="tool-card">
+          <div class="tool-type">Client Management</div>
+          <div class="tool-name">Neoserra</div>
+          <div class="tool-desc">System of record. Intake forms, session tracking, milestone logging, satisfaction surveys, EI attribution, and real-time performance dashboards. Reviewed monthly, quarterly, and annually.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-type">Impact Tracking</div>
+          <div class="tool-name">Milestone Attribution API</div>
+          <div class="tool-desc">Captures and syncs economic impact data into Neoserra. Advisor communication during sessions, email survey via landing page, and annual API survey for 3+ hour clients. Spot-checked throughout the year.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-type">Scheduling</div>
+          <div class="tool-name">Calendly</div>
+          <div class="tool-desc">Client-facing scheduling for the centralized intake process. Clients self-book their 20-minute phone intake, reducing friction from first contact to first conversation.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-type">Client-Facing</div>
+          <div class="tool-name">MySBDC</div>
+          <div class="tool-desc">Public website and digital front door. Event registration, advisor discovery, resource library, success stories hub, and online application for new clients.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-type">Client-Facing</div>
+          <div class="tool-name">Tech Futures Group Site</div>
+          <div class="tool-desc">Dedicated TFG portal. Founder application, SBIR/STTR resources, impact data, and advisor profiles. Optimized for organic search and conversion.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-type">Brand</div>
+          <div class="tool-name">Brand House</div>
+          <div class="tool-desc">Centralized brand resource hub. Design system, campaign toolkits, story templates, event graphics, messaging guide, and lender resources — all in one place.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ AT A GLANCE ═══ -->
+    <section id="glance">
+      <div class="section-header reveal">
+        <span class="section-kicker">The Full Picture</span>
+        <h2 class="section-title">At a Glance</h2>
+      </div>
+      <div class="reveal">
+        <div class="glance-grid">
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:collaborate"></iconify-icon>
+            <div class="gi-num">63</div>
+            <div class="gi-label">Advisors</div>
+            <div class="gi-detail">Across 14 centers</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:location"></iconify-icon>
+            <div class="gi-num">36</div>
+            <div class="gi-label">Counties Served</div>
+            <div class="gi-detail">Northern California</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:group"></iconify-icon>
+            <div class="gi-num">8,500+</div>
+            <div class="gi-label">Clients Served</div>
+            <div class="gi-detail">Pre-venture + existing</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:currency-dollar"></iconify-icon>
+            <div class="gi-num">$240M+</div>
+            <div class="gi-label">Capital Accessed</div>
+            <div class="gi-detail">50+ lending partners</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:user-multiple"></iconify-icon>
+            <div class="gi-num">1,900+</div>
+            <div class="gi-label">Jobs Created</div>
+            <div class="gi-detail">Verified via API</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:rocket"></iconify-icon>
+            <div class="gi-num">$1B+</div>
+            <div class="gi-label">TFG Capital</div>
+            <div class="gi-detail">57% SBIR win rate</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:categories"></iconify-icon>
+            <div class="gi-num">12+</div>
+            <div class="gi-label">Specialty Programs</div>
+            <div class="gi-detail">TFG to Beauty Boss</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:tag"></iconify-icon>
+            <div class="gi-num">No-Fee</div>
+            <div class="gi-label">Every Service</div>
+            <div class="gi-detail">Always</div>
+          </div>
+        </div>
+        <p class="glance-note">All services are no-fee to the client. NorCal SBDC is funded by the U.S. Small Business Administration and the State of California through GO-Biz, with additional support from host institutions and community partners. Performance tracked in real-time via Neoserra dashboards and reviewed monthly, quarterly, and annually.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="reveal">
+      <div class="footer-content">
+        <div class="footer-logo"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC"></div>
+        <a href="brand-house.html" class="footer-cta">Back to Brand House</a>
+        <div class="footer-bottom">
+          <p>&copy; 2026 NorCal Small Business Development Center. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+    }
+  </script>
+</body>
+</html>

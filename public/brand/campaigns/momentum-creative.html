@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — 20 Years — Creative Exploration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* Daily Spoon Blues */
+            --ice: #E8F4F8;
+            --mist: #D4E9F0;
+            --sky: #B8D9E8;
+            --pool: #8FC5D9;
+            --slate: #5A9BB5;
+            --deep: #2D6B85;
+            --navy: #0F1C2E;
+            --maroon: #8A2432;
+            --cream: #FAF9F7;
+            --warm: #F5F0E8;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: #080808;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .section-break {
+            text-align: center;
+            padding: 100px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .section-break-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .frame {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frame-label {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            z-index: 100;
+        }
+        
+        /* Grain */
+        .grain::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        /* =============================================
+           BOARD 1: MASSIVE TYPE CROP
+        ============================================= */
+        .board-crop {
+            background: var(--ice);
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .board-crop .frame-label { color: var(--deep); }
+        
+        .board-crop .crop-text {
+            position: absolute;
+            bottom: -120px;
+            left: -20px;
+            font-size: 380px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.75;
+            opacity: 0.08;
+        }
+        
+        .board-crop .content {
+            position: relative;
+            z-index: 10;
+            padding: 80px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .board-crop .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .board-crop .logo {
+            width: 200px;
+        }
+        
+        .board-crop .date-badge {
+            background: var(--navy);
+            color: white;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+        }
+        
+        .board-crop .hero-block {
+            max-width: 600px;
+        }
+        
+        .board-crop .hero-line {
+            font-size: 72px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .board-crop .hero-line.accent {
+            color: var(--deep);
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        .board-crop .star-float {
+            position: absolute;
+            top: 100px;
+            right: 100px;
+            width: 120px;
+            opacity: 0.12;
+            transform: rotate(-10deg);
+        }
+        
+        /* =============================================
+           BOARD 2: BRUTAL SPLIT
+        ============================================= */
+        .board-brutal {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            min-height: 600px;
+        }
+        
+        .board-brutal .left {
+            background: var(--navy);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+        
+        .board-brutal .left .vertical-text {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .board-brutal .left .big-num {
+            font-size: 200px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+        }
+        
+        .board-brutal .left .unit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-top: 16px;
+        }
+        
+        .board-brutal .right {
+            background: var(--pool);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .board-brutal .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .board-brutal .right .logo {
+            width: 180px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-brutal .right .statement {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-brutal .right .statement span {
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        .board-brutal .right .star {
+            position: absolute;
+            bottom: -60px;
+            right: -60px;
+            width: 250px;
+            opacity: 0.08;
+        }
+        
+        /* =============================================
+           BOARD 3: OVERLAP CHAOS
+        ============================================= */
+        .board-overlap {
+            background: var(--cream);
+            min-height: 600px;
+            position: relative;
+            padding: 80px;
+        }
+        
+        .board-overlap .frame-label { color: var(--slate); }
+        
+        .board-overlap .back-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 300px;
+            font-weight: 900;
+            color: var(--navy);
+            opacity: 0.04;
+            letter-spacing: -0.03em;
+            white-space: nowrap;
+        }
+        
+        .board-overlap .card {
+            position: absolute;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        }
+        
+        .board-overlap .card-1 {
+            top: 80px;
+            left: 80px;
+            width: 320px;
+            padding: 40px;
+            transform: rotate(-2deg);
+            z-index: 10;
+        }
+        
+        .board-overlap .card-1 .num {
+            font-size: 80px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+        
+        .board-overlap .card-1 .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 8px;
+        }
+        
+        .board-overlap .card-2 {
+            top: 200px;
+            right: 120px;
+            width: 400px;
+            padding: 48px;
+            transform: rotate(1deg);
+            z-index: 20;
+        }
+        
+        .board-overlap .card-2 .logo {
+            width: 160px;
+            margin-bottom: 24px;
+        }
+        
+        .board-overlap .card-2 .text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+        
+        .board-overlap .card-3 {
+            bottom: 60px;
+            left: 200px;
+            background: var(--navy);
+            width: 280px;
+            padding: 36px;
+            transform: rotate(3deg);
+            z-index: 15;
+        }
+        
+        .board-overlap .card-3 .stat {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .board-overlap .card-3 .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .board-overlap .star-scatter-1 {
+            position: absolute;
+            top: 60px;
+            right: 60px;
+            width: 50px;
+            opacity: 0.15;
+            transform: rotate(15deg);
+        }
+        
+        .board-overlap .star-scatter-2 {
+            position: absolute;
+            bottom: 100px;
+            right: 80px;
+            width: 35px;
+            opacity: 0.1;
+            transform: rotate(-20deg);
+        }
+        
+        /* =============================================
+           BOARD 4: EDITORIAL MAGAZINE
+        ============================================= */
+        .board-editorial {
+            background: white;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .board-editorial .frame-label { color: #999; }
+        
+        .board-editorial .left {
+            padding: 60px;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .board-editorial .masthead {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .board-editorial .masthead .logo {
+            width: 140px;
+        }
+        
+        .board-editorial .masthead .issue {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #999;
+        }
+        
+        .board-editorial .headline {
+            font-size: 64px;
+            font-weight: 300;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+        
+        .board-editorial .headline strong {
+            font-weight: 800;
+        }
+        
+        .board-editorial .byline {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+        
+        .board-editorial .right {
+            background: var(--mist);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .board-editorial .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+        }
+        
+        .board-editorial .star-center {
+            width: 280px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-editorial .pull-quote {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            font-size: 18px;
+            font-weight: 600;
+            font-style: italic;
+            color: var(--navy);
+            text-align: center;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           BOARD 5: KINETIC STAGGER
+        ============================================= */
+        .board-kinetic {
+            background: var(--navy);
+            min-height: 600px;
+            padding: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .board-kinetic .frame-label { color: var(--pool); }
+        
+        .board-kinetic .stagger-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-kinetic .stagger-line {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: -20px;
+        }
+        
+        .board-kinetic .stagger-line:nth-child(2) { margin-left: 80px; }
+        .board-kinetic .stagger-line:nth-child(3) { margin-left: 160px; }
+        .board-kinetic .stagger-line:nth-child(4) { margin-left: 240px; }
+        
+        .board-kinetic .word {
+            font-size: 100px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .board-kinetic .word.ghost { color: var(--deep); opacity: 0.3; }
+        .board-kinetic .word.solid { color: white; }
+        .board-kinetic .word.accent { color: var(--pool); }
+        
+        .board-kinetic .logo {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            width: 180px;
+        }
+        
+        .board-kinetic .star-1 {
+            position: absolute;
+            top: 80px;
+            right: 200px;
+            width: 60px;
+            opacity: 0.3;
+        }
+        
+        .board-kinetic .star-2 {
+            position: absolute;
+            bottom: 200px;
+            left: 80px;
+            width: 40px;
+            opacity: 0.15;
+            transform: rotate(30deg);
+        }
+        
+        .board-kinetic .bottom-text {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--slate);
+        }
+        
+        /* =============================================
+           BOARD 6: NEGATIVE SPACE
+        ============================================= */
+        .board-negative {
+            background: var(--deep);
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .board-negative .frame-label { color: var(--sky); }
+        
+        .board-negative .cutout {
+            width: 500px;
+            height: 400px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .board-negative .cutout::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .board-negative .cutout .logo {
+            width: 200px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-negative .cutout .text {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-negative .cutout .text span {
+            color: var(--maroon);
+        }
+        
+        .board-negative .corner-num {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            font-size: 180px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.06);
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+        }
+        
+        .board-negative .star-corner {
+            position: absolute;
+            bottom: 40px;
+            left: 60px;
+            width: 80px;
+            opacity: 0.2;
+        }
+        
+        /* =============================================
+           BOARD 7: DATA WALL
+        ============================================= */
+        .board-data {
+            background: var(--navy);
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            padding: 1px;
+        }
+        
+        .board-data .cell {
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            transition: background 0.3s;
+        }
+        
+        .board-data .cell:hover {
+            background: var(--deep);
+        }
+        
+        .board-data .cell.accent {
+            background: var(--pool);
+        }
+        
+        .board-data .cell.accent:hover {
+            background: var(--sky);
+        }
+        
+        .board-data .cell.double {
+            grid-column: span 2;
+        }
+        
+        .board-data .cell .num {
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+        
+        .board-data .cell.accent .num {
+            color: var(--navy);
+        }
+        
+        .board-data .cell .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 8px;
+        }
+        
+        .board-data .cell.accent .label {
+            color: var(--navy);
+            opacity: 0.6;
+        }
+        
+        .board-data .cell.logo-cell {
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .board-data .cell.logo-cell .logo {
+            width: 140px;
+        }
+        
+        .board-data .cell.star-cell {
+            justify-content: center;
+            align-items: center;
+            background: var(--mist);
+        }
+        
+        .board-data .cell.star-cell .star {
+            width: 80px;
+            opacity: 0.4;
+        }
+        
+        /* =============================================
+           BOARD 8: POSTER BOLD
+        ============================================= */
+        .board-poster {
+            background: linear-gradient(180deg, var(--pool) 0%, var(--deep) 100%);
+            min-height: 700px;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .board-poster .frame-label { color: white; opacity: 0.5; }
+        
+        .board-poster .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-poster .logo {
+            width: 160px;
+        }
+        
+        .board-poster .badge {
+            background: white;
+            color: var(--navy);
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .board-poster .center {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-poster .mega {
+            font-size: 280px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.75;
+            text-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .board-poster .tagline {
+            font-size: 32px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.05em;
+            margin-top: 32px;
+        }
+        
+        .board-poster .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-poster .stats {
+            display: flex;
+            gap: 48px;
+        }
+        
+        .board-poster .stat {
+            text-align: left;
+        }
+        
+        .board-poster .stat-num {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+        }
+        
+        .board-poster .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .board-poster .cta {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .board-poster .star-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            opacity: 0.06;
+        }
+        
+        /* =============================================
+           BOARD 9: ASYMMETRIC BLOCKS
+        ============================================= */
+        .board-asymmetric {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            min-height: 600px;
+            gap: 4px;
+            background: #e0e0e0;
+        }
+        
+        .board-asymmetric .block-1 {
+            grid-row: span 2;
+            background: var(--navy);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+        
+        .board-asymmetric .block-1 .vertical {
+            position: absolute;
+            top: 60px;
+            right: 60px;
+            writing-mode: vertical-rl;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .board-asymmetric .block-1 .logo {
+            width: 200px;
+            margin-bottom: 40px;
+        }
+        
+        .board-asymmetric .block-1 .headline {
+            font-size: 56px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+        
+        .board-asymmetric .block-1 .headline span {
+            color: var(--pool);
+        }
+        
+        .board-asymmetric .block-2 {
+            background: var(--pool);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .board-asymmetric .block-2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .board-asymmetric .block-2 .star {
+            width: 100px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-asymmetric .block-3 {
+            background: var(--cream);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .board-asymmetric .block-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .board-asymmetric .block-3 .num {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-asymmetric .block-3 .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           BOARD 10: MANIFESTO
+        ============================================= */
+        .board-manifesto {
+            background: var(--cream);
+            min-height: 700px;
+            padding: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .board-manifesto::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .board-manifesto .frame-label { color: var(--slate); }
+        
+        .board-manifesto .logo {
+            position: absolute;
+            top: 60px;
+            left: 100px;
+            width: 160px;
+        }
+        
+        .board-manifesto .manifesto-text {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .board-manifesto .line {
+            font-size: 48px;
+            font-weight: 300;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .board-manifesto .line strong {
+            font-weight: 800;
+        }
+        
+        .board-manifesto .line em {
+            font-style: italic;
+            color: var(--deep);
+        }
+        
+        .board-manifesto .cta-block {
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .board-manifesto .cta-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+        
+        .board-manifesto .cta-arrow {
+            font-size: 24px;
+            color: var(--maroon);
+        }
+        
+        .board-manifesto .star-float {
+            position: absolute;
+            bottom: 80px;
+            right: 100px;
+            width: 120px;
+            opacity: 0.08;
+        }
+        
+        .board-manifesto .year-badge {
+            position: absolute;
+            bottom: 60px;
+            left: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--slate);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section-break">
+        <div class="section-break-label">NorCal SBDC · Creative Exploration · ZAG</div>
+    </div>
+
+    <!-- BOARD 1: MASSIVE TYPE CROP -->
+    <div class="frame board-crop grain">
+        <span class="frame-label">01 — Crop</span>
+        <div class="crop-text">MOMENTUM</div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-float">
+        <div class="content">
+            <div class="top-row">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="date-badge">2006 — 2026</div>
+            </div>
+            <div class="hero-block">
+                <div class="hero-line">Twenty years</div>
+                <div class="hero-line">of turning</div>
+                <div class="hero-line accent">ambition into action.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOARD 2: BRUTAL SPLIT -->
+    <div class="frame board-brutal">
+        <div class="left">
+            <div class="vertical-text">Years of Impact</div>
+            <div class="big-num">20</div>
+            <div class="unit">Years</div>
+        </div>
+        <div class="right">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="statement">Free advice.<br><span>Real results.</span></div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+        </div>
+    </div>
+
+    <!-- BOARD 3: OVERLAP CHAOS -->
+    <div class="frame board-overlap grain">
+        <span class="frame-label">03 — Overlap</span>
+        <div class="back-text">SBDC</div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-scatter-1">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-scatter-2">
+        <div class="card card-1">
+            <div class="num">20</div>
+            <div class="label">Years</div>
+        </div>
+        <div class="card card-2">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="text">Your Business People.</div>
+        </div>
+        <div class="card card-3">
+            <div class="stat">$547M</div>
+            <div class="stat-label">Capital Accessed</div>
+        </div>
+    </div>
+
+    <!-- BOARD 4: EDITORIAL -->
+    <div class="frame board-editorial">
+        <span class="frame-label">04 — Editorial</span>
+        <div class="left">
+            <div class="masthead">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="issue">Issue 20 · 2026</div>
+            </div>
+            <div class="headline">
+                <strong>Twenty</strong> years<br>
+                of building<br>
+                Northern California.
+            </div>
+            <div class="byline">Free expert guidance for 12,400 small businesses every year. $547M in capital accessed. 300+ advisors across 36 counties.</div>
+        </div>
+        <div class="right">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-center">
+            <div class="pull-quote">"Your Business People."</div>
+        </div>
+    </div>
+
+    <!-- BOARD 5: KINETIC -->
+    <div class="frame board-kinetic grain">
+        <span class="frame-label">05 — Kinetic</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-1">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-2">
+        <div class="stagger-container">
+            <div class="stagger-line"><span class="word ghost">Add</span></div>
+            <div class="stagger-line"><span class="word ghost">Add</span></div>
+            <div class="stagger-line"><span class="word solid">Add</span></div>
+            <div class="stagger-line"><span class="word accent">momentum.</span></div>
+        </div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+        <div class="bottom-text">NorCal SBDC · 20 Years</div>
+    </div>
+
+    <!-- BOARD 6: NEGATIVE SPACE -->
+    <div class="frame board-negative grain">
+        <span class="frame-label">06 — Negative</span>
+        <div class="corner-num">20</div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-corner">
+        <div class="cutout">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="text">Add <span>momentum.</span></div>
+        </div>
+    </div>
+
+    <!-- BOARD 7: DATA WALL -->
+    <div class="frame board-data">
+        <div class="cell logo-cell">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+        </div>
+        <div class="cell">
+            <div class="num">20</div>
+            <div class="label">Years</div>
+        </div>
+        <div class="cell accent">
+            <div class="num">$547M</div>
+            <div class="label">Capital</div>
+        </div>
+        <div class="cell star-cell">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+        </div>
+        <div class="cell">
+            <div class="num">12,400</div>
+            <div class="label">Businesses/Yr</div>
+        </div>
+        <div class="cell accent double">
+            <div class="num">$0</div>
+            <div class="label">Cost of Expert Advice</div>
+        </div>
+        <div class="cell">
+            <div class="num">300+</div>
+            <div class="label">Advisors</div>
+        </div>
+    </div>
+
+    <!-- BOARD 8: POSTER -->
+    <div class="frame board-poster grain">
+        <span class="frame-label">08 — Poster</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-bg">
+        <div class="top">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="badge">2006 — 2026</div>
+        </div>
+        <div class="center">
+            <div class="mega">20</div>
+            <div class="tagline">Years of Momentum</div>
+        </div>
+        <div class="bottom">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-num">$547M</div>
+                    <div class="stat-label">Capital</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">12,400</div>
+                    <div class="stat-label">Businesses/Yr</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">36</div>
+                    <div class="stat-label">Counties</div>
+                </div>
+            </div>
+            <div class="cta">Your Business People. →</div>
+        </div>
+    </div>
+
+    <!-- BOARD 9: ASYMMETRIC -->
+    <div class="frame board-asymmetric">
+        <div class="block-1">
+            <div class="vertical">Est. 2006</div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="headline">Free advice.<br><span>Real results.</span></div>
+        </div>
+        <div class="block-2">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+        </div>
+        <div class="block-3">
+            <div class="num">$0</div>
+            <div class="label">Cost of Expert Advice</div>
+        </div>
+    </div>
+
+    <!-- BOARD 10: MANIFESTO -->
+    <div class="frame board-manifesto">
+        <span class="frame-label">10 — Manifesto</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-float">
+        <div class="manifesto-text">
+            <div class="line">You had the <strong>idea.</strong></div>
+            <div class="line">You took the <strong>risk.</strong></div>
+            <div class="line">You did the <em>impossible</em> part.</div>
+            <div class="line">Now let us help with <strong>the rest.</strong></div>
+        </div>
+        <div class="cta-block">
+            <span class="cta-text">Add momentum.</span>
+            <span class="cta-arrow">→</span>
+        </div>
+        <div class="year-badge">20 Years · 2006—2026</div>
+    </div>
+
+    <div class="section-break">
+        <div class="section-break-label">End Creative Exploration</div>
+    </div>
+
+</body>
+</html>

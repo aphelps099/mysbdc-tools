@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC Newsletter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #152445;
+            --slate: #446580;
+            --fog: #C8D5E3;
+            --cream: #F5F5ED;
+            --accent: #C23A3A;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ddd;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .preview-label {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 24px;
+        }
+        
+        .email-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--cream);
+        }
+        
+        /* =============================================
+           HEADER — Minimal
+        ============================================= */
+        .header {
+            padding: 32px 40px;
+            border-bottom: 1px solid var(--fog);
+        }
+        
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        
+        .header-brand {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        
+        .header-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--slate);
+        }
+        
+        /* =============================================
+           FEATURED EVENT
+        ============================================= */
+        .featured {
+            padding: 40px;
+            border-bottom: 1px solid var(--fog);
+        }
+        
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 16px;
+        }
+        
+        .featured-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        
+        .featured-desc {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--slate);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .featured-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--slate);
+            margin-bottom: 20px;
+        }
+        
+        .featured-meta span {
+            margin-right: 16px;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* =============================================
+           MORE EVENTS
+        ============================================= */
+        .events-section {
+            padding: 40px;
+            border-bottom: 1px solid var(--fog);
+        }
+        
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--fog);
+        }
+        
+        .event-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .event-item:first-of-type {
+            padding-top: 0;
+        }
+        
+        .event-info {
+            flex: 1;
+        }
+        
+        .event-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        
+        .event-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--slate);
+        }
+        
+        .event-link {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* =============================================
+           CLIENT STORY
+        ============================================= */
+        .story-section {
+            background: var(--navy);
+            padding: 40px;
+        }
+        
+        .story-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 20px;
+        }
+        
+        .story-quote {
+            font-size: 18px;
+            font-weight: 400;
+            color: white;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        
+        .story-stats {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .stat {
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 4px;
+        }
+        
+        .story-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .story-attr {
+            font-size: 13px;
+            color: var(--fog);
+        }
+        
+        .story-attr strong {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .story-link {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* =============================================
+           CTA
+        ============================================= */
+        .cta-section {
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--fog);
+        }
+        
+        .cta-text {
+            font-size: 15px;
+            color: var(--slate);
+            margin-bottom: 16px;
+        }
+        
+        .cta-text strong {
+            color: var(--navy);
+            font-weight: 600;
+        }
+        
+        .btn-cta {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 24px;
+            text-decoration: none;
+        }
+        
+        /* =============================================
+           FOOTER
+        ============================================= */
+        .footer {
+            padding: 32px 40px;
+            text-align: center;
+        }
+        
+        .footer-brand {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        
+        .footer-tagline {
+            font-size: 12px;
+            color: var(--slate);
+            margin-bottom: 16px;
+        }
+        
+        .footer-links {
+            margin-bottom: 16px;
+        }
+        
+        .footer-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--slate);
+            text-decoration: none;
+            margin: 0 12px;
+        }
+        
+        .footer-legal {
+            font-size: 11px;
+            color: var(--slate);
+        }
+        
+        .footer-legal a {
+            color: var(--slate);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preview-label">Newsletter — Minimal</div>
+
+    <div class="email-wrapper">
+        
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-row">
+                <div class="header-brand">NorCal SBDC</div>
+                <div class="header-date">January 2025</div>
+            </div>
+        </div>
+        
+        <!-- FEATURED -->
+        <div class="featured">
+            <div class="section-label">Featured</div>
+            <div class="featured-title">Funding Your Growth: SBA Loans Demystified</div>
+            <div class="featured-desc">Think you don't qualify for an SBA loan? Think again. Join us for a practical breakdown of loan options and what lenders actually look for.</div>
+            <div class="featured-meta">
+                <span>Jan 23</span>
+                <span>10:00 AM</span>
+                <span>Virtual</span>
+                <span>Free</span>
+            </div>
+            <a href="#" class="btn-primary">Register →</a>
+        </div>
+        
+        <!-- MORE EVENTS -->
+        <div class="events-section">
+            <div class="section-label">Events</div>
+            
+            <div class="event-item">
+                <div class="event-info">
+                    <div class="event-title">Marketing on a Bootstrap Budget</div>
+                    <div class="event-date">Jan 30 · 1:00 PM · Virtual</div>
+                </div>
+                <a href="#" class="event-link">Register →</a>
+            </div>
+            
+            <div class="event-item">
+                <div class="event-info">
+                    <div class="event-title">QuickBooks for Real People</div>
+                    <div class="event-date">Feb 6 · 9:00 AM · Sacramento</div>
+                </div>
+                <a href="#" class="event-link">Register →</a>
+            </div>
+            
+        </div>
+        
+        <!-- STORY -->
+        <div class="story-section">
+            <div class="story-label">Client Story</div>
+            <div class="story-quote">"Maria didn't just help me get a loan. She helped me see what my business could become."</div>
+            
+            <div class="story-stats">
+                <div class="stat">
+                    <div class="stat-number">$250K</div>
+                    <div class="stat-label">SBA Loan</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Locations</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Employees</div>
+                </div>
+            </div>
+            
+            <div class="story-footer">
+                <div class="story-attr"><strong>Rosa Martinez</strong> · Rosa's Cocina</div>
+                <a href="#" class="story-link">Full story →</a>
+            </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="cta-section">
+            <div class="cta-text"><strong>$0 advice.</strong> $547M in client capital last year.</div>
+            <a href="#" class="btn-cta">Book a free session →</a>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-brand">NorCal SBDC</div>
+            <div class="footer-tagline">Your Business People</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Events</a>
+                <a href="#" class="footer-link">Resources</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <div class="footer-legal">© 2025 NorCal SBDC · <a href="#">Unsubscribe</a></div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

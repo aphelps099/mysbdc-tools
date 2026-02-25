@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SBDC Day Social Media Grid | NorCal SBDC</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0F1C2E;
+      --pool: #8FC5D9;
+      --cream: #F5F2EB;
+      --red: #c23a3a;
+      --gold: #D4A03C;
+      --slate: #4a6580;
+      --mist: #c8d5e3;
+      --fog: #e5ebf1;
+      --bg: #F5F2EB;
+      --card-bg: #ffffff;
+      --border: #d4c5b0;
+      --sans: 'proxima-nova', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header-logo {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--slate);
+    }
+
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    .header-nav a {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover {
+      color: var(--navy);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--navy);
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--slate);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-date {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--pool);
+    }
+
+    /* Controls */
+    .controls {
+      padding: 24px 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .control-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--slate);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--slate);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      border-color: var(--slate);
+      color: var(--navy);
+    }
+
+    .btn.active {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    /* Main Grid */
+    .main {
+      padding: 40px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* 5x5 Grid */
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+
+    @media (max-width: 1400px) {
+      .post-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 1100px) {
+      .post-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 800px) {
+      .post-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .post-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Post Card */
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .post-card:hover {
+      border-color: var(--slate);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .post-card.carousel-item {
+      border-color: var(--pool);
+      box-shadow: 0 0 20px rgba(143, 197, 217, 0.2);
+    }
+
+    /* Post Preview (Visual) */
+    .post-preview {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Post Visual Styles */
+    .post-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+    }
+
+    .post-visual .wordmark {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+    }
+
+    .post-visual .post-number {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-family: var(--mono);
+      font-size: 9px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* Style: Navy Hero */
+    .style-navy {
+      background: var(--navy);
+      color: white;
+    }
+
+    .style-navy .eyebrow {
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 12px;
+    }
+
+    .style-navy .headline {
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .style-navy .subhead {
+      font-size: 12px;
+      color: var(--mist);
+      line-height: 1.4;
+    }
+
+    /* Style: Cream */
+    .style-cream {
+      background: var(--cream);
+      color: var(--navy);
+    }
+
+    .style-cream .eyebrow {
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+
+    .style-cream .headline {
+      font-size: clamp(18px, 2.5vw, 28px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .style-cream .subhead {
+      font-size: 11px;
+      color: var(--slate);
+      line-height: 1.4;
+    }
+
+    .style-cream .wordmark {
+      color: var(--slate);
+    }
+
+    /* Style: Red Accent */
+    .style-red {
+      background: linear-gradient(145deg, var(--navy) 0%, #2a1a1a 100%);
+      color: white;
+    }
+
+    .style-red .stat {
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 300;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .style-red .stat span {
+      color: var(--red);
+    }
+
+    .style-red .context {
+      font-size: 12px;
+      color: var(--mist);
+    }
+
+    /* Style: Gradient */
+    .style-gradient {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--slate) 60%, var(--red) 100%);
+      color: white;
+      justify-content: flex-end;
+    }
+
+    .style-gradient .headline {
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .style-gradient .subhead {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Style: Mist */
+    .style-mist {
+      background: var(--mist);
+      color: var(--navy);
+      text-align: center;
+      align-items: center;
+    }
+
+    .style-mist .headline {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+
+    .style-mist .divider {
+      width: 32px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 12px;
+    }
+
+    .style-mist .subhead {
+      font-size: 11px;
+      color: var(--slate);
+    }
+
+    .style-mist .wordmark {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Style: Pool */
+    .style-pool {
+      background: var(--pool);
+      color: var(--navy);
+    }
+
+    .style-pool .eyebrow {
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--navy);
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
+
+    .style-pool .headline {
+      font-size: clamp(18px, 2.5vw, 28px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .style-pool .wordmark {
+      color: var(--navy);
+    }
+
+    /* Post Content (Copy area) */
+    .post-content {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-row-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--pool);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .post-caption {
+      font-size: 13px;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      cursor: pointer;
+      padding: 8px;
+      background: rgba(0,0,0,0.02);
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .post-caption:hover {
+      background: rgba(0,0,0,0.04);
+      border-color: var(--border);
+    }
+
+    .post-caption.copied {
+      border-color: var(--pool);
+      background: rgba(143, 197, 217, 0.15);
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--pool);
+      background: rgba(143, 197, 217, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag:hover {
+      background: rgba(143, 197, 217, 0.2);
+    }
+
+    .post-image-link {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--slate);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .post-image-link:hover {
+      color: var(--navy);
+    }
+
+    .post-image-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Carousel Section */
+    .carousel-section {
+      margin-bottom: 80px;
+    }
+
+    .carousel-demo {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .carousel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .carousel-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .carousel-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .carousel-nav button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .carousel-nav button:hover {
+      background: var(--cream);
+      border-color: var(--slate);
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-track::-webkit-scrollbar-track {
+      background: var(--cream);
+      border-radius: 4px;
+    }
+
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: var(--slate);
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+    }
+
+    .carousel-slide .post-visual {
+      aspect-ratio: 1;
+      border-radius: 12px;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .carousel-dot.active {
+      background: var(--pool);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* Copy All Section */
+    .copy-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 80px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .copy-section h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: var(--navy);
+    }
+
+    .copy-all-btn {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 12px 24px;
+      background: var(--pool);
+      color: var(--navy);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-all-btn:hover {
+      background: white;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--pool);
+      color: var(--navy);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    .footer {
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--slate);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--navy);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="header-logo">NORCAL SBDC</div>
+      <div class="header-title">Social Media Grid</div>
+    </div>
+    <nav class="header-nav">
+      <a href="../index.html">Home</a>
+      <a href="../catalog.html">Catalog</a>
+      <a href="social-templates.html">Templates</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-badge">Campaign Kit</div>
+    <h1>SBDC Day Social Grid</h1>
+    <p>25 ready-to-post social media graphics for SBDC Day. Click any caption to copy. Designed to work individually or as carousel sets.</p>
+    <div class="hero-date">March 18, 2026 — #SBDCDay</div>
+  </section>
+
+  <div class="controls">
+    <div class="control-group">
+      <span class="control-label">View</span>
+      <button class="btn active" data-view="grid">Grid</button>
+      <button class="btn" data-view="carousel">Carousels</button>
+    </div>
+    <div class="control-group">
+      <span class="control-label">Filter</span>
+      <button class="btn active" data-filter="all">All</button>
+      <button class="btn" data-filter="stats">Stats</button>
+      <button class="btn" data-filter="stories">Stories</button>
+      <button class="btn" data-filter="cta">CTA</button>
+    </div>
+  </div>
+
+  <main class="main">
+
+    <!-- Carousel Demo -->
+    <section class="carousel-section">
+      <div class="section-title">Carousel Preview — Swipe to see how posts flow together</div>
+      <div class="carousel-demo">
+        <div class="carousel-header">
+          <div class="carousel-title">SBDC Day Carousel — 5 Posts</div>
+          <div class="carousel-nav">
+            <button onclick="scrollCarousel(-1)">←</button>
+            <button onclick="scrollCarousel(1)">→</button>
+          </div>
+        </div>
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Carousel slides will be populated by JS or static -->
+          <div class="carousel-slide">
+            <div class="post-visual style-navy">
+              <div class="post-number">1/5</div>
+              <div class="eyebrow">March 18</div>
+              <div class="headline">It's SBDC Day!</div>
+              <div class="subhead">Celebrating America's small business advisors</div>
+              <div class="wordmark">NORCAL SBDC</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="post-visual style-red">
+              <div class="post-number">2/5</div>
+              <div class="stat">1,000<span>+</span></div>
+              <div class="context">SBDCs nationwide helping entrepreneurs succeed</div>
+              <div class="wordmark">NORCAL SBDC</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="post-visual style-cream">
+              <div class="post-number">3/5</div>
+              <div class="eyebrow">Our Mission</div>
+              <div class="headline">Free, confidential advising for every small business</div>
+              <div class="wordmark">NORCAL SBDC</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="post-visual style-mist">
+              <div class="post-number">4/5</div>
+              <div class="headline">No cost.<br>No catch.</div>
+              <div class="divider"></div>
+              <div class="subhead">Just expert guidance when you need it.</div>
+              <div class="wordmark">NORCAL SBDC</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="post-visual style-gradient">
+              <div class="post-number">5/5</div>
+              <div class="headline">Ready to grow?</div>
+              <div class="subhead">Book your free advising session today →</div>
+              <div class="wordmark">NORCAL SBDC</div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-dots">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row 1: Introduction -->
+    <div class="section-title">Row 1 — Introduction Posts</div>
+    <div class="post-grid">
+
+      <!-- Post 1 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">March 18</div>
+            <div class="headline">It's SBDC Day!</div>
+            <div class="subhead">Celebrating America's small business advisors</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Happy #SBDCDay! 🎉 Today we celebrate the nationwide network of Small Business Development Centers helping entrepreneurs turn ideas into thriving businesses.
+
+For over 40 years, SBDCs have been the trusted advisors behind America's small business success stories.
+
+#SmallBusiness #Entrepreneurship #NorCalSBDC
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusiness</span>
+            <span class="tag" onclick="copyTag(this)">#Entrepreneurship</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-01-intro.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-red">
+            <div class="stat">1,000<span>+</span></div>
+            <div class="context">SBDCs across America</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+With over 1,000 SBDC locations nationwide, there's always an advisor ready to help you navigate your business journey.
+
+That's the power of America's largest small business support network.
+
+#SBDCDay #SmallBusinessSupport
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessSupport</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessAdvising</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-02-stat.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-cream">
+            <div class="eyebrow">What We Do</div>
+            <div class="headline">Free business advising. Real results.</div>
+            <div class="subhead">No strings attached.</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+What exactly does an SBDC do? 🤔
+
+✓ One-on-one business advising
+✓ Help with business plans & financing
+✓ Market research & strategy
+✓ Government contracting guidance
+✓ Export assistance
+
+And it's completely FREE. Seriously.
+
+#SBDCDay #FreeAdvising #SmallBusinessHelp
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#FreeAdvising</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessHelp</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-03-services.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 4 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-pool">
+            <div class="eyebrow">Since 1980</div>
+            <div class="headline">40+ years of helping small businesses succeed</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+For more than four decades, SBDCs have been the quiet force behind America's entrepreneurial success.
+
+From first-time founders to established businesses seeking growth—we've seen it all and helped through it all.
+
+Happy SBDC Day to our incredible nationwide network! 🙌
+
+#SBDCDay #SmallBusinessHistory
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessHistory</span>
+            <span class="tag" onclick="copyTag(this)">#40YearsStrong</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-04-history.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 5 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-gradient">
+            <div class="headline">Your Business People</div>
+            <div class="subhead">Expert advisors. Zero cost. Real impact.</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+We're your business people.
+
+Not consultants charging hundreds per hour. Not generic advice from a chatbot. Real advisors who understand your challenges and celebrate your wins.
+
+That's the SBDC difference.
+
+#SBDCDay #YourBusinessPeople #NorCalSBDC
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#YourBusinessPeople</span>
+            <span class="tag" onclick="copyTag(this)">#NorCalSBDC</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-05-tagline.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2: Impact Stats -->
+    <div class="section-title">Row 2 — Impact Stats</div>
+    <div class="post-grid">
+
+      <!-- Post 6 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-red">
+            <div class="stat">$549<span>M</span></div>
+            <div class="context">capital accessed by our clients in 2025</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+$549 million.
+
+That's how much capital NorCal SBDC clients accessed last year. From SBA loans to investor funding to grants—we help you find the money your business needs.
+
+#SBDCDay #SmallBusinessFunding #CapitalAccess
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessFunding</span>
+            <span class="tag" onclick="copyTag(this)">#CapitalAccess</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-06-capital.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 7 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">2025 Impact</div>
+            <div class="headline">16,000+ businesses served</div>
+            <div class="subhead">across Northern California</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+16,000+ businesses. One mission: help them thrive.
+
+From Sacramento to the Oregon border, NorCal SBDC advisors are in 18 centers across 36 counties, providing free guidance to entrepreneurs at every stage.
+
+#SBDCDay #NorCalBusiness #SmallBusinessImpact
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#NorCalBusiness</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessImpact</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-07-served.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 8 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-red">
+            <div class="stat">3,723<span>+</span></div>
+            <div class="context">new jobs created</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+3,723+ new jobs created.
+
+When small businesses grow, communities grow. Every new hire represents someone's livelihood, someone's opportunity, someone's future.
+
+That's the real impact of SBDC advising.
+
+#SBDCDay #JobCreation #EconomicImpact
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#JobCreation</span>
+            <span class="tag" onclick="copyTag(this)">#EconomicImpact</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-08-jobs.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 9 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-mist">
+            <div class="headline">712<br>new businesses</div>
+            <div class="divider"></div>
+            <div class="subhead">launched with SBDC support</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+712 new businesses launched last year with SBDC guidance.
+
+From the spark of an idea to opening day, our advisors help entrepreneurs navigate every step of starting a business.
+
+Your dream business? Let's make it real.
+
+#SBDCDay #StartupHelp #NewBusiness
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#StartupHelp</span>
+            <span class="tag" onclick="copyTag(this)">#NewBusiness</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-09-startups.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 10 -->
+      <div class="post-card" data-category="stats">
+        <div class="post-preview">
+          <div class="post-visual style-gradient">
+            <div class="headline">$201M</div>
+            <div class="subhead">in sales growth for our clients</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+$201 million in sales growth.
+
+That's the combined revenue increase for NorCal SBDC clients last year. When we help businesses grow, everyone wins.
+
+#SBDCDay #SalesGrowth #BusinessSuccess
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SalesGrowth</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessSuccess</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-10-sales.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 3: Client Stories -->
+    <div class="section-title">Row 3 — Client Stories & Quotes</div>
+    <div class="post-grid">
+
+      <!-- Post 11 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-cream">
+            <div class="eyebrow">Client Story</div>
+            <div class="headline">"They believed in my business before I did."</div>
+            <div class="subhead">— Sacramento Entrepreneur</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+"They believed in my business before I did."
+
+Sometimes the biggest barrier to starting a business is believing it's possible. Our advisors don't just help with plans and funding—they help entrepreneurs see their own potential.
+
+#SBDCDay #ClientStory #BeliefInBusiness
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#ClientStory</span>
+            <span class="tag" onclick="copyTag(this)">#Entrepreneurship</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-11-quote1.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 12 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">Real Talk</div>
+            <div class="headline">"I expected a government program. I got a partner."</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+"I expected a government program. I got a partner."
+
+Yes, we're funded by the SBA. But we're not bureaucrats pushing paperwork. We're business advisors who genuinely care about your success.
+
+The difference? You'll feel it in your first meeting.
+
+#SBDCDay #BusinessPartner #RealSupport
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessPartner</span>
+            <span class="tag" onclick="copyTag(this)">#SBAResource</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-12-quote2.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 13 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-pool">
+            <div class="eyebrow">Success Story</div>
+            <div class="headline">From idea → $2M in revenue in 3 years</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+From a napkin sketch to $2M in annual revenue in just 3 years.
+
+This is what happens when a great idea meets expert guidance. Our client came with a vision. We helped map the path.
+
+Your success story starts with a conversation.
+
+#SBDCDay #SuccessStory #BusinessGrowth
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SuccessStory</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessGrowth</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-13-success.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 14 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-cream">
+            <div class="eyebrow">Client Reflection</div>
+            <div class="headline">"The best investment I never had to make."</div>
+            <div class="subhead">— Chico Business Owner</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+"The best investment I never had to make."
+
+Private consultants can cost $200-$500/hour. SBDC advising costs nothing—and our advisors have decades of real business experience.
+
+It's not too good to be true. It's just what we do.
+
+#SBDCDay #FreeAdvising #SmartBusiness
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#FreeAdvising</span>
+            <span class="tag" onclick="copyTag(this)">#ValueProposition</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-14-quote3.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 15 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-mist">
+            <div class="headline">"Finally, someone who speaks my language."</div>
+            <div class="divider"></div>
+            <div class="subhead">Multilingual advisors across NorCal</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+"Finally, someone who speaks my language."
+
+Business is complicated enough without language barriers. NorCal SBDC offers advising in Spanish, Chinese, Vietnamese, Hmong, and more.
+
+Everyone deserves expert guidance in the language they're most comfortable with.
+
+#SBDCDay #MultilingualSupport #InclusiveBusiness
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#MultilingualSupport</span>
+            <span class="tag" onclick="copyTag(this)">#InclusiveBusiness</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-15-multilingual.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 4: Services -->
+    <div class="section-title">Row 4 — Services & Offerings</div>
+    <div class="post-grid">
+
+      <!-- Post 16 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">We Help With</div>
+            <div class="headline">Business Plans</div>
+            <div class="subhead">From first draft to investor-ready</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Need a business plan? Let's talk.
+
+Whether you're pitching investors, applying for a loan, or just getting clear on your strategy—we'll help you build a plan that actually works.
+
+No templates. Real guidance. Free help.
+
+#SBDCDay #BusinessPlan #StartupHelp
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessPlan</span>
+            <span class="tag" onclick="copyTag(this)">#StartupHelp</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-16-bizplan.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 17 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-gradient">
+            <div class="headline">SBA Loan Prep</div>
+            <div class="subhead">We help you get loan-ready</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+SBA loan application giving you anxiety? 😰
+
+Our advisors have helped hundreds of businesses navigate the loan process. We know what lenders want to see—and we'll help you put your best foot forward.
+
+#SBDCDay #SBALoan #BusinessFunding
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#SBALoan</span>
+            <span class="tag" onclick="copyTag(this)">#BusinessFunding</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-17-loans.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 18 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-cream">
+            <div class="eyebrow">Expert Help</div>
+            <div class="headline">Marketing & Growth Strategy</div>
+            <div class="subhead">Get customers, keep customers</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Great product but struggling to get customers?
+
+Our advisors help with:
+→ Digital marketing strategy
+→ Social media planning
+→ Customer acquisition
+→ Brand positioning
+
+Let's get your business seen.
+
+#SBDCDay #MarketingHelp #GrowthStrategy
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#MarketingHelp</span>
+            <span class="tag" onclick="copyTag(this)">#GrowthStrategy</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-18-marketing.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 19 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-pool">
+            <div class="eyebrow">Specialized Support</div>
+            <div class="headline">Government Contracting</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Want to win government contracts? 🏛️
+
+Federal, state, and local agencies buy BILLIONS from small businesses every year. Our advisors can help you get certified and compete.
+
+It's a massive opportunity most businesses overlook.
+
+#SBDCDay #GovContracting #FederalContracts
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#GovContracting</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessOpportunity</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-19-govcon.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 20 -->
+      <div class="post-card" data-category="stories">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">Go Global</div>
+            <div class="headline">Export & International Trade</div>
+            <div class="subhead">Take your business worldwide</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Ready to sell internationally? 🌍
+
+Exporting can transform your business—but the logistics can be overwhelming. Our international trade specialists help you navigate tariffs, regulations, and market entry.
+
+Your customers are out there. Let's find them.
+
+#SBDCDay #ExportHelp #InternationalTrade
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#ExportHelp</span>
+            <span class="tag" onclick="copyTag(this)">#InternationalTrade</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-20-export.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 5: Call to Action -->
+    <div class="section-title">Row 5 — Call to Action</div>
+    <div class="post-grid">
+
+      <!-- Post 21 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-gradient">
+            <div class="headline">Ready to start?</div>
+            <div class="subhead">Book your free advising session →</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Ready to take the next step?
+
+Book a free advising session with NorCal SBDC. In just 30 minutes, you'll get clarity on your biggest challenges and a path forward.
+
+No sales pitch. Just help.
+
+Link in bio 👆
+
+#SBDCDay #FreeAdvising #BookNow
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#FreeAdvising</span>
+            <span class="tag" onclick="copyTag(this)">#BookNow</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-21-cta1.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 22 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-mist">
+            <div class="headline">No cost.<br>No catch.</div>
+            <div class="divider"></div>
+            <div class="subhead">Just expert help for your business.</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Still skeptical? We get it.
+
+"Free business advising" sounds too good to be true. But SBDCs are funded by the SBA and universities specifically to help small businesses succeed.
+
+No catch. No upsell. Just expertise when you need it.
+
+Try us. → Link in bio
+
+#SBDCDay #NoCatch #TrustTheProcess
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#FreeHelp</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessResource</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-22-nocatch.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 23 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-red">
+            <div class="stat">Tag a<span>↓</span></div>
+            <div class="context">business owner who needs this</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Know someone building a business? Tag them below 👇
+
+Sometimes the best gift you can give an entrepreneur is pointing them to the right resource.
+
+Share this post. It might change someone's trajectory.
+
+#SBDCDay #TagAFounder #ShareTheHelp
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#TagAFounder</span>
+            <span class="tag" onclick="copyTag(this)">#Entrepreneurship</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-23-tag.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 24 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-navy">
+            <div class="eyebrow">Find Your Center</div>
+            <div class="headline">SBDCs in every county</div>
+            <div class="subhead">norcalsbdc.org</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+Where's your nearest SBDC? Probably closer than you think.
+
+NorCal SBDC has centers throughout Northern California—from Sacramento to Redding to the coast.
+
+Find yours at norcalsbdc.org and schedule your free session today.
+
+#SBDCDay #FindYourSBDC #LocalSupport
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#FindYourSBDC</span>
+            <span class="tag" onclick="copyTag(this)">#NorCalBusiness</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-24-findus.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 25 -->
+      <div class="post-card" data-category="cta">
+        <div class="post-preview">
+          <div class="post-visual style-cream">
+            <div class="eyebrow">Happy SBDC Day</div>
+            <div class="headline">Thank you for trusting us with your dreams.</div>
+            <div class="wordmark">NORCAL SBDC</div>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-row-label">Caption</div>
+          <div class="post-caption" onclick="copyText(this)">
+To every entrepreneur who's walked through our doors—thank you.
+
+Thank you for trusting us with your dreams, your challenges, and your late-night questions.
+
+You're why we do this. Happy SBDC Day. 💙
+
+#SBDCDay #ThankYou #SmallBusinessLove
+          </div>
+          <div class="post-tags">
+            <span class="tag" onclick="copyTag(this)">#SBDCDay</span>
+            <span class="tag" onclick="copyTag(this)">#ThankYou</span>
+            <span class="tag" onclick="copyTag(this)">#SmallBusinessLove</span>
+          </div>
+          <div class="post-image-link" onclick="copyImageLink(this)" data-link="[GDrive: sbdc-day-25-thankyou.png]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Image link
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Copy All Section -->
+    <div class="copy-section">
+      <h3>Quick Export</h3>
+      <p style="color: var(--slate); margin-bottom: 16px; font-size: 14px;">Copy all captions to clipboard for scheduling in your social media tool.</p>
+      <button class="copy-all-btn" onclick="copyAllCaptions()">Copy All Captions</button>
+      <button class="copy-all-btn" onclick="copyAllTags()" style="margin-left: 12px; background: transparent; border: 1px solid var(--pool); color: var(--pool);">Copy All Hashtags</button>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-left">© 2026 NorCal SBDC. Internal use only.</div>
+    <div class="footer-links">
+      <a href="../index.html">Home</a>
+      <a href="../brand-book.html">Brand Book</a>
+      <a href="social-templates.html">Templates</a>
+    </div>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    // Copy single caption
+    function copyText(element) {
+      const text = element.innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        element.classList.add('copied');
+        showToast('Caption copied!');
+        setTimeout(() => element.classList.remove('copied'), 2000);
+      });
+    }
+
+    // Copy single tag
+    function copyTag(element) {
+      const text = element.innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Tag copied: ' + text);
+      });
+    }
+
+    // Copy image link placeholder
+    function copyImageLink(element) {
+      const link = element.dataset.link;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Image link copied!');
+      });
+    }
+
+    // Copy all captions
+    function copyAllCaptions() {
+      const captions = document.querySelectorAll('.post-caption');
+      let allText = '';
+      captions.forEach((cap, i) => {
+        allText += `--- POST ${i + 1} ---\n${cap.innerText.trim()}\n\n`;
+      });
+      navigator.clipboard.writeText(allText).then(() => {
+        showToast('All 25 captions copied!');
+      });
+    }
+
+    // Copy all hashtags
+    function copyAllTags() {
+      const tags = new Set();
+      document.querySelectorAll('.tag').forEach(tag => {
+        tags.add(tag.innerText.trim());
+      });
+      const allTags = Array.from(tags).join(' ');
+      navigator.clipboard.writeText(allTags).then(() => {
+        showToast('All hashtags copied!');
+      });
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Carousel scroll
+    function scrollCarousel(direction) {
+      const track = document.getElementById('carouselTrack');
+      const slideWidth = 296; // 280px + 16px gap
+      track.scrollBy({ left: slideWidth * direction, behavior: 'smooth' });
+    }
+
+    // View toggle
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Could implement different views here
+      });
+    });
+
+    // Filter functionality
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        document.querySelectorAll('.post-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Update carousel dots on scroll
+    const carouselTrack = document.getElementById('carouselTrack');
+    const dots = document.querySelectorAll('.carousel-dot');
+
+    carouselTrack.addEventListener('scroll', () => {
+      const scrollPos = carouselTrack.scrollLeft;
+      const slideWidth = 296;
+      const activeIndex = Math.round(scrollPos / slideWidth);
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    });
+  </script>
+
+</body>
+</html>

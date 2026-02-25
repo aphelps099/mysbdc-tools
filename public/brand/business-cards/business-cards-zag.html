@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Business Cards (ZAG)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            padding: 60px 0 80px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .gallery-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 24px;
+        }
+        
+        .card-pair {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .card-container {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 200px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =============================================
+           ZAG 1: NAME IS EVERYTHING
+           Giant name, nothing else on front
+        ============================================= */
+        .zag-1-front {
+            background: white;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .zag-1-front .giant-name {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            text-align: center;
+            line-height: 1;
+        }
+        
+        .zag-1-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-1-back .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .zag-1-back .logo {
+            width: 80px;
+        }
+        
+        .zag-1-back .title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: var(--pool);
+            text-align: right;
+            letter-spacing: 0.05em;
+        }
+        
+        .zag-1-back .contact {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .zag-1-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: white;
+        }
+
+        /* =============================================
+           ZAG 2: VERTICAL ORIENTATION
+           Name runs vertically
+        ============================================= */
+        .zag-2-front {
+            background: var(--cream);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .zag-2-front .vert-name {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .zag-2-front .logo {
+            width: 70px;
+        }
+        
+        .zag-2-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-2-back .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        
+        .zag-2-back .center {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+        }
+        
+        .zag-2-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .zag-2-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           ZAG 3: JUST THE FACTS
+           No logo on front, pure typography
+        ============================================= */
+        .zag-3-front {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .zag-3-front .name {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .zag-3-front .role {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+        
+        .zag-3-back {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-3-back .logo {
+            width: 80px;
+        }
+        
+        .zag-3-back .contact-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-3-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+        
+        .zag-3-back .contact-line.muted {
+            color: var(--sky);
+        }
+
+        /* =============================================
+           POOL FORWARD (Option F)
+           Pool/teal front, navy back
+        ============================================= */
+        .pool-forward-front {
+            background: var(--pool);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pool-forward-front .logo {
+            width: 80px;
+        }
+
+        .pool-forward-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--navy);
+        }
+
+        .pool-forward-back {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pool-forward-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .pool-forward-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+
+        .pool-forward-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .pool-forward-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+        }
+
+        /* =============================================
+           Z5: MONO GRADIENT
+           Navy with gradient bar at bottom
+        ============================================= */
+        .z5-front {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .z5-front .logo {
+            width: 80px;
+        }
+
+        .z5-front .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: white;
+        }
+
+        .z5-front .gradient-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--pool), var(--royal), var(--maroon));
+        }
+
+        .z5-back {
+            background: var(--navy);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .z5-back .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .z5-back .title {
+            font-size: 11px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+
+        .z5-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .z5-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           ZAG 5: MONO ONLY
+           All monospace, brutalist
+        ============================================= */
+        .zag-5-front {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-5-front .logo {
+            width: 80px;
+        }
+        
+        .zag-5-front .name-block {
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .zag-5-front .name {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+        
+        .zag-5-front .title {
+            font-size: 10px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .zag-5-back {
+            background: var(--navy);
+            padding: 20px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 3px;
+        }
+        
+        .zag-5-back .line {
+            font-size: 10px;
+            color: white;
+        }
+        
+        .zag-5-back .line.dim {
+            color: var(--sky);
+        }
+
+        /* =============================================
+           ZAG 6: BLEED NAME
+           Name bleeds off edge
+        ============================================= */
+        .zag-6-front {
+            background: var(--pool);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zag-6-front .bleed-name {
+            position: absolute;
+            bottom: -20px;
+            left: -5px;
+            font-size: 80px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+            opacity: 0.15;
+        }
+        
+        .zag-6-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-6-front .logo {
+            width: 80px;
+        }
+        
+        .zag-6-front .name {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .zag-6-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-6-back .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pool);
+        }
+        
+        .zag-6-back .center {
+            font-size: 11px;
+            color: var(--sky);
+            margin-top: 2px;
+        }
+        
+        .zag-6-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-6-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           ZAG 7: TWO-TONE HORIZONTAL
+           Hard horizontal split
+        ============================================= */
+        .zag-7-front {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .zag-7-front .top {
+            background: var(--navy);
+            flex: 1;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .zag-7-front .logo {
+            width: 80px;
+        }
+        
+        .zag-7-front .bottom {
+            background: var(--cream);
+            flex: 1;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .zag-7-front .name {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .zag-7-back {
+            background: var(--cream);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-7-back .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        
+        .zag-7-back .center {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+        }
+        
+        .zag-7-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-7-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+
+        /* =============================================
+           ZAG 8: CORNER LOGO
+           Logo tucked in corner, name dominates
+        ============================================= */
+        .zag-8-front {
+            background: white;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .zag-8-front .logo {
+            width: 50px;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+        
+        .zag-8-front .name-stack {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+        
+        .zag-8-front .first {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+        
+        .zag-8-front .last {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--maroon);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+        
+        .zag-8-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-8-back .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pool);
+        }
+        
+        .zag-8-back .center {
+            font-size: 10px;
+            color: var(--sky);
+            margin-top: 2px;
+        }
+        
+        .zag-8-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-8-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* =============================================
+           ZAG 9: EDITORIAL LABEL
+           Like a magazine masthead
+        ============================================= */
+        .zag-9-front {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid var(--navy);
+        }
+        
+        .zag-9-front .masthead {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--navy);
+        }
+        
+        .zag-9-front .logo {
+            width: 70px;
+        }
+        
+        .zag-9-front .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--navy);
+            text-transform: uppercase;
+        }
+        
+        .zag-9-front .name {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .zag-9-front .title {
+            font-size: 11px;
+            color: var(--maroon);
+            margin-top: 2px;
+        }
+        
+        .zag-9-back {
+            background: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 2px solid var(--navy);
+        }
+        
+        .zag-9-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-9-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--navy);
+        }
+        
+        .zag-9-back .tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--navy);
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--navy);
+        }
+
+        /* =============================================
+           ZAG 10: OVERSIZED INITIAL
+           Giant first letter
+        ============================================= */
+        .zag-10-front {
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zag-10-front .initial {
+            position: absolute;
+            top: -30px;
+            left: -10px;
+            font-size: 200px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+            line-height: 0.8;
+        }
+        
+        .zag-10-front .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .zag-10-front .logo {
+            width: 80px;
+        }
+        
+        .zag-10-front .name {
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .zag-10-front .title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--pool);
+            margin-top: 4px;
+        }
+        
+        .zag-10-back {
+            background: var(--navy);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .zag-10-back .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .zag-10-back .contact-line {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: white;
+        }
+        
+        .zag-10-back .tagline {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--pool);
+            margin-top: 20px;
+        }
+
+        /* =============================================
+           EMAIL SIGNATURES SECTION
+        ============================================= */
+        .section-divider {
+            border-top: 1px solid #333;
+            margin: 80px 0;
+            padding-top: 80px;
+        }
+
+        .section-divider .gallery-label {
+            text-align: left;
+        }
+
+        .section-divider .gallery-title {
+            font-size: 36px;
+            text-align: left;
+        }
+
+        .email-sig {
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            max-width: 500px;
+        }
+
+        .email-sig-header {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--pool);
+            margin-bottom: 12px;
+        }
+
+        .email-sig-logo {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .email-sig-info {
+            flex: 1;
+        }
+
+        .email-sig-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .email-sig-title {
+            font-size: 13px;
+            color: var(--royal);
+            margin-top: 2px;
+        }
+
+        .email-sig-center {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .email-sig-contact {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            color: var(--navy);
+            line-height: 1.6;
+        }
+
+        .email-sig-contact a {
+            color: var(--royal);
+            text-decoration: none;
+        }
+
+        .email-sig-tagline {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--navy);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+        }
+
+        .sig-variants {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .sig-variant {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .sig-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        /* S7: Horizontal with Logo */
+        .sig-s7 {
+            font-family: 'Proxima Nova', Arial, sans-serif;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sig-s7 .logo img {
+            height: 56px;
+            width: auto;
+        }
+
+        .sig-s7 .divider-v {
+            width: 2px;
+            height: 56px;
+            background: linear-gradient(180deg, var(--royal), var(--maroon));
+        }
+
+        .sig-s7 .info {
+            flex: 1;
+        }
+
+        .sig-s7 .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .sig-s7 .title {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .sig-s7 .contact {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .sig-s7 .contact a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .sig-s7 .tagline {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--maroon);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-header">
+        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
+        <div class="gallery-title">Business Cards — ZAG</div>
+    </div>
+
+    <!-- ZAG 1 -->
+    <div class="section">
+        <div class="section-label">ZAG 1 — Name Is Everything</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-1-front">
+                    <div class="giant-name">Maria Santos</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-1-back">
+                    <div class="top-row">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="title">Senior Business Advisor<br>Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 2 -->
+    <div class="section">
+        <div class="section-label">ZAG 2 — Vertical</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-2-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="vert-name">Santos</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-2-back">
+                    <div class="info">
+                        <div class="title">Maria Santos</div>
+                        <div class="center">Senior Business Advisor · Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 3 -->
+    <div class="section">
+        <div class="section-label">ZAG 3 — Just The Facts</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-3-front">
+                    <div class="name">Maria Santos</div>
+                    <div class="role">Senior Business Advisor · Chico SBDC</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-3-back">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="contact-stack">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line muted">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POOL FORWARD -->
+    <div class="section">
+        <div class="section-label">Option F — Pool Forward</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card pool-forward-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card pool-forward-back">
+                    <div>
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Z5 MONO GRADIENT -->
+    <div class="section">
+        <div class="section-label">Z5 — Mono Gradient</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card z5-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People.</div>
+                    <div class="gradient-bar"></div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card z5-back">
+                    <div>
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 5 -->
+    <div class="section">
+        <div class="section-label">ZAG 5 — Mono Only</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-5-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="name-block">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Senior Business Advisor · Chico SBDC</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-5-back">
+                    <div class="line">530.898.4598</div>
+                    <div class="line">msantos@norcalsbdc.org</div>
+                    <div class="line dim">norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 6 -->
+    <div class="section">
+        <div class="section-label">ZAG 6 — Bleed Name</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-6-front">
+                    <div class="bleed-name">SANTOS</div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="name">Maria Santos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-6-back">
+                    <div class="info">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 7 -->
+    <div class="section">
+        <div class="section-label">ZAG 7 — Two-Tone Split</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-7-front">
+                    <div class="top">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    </div>
+                    <div class="bottom">
+                        <div class="name">Maria Santos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-7-back">
+                    <div class="info">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 8 -->
+    <div class="section">
+        <div class="section-label">ZAG 8 — Corner Logo</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-8-front">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="name-stack">
+                        <div class="first">Maria</div>
+                        <div class="last">Santos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-8-back">
+                    <div class="info">
+                        <div class="title">Senior Business Advisor</div>
+                        <div class="center">Chico SBDC</div>
+                    </div>
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 9 -->
+    <div class="section">
+        <div class="section-label">ZAG 9 — Editorial</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-9-front">
+                    <div class="masthead">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="label">Business Advisor</div>
+                    </div>
+                    <div class="info">
+                        <div class="name">Maria Santos</div>
+                        <div class="title">Chico SBDC</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-9-back">
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZAG 10 -->
+    <div class="section">
+        <div class="section-label">ZAG 10 — Oversized Initial</div>
+        <div class="card-pair">
+            <div class="card-container">
+                <div class="card-label">Front</div>
+                <div class="card zag-10-front">
+                    <div class="initial">M</div>
+                    <div class="content">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                        <div class="bottom-info">
+                            <div class="name">Maria Santos</div>
+                            <div class="title">Senior Business Advisor · Chico SBDC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-label">Back</div>
+                <div class="card zag-10-back">
+                    <div class="contact">
+                        <div class="contact-line">530.898.4598</div>
+                        <div class="contact-line">msantos@norcalsbdc.org</div>
+                        <div class="contact-line">norcalsbdc.org</div>
+                    </div>
+                    <div class="tagline">Your Business People.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMAIL SIGNATURES -->
+    <div class="section section-divider">
+        <div class="gallery-label">EMAIL SIGNATURES</div>
+        <div class="gallery-title" style="color: white;">Professional Email Signatures</div>
+        <p style="color: #888; margin-top: 16px; margin-bottom: 40px;">Standard templates for all staff and advisors.</p>
+
+        <div class="sig-variants">
+            <div class="sig-variant">
+                <div class="sig-label">Standard</div>
+                <div class="email-sig">
+                    <div class="email-sig-header">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="email-sig-logo">
+                        <div class="email-sig-info">
+                            <div class="email-sig-name">Maria Santos</div>
+                            <div class="email-sig-title">Senior Business Advisor</div>
+                            <div class="email-sig-center">Chico SBDC</div>
+                        </div>
+                    </div>
+                    <div class="email-sig-contact">
+                        530.898.4598<br>
+                        <a href="mailto:msantos@norcalsbdc.org">msantos@norcalsbdc.org</a><br>
+                        <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                    </div>
+                    <div class="email-sig-tagline">Your Business People.</div>
+                </div>
+            </div>
+
+            <div class="sig-variant">
+                <div class="sig-label">Compact</div>
+                <div class="email-sig" style="padding: 16px;">
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" style="width: 60px;">
+                        <div>
+                            <div style="font-weight: 700; color: var(--navy);">Maria Santos</div>
+                            <div style="font-size: 12px; color: var(--royal);">Senior Business Advisor · Chico SBDC</div>
+                            <div style="font-family: 'Roboto Mono', monospace; font-size: 10px; color: var(--navy); margin-top: 4px;">530.898.4598 · msantos@norcalsbdc.org</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- S7 Horizontal with Logo -->
+        <div style="margin-top: 48px;">
+            <div class="sig-label">S7 — Horizontal with Logo</div>
+            <div class="email-sig" style="max-width: 550px;">
+                <div class="sig-s7">
+                    <div class="logo">
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC">
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="info">
+                        <div class="name">Kristin Johnson</div>
+                        <div class="title">Executive Director</div>
+                        <div class="contact">
+                            707.496.7079 · <a href="mailto:kristin@norcalsbdc.org">kristin@norcalsbdc.org</a> · <a href="https://norcalsbdc.org">norcalsbdc.org</a>
+                        </div>
+                        <div class="tagline">Your Business People.</div>
+                    </div>
+                </div>
+            </div>
+            <p style="color: #666; font-size: 11px; margin-top: 12px;">Modern · Logo-forward · Best for maximum logo visibility</p>
+        </div>
+    </div>
+
+</body>
+</html>

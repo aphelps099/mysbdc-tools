@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Client Success Story Templates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --warm: #FAF8F5;
+            --maroon: #8A2432;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: #1a1a1a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .section-header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 60px 0 30px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .section-header h2 {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 8px;
+        }
+        
+        .section-header p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .template-grid {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        
+        .template-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        /* Grain texture */
+        .grain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        
+        /* =============================================
+           SOCIAL: SQUARE (1:1) - Instagram/Facebook
+        ============================================= */
+        .social-square {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Square Style A: Quote Focus */
+        .square-quote {
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .square-quote .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .square-quote .logo {
+            width: 100px;
+        }
+        
+        .square-quote .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .square-quote .quote {
+            font-size: 26px;
+            font-weight: 400;
+            font-style: italic;
+            color: white;
+            line-height: 1.35;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-quote .attribution {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-quote .name {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .square-quote .result {
+            font-size: 13px;
+            color: var(--sky);
+            margin-top: 4px;
+        }
+        
+        .square-quote .star {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            opacity: 0.06;
+        }
+        
+        /* Square Style B: Stat Hero */
+        .square-stat {
+            background: var(--cream);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .square-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .square-stat .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-stat .stat-block {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-stat .stat {
+            font-size: 100px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .square-stat .stat-context {
+            font-size: 18px;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+        
+        .square-stat .story {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.4;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-stat .story span {
+            font-weight: 400;
+            opacity: 0.6;
+        }
+        
+        .square-stat .logo {
+            width: 100px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Square Style C: Before/After */
+        .square-journey {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+        
+        .square-journey .before {
+            background: var(--cream);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .square-journey .before::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .square-journey .after {
+            background: var(--navy);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .square-journey .after::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .square-journey .year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-journey .before .year { color: var(--navy); opacity: 0.4; }
+        .square-journey .after .year { color: var(--pool); }
+        
+        .square-journey .state {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-journey .before .state { color: var(--navy); opacity: 0.7; }
+        .square-journey .after .state { color: white; }
+        
+        .square-journey .logo {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 80px;
+            z-index: 2;
+        }
+        
+        /* Square Style D: Split Stats */
+        .square-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .square-split .left {
+            background: var(--navy);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .square-split .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .square-split .right {
+            background: var(--sky);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .square-split .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .square-split .logo {
+            width: 80px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-split .left .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-split .left .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 12px;
+        }
+        
+        .square-split .left .headline {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+        
+        .square-split .left .headline span {
+            color: var(--pool);
+        }
+        
+        .square-split .right .stat {
+            font-size: 72px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .square-split .right .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-top: 8px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           SOCIAL: STORY (9:16) - Instagram/Facebook Stories
+        ============================================= */
+        .social-story {
+            width: 270px;
+            height: 480px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Story Style A: Full Impact */
+        .story-impact {
+            background: var(--navy);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .story-impact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .story-impact .logo {
+            width: 100px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-impact .middle {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-impact .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 16px;
+        }
+        
+        .story-impact .stat {
+            font-size: 80px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+        }
+        
+        .story-impact .context {
+            font-size: 16px;
+            color: var(--sky);
+            margin-top: 12px;
+        }
+        
+        .story-impact .quote {
+            font-size: 18px;
+            font-style: italic;
+            color: white;
+            line-height: 1.4;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .story-impact .bottom {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-impact .name {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .story-impact .business {
+            font-size: 12px;
+            color: var(--sky);
+            margin-top: 2px;
+        }
+        
+        .story-impact .cta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-top: 16px;
+        }
+        
+        .story-impact .star {
+            position: absolute;
+            top: 120px;
+            right: -40px;
+            width: 120px;
+            opacity: 0.06;
+        }
+        
+        /* Story Style B: Journey */
+        .story-journey {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .story-journey .top {
+            flex: 1;
+            background: var(--cream);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+        
+        .story-journey .top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .story-journey .logo {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            width: 80px;
+            z-index: 2;
+        }
+        
+        .story-journey .top .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-journey .year-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--navy);
+            opacity: 0.4;
+            margin-bottom: 8px;
+        }
+        
+        .story-journey .state-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.15;
+        }
+        
+        .story-journey .bottom {
+            flex: 1;
+            background: var(--navy);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .story-journey .bottom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .story-journey .bottom .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-journey .bottom .year-label {
+            color: var(--pool);
+            opacity: 1;
+        }
+        
+        .story-journey .bottom .state-text {
+            color: white;
+        }
+        
+        .story-journey .cta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pool);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           SOCIAL: LANDSCAPE (16:9) - LinkedIn/Twitter
+        ============================================= */
+        .social-landscape {
+            width: 600px;
+            height: 338px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .landscape-split {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            height: 100%;
+        }
+        
+        .landscape-split .left {
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .landscape-split .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .landscape-split .logo {
+            width: 120px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .left .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .left .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 12px;
+        }
+        
+        .landscape-split .left .headline {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+        
+        .landscape-split .left .headline span {
+            color: var(--pool);
+        }
+        
+        .landscape-split .left .subtext {
+            font-size: 14px;
+            color: var(--sky);
+            margin-top: 12px;
+        }
+        
+        .landscape-split .right {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .landscape-split .right-top {
+            flex: 1;
+            background: var(--sky);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .landscape-split .right-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .landscape-split .right-top .stat {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .right-top .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.6;
+            margin-top: 6px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .right-bottom {
+            background: var(--cream);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .landscape-split .right-bottom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .landscape-split .right-bottom .name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .right-bottom .location {
+            font-size: 12px;
+            color: var(--navy);
+            opacity: 0.5;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .landscape-split .right-bottom .star {
+            width: 24px;
+            opacity: 0.3;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           EMAIL TEMPLATE
+        ============================================= */
+        .email-container {
+            width: 600px;
+            background: white;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.2);
+        }
+        
+        .email-header {
+            background: var(--navy);
+            padding: 32px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .email-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .email-header .logo {
+            width: 140px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-header .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+        }
+        
+        .email-hero .left {
+            background: var(--cream);
+            padding: 48px 40px;
+            position: relative;
+        }
+        
+        .email-hero .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .email-hero .journey-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero .journey-text {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero .journey-text span {
+            color: var(--maroon);
+        }
+        
+        .email-hero .right {
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .email-hero .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .email-hero .stat {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-hero .stat-label {
+            font-size: 14px;
+            color: var(--sky);
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-body {
+            padding: 40px;
+        }
+        
+        .email-body .intro {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+        
+        .email-body p {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+        
+        .email-body .quote-block {
+            background: var(--light-gray);
+            padding: 32px;
+            margin: 32px 0;
+            border-left: 4px solid var(--maroon);
+        }
+        
+        .email-body .quote-block blockquote {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .email-body .quote-block .attribution {
+            font-size: 14px;
+            color: var(--navy);
+            opacity: 0.6;
+        }
+        
+        .email-body .results {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 32px 0;
+            padding: 32px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .email-body .result-item {
+            text-align: center;
+        }
+        
+        .email-body .result-num {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .email-body .result-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+        
+        .email-cta {
+            text-align: center;
+            padding: 0 40px 40px;
+        }
+        
+        .email-cta a {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 16px 40px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .email-footer {
+            background: var(--navy);
+            padding: 32px 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .email-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .email-footer .logo {
+            width: 120px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .email-footer .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+            position: relative;
+            z-index: 2;
+        }
+        
+        :root { --light-gray: #f5f5f5; }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         SOCIAL MEDIA: SQUARE (1:1)
+    ========================================== -->
+    
+    <div class="section-header">
+        <h2>Social Media — Square (1:1)</h2>
+        <p>Instagram Feed, Facebook, LinkedIn</p>
+    </div>
+    
+    <div class="template-grid">
+        
+        <!-- Square A: Quote Focus -->
+        <div>
+            <div class="template-label">A — Quote Focus</div>
+            <div class="social-square square-quote grain">
+                <div class="top">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="label">Client Story</div>
+                </div>
+                <div class="quote">"She didn't help me get a loan. She helped me see what my business could become."</div>
+                <div class="attribution">
+                    <div class="name">Maria R.</div>
+                    <div class="result">Food truck → 3 restaurants. 5 years.</div>
+                </div>
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+            </div>
+        </div>
+        
+        <!-- Square B: Stat Hero -->
+        <div>
+            <div class="template-label">B — Stat Hero</div>
+            <div class="social-square square-stat">
+                <div class="label">Client Result</div>
+                <div class="stat-block">
+                    <div class="stat">$380K</div>
+                    <div class="stat-context">SBA loan secured</div>
+                </div>
+                <div class="story">Maria R. <span>· Sacramento · 22 new jobs created</span></div>
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+            </div>
+        </div>
+        
+        <!-- Square C: Before/After -->
+        <div>
+            <div class="template-label">C — Before / After</div>
+            <div class="social-square square-journey">
+                <div class="before">
+                    <div class="year-label">2019</div>
+                    <div class="state">One food truck.<br>One dream.</div>
+                </div>
+                <div class="after">
+                    <div class="year-label">2024</div>
+                    <div class="state">Three locations.<br>22 employees.</div>
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Square D: Split Stats -->
+        <div>
+            <div class="template-label">D — Split Stats</div>
+            <div class="social-square square-split">
+                <div class="left">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="content">
+                        <div class="label">Success Story</div>
+                        <div class="headline">From shutdown to <span>+40% revenue.</span></div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="stat">+40%</div>
+                    <div class="stat-label">Revenue Growth</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- ==========================================
+         SOCIAL MEDIA: STORY (9:16)
+    ========================================== -->
+    
+    <div class="section-header">
+        <h2>Social Media — Story (9:16)</h2>
+        <p>Instagram Stories, Facebook Stories</p>
+    </div>
+    
+    <div class="template-grid">
+        
+        <!-- Story A: Impact -->
+        <div>
+            <div class="template-label">A — Full Impact</div>
+            <div class="social-story story-impact">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="middle">
+                    <div class="label">Client Result</div>
+                    <div class="stat">$380K</div>
+                    <div class="context">SBA loan secured</div>
+                    <div class="quote">"She helped me see what my business could become."</div>
+                </div>
+                <div class="bottom">
+                    <div class="name">Maria R.</div>
+                    <div class="business">Sacramento · Restaurant Owner</div>
+                    <div class="cta">Swipe up → Add momentum</div>
+                </div>
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+            </div>
+        </div>
+        
+        <!-- Story B: Journey -->
+        <div>
+            <div class="template-label">B — Journey Split</div>
+            <div class="social-story story-journey">
+                <div class="top">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="content">
+                        <div class="year-label">2019</div>
+                        <div class="state-text">One food truck.<br>Big dreams.<br>No idea how.</div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="content">
+                        <div class="year-label">Today</div>
+                        <div class="state-text">Three restaurants.<br>22 employees.<br>$380K funded.</div>
+                    </div>
+                    <div class="cta">Swipe up → Your turn</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- ==========================================
+         SOCIAL MEDIA: LANDSCAPE (16:9)
+    ========================================== -->
+    
+    <div class="section-header">
+        <h2>Social Media — Landscape (16:9)</h2>
+        <p>LinkedIn, Twitter/X, YouTube Thumbnails</p>
+    </div>
+    
+    <div class="template-grid">
+        
+        <!-- Landscape: Split -->
+        <div>
+            <div class="template-label">Split Layout</div>
+            <div class="social-landscape landscape-split">
+                <div class="left">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="content">
+                        <div class="label">Client Success</div>
+                        <div class="headline">Food truck → three locations. <span>Five years.</span></div>
+                        <div class="subtext">Free advice. Real results.</div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="right-top">
+                        <div class="stat">$380K</div>
+                        <div class="stat-label">SBA Loan Secured</div>
+                    </div>
+                    <div class="right-bottom">
+                        <div>
+                            <div class="name">Maria R.</div>
+                            <div class="location">Sacramento, CA</div>
+                        </div>
+                        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- ==========================================
+         EMAIL TEMPLATE
+    ========================================== -->
+    
+    <div class="section-header">
+        <h2>Email Template</h2>
+        <p>Client Success Story Feature Email</p>
+    </div>
+    
+    <div class="template-grid">
+        
+        <div>
+            <div class="template-label">Success Story Email</div>
+            <div class="email-container">
+                
+                <div class="email-header">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="label">Client Story</div>
+                </div>
+                
+                <div class="email-hero">
+                    <div class="left">
+                        <div class="journey-label">The Journey</div>
+                        <div class="journey-text">Food truck <span>→</span> three restaurants. Five years.</div>
+                    </div>
+                    <div class="right">
+                        <div class="stat">$380K</div>
+                        <div class="stat-label">SBA loan secured</div>
+                    </div>
+                </div>
+                
+                <div class="email-body">
+                    <p class="intro">Maria R. came to NorCal SBDC with a food truck and a question: "How do I grow?"</p>
+                    
+                    <p>She had the recipes. She had the customers lining up at her truck every lunch hour. What she didn't have was a roadmap—or anyone to ask.</p>
+                    
+                    <p>Her SBDC advisor changed that. Together, they built a business plan, navigated her first commercial lease, and secured $380,000 in SBA financing.</p>
+                    
+                    <div class="quote-block">
+                        <blockquote>"She didn't just help me get a loan. She helped me see what my business could become."</blockquote>
+                        <div class="attribution">— Maria R., Sacramento</div>
+                    </div>
+                    
+                    <p>Five years later, Maria has three restaurant locations and 22 employees. The food truck? She still brings it out for special events.</p>
+                    
+                    <div class="results">
+                        <div class="result-item">
+                            <div class="result-num">$380K</div>
+                            <div class="result-label">Funded</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-num">3</div>
+                            <div class="result-label">Locations</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-num">22</div>
+                            <div class="result-label">Jobs Created</div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Ready to add momentum to your business?</strong> Our advisors are here—free, confidential, no strings attached.</p>
+                </div>
+                
+                <div class="email-cta">
+                    <a href="#">Schedule your free session →</a>
+                </div>
+                
+                <div class="email-footer">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="tagline">Your Business People</div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

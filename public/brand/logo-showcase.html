@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Logo Concept | NorCal SBDC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0f;
+            --white: #ffffff;
+            --navy: #0F1C2E;
+            --pool: #8FC5D9;
+            --wine: #8A2432;
+            --cream: #F5F2EB;
+            --mist: #B8D4E3;
+            --gray: rgba(255,255,255,0.4);
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'proxima-nova', 'Proxima Nova', -apple-system, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Stacked document layout */
+        .document {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Section styling */
+        .section {
+            margin-bottom: 80px;
+            padding-bottom: 80px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section__number {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        /* Typography */
+        .headline--large {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .headline--medium {
+            font-size: clamp(24px, 3vw, 36px);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .text--caption {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            opacity: 0.6;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        em {
+            font-style: normal;
+            color: var(--pool);
+        }
+
+        /* Wine accent line */
+        .accent-line {
+            width: 60px;
+            height: 2px;
+            background: var(--wine);
+            margin: 30px 0;
+        }
+
+        /* ==================== */
+        /* SECTION 1: THE PROBLEM */
+        /* ==================== */
+        .problem-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .problem-visual {
+            background: #e8e8e8;
+            border-radius: 8px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .problem-visual img {
+            max-width: 100%;
+            max-height: 120px;
+        }
+
+        .problem-visual__caption {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 16px;
+        }
+
+        .problem-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .problem-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+            border-left: 2px solid var(--wine);
+        }
+
+        .problem-item__number {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--wine);
+            min-width: 20px;
+        }
+
+        .problem-item__text {
+            font-size: 15px;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+
+        .problem-item__text strong {
+            color: var(--pool);
+            font-weight: 600;
+        }
+
+        /* ==================== */
+        /* SECTION 2: THE SOLUTION */
+        /* ==================== */
+        .solution-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .logo-comparison {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-box {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 30px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+
+        .logo-box--light {
+            background: #e8e8e8;
+        }
+
+        .logo-box--light .logo-box__label {
+            color: var(--navy);
+        }
+
+        .logo-box__label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.4;
+        }
+
+        .logo-box__current {
+            max-width: 200px;
+            max-height: 80px;
+        }
+
+        .logo-box__new {
+            height: 70px;
+        }
+
+        .arrow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+        }
+
+        .arrow {
+            font-size: 24px;
+            opacity: 0.3;
+        }
+
+        .benefits-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .benefit {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 24px 16px;
+            background: rgba(143, 197, 217, 0.05);
+            border-radius: 8px;
+        }
+
+        .benefit__stat {
+            font-size: 36px;
+            font-weight: 200;
+            color: var(--pool);
+        }
+
+        .benefit__label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+
+        /* ==================== */
+        /* SECTION 3: THE SYSTEM */
+        /* ==================== */
+        .system-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .lockup-section {
+            margin-bottom: 30px;
+        }
+
+        .lockup-section__label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-bottom: 16px;
+        }
+
+        .lockup-examples {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Vertical stacked lockup */
+        .lockup-card {
+            background: var(--navy);
+            border-radius: 8px;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            min-width: 180px;
+        }
+
+        .lockup-card--light {
+            background: var(--cream);
+        }
+
+        .lockup-card__logo {
+            height: 50px;
+        }
+
+        .lockup-card__divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lockup-card--light .lockup-card__divider {
+            background: rgba(15,28,46,0.2);
+        }
+
+        .lockup-card__name {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .lockup-card--light .lockup-card__name {
+            color: var(--navy);
+        }
+
+        /* Horizontal inline lockup */
+        .lockup-inline {
+            background: var(--navy);
+            border-radius: 8px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .lockup-inline--light {
+            background: var(--cream);
+        }
+
+        .lockup-inline__logo {
+            height: 45px;
+        }
+
+        .lockup-inline__divider {
+            width: 1px;
+            height: 36px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lockup-inline--light .lockup-inline__divider {
+            background: rgba(15,28,46,0.2);
+        }
+
+        .lockup-inline__name {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--white);
+        }
+
+        .lockup-inline--light .lockup-inline__name {
+            color: var(--navy);
+        }
+
+        .center-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+        }
+
+        .center-chip {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.04);
+            padding: 10px 12px;
+            border-radius: 4px;
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        /* ==================== */
+        /* SECTION 4: THE ASK */
+        /* ==================== */
+        .ask-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .final-logo-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+
+        .final-logo {
+            height: 80px;
+        }
+
+        .ask-points {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ask-point {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(138, 36, 50, 0.08);
+            border-radius: 6px;
+        }
+
+        .ask-point__icon {
+            font-size: 16px;
+            color: var(--pool);
+            width: 24px;
+            text-align: center;
+        }
+
+        .ask-point__text {
+            font-size: 14px;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+
+        .closing-statement {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(143, 197, 217, 0.05) 0%, rgba(138, 36, 50, 0.05) 100%);
+            border-radius: 8px;
+        }
+
+        .closing-statement p {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        /* Print styles */
+        @media print {
+            .document {
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                margin-bottom: 40px;
+                padding-bottom: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .document {
+                padding: 40px 24px;
+            }
+
+            .logo-comparison {
+                flex-direction: column;
+            }
+
+            .arrow-container {
+                transform: rotate(90deg);
+                width: 100%;
+                padding: 10px 0;
+            }
+
+            .benefits-row {
+                flex-direction: column;
+            }
+
+            .benefit {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document">
+
+        <!-- SECTION 1: THE PROBLEM -->
+        <section class="section">
+            <div class="section__number">01 — Why We're Changing</div>
+            <h2 class="headline--large">Our current logo <em>doesn't scale.</em></h2>
+
+            <div class="problem-content">
+                <div class="problem-visual">
+                    <img src="https://www.sacramentovalleysbdc.org/wp-content/uploads/sites/27/2021/12/NCN-sacramento-valley.png" alt="Current Center Logo">
+                    <p class="problem-visual__caption">Current center logo example</p>
+                </div>
+
+                <div class="problem-list">
+                    <div class="problem-item">
+                        <span class="problem-item__number">01</span>
+                        <p class="problem-item__text"><strong>Too many layers.</strong> America's SBDC → California → Northern CA → "Small Business Development Center" → Sacramento Valley. Five levels before we get to what matters.</p>
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item__number">02</span>
+                        <p class="problem-item__text"><strong>Illegible at small sizes.</strong> Try putting this on a business card, social media avatar, or email signature. It turns to mush.</p>
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item__number">03</span>
+                        <p class="problem-item__text"><strong>No visual unity.</strong> Each of our 16 centers has a different variation. There's no consistent network identity.</p>
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item__number">04</span>
+                        <p class="problem-item__text"><strong>Local centers get buried.</strong> The thing clients actually care about—their local center—is always last and smallest.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE SOLUTION -->
+        <section class="section">
+            <div class="section__number">02 — The Solution</div>
+            <h2 class="headline--large">One clean mark. <em>Infinitely scalable.</em></h2>
+
+            <div class="solution-content">
+                <div class="logo-comparison">
+                    <div class="logo-box logo-box--light">
+                        <span class="logo-box__label">Current</span>
+                        <img class="logo-box__current" src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png" alt="Current Logo">
+                    </div>
+
+                    <div class="arrow-container">
+                        <span class="arrow">→</span>
+                    </div>
+
+                    <div class="logo-box">
+                        <span class="logo-box__label">Proposed</span>
+                        <img class="logo-box__new" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="Proposed Logo">
+                    </div>
+                </div>
+
+                <div class="benefits-row">
+                    <div class="benefit">
+                        <div class="benefit__stat">1</div>
+                        <div class="benefit__label">Text element</div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit__stat">2</div>
+                        <div class="benefit__label">Colors max</div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit__stat">∞</div>
+                        <div class="benefit__label">Scalability</div>
+                    </div>
+                </div>
+
+                <p class="text--caption">One mark. Clean, simple, and recognizable at any size. From billboards to mobile screens.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THE SYSTEM -->
+        <section class="section">
+            <div class="section__number">03 — How It Works</div>
+            <h2 class="headline--large">Centers get <em>equal billing.</em></h2>
+
+            <div class="system-content">
+                <!-- Horizontal Inline Lockups for Centers -->
+                <div class="lockup-section">
+                    <p class="lockup-section__label">Horizontal Lockups — Centers</p>
+                    <div class="lockup-examples">
+                        <div class="lockup-inline">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">Sacramento Valley</div>
+                        </div>
+                        <div class="lockup-inline lockup-inline--light">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">Shasta Cascade</div>
+                        </div>
+                    </div>
+                    <div class="lockup-examples" style="margin-top: 24px;">
+                        <div class="lockup-inline">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">Silicon Valley</div>
+                        </div>
+                        <div class="lockup-inline lockup-inline--light">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">East Bay</div>
+                        </div>
+                    </div>
+                    <div class="lockup-examples" style="margin-top: 24px;">
+                        <div class="lockup-inline">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">San Francisco</div>
+                        </div>
+                        <div class="lockup-inline lockup-inline--light">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">Contra Costa</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vertical Stacked Lockups for Centers -->
+                <div class="lockup-section">
+                    <p class="lockup-section__label">Vertical Lockups — Centers</p>
+                    <div class="lockup-examples">
+                        <div class="lockup-card">
+                            <img class="lockup-card__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-card__divider"></div>
+                            <div class="lockup-card__name">Sacramento<br>Valley</div>
+                        </div>
+                        <div class="lockup-card lockup-card--light">
+                            <img class="lockup-card__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-card__divider"></div>
+                            <div class="lockup-card__name">Shasta<br>Cascade</div>
+                        </div>
+                        <div class="lockup-card">
+                            <img class="lockup-card__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-card__divider"></div>
+                            <div class="lockup-card__name">Silicon<br>Valley</div>
+                        </div>
+                        <div class="lockup-card lockup-card--light">
+                            <img class="lockup-card__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-card__divider"></div>
+                            <div class="lockup-card__name">East<br>Bay</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trainings Lockup -->
+                <div class="lockup-section">
+                    <p class="lockup-section__label">Programs & Services</p>
+                    <div class="lockup-examples">
+                        <div class="lockup-inline">
+                            <img class="lockup-inline__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="SBDC Logo">
+                            <div class="lockup-inline__divider"></div>
+                            <div class="lockup-inline__name">Trainings</div>
+                        </div>
+                        <div class="lockup-card lockup-card--light">
+                            <img class="lockup-card__logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="SBDC Logo">
+                            <div class="lockup-card__divider"></div>
+                            <div class="lockup-card__name">Trainings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text--caption">One flexible system. The center name or program name shares equal space with the SBDC mark—not buried under layers of hierarchy.</p>
+
+                <div class="accent-line"></div>
+
+                <h3 class="headline--medium" style="margin-top: 40px;">All 16 Centers. <em>One System.</em></h3>
+                <div class="center-grid">
+                    <div class="center-chip">Butte</div>
+                    <div class="center-chip">Contra Costa</div>
+                    <div class="center-chip">East Bay</div>
+                    <div class="center-chip">Gold Country</div>
+                    <div class="center-chip">Humboldt</div>
+                    <div class="center-chip">Napa Solano</div>
+                    <div class="center-chip">North Coast</div>
+                    <div class="center-chip">Sacramento Valley</div>
+                    <div class="center-chip">San Francisco</div>
+                    <div class="center-chip">San Joaquin</div>
+                    <div class="center-chip">Shasta Cascade</div>
+                    <div class="center-chip">Silicon Valley</div>
+                    <div class="center-chip">Solano</div>
+                    <div class="center-chip">Sonoma</div>
+                    <div class="center-chip">Tri-Counties</div>
+                    <div class="center-chip">Yuba-Sutter</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: THE BENEFITS -->
+        <section class="section">
+            <div class="section__number">04 — Why This Works</div>
+            <h2 class="headline--large">Simple is <em>better.</em></h2>
+
+            <div class="ask-content">
+                <div class="final-logo-container">
+                    <img class="final-logo" src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC">
+                </div>
+
+                <div class="ask-points">
+                    <div class="ask-point">
+                        <div class="ask-point__icon">✓</div>
+                        <p class="ask-point__text">Works at every size—from billboards to email avatars</p>
+                    </div>
+                    <div class="ask-point">
+                        <div class="ask-point__icon">✓</div>
+                        <p class="ask-point__text">Unifies all 16 centers under one consistent visual system</p>
+                    </div>
+                    <div class="ask-point">
+                        <div class="ask-point__icon">✓</div>
+                        <p class="ask-point__text">Elevates local center identity instead of burying it</p>
+                    </div>
+                    <div class="ask-point">
+                        <div class="ask-point__icon">✓</div>
+                        <p class="ask-point__text">Flexible enough for centers, programs, and services</p>
+                    </div>
+                    <div class="ask-point">
+                        <div class="ask-point__icon">✓</div>
+                        <p class="ask-point__text">Modern, professional, and instantly recognizable</p>
+                    </div>
+                </div>
+
+                <div class="closing-statement">
+                    <p>One network. One mark. One cohesive brand.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

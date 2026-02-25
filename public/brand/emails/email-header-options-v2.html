@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — SBDC Day Email — Header Explorations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --warm: #FAF8F5;
+            --maroon: #8A2432;
+        }
+        
+        body {
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e8e8e8;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .section-label {
+            max-width: 600px;
+            margin: 0 auto 16px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #999;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto 80px;
+            background: white;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        
+        /* =============================================
+           HEADER OPTION A: MASSIVE CROP
+        ============================================= */
+        .header-crop {
+            background: var(--navy);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-crop::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .header-crop .bg-text {
+            position: absolute;
+            font-size: 500px;
+            font-weight: 900;
+            color: white;
+            opacity: 0.04;
+            letter-spacing: -0.05em;
+            line-height: 0.7;
+            top: -80px;
+            left: -40px;
+        }
+        
+        .header-crop .content {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .header-crop .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .header-crop .logo {
+            width: 140px;
+        }
+        
+        .header-crop .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+        
+        .header-crop .hero-block {
+            max-width: 400px;
+        }
+        
+        .header-crop .line-1 {
+            font-size: 42px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+        
+        .header-crop .line-2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--pool);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+        
+        .header-crop .star {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 180px;
+            opacity: 0.08;
+        }
+        
+        /* =============================================
+           HEADER OPTION B: SPLIT TENSION
+        ============================================= */
+        .header-split {
+            display: flex;
+            min-height: 380px;
+        }
+        
+        .header-split .left {
+            flex: 1.2;
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-split .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .header-split .logo {
+            width: 140px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-split .left-hero {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-split .hook-line {
+            font-size: 28px;
+            font-weight: 400;
+            color: white;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        
+        .header-split .hook-line strong {
+            font-weight: 800;
+        }
+        
+        .header-split .hook-line span {
+            color: var(--pool);
+            font-weight: 800;
+        }
+        
+        .header-split .right {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-split .right-top {
+            flex: 1;
+            background: var(--sky);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .header-split .right-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .header-split .big-num {
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-split .right-bottom {
+            background: var(--cream);
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-split .right-bottom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .header-split .year-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           HEADER OPTION C: STACKED BOLD
+        ============================================= */
+        .header-stacked {
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-stacked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .header-stacked .top-bar {
+            background: var(--navy);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-stacked .logo {
+            width: 140px;
+        }
+        
+        .header-stacked .date-badge {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+        
+        .header-stacked .hero-area {
+            padding: 48px 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-stacked .stack-line {
+            display: block;
+            line-height: 0.95;
+        }
+        
+        .header-stacked .stack-line.num {
+            font-size: 180px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+        }
+        
+        .header-stacked .stack-line.years {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.4;
+            margin-top: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .header-stacked .stack-line.hook {
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        
+        .header-stacked .stack-line.hook strong {
+            font-weight: 800;
+        }
+        
+        .header-stacked .stack-line.hook span {
+            color: var(--maroon);
+            font-weight: 800;
+        }
+        
+        .header-stacked .star {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 80px;
+            opacity: 0.1;
+        }
+        
+        /* =============================================
+           HEADER OPTION D: ASYMMETRIC BLOCKS
+        ============================================= */
+        .header-asymmetric {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto auto;
+            min-height: 380px;
+        }
+        
+        .header-asymmetric .main-block {
+            grid-row: span 2;
+            background: var(--navy);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-asymmetric .main-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .header-asymmetric .logo {
+            width: 140px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-asymmetric .main-hero {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-asymmetric .main-line {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+        
+        .header-asymmetric .main-line span {
+            color: var(--pool);
+        }
+        
+        .header-asymmetric .sub-line {
+            font-size: 15px;
+            color: var(--sky);
+            margin-top: 16px;
+            opacity: 0.8;
+        }
+        
+        .header-asymmetric .accent-block {
+            background: var(--sky);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .header-asymmetric .accent-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+        
+        .header-asymmetric .star {
+            width: 70px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-asymmetric .stat-block {
+            background: var(--cream);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .header-asymmetric .stat-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .header-asymmetric .stat-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-asymmetric .stat-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 4px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           HEADER OPTION E: PROVOCATIVE HOOK
+        ============================================= */
+        .header-provocative {
+            background: var(--navy);
+            min-height: 360px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-provocative::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .header-provocative .content {
+            padding: 40px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-provocative .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .header-provocative .logo {
+            width: 140px;
+        }
+        
+        .header-provocative .anniversary-badge {
+            text-align: right;
+        }
+        
+        .header-provocative .anniversary-badge .num {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+        }
+        
+        .header-provocative .anniversary-badge .label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+        
+        .header-provocative .hero-text {
+            max-width: 450px;
+        }
+        
+        .header-provocative .hook {
+            font-size: 36px;
+            font-weight: 400;
+            color: white;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        
+        .header-provocative .hook strong {
+            font-weight: 800;
+        }
+        
+        .header-provocative .hook span {
+            color: var(--pool);
+            font-weight: 800;
+        }
+        
+        .header-provocative .proof {
+            font-size: 16px;
+            color: var(--sky);
+            margin-top: 16px;
+        }
+        
+        .header-provocative .star {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 150px;
+            opacity: 0.06;
+        }
+        
+        /* =============================================
+           HEADER OPTION F: KINETIC STAGGER
+        ============================================= */
+        .header-kinetic {
+            background: var(--navy);
+            min-height: 380px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-kinetic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+        
+        .header-kinetic .content {
+            padding: 40px;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-kinetic .logo {
+            width: 140px;
+        }
+        
+        .header-kinetic .stagger-block {
+            margin-left: -10px;
+        }
+        
+        .header-kinetic .stagger-line {
+            display: block;
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 0.95;
+        }
+        
+        .header-kinetic .stagger-line:nth-child(1) { margin-left: 0; }
+        .header-kinetic .stagger-line:nth-child(2) { margin-left: 30px; }
+        .header-kinetic .stagger-line:nth-child(3) { margin-left: 60px; }
+        
+        .header-kinetic .stagger-line.ghost {
+            color: white;
+            opacity: 0.15;
+        }
+        
+        .header-kinetic .stagger-line.solid {
+            color: white;
+        }
+        
+        .header-kinetic .stagger-line.accent {
+            color: var(--pool);
+        }
+        
+        .header-kinetic .bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .header-kinetic .proof {
+            font-size: 14px;
+            color: var(--sky);
+        }
+        
+        .header-kinetic .years {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--pool);
+        }
+        
+        .header-kinetic .star {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 50px;
+            opacity: 0.3;
+        }
+        
+        /* Common email body for preview */
+        .email-body-preview {
+            padding: 40px;
+            background: white;
+        }
+        
+        .email-body-preview p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .divider {
+            height: 60px;
+            background: #e8e8e8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OPTION A: MASSIVE CROP -->
+    <div class="section-label">Option A — Massive Crop</div>
+    <div class="email-container">
+        <div class="header-crop">
+            <div class="bg-text">20</div>
+            <div class="content">
+                <div class="top-row">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="badge">SBDC DAY 2026</div>
+                </div>
+                <div class="hero-block">
+                    <div class="line-1">You have nothing to lose</div>
+                    <div class="line-2">but momentum.</div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- OPTION B: SPLIT TENSION -->
+    <div class="section-label">Option B — Split Tension</div>
+    <div class="email-container">
+        <div class="header-split">
+            <div class="left">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="left-hero">
+                    <div class="hook-line">You have <strong>nothing to lose</strong></div>
+                    <div class="hook-line">but <span>momentum.</span></div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="right-top">
+                    <div class="big-num">20</div>
+                </div>
+                <div class="right-bottom">
+                    <div class="year-label">Years of Momentum</div>
+                </div>
+            </div>
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- OPTION C: STACKED BOLD -->
+    <div class="section-label">Option C — Stacked Bold</div>
+    <div class="email-container">
+        <div class="header-stacked">
+            <div class="top-bar">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="date-badge">SBDC DAY 2026</div>
+            </div>
+            <div class="hero-area">
+                <span class="stack-line num">20</span>
+                <span class="stack-line years">Years of Momentum</span>
+                <span class="stack-line hook">You have <strong>nothing to lose</strong> but <span>momentum.</span></span>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- OPTION D: ASYMMETRIC BLOCKS -->
+    <div class="section-label">Option D — Asymmetric Blocks</div>
+    <div class="email-container">
+        <div class="header-asymmetric">
+            <div class="main-block">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="main-hero">
+                    <div class="main-line">Twenty years of turning ambition into <span>momentum.</span></div>
+                    <div class="sub-line">Free advice. $547M in results. Since 2006.</div>
+                </div>
+            </div>
+            <div class="accent-block">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+            </div>
+            <div class="stat-block">
+                <div class="stat-num">20</div>
+                <div class="stat-label">Years</div>
+            </div>
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- OPTION E: PROVOCATIVE HOOK -->
+    <div class="section-label">Option E — Provocative Hook</div>
+    <div class="email-container">
+        <div class="header-provocative">
+            <div class="content">
+                <div class="top-row">
+                    <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                    <div class="anniversary-badge">
+                        <div class="num">20</div>
+                        <div class="label">Years</div>
+                    </div>
+                </div>
+                <div class="hero-text">
+                    <div class="hook">You have <strong>nothing to lose</strong> but <span>momentum.</span></div>
+                    <div class="proof">Free advice. $547M in client results last year.</div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- OPTION F: KINETIC STAGGER -->
+    <div class="section-label">Option F — Kinetic Stagger</div>
+    <div class="email-container">
+        <div class="header-kinetic">
+            <div class="content">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="stagger-block">
+                    <span class="stagger-line ghost">Add</span>
+                    <span class="stagger-line solid">Add</span>
+                    <span class="stagger-line accent">momentum.</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="proof">Free advice. $547M in client results.</div>
+                    <div class="years">20 Years</div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+        </div>
+        <div class="email-body-preview">
+            <p>Email body continues here...</p>
+        </div>
+    </div>
+
+</body>
+</html>

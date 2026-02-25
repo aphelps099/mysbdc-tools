@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC - Add Momentum + Messaging</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --navy-alt: #1a2f42;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --bone: #f5f2eb;
+            --warm: #FAF8F5;
+            --maroon: #8A2432;
+
+            --sans: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'Roboto Mono', monospace;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: #080808;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =============================================
+           SECTION BREAKS
+        ============================================= */
+        .section-break {
+            text-align: center;
+            padding: 80px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 60px;
+        }
+
+        .section-break-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        /* =============================================
+           FRAME CONTAINERS
+        ============================================= */
+        .frame {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frame-label {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            z-index: 100;
+        }
+
+        /* PAGE CONTAINERS */
+        .page {
+            width: 11in;
+            height: 8.5in;
+            margin: 0 auto 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-label {
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        /* Grain */
+        .grain::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* =============================================
+           PART 1: MESSAGING BOARDS
+        ============================================= */
+
+        /* BOARD 1: NOTHING TO LOSE — Hero */
+        .board-nothing {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            min-height: 600px;
+        }
+
+        .board-nothing .left {
+            background: var(--navy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .board-nothing .frame-label { color: var(--sky); }
+
+        .board-nothing .logo {
+            width: 200px;
+        }
+
+        .board-nothing .hero-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-nothing .line-1 {
+            font-size: 56px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .board-nothing .line-2 {
+            font-size: 56px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .board-nothing .line-2 span {
+            color: var(--pool);
+        }
+
+        .board-nothing .cta {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--sky);
+            margin-top: 40px;
+        }
+
+        .board-nothing .right {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .board-nothing .right-top {
+            background: var(--sky);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .board-nothing .right-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+        }
+
+        .board-nothing .star {
+            width: 120px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-nothing .right-bottom {
+            background: var(--cream);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .board-nothing .right-bottom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+
+        .board-nothing .stat {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-nothing .stat-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* BOARD 2: FREE ADVICE / $547M SPLIT */
+        .board-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .board-split .left {
+            background: var(--cream);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .board-split .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+
+        .board-split .frame-label { color: var(--navy); opacity: 0.3; }
+
+        .board-split .wordmark {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-split .hero-left {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-split .dollar {
+            font-size: 200px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.75;
+        }
+
+        .board-split .advice {
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+        }
+
+        .board-split .sub-left {
+            font-size: 20px;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 24px;
+        }
+
+        .board-split .cta-left {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 16px 32px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 32px;
+        }
+
+        .board-split .right {
+            background: var(--navy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .board-split .hero-right {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-split .big-stat {
+            font-size: 180px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+        }
+
+        .board-split .stat-context {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--sky);
+            margin-top: 16px;
+        }
+
+        .board-split .star-clip {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 250px;
+            opacity: 0.08;
+        }
+
+        /* BOARD 3: AMBITION / MOMENTUM */
+        .board-ambition {
+            background: var(--navy);
+            min-height: 600px;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .board-ambition .frame-label { color: var(--sky); }
+
+        .board-ambition .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .board-ambition .logo {
+            width: 180px;
+        }
+
+        .board-ambition .date {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--sky);
+        }
+
+        .board-ambition .hero {
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-ambition .line {
+            font-size: 64px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+        }
+
+        .board-ambition .line strong {
+            font-weight: 800;
+        }
+
+        .board-ambition .line span {
+            color: var(--pool);
+        }
+
+        .board-ambition .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .board-ambition .tagline {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--sky);
+        }
+
+        .board-ambition .tagline span {
+            font-style: italic;
+            opacity: 0.6;
+        }
+
+        .board-ambition .cta {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .board-ambition .star-float {
+            position: absolute;
+            bottom: 100px;
+            right: 100px;
+            width: 150px;
+            opacity: 0.06;
+        }
+
+        /* BOARD 4: $547M RESULTS — Proof First */
+        .board-proof {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            min-height: 600px;
+        }
+
+        .board-proof .left {
+            background: var(--cream);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .board-proof .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+
+        .board-proof .frame-label { color: var(--navy); opacity: 0.3; }
+
+        .board-proof .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-proof .logo {
+            width: 180px;
+            margin-bottom: 60px;
+        }
+
+        .board-proof .mega-stat {
+            font-size: 180px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+        }
+
+        .board-proof .stat-context {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 16px;
+        }
+
+        .board-proof .divider {
+            width: 60px;
+            height: 3px;
+            background: var(--navy);
+            margin: 40px 0;
+        }
+
+        .board-proof .hook {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .board-proof .hook span {
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .board-proof .right {
+            background: var(--navy);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .board-proof .free-block {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-proof .free-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+            margin-bottom: 12px;
+        }
+
+        .board-proof .free-text {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .board-proof .bottom-block {
+            position: relative;
+            z-index: 2;
+        }
+
+        .board-proof .tagline {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--sky);
+            margin-bottom: 24px;
+        }
+
+        .board-proof .cta {
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .board-proof .star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            opacity: 0.1;
+        }
+
+        /* BOARD 5: MESSAGE HIERARCHY */
+        .board-hierarchy {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+            background: var(--warm);
+        }
+
+        .board-hierarchy .left {
+            padding: 60px;
+            border-right: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .board-hierarchy .section-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 48px;
+        }
+
+        .board-hierarchy .msg-block {
+            padding: 32px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .board-hierarchy .msg-block:last-child {
+            border-bottom: none;
+        }
+
+        .board-hierarchy .msg-num {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 500;
+            color: var(--navy);
+            opacity: 0.3;
+            margin-bottom: 4px;
+        }
+
+        .board-hierarchy .msg-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .board-hierarchy .msg-text {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .board-hierarchy .msg-text.italic {
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .board-hierarchy .msg-desc {
+            font-size: 13px;
+            color: var(--navy);
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+
+        .board-hierarchy .right {
+            background: var(--navy);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .board-hierarchy .right-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        .board-hierarchy .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .board-hierarchy .app-hook {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 0.95;
+        }
+
+        .board-hierarchy .app-proof {
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 0.9;
+            margin-top: 24px;
+        }
+
+        .board-hierarchy .app-context {
+            font-size: 16px;
+            color: var(--sky);
+            margin-top: 8px;
+        }
+
+        .board-hierarchy .app-cta {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .board-hierarchy .right-footer {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--sky);
+            opacity: 0.5;
+        }
+
+        /* =============================================
+           PART 2: CAMPAIGN PAGES
+        ============================================= */
+
+        /* PAGE 1: CAMPAIGN PHILOSOPHY */
+        .philosophy {
+            background: #faf9f7;
+            padding: 0.6in;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .philosophy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5in;
+        }
+
+        .philosophy-brand {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--navy-alt);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .philosophy-date {
+            font-size: 10px;
+            font-weight: 500;
+            color: rgba(26,47,66,0.4);
+        }
+
+        .philosophy-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 8in;
+        }
+
+        .philosophy-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(26,47,66,0.4);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .philosophy-headline {
+            font-size: 96px;
+            font-weight: 900;
+            color: var(--navy-alt);
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .philosophy-sub {
+            font-size: 28px;
+            font-style: italic;
+            color: rgba(26,47,66,0.5);
+            line-height: 1.4;
+            max-width: 6in;
+        }
+
+        .philosophy-footer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(26,47,66,0.1);
+        }
+
+        .philosophy-footer-item {}
+
+        .philosophy-footer-label {
+            font-size: 9px;
+            font-weight: 700;
+            color: rgba(26,47,66,0.35);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .philosophy-footer-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--navy-alt);
+            line-height: 1.4;
+        }
+
+        /* PAGE 2: MESSAGE SYSTEM */
+        .messages {
+            background: var(--bone);
+            padding: 0.5in;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4in;
+        }
+
+        .messages-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-brand {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--navy-alt);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.4in;
+        }
+
+        .messages-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(26,47,66,0.4);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .message-block {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(26,47,66,0.1);
+        }
+
+        .message-block:last-child {
+            border-bottom: none;
+        }
+
+        .message-num {
+            font-size: 9px;
+            font-weight: 700;
+            color: rgba(26,47,66,0.25);
+            margin-bottom: 4px;
+        }
+
+        .message-role {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(26,47,66,0.5);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .message-text {
+            font-weight: 800;
+            color: var(--navy-alt);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .message-text.xl { font-size: 36px; }
+        .message-text.lg { font-size: 28px; }
+        .message-text.md { font-size: 22px; }
+
+        .message-text.serif {
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .message-note {
+            font-size: 11px;
+            color: rgba(26,47,66,0.5);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .messages-right {
+            background: var(--navy-alt);
+            padding: 0.4in;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-right-label {
+            font-size: 9px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: auto;
+        }
+
+        .messages-hero {
+            margin-bottom: 0.3in;
+        }
+
+        .messages-hero-hook {
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+
+        .messages-hero-proof {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .messages-hero-proof strong {
+            display: block;
+            font-size: 40px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .messages-cta {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .messages-cta-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .messages-tagline {
+            margin-top: auto;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* PAGE 3: HERO POSTER - $0 ADVICE */
+        .hero-advice {
+            background: var(--navy-alt);
+            height: 100%;
+            position: relative;
+            padding: 0.5in;
+        }
+
+        .hero-advice .brand {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero-advice .hook {
+            position: absolute;
+            top: 0.4in;
+            left: 0.3in;
+            font-size: 220px;
+            font-weight: 900;
+            color: white;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+        }
+
+        .hero-advice .philosophy-block {
+            position: absolute;
+            top: 45%;
+            right: 0.6in;
+            text-align: right;
+            max-width: 3.5in;
+        }
+
+        .hero-advice .philosophy-text {
+            font-size: 32px;
+            font-style: italic;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.2;
+        }
+
+        .hero-advice .bottom {
+            position: absolute;
+            bottom: 0.5in;
+            left: 0.5in;
+            right: 0.5in;
+        }
+
+        .hero-advice .proof {
+            margin-bottom: 20px;
+        }
+
+        .hero-advice .proof-number {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .hero-advice .proof-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
+
+        .hero-advice .cta-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-advice .cta-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .hero-advice .cta-tagline {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* PAGE 4: HERO POSTER - AMBITION NEEDS MOMENTUM */
+        .hero-ambition-page {
+            background: var(--bone);
+            height: 100%;
+            position: relative;
+            padding: 0.5in;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-ambition-page .brand {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--navy-alt);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: auto;
+        }
+
+        .hero-ambition-page .main {}
+
+        .hero-ambition-page .line {
+            font-weight: 900;
+            color: var(--navy-alt);
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+
+        .hero-ambition-page .line.light {
+            font-size: 120px;
+            font-weight: 300;
+        }
+
+        .hero-ambition-page .line.bold {
+            font-size: 120px;
+        }
+
+        .hero-ambition-page .sub {
+            font-size: 24px;
+            font-style: italic;
+            color: rgba(26,47,66,0.5);
+            margin-top: 24px;
+        }
+
+        .hero-ambition-page .footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26,47,66,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .hero-ambition-page .stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .hero-ambition-page .stat-item {}
+
+        .hero-ambition-page .stat-number {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--navy-alt);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-ambition-page .stat-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(26,47,66,0.5);
+        }
+
+        .hero-ambition-page .cta-block {
+            text-align: right;
+        }
+
+        .hero-ambition-page .cta-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--navy-alt);
+        }
+
+        .hero-ambition-page .cta-tagline {
+            font-size: 10px;
+            font-weight: 500;
+            color: rgba(26,47,66,0.4);
+            margin-top: 4px;
+        }
+
+        /* PAGE 5: SPLIT - $0 vs $547M */
+        .split-page {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100%;
+        }
+
+        .split-left {
+            background: #faf9f7;
+            padding: 0.6in;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .split-left .brand {
+            position: absolute;
+            top: 0.5in;
+            left: 0.6in;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--navy-alt);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .split-left .hook {
+            font-size: 160px;
+            font-weight: 900;
+            color: var(--navy-alt);
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+        }
+
+        .split-left .sub {
+            font-size: 20px;
+            font-style: italic;
+            color: rgba(26,47,66,0.5);
+            margin-top: 16px;
+        }
+
+        .split-right {
+            background: var(--navy-alt);
+            padding: 0.6in;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .split-right .label {
+            position: absolute;
+            top: 0.5in;
+            right: 0.6in;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .split-right .number {
+            font-size: 120px;
+            font-weight: 900;
+            color: white;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            text-align: right;
+        }
+
+        .split-right .number-label {
+            font-size: 20px;
+            font-style: italic;
+            color: rgba(255,255,255,0.5);
+            margin-top: 12px;
+            text-align: right;
+        }
+
+        .split-page .cta-center {
+            position: absolute;
+            bottom: 0.5in;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--navy-alt);
+            padding: 14px 40px;
+            z-index: 10;
+        }
+
+        .split-page .cta-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.02em;
+        }
+
+        /* PAGE 6: FULL BLEED POSTER */
+        .poster {
+            background: var(--navy-alt);
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0.6in;
+        }
+
+        .poster .brand {
+            position: absolute;
+            top: 0.5in;
+            left: 0.6in;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .poster .main {}
+
+        .poster .line1 {
+            font-size: 56px;
+            font-style: italic;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.1;
+        }
+
+        .poster .line2 {
+            font-size: 140px;
+            font-weight: 900;
+            color: white;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+
+        .poster .proof {
+            margin-top: 32px;
+        }
+
+        .poster .proof-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .poster .proof-text strong {
+            font-weight: 800;
+            color: white;
+        }
+
+        .poster .footer {
+            position: absolute;
+            bottom: 0.5in;
+            left: 0.6in;
+            right: 0.6in;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .poster .cta {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .poster .tagline {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .page { margin: 0; page-break-after: always; }
+            .page-label { display: none; }
+            .section-break { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =============================================
+         PART 1: MESSAGING BOARDS
+    ============================================= -->
+
+    <div class="section-break">
+        <div class="section-break-label">NorCal SBDC — Messaging Exploration</div>
+    </div>
+
+    <!-- BOARD 1: NOTHING TO LOSE -->
+    <div class="frame board-nothing">
+        <span class="frame-label">01 — Hook</span>
+        <div class="left">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="hero-text">
+                <div class="line-1">You have nothing to lose</div>
+                <div class="line-2">but <span>momentum.</span></div>
+            </div>
+            <div class="cta">Add momentum. →</div>
+        </div>
+        <div class="right">
+            <div class="right-top">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star">
+            </div>
+            <div class="right-bottom">
+                <div class="stat">$0</div>
+                <div class="stat-label">Cost of Expert Advice</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOARD 2: FREE ADVICE / $547M SPLIT -->
+    <div class="frame board-split">
+        <span class="frame-label">02 — Split</span>
+        <div class="left">
+            <div class="wordmark">NorCal SBDC</div>
+            <div class="hero-left">
+                <div class="dollar">$0</div>
+                <div class="advice">Advice.</div>
+                <div class="sub-left">No cost. No catch.</div>
+                <div class="cta-left">Add momentum. →</div>
+            </div>
+        </div>
+        <div class="right">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-clip">
+            <div class="hero-right">
+                <div class="big-stat">$547M</div>
+                <div class="stat-context">in client capital for 2025.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOARD 3: AMBITION / MOMENTUM -->
+    <div class="frame board-ambition grain">
+        <span class="frame-label">03 — Philosophy</span>
+        <div class="top">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo">
+            <div class="date">Since 2006</div>
+        </div>
+        <div class="hero">
+            <div class="line"><strong>Ambition</strong> gets you started.</div>
+            <div class="line"><span>Momentum</span> gets you there.</div>
+        </div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-float">
+        <div class="bottom">
+            <div class="tagline"><span>Helping small businesses since 2006.</span> Your Business People.</div>
+            <div class="cta">Add momentum. →</div>
+        </div>
+    </div>
+
+    <!-- BOARD 4: $547M RESULTS — Proof First -->
+    <div class="frame board-proof">
+        <span class="frame-label">04 — Proof</span>
+        <div class="left">
+            <div class="content">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo">
+                <div class="mega-stat">$547M</div>
+                <div class="stat-context">Client results last year.</div>
+                <div class="divider"></div>
+                <div class="hook">Free advice.<br><span>No cost. No catch.</span></div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="free-block">
+                <div class="free-label">The Hook</div>
+                <div class="free-text">$0<br>Advice.</div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star">
+            <div class="bottom-block">
+                <div class="tagline">Your Business People.</div>
+                <div class="cta">Add momentum. →</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOARD 5: MESSAGE HIERARCHY -->
+    <div class="frame board-hierarchy">
+        <div class="left">
+            <div class="section-title">Message Hierarchy</div>
+
+            <div class="msg-block">
+                <div class="msg-num">01</div>
+                <div class="msg-label">Hook</div>
+                <div class="msg-text">$0 Advice.</div>
+                <div class="msg-desc">Stops the scroll. Unexpected. ZAG when they zig.</div>
+            </div>
+
+            <div class="msg-block">
+                <div class="msg-num">02</div>
+                <div class="msg-label">Proof</div>
+                <div class="msg-text">$547M in client capital.</div>
+                <div class="msg-desc">Hard number. Turns free into credible.</div>
+            </div>
+
+            <div class="msg-block">
+                <div class="msg-num">03</div>
+                <div class="msg-label">Philosophy</div>
+                <div class="msg-text italic">Ambition needs momentum.</div>
+                <div class="msg-desc">The why. Connects ambition to action.</div>
+            </div>
+
+            <div class="msg-block">
+                <div class="msg-num">04</div>
+                <div class="msg-label">Action</div>
+                <div class="msg-text">Add momentum. →</div>
+                <div class="msg-desc">Client does this. Verb-first. They're the hero.</div>
+            </div>
+
+            <div class="msg-block">
+                <div class="msg-num">05</div>
+                <div class="msg-label">Tagline</div>
+                <div class="msg-text italic">Your Business People</div>
+                <div class="msg-desc">The guide. Human, not institutional.</div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="right-label">Primary Application</div>
+            <div class="right-content">
+                <div class="app-hook">$0<br>Advice.</div>
+                <div class="app-proof">$547M</div>
+                <div class="app-context">in client capital for 2025.</div>
+                <div class="app-cta">Add momentum. →</div>
+            </div>
+            <div class="right-footer">Your Business People</div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         PART 2: CAMPAIGN PAGES
+    ============================================= -->
+
+    <div class="section-break">
+        <div class="section-break-label">Add Momentum Campaign</div>
+    </div>
+
+    <!-- PAGE 1: CAMPAIGN PHILOSOPHY -->
+    <p class="page-label">01 — Campaign Philosophy</p>
+    <div class="page philosophy">
+        <div class="philosophy-header">
+            <div class="philosophy-brand">NorCal SBDC</div>
+            <div class="philosophy-date">Campaign 2025</div>
+        </div>
+
+        <div class="philosophy-main">
+            <div class="philosophy-label">Campaign</div>
+            <h1 class="philosophy-headline">Ambition needs<br>Momentum.</h1>
+            <p class="philosophy-sub">You've done the hard part—starting. Now you need what's been missing: people who've been there, connections that open doors, and capital that fuels growth. Add momentum.</p>
+        </div>
+
+        <div class="philosophy-footer">
+            <div class="philosophy-footer-item">
+                <div class="philosophy-footer-label">Design</div>
+                <div class="philosophy-footer-value">Type as image.<br>Scale creates impact.</div>
+            </div>
+            <div class="philosophy-footer-item">
+                <div class="philosophy-footer-label">StoryBrand</div>
+                <div class="philosophy-footer-value">Client is the hero.<br>We are the guide.</div>
+            </div>
+            <div class="philosophy-footer-item">
+                <div class="philosophy-footer-label">ZAG</div>
+                <div class="philosophy-footer-value">$0 is unexpected.<br>When they zig, zag.</div>
+            </div>
+            <div class="philosophy-footer-item">
+                <div class="philosophy-footer-label">System</div>
+                <div class="philosophy-footer-value">Two colors only.<br>Maximum contrast.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: MESSAGE SYSTEM -->
+    <p class="page-label">02 — Message System</p>
+    <div class="page messages">
+        <div class="messages-left">
+            <div class="messages-brand">NorCal SBDC</div>
+            <div class="messages-title">Message Hierarchy</div>
+
+            <div class="message-block">
+                <div class="message-num">01</div>
+                <div class="message-role">Hook</div>
+                <div class="message-text xl">$0 Advice.</div>
+                <div class="message-note">Stops the scroll. Unexpected. Zag.</div>
+            </div>
+
+            <div class="message-block">
+                <div class="message-num">02</div>
+                <div class="message-role">Proof</div>
+                <div class="message-text lg">$547M in client capital.</div>
+                <div class="message-note">Hard number. Credibility.</div>
+            </div>
+
+            <div class="message-block">
+                <div class="message-num">03</div>
+                <div class="message-role">Philosophy</div>
+                <div class="message-text md serif">Ambition needs momentum.</div>
+                <div class="message-note">The why. Connects to action.</div>
+            </div>
+
+            <div class="message-block">
+                <div class="message-num">04</div>
+                <div class="message-role">Action</div>
+                <div class="message-text md">Add momentum. →</div>
+                <div class="message-note">Verb-first. Client is hero.</div>
+            </div>
+
+            <div class="message-block">
+                <div class="message-num">05</div>
+                <div class="message-role">Tagline</div>
+                <div class="message-text md serif">Your Business People</div>
+                <div class="message-note">Human, not institutional.</div>
+            </div>
+        </div>
+
+        <div class="messages-right">
+            <div class="messages-right-label">Primary Application</div>
+
+            <div class="messages-hero">
+                <div class="messages-hero-hook">$0<br>Advice.</div>
+                <div class="messages-hero-proof">
+                    <strong>$547M</strong>
+                    in client capital for 2025.
+                </div>
+            </div>
+
+            <div class="messages-cta">
+                <div class="messages-cta-text">Add momentum. →</div>
+            </div>
+
+            <div class="messages-tagline">Your Business People</div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: HERO POSTER -->
+    <p class="page-label">03 — Hero: $0 Advice</p>
+    <div class="page hero-advice">
+        <div class="brand">NorCal SBDC</div>
+        <div class="hook">$0<br>Advice.</div>
+        <div class="philosophy-block">
+            <div class="philosophy-text">Ambition needs<br>momentum.</div>
+        </div>
+        <div class="bottom">
+            <div class="proof">
+                <div class="proof-number">$547M</div>
+                <div class="proof-label">in client capital for 2025.</div>
+            </div>
+            <div class="cta-block">
+                <div class="cta-text">Add momentum. →</div>
+                <div class="cta-tagline">Your Business People</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: HERO - AMBITION NEEDS MOMENTUM -->
+    <p class="page-label">04 — Hero: Ambition Needs Momentum</p>
+    <div class="page hero-ambition-page">
+        <div class="brand">NorCal SBDC</div>
+        <div class="main">
+            <div class="line light">Ambition</div>
+            <div class="line bold">needs<br>Momentum.</div>
+        </div>
+        <div class="sub">The missing piece between effort and growth.</div>
+        <div class="footer">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">$0</div>
+                    <div class="stat-label">advice</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$547M</div>
+                    <div class="stat-label">in client capital</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">300+</div>
+                    <div class="stat-label">advisors</div>
+                </div>
+            </div>
+            <div class="cta-block">
+                <div class="cta-text">Add momentum. →</div>
+                <div class="cta-tagline">Your Business People</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: SPLIT -->
+    <p class="page-label">05 — Split: $0 vs $547M</p>
+    <div class="page split-page">
+        <div class="split-left">
+            <div class="brand">NorCal SBDC</div>
+            <div class="hook">$0<br>Advice.</div>
+            <div class="sub">No cost. No catch.</div>
+        </div>
+        <div class="split-right">
+            <div class="label">2025 Results</div>
+            <div class="number">$547M</div>
+            <div class="number-label">in client capital.</div>
+        </div>
+        <div class="cta-center">
+            <div class="cta-text">Add momentum. →</div>
+        </div>
+    </div>
+
+    <!-- PAGE 6: FULL BLEED POSTER -->
+    <p class="page-label">06 — Poster: Full Bleed</p>
+    <div class="page poster">
+        <div class="brand">NorCal SBDC</div>
+        <div class="main">
+            <div class="line1">Ambition needs</div>
+            <div class="line2">Momentum.</div>
+        </div>
+        <div class="proof">
+            <div class="proof-text"><strong>$0 advice.</strong> $547M in client capital for 2025.</div>
+        </div>
+        <div class="footer">
+            <div class="cta">Add momentum. →</div>
+            <div class="tagline">Your Business People</div>
+        </div>
+    </div>
+
+    <div class="section-break">
+        <div class="section-break-label">End Add Momentum + Messaging</div>
+    </div>
+
+</body>
+</html>

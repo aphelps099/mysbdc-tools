@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — 20 Years of Momentum (Refined)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy: #0F1C2E;
+            --royal: #1D5AA7;
+            --sky: #9EC4E0;
+            --maroon: #8A2432;
+            --cream: #F5F2EB;
+            --silver: #E8E6E1;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            padding: 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .section-break {
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid #222;
+            margin-bottom: 40px;
+        }
+        
+        .section-break-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #444;
+        }
+        
+        /* =============================================
+           FRAME BASE
+        ============================================= */
+        .frame {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frame-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            z-index: 10;
+            opacity: 0.5;
+        }
+        
+        /* Grain overlay */
+        .grain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* =============================================
+           FRAME 1: Navy + Clipped Star
+        ============================================= */
+        .frame-navy {
+            background: var(--navy);
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .frame-navy .frame-label { color: var(--sky); }
+        
+        .frame-navy .star-clip {
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 300px;
+            opacity: 0.08;
+        }
+        
+        .frame-navy .hero-logo {
+            width: 350px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-navy .hero-text {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-navy .hero-number {
+            font-size: 200px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+            margin-bottom: 16px;
+            margin-left: -8px;
+        }
+        
+        .frame-navy .hero-unit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sky);
+        }
+        
+        .frame-navy .hero-tagline {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            text-align: right;
+            z-index: 2;
+        }
+        
+        .frame-navy .tagline-main {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+        
+        .frame-navy .tagline-sub {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--sky);
+            margin-top: 8px;
+        }
+        
+        /* =============================================
+           FRAME 2: Gradient + Star Accent
+        ============================================= */
+        .frame-gradient {
+            background: linear-gradient(135deg, #1D5AA7 0%, #8A2432 100%);
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .frame-gradient .frame-label { color: rgba(255,255,255,0.5); }
+        
+        .frame-gradient .star-accent {
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            width: 200px;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+        }
+        
+        .frame-gradient .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-gradient .hero-logo {
+            width: 280px;
+            margin: 0 auto 40px;
+            filter: drop-shadow(0 4px 24px rgba(0,0,0,0.3));
+        }
+        
+        .frame-gradient .hero-statement {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            text-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+        
+        .frame-gradient .hero-statement span {
+            display: block;
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 0;
+            opacity: 0.7;
+            margin-top: 16px;
+        }
+        
+        /* =============================================
+           FRAME 3: Cream + Corner Star
+        ============================================= */
+        .frame-cream {
+            background: var(--cream);
+            padding: 80px;
+            min-height: 500px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .frame-cream::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        
+        .frame-cream .frame-label { color: rgba(0,0,0,0.3); }
+        
+        .frame-cream .star-corner {
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            width: 350px;
+            opacity: 0.06;
+        }
+        
+        .frame-cream .left {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-cream .anniversary-mark {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .frame-cream .anniversary-number {
+            font-size: 120px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .frame-cream .anniversary-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--maroon);
+        }
+        
+        .frame-cream .statement {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        .frame-cream .statement em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--royal);
+        }
+        
+        .frame-cream .right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-cream .stat-row {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+        }
+        
+        .frame-cream .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+        }
+        
+        .frame-cream .stat-label {
+            font-size: 14px;
+            color: var(--royal);
+        }
+        
+        /* =============================================
+           FRAME 4: REWORKED - Massive Clipped Type
+        ============================================= */
+        .frame-type {
+            background: linear-gradient(180deg, #0F1C2E 0%, #1D5AA7 100%);
+            padding: 80px;
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .frame-type .frame-label { color: rgba(255,255,255,0.4); }
+        
+        /* Massive clipped type as texture */
+        .frame-type .clip-word {
+            position: absolute;
+            font-size: 280px;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 0.75;
+            color: rgba(255,255,255,0.04);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        .frame-type .clip-word.w1 {
+            top: -40px;
+            left: -20px;
+        }
+        
+        .frame-type .clip-word.w2 {
+            top: 180px;
+            left: 200px;
+        }
+        
+        .frame-type .clip-word.w3 {
+            bottom: -60px;
+            right: -100px;
+        }
+        
+        .frame-type .star-float {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            width: 80px;
+            opacity: 0.3;
+        }
+        
+        .frame-type .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .frame-type .top-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sky);
+        }
+        
+        .frame-type .center-statement {
+            text-align: left;
+            padding-left: 40px;
+        }
+        
+        .frame-type .word {
+            display: block;
+            font-size: 90px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.95;
+        }
+        
+        .frame-type .word.dim { color: rgba(255,255,255,0.25); }
+        .frame-type .word.bright { color: white; }
+        
+        .frame-type .bottom-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .frame-type .bottom-left {
+            font-size: 14px;
+            color: var(--sky);
+        }
+        
+        .frame-type .bottom-right {
+            text-align: right;
+        }
+        
+        .frame-type .cta {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        /* =============================================
+           FRAME 5: Split + Stars
+        ============================================= */
+        .frame-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+        
+        .frame-split .left {
+            background: var(--cream);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .frame-split .left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        
+        .frame-split .left .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-split .star-left {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            opacity: 0.15;
+        }
+        
+        .frame-split .year-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--maroon);
+            margin-bottom: 16px;
+        }
+        
+        .frame-split .before-text {
+            font-size: 72px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.95;
+            opacity: 0.25;
+        }
+        
+        .frame-split .right {
+            background: var(--navy);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .frame-split .after-text {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.95;
+        }
+        
+        .frame-split .arrow-line {
+            position: absolute;
+            top: 50%;
+            left: -30px;
+            transform: translateY(-50%);
+            font-size: 40px;
+            color: var(--maroon);
+        }
+        
+        .frame-split .logo-small {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 100px;
+        }
+        
+        /* =============================================
+           FRAME 6: Maroon + Clipped Number
+        ============================================= */
+        .frame-maroon {
+            background: var(--maroon);
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .frame-maroon .frame-label { color: rgba(255,255,255,0.4); }
+        
+        .frame-maroon .clip-number {
+            position: absolute;
+            bottom: -100px;
+            right: -50px;
+            font-size: 400px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.06);
+            letter-spacing: -0.05em;
+            line-height: 0.7;
+        }
+        
+        .frame-maroon .star-top {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            opacity: 0.3;
+        }
+        
+        .frame-maroon .hero-logo {
+            width: 250px;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-maroon .mega-number {
+            font-size: 180px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.05em;
+            line-height: 0.8;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-maroon .mega-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-top: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* =============================================
+           FRAME 7: Timeline + Stars
+        ============================================= */
+        .frame-timeline {
+            background: var(--navy);
+            padding: 80px;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .frame-timeline .frame-label { color: var(--sky); }
+        
+        .frame-timeline .star-left {
+            position: absolute;
+            top: 50%;
+            left: -30px;
+            transform: translateY(-50%);
+            width: 100px;
+            opacity: 0.1;
+        }
+        
+        .frame-timeline .star-right {
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
+            width: 100px;
+            opacity: 0.1;
+        }
+        
+        .frame-timeline .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-timeline .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100px;
+            right: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, var(--royal) 50%, var(--maroon) 100%);
+            transform: translateY(-50%);
+        }
+        
+        .frame-timeline .year-marker {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-timeline .year-marker.start .year-num {
+            color: rgba(255,255,255,0.3);
+        }
+        
+        .frame-timeline .year-marker.end .year-num {
+            color: white;
+        }
+        
+        .frame-timeline .year-num {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        
+        .frame-timeline .year-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--sky);
+            margin-top: 8px;
+        }
+        
+        .frame-timeline .center-logo {
+            width: 180px;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .frame-timeline .momentum-text {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--maroon);
+        }
+        
+        /* =============================================
+           FRAME 8: Silver + Star Mark
+        ============================================= */
+        .frame-silver {
+            background: var(--silver);
+            padding: 80px;
+            min-height: 500px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            align-items: end;
+            position: relative;
+        }
+        
+        .frame-silver::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+        }
+        
+        .frame-silver .frame-label { color: rgba(0,0,0,0.25); }
+        
+        .frame-silver .star-bg {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 120px;
+            opacity: 0.08;
+        }
+        
+        .frame-silver .left {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-silver .trust-badge {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            margin-bottom: 24px;
+        }
+        
+        .frame-silver .main-stat {
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .frame-silver .stat-context {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--royal);
+            margin-top: 8px;
+        }
+        
+        .frame-silver .right {
+            position: relative;
+            z-index: 2;
+            text-align: right;
+        }
+        
+        .frame-silver .logo-navy {
+            width: 160px;
+            margin-left: auto;
+            margin-bottom: 24px;
+        }
+        
+        .frame-silver .sub-stat {
+            font-size: 14px;
+            color: var(--navy);
+            line-height: 1.6;
+        }
+        
+        .frame-silver .sub-stat strong {
+            font-weight: 700;
+        }
+        
+        /* =============================================
+           FRAME 9: Sunset + Floating Stars
+        ============================================= */
+        .frame-sunset {
+            background: linear-gradient(135deg, #1D5AA7 0%, #8A2432 50%, #0F1C2E 100%);
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .frame-sunset .frame-label { color: rgba(255,255,255,0.4); }
+        
+        .frame-sunset .star-float-1 {
+            position: absolute;
+            top: 60px;
+            right: 100px;
+            width: 40px;
+            opacity: 0.4;
+        }
+        
+        .frame-sunset .star-float-2 {
+            position: absolute;
+            bottom: 120px;
+            left: 60px;
+            width: 30px;
+            opacity: 0.2;
+            transform: rotate(15deg);
+        }
+        
+        .frame-sunset .top {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-sunset .hero-logo {
+            width: 180px;
+            margin-bottom: 32px;
+        }
+        
+        .frame-sunset .quote {
+            font-size: 36px;
+            font-weight: 400;
+            color: white;
+            line-height: 1.4;
+            max-width: 700px;
+        }
+        
+        .frame-sunset .quote strong {
+            font-weight: 800;
+        }
+        
+        .frame-sunset .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-sunset .anniversary-stack {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+        
+        .frame-sunset .anni-num {
+            font-size: 80px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+        }
+        
+        .frame-sunset .anni-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .frame-sunset .tagline {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        /* =============================================
+           FRAME 10: Minimal + Star Anchor
+        ============================================= */
+        .frame-white {
+            background: white;
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .frame-white .frame-label { color: rgba(0,0,0,0.2); }
+        
+        .frame-white .star-anchor {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            opacity: 0.04;
+        }
+        
+        .frame-white .logo-navy {
+            width: 280px;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-white .simple-statement {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-white .simple-statement span {
+            color: var(--maroon);
+        }
+        
+        .frame-white .corner-badge {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            text-align: right;
+            z-index: 2;
+        }
+        
+        .frame-white .badge-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .frame-white .badge-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--royal);
+        }
+        
+        /* =============================================
+           NEW FRAME 11: Pure Star Hero
+        ============================================= */
+        .frame-star {
+            background: var(--navy);
+            padding: 80px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .frame-star .frame-label { color: var(--sky); }
+        
+        .frame-star .star-hero {
+            width: 300px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .frame-star .text-left {
+            position: absolute;
+            left: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+        
+        .frame-star .big-20 {
+            font-size: 180px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 0.8;
+        }
+        
+        .frame-star .years-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sky);
+        }
+        
+        .frame-star .text-right {
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: right;
+            z-index: 2;
+        }
+        
+        .frame-star .tagline-word {
+            display: block;
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        
+        .frame-star .tagline-word.dim {
+            opacity: 0.3;
+        }
+        
+        /* =============================================
+           NEW FRAME 12: Clipped 20
+        ============================================= */
+        .frame-clip20 {
+            background: var(--royal);
+            padding: 80px;
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .frame-clip20 .frame-label { color: rgba(255,255,255,0.4); }
+        
+        .frame-clip20 .giant-20 {
+            position: absolute;
+            top: -80px;
+            left: -40px;
+            font-size: 500px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.08);
+            letter-spacing: -0.05em;
+            line-height: 0.75;
+        }
+        
+        .frame-clip20 .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .frame-clip20 .logo-white {
+            width: 200px;
+            margin-bottom: 24px;
+        }
+        
+        .frame-clip20 .statement {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            max-width: 500px;
+        }
+        
+        .frame-clip20 .statement span {
+            opacity: 0.5;
+        }
+        
+        .frame-clip20 .star-bottom {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 80px;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section-break">
+        <div class="section-break-label">NorCal SBDC · 20 Years of Momentum · Refined Exploration</div>
+    </div>
+
+    <!-- FRAME 1: Navy + Clipped Star -->
+    <div class="frame frame-navy grain">
+        <span class="frame-label">01 — Foundation</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-clip">
+        <div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="hero-logo">
+            <div class="hero-text">
+                <div class="hero-number">20</div>
+                <div class="hero-unit">Years of Momentum</div>
+            </div>
+        </div>
+        <div class="hero-tagline">
+            <div class="tagline-main">Your Business People.</div>
+            <div class="tagline-sub">Since 2006</div>
+        </div>
+    </div>
+
+    <!-- FRAME 2: Gradient + Star Accent -->
+    <div class="frame frame-gradient grain">
+        <span class="frame-label">02 — Energy</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-accent">
+        <div class="content">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="hero-logo">
+            <div class="hero-statement">
+                Ambition needs<br>momentum.
+                <span>We've been adding it for 20 years.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 3: Cream + Corner Star -->
+    <div class="frame frame-cream">
+        <span class="frame-label">03 — Premium</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-corner">
+        <div class="left">
+            <div class="anniversary-mark">
+                <div class="anniversary-number">20</div>
+                <div class="anniversary-text">Years<br>2006–2026</div>
+            </div>
+            <div class="statement">
+                Two decades of turning<br>
+                <em>ambition into action.</em>
+            </div>
+        </div>
+        <div class="right">
+            <div class="stat-row">
+                <div class="stat-number">$547M</div>
+                <div class="stat-label">capital accessed</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-number">12,400</div>
+                <div class="stat-label">businesses served yearly</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-number">300+</div>
+                <div class="stat-label">advisors across 36 counties</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 4: REWORKED - Clipped Type -->
+    <div class="frame frame-type">
+        <span class="frame-label">04 — Modern</span>
+        <div class="clip-word w1">AMBITION</div>
+        <div class="clip-word w2">NEEDS</div>
+        <div class="clip-word w3">MOMENTUM</div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-float">
+        <div class="content">
+            <div class="top-line">NorCal SBDC · Est. 2006</div>
+            <div class="center-statement">
+                <span class="word dim">Ambition</span>
+                <span class="word dim">needs</span>
+                <span class="word bright">Momentum.</span>
+            </div>
+            <div class="bottom-line">
+                <div class="bottom-left">36 Counties · 18 Centers · 1 Network</div>
+                <div class="bottom-right">
+                    <div class="cta">Add momentum. →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 5: Split + Stars -->
+    <div class="frame frame-split">
+        <div class="left">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-left">
+            <div class="content">
+                <div class="year-badge">2006</div>
+                <div class="before-text">An idea.</div>
+            </div>
+        </div>
+        <div class="right">
+            <span class="arrow-line">→</span>
+            <div class="after-text">An empire.</div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-small">
+        </div>
+        <span class="frame-label" style="color: rgba(0,0,0,0.3);">05 — Contrast</span>
+    </div>
+
+    <!-- FRAME 6: Maroon + Clipped 20 -->
+    <div class="frame frame-maroon grain">
+        <span class="frame-label">06 — Impact</span>
+        <div class="clip-number">20</div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-top">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="hero-logo">
+        <div class="mega-number">$0</div>
+        <div class="mega-label">Cost of Expert Advice · Since 2006</div>
+    </div>
+
+    <!-- FRAME 7: Timeline + Stars -->
+    <div class="frame frame-timeline grain">
+        <span class="frame-label">07 — Journey</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-left">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-right">
+        <div class="timeline">
+            <div class="year-marker start">
+                <div class="year-num">2006</div>
+                <div class="year-label">Founded</div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="center-logo">
+            <div class="year-marker end">
+                <div class="year-num">2026</div>
+                <div class="year-label">20 Years</div>
+            </div>
+        </div>
+        <div class="momentum-text">→ Momentum →</div>
+    </div>
+
+    <!-- FRAME 8: Silver + Star Mark -->
+    <div class="frame frame-silver">
+        <span class="frame-label">08 — Trust</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-bg">
+        <div class="left">
+            <div class="trust-badge">20 Years of Results</div>
+            <div class="main-stat">$547M</div>
+            <div class="stat-context">in client capital accessed</div>
+        </div>
+        <div class="right">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo-navy">
+            <div class="sub-stat">
+                <strong>12,400</strong> businesses served annually<br>
+                <strong>300+</strong> expert advisors<br>
+                <strong>36</strong> counties covered
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 9: Sunset + Floating Stars -->
+    <div class="frame frame-sunset grain">
+        <span class="frame-label">09 — Warmth</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-float-1">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-float-2">
+        <div class="top">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="hero-logo">
+            <div class="quote">
+                "She didn't just help me get a loan.<br>
+                <strong>She helped me see what my business could become."</strong>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="anniversary-stack">
+                <div class="anni-num">20</div>
+                <div class="anni-text">Years of<br>Momentum</div>
+            </div>
+            <div class="tagline">Your Business People. →</div>
+        </div>
+    </div>
+
+    <!-- FRAME 10: Minimal + Star Anchor -->
+    <div class="frame frame-white">
+        <span class="frame-label">10 — Confidence</span>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-anchor">
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-blue-2026.png" alt="NorCal SBDC" class="logo-navy">
+        <div class="simple-statement">
+            Add <span>momentum.</span>
+        </div>
+        <div class="corner-badge">
+            <div class="badge-num">20</div>
+            <div class="badge-text">Years</div>
+        </div>
+    </div>
+
+    <!-- FRAME 11: Pure Star Hero -->
+    <div class="frame frame-star grain">
+        <span class="frame-label">11 — Icon</span>
+        <div class="text-left">
+            <div class="big-20">20</div>
+            <div class="years-text">Years</div>
+        </div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-hero">
+        <div class="text-right">
+            <span class="tagline-word dim">Your</span>
+            <span class="tagline-word dim">Business</span>
+            <span class="tagline-word">People.</span>
+        </div>
+    </div>
+
+    <!-- FRAME 12: Clipped 20 -->
+    <div class="frame frame-clip20 grain">
+        <span class="frame-label">12 — Bold</span>
+        <div class="giant-20">20</div>
+        <div class="content">
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-white">
+            <div class="statement">
+                <span>Twenty years of</span><br>
+                turning ambition<br>
+                into momentum.
+            </div>
+        </div>
+        <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-bottom">
+    </div>
+
+    <div class="section-break">
+        <div class="section-break-label">End Exploration</div>
+    </div>
+
+</body>
+</html>
