@@ -914,6 +914,57 @@ export default function BrandHouse() {
             </div>
           </div>
         </div>
+
+        {/* Lender Resources CTA */}
+        <a
+          href="/brand/lender-resources"
+          className="bh-program-card"
+          style={{
+            display: 'block',
+            marginTop: 80,
+            background: '#0f1c2e',
+            borderRadius: 16,
+            padding: 'clamp(40px, 5vw, 64px)',
+            textDecoration: 'none',
+            position: 'relative',
+            overflow: 'hidden',
+            border: 'none',
+          }}
+        >
+          <span style={{
+            fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700,
+            letterSpacing: '0.1em', textTransform: 'uppercase' as const,
+            color: '#8FC5D9', display: 'block', marginBottom: 12,
+          }}>
+            Resources
+          </span>
+          <span style={{
+            fontFamily: 'var(--display)',
+            fontSize: 'clamp(24px, 4vw, 40px)',
+            fontWeight: 100,
+            letterSpacing: '-0.03em',
+            color: '#ffffff',
+            display: 'block',
+            lineHeight: 1.1,
+            marginBottom: 12,
+          }}>
+            Lender &amp; Partner Resources
+          </span>
+          <span style={{
+            fontFamily: 'var(--era-text)', fontSize: 14, fontWeight: 400,
+            color: 'rgba(255,255,255,0.45)', display: 'block',
+            maxWidth: 440, lineHeight: 1.6, marginBottom: 24,
+          }}>
+            Guides, talking points, outreach templates, and quick-copy phrases for lending partnerships.
+          </span>
+          <span style={{
+            fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 400,
+            letterSpacing: '0.08em', textTransform: 'uppercase' as const,
+            color: '#8FC5D9',
+          }}>
+            View Resources &rarr;
+          </span>
+        </a>
       </section>
 
       {/* ── Footer ── */}
