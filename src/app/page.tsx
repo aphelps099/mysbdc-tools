@@ -67,6 +67,16 @@ const tools = [
       </svg>
     ),
   },
+  {
+    href: '/brand',
+    name: 'Brand House',
+    description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2 2 7l10 5 10-5-10-5Z" /><path d="m2 17 10 5 10-5" /><path d="m2 12 10 5 10-5" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
