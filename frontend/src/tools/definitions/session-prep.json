@@ -1,0 +1,71 @@
+{
+  "id": "session-prep",
+  "title": "Session Prep",
+  "description": "Prepare talking points and resources for an upcoming advising session.",
+  "category": "session-management",
+  "tag": "Session Management",
+  "tagColor": "green",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.6,
+    "maxTokens": 1800
+  },
+  "body": [
+    { "type": "text", "content": "I have an upcoming advising session with " },
+    {
+      "type": "token",
+      "id": "client",
+      "label": "Client First Name",
+      "placeholder": "e.g. Maria",
+      "tip": "Client's first name only — protect PII"
+    },
+    { "type": "text", "content": " who runs " },
+    {
+      "type": "token",
+      "id": "biz",
+      "label": "Business Name",
+      "placeholder": "e.g. Sunrise Bakery LLC",
+      "tip": "Client's business"
+    },
+    { "type": "text", "content": "." },
+    { "type": "label", "content": "Session Context" },
+    { "type": "text", "content": "This is a " },
+    {
+      "type": "pills",
+      "id": "sessionType",
+      "label": "Session Type",
+      "options": ["Initial Intake", "Follow-up", "Milestone Review", "Crisis/Urgent"],
+      "tip": "What kind of session?"
+    },
+    { "type": "text", "content": " session." },
+    { "type": "br" },
+    { "type": "text", "content": "Primary topic: " },
+    {
+      "type": "token",
+      "id": "topic",
+      "label": "Topic",
+      "placeholder": "e.g. loan application, marketing strategy",
+      "tip": "Main discussion topic"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Client's current challenge: " },
+    {
+      "type": "token",
+      "id": "challenge",
+      "label": "Challenge",
+      "placeholder": "e.g. cash flow issues, scaling operations",
+      "tip": "What are they struggling with?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Session duration: " },
+    {
+      "type": "token",
+      "id": "duration",
+      "label": "Duration",
+      "placeholder": "e.g. 60 minutes",
+      "tip": "Planned session length"
+    },
+    { "type": "static", "content": "Generate a structured session prep sheet that includes: an agenda with time allocations, 3\u20135 key questions to ask, relevant resources or referrals to have ready, potential action items to assign, and follow-up reminders. Format as a clean, printable outline." }
+  ]
+}

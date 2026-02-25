@@ -1,0 +1,75 @@
+{
+  "id": "learn_session_prep",
+  "name": "AI-Powered Session Prep",
+  "description": "Guided exercise: prep for a mock client meeting using AI",
+  "version": "1.0",
+  "icon": "📋",
+  "category": "learn",
+  "categoryLabel": "Learn — Applied Skills",
+
+  "persona": "You are a training facilitator for SBDC advisors, running them through a mock session prep exercise. You play two roles: (1) the trainer guiding the exercise, and (2) when needed, you simulate a mock client profile for them to prep for. You provide a realistic but fictional client scenario and walk the advisor through using AI to prep for the meeting. After each step, you give feedback on their approach and suggest improvements. You are practical and time-conscious — advisors are busy and you show them how AI saves time without cutting corners.",
+
+  "trigger": "start",
+  "advance_command": "next",
+  "cancel_command": "quit",
+
+  "intro_message": "📋 **AI-Powered Session Prep**\n\nGreat session prep is the difference between a good advising meeting and a great one. In this exercise, you'll prep for a mock client meeting using AI — step by step.\n\nI'll give you a realistic client scenario and walk you through using AI to:\n- Research the client's industry\n- Build talking points\n- Prepare an agenda\n- Anticipate questions\n\nBy the end, you'll have a repeatable process you can use before every session.\n\nLet's meet your mock client!",
+
+  "steps": [
+    {
+      "id": "meet_client",
+      "title": "Meet Your Mock Client",
+      "objective": "Present a realistic client profile and have the advisor identify what they need to prep",
+      "instructions": "Present a detailed mock client profile. Example: 'Alex runs a 2-year-old landscaping business in Sacramento. Revenue is $8K/month but inconsistent. Has 2 part-time employees. Wants to bid on commercial contracts but isn't sure if ready. This is your 3rd session — previous sessions covered business plan basics and pricing.' Ask the advisor what they'd want to research or prepare before this meeting. Validate their ideas and add any they missed.",
+      "questions": [
+        "Here's your client profile — what's the first thing you'd want to research before this meeting?",
+        "What questions do you think Alex will come in with?",
+        "What resources or referrals should you have ready?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "research",
+      "title": "AI-Assisted Research",
+      "objective": "Practice using AI to quickly research the client's industry and situation",
+      "instructions": "Walk the advisor through using AI to research the mock client's industry. Have them try prompts like: 'What should I know about the commercial landscaping market in California?' or 'What are the typical requirements for a small landscaping company to bid on commercial contracts?' Coach their prompting. Show them how to specify 'Give me 5 key points I need to know' rather than asking for an essay. Remind them to verify any specific claims.",
+      "questions": [
+        "Write a prompt to research Alex's industry — what do you need to know?",
+        "That's useful — but how would you verify these specific numbers?",
+        "What else would be helpful to know before the meeting?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "build_agenda",
+      "title": "Build the Agenda",
+      "objective": "Use AI to create a structured session agenda with talking points",
+      "instructions": "Have the advisor use AI to build a session agenda. Coach them to include: time allocations, key questions to ask, specific advice to prepare, and potential referrals. Show them how to combine what they learned from research with the client's specific situation. Encourage them to customize the AI output — it's a starting point, not a final agenda. Have them add at least one thing from their own expertise that AI wouldn't know.",
+      "questions": [
+        "Write a prompt to create a 60-minute session agenda for Alex",
+        "Good — now what would you add from your own experience that AI might miss?",
+        "How would you adjust this if Alex comes in with a different priority?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "debrief",
+      "title": "Debrief & Build Your Process",
+      "objective": "Reflect on the exercise and create a repeatable session prep workflow",
+      "instructions": "Walk the advisor through a debrief: What worked? What would they do differently? How much time did this take vs. their usual prep? Help them build a repeatable 3-step process they can use before every session: (1) Quick industry research prompt, (2) Agenda builder prompt, (3) Personal review and customization. Offer to help them create a saved prompt template they can reuse. Point them to the Session Prep tool in the platform.",
+      "questions": [
+        "How does this compare to how you usually prep for sessions?",
+        "What part of this process saved you the most time?",
+        "Let's build your personal session prep template — what should it always include?",
+        "Want me to create a reusable prompt you can copy-paste before each session?"
+      ],
+      "allow_skip": false
+    }
+  ],
+
+  "completion": {
+    "message": "📋 **Session Prep: Leveled Up**\n\nYou now have an AI-assisted session prep process:\n\n1. 🔍 **Research** — Quick industry/topic brief (5 min)\n2. 📝 **Build** — Session agenda with talking points (5 min)\n3. 🧠 **Review** — Add your expertise, customize for the client (5 min)\n\n**Total: ~15 minutes of quality prep.**\n\n**Pro tip:** Use the **Session Prep** tool in this platform — it automates step 2 with a structured template.\n\nYour mock session prep is ready to download as a reference.",
+    "summary_instructions": "Generate the complete mock session prep package: the client profile, research notes, session agenda, and the advisor's personal prep process template. Include their reusable prompt template. Format as a clean reference document.",
+    "export_format": "markdown"
+  }
+}

@@ -1,0 +1,261 @@
+/* ═══════════════════════════════════════════════════════
+   Title Card — Motion Graphics Animations
+   Snappy fades, stagger reveals, line expands, word pops
+   ═══════════════════════════════════════════════════════ */
+
+.tc-stage {
+  --tc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --tc-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --tc-speed: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Fullscreen mode ── */
+.tc-stage.tc-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  border-radius: 0 !important;
+}
+
+/* ── Kicker / tag line ── */
+.tc-kicker {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.tc-kicker.tc-animate {
+  animation: tcSnapIn calc(300ms * var(--tc-speed)) var(--tc-ease) calc(100ms * var(--tc-speed)) both;
+}
+
+/* ── Kicker accent line ── */
+.tc-kicker-line {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.tc-kicker-line.tc-animate {
+  animation: tcLineExpand calc(450ms * var(--tc-speed)) var(--tc-ease) calc(0ms * var(--tc-speed)) both;
+}
+
+/* ── Title words — staggered entrance ── */
+.tc-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.tc-word.tc-animate {
+  animation: tcWordIn calc(400ms * var(--tc-speed)) var(--tc-ease-smooth) both;
+}
+
+/* Stagger delays applied via inline style */
+
+/* ── Subtitle ── */
+.tc-subtitle {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.tc-subtitle.tc-animate {
+  animation: tcSnapIn calc(350ms * var(--tc-speed)) var(--tc-ease) both;
+}
+
+/* ── Divider line ── */
+.tc-divider {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.tc-divider.tc-animate {
+  animation: tcLineExpand calc(500ms * var(--tc-speed)) var(--tc-ease) both;
+}
+
+/* ── Watermark ── */
+.tc-watermark {
+  opacity: 0;
+}
+
+.tc-watermark.tc-animate {
+  animation: tcFadeIn calc(400ms * var(--tc-speed)) ease both;
+}
+
+/* ── Corner accent ── */
+.tc-corner {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.tc-corner.tc-animate {
+  animation: tcCornerIn calc(350ms * var(--tc-speed)) var(--tc-ease) both;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Keyframes
+   ═══════════════════════════════════════════════════════ */
+
+@keyframes tcSnapIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tcWordIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tcLineExpand {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes tcFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+@keyframes tcCornerIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 0.12;
+    transform: scale(1);
+  }
+}
+
+/* ── Exit animations ── */
+.tc-kicker.tc-exit,
+.tc-subtitle.tc-exit {
+  animation: tcSnapOut calc(200ms * var(--tc-speed)) ease both;
+}
+
+.tc-word.tc-exit {
+  animation: tcWordOut calc(250ms * var(--tc-speed)) ease both;
+}
+
+.tc-kicker-line.tc-exit,
+.tc-divider.tc-exit {
+  animation: tcLineCollapse calc(300ms * var(--tc-speed)) ease both;
+  transform-origin: right center;
+}
+
+.tc-watermark.tc-exit {
+  animation: tcFadeOut calc(250ms * var(--tc-speed)) ease both;
+}
+
+.tc-corner.tc-exit {
+  animation: tcCornerOut calc(200ms * var(--tc-speed)) ease both;
+}
+
+@keyframes tcSnapOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes tcWordOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes tcLineCollapse {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes tcFadeOut {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes tcCornerOut {
+  from {
+    opacity: 0.12;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ── Controls panel ── */
+.tc-controls {
+  animation: tcControlsIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tcControlsIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Grain overlay (subtle texture) ── */
+.tc-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Cursor blink for typing style ── */
+.tc-cursor::after {
+  content: '|';
+  animation: tcBlink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes tcBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}

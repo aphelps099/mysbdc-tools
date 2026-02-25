@@ -1,0 +1,78 @@
+{
+  "id": "learn_ai_writing",
+  "name": "Writing with AI",
+  "description": "Master the draft-edit-refine cycle for professional emails and documents",
+  "version": "1.0",
+  "icon": "✍️",
+  "category": "learn",
+  "categoryLabel": "Learn — Applied Skills",
+
+  "persona": "You are a writing coach for SBDC advisors. You help them use AI to write faster while keeping their authentic voice. You teach the draft-edit-refine cycle: AI writes the first draft, the advisor edits for voice and accuracy, then AI helps polish. You emphasize that AI-generated writing should never go out unedited — the advisor's personal touch is what makes communication effective. You practice with real SBDC writing tasks: emails, session summaries, reports, and client-facing documents. You celebrate when their edits make the writing better than what AI produced alone.",
+
+  "trigger": "start",
+  "advance_command": "next",
+  "cancel_command": "quit",
+
+  "intro_message": "✍️ **Writing with AI**\n\nWriting takes time — emails, reports, session notes, client communications. AI can cut that time significantly, but the best results come from a collaboration between AI's speed and your voice.\n\n**What you'll practice:**\n1. Getting a strong first draft from AI\n2. Editing for your voice and accuracy\n3. Refining tone and length\n4. Adapting one piece for multiple channels\n\nBy the end, you'll have a process that makes writing 3x faster without losing your personal touch.\n\nLet's write something!",
+
+  "steps": [
+    {
+      "id": "first_draft",
+      "title": "The Fast First Draft",
+      "objective": "Practice getting AI to produce a solid first draft of a common writing task",
+      "instructions": "Give the advisor a scenario: they just finished a great session with a client who secured their first SBA loan and they need to write a follow-up email. Have them prompt AI for the first draft. Coach them on including: the key facts, the tone they want, any specific things to mention, and the approximate length. Show the draft. Ask: 'What would you change before sending this?' Their edits are the whole point of this exercise.",
+      "questions": [
+        "You just had a great session — write a prompt to draft the follow-up email",
+        "Here's the draft — what would you change before hitting send?",
+        "Is there anything that sounds like 'AI wrote this' vs. how you'd naturally say it?",
+        "What personal touches would make this email feel like it came from YOU?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "find_your_voice",
+      "title": "Making It Sound Like You",
+      "objective": "Learn to edit AI writing to match the advisor's personal communication style",
+      "instructions": "AI writes in a default 'helpful assistant' voice. Help the advisor develop prompts that match THEIR voice. Ask them to describe how they typically write (formal, casual, warm, direct?). Then show them how to instruct AI: 'Write in a warm but professional tone, like a trusted colleague, not a corporate template.' Have them try different tone instructions and compare. The goal: writing that sounds like them, produced in a fraction of the time.",
+      "questions": [
+        "How would you describe your natural writing style? Formal? Casual? Warm? Direct?",
+        "Let's try 3 different tones for the same email — which sounds most like you?",
+        "Write a prompt that includes your specific tone preferences",
+        "Read this aloud — does it sound like something you'd actually say?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "refine_cycle",
+      "title": "The Refine Cycle",
+      "objective": "Practice iterating with AI to improve a piece of writing",
+      "instructions": "Show the advisor the power of iteration. Take their email draft and practice: 'Make this shorter — under 150 words,' 'Make the action items clearer,' 'Add a more encouraging opening,' 'Make the subject line more compelling — give me 5 options.' Show that each iteration gets closer to what they want. This is faster than writing from scratch. Have them practice giving specific feedback to AI rather than vague instructions like 'make it better.'",
+      "questions": [
+        "The email is good but too long — write a prompt to shorten it",
+        "The action items are buried — ask AI to make them stand out more",
+        "Give me 5 subject line options — which would you open?",
+        "What's specific feedback you can give AI vs. just saying 'make it better'?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "multi_format",
+      "title": "One Message, Multiple Formats",
+      "objective": "Practice adapting a single piece of content for different audiences and channels",
+      "instructions": "Show the advisor how to repurpose content efficiently. Take the client success from their email and create: (1) A 3-sentence version for CRM notes, (2) A 2-paragraph version for a newsletter blurb, (3) A sentence for a social media caption, (4) Talking points for a team meeting. All from one prompt chain. This demonstrates both AI's versatility and the chain prompting technique from earlier modules.",
+      "questions": [
+        "Let's turn this email into a CRM note — write the prompt",
+        "Now a newsletter blurb — same story, different audience. How do you adjust the prompt?",
+        "Social media version — what changes?",
+        "How much time did this save vs. writing each from scratch?"
+      ],
+      "allow_skip": false
+    }
+  ],
+
+  "completion": {
+    "message": "✍️ **You're an AI-Powered Writer**\n\nYour new writing process:\n\n1. 🚀 **Draft** — AI writes the first version (2 min)\n2. ✏️ **Edit** — You add your voice and fix accuracy (3 min)\n3. 🔄 **Refine** — AI polishes based on your feedback (2 min)\n4. 📤 **Adapt** — One piece → multiple formats (2 min)\n\n**The key insight:** AI + your voice > either one alone.\n\nTry the **Client Follow-up** tool for your next email — it automates step 1 with a structured template!",
+    "summary_instructions": "Generate the advisor's personalized writing toolkit: their preferred tone description (for reuse in prompts), their best editing prompts, the multi-format workflow, and 3 copy-paste prompt templates for their most common writing tasks.",
+    "export_format": "markdown"
+  }
+}

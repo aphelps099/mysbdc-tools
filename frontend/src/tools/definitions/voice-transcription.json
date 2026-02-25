@@ -1,0 +1,15 @@
+{
+  "id": "voice-transcription",
+  "title": "Voice Transcription",
+  "description": "Record a session, transcribe it, and apply templates for notes, action plans, or follow-up emails.",
+  "category": "session-management",
+  "tag": "Session Management",
+  "tagColor": "green",
+  "version": "0.1-beta",
+  "config": {
+    "model": "gpt-4o-mini-transcribe",
+    "temperature": 0,
+    "maxTokens": 0
+  },
+  "body": []
+}

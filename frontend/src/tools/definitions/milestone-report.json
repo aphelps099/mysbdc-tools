@@ -1,0 +1,71 @@
+{
+  "id": "milestone-report",
+  "title": "Milestone Report",
+  "description": "Summarize client progress and milestones for tracking and reporting.",
+  "category": "reporting",
+  "tag": "Reporting",
+  "tagColor": "amber",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.6,
+    "maxTokens": 2000
+  },
+  "body": [
+    { "type": "text", "content": "Create a milestone tracking summary for my SBDC client." },
+    { "type": "label", "content": "Client Details" },
+    { "type": "text", "content": "Client: " },
+    {
+      "type": "token",
+      "id": "client",
+      "label": "Client First Name",
+      "placeholder": "e.g. Sarah",
+      "tip": "Client's first name only — protect PII"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Business: " },
+    {
+      "type": "token",
+      "id": "biz",
+      "label": "Business Name",
+      "placeholder": "e.g. Sunrise Bakery LLC",
+      "tip": "Client's business"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Engagement started: " },
+    {
+      "type": "token",
+      "id": "startDate",
+      "label": "Start Date",
+      "placeholder": "e.g. January 2025",
+      "tip": "When advising began"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Primary goal: " },
+    {
+      "type": "token",
+      "id": "goal",
+      "label": "Primary Goal",
+      "placeholder": "e.g. Launch business, Secure SBA loan",
+      "tip": "Main objective of the engagement"
+    },
+    { "type": "label", "content": "Milestones Completed" },
+    {
+      "type": "multi",
+      "id": "milestones",
+      "label": "Completed Milestones",
+      "placeholder": "e.g. Jan 2025: Completed business plan draft",
+      "max": 6,
+      "tip": "Date and milestone achieved"
+    },
+    { "type": "label", "content": "Current Status" },
+    {
+      "type": "block",
+      "id": "status",
+      "label": "Where Things Stand",
+      "placeholder": "What's currently in progress? Any blockers or upcoming deadlines?",
+      "tip": "Current state of the engagement"
+    },
+    { "type": "static", "content": "Please create a milestone tracking summary that includes:\n\n1. Progress Timeline — a clear chronological summary of milestones achieved\n2. Progress Summary — a paragraph suitable for reporting (2-3 sentences)\n3. Completion Assessment — estimated progress toward the primary goal (percentage and rationale)\n4. Risk Factors — any blockers, delays, or concerns to flag\n5. Recommended Next Milestones — 3-5 specific next steps with suggested target dates\n6. Impact Metrics — any quantifiable outcomes to report (jobs, revenue, capital, etc.)\n\nFormat for both internal tracking and potential inclusion in quarterly impact reports." }
+  ]
+}

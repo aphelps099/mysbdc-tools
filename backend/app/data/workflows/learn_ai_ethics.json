@@ -1,0 +1,78 @@
+{
+  "id": "learn_ai_ethics",
+  "name": "AI Ethics for Advisors",
+  "description": "Case studies on when to use AI, when not to, and client disclosure",
+  "version": "1.0",
+  "icon": "⚖️",
+  "category": "learn",
+  "categoryLabel": "Learn — Fundamentals",
+
+  "persona": "You are an AI ethics facilitator for SBDC advisors. You teach through case studies and discussion, not lectures. You present realistic scenarios and ask the advisor what they would do — then explore the implications together. You don't have all the answers — some of these are genuinely gray areas. You help advisors think through the issues and develop their own guidelines. You are honest about AI's limitations and risks. You never dismiss concerns. Your tone is thoughtful, collegial, and respectful — like a peer discussion at a professional development session.",
+
+  "trigger": "start",
+  "advance_command": "next",
+  "cancel_command": "quit",
+
+  "intro_message": "⚖️ **AI Ethics for Advisors**\n\nAI is a powerful tool — but powerful tools need thoughtful use. As SBDC advisors, we have professional obligations to our clients, our centers, and the SBA.\n\nThis module walks through real scenarios you might face. There aren't always clear-cut answers — the goal is to help you develop your own guidelines.\n\n**We'll cover:**\n1. Client confidentiality and AI\n2. Accuracy, liability, and 'hallucinations'\n3. Appropriate vs. inappropriate use cases\n4. Building your personal AI guidelines\n\nLet's think through this together.",
+
+  "steps": [
+    {
+      "id": "confidentiality",
+      "title": "Client Confidentiality",
+      "objective": "Explore how client data should be handled when using AI tools",
+      "instructions": "Present a scenario: An advisor wants to paste a client's full financial details into ChatGPT to get help analyzing their cash flow. Walk through the implications: Where does that data go? Who can see it? Does it matter if the tool is this platform vs a public tool? Discuss first names vs full names, business details vs personal financial data. Help them think about what data is safe to share with AI and what isn't. Note: this platform is configured with privacy protections, but public AI tools may not be.",
+      "questions": [
+        "A colleague pastes a client's full tax return into ChatGPT to help analyze it. What concerns do you have?",
+        "What client information do you think is safe to use with AI? Where would you draw the line?",
+        "Would your answer change depending on which AI tool you're using? Why or why not?",
+        "Should advisors tell clients when they're using AI to help with their case?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "accuracy",
+      "title": "When AI Gets It Wrong",
+      "objective": "Understand AI 'hallucinations' and the advisor's responsibility to verify",
+      "instructions": "Present a scenario: An advisor uses AI to research SBA loan requirements and the AI confidently states an incorrect interest rate and eligibility threshold. The advisor shares this with a client. Discuss: What could happen? Whose responsibility is it? Then present 3-4 statements that AI might generate about SBDC services, SBA programs, or financial regulations — some correct, some wrong. Ask the advisor to identify which ones need verification. Teach the principle: AI is a first draft, never a final answer for factual claims.",
+      "questions": [
+        "An advisor shares AI-generated SBA loan info with a client without checking it. The info is wrong. What happens next?",
+        "Here are 4 statements AI generated about small business programs — which ones would you verify before sharing?",
+        "What's your strategy for fact-checking AI outputs? What sources do you trust?",
+        "Where do you think AI is most likely to give wrong information in our field?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "appropriate_use",
+      "title": "When to Use AI (and When Not To)",
+      "objective": "Develop judgment about appropriate AI use cases in SBDC advising",
+      "instructions": "Present a spectrum of use cases from clearly appropriate to clearly inappropriate. Examples — Appropriate: drafting a follow-up email template, brainstorming session prep questions, formatting meeting notes. Gray area: writing a business plan section for a client, generating financial projections. Inappropriate: making lending decisions, diagnosing legal issues, replacing the advising relationship. For each gray area case, discuss what would make it appropriate vs. not. Key principle: AI assists the advisor's expertise, it doesn't replace it.",
+      "questions": [
+        "Rate these 5 scenarios from 'clearly OK' to 'definitely not' — and explain your reasoning",
+        "For the gray area cases, what would you need to do to make the AI use appropriate?",
+        "Can you think of a situation where using AI might actually be better for the client than not using it?",
+        "Where would you be uncomfortable using AI in your advising work?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "personal_guidelines",
+      "title": "Your AI Guidelines",
+      "objective": "Help the advisor create their own personal AI use guidelines",
+      "instructions": "Based on everything discussed, help the advisor draft their own 5-7 personal guidelines for using AI in their SBDC work. Prompt them to think about: data handling, verification, disclosure to clients, appropriate use cases, and continuous learning. Offer to format it as a printable one-page reference. Make it feel like THEIR guidelines, not rules imposed from above. Celebrate their thoughtfulness.",
+      "questions": [
+        "Based on our discussion, what are the top 3 principles you want to follow when using AI?",
+        "What's your rule for what client data you will and won't put into AI tools?",
+        "Will you tell clients when AI helped with something? In what situations?",
+        "What verification steps will you always take before sharing AI-generated content?"
+      ],
+      "allow_skip": false
+    }
+  ],
+
+  "completion": {
+    "message": "⚖️ **Well Done — You've Got a Framework**\n\nYou now have personal guidelines for using AI ethically in your advising work. Here's a quick summary:\n\n**The Big Principles:**\n- 🔒 Protect client data — first names only, no sensitive financials in public tools\n- ✅ Always verify — AI is a first draft, never a final answer\n- 🤝 Be transparent — tell clients when AI helped\n- 🧠 AI assists your expertise — it doesn't replace your judgment\n\n**Your personalized guidelines are ready to download.**\n\nAs AI tools evolve, revisit these guidelines periodically. What's a gray area today may become clearer tomorrow.",
+    "summary_instructions": "Generate the advisor's personalized AI Ethics Guidelines as a clean, professional one-page document. Include their specific principles, data handling rules, verification checklist, and disclosure approach. Format it for printing — clear headings, bullet points, concise language. Include today's date and a note to review quarterly.",
+    "export_format": "markdown"
+  }
+}

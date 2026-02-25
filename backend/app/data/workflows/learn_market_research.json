@@ -1,0 +1,78 @@
+{
+  "id": "learn_market_research",
+  "name": "Market Research with AI",
+  "description": "Learn to validate and cross-check AI-generated market research",
+  "version": "1.0",
+  "icon": "🔬",
+  "category": "learn",
+  "categoryLabel": "Learn — Applied Skills",
+
+  "persona": "You are a market research trainer for SBDC advisors. You teach them how to use AI as a starting point for market research — not a replacement for real data. You emphasize the difference between AI-generated insights (which may be fabricated) and verified data (from Census, BLS, IBISWorld, SBA, etc.). You are practical about the reality that most small businesses can't afford professional market research, so you show how AI + free public data sources = good enough for most advising situations. You model healthy skepticism while remaining enthusiastic about AI's usefulness.",
+
+  "trigger": "start",
+  "advance_command": "next",
+  "cancel_command": "quit",
+
+  "intro_message": "🔬 **Market Research with AI**\n\nClients always need market research, and professional reports cost thousands. AI can help bridge the gap — but only if you know how to verify what it generates.\n\nIn this module, you'll practice:\n1. Getting useful market research from AI\n2. Cross-checking claims against real data sources\n3. Building a research brief for a client\n4. Knowing what's reliable vs. what needs verification\n\nLet's research a market together!",
+
+  "steps": [
+    {
+      "id": "generate_research",
+      "title": "AI-Generated Market Research",
+      "objective": "Practice prompting AI for market research and evaluating the output",
+      "instructions": "Present a scenario: a client wants to open a pet grooming business in a mid-size California city. Have the advisor prompt AI for market research. Coach them toward specific prompts: target market size, competitor landscape, industry trends, pricing benchmarks. Produce the research, then immediately ask: 'Which of these facts can we trust and which need verification?' Highlight that statistics, market sizes, and specific numbers are the MOST likely to be unreliable.",
+      "questions": [
+        "Your client wants to open a pet grooming business — write a prompt to research this market",
+        "Good output — but which of these claims would you trust and which would you verify?",
+        "The AI says the pet grooming market is $X billion — how would you check that?",
+        "What's missing from this research that a real market analysis would include?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "verify_data",
+      "title": "Cross-Checking with Real Sources",
+      "objective": "Learn to verify AI research against free public data sources",
+      "instructions": "Walk through the free data sources every SBDC advisor should know: Census Business Builder, BLS (Bureau of Labor Statistics), IBISWorld (if center has access), SBA size standards, local economic development data, Google Trends, Yelp/Google Maps for competitor counts. Show how to use these to verify AI's claims. Practice: AI said there are 'approximately 150 pet groomers in the Sacramento metro area.' How would you verify this? (Google Maps search, Yelp, local business directories). Build a verification workflow.",
+      "questions": [
+        "Let's verify AI's market size claim — what source would you check first?",
+        "How would you count actual competitors in the client's area?",
+        "Which of these free data sources do you already use? Which are new to you?",
+        "For what kind of claims is AI research 'good enough' vs. needing verification?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "build_brief",
+      "title": "Build a Client Research Brief",
+      "objective": "Combine AI research with verified data into a useful client deliverable",
+      "instructions": "Have the advisor use AI to create a one-page market research brief for the mock client. Coach them to: (1) Lead with verified data where available, (2) Label AI-generated insights as 'preliminary' or 'estimated,' (3) Include competitor landscape based on real sources, (4) Add industry trends from AI (these tend to be more reliable than specific numbers), (5) Include 'questions for further research' — things the client should investigate locally. Show the difference between a raw AI dump and a curated, partially-verified brief.",
+      "questions": [
+        "Write a prompt to create a one-page market brief for your client",
+        "Now let's edit it — what would you mark as 'verified' vs. 'estimated'?",
+        "What local knowledge would you add that AI can't know?",
+        "Would you feel comfortable sharing this with your client? What caveats would you add?"
+      ],
+      "allow_skip": false
+    },
+    {
+      "id": "process",
+      "title": "Your Research Process",
+      "objective": "Build a repeatable AI-assisted market research workflow",
+      "instructions": "Help the advisor create their personal research process: (1) AI first draft — broad market overview, (2) Verify key numbers — check 2-3 critical claims against real sources, (3) Local validation — competitor count, local market conditions, (4) Synthesize — combine into a client-ready brief with clear sourcing. Discuss time: a 30-minute AI-assisted process vs. hours of manual research. Point them to the Competitive Analysis tool. Note that industry trends and general insights from AI tend to be more reliable than specific statistics.",
+      "questions": [
+        "How long does market research usually take you for a client?",
+        "With this process, what's the minimum verification you'd always do?",
+        "What types of businesses need more thorough research vs. a quick brief?",
+        "Let's save your research prompt template — what should it always include?"
+      ],
+      "allow_skip": false
+    }
+  ],
+
+  "completion": {
+    "message": "🔬 **Market Research Skills: Sharpened**\n\nYou now know how to use AI for market research responsibly:\n\n1. 🤖 **Generate** — AI provides a fast first draft of market insights\n2. ✅ **Verify** — Check specific numbers against Census, BLS, and local data\n3. 📝 **Synthesize** — Combine AI + verified data into a client brief\n4. ⚠️ **Label** — Always distinguish estimated vs. verified information\n\n**Reliable free sources to bookmark:**\n- Census Business Builder\n- Bureau of Labor Statistics\n- Google Maps/Yelp (competitor counts)\n- SBA.gov (size standards, industry data)\n\nTry the **Competitive Analysis** tool for your next client!",
+    "summary_instructions": "Generate the advisor's market research toolkit: their reusable research prompts, a list of free data sources with URLs, their verification checklist, and a sample research brief template they can customize for clients.",
+    "export_format": "markdown"
+  }
+}

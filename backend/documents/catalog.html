@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Design Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --bg: #0a0a0a;
+            --card-bg: #141414;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: white;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .stats span {
+            color: var(--pool);
+            font-weight: 600;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: #888;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #444;
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: var(--navy);
+            border-color: var(--pool);
+            color: var(--pool);
+        }
+
+        .action-btn {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border: none;
+            background: var(--pool);
+            color: var(--navy);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: white;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Main Content */
+        .main {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            position: sticky;
+            top: 120px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            margin-bottom: 4px;
+        }
+
+        .category-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .category-link:hover {
+            background: var(--card-bg);
+            color: white;
+        }
+
+        .category-link.active {
+            background: var(--navy);
+            color: var(--pool);
+        }
+
+        .category-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #555;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 24px 40px;
+        }
+
+        .category-section {
+            margin-bottom: 60px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .category-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #666;
+        }
+
+        /* Design Grid */
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .design-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .design-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        .design-card.selected {
+            border-color: var(--pool);
+            box-shadow: 0 0 0 1px var(--pool);
+        }
+
+        .design-card.hidden {
+            display: none;
+        }
+
+        .card-preview {
+            aspect-ratio: 16/10;
+            background: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-preview iframe {
+            width: 200%;
+            height: 200%;
+            border: none;
+            transform: scale(0.5);
+            transform-origin: top left;
+            pointer-events: none;
+        }
+
+        .card-preview-overlay {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .card-info {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pool);
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-file {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: #555;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .select-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .select-checkbox:hover {
+            border-color: var(--pool);
+        }
+
+        .select-checkbox.checked {
+            background: var(--pool);
+            border-color: var(--pool);
+        }
+
+        .select-checkbox.checked::after {
+            content: '✓';
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .view-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border: 1px solid #444;
+            background: transparent;
+            color: #888;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            border-color: var(--pool);
+            color: var(--pool);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .modal-title {
+            font-family: 'proxima-nova', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .modal-subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .modal-open-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            color: white;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .modal-open-tab:hover {
+            border-color: var(--pool);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-open-tab svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s ease;
+            color: white;
+        }
+
+        .modal-close:hover {
+            border-color: var(--pool);
+        }
+
+        .modal-close svg {
+            width: 16px;
+            height: 16px;
+            stroke: white;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .modal iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div>
+                <div class="logo">NorCal SBDC</div>
+                <h1 class="title">Design Catalog</h1>
+            </div>
+            <div class="stats">
+                <span id="selected-count">0</span> selected of <span id="total-count">0</span> designs
+            </div>
+        </div>
+        <div class="controls">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="selected">Selected Only</button>
+            <button class="action-btn" id="clear-btn" disabled>Clear Selection</button>
+            <button class="action-btn" id="export-btn" disabled>Export Master Set</button>
+        </div>
+    </header>
+
+    <div class="main">
+        <aside class="sidebar">
+            <div class="sidebar-title">Categories</div>
+            <ul class="category-list" id="category-nav">
+                <!-- Generated by JS -->
+            </ul>
+        </aside>
+
+        <main class="content" id="content">
+            <!-- Generated by JS -->
+        </main>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="modal-header-left">
+                <span class="modal-title" id="modal-title">Preview</span>
+                <span class="modal-subtitle" id="modal-subtitle"></span>
+            </div>
+            <div class="modal-header-right">
+                <a href="#" class="modal-open-tab" id="modal-open-tab" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Open in New Tab
+                </a>
+                <button class="modal-close" id="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-content">
+                <iframe id="modal-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Design Database
+        const designs = [
+            // Business Cards - Classic
+            { id: 'bc-classic-a', category: 'Business Cards', series: 'Classic', label: 'Option A', name: 'Classic Navy', file: 'business-cards/business-cards.html' },
+            { id: 'bc-classic-b', category: 'Business Cards', series: 'Classic', label: 'Option B', name: 'Bold Split', file: 'business-cards/business-cards.html' },
+            { id: 'bc-classic-c', category: 'Business Cards', series: 'Classic', label: 'Option C', name: 'Minimal White', file: 'business-cards/business-cards.html' },
+            { id: 'bc-classic-d', category: 'Business Cards', series: 'Classic', label: 'Option D', name: 'Diagonal Cut', file: 'business-cards/business-cards.html' },
+            { id: 'bc-classic-e', category: 'Business Cards', series: 'Classic', label: 'Option E', name: 'Maroon Accent', file: 'business-cards/business-cards.html' },
+            { id: 'bc-classic-f', category: 'Business Cards', series: 'Classic', label: 'Option F', name: 'Pool Forward', file: 'business-cards/business-cards.html' },
+
+            // Business Cards - Momentum
+            { id: 'bc-m1', category: 'Business Cards', series: 'Momentum', label: 'M1', name: 'Velocity Bars', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m2', category: 'Business Cards', series: 'Momentum', label: 'M2', name: 'Gradient Sweep', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m3', category: 'Business Cards', series: 'Momentum', label: 'M3', name: 'Corner Burst', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m4', category: 'Business Cards', series: 'Momentum', label: 'M4', name: 'Stacked Waves', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m5', category: 'Business Cards', series: 'Momentum', label: 'M5', name: 'Split Diagonal', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m6', category: 'Business Cards', series: 'Momentum', label: 'M6', name: 'Edge Lines', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m7', category: 'Business Cards', series: 'Momentum', label: 'M7', name: 'Full Fade', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m8', category: 'Business Cards', series: 'Momentum', label: 'M8', name: 'Corner Glow', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m9', category: 'Business Cards', series: 'Momentum', label: 'M9', name: 'Rising Bars', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m10', category: 'Business Cards', series: 'Momentum', label: 'M10', name: 'Whisper Lines', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m11', category: 'Business Cards', series: 'Momentum', label: 'M11', name: 'Gradient Field', file: 'business-cards/business-cards-momentum.html' },
+            { id: 'bc-m12', category: 'Business Cards', series: 'Momentum', label: 'M12', name: 'Motion Blur', file: 'business-cards/business-cards-momentum.html' },
+
+            // Business Cards - ZAG
+            { id: 'bc-zag1', category: 'Business Cards', series: 'ZAG', label: 'ZAG 1', name: 'Name Is Everything', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag2', category: 'Business Cards', series: 'ZAG', label: 'ZAG 2', name: 'Vertical', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag3', category: 'Business Cards', series: 'ZAG', label: 'ZAG 3', name: 'Just The Facts', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag4', category: 'Business Cards', series: 'ZAG', label: 'ZAG 4', name: 'The Slash', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag5', category: 'Business Cards', series: 'ZAG', label: 'ZAG 5', name: 'Mono Only', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag6', category: 'Business Cards', series: 'ZAG', label: 'ZAG 6', name: 'Bleed Name', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag7', category: 'Business Cards', series: 'ZAG', label: 'ZAG 7', name: 'Two-Tone Split', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag8', category: 'Business Cards', series: 'ZAG', label: 'ZAG 8', name: 'Corner Logo', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag9', category: 'Business Cards', series: 'ZAG', label: 'ZAG 9', name: 'Editorial', file: 'business-cards/business-cards-zag.html' },
+            { id: 'bc-zag10', category: 'Business Cards', series: 'ZAG', label: 'ZAG 10', name: 'Oversized Initial', file: 'business-cards/business-cards-zag.html' },
+
+            // Business Cards - Patterns
+            { id: 'bc-p1', category: 'Business Cards', series: 'Patterns', label: 'P1', name: 'Gradient Sweep', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p2', category: 'Business Cards', series: 'Patterns', label: 'P2', name: 'Perspective Grid', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p3', category: 'Business Cards', series: 'Patterns', label: 'P3', name: 'Radial Emergence', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p4', category: 'Business Cards', series: 'Patterns', label: 'P4', name: 'Input/Output', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p5', category: 'Business Cards', series: 'Patterns', label: 'P5', name: 'Asterisk Field', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p6', category: 'Business Cards', series: 'Patterns', label: 'P6', name: 'Linear Fade', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p7', category: 'Business Cards', series: 'Patterns', label: 'P7', name: 'Noise Field', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p8', category: 'Business Cards', series: 'Patterns', label: 'P8', name: 'Cropped Circles', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p9', category: 'Business Cards', series: 'Patterns', label: 'P9', name: 'Deep Gradient', file: 'business-cards/business-cards-patterns.html' },
+            { id: 'bc-p10', category: 'Business Cards', series: 'Patterns', label: 'P10', name: 'Gradient Mesh', file: 'business-cards/business-cards-patterns.html' },
+
+            // Business Cards - Wild
+            { id: 'bc-w1', category: 'Business Cards', series: 'Wild', label: 'W1', name: 'Name Is The Card', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w2', category: 'Business Cards', series: 'Wild', label: 'W2', name: 'Split Personality', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w3', category: 'Business Cards', series: 'Wild', label: 'W3', name: 'Full Gradient Chaos', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w4', category: 'Business Cards', series: 'Wild', label: 'W4', name: 'Stacked Chaos', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w5', category: 'Business Cards', series: 'Wild', label: 'W5', name: 'The Void', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w6', category: 'Business Cards', series: 'Wild', label: 'W6', name: 'Inverted Expectations', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w7', category: 'Business Cards', series: 'Wild', label: 'W7', name: 'Mono Brutalist', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w8', category: 'Business Cards', series: 'Wild', label: 'W8', name: 'Color Field', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w9', category: 'Business Cards', series: 'Wild', label: 'W9', name: 'Glitch', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w10', category: 'Business Cards', series: 'Wild', label: 'W10', name: 'Circle Crop', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w11', category: 'Business Cards', series: 'Wild', label: 'W11', name: 'Extreme Vertical', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w12', category: 'Business Cards', series: 'Wild', label: 'W12', name: 'Data Card', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w13', category: 'Business Cards', series: 'Wild', label: 'W13', name: 'Overlap Madness', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w14', category: 'Business Cards', series: 'Wild', label: 'W14', name: 'Giant First Letter', file: 'business-cards/business-cards-wild.html' },
+            { id: 'bc-w15', category: 'Business Cards', series: 'Wild', label: 'W15', name: 'Noise Static', file: 'business-cards/business-cards-wild.html' },
+
+            // Business Cards - Pentagram + Momentum
+            { id: 'bc-pm1', category: 'Business Cards', series: 'Pentagram', label: '01', name: 'Gradient Line', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm2', category: 'Business Cards', series: 'Pentagram', label: '02', name: 'Corner Fade', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm3', category: 'Business Cards', series: 'Pentagram', label: '03', name: 'Diagonal Edge', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm4', category: 'Business Cards', series: 'Pentagram', label: '04', name: 'Sweep Edge', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm5', category: 'Business Cards', series: 'Pentagram', label: '05', name: 'Navy Sweep', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm6', category: 'Business Cards', series: 'Pentagram', label: '06', name: 'Rising Lines', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm7', category: 'Business Cards', series: 'Pentagram', label: '07', name: 'Offset Dot', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm8', category: 'Business Cards', series: 'Pentagram', label: '08', name: 'Cream Gradient', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm9', category: 'Business Cards', series: 'Pentagram', label: '09', name: 'Half Sweep', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm10', category: 'Business Cards', series: 'Pentagram', label: '10', name: 'Whisper Ring', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm11', category: 'Business Cards', series: 'Pentagram', label: '11', name: 'Split Gradient', file: 'business-cards/business-cards-pentagram-momentum.html' },
+            { id: 'bc-pm12', category: 'Business Cards', series: 'Pentagram', label: '12', name: 'Bottom Glow', file: 'business-cards/business-cards-pentagram-momentum.html' },
+
+            // Email Signatures
+            { id: 'sig-s1', category: 'Email Signatures', series: 'Core', label: 'S1', name: 'Text Only (Ultra Minimal)', file: 'emails/email-signatures.html' },
+            { id: 'sig-s2', category: 'Email Signatures', series: 'Core', label: 'S2', name: 'Logo + Divider', file: 'emails/email-signatures.html' },
+            { id: 'sig-s3', category: 'Email Signatures', series: 'Core', label: 'S3', name: 'Gradient Line', file: 'emails/email-signatures.html' },
+            { id: 'sig-s4', category: 'Email Signatures', series: 'Core', label: 'S4', name: 'Logo + Gradient', file: 'emails/email-signatures.html' },
+            { id: 'sig-s5', category: 'Email Signatures', series: 'Core', label: 'S5', name: 'Stacked Minimal', file: 'emails/email-signatures.html' },
+            { id: 'sig-s6', category: 'Email Signatures', series: 'Core', label: 'S6', name: 'Bold Card (Wild)', file: 'emails/email-signatures.html' },
+            { id: 'sig-s7', category: 'Email Signatures', series: 'Core', label: 'S7', name: 'Side Accent', file: 'emails/email-signatures.html' },
+            { id: 'sig-s8', category: 'Email Signatures', series: 'Core', label: 'S8', name: 'Compact Row', file: 'emails/email-signatures.html' },
+
+            // Email Headers
+            { id: 'header-a', category: 'Email Headers', series: 'Options', label: 'Option A', name: 'Massive Crop', file: 'emails/email-header-options.html' },
+            { id: 'header-b', category: 'Email Headers', series: 'Options', label: 'Option B', name: 'Split Tension', file: 'emails/email-header-options.html' },
+            { id: 'header-c', category: 'Email Headers', series: 'Options', label: 'Option C', name: 'Stacked Bold', file: 'emails/email-header-options.html' },
+            { id: 'header-d', category: 'Email Headers', series: 'Options', label: 'Option D', name: 'Asymmetric Blocks', file: 'emails/email-header-options.html' },
+            { id: 'header-e', category: 'Email Headers', series: 'Options', label: 'Option E', name: 'Provocative Hook', file: 'emails/email-header-options.html' },
+            { id: 'header-f', category: 'Email Headers', series: 'Options', label: 'Option F', name: 'Kinetic Stagger', file: 'emails/email-header-options.html' },
+
+            // Letterhead
+            { id: 'lh-l1', category: 'Letterhead', series: 'System', label: 'L1', name: 'Pentagram Minimal', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l2', category: 'Letterhead', series: 'System', label: 'L2', name: 'Gradient Line', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l3', category: 'Letterhead', series: 'System', label: 'L3', name: 'Edge Accent', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l4', category: 'Letterhead', series: 'System', label: 'L4', name: 'Corner Fade', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l5', category: 'Letterhead', series: 'System', label: 'L5', name: 'Split Header', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l6', category: 'Letterhead', series: 'System', label: 'L6', name: 'Diagonal Momentum', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l7', category: 'Letterhead', series: 'System', label: 'L7', name: 'Cream Base', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l8', category: 'Letterhead', series: 'System', label: 'L8', name: 'Rising Lines', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l9', category: 'Letterhead', series: 'System', label: 'L9', name: 'Full Sweep', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l10', category: 'Letterhead', series: 'System', label: 'L10', name: 'Maroon Accent', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l11', category: 'Letterhead', series: 'System', label: 'L11', name: 'Gradient Bleed (Wild)', file: 'letterhead/letterhead-system.html' },
+            { id: 'lh-l12', category: 'Letterhead', series: 'System', label: 'L12', name: 'Ring Emergence (Wild)', file: 'letterhead/letterhead-system.html' },
+
+            // Social Templates
+            { id: 'social-sq1', category: 'Social', series: 'Square', label: '01', name: 'Stat Hero', file: 'social/social-templates.html' },
+            { id: 'social-sq2', category: 'Social', series: 'Square', label: '02', name: 'Quote', file: 'social/social-templates.html' },
+            { id: 'social-sq3', category: 'Social', series: 'Square', label: '03', name: 'Gradient Statement', file: 'social/social-templates.html' },
+            { id: 'social-sq4', category: 'Social', series: 'Square', label: '04', name: 'Mist Minimal', file: 'social/social-templates.html' },
+            { id: 'social-sq5', category: 'Social', series: 'Square', label: '05', name: 'Split', file: 'social/social-templates.html' },
+            { id: 'social-sq6', category: 'Social', series: 'Square', label: '06', name: 'Tip Card', file: 'social/social-templates.html' },
+            { id: 'social-st1', category: 'Social', series: 'Story', label: '01', name: 'Stat', file: 'social/social-templates.html' },
+            { id: 'social-st2', category: 'Social', series: 'Story', label: '02', name: 'Quote', file: 'social/social-templates.html' },
+            { id: 'social-st3', category: 'Social', series: 'Story', label: '03', name: 'CTA', file: 'social/social-templates.html' },
+            { id: 'social-st4', category: 'Social', series: 'Story', label: '04', name: 'Event', file: 'social/social-templates.html' },
+
+            // 20 Years Social Banners
+            { id: '20y-ig', category: 'Social', series: '20 Years', label: 'IG/FB', name: 'Square (1080x1080)', file: 'social/20-years-social-banners.html' },
+            { id: '20y-li', category: 'Social', series: '20 Years', label: 'LinkedIn', name: 'Header (1200x627)', file: 'social/20-years-social-banners.html' },
+            { id: '20y-fb', category: 'Social', series: '20 Years', label: 'Facebook', name: 'Cover (820x312)', file: 'social/20-years-social-banners.html' },
+            { id: '20y-story', category: 'Social', series: '20 Years', label: 'Story', name: 'IG/FB Story (1080x1920)', file: 'social/20-years-social-banners.html' },
+            { id: '20y-tw', category: 'Social', series: '20 Years', label: 'Twitter', name: 'Header (1500x500)', file: 'social/20-years-social-banners.html' },
+
+            // Reports - District Impact
+            { id: 'di-a1', category: 'Reports', series: 'Ambition', label: 'A1', name: 'Diagonal Momentum', file: 'reports/district-impact-ambition.html' },
+            { id: 'di-a2', category: 'Reports', series: 'Ambition', label: 'A2', name: 'Triple Diagonal', file: 'reports/district-impact-ambition.html' },
+            { id: 'di-a3', category: 'Reports', series: 'Ambition', label: 'A3', name: 'Corner Cut', file: 'reports/district-impact-ambition.html' },
+            { id: 'di-a4', category: 'Reports', series: 'Ambition', label: 'A4', name: 'Ascending Lines', file: 'reports/district-impact-ambition.html' },
+            { id: 'di-a5', category: 'Reports', series: 'Ambition', label: 'A5', name: 'Full Ambition', file: 'reports/district-impact-ambition.html' },
+
+            // Success Stories
+            { id: 'ss-sq-a', category: 'Success Stories', series: 'Square', label: 'A', name: 'Quote Focus', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-sq-b', category: 'Success Stories', series: 'Square', label: 'B', name: 'Stat Hero', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-sq-c', category: 'Success Stories', series: 'Square', label: 'C', name: 'Before/After', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-sq-d', category: 'Success Stories', series: 'Square', label: 'D', name: 'Split Stats', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-story-a', category: 'Success Stories', series: 'Story', label: 'A', name: 'Full Impact', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-story-b', category: 'Success Stories', series: 'Story', label: 'B', name: 'Journey Split', file: 'success-stories/success-story-templates.html' },
+            { id: 'ss-p1', category: 'Success Stories', series: 'Bold', label: 'P1', name: 'Type as Hero', file: 'success-stories/success-story-bold.html' },
+            { id: 'ss-p2', category: 'Success Stories', series: 'Bold', label: 'P2', name: 'Diagonal Energy', file: 'success-stories/success-story-bold.html' },
+            { id: 'ss-p3', category: 'Success Stories', series: 'Bold', label: 'P3', name: 'Type Wall', file: 'success-stories/success-story-bold.html' },
+
+            // Campaigns - Momentum
+            { id: 'camp-1', category: 'Campaigns', series: 'Momentum', label: '01', name: 'Foundation', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-2', category: 'Campaigns', series: 'Momentum', label: '02', name: 'Energy', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-3', category: 'Campaigns', series: 'Momentum', label: '03', name: 'Premium', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-4', category: 'Campaigns', series: 'Momentum', label: '04', name: 'Modern', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-5', category: 'Campaigns', series: 'Momentum', label: '05', name: 'Contrast', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-6', category: 'Campaigns', series: 'Momentum', label: '06', name: 'Impact', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-7', category: 'Campaigns', series: 'Momentum', label: '07', name: 'Journey', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-8', category: 'Campaigns', series: 'Momentum', label: '08', name: 'Trust', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-9', category: 'Campaigns', series: 'Momentum', label: '09', name: 'Warmth', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-10', category: 'Campaigns', series: 'Momentum', label: '10', name: 'Confidence', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-11', category: 'Campaigns', series: 'Momentum', label: '11', name: 'Icon', file: 'campaigns/momentum-refined-v2.html' },
+            { id: 'camp-12', category: 'Campaigns', series: 'Momentum', label: '12', name: 'Bold', file: 'campaigns/momentum-refined-v2.html' },
+
+            // Billboards
+            { id: 'bb-rosa', category: 'Billboards', series: 'Stories', label: 'Rosa', name: 'Food Truck to Restaurant', file: 'billboards/ambition-momentum-billboards.html' },
+            { id: 'bb-marcus', category: 'Billboards', series: 'Stories', label: 'Marcus', name: 'Solo to Crew of 8', file: 'billboards/ambition-momentum-billboards.html' },
+            { id: 'bb-priya', category: 'Billboards', series: 'Stories', label: 'Priya', name: 'Side Project to Funded', file: 'billboards/ambition-momentum-billboards.html' },
+            { id: 'bb-james', category: 'Billboards', series: 'Stories', label: 'James & Deja', name: 'Online to Brick & Mortar', file: 'billboards/ambition-momentum-billboards.html' },
+            { id: 'bb-chen', category: 'Billboards', series: 'Stories', label: 'Chen', name: 'Local to Gov Contracts', file: 'billboards/ambition-momentum-billboards.html' },
+        ];
+
+        // State
+        let selectedIds = new Set(JSON.parse(localStorage.getItem('selectedDesigns') || '[]'));
+        let currentFilter = 'all';
+        let currentCategory = null;
+
+        // DOM Elements
+        const contentEl = document.getElementById('content');
+        const categoryNavEl = document.getElementById('category-nav');
+        const selectedCountEl = document.getElementById('selected-count');
+        const totalCountEl = document.getElementById('total-count');
+        const clearBtn = document.getElementById('clear-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const modal = document.getElementById('modal');
+        const modalIframe = document.getElementById('modal-iframe');
+        const modalClose = document.getElementById('modal-close');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        const modalOpenTab = document.getElementById('modal-open-tab');
+        const modalBody = document.querySelector('.modal-body');
+
+        // Get unique categories
+        const categories = [...new Set(designs.map(d => d.category))];
+
+        // Initialize
+        function init() {
+            renderCategoryNav();
+            renderDesigns();
+            updateStats();
+            bindEvents();
+        }
+
+        function renderCategoryNav() {
+            categoryNavEl.innerHTML = `
+                <li class="category-item">
+                    <a href="#" class="category-link active" data-category="all">
+                        All Designs
+                        <span class="category-count">${designs.length}</span>
+                    </a>
+                </li>
+                ${categories.map(cat => {
+                    const count = designs.filter(d => d.category === cat).length;
+                    return `
+                        <li class="category-item">
+                            <a href="#${cat.toLowerCase().replace(/\s+/g, '-')}" class="category-link" data-category="${cat}">
+                                ${cat}
+                                <span class="category-count">${count}</span>
+                            </a>
+                        </li>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function renderDesigns() {
+            const filteredDesigns = currentFilter === 'selected'
+                ? designs.filter(d => selectedIds.has(d.id))
+                : designs;
+
+            const filteredByCategory = currentCategory && currentCategory !== 'all'
+                ? filteredDesigns.filter(d => d.category === currentCategory)
+                : filteredDesigns;
+
+            if (filteredByCategory.length === 0) {
+                contentEl.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No designs found</h3>
+                        <p>${currentFilter === 'selected' ? 'Select some designs to see them here.' : 'Try a different filter.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by category
+            const grouped = {};
+            filteredByCategory.forEach(d => {
+                if (!grouped[d.category]) grouped[d.category] = [];
+                grouped[d.category].push(d);
+            });
+
+            contentEl.innerHTML = Object.entries(grouped).map(([category, items]) => `
+                <section class="category-section" id="${category.toLowerCase().replace(/\s+/g, '-')}">
+                    <div class="category-header">
+                        <h2 class="category-name">${category}</h2>
+                        <span class="category-meta">${items.length} designs</span>
+                    </div>
+                    <div class="design-grid">
+                        ${items.map(d => renderCard(d)).join('')}
+                    </div>
+                </section>
+            `).join('');
+        }
+
+        function renderCard(design) {
+            const isSelected = selectedIds.has(design.id);
+            return `
+                <div class="design-card ${isSelected ? 'selected' : ''}" data-id="${design.id}">
+                    <div class="card-preview">
+                        <iframe src="${design.file}" loading="lazy"></iframe>
+                        <div class="card-preview-overlay" data-file="${design.file}" data-name="${design.name}" data-category="${design.category}"></div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-details">
+                            <div class="card-label">${design.series} / ${design.label}</div>
+                            <div class="card-title">${design.name}</div>
+                            <div class="card-file">${design.file}</div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="${design.file}" target="_blank" class="view-btn">Open</a>
+                            <div class="select-checkbox ${isSelected ? 'checked' : ''}" data-id="${design.id}"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats() {
+            selectedCountEl.textContent = selectedIds.size;
+            totalCountEl.textContent = designs.length;
+            clearBtn.disabled = selectedIds.size === 0;
+            exportBtn.disabled = selectedIds.size === 0;
+        }
+
+        function saveSelection() {
+            localStorage.setItem('selectedDesigns', JSON.stringify([...selectedIds]));
+        }
+
+        function bindEvents() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderDesigns();
+                });
+            });
+
+            // Category navigation
+            categoryNavEl.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-link')) {
+                    e.preventDefault();
+                    document.querySelectorAll('.category-link').forEach(l => l.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentCategory = e.target.dataset.category;
+                    renderDesigns();
+                }
+            });
+
+            // Checkbox clicks
+            contentEl.addEventListener('click', (e) => {
+                if (e.target.classList.contains('select-checkbox')) {
+                    const id = e.target.dataset.id;
+                    if (selectedIds.has(id)) {
+                        selectedIds.delete(id);
+                        e.target.classList.remove('checked');
+                        e.target.closest('.design-card').classList.remove('selected');
+                    } else {
+                        selectedIds.add(id);
+                        e.target.classList.add('checked');
+                        e.target.closest('.design-card').classList.add('selected');
+                    }
+                    saveSelection();
+                    updateStats();
+                }
+
+                // Preview overlay click
+                if (e.target.classList.contains('card-preview-overlay')) {
+                    const file = e.target.dataset.file;
+                    const name = e.target.dataset.name || 'Preview';
+                    const category = e.target.dataset.category || '';
+
+                    modalIframe.src = file;
+                    modalTitle.textContent = name;
+                    modalSubtitle.textContent = category;
+                    modalOpenTab.href = file;
+                    modal.classList.add('active');
+                }
+            });
+
+            // Modal close
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+                modalIframe.src = '';
+            });
+
+            modalBody.addEventListener('click', (e) => {
+                if (e.target === modalBody) {
+                    modal.classList.remove('active');
+                    modalIframe.src = '';
+                }
+            });
+
+            // Clear selection
+            clearBtn.addEventListener('click', () => {
+                selectedIds.clear();
+                saveSelection();
+                renderDesigns();
+                updateStats();
+            });
+
+            // Export
+            exportBtn.addEventListener('click', exportMasterSet);
+        }
+
+        function exportMasterSet() {
+            const selected = designs.filter(d => selectedIds.has(d.id));
+
+            // Group by category
+            const grouped = {};
+            selected.forEach(d => {
+                if (!grouped[d.category]) grouped[d.category] = [];
+                grouped[d.category].push(d);
+            });
+
+            const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorCal SBDC — Master Set (${selected.length} designs)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #0a0a0a; color: white; padding: 40px; }
+        h1 { font-size: 32px; margin-bottom: 8px; }
+        .subtitle { color: #666; margin-bottom: 40px; }
+        .category { margin-bottom: 48px; }
+        .category-title { font-size: 20px; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 20px; }
+        .design-list { display: grid; gap: 12px; }
+        .design-item { display: flex; gap: 16px; padding: 16px; background: #141414; border-radius: 8px; }
+        .design-label { font-family: monospace; font-size: 12px; color: #8FC5D9; min-width: 80px; }
+        .design-name { font-weight: 600; }
+        .design-file { font-family: monospace; font-size: 11px; color: #555; margin-top: 4px; }
+        a { color: #8FC5D9; }
+    </style>
+</head>
+<body>
+    <h1>Master Set</h1>
+    <p class="subtitle">${selected.length} selected designs — Generated ${new Date().toLocaleDateString()}</p>
+
+    ${Object.entries(grouped).map(([category, items]) => `
+    <div class="category">
+        <h2 class="category-title">${category}</h2>
+        <div class="design-list">
+            ${items.map(d => `
+            <div class="design-item">
+                <span class="design-label">${d.label}</span>
+                <div>
+                    <div class="design-name">${d.name}</div>
+                    <div class="design-file"><a href="${d.file}" target="_blank">${d.file}</a></div>
+                </div>
+            </div>
+            `).join('')}
+        </div>
+    </div>
+    `).join('')}
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'master-set.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        init();
+    </script>
+</body>
+</html>

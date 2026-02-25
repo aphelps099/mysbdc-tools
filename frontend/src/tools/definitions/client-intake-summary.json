@@ -1,0 +1,72 @@
+{
+  "id": "client-intake-summary",
+  "title": "Client Intake Summary",
+  "description": "Structure new client information into a clear intake summary with recommended next steps.",
+  "category": "session-management",
+  "tag": "Session Management",
+  "tagColor": "green",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.6,
+    "maxTokens": 2000
+  },
+  "body": [
+    { "type": "text", "content": "Create an intake summary for a new SBDC client." },
+    { "type": "label", "content": "Client Information" },
+    { "type": "text", "content": "Client: " },
+    {
+      "type": "token",
+      "id": "client",
+      "label": "Client First Name",
+      "placeholder": "e.g. Sarah",
+      "tip": "Client's first name only — protect PII"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Business: " },
+    {
+      "type": "token",
+      "id": "biz",
+      "label": "Business Name",
+      "placeholder": "e.g. Sunrise Bakery LLC",
+      "tip": "Business name (or proposed name)"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Stage: " },
+    {
+      "type": "pills",
+      "id": "stage",
+      "label": "Business Stage",
+      "options": ["Idea", "Startup", "Growth", "Established"],
+      "tip": "Where is this business in its lifecycle?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Industry: " },
+    {
+      "type": "token",
+      "id": "industry",
+      "label": "Industry",
+      "placeholder": "e.g. Food & Beverage",
+      "tip": "Business industry or sector"
+    },
+    { "type": "label", "content": "What They Need" },
+    { "type": "text", "content": "Primary need: " },
+    {
+      "type": "pills",
+      "id": "need",
+      "label": "Primary Need",
+      "options": ["Business plan", "Funding", "Marketing", "Operations", "General guidance"],
+      "allowCustom": true,
+      "tip": "What brought them to the SBDC?"
+    },
+    { "type": "label", "content": "Background" },
+    {
+      "type": "block",
+      "id": "background",
+      "label": "Background Info",
+      "placeholder": "Any notes from your initial conversation — their story, experience, goals, concerns, timeline, etc. Raw notes are fine...",
+      "tip": "Whatever you know so far about this client"
+    },
+    { "type": "static", "content": "Please create a structured client intake summary for my records that includes:\n\n1. Client Profile — organized summary of who they are, their business, and their background\n2. Needs Assessment — what they're looking for and why, based on the information provided\n3. Business Stage Analysis — where they are and what's typical for businesses at this stage\n4. Recommended Service Plan — suggest 3-5 specific SBDC services or resources that match their needs (e.g., business plan development, financial projections review, market research, loan package preparation, workshop recommendations)\n5. Priority Action Items — the 3 most important next steps, in order\n6. Suggested First Session Agenda — what to cover in the first full advising session\n7. Information to Request — what documents or details to ask the client to bring next time\n\nFormat for CRM entry — professional, concise, and scannable." }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": "client-followup",
+  "title": "Client Follow-up",
+  "description": "Draft a personalized follow-up message after an advising session.",
+  "category": "communications",
+  "tag": "Communications",
+  "tagColor": "coral",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "maxTokens": 1500
+  },
+  "body": [
+    { "type": "text", "content": "I need to follow up with " },
+    {
+      "type": "token",
+      "id": "client",
+      "label": "Client First Name",
+      "placeholder": "e.g. Maria",
+      "tip": "Client's first name only — protect PII"
+    },
+    { "type": "text", "content": " after our " },
+    {
+      "type": "pills",
+      "id": "sessionType",
+      "label": "Session Type",
+      "options": ["Initial Intake", "Follow-up", "Workshop", "Phone Call"],
+      "tip": "What type of interaction?"
+    },
+    { "type": "text", "content": " about " },
+    {
+      "type": "token",
+      "id": "topic",
+      "label": "Topic",
+      "placeholder": "e.g. SBA loan application",
+      "tip": "What was discussed?"
+    },
+    { "type": "text", "content": "." },
+    { "type": "label", "content": "Follow-up Details" },
+    { "type": "text", "content": "Key takeaways from our session:" },
+    { "type": "block", "id": "takeaways", "label": "Takeaways", "placeholder": "Brief notes on what was discussed and decided...", "tip": "What were the main points?" },
+    { "type": "text", "content": "Action items assigned: " },
+    {
+      "type": "token",
+      "id": "actions",
+      "label": "Action Items",
+      "placeholder": "e.g. gather tax returns, update P&L",
+      "tip": "What did the client commit to?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Next meeting: " },
+    {
+      "type": "token",
+      "id": "nextDate",
+      "label": "Next Date",
+      "placeholder": "e.g. March 15, 2026",
+      "tip": "When is the next session?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Tone: " },
+    {
+      "type": "pills",
+      "id": "tone",
+      "label": "Tone",
+      "options": ["Warm & Encouraging", "Professional", "Urgent/Action-needed", "Celebratory"],
+      "tip": "What tone fits?"
+    },
+    { "type": "static", "content": "Draft a follow-up email that: recaps the key discussion points, lists the agreed-upon action items with deadlines, includes any relevant resources or links mentioned, confirms the next meeting date, and ends with an encouraging note. Keep it concise (under 300 words) and professional but warm." }
+  ]
+}

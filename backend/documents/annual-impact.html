@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FY 2025 Annual Impact Report | NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face { font-family:'Tobias'; src:url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Tobias'; src:url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'), url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
+    @font-face { font-family:'GT America'; src:url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype'); font-weight:300; font-display:swap; }
+    @font-face { font-family:'GT America'; src:url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+    @font-face { font-family:'GT America'; src:url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype'); font-weight:500; font-display:swap; }
+    @font-face { font-family:'GT America'; src:url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+    @font-face { font-family:'GT America Mono'; src:url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+
+    :root {
+      --navy:#0f1c2e; --royal:#1D5AA7; --royal-dim:rgba(29,90,167,0.08);
+      --pool:#8FC5D9; --cream:#f0efeb; --white:#ffffff; --brick:#a82039;
+      --dusty:#5d7a9c; --text:#0a1528; --text-secondary:#4a5568;
+      --text-tertiary:#8a8a8a; --rule:rgba(0,0,0,0.12); --rule-light:rgba(0,0,0,0.06);
+      --green:#16a34a;
+      --sans:'GT America',-apple-system,Helvetica,sans-serif;
+      --serif:'Tobias',Georgia,serif;
+      --mono:'GT America Mono','SF Mono',monospace;
+      --pad:clamp(32px,5vw,64px); --max:1080px;
+      --ease:cubic-bezier(0.16,1,0.3,1);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--white);line-height:1.6;}
+
+    /* ── Nav ── */
+    nav.top-bar{position:fixed;top:0;left:0;right:0;height:44px;background:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);z-index:1000;border-bottom:1px solid var(--rule-light);}
+    .nav-logo{flex-shrink:0;height:14px;} .nav-logo img{height:100%;width:auto;opacity:0.25;}
+    .nav-links{display:flex;gap:2rem;margin-left:auto;align-items:center;}
+    .nav-links a{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-tertiary);text-decoration:none;transition:color 200ms var(--ease);}
+    .nav-links a:hover{color:var(--text);}
+    main{margin-top:44px;}
+
+    /* ── Utility ── */
+    section{padding:var(--pad) 0;} section > *{max-width:var(--max);margin:0 auto;padding:0 var(--pad);}
+    .section-header{border-top:1px solid var(--rule);padding-top:1rem;margin-bottom:2.5rem;}
+    .section-kicker{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:0.5rem;display:block;}
+    .section-title{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:400;color:var(--text);line-height:1.1;}
+    .section-intro{font-size:1.05rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2.5rem;}
+    .grid-1px{display:grid;gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;}
+    .grid-1px > *{background:var(--white);}
+    /* Fix: prevent grid background from bleeding into section padding */
+    section > .grid-1px,section > .roi-strip,section > .national-grid,
+    section > .demo-layout,section > .story-feature{padding:0;max-width:calc(var(--max) - var(--pad) * 2);}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);}
+    .reveal.active{opacity:1;transform:translateY(0);}
+
+    /* ══════════════ HERO ══════════════ */
+    section#hero{background:var(--navy);color:var(--white);padding:5rem var(--pad) 3.5rem;}
+    section#hero > div{max-width:var(--max);margin:0 auto;}
+    .hero-badge{font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;padding:0.35rem 0.75rem;border:1px solid rgba(255,255,255,0.2);border-radius:2px;display:inline-block;margin-bottom:1.5rem;opacity:0.7;}
+    .hero-title{font-family:var(--serif);font-size:clamp(3.5rem,10vw,6.5rem);font-weight:400;line-height:0.95;margin-bottom:0.5rem;}
+    .hero-sub{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.5rem);font-weight:400;line-height:1.1;opacity:0.7;margin-bottom:1rem;}
+    .hero-tagline{font-size:1.1rem;font-weight:300;max-width:580px;line-height:1.55;opacity:0.8;margin-bottom:3rem;}
+    .hero-strip{display:flex;gap:0;border-top:1px solid rgba(255,255,255,0.15);padding-top:1.5rem;}
+    .hero-strip .hs-item{flex:1;text-align:center;}
+    .hero-strip .hs-item:not(:last-child){border-right:1px solid rgba(255,255,255,0.15);}
+    .hs-num{font-family:var(--serif);font-size:1.5rem;} .hs-label{font-size:0.75rem;opacity:0.6;margin-top:0.2rem;}
+
+    /* ══════════════ CAPITAL ══════════════ */
+    section#capital{background:var(--cream);}
+    .capital-hero{text-align:center;margin-bottom:3rem;}
+    .cap-amount{font-family:var(--serif);font-size:clamp(3rem,8vw,5rem);font-weight:400;color:var(--text);line-height:1;}
+    .cap-label{font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-top:0.5rem;}
+    .cap-desc{font-size:1rem;color:var(--text-secondary);max-width:540px;margin:1rem auto 0;line-height:1.6;}
+    .roi-strip{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;margin-top:2.5rem;}
+    .roi-cell{background:var(--white);padding:2rem;text-align:center;}
+    .roi-num{font-family:var(--serif);font-size:2.5rem;font-weight:400;color:var(--text);}
+    .roi-label{font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem;line-height:1.4;}
+    .cap-breakdown{grid-template-columns:1fr 1fr;margin-top:1.5rem;}
+    .cap-break-cell{padding:1.75rem;text-align:center;}
+    .cb-num{font-family:var(--serif);font-size:1.75rem;font-weight:400;color:var(--text);}
+    .cb-label{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);margin-top:0.25rem;}
+
+    /* ══════════════ ECONOMIC IMPACT ══════════════ */
+    section#impact{background:var(--white);}
+    .impact-grid{grid-template-columns:repeat(3,1fr);margin-top:2.5rem;}
+    .impact-card{padding:2.5rem 1.75rem;text-align:center;}
+    .ic-num{font-family:var(--serif);font-size:clamp(2rem,5vw,3rem);font-weight:400;color:var(--text);line-height:1;}
+    .ic-label{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--text);margin-top:0.5rem;}
+    .ic-desc{font-size:0.82rem;color:var(--text-secondary);margin-top:0.5rem;line-height:1.55;}
+    .ic-highlight{font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--royal);margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--rule-light);}
+
+    /* ══════════════ SERVICE DELIVERY ══════════════ */
+    section#delivery{background:var(--cream);}
+    .delivery-grid{grid-template-columns:repeat(4,1fr);margin-top:2.5rem;}
+    .del-card{padding:2rem 1.25rem;text-align:center;}
+    .del-icon{font-size:1.5rem;color:var(--navy);margin-bottom:0.75rem;display:block;}
+    .del-num{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.25rem);font-weight:400;color:var(--text);line-height:1;}
+    .del-label{font-family:var(--serif);font-size:0.95rem;font-weight:400;color:var(--text);margin-top:0.35rem;}
+    .del-desc{font-size:0.75rem;color:var(--text-secondary);margin-top:0.5rem;line-height:1.5;}
+
+    /* ══════════════ WHO WE REACH ══════════════ */
+    section#demographics{background:var(--white);}
+    .demo-layout{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;margin-top:2.5rem;}
+    .demo-main{background:var(--navy);color:var(--white);padding:3rem 2.5rem;position:relative;overflow:hidden;}
+    .demo-main .demo-bg{position:absolute;font-size:300px;opacity:0.03;top:-40px;right:-60px;color:var(--white);pointer-events:none;}
+    .demo-main > *{position:relative;z-index:1;}
+    .demo-headline{font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1.15;margin-bottom:1.5rem;}
+    .demo-bars{display:flex;flex-direction:column;gap:1rem;}
+    .demo-bar-row{display:flex;align-items:center;gap:1rem;}
+    .demo-bar-label{font-size:0.78rem;opacity:0.7;min-width:140px;text-align:right;}
+    .demo-bar-track{flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;}
+    .demo-bar-fill{height:100%;border-radius:4px;transition:width 1s var(--ease);}
+    .demo-bar-fill.women{background:var(--pool);} .demo-bar-fill.minority{background:var(--brick);}
+    .demo-bar-fill.veteran{background:var(--green);} .demo-bar-fill.rural{background:var(--dusty);}
+    .demo-bar-fill.lowincome{background:rgba(255,255,255,0.5);}
+    .demo-bar-pct{font-family:var(--mono);font-size:0.7rem;opacity:0.9;min-width:36px;}
+    .demo-sidebar{background:var(--white);display:flex;flex-direction:column;}
+    .demo-cell{flex:1;padding:1.5rem;border-bottom:1px solid var(--rule-light);display:flex;flex-direction:column;justify-content:center;}
+    .demo-cell:last-child{border-bottom:none;}
+    .demo-cell-num{font-family:var(--serif);font-size:1.75rem;font-weight:400;color:var(--text);line-height:1;}
+    .demo-cell-label{font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem;}
+    .demo-cell-detail{font-family:var(--mono);font-size:0.6rem;color:var(--text-tertiary);margin-top:0.15rem;}
+
+    /* ══════════════ SPECIALTY PROGRAMS ══════════════ */
+    section#specialty{background:var(--cream);}
+    .spec-grid{grid-template-columns:1fr 1fr;margin-top:2.5rem;}
+    .spec-card{padding:2.5rem 2rem;}
+    .spec-badge{display:inline-flex;align-items:center;gap:0.35rem;font-family:var(--mono);font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;padding:0.25rem 0.5rem;border-radius:2px;width:fit-content;margin-bottom:0.75rem;}
+    .spec-badge.blue{background:var(--royal-dim);color:var(--royal);}
+    .spec-badge.green{background:rgba(22,163,74,0.1);color:var(--green);}
+    .spec-name{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:var(--text);margin-bottom:0.35rem;line-height:1.15;}
+    .spec-desc{font-size:0.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.5rem;}
+    .spec-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;}
+    .spec-stat{background:var(--white);padding:1rem;text-align:center;}
+    .ss-num{font-family:var(--serif);font-size:1.25rem;font-weight:400;color:var(--text);line-height:1;}
+    .ss-label{font-family:var(--mono);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);margin-top:0.2rem;}
+
+    /* ══════════════ SUCCESS STORIES ══════════════ */
+    section#stories{background:var(--white);}
+    .story-feature{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;margin-bottom:2rem;}
+    .story-left{padding:2.5rem 2rem;background:var(--white);}
+    .story-right{padding:2.5rem 2rem;background:var(--white);}
+    .story-badge{display:inline-flex;align-items:center;gap:0.35rem;font-family:var(--mono);font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;padding:0.25rem 0.5rem;border-radius:2px;width:fit-content;margin-bottom:0.75rem;}
+    .story-badge.teal{background:rgba(143,197,217,0.2);color:#3a8ba8;}
+    .story-badge.brick{background:rgba(168,32,57,0.08);color:var(--brick);}
+    .story-name{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:var(--text);margin-bottom:0.15rem;line-height:1.15;}
+    .story-sub{font-size:0.82rem;color:var(--text-secondary);line-height:1.5;margin-bottom:1rem;}
+    .story-section-label{font-family:var(--mono);font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:0.4rem;}
+    .story-text{font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.25rem;}
+    .story-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:2px;overflow:hidden;}
+    .story-stat{background:var(--cream);padding:1rem;text-align:center;}
+    .sts-num{font-family:var(--serif);font-size:1.25rem;font-weight:400;color:var(--text);line-height:1;}
+    .sts-label{font-family:var(--mono);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);margin-top:0.2rem;}
+    .story-quote{border-left:2px solid var(--rule-light);padding-left:1.25rem;margin-top:1.5rem;}
+    .story-quote-text{font-family:var(--serif);font-size:1rem;font-style:italic;color:var(--text);line-height:1.5;}
+    .story-quote-attr{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);margin-top:0.5rem;}
+
+    /* More stories grid */
+    .more-stories{grid-template-columns:repeat(3,1fr);margin-top:2rem;}
+    .ms-card{padding:1.75rem 1.5rem;}
+    .ms-industry{font-family:var(--mono);font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:0.5rem;}
+    .ms-name{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--text);margin-bottom:0.15rem;line-height:1.2;}
+    .ms-metric{font-family:var(--serif);font-size:1rem;color:var(--royal);margin-bottom:0.35rem;}
+    .ms-desc{font-size:0.78rem;color:var(--text-secondary);line-height:1.5;}
+
+    /* ══════════════ FLYWHEEL ══════════════ */
+    section#flywheel{background:var(--cream);}
+    .flywheel-intro{font-family:var(--serif);font-size:1.15rem;font-style:italic;color:var(--text-secondary);margin-bottom:2.5rem;}
+    .flywheel-track{grid-template-columns:repeat(6,1fr);margin-top:2rem;}
+    .fw-step{padding:1.75rem 1rem;text-align:center;}
+    .fw-num{font-family:var(--serif);font-size:2rem;font-weight:400;color:var(--text);line-height:1;margin-bottom:0.35rem;}
+    .fw-num.active{color:var(--brick);}
+    .fw-icon{font-size:1.25rem;color:var(--navy);margin-bottom:0.5rem;display:block;}
+    .fw-label{font-family:var(--serif);font-size:0.9rem;font-weight:400;color:var(--text);}
+
+    /* ══════════════ NATIONAL CONTEXT ══════════════ */
+    section#national{background:var(--navy);color:var(--white);}
+    section#national .section-header{border-top-color:rgba(255,255,255,0.15);}
+    section#national .section-kicker{color:rgba(255,255,255,0.5);}
+    section#national .section-title{color:var(--white);}
+    .national-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+    .nat-card{background:var(--navy);padding:2rem 1.25rem;text-align:center;}
+    .nat-num{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.25rem);font-weight:400;line-height:1;}
+    .nat-label{font-size:0.78rem;opacity:0.7;margin-top:0.35rem;line-height:1.3;}
+
+    /* ══════════════ QUOTE ══════════════ */
+    section#quote{background:var(--white);text-align:center;padding:4rem var(--pad);}
+    .quote-mark{font-family:var(--serif);font-size:4rem;color:var(--rule-light);line-height:1;margin-bottom:0.5rem;}
+    .quote-text{font-family:var(--serif);font-size:clamp(1.25rem,3vw,1.75rem);font-weight:400;color:var(--text);line-height:1.4;max-width:600px;margin:0 auto;}
+    .quote-attr{font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-top:1.25rem;}
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer{background:var(--navy);color:var(--white);padding:3rem var(--pad);text-align:center;border-top:1px solid rgba(255,255,255,0.08);}
+    .footer-content{max-width:var(--max);margin:0 auto;}
+    .footer-logo{margin-bottom:1rem;} .footer-logo img{height:16px;width:auto;opacity:0.5;}
+    .footer-partners{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.35;margin-bottom:1.5rem;line-height:1.8;}
+    .footer-cta{display:inline-block;font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--white);opacity:0.7;text-decoration:none;padding:0.6rem 1.5rem;border:1px solid rgba(255,255,255,0.25);border-radius:2px;transition:all 200ms var(--ease);}
+    .footer-cta:hover{opacity:1;border-color:rgba(255,255,255,0.5);}
+    .footer-cta + .footer-cta{margin-left:0.75rem;}
+    .footer-bottom{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+    .footer-bottom p{font-size:0.7rem;opacity:0.35;line-height:1.6;}
+    .footer-contact{font-size:0.72rem;opacity:0.5;margin-bottom:0.75rem;}
+
+    /* ══════════════ RESPONSIVE ══════════════ */
+    @media(max-width:768px){
+      .impact-grid,.more-stories,.flywheel-track{grid-template-columns:1fr 1fr;}
+      .delivery-grid,.national-grid{grid-template-columns:1fr 1fr;}
+      .spec-grid,.story-feature{grid-template-columns:1fr;}
+      .demo-layout{grid-template-columns:1fr;}
+      .hero-strip{flex-wrap:wrap;} .hero-strip .hs-item{flex:1 1 50%;padding:0.75rem 0;}
+      .roi-strip,.cap-breakdown{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-bar">
+    <div class="nav-logo"><img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC"></div>
+    <div class="nav-links">
+      <a href="#capital">Capital</a>
+      <a href="#impact">Impact</a>
+      <a href="#delivery">Services</a>
+      <a href="#demographics">Reach</a>
+      <a href="#stories">Stories</a>
+      <a href="#national">National</a>
+      <a href="brand-house.html">Brand House</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+      <div>
+        <div class="hero-badge">FY 2025 Annual Impact Report</div>
+        <h1 class="hero-title">$549M</h1>
+        <div class="hero-sub">in client capital secured</div>
+        <p class="hero-tagline">Every dollar we help secure strengthens local communities. Our advisors work one-on-one with entrepreneurs to access capital, create jobs, and grow sustainable businesses across Northern California.</p>
+        <div class="hero-strip">
+          <div class="hs-item"><div class="hs-num">36</div><div class="hs-label">Counties</div></div>
+          <div class="hs-item"><div class="hs-num">18</div><div class="hs-label">Centers</div></div>
+          <div class="hs-item"><div class="hs-num">16,000+</div><div class="hs-label">Clients Served</div></div>
+          <div class="hs-item"><div class="hs-num">300+</div><div class="hs-label">Advisors</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CAPITAL ═══ -->
+    <section id="capital">
+      <div class="section-header reveal">
+        <span class="section-kicker">Total Capital Accessed FY 2025</span>
+        <h2 class="section-title">Capital Impact</h2>
+      </div>
+      <div class="capital-hero reveal">
+        <div class="cap-amount">$549 Million</div>
+        <div class="cap-label">In client capital secured for NorCal small businesses</div>
+        <p class="cap-desc">Every dollar we help secure strengthens local communities. Our advisors work one-on-one with entrepreneurs to access capital, create jobs, and grow sustainable businesses.</p>
+      </div>
+      <div class="roi-strip reveal">
+        <div class="roi-cell">
+          <div class="roi-num">$1</div>
+          <div class="roi-label">Of federal investment</div>
+        </div>
+        <div class="roi-cell">
+          <div class="roi-num">$40</div>
+          <div class="roi-label">In new capital for small businesses</div>
+        </div>
+      </div>
+      <div class="grid-1px cap-breakdown reveal">
+        <div class="cap-break-cell">
+          <div class="cb-num">$81M</div>
+          <div class="cb-label">Loans</div>
+        </div>
+        <div class="cap-break-cell">
+          <div class="cb-num">$299M</div>
+          <div class="cb-label">Equity &amp; Grants</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ECONOMIC IMPACT ═══ -->
+    <section id="impact">
+      <div class="section-header reveal">
+        <span class="section-kicker">Economic Impact</span>
+        <h2 class="section-title">Jobs, Starts &amp; Sales</h2>
+      </div>
+      <div class="grid-1px impact-grid reveal">
+        <div class="impact-card">
+          <div class="ic-num">3,723</div>
+          <div class="ic-label">Jobs Created</div>
+          <div class="ic-desc">Each job is a family. A livelihood. A community anchor. Across 36 counties.</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-num">712</div>
+          <div class="ic-label">Businesses Started</div>
+          <div class="ic-desc">Entrepreneurs launched with SBDC guidance, from kitchen-table ideas to commercial operations.</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-num">$201M</div>
+          <div class="ic-label">Sales Growth</div>
+          <div class="ic-desc">SBDC clients experienced meaningful revenue growth across all industries and regions.</div>
+          <div class="ic-highlight">11.4% client growth vs. 5.0% U.S. average</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SERVICE DELIVERY ═══ -->
+    <section id="delivery">
+      <div class="section-header reveal">
+        <span class="section-kicker">Service Delivery 2025</span>
+        <h2 class="section-title">How We Deliver</h2>
+      </div>
+      <div class="grid-1px delivery-grid reveal">
+        <div class="del-card">
+          <iconify-icon class="del-icon" icon="carbon:collaborate"></iconify-icon>
+          <div class="del-num">55,319</div>
+          <div class="del-label">Advising Hours</div>
+          <div class="del-desc">Confidential, customized 1:1 guidance across planning, finance, marketing, and growth strategy.</div>
+        </div>
+        <div class="del-card">
+          <iconify-icon class="del-icon" icon="carbon:event"></iconify-icon>
+          <div class="del-num">754</div>
+          <div class="del-label">Training Events</div>
+          <div class="del-desc">Live and virtual workshops from e-commerce to AI to government contracting.</div>
+        </div>
+        <div class="del-card">
+          <iconify-icon class="del-icon" icon="carbon:group"></iconify-icon>
+          <div class="del-num">13,300+</div>
+          <div class="del-label">Training Attendees</div>
+          <div class="del-desc">Entrepreneurs in SBDC workshops, webinars, and accelerator programs across 36 counties.</div>
+        </div>
+        <div class="del-card">
+          <iconify-icon class="del-icon" icon="carbon:user-multiple"></iconify-icon>
+          <div class="del-num">16,000+</div>
+          <div class="del-label">Total Clients</div>
+          <div class="del-desc">Unique businesses receiving advising, training, or specialized support.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ WHO WE REACH ══════════════ -->
+    <section id="demographics">
+      <div class="section-header reveal">
+        <span class="section-kicker">Who We Reach</span>
+        <h2 class="section-title">Serving All of Northern California</h2>
+      </div>
+      <div class="demo-layout reveal">
+        <div class="demo-main">
+          <iconify-icon class="demo-bg" icon="carbon:map"></iconify-icon>
+          <div class="demo-headline">Our clients reflect the communities we serve.</div>
+          <div class="demo-bars">
+            <div class="demo-bar-row">
+              <div class="demo-bar-label">Women-Owned</div>
+              <div class="demo-bar-track"><div class="demo-bar-fill women" style="width:52%"></div></div>
+              <div class="demo-bar-pct">52%</div>
+            </div>
+            <div class="demo-bar-row">
+              <div class="demo-bar-label">Minority-Owned</div>
+              <div class="demo-bar-track"><div class="demo-bar-fill minority" style="width:48%"></div></div>
+              <div class="demo-bar-pct">48%</div>
+            </div>
+            <div class="demo-bar-row">
+              <div class="demo-bar-label">Veteran-Owned</div>
+              <div class="demo-bar-track"><div class="demo-bar-fill veteran" style="width:7%"></div></div>
+              <div class="demo-bar-pct">7%</div>
+            </div>
+            <div class="demo-bar-row">
+              <div class="demo-bar-label">Rural Communities</div>
+              <div class="demo-bar-track"><div class="demo-bar-fill rural" style="width:24%"></div></div>
+              <div class="demo-bar-pct">24%</div>
+            </div>
+            <div class="demo-bar-row">
+              <div class="demo-bar-label">Low-Income Areas</div>
+              <div class="demo-bar-track"><div class="demo-bar-fill lowincome" style="width:35%"></div></div>
+              <div class="demo-bar-pct">35%</div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-sidebar">
+          <div class="demo-cell">
+            <div class="demo-cell-num">36</div>
+            <div class="demo-cell-label">Counties</div>
+            <div class="demo-cell-detail">Del Norte to San Joaquin</div>
+          </div>
+          <div class="demo-cell">
+            <div class="demo-cell-num">18</div>
+            <div class="demo-cell-label">Centers</div>
+            <div class="demo-cell-detail">Local presence statewide</div>
+          </div>
+          <div class="demo-cell">
+            <div class="demo-cell-num">~45%</div>
+            <div class="demo-cell-label">BIPOC Clients</div>
+            <div class="demo-cell-detail">Reflecting community diversity</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SPECIALTY PROGRAM CALLOUTS ═══ -->
+    <section id="specialty">
+      <div class="section-header reveal">
+        <span class="section-kicker">Specialty Programs</span>
+        <h2 class="section-title">Deep Impact</h2>
+      </div>
+      <div class="grid-1px spec-grid reveal">
+        <div class="spec-card">
+          <div class="spec-badge blue">Tech &amp; Innovation</div>
+          <div class="spec-name">Tech Futures Group</div>
+          <div class="spec-desc">TFG supports ambitious founders navigating SBIR/STTR funding, investor readiness, and deep-tech commercialization. TFG clients win SBIR grants at nearly 4x the California state average.</div>
+          <div class="spec-stats">
+            <div class="spec-stat"><div class="ss-num">$1.4B</div><div class="ss-label">Capital Raised to Date</div></div>
+            <div class="spec-stat"><div class="ss-num">$70M+</div><div class="ss-label">In Grants</div></div>
+            <div class="spec-stat"><div class="ss-num">2,700+</div><div class="ss-label">Jobs Created</div></div>
+            <div class="spec-stat"><div class="ss-num">57%</div><div class="ss-label">SBIR Win Rate</div></div>
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-badge green">Industry-Specific</div>
+          <div class="spec-name">SBDC Health</div>
+          <div class="spec-desc">Specialized advising and cohort-based training for healthcare entrepreneurs — from clinical practices to health-tech startups. Delivering measurable economic impact across the healthcare sector.</div>
+          <div class="spec-stats">
+            <div class="spec-stat"><div class="ss-num">157</div><div class="ss-label">Jobs Created (FT + PT)</div></div>
+            <div class="spec-stat"><div class="ss-num">$6.9M</div><div class="ss-label">Sales Increase</div></div>
+            <div class="spec-stat"><div class="ss-num">$2M</div><div class="ss-label">Capital Infusion</div></div>
+            <div class="spec-stat"><div class="ss-num">91</div><div class="ss-label">Cohort Graduates</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SUCCESS STORIES ═══ -->
+    <section id="stories">
+      <div class="section-header reveal">
+        <span class="section-kicker">Client Success</span>
+        <h2 class="section-title">Real Businesses. Real Results.</h2>
+      </div>
+
+      <!-- ReJoule -->
+      <div class="story-feature reveal">
+        <div class="story-left">
+          <div class="story-badge teal">Clean Tech</div>
+          <div class="story-name">ReJoule</div>
+          <div class="story-sub">Fast, accurate battery health diagnostics enabling reuse, repurposing, and recycling at scale.</div>
+          <div class="story-section-label">The Challenge</div>
+          <div class="story-text">ReJoule faced the task of disrupting an inefficient testing process that plagued automakers managing aging EV batteries. Traditional methods cost $5,000+ per battery and took days to complete.</div>
+          <div class="story-section-label">The Solution</div>
+          <div class="story-text">Tech Futures Group advisors provided critical business strategy and presentation coaching while leveraging their deep expertise in DoD funding, facilitating introductions to key investors including LG Technology Ventures.</div>
+        </div>
+        <div class="story-right">
+          <div class="story-stats">
+            <div class="story-stat"><div class="sts-num">$27M</div><div class="sts-label">Total Funding</div></div>
+            <div class="story-stat"><div class="sts-num">$25M</div><div class="sts-label">Non-Dilutive Grants</div></div>
+            <div class="story-stat"><div class="sts-num">90%</div><div class="sts-label">Cost Reduction</div></div>
+            <div class="story-stat"><div class="sts-num">2,000+</div><div class="sts-label">Service Centers</div></div>
+          </div>
+          <div class="story-quote">
+            <div class="story-quote-text">"The advice we received from Pitch Global has been extremely valuable, and the exposure to their network is unmatched."</div>
+            <div class="story-quote-attr">Zora Chung · CFO, ReJoule</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circosphere -->
+      <div class="story-feature reveal">
+        <div class="story-left">
+          <div class="story-badge brick">Entertainment · WBE Certified</div>
+          <div class="story-name">Circosphere</div>
+          <div class="story-sub">Woman-owned cirque entertainment creating unforgettable performances for special events.</div>
+          <div class="story-section-label">The Challenge</div>
+          <div class="story-text">After launching in 2015, founder Kristen Parks faced significant challenges navigating post-COVID recovery. Most clients booked less than 30 days in advance, creating cash flow unpredictability and operational bottlenecks.</div>
+          <div class="story-section-label">The Solution</div>
+          <div class="story-text">East Bay SBDC advisors guided Parks through WBE certification, government contracting strategy, and business growth — including capability statements and pursuing major opportunities like the Super Bowl and FIFA World Cup 2026.</div>
+        </div>
+        <div class="story-right">
+          <div class="story-stats">
+            <div class="story-stat"><div class="sts-num">$874K</div><div class="sts-label">Annual Revenue</div></div>
+            <div class="story-stat"><div class="sts-num">$469K</div><div class="sts-label">Sales Growth</div></div>
+            <div class="story-stat"><div class="sts-num">11</div><div class="sts-label">Employees</div></div>
+            <div class="story-stat"><div class="sts-num">WBE</div><div class="sts-label">Certified</div></div>
+          </div>
+          <div class="story-quote">
+            <div class="story-quote-text">"My SBDC advisor played a pivotal role in helping the business recover from COVID-19 and supporting its growth."</div>
+            <div class="story-quote-attr">Kristen Parks · Founder &amp; Owner, Circosphere</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- More stories -->
+      <div class="grid-1px more-stories reveal">
+        <div class="ms-card">
+          <div class="ms-industry">Healthcare</div>
+          <div class="ms-name">Seal Rock Dental</div>
+          <div class="ms-metric">21 jobs created</div>
+          <div class="ms-desc">Community-focused dental care practice growing with SBDC guidance.</div>
+        </div>
+        <div class="ms-card">
+          <div class="ms-industry">Automotive</div>
+          <div class="ms-name">Marin Auto Works</div>
+          <div class="ms-metric">$559K capital secured</div>
+          <div class="ms-desc">Dream automotive shop realized through strategic SBDC advising.</div>
+        </div>
+        <div class="ms-card">
+          <div class="ms-industry">Sports Training</div>
+          <div class="ms-name">Rep It Out</div>
+          <div class="ms-metric">$713K in funding</div>
+          <div class="ms-desc">Innovative batting cage and training facility expanding operations.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ THE FLYWHEEL ═══ -->
+    <section id="flywheel">
+      <div class="section-header reveal">
+        <span class="section-kicker">The Model</span>
+        <h2 class="section-title">The Flywheel</h2>
+      </div>
+      <p class="flywheel-intro reveal">Impact compounds. Each revolution makes the next one easier.</p>
+      <div class="grid-1px flywheel-track reveal">
+        <div class="fw-step">
+          <div class="fw-num active">1</div>
+          <iconify-icon class="fw-icon" icon="carbon:collaborate"></iconify-icon>
+          <div class="fw-label">Advise</div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-num">2</div>
+          <iconify-icon class="fw-icon" icon="carbon:education"></iconify-icon>
+          <div class="fw-label">Train</div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-num">3</div>
+          <iconify-icon class="fw-icon" icon="carbon:currency-dollar"></iconify-icon>
+          <div class="fw-label">Fund</div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-num">4</div>
+          <iconify-icon class="fw-icon" icon="carbon:rocket"></iconify-icon>
+          <div class="fw-label">Launch</div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-num">5</div>
+          <iconify-icon class="fw-icon" icon="carbon:growth"></iconify-icon>
+          <div class="fw-label">Grow</div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-num">6</div>
+          <iconify-icon class="fw-icon" icon="carbon:renew"></iconify-icon>
+          <div class="fw-label">Reinvest</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ NATIONAL CONTEXT ═══ -->
+    <section id="national">
+      <div class="section-header reveal">
+        <span class="section-kicker">America's SBDC Network</span>
+        <h2 class="section-title">National Impact</h2>
+      </div>
+      <div class="national-grid reveal">
+        <div class="nat-card">
+          <div class="nat-num">$40</div>
+          <div class="nat-label">Generated for every $1 of federal investment</div>
+        </div>
+        <div class="nat-card">
+          <div class="nat-num">2x</div>
+          <div class="nat-label">Faster sales growth than non-SBDC businesses</div>
+        </div>
+        <div class="nat-card">
+          <div class="nat-num">68K+</div>
+          <div class="nat-label">Jobs created nationally</div>
+        </div>
+        <div class="nat-card">
+          <div class="nat-num">$5.5B</div>
+          <div class="nat-label">Capital accessed across all SBDCs</div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem;opacity:0.4;margin-top:2rem;text-align:center;" class="reveal">96% of SBDC clients would recommend SBDC services.</p>
+    </section>
+
+    <!-- ═══ QUOTE ═══ -->
+    <section id="quote">
+      <div class="reveal">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">I had no idea how to start. My SBDC advisor helped me realize my dream.</div>
+        <div class="quote-attr">Brenda Gallegos · Leading With Love, Ukiah</div>
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="reveal">
+      <div class="footer-content">
+        <div class="footer-logo"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC"></div>
+        <div class="footer-partners">U.S. SBA · GO-Biz · Cal Poly Humboldt · America's SBDC</div>
+        <div class="footer-contact">norcalsbdc.org · (833) ASK-SBDC · 876 7th Street, Arcata, CA 95521</div>
+        <a href="brand-house.html" class="footer-cta">Brand House</a>
+        <a href="programs-map.html" class="footer-cta">Programs Map</a>
+        <div class="footer-bottom">
+          <p>Funded in part through a cooperative agreement with the U.S. Small Business Administration and a grant with the Governor's Office of Business and Economic Development. All data reported by SBDC businesses. No multipliers used. Results verified annually by third-party research.</p>
+          <p style="margin-top:0.5rem;">&copy; 2026 NorCal Small Business Development Center. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+    }
+  </script>
+</body>
+</html>

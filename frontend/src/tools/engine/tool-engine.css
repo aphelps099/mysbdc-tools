@@ -1,0 +1,1034 @@
+/* ═══════════════════════════════════════════════
+   Tool Engine — All styles for the editor surface
+   ═══════════════════════════════════════════════ */
+
+/* ── Custom properties ── */
+.tool-engine {
+  --te-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --te-blue: #2456e3;
+  --te-navy: var(--p-navy, #162d50);
+  --te-ink: var(--p-ink, #1a1a1a);
+  --te-mid: var(--p-mid, #57534e);
+  --te-muted: var(--p-muted, #a8a29e);
+  --te-line: var(--p-line, #e7e2da);
+  --te-sand: var(--p-sand, #f3efe8);
+  --te-white: var(--p-white, #ffffff);
+  --te-green: #16a34a;
+  --te-amber: #d97706;
+}
+
+/* ── Page layout ── */
+.tool-engine {
+  padding: 36px 28px 32px;
+  max-width: 780px;
+  margin: 0 auto;
+  animation: teFadeSlide 0.45s var(--te-ease) both;
+}
+
+/* ── Back link ── */
+.te-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 18px;
+  transition: color 0.15s var(--te-ease);
+  animation: teFadeSlide 0.45s var(--te-ease) 0.04s both;
+}
+.te-back:hover {
+  color: var(--te-ink);
+}
+.te-back svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Page header ── */
+.te-header {
+  margin-bottom: 18px;
+  animation: teFadeSlide 0.45s var(--te-ease) 0.08s both;
+}
+.te-title {
+  font-family: var(--era-text, var(--sans));
+  font-weight: 900;
+  font-size: clamp(24px, 3.5vw, 30px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  color: var(--te-ink);
+  margin: 0 0 10px;
+}
+.te-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--te-mid);
+}
+.te-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Card (editor surface) ── */
+.te-card {
+  background: var(--te-white);
+  border: 1.5px solid #c5bfb5;
+  border-radius: 18px;
+  padding: 26px 28px 24px;
+  animation: teFadeSlide 0.55s var(--te-ease) 0.22s both;
+}
+
+/* ── Prompt body (the prose flow) ── */
+.te-body {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 2.15;
+  color: var(--te-ink);
+}
+
+/* ── Section label ── */
+.te-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+  margin-top: 24px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--te-line);
+}
+
+/* ── Static instruction text ── */
+.te-static {
+  display: block;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--te-mid);
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--te-sand);
+  border-radius: 12px;
+  border: 1px solid var(--te-line);
+}
+
+/* ── Token chip ── */
+.te-token {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  vertical-align: baseline;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 12px 4px;
+  border-radius: 7px;
+  transition: all 0.18s var(--te-ease);
+  white-space: nowrap;
+  margin: 0 1px;
+}
+
+/* Token: empty */
+.te-token--empty {
+  background: #edf1ff;
+  border: 1.5px dashed #bac5f5;
+  color: #4269d4;
+}
+.te-token--empty:hover {
+  background: #dfe5fc;
+  transform: translateY(-0.5px);
+}
+
+/* Token: filled */
+.te-token--filled {
+  background: #edfcf3;
+  border: 1.5px solid #7ee2a8;
+  color: #158040;
+}
+.te-token--filled:hover {
+  background: #e0f9ea;
+  transform: translateY(-0.5px);
+}
+
+/* Token: editing */
+.te-token--editing {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  margin: 0 1px;
+}
+.te-token--editing input {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--te-ink);
+  background: #fefaee;
+  border: none;
+  border-bottom: 2px solid var(--te-amber);
+  padding: 2px 4px 3px;
+  outline: none;
+  min-width: 100px;
+  max-width: 260px;
+}
+.te-token--editing input::placeholder {
+  color: var(--te-muted);
+  font-weight: 400;
+}
+
+/* Token tooltip */
+.te-token-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  background: var(--te-navy);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s var(--te-ease), transform 0.15s var(--te-ease);
+  z-index: 10;
+}
+.te-token:hover .te-token-tip,
+.te-token--editing .te-token-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Pills ── */
+.te-pills {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 4px;
+  vertical-align: middle;
+}
+.te-pill {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 5px 14px 6px;
+  border-radius: 100px;
+  cursor: pointer;
+  border: 1.5px solid #c5bfb5;
+  background: var(--te-white);
+  color: var(--te-ink);
+  transition: all 0.18s var(--te-ease);
+  white-space: nowrap;
+}
+.te-pill:hover {
+  background: #f7f8ff;
+  border-color: #92a5e8;
+  transform: translateY(-0.5px);
+}
+.te-pill--selected {
+  background: var(--te-blue);
+  border-color: var(--te-blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(36, 86, 227, 0.25);
+}
+.te-pill--selected:hover {
+  background: var(--te-blue);
+  border-color: var(--te-blue);
+  transform: translateY(-0.5px);
+}
+.te-pill--dimmed {
+  opacity: 0.45;
+}
+.te-pill--dimmed:hover {
+  opacity: 0.8;
+  background: #f7f8ff;
+  border-color: #92a5e8;
+}
+.te-pill--custom {
+  border-style: dashed;
+  color: var(--te-mid);
+  font-weight: 600;
+}
+
+/* Custom pill input */
+.te-pill-input {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.te-pill-input input {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 12px 6px;
+  border-radius: 100px;
+  border: 1.5px solid var(--te-amber);
+  background: #fefaee;
+  color: var(--te-ink);
+  outline: none;
+  min-width: 80px;
+  max-width: 180px;
+}
+
+/* ── Block (textarea) ── */
+.te-block {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.te-block textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--te-ink);
+  background: var(--te-white);
+  border: 1.5px solid var(--te-line);
+  border-radius: 12px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.18s var(--te-ease);
+}
+.te-block textarea:focus {
+  border-color: var(--te-blue);
+  box-shadow: 0 0 0 3px rgba(36, 86, 227, 0.08);
+}
+.te-block textarea::placeholder {
+  color: var(--te-muted);
+}
+.te-block-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+  margin-bottom: 6px;
+}
+
+/* ── Upload ── */
+.te-upload {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.te-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: 1.5px dashed var(--te-line);
+  border-radius: 12px;
+  background: var(--te-sand);
+  cursor: pointer;
+  transition: all 0.18s var(--te-ease);
+}
+.te-upload-zone:hover {
+  border-color: var(--te-blue);
+  background: #f7f8ff;
+}
+.te-upload-zone.te-upload--dragover {
+  border-color: var(--te-blue);
+  background: #edf1ff;
+}
+.te-upload-zone.te-upload--filled {
+  border-style: solid;
+  border-color: #7ee2a8;
+  background: #edfcf3;
+}
+.te-upload-icon {
+  color: var(--te-muted);
+}
+.te-upload-text {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--te-mid);
+}
+.te-upload-hint {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+}
+.te-upload-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.te-upload-filename {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #158040;
+}
+.te-upload-remove {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+}
+.te-upload-remove:hover {
+  color: #dc2626;
+}
+
+/* ── Multi ── */
+.te-multi {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.te-multi-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.te-multi-row input {
+  flex: 1;
+  padding: 8px 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--te-ink);
+  background: var(--te-white);
+  border: 1.5px solid var(--te-line);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.18s var(--te-ease);
+}
+.te-multi-row input:focus {
+  border-color: var(--te-blue);
+}
+.te-multi-row input::placeholder {
+  color: var(--te-muted);
+}
+.te-multi-remove {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--te-muted);
+  cursor: pointer;
+  transition: all 0.12s var(--te-ease);
+  flex-shrink: 0;
+}
+.te-multi-remove:hover {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.06);
+}
+.te-multi-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--te-blue);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.12s var(--te-ease);
+}
+.te-multi-add:hover {
+  opacity: 0.7;
+}
+.te-multi-add:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Or divider ── */
+.te-or {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 0;
+  color: var(--te-muted);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.te-or::before,
+.te-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--te-line);
+}
+
+/* ── Footer ── */
+.te-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  animation: teFadeSlide 0.45s var(--te-ease) 0.32s both;
+}
+
+/* ── Progress ── */
+.te-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.te-progress-bar {
+  width: 72px;
+  height: 3px;
+  background: var(--te-line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.te-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--te-navy);
+  transition: width 0.35s var(--te-ease), background-color 0.35s var(--te-ease);
+}
+.te-progress-fill--complete {
+  background: var(--te-green);
+}
+.te-progress-count {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--te-muted);
+  transition: color 0.35s var(--te-ease);
+}
+.te-progress-count--complete {
+  color: var(--te-green);
+}
+
+/* ── Raw toggle ── */
+.te-raw-toggle {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--te-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.12s var(--te-ease);
+}
+.te-raw-toggle:hover {
+  color: var(--te-mid);
+  background: var(--te-sand);
+}
+
+/* ── Send button ── */
+.te-send {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s var(--te-ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.te-send--disabled {
+  background: var(--te-line);
+  color: var(--te-muted);
+  cursor: not-allowed;
+}
+.te-send--ready {
+  background: var(--te-navy);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(22, 45, 80, 0.2);
+}
+.te-send--ready:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(22, 45, 80, 0.28);
+}
+.te-send--sent {
+  background: var(--te-green);
+  color: #fff;
+}
+.te-send svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Raw prompt view ── */
+.te-raw {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--te-sand);
+  border: 1px solid var(--te-line);
+  border-radius: 12px;
+  font-family: var(--mono, monospace);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--te-mid);
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: teFadeSlide 0.3s var(--te-ease) both;
+}
+
+
+/* ═══════════════════════════════════════════════
+   Mobile — 768px breakpoint
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+
+  .tool-engine {
+    padding: 20px 10px 120px;
+  }
+
+  /* ── Back — larger tap target ── */
+  .te-back {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 0;
+    margin-bottom: 20px;
+    font-size: 11.5px;
+  }
+  .te-back svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ── Header ── */
+  .te-header {
+    margin-bottom: 20px;
+  }
+  .te-title {
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .te-badge {
+    font-size: 11.5px;
+  }
+  .te-badge-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* ── Card — slim horizontal, generous vertical ── */
+  .te-card {
+    border-radius: 14px;
+    padding: 24px 14px 22px;
+  }
+
+  /* ── Prose — bigger, more readable ── */
+  .te-body {
+    font-size: 17px;
+    line-height: 2.1;
+  }
+
+  /* ── Tokens — bigger, comfortable taps ── */
+  .te-token {
+    padding: 8px 16px 9px;
+    font-size: 12px;
+    border-radius: 9px;
+    min-height: 40px;
+  }
+  .te-token--empty:hover,
+  .te-token--filled:hover {
+    transform: none; /* no hover lift on touch */
+  }
+  .te-token--empty:active,
+  .te-token--filled:active {
+    transform: scale(0.96);
+    transition-duration: 0.06s;
+  }
+
+  /* Editing input — full width feel */
+  .te-token--editing input {
+    font-size: 16px; /* prevents iOS zoom */
+    min-width: 100px;
+    max-width: calc(100vw - 100px);
+    padding: 6px 8px 7px;
+  }
+
+  /* ── Tooltips — hidden on mobile (taps do the work) ── */
+  .te-token-tip {
+    display: none;
+  }
+
+  /* ── Pills — wrap freely, bigger taps ── */
+  .te-pills {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 6px 0;
+    gap: 10px;
+  }
+  .te-pill {
+    padding: 10px 20px 11px;
+    font-size: 11.5px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .te-pill:hover {
+    transform: none;
+  }
+  .te-pill:active {
+    transform: scale(0.96);
+    transition-duration: 0.06s;
+  }
+  .te-pill-input input {
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 10px 16px 11px;
+    min-width: 120px;
+    max-width: calc(100vw - 100px);
+  }
+
+  /* ── Labels — bigger ── */
+  .te-label {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 11.5px;
+  }
+
+  /* ── Static — bigger ── */
+  .te-static {
+    font-size: 15px;
+    padding: 14px 12px;
+    margin-top: 18px;
+    border-radius: 10px;
+    line-height: 1.7;
+  }
+
+  /* ── Block — bigger textarea ── */
+  .te-block textarea {
+    font-size: 16px; /* prevents iOS zoom */
+    min-height: 120px;
+    padding: 12px 12px;
+    border-radius: 10px;
+  }
+  .te-block-label {
+    font-size: 11.5px;
+    margin-bottom: 8px;
+  }
+
+  /* ── Upload — roomier ── */
+  .te-upload-zone {
+    padding: 24px 12px;
+    border-radius: 10px;
+    gap: 10px;
+  }
+  .te-upload-text {
+    font-size: 12.5px;
+  }
+  .te-upload-hint {
+    font-size: 11.5px;
+  }
+  .te-upload-filename {
+    font-size: 12.5px;
+  }
+  .te-upload-remove {
+    font-size: 11.5px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* ── Multi — bigger inputs ── */
+  .te-multi-row input {
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 12px 12px;
+    border-radius: 10px;
+  }
+  .te-multi-remove {
+    width: 40px;
+    height: 40px;
+  }
+  .te-multi-add {
+    font-size: 11.5px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 0;
+  }
+
+  /* ── Or divider ── */
+  .te-or {
+    margin: 16px 0;
+    font-size: 12px;
+  }
+
+  /* ── Footer — stacked layout ── */
+  .te-footer {
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+    align-items: stretch;
+  }
+
+  /* Progress row */
+  .te-progress {
+    justify-content: center;
+    order: 1;
+  }
+  .te-progress-bar {
+    width: 88px;
+    height: 4px;
+  }
+  .te-progress-count {
+    font-size: 13px;
+  }
+
+  /* Send button — full width, prominent */
+  .te-send {
+    width: 100%;
+    padding: 16px 28px;
+    font-size: 12.5px;
+    border-radius: 14px;
+    order: 2;
+    min-height: 54px;
+  }
+  .te-send--ready:hover {
+    transform: none;
+  }
+  .te-send--ready:active {
+    transform: scale(0.98);
+    transition-duration: 0.06s;
+  }
+
+  /* Raw toggle — centered below send */
+  .te-raw-toggle {
+    text-align: center;
+    order: 3;
+    padding: 8px;
+    font-size: 11.5px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Raw prompt — bigger ── */
+  .te-raw {
+    padding: 14px 12px;
+    font-size: 13.5px;
+    border-radius: 10px;
+    margin-top: 16px;
+    line-height: 1.75;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   Dark mode overrides
+   ═══════════════════════════════════════════════ */
+
+.theme-dark .tool-engine {
+  --te-ink: #e5e7eb;
+  --te-mid: #9ca3af;
+  --te-muted: #6b7280;
+  --te-line: rgba(255, 255, 255, 0.12);
+  --te-sand: #1e2737;
+  --te-white: #111827;
+}
+
+/* Token: empty */
+.theme-dark .te-token--empty {
+  background: rgba(36, 86, 227, 0.15);
+  border-color: rgba(36, 86, 227, 0.4);
+  color: #7ba3f7;
+}
+.theme-dark .te-token--empty:hover {
+  background: rgba(36, 86, 227, 0.25);
+}
+
+/* Token: filled */
+.theme-dark .te-token--filled {
+  background: rgba(22, 163, 74, 0.15);
+  border-color: rgba(22, 163, 74, 0.4);
+  color: #6ee7a0;
+}
+.theme-dark .te-token--filled:hover {
+  background: rgba(22, 163, 74, 0.25);
+}
+
+/* Token: editing */
+.theme-dark .te-token--editing input {
+  background: rgba(217, 119, 6, 0.12);
+  color: #e5e7eb;
+  border-bottom-color: var(--te-amber);
+}
+
+/* Pill base */
+.theme-dark .te-pill {
+  background: #1e2737;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #d1d5db;
+}
+.theme-dark .te-pill:hover {
+  background: rgba(36, 86, 227, 0.12);
+  border-color: rgba(36, 86, 227, 0.4);
+}
+
+/* Pill selected — keep blue, works on dark */
+.theme-dark .te-pill--selected {
+  background: var(--te-blue);
+  border-color: var(--te-blue);
+  color: #fff;
+}
+
+/* Pill dimmed */
+.theme-dark .te-pill--dimmed {
+  opacity: 0.5;
+}
+.theme-dark .te-pill--dimmed:hover {
+  opacity: 0.85;
+  background: rgba(36, 86, 227, 0.12);
+  border-color: rgba(36, 86, 227, 0.4);
+}
+
+/* Pill custom input */
+.theme-dark .te-pill-input input {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: var(--te-amber);
+  color: #e5e7eb;
+}
+
+/* Card border */
+.theme-dark .te-card {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Block textarea */
+.theme-dark .te-block textarea {
+  background: #0f1724;
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.theme-dark .te-block textarea:focus {
+  box-shadow: 0 0 0 3px rgba(36, 86, 227, 0.2);
+}
+
+/* Multi input */
+.theme-dark .te-multi-row input {
+  background: #0f1724;
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.theme-dark .te-multi-remove:hover {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+/* Upload zone */
+.theme-dark .te-upload-zone {
+  background: #1e2737;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.theme-dark .te-upload-zone:hover {
+  background: rgba(36, 86, 227, 0.1);
+  border-color: rgba(36, 86, 227, 0.4);
+}
+.theme-dark .te-upload-zone.te-upload--dragover {
+  background: rgba(36, 86, 227, 0.15);
+}
+.theme-dark .te-upload-zone.te-upload--filled {
+  border-color: rgba(22, 163, 74, 0.4);
+  background: rgba(22, 163, 74, 0.1);
+}
+.theme-dark .te-upload-filename {
+  color: #6ee7a0;
+}
+
+/* Send disabled */
+.theme-dark .te-send--disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: #4b5563;
+}
+
+/* Send ready — lighter navy for dark bg */
+.theme-dark .te-send--ready {
+  background: #4a8fe2;
+  box-shadow: 0 2px 10px rgba(74, 143, 226, 0.25);
+}
+.theme-dark .te-send--ready:hover {
+  box-shadow: 0 4px 16px rgba(74, 143, 226, 0.35);
+}
+
+/* Raw toggle hover */
+.theme-dark .te-raw-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Raw prompt view */
+.theme-dark .te-raw {
+  background: #0f1724;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ── Animations ── */
+@keyframes teFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

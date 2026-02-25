@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attribution Collection | NorCal SBDC</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-Regular.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tobias';
+      src: url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.woff2') format('woff2'),
+           url('new-fonts/Tobias/TobiasTRIAL-RegularItalic.otf') format('opentype');
+      font-weight: 400; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Light.otf') format('opentype');
+      font-weight: 300; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Regular.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Medium.otf') format('opentype');
+      font-weight: 500; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America';
+      src: url('new-fonts/GT-America/GT-America-Standard-Bold.otf') format('opentype');
+      font-weight: 700; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GT America Mono';
+      src: url('new-fonts/GT-America/GT-America-Mono-Regular.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+
+    :root {
+      --navy: #0f1c2e;
+      --royal: #1D5AA7;
+      --royal-dim: rgba(29,90,167,0.08);
+      --pool: #8FC5D9;
+      --cream: #f0efeb;
+      --white: #ffffff;
+      --brick: #a82039;
+      --dusty: #5d7a9c;
+      --text: #0a1528;
+      --text-secondary: #4a5568;
+      --text-tertiary: #8a8a8a;
+      --rule: rgba(0,0,0,0.12);
+      --rule-light: rgba(0,0,0,0.06);
+      --green: #16a34a;
+      --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+      --serif: 'Tobias', Georgia, serif;
+      --mono: 'GT America Mono', 'SF Mono', monospace;
+      --pad: clamp(32px, 5vw, 64px);
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); font-weight: 300; color: var(--text); background: var(--white); line-height: 1.6; }
+
+    /* ── Nav ── */
+    nav.top-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 44px; background: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad); z-index: 1000; border-bottom: 1px solid var(--rule-light);
+    }
+    .nav-logo { flex-shrink: 0; height: 14px; }
+    .nav-logo img { height: 100%; width: auto; opacity: 0.25; }
+    .nav-links { display: flex; gap: 2rem; margin-left: auto; align-items: center; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-tertiary); text-decoration: none;
+      transition: color 200ms var(--ease);
+    }
+    .nav-links a:hover { color: var(--text); }
+    main { margin-top: 44px; }
+
+    /* ── Utility ── */
+    section { padding: var(--pad) 0; }
+    section > * { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .section-header { border-top: 1px solid var(--rule); padding-top: 1rem; margin-bottom: 2.5rem; }
+    .section-kicker {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 0.5rem; display: block;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 400; color: var(--text); line-height: 1.1;
+    }
+
+    /* ── Grid ── */
+    .grid-1px {
+      display: grid; gap: 1px; background: var(--rule-light);
+      border: 1px solid var(--rule-light); border-radius: 2px; overflow: hidden;
+    }
+    .grid-1px > * { background: var(--white); }
+    /* Fix: prevent grid background from bleeding into section padding */
+    section > .grid-1px, section > .api-layout { padding: 0; max-width: calc(var(--max) - var(--pad) * 2); }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════ HERO ══════════════ */
+    section#hero { background: var(--navy); color: var(--white); padding: 5rem var(--pad) 3.5rem; }
+    section#hero > div { max-width: var(--max); margin: 0 auto; }
+    .hero-title {
+      font-family: var(--serif); font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 400; margin-bottom: 0.75rem; line-height: 1.05;
+    }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 1rem; letter-spacing: 0.05em;
+      margin-bottom: 1.25rem; opacity: 0.7;
+    }
+    .hero-tagline {
+      font-size: 1.15rem; font-weight: 300; max-width: 620px; line-height: 1.5; opacity: 0.9;
+    }
+    .hero-strip {
+      display: flex; gap: 0; margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem;
+    }
+    .hero-strip .hs-item { flex: 1; text-align: center; }
+    .hero-strip .hs-item:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.15); }
+    .hs-num { font-family: var(--serif); font-size: 1.5rem; }
+    .hs-label { font-size: 0.75rem; opacity: 0.6; margin-top: 0.2rem; }
+
+    /* ══════════════ HOW IT WORKS (overview) ══════════════ */
+    section#overview { background: var(--cream); }
+    .overview-intro {
+      font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;
+      max-width: 680px; margin-bottom: 2.5rem;
+    }
+    .overview-grid { grid-template-columns: repeat(3, 1fr); margin-top: 2rem; }
+    .ov-card { padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+    .ov-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .ov-num {
+      font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.5rem;
+    }
+    .ov-title {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .ov-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ══════════════ BULK CAMPAIGN SETUP ══════════════ */
+    section#campaign { background: var(--white); }
+    .campaign-steps { grid-template-columns: 1fr 1fr; margin-top: 2.5rem; }
+    .cs-card { padding: 2rem 1.75rem; }
+    .cs-step-num {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--white); background: var(--navy);
+      display: inline-block; padding: 0.2rem 0.5rem; border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+    .cs-title {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .cs-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+    .cs-detail {
+      margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--rule-light);
+      font-family: var(--mono); font-size: 0.65rem; color: var(--text-tertiary); line-height: 1.7;
+    }
+
+    /* ══════════════ CLIENT JOURNEY ══════════════ */
+    section#journey { background: var(--cream); }
+    .journey-track { grid-template-columns: repeat(4, 1fr); margin-top: 2.5rem; }
+    .journey-step { padding: 1.75rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .js-number {
+      font-family: var(--serif); font-size: 2rem; font-weight: 400;
+      color: var(--text); line-height: 1; margin-bottom: 0.5rem;
+    }
+    .js-number.active { color: var(--brick); }
+    .js-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; }
+    .js-title {
+      font-family: var(--serif); font-size: 0.95rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .js-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Journey expanded detail rows */
+    .journey-detail { grid-template-columns: repeat(2, 1fr); margin-top: 1.5rem; }
+    .jd-card { padding: 2rem 1.75rem; }
+    .jd-label {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 0.5rem;
+    }
+    .jd-label.in-biz { color: var(--royal); }
+    .jd-label.pre-venture { color: var(--brick); }
+    .jd-title {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .jd-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+    .jd-fields {
+      margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.35rem;
+    }
+    .jd-field {
+      font-family: var(--mono); font-size: 0.6rem; padding: 0.25rem 0.55rem;
+      border: 1px solid var(--rule-light); color: var(--text-secondary);
+      border-radius: 2px; background: var(--cream);
+    }
+
+    /* ══════════════ FORM FIELDS ══════════════ */
+    section#fields { background: var(--white); }
+    .fields-grid { grid-template-columns: repeat(2, 1fr); margin-top: 2.5rem; }
+    .field-block { padding: 2rem 1.75rem; }
+    .fb-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 0.25rem 0.5rem;
+      border-radius: 2px; width: fit-content; margin-bottom: 0.75rem;
+    }
+    .fb-badge.blue { background: var(--royal-dim); color: var(--royal); }
+    .fb-badge.red { background: rgba(168,32,57,0.08); color: var(--brick); }
+    .fb-badge.green { background: rgba(22,163,74,0.1); color: var(--green); }
+    .fb-badge.teal { background: rgba(143,197,217,0.2); color: #3a8ba8; }
+    .fb-title {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .fb-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+    .fb-data-point {
+      display: flex; align-items: baseline; gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .fb-data-point .dp-icon {
+      font-size: 0.7rem; color: var(--text-tertiary); flex-shrink: 0; margin-top: 0.15rem;
+    }
+    .fb-data-point .dp-text {
+      font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;
+    }
+    .fb-data-point .dp-text strong { font-weight: 500; color: var(--text); }
+
+    /* ══════════════ API MECHANICS ══════════════ */
+    section#api { background: var(--cream); }
+    .api-layout {
+      display: grid; grid-template-columns: 2fr 1fr; gap: 1px;
+      background: var(--rule-light); border: 1px solid var(--rule-light);
+      border-radius: 2px; overflow: hidden; margin-top: 2.5rem;
+    }
+    .api-main { background: var(--navy); color: var(--white); padding: 3rem 2.5rem; position: relative; overflow: hidden; }
+    .api-main .api-bg-icon {
+      position: absolute; font-size: 300px; opacity: 0.03;
+      top: -40px; right: -60px; color: var(--white); pointer-events: none;
+    }
+    .api-main > * { position: relative; z-index: 1; }
+    .api-headline {
+      font-family: var(--serif); font-size: 2rem; font-weight: 400;
+      line-height: 1.15; margin-bottom: 1.25rem;
+    }
+    .api-desc { font-size: 0.92rem; opacity: 0.8; line-height: 1.65; margin-bottom: 2rem; }
+    .api-flow {
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .api-flow-step {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.85rem; opacity: 0.9;
+    }
+    .api-flow-step .afs-num {
+      font-family: var(--mono); font-size: 0.6rem; background: rgba(255,255,255,0.12);
+      padding: 0.25rem 0.5rem; border-radius: 2px; flex-shrink: 0;
+    }
+    .api-sidebar { background: var(--white); display: flex; flex-direction: column; }
+    .api-side-cell {
+      flex: 1; padding: 1.5rem; border-bottom: 1px solid var(--rule-light);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .api-side-cell:last-child { border-bottom: none; }
+    .api-side-icon { font-size: 1.25rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .api-side-title {
+      font-family: var(--serif); font-size: 1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.25rem;
+    }
+    .api-side-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ══════════════ ADMIN NOTIFICATIONS ══════════════ */
+    section#admin { background: var(--white); }
+    .admin-grid { grid-template-columns: repeat(3, 1fr); margin-top: 2.5rem; }
+    .admin-card { padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+    .ac-timing {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--green); margin-bottom: 0.5rem;
+    }
+    .ac-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .ac-title {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .ac-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+    .ac-includes {
+      margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--rule-light);
+      margin-top: 1rem;
+    }
+    .ac-includes-label {
+      font-family: var(--mono); font-size: 0.5rem; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-tertiary); margin-bottom: 0.4rem;
+    }
+    .ac-includes-item {
+      font-size: 0.75rem; color: var(--text-secondary); line-height: 1.7;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .ac-includes-item iconify-icon { font-size: 0.7rem; color: var(--green); }
+
+    /* ══════════════ NEOSERRA ══════════════ */
+    section#neoserra { background: var(--cream); }
+    .neo-grid { grid-template-columns: repeat(3, 1fr); margin-top: 2.5rem; }
+    .neo-card { padding: 2rem 1.5rem; }
+    .nc-step {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.5rem;
+    }
+    .nc-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .nc-title {
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .nc-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ══════════════ SYSTEM ARCHITECTURE ══════════════ */
+    section#architecture { background: var(--white); }
+    .arch-grid { grid-template-columns: repeat(2, 1fr); margin-top: 2.5rem; }
+    .arch-card { padding: 2rem 1.75rem; }
+    .arch-type {
+      font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.5rem;
+    }
+    .arch-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .arch-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .arch-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+    .arch-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .arch-tag {
+      font-family: var(--mono); font-size: 0.6rem; padding: 0.25rem 0.55rem;
+      background: var(--cream); border: 1px solid var(--rule-light);
+      color: var(--text-secondary); border-radius: 2px;
+    }
+
+    /* ══════════════ QUALITY & COMPLIANCE ══════════════ */
+    section#compliance { background: var(--cream); }
+    .comp-grid { grid-template-columns: repeat(2, 1fr); margin-top: 2.5rem; }
+    .comp-card { padding: 2rem 1.75rem; }
+    .comp-icon { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.75rem; display: block; }
+    .comp-title {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .comp-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+    .comp-checklist { display: flex; flex-direction: column; gap: 0.35rem; }
+    .comp-check {
+      font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .comp-check iconify-icon { font-size: 0.75rem; color: var(--green); flex-shrink: 0; }
+
+    /* ══════════════ AT A GLANCE ══════════════ */
+    section#glance { background: var(--navy); color: var(--white); }
+    section#glance .section-header { border-top-color: rgba(255,255,255,0.15); }
+    section#glance .section-kicker { color: rgba(255,255,255,0.5); }
+    section#glance .section-title { color: var(--white); }
+    .glance-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+    }
+    .glance-item { background: var(--navy); padding: 1.75rem 1.25rem; text-align: center; }
+    .gi-icon { font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block; }
+    .gi-num { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 0.15rem; }
+    .gi-label { font-size: 0.78rem; opacity: 0.7; }
+    .gi-detail { font-size: 0.68rem; opacity: 0.45; margin-top: 0.25rem; }
+    .glance-note {
+      font-size: 0.78rem; opacity: 0.5; margin-top: 2rem; max-width: 700px;
+      line-height: 1.65;
+    }
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer {
+      background: var(--navy); color: var(--white);
+      padding: 3rem var(--pad); text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-content { max-width: var(--max); margin: 0 auto; }
+    .footer-logo { margin-bottom: 1.5rem; }
+    .footer-logo img { height: 16px; width: auto; opacity: 0.5; }
+    .footer-cta {
+      display: inline-block; font-family: var(--mono); font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--white);
+      opacity: 0.7; text-decoration: none; padding: 0.6rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.25); border-radius: 2px;
+      transition: all 200ms var(--ease);
+    }
+    .footer-cta:hover { opacity: 1; border-color: rgba(255,255,255,0.5); }
+    .footer-cta + .footer-cta { margin-left: 0.75rem; }
+    .footer-bottom {
+      margin-top: 1.5rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-bottom p { font-size: 0.7rem; opacity: 0.35; }
+
+    /* ══════════════ RESPONSIVE ══════════════ */
+    @media (max-width: 768px) {
+      .overview-grid, .admin-grid, .neo-grid { grid-template-columns: 1fr; }
+      .campaign-steps, .fields-grid, .journey-detail, .arch-grid, .comp-grid { grid-template-columns: 1fr; }
+      .journey-track { grid-template-columns: repeat(2, 1fr); }
+      .api-layout { grid-template-columns: 1fr; }
+      .glance-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-strip { flex-wrap: wrap; }
+      .hero-strip .hs-item { flex: 1 1 50%; padding: 0.75rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-bar">
+    <div class="nav-logo"><img src="assets/sbdc-blue-2026.png" alt="NorCal SBDC"></div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#campaign">Campaign</a>
+      <a href="#journey">Client Path</a>
+      <a href="#fields">Impact Fields</a>
+      <a href="#api">API</a>
+      <a href="#admin">Notifications</a>
+      <a href="#architecture">Architecture</a>
+      <a href="brand-house.html">Brand House</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+      <div>
+        <div class="hero-kicker">Milestone Attribution API</div>
+        <h1 class="hero-title">Attribution<br>Collection</h1>
+        <p class="hero-tagline">A streamlined digital process for capturing and tracking the economic impact of SBDC business advising. Clients self-report milestones — capital, jobs, sales, new businesses — through a dynamic form that validates, routes, and syncs directly into Neoserra.</p>
+        <div class="hero-strip">
+          <div class="hs-item">
+            <div class="hs-num">API</div>
+            <div class="hs-label">Auto-Validation</div>
+          </div>
+          <div class="hs-item">
+            <div class="hs-num">4</div>
+            <div class="hs-label">Impact Areas</div>
+          </div>
+          <div class="hs-item">
+            <div class="hs-num">3</div>
+            <div class="hs-label">Admin Alerts</div>
+          </div>
+          <div class="hs-item">
+            <div class="hs-num">CRM</div>
+            <div class="hs-label">Auto-Sync</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section id="overview">
+      <div class="section-header reveal">
+        <span class="section-kicker">How It Works</span>
+        <h2 class="section-title">System Overview</h2>
+      </div>
+      <p class="overview-intro reveal">The Bulk Campaign Attribution Collection system digitizes milestone reporting by combining email marketing, a smart online form, and API-driven CRM integration. It replaces manual data entry with a client-facing experience that automates validation, record creation, and administrative review.</p>
+      <div class="grid-1px overview-grid reveal">
+        <div class="ov-card">
+          <iconify-icon class="ov-icon" icon="carbon:send-alt"></iconify-icon>
+          <div class="ov-num">Phase 01</div>
+          <div class="ov-title">Send</div>
+          <div class="ov-desc">Build a client list, upload to Constant Contact, and send a bulk email campaign with a personalized URL that pre-populates the sign-in form with the recipient's email address.</div>
+        </div>
+        <div class="ov-card">
+          <iconify-icon class="ov-icon" icon="carbon:task-complete"></iconify-icon>
+          <div class="ov-num">Phase 02</div>
+          <div class="ov-title">Collect</div>
+          <div class="ov-desc">Clients click through to the SBDC Success portal, verify their identity, select their business, and report economic impact data through dynamically rendered fields based on business status.</div>
+        </div>
+        <div class="ov-card">
+          <iconify-icon class="ov-icon" icon="carbon:data-base"></iconify-icon>
+          <div class="ov-num">Phase 03</div>
+          <div class="ov-title">Sync</div>
+          <div class="ov-desc">On submission, milestones are automatically entered into Neoserra and simultaneous notifications are sent to the milestone manager, center director, and client — all without manual entry.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ BULK CAMPAIGN SETUP ═══ -->
+    <section id="campaign">
+      <div class="section-header reveal">
+        <span class="section-kicker">Step 1 · Outreach</span>
+        <h2 class="section-title">Bulk Campaign Setup</h2>
+      </div>
+      <div class="grid-1px campaign-steps reveal">
+        <div class="cs-card">
+          <div class="cs-step-num">Step A</div>
+          <div class="cs-title">Build the Client List</div>
+          <div class="cs-desc">Pull client records from Neoserra for clients with 3+ counseling hours who are eligible for impact reporting. Filter by active status, service date range, and center assignment.</div>
+          <div class="cs-detail">Source: Neoserra client export → CSV → Constant Contact upload</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step B</div>
+          <div class="cs-title">Upload to Constant Contact</div>
+          <div class="cs-desc">Import the filtered client list into a dedicated Constant Contact contact list. This list becomes the audience for the attribution email campaign.</div>
+          <div class="cs-detail">Platform: Constant Contact → Contact Management → Import</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step C</div>
+          <div class="cs-title">Compose the Campaign Email</div>
+          <div class="cs-desc">Create an email with a clear call-to-action: "Share Your Business Growth!" The CTA button uses a special URL parameter that captures the recipient's Constant Contact email address.</div>
+          <div class="cs-detail">URL parameter auto-populates the sign-in form email field on click</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step D</div>
+          <div class="cs-title">Send &amp; Monitor</div>
+          <div class="cs-desc">Schedule or send the campaign immediately. Monitor open rates, click-throughs, and form completions. Follow up with non-responders in a second wave if needed.</div>
+          <div class="cs-detail">Track: Opens → Clicks → Form Starts → Submissions</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CLIENT JOURNEY ═══ -->
+    <section id="journey">
+      <div class="section-header reveal">
+        <span class="section-kicker">Step 2 · Client Experience</span>
+        <h2 class="section-title">Client Journey</h2>
+      </div>
+      <div class="grid-1px journey-track reveal">
+        <div class="journey-step">
+          <div class="js-number active">1</div>
+          <iconify-icon class="js-icon" icon="carbon:email"></iconify-icon>
+          <div class="js-title">Email Click</div>
+          <div class="js-desc">Client receives the campaign email and clicks the CTA. The special URL pre-populates their email into the sign-in form on the SBDC Success page.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">2</div>
+          <iconify-icon class="js-icon" icon="carbon:user-identification"></iconify-icon>
+          <div class="js-title">Contact Details</div>
+          <div class="js-desc">Form collects first name, last name, email (pre-filled), and phone number. Client confirms their identity.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">3</div>
+          <iconify-icon class="js-icon" icon="carbon:search-locate"></iconify-icon>
+          <div class="js-title">API Validation</div>
+          <div class="js-desc">The API locates and validates the client's business records in milliseconds using the provided email. Client selects their business from the returned list.</div>
+        </div>
+        <div class="journey-step">
+          <div class="js-number">4</div>
+          <iconify-icon class="js-icon" icon="carbon:chart-line-data"></iconify-icon>
+          <div class="js-title">Report Impact</div>
+          <div class="js-desc">Dynamic fields appear based on business status (In-Business vs. Pre-Venture). Client reports capital, jobs, sales, and shares how the SBDC helped.</div>
+        </div>
+      </div>
+
+      <!-- Expanded steps 5–8 -->
+      <div class="grid-1px campaign-steps reveal" style="margin-top:1.5rem;">
+        <div class="cs-card">
+          <div class="cs-step-num">Step 5</div>
+          <div class="cs-title">Signature</div>
+          <div class="cs-desc">Client signs the digital signature field to certify the accuracy of their reported milestones.</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step 6</div>
+          <div class="cs-title">Review Modal</div>
+          <div class="cs-desc">A modal window displays a summary of all inputs. Client reviews the data and clicks "Confirm / Continue" to finalize the submission.</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step 7</div>
+          <div class="cs-title">Submission</div>
+          <div class="cs-desc">The form submits and the system simultaneously creates the milestone record in Neoserra, triggers admin notifications, and sends the client a thank-you email.</div>
+        </div>
+        <div class="cs-card">
+          <div class="cs-step-num">Step 8</div>
+          <div class="cs-title">Confirmation</div>
+          <div class="cs-desc">Done. Confetti. The client sees a visual confirmation that their milestones have been received and are under review.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ DYNAMIC FORM FIELDS ═══ -->
+    <section id="fields">
+      <div class="section-header reveal">
+        <span class="section-kicker">Step 2b · Dynamic Logic</span>
+        <h2 class="section-title">Impact Fields by Business Status</h2>
+      </div>
+      <p class="overview-intro reveal">The form dynamically adjusts which fields are presented based on whether the client's business is classified as In-Business or Pre-Venture. This ensures each client sees only the questions relevant to their stage.</p>
+
+      <!-- In-Business vs Pre-Venture -->
+      <div class="grid-1px fields-grid reveal">
+        <div class="field-block">
+          <div class="fb-badge blue">In-Business</div>
+          <div class="fb-title">Existing Business Clients</div>
+          <div class="fb-desc">Clients are not prompted with "business start" questions. They go directly to impact reporting fields for capital, jobs, and sales growth.</div>
+          <div class="jd-fields">
+            <span class="jd-field">Business Funding</span>
+            <span class="jd-field">Total Amount Approved</span>
+            <span class="jd-field">Date Completed</span>
+            <span class="jd-field">Jobs Created</span>
+            <span class="jd-field">Sales Increase</span>
+            <span class="jd-field">SBDC Testimonial</span>
+          </div>
+        </div>
+        <div class="field-block">
+          <div class="fb-badge red">Pre-Venture</div>
+          <div class="fb-title">Pre-Venture Clients</div>
+          <div class="fb-desc">Clients first see a field to enter their business start date. Once the "in business" criteria per SBA standards are met, capital, jobs, and sales fields appear.</div>
+          <div class="jd-fields">
+            <span class="jd-field">Business Start Date</span>
+            <span class="jd-field">Business Funding</span>
+            <span class="jd-field">Total Amount Approved</span>
+            <span class="jd-field">Date Completed</span>
+            <span class="jd-field">Jobs Created</span>
+            <span class="jd-field">Sales Increase</span>
+            <span class="jd-field">SBDC Testimonial</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact areas detail -->
+      <div class="grid-1px fields-grid reveal" style="margin-top:1.5rem;">
+        <div class="field-block">
+          <div class="fb-badge green">Impact Area</div>
+          <div class="fb-title">Capital &amp; Funding</div>
+          <div class="fb-desc">Captures the financial milestones that demonstrate SBDC's impact on client access to capital.</div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>Funding type</strong> — e.g., Owner Investment, SBA Loan, Grant</span>
+          </div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>Total amount approved</strong> — dollar amount of capital secured</span>
+          </div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>Date completed</strong> — when the funding was finalized</span>
+          </div>
+        </div>
+        <div class="field-block">
+          <div class="fb-badge green">Impact Area</div>
+          <div class="fb-title">Jobs &amp; Sales</div>
+          <div class="fb-desc">Captures employment growth and revenue increases attributable to SBDC advising services.</div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>Jobs created</strong> — new full-time equivalent positions</span>
+          </div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>Sales increase</strong> — revenue growth since engagement</span>
+          </div>
+          <div class="fb-data-point">
+            <iconify-icon class="dp-icon" icon="carbon:arrow-right"></iconify-icon>
+            <span class="dp-text"><strong>SBDC support</strong> — open-ended question: "How did SBDC help you?"</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ API MECHANICS ═══ -->
+    <section id="api">
+      <div class="section-header reveal">
+        <span class="section-kicker">Under the Hood</span>
+        <h2 class="section-title">The Attribution API</h2>
+      </div>
+      <div class="api-layout reveal">
+        <div class="api-main">
+          <iconify-icon class="api-bg-icon" icon="carbon:api"></iconify-icon>
+          <div class="api-headline">Automated Record Validation &amp; Milestone Creation</div>
+          <div class="api-desc">The API is the engine behind the form. It validates client identity, retrieves business records, dynamically adjusts fields based on client status, creates milestone records in Neoserra, and triggers all downstream notifications — in real time.</div>
+          <div class="api-flow">
+            <div class="api-flow-step">
+              <span class="afs-num">GET</span>
+              <span>Client email → API locates matching business records in Neoserra</span>
+            </div>
+            <div class="api-flow-step">
+              <span class="afs-num">VALIDATE</span>
+              <span>Cross-references contact details against existing client data</span>
+            </div>
+            <div class="api-flow-step">
+              <span class="afs-num">ROUTE</span>
+              <span>Determines In-Business vs. Pre-Venture → renders correct fields</span>
+            </div>
+            <div class="api-flow-step">
+              <span class="afs-num">POST</span>
+              <span>Creates milestone record in Neoserra on form submission</span>
+            </div>
+            <div class="api-flow-step">
+              <span class="afs-num">NOTIFY</span>
+              <span>Sends alerts to milestone manager, center director, and client</span>
+            </div>
+          </div>
+        </div>
+        <div class="api-sidebar">
+          <div class="api-side-cell">
+            <iconify-icon class="api-side-icon" icon="carbon:flash"></iconify-icon>
+            <div class="api-side-title">Millisecond Lookup</div>
+            <div class="api-side-desc">Client records are located and validated instantly via the API's GET parameters using the email address.</div>
+          </div>
+          <div class="api-side-cell">
+            <iconify-icon class="api-side-icon" icon="carbon:branch"></iconify-icon>
+            <div class="api-side-title">Dynamic Routing</div>
+            <div class="api-side-desc">In-Business clients skip the "business start" question. Pre-Venture clients see it first, then capital/jobs/sales.</div>
+          </div>
+          <div class="api-side-cell">
+            <iconify-icon class="api-side-icon" icon="carbon:link"></iconify-icon>
+            <div class="api-side-title">URL Pre-Population</div>
+            <div class="api-side-desc">The Constant Contact CTA URL embeds the recipient's email, which flows through to the sign-in form automatically.</div>
+          </div>
+          <div class="api-side-cell">
+            <iconify-icon class="api-side-icon" icon="carbon:checkmark-outline"></iconify-icon>
+            <div class="api-side-title">SBA Compliance</div>
+            <div class="api-side-desc">Pre-Venture "in business" criteria follow SBA standards before capital and employment fields unlock.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ADMIN NOTIFICATIONS ═══ -->
+    <section id="admin">
+      <div class="section-header reveal">
+        <span class="section-kicker">Step 4 · Post-Submission</span>
+        <h2 class="section-title">Admin Notifications</h2>
+      </div>
+      <p class="overview-intro reveal">Three simultaneous actions fire the moment a client clicks "Confirm." The entire notification chain is automated — no manual triggers, no delays.</p>
+      <div class="grid-1px admin-grid reveal">
+        <div class="admin-card">
+          <div class="ac-timing">Immediate</div>
+          <iconify-icon class="ac-icon" icon="carbon:task-approved"></iconify-icon>
+          <div class="ac-title">Milestone Manager</div>
+          <div class="ac-desc">An automated notification is sent to the milestone manager with a direct link to the client's milestone record for review and approval.</div>
+          <div class="ac-includes">
+            <div class="ac-includes-label">Includes</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Direct link to Neoserra record</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Client name &amp; business</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Submitted milestone data</div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="ac-timing">Immediate</div>
+          <iconify-icon class="ac-icon" icon="carbon:user-admin"></iconify-icon>
+          <div class="ac-title">Center Director</div>
+          <div class="ac-desc">A confirmation email is simultaneously sent to the center director with a direct link to view and approve the milestone submission.</div>
+          <div class="ac-includes">
+            <div class="ac-includes-label">Includes</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Direct link to approve</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Summary of impact data</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Client testimonial excerpt</div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="ac-timing">Immediate</div>
+          <iconify-icon class="ac-icon" icon="carbon:email"></iconify-icon>
+          <div class="ac-title">Client Thank-You</div>
+          <div class="ac-desc">A thank-you email is sent to the client as a follow-up, confirming receipt of their milestones and acknowledging their contribution.</div>
+          <div class="ac-includes">
+            <div class="ac-includes-label">Includes</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Submission confirmation</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Review timeline expectation</div>
+            <div class="ac-includes-item"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> SBDC contact information</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ NEOSERRA INTEGRATION ═══ -->
+    <section id="neoserra">
+      <div class="section-header reveal">
+        <span class="section-kicker">Step 5 · CRM Workflow</span>
+        <h2 class="section-title">Neoserra Integration</h2>
+      </div>
+      <p class="overview-intro reveal">Milestones submitted through the form are automatically entered into Neoserra, where they await review and approval. This eliminates manual data entry and ensures a clean audit trail from client submission to final approval.</p>
+      <div class="grid-1px neo-grid reveal">
+        <div class="neo-card">
+          <div class="nc-step">Auto</div>
+          <iconify-icon class="nc-icon" icon="carbon:data-base"></iconify-icon>
+          <div class="nc-title">Record Creation</div>
+          <div class="nc-desc">The API creates a new milestone record in Neoserra the instant the form is submitted. No CSV import, no manual entry — the record simply appears.</div>
+        </div>
+        <div class="neo-card">
+          <div class="nc-step">Review</div>
+          <iconify-icon class="nc-icon" icon="carbon:view"></iconify-icon>
+          <div class="nc-title">Manager Assessment</div>
+          <div class="nc-desc">The milestone manager accesses the record via the direct link in their notification email. They review data accuracy, make adjustments if needed, and move toward approval.</div>
+        </div>
+        <div class="neo-card">
+          <div class="nc-step">Approve</div>
+          <iconify-icon class="nc-icon" icon="carbon:task-approved"></iconify-icon>
+          <div class="nc-title">Final Approval</div>
+          <div class="nc-desc">Once reviewed, the milestone is approved in Neoserra. Records over $1M are spot-checked before the annual NEXUS upload to ensure accuracy and compliance.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SYSTEM ARCHITECTURE ═══ -->
+    <section id="architecture">
+      <div class="section-header reveal">
+        <span class="section-kicker">Technical Stack</span>
+        <h2 class="section-title">System Architecture</h2>
+      </div>
+      <div class="grid-1px arch-grid reveal">
+        <div class="arch-card">
+          <div class="arch-type">Email Platform</div>
+          <iconify-icon class="arch-icon" icon="carbon:send-alt"></iconify-icon>
+          <div class="arch-name">Constant Contact</div>
+          <div class="arch-desc">Manages the client contact list, designs and delivers the bulk attribution email, and embeds the special URL parameter that pre-populates the form.</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Client List Upload</span>
+            <span class="arch-tag">Email Design</span>
+            <span class="arch-tag">URL Parameters</span>
+            <span class="arch-tag">Campaign Analytics</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-type">Client Portal</div>
+          <iconify-icon class="arch-icon" icon="carbon:application-web"></iconify-icon>
+          <div class="arch-name">SBDC Success Page</div>
+          <div class="arch-desc">The front-end form hosted on the NorCal SBDC website. Receives the pre-populated email, collects contact details, renders dynamic fields, and handles the signature and confirmation flow.</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Dynamic Forms</span>
+            <span class="arch-tag">Signature Capture</span>
+            <span class="arch-tag">Review Modal</span>
+            <span class="arch-tag">Confetti UX</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-type">Integration Layer</div>
+          <iconify-icon class="arch-icon" icon="carbon:api"></iconify-icon>
+          <div class="arch-name">Milestone Attribution API</div>
+          <div class="arch-desc">The middleware that connects the form to Neoserra. Handles GET requests for client validation, POST requests for milestone creation, and triggers all notification emails.</div>
+          <div class="arch-tags">
+            <span class="arch-tag">GET Validation</span>
+            <span class="arch-tag">POST Milestones</span>
+            <span class="arch-tag">Email Triggers</span>
+            <span class="arch-tag">Status Routing</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-type">System of Record</div>
+          <iconify-icon class="arch-icon" icon="carbon:data-base"></iconify-icon>
+          <div class="arch-name">Neoserra CRM</div>
+          <div class="arch-desc">The destination for all milestone data. Stores client records, milestone submissions, approval status, and feeds into real-time dashboards reviewed monthly, quarterly, and annually.</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Milestone Storage</span>
+            <span class="arch-tag">Review Queue</span>
+            <span class="arch-tag">Dashboards</span>
+            <span class="arch-tag">NEXUS Upload</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ QUALITY & COMPLIANCE ═══ -->
+    <section id="compliance">
+      <div class="section-header reveal">
+        <span class="section-kicker">Data Integrity</span>
+        <h2 class="section-title">Quality &amp; Compliance</h2>
+      </div>
+      <div class="grid-1px comp-grid reveal">
+        <div class="comp-card">
+          <iconify-icon class="comp-icon" icon="carbon:data-check"></iconify-icon>
+          <div class="comp-title">Validation Rules</div>
+          <div class="comp-desc">Multiple checkpoints ensure data accuracy from client entry to final approval.</div>
+          <div class="comp-checklist">
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> API validates client email against Neoserra records</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Business status determines field visibility</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Review modal requires client confirmation</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Digital signature certifies accuracy</div>
+          </div>
+        </div>
+        <div class="comp-card">
+          <iconify-icon class="comp-icon" icon="carbon:security"></iconify-icon>
+          <div class="comp-title">SBA Standards</div>
+          <div class="comp-desc">All definitions and thresholds comply with SBA reporting requirements.</div>
+          <div class="comp-checklist">
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Pre-Venture "in business" criteria per SBA</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> $1M+ records spot-checked before NEXUS</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Milestone manager review and approval</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Annual API survey for 3+ hour clients</div>
+          </div>
+        </div>
+        <div class="comp-card">
+          <iconify-icon class="comp-icon" icon="carbon:report"></iconify-icon>
+          <div class="comp-title">Audit Trail</div>
+          <div class="comp-desc">Every submission creates a traceable record from form entry to NEXUS upload.</div>
+          <div class="comp-checklist">
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Timestamped client submission</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Notification delivery logs</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Manager review date and approval</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> NEXUS upload confirmation</div>
+          </div>
+        </div>
+        <div class="comp-card">
+          <iconify-icon class="comp-icon" icon="carbon:calendar"></iconify-icon>
+          <div class="comp-title">Review Cadence</div>
+          <div class="comp-desc">Data is continuously monitored through multiple review cycles.</div>
+          <div class="comp-checklist">
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Spot-checked throughout the year</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Monthly dashboard review</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Quarterly performance audit</div>
+            <div class="comp-check"><iconify-icon icon="carbon:checkmark-filled"></iconify-icon> Annual NEXUS submission cycle</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ AT A GLANCE ═══ -->
+    <section id="glance">
+      <div class="section-header reveal">
+        <span class="section-kicker">The Full Picture</span>
+        <h2 class="section-title">At a Glance</h2>
+      </div>
+      <div class="reveal">
+        <div class="glance-grid">
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:api"></iconify-icon>
+            <div class="gi-num">1</div>
+            <div class="gi-label">API</div>
+            <div class="gi-detail">Milestone Attribution</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:branch"></iconify-icon>
+            <div class="gi-num">2</div>
+            <div class="gi-label">Client Paths</div>
+            <div class="gi-detail">In-Business + Pre-Venture</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:notification"></iconify-icon>
+            <div class="gi-num">3</div>
+            <div class="gi-label">Auto-Notifications</div>
+            <div class="gi-detail">Manager · Director · Client</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:chart-line-data"></iconify-icon>
+            <div class="gi-num">4</div>
+            <div class="gi-label">Impact Areas</div>
+            <div class="gi-detail">Capital · Jobs · Sales · Starts</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:flash"></iconify-icon>
+            <div class="gi-num">ms</div>
+            <div class="gi-label">Lookup Speed</div>
+            <div class="gi-detail">API record validation</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:data-base"></iconify-icon>
+            <div class="gi-num">0</div>
+            <div class="gi-label">Manual Entry</div>
+            <div class="gi-detail">Fully automated to CRM</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:send-alt"></iconify-icon>
+            <div class="gi-num">CC</div>
+            <div class="gi-label">Constant Contact</div>
+            <div class="gi-detail">Bulk campaign delivery</div>
+          </div>
+          <div class="glance-item">
+            <iconify-icon class="gi-icon" icon="carbon:task-approved"></iconify-icon>
+            <div class="gi-num">CRM</div>
+            <div class="gi-label">Neoserra</div>
+            <div class="gi-detail">System of record</div>
+          </div>
+        </div>
+        <p class="glance-note">The Bulk Campaign Attribution Collection system automates the full cycle of economic impact reporting — from client outreach through milestone creation to administrative approval. All data flows through the Milestone Attribution API into Neoserra, where it is reviewed, approved, and ultimately submitted to SBA via the annual NEXUS upload.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="reveal">
+      <div class="footer-content">
+        <div class="footer-logo"><img src="assets/sbdc-white-2026.png" alt="NorCal SBDC"></div>
+        <a href="programs-map.html" class="footer-cta">Programs &amp; Network</a>
+        <a href="brand-house.html" class="footer-cta">Brand House</a>
+        <div class="footer-bottom">
+          <p>&copy; 2026 NorCal Small Business Development Center. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+    }
+  </script>
+</body>
+</html>

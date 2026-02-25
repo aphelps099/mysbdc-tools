@@ -1,0 +1,597 @@
+/* ═══════════════════════════════════════════════════════════
+   Milestone Collection — extends Smart 641 design language
+   ═══════════════════════════════════════════════════════════
+   Reuses s641-* classes from smart641.css for shared elements.
+   ms-* namespace for milestone-specific styles only.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Section headers (styled info blocks) ── */
+
+.ms-section-header {
+  border-radius: 10px;
+  border-left: 4px solid var(--ms-accent, #032040);
+  padding: 24px;
+  padding-right: 80px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ms-section-header h3 {
+  font-family: var(--display, 'GT Era Display', sans-serif);
+  font-weight: 600;
+  font-size: clamp(22px, 3.5vw, 30px);
+  color: #032040;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.ms-section-header p {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  color: #032040;
+  margin: 0 0 6px;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.ms-section-icon {
+  position: absolute;
+  right: -14px;
+  bottom: -14px;
+  width: 140px;
+  height: 140px;
+  opacity: 0.10;
+  pointer-events: none;
+  color: var(--ms-accent, #032040);
+}
+
+/* ── Checkpoint alert ── */
+
+.ms-checkpoint {
+  background: #FFF5F5;
+  border-left: 4px solid #F56565;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin-top: 16px;
+  position: relative;
+  animation: s641Enter 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ms-checkpoint-title {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: #C53030;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ms-checkpoint-text {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #742A2A;
+  margin: 0;
+}
+
+.ms-checkpoint-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #C53030;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px;
+}
+
+/* ── Initial value display ── */
+
+.ms-initial-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(36, 86, 227, 0.04);
+  border: 1px solid rgba(36, 86, 227, 0.1);
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 12px;
+  color: var(--p-mid, #57534e);
+  margin-bottom: 8px;
+}
+
+.ms-initial-badge strong {
+  color: var(--p-ink, #1a1a1a);
+}
+
+/* ── Change delta ── */
+
+.ms-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+
+.ms-delta-positive {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.06);
+}
+
+.ms-delta-negative {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.ms-delta-zero {
+  color: var(--p-mid, #57534e);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* ── Funding row (dynamic list) ── */
+
+.ms-funding-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ms-funding-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 36px;
+  gap: 10px;
+  align-items: end;
+}
+
+.ms-funding-remove {
+  width: 36px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--p-line, #e7e2da);
+  border-radius: 8px;
+  color: var(--p-mid, #57534e);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.ms-funding-remove:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.04);
+}
+
+.ms-add-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px dashed var(--p-line, #e7e2da);
+  border-radius: 8px;
+  background: none;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--p-blue, #2456e3);
+  cursor: pointer;
+  transition: all 150ms ease;
+  margin-top: 4px;
+}
+
+.ms-add-row:hover {
+  border-color: var(--p-blue, #2456e3);
+  background: rgba(36, 86, 227, 0.03);
+}
+
+/* ── Fade-in for progressive disclosure ── */
+
+.ms-fade-in {
+  animation: ms-fadeIn 250ms ease both;
+}
+
+/* ── Criteria bullet list (New Business step) ── */
+
+.ms-criteria-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #44403c;
+  list-style: none;
+}
+
+.ms-criteria-item {
+  position: relative;
+  padding-left: 12px;
+  margin-bottom: 5px;
+  animation: ms-fadeIn 200ms ease both;
+}
+
+.ms-criteria-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #a8a29e;
+}
+
+/* ── Example type chips ── */
+
+.ms-example-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 10px;
+}
+
+.ms-example-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--p-mid, #57534e);
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+/* ── Support message (for "no, business doesn't meet criteria") ── */
+
+.ms-support-message {
+  background: #E6F7FF;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.ms-support-message p {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #032040;
+  margin: 0 0 12px;
+}
+
+.ms-support-message p:last-child {
+  margin-bottom: 0;
+}
+
+.ms-support-message a {
+  color: #0056b3;
+  text-decoration: none;
+  border-bottom: 2px solid #0056b3;
+  transition: all 0.2s ease;
+}
+
+.ms-support-message a:hover {
+  color: #003d82;
+  border-bottom-color: #003d82;
+}
+
+/* ── Terms of agreement ── */
+
+.ms-terms {
+  background: #e4e4e4;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ms-terms-icon {
+  flex-shrink: 0;
+  color: #54475F;
+  margin-top: 1px;
+}
+
+.ms-terms p {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  line-height: 1.4;
+  color: #54475F;
+  margin: 0;
+}
+
+/* ── Loading state for lookup ── */
+
+.ms-lookup-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+}
+
+.ms-lookup-loading-text {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  color: var(--p-mid, #57534e);
+}
+
+/* ── Error banner ── */
+
+.ms-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.04);
+  border: 1px solid rgba(220, 38, 38, 0.12);
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  color: #dc2626;
+  margin-top: 12px;
+}
+
+/* ── No records message ── */
+
+.ms-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+}
+
+.ms-not-found-title {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--p-ink, #1a1a1a);
+  margin: 0;
+}
+
+.ms-not-found-text {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  color: var(--p-mid, #57534e);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 380px;
+}
+
+/* ── Milestone category cards (select step) ── */
+
+.ms-cat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid var(--p-line, #e7e2da);
+  border-left: 4px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  text-align: left;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  overflow: hidden;
+}
+
+.ms-cat-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ms-cat-card.selected {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.ms-cat-icon {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 90px;
+  height: 90px;
+  opacity: 0.09;
+  pointer-events: none;
+}
+
+.ms-cat-card.selected .ms-cat-icon {
+  opacity: 0.14;
+}
+
+.ms-cat-card .s641-card-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding-right: 40px;
+}
+
+.ms-cat-card .s641-card-check {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Currency input prefix ── */
+
+.ms-currency-wrap {
+  position: relative;
+}
+
+.ms-currency-wrap .s641-input {
+  padding-left: 28px;
+}
+
+.ms-currency-prefix {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 15px;
+  color: var(--p-muted, #a8a29e);
+  pointer-events: none;
+}
+
+/* ── "Why milestones" learn-more link ── */
+
+.ms-learn-more {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--p-blue, #2456e3);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(36, 86, 227, 0.3);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 150ms ease;
+}
+
+.ms-learn-more:hover {
+  text-decoration-color: var(--p-blue, #2456e3);
+}
+
+/* ── Modal overlay ── */
+
+.ms-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 24px 48px;
+  animation: ms-fadeIn 200ms ease both;
+}
+
+.ms-modal {
+  position: relative;
+  background: var(--p-cream, #faf8f4);
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  animation: ms-slideUp 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ms-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  color: #44403c;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 150ms ease, color 150ms ease;
+  line-height: 0;
+}
+
+.ms-modal-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: #1c1917;
+}
+
+.ms-modal-title {
+  font-family: var(--display, 'GT Era Display', sans-serif);
+  font-weight: 600;
+  font-size: 22px;
+  color: #032040;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.ms-modal-body p {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: #032040;
+  margin: 0 0 12px;
+}
+
+.ms-modal-subhead {
+  font-weight: 600;
+  margin-top: 16px !important;
+}
+
+.ms-modal-list {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: #032040;
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+
+.ms-modal-list li {
+  margin-bottom: 10px;
+}
+
+.ms-modal-list strong {
+  color: var(--p-blue, #2456e3);
+}
+
+.ms-modal-closing {
+  font-style: italic;
+  color: var(--p-mid, #57534e) !important;
+}
+
+@keyframes ms-fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ms-slideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Dark mode overrides ── */
+
+.theme-dark .ms-section-header {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.theme-dark .ms-section-header h3,
+.theme-dark .ms-section-header p {
+  color: var(--p-ink, #e2e6eb);
+}
+
+.theme-dark .ms-checkpoint {
+  background: rgba(245, 101, 101, 0.08);
+  border-left-color: rgba(245, 101, 101, 0.6);
+}
+
+.theme-dark .ms-checkpoint-title {
+  color: #FCA5A5;
+}
+
+.theme-dark .ms-checkpoint-text {
+  color: #FECACA;
+}
+
+.theme-dark .ms-terms {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-dark .ms-terms p {
+  color: var(--p-mid, #8b8b8b);
+}

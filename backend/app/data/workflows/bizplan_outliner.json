@@ -1,0 +1,198 @@
+{
+  "id": "bizplan_outliner",
+  "name": "Business Planner",
+  "description": "Build a fundable, lender-ready business plan outline one section at a time",
+  "version": "1.0",
+  "icon": "\ud83d\udccb",
+
+  "persona": "You are a business plan consultant helping an SBDC advisor build a business plan outline with their entrepreneur client. Be thorough but conversational. Ask questions one group at a time (2-3 at once, not all at once), wait for answers, and acknowledge what you receive before asking more. Use the questions listed for each step as your guide, but adapt naturally based on what the user shares. When the user provides brief answers, ask follow-up questions to get more detail.",
+
+  "trigger": "start",
+  "advance_command": "next",
+  "cancel_command": "quit",
+
+  "intro_message": "**Welcome to the BizPlan Outliner!**\n\nI'll walk you through building a business plan outline, one section at a time.\n\n**How it works:**\n- I'll ask questions for each section of the business plan\n- Answer as much as you can \u2014 incomplete answers are fine, we can come back\n- Type **next** when you're ready to move to the next section\n- Type **quit** at any time to exit the workflow\n\nWe'll cover 9 sections, ending with the Executive Summary (which pulls everything together).\n\nPress **Start** when you're ready to begin!",
+
+  "steps": [
+    {
+      "id": "intake",
+      "title": "Basic Business Information",
+      "objective": "Gather foundational information about the business before diving into plan sections",
+      "instructions": "Ask these questions conversationally, two or three at a time. Acknowledge each answer warmly. This is the warm-up \u2014 keep it light and encouraging. Once you have all the basics, let the user know they can type 'next' to move to the first plan section.",
+      "questions": [
+        "What type of business is this? (industry, sector)",
+        "What products or services does the business offer (or plan to offer)?",
+        "What is the business name (or working name)?",
+        "Where is the business located (or planned location)?",
+        "What stage is the business in? (idea, startup, existing, expanding)"
+      ],
+      "what_is_needed": "Basic information about the business \u2014 name, type, location, and what it sells.",
+      "allow_skip": false
+    },
+    {
+      "id": "section_ii",
+      "title": "Company Description",
+      "section_number": "Section II",
+      "objective": "Build a clear description of what the company does, its mission, and its legal structure",
+      "instructions": "Guide the user through describing their company comprehensively. Reference any intake answers already collected \u2014 don't re-ask things they already told you. If they give short answers, ask follow-up questions to get more detail.",
+      "questions": [
+        "What is the company's mission statement or core purpose?",
+        "What legal structure is the business? (sole proprietorship, LLC, corporation, partnership, etc.)",
+        "When was (or will) the business be founded?",
+        "What problem does this business solve for its customers?",
+        "What makes this business different from competitors?",
+        "What are the short-term goals (1 year) and long-term goals (3-5 years)?"
+      ],
+      "description": "The Company Description gives readers a high-level understanding of your business \u2014 what it does, why it exists, and where it's headed.",
+      "examples": "Example: 'GreenLeaf Landscaping is an LLC founded in 2023 in Chico, CA. We provide sustainable landscaping services to residential customers in Butte County. Our mission is to make eco-friendly yard care affordable and accessible.'",
+      "what_is_needed": "Mission, legal structure, founding date, competitive advantage, goals."
+    },
+    {
+      "id": "section_iii",
+      "title": "Organization & Management",
+      "section_number": "Section III",
+      "objective": "Map out who runs the business and how it is structured",
+      "instructions": "Help the user think through their team and management structure. For solo entrepreneurs, focus on their own experience and any planned hires. For teams, map out the org chart. Ask about relevant education and industry experience.",
+      "questions": [
+        "Who owns the business? What is the ownership structure (percentages)?",
+        "Who are the key team members and what are their roles?",
+        "What relevant experience, education, or qualifications do the owners/managers bring?",
+        "Do you have (or plan to have) a board of directors or advisory board?",
+        "What positions do you need to fill, and what's your hiring timeline?",
+        "How is decision-making structured?"
+      ],
+      "description": "This section covers your team, ownership structure, and organizational hierarchy.",
+      "what_is_needed": "Ownership details, team bios, org chart, hiring plans, owner experience/education."
+    },
+    {
+      "id": "section_iv",
+      "title": "Market & Industry Analysis",
+      "section_number": "Section IV",
+      "objective": "Define the target market, industry landscape, and competitive positioning",
+      "instructions": "This is often the hardest section for entrepreneurs. Guide them through thinking about their market systematically. Help them identify at least three local competitors. If they struggle with market size, help them think through it logically (number of potential customers x average transaction). Encourage them to think about a SWOT analysis.",
+      "questions": [
+        "Who is your target customer? (demographics, location, income level, behavior)",
+        "How large is your target market? (number of potential customers, dollar size)",
+        "What industry trends are affecting your market right now?",
+        "Who are your three main local competitors? What do they do well and poorly?",
+        "What is your competitive advantage \u2014 why would customers choose you?",
+        "What are your business strengths, weaknesses, opportunities, and threats (SWOT)?",
+        "Are there any barriers to entry in this market?"
+      ],
+      "description": "Market Analysis demonstrates that you understand your industry, customers, and competition. Lenders want to see that you've done your homework.",
+      "what_is_needed": "Target customer profile, market size estimates, at least 3 competitor names, industry trends, SWOT analysis.",
+      "rag_query_hint": "market analysis resources small business planning"
+    },
+    {
+      "id": "section_v",
+      "title": "Products & Services",
+      "section_number": "Section V",
+      "objective": "Detail what the business sells, pricing logic, sourcing, and delivery",
+      "instructions": "Help the user articulate their offerings clearly. Push for specifics on pricing strategy, not just the price itself. Ask about the supply chain and delivery method. For service businesses, focus on service delivery process.",
+      "questions": [
+        "Describe each product or service you offer (or plan to offer)",
+        "What is the pricing strategy for each? How did you arrive at those prices?",
+        "How are products sourced, manufactured, or delivered?",
+        "What is the product/service lifecycle? (development stage, maturity, future versions)",
+        "Do you have any patents, trademarks, copyrights, or proprietary processes?",
+        "What future products or services are you planning?"
+      ],
+      "description": "This section provides detail on what you sell, how it's priced, how it's produced or delivered, and what makes it valuable.",
+      "what_is_needed": "Product/service details, pricing rationale, suppliers, delivery method, IP, future offerings."
+    },
+    {
+      "id": "section_vi",
+      "title": "Marketing & Sales Strategy",
+      "section_number": "Section VI",
+      "objective": "Define how the business will attract, convert, and retain customers",
+      "instructions": "Guide the user through their go-to-market strategy. Many small businesses skip this \u2014 help them think through each channel and tactic. Ask about both online and offline marketing. Push for specifics on the sales process from first contact to closed deal.",
+      "questions": [
+        "How will customers find out about your business? (list all marketing channels)",
+        "What is your sales process from first contact to closed deal?",
+        "Do you have a brand identity? (logo, tagline, brand values, brand story)",
+        "What is your marketing budget (monthly or annual)?",
+        "Which social media platforms will you use, and how often will you post?",
+        "How will you retain existing customers and encourage repeat business?",
+        "What partnerships or referral relationships will help drive sales?"
+      ],
+      "description": "Marketing & Sales explains how you will reach your customers, convert them into paying clients, and keep them coming back.",
+      "what_is_needed": "Marketing channels, sales process, brand details, budget, social media plan, partnerships.",
+      "rag_query_hint": "marketing strategy small business SBDC"
+    },
+    {
+      "id": "section_vii",
+      "title": "Financial Projections",
+      "section_number": "Section VII",
+      "objective": "Outline the financial forecast, startup costs, revenue model, and funding needs",
+      "instructions": "IMPORTANT: Do NOT provide specific financial advice. Help the user think through what financial information they need and what their projections look like at a high level. Recommend they work with the NorCal SBDC Finance Center for detailed financial projections and loan packaging. Focus on helping them organize their thinking, not calculating numbers.",
+      "questions": [
+        "What are your startup costs (or current monthly operating costs)?",
+        "What is your revenue model? How do you make money?",
+        "What are your revenue projections for Year 1, Year 2, and Year 3?",
+        "What are your major expense categories?",
+        "When do you expect to break even?",
+        "How much funding do you need, and what specifically will it be used for?",
+        "What funding sources are you considering? (SBA loans, conventional loans, investors, grants, personal savings)"
+      ],
+      "description": "Financial Projections show that your business can be profitable and that you understand the numbers. Lenders need to see realistic projections.",
+      "what_is_needed": "Startup costs, revenue model, 3-year projections, expense breakdown, funding request amount and use of funds.",
+      "rag_query_hint": "access to capital finance center SBA loans funding"
+    },
+    {
+      "id": "section_viii",
+      "title": "Fiscal Performance & Monitoring",
+      "section_number": "Section VIII",
+      "objective": "Define KPIs, reporting cadence, cash-flow monitoring, and financial controls",
+      "instructions": "For existing businesses, ask about current financial performance and monitoring practices. For pre-venture businesses, this section may be brief \u2014 focus on what KPIs they plan to track and how often. This section is about accountability and financial discipline.",
+      "questions": [
+        "What key performance indicators (KPIs) will you track? (revenue, profit margin, customer count, etc.)",
+        "How often will you review financial performance? (weekly, monthly, quarterly)",
+        "How will you monitor cash flow?",
+        "What financial controls or checks are in place? (bookkeeper, accountant, software)",
+        "If the business is already operating: what was last year's revenue and profit?",
+        "What decision checkpoints will trigger a strategy change? (e.g., if revenue drops below X)"
+      ],
+      "description": "This section shows lenders and stakeholders that you have a plan for monitoring and managing financial performance over time.",
+      "what_is_needed": "KPIs, reporting schedule, cash-flow monitoring plan, financial controls.",
+      "allow_skip": true
+    },
+    {
+      "id": "section_ix",
+      "title": "Project Plan & Milestones",
+      "section_number": "Section IX",
+      "objective": "Create a timeline of key milestones, objectives, resource allocation, and expected outcomes",
+      "instructions": "Help the user think in terms of concrete milestones with dates. This is the action plan that turns the business plan into an executable roadmap. Push for specific dates, not vague timelines.",
+      "questions": [
+        "What are the key milestones for the next 12 months? (with target dates)",
+        "What is the launch date (or next major milestone date)?",
+        "What are the critical tasks that must happen in order?",
+        "Who is responsible for each major task?",
+        "How will funding and resources be allocated across these milestones?",
+        "What are the biggest risks, and how will you mitigate them?",
+        "What does success look like at 6 months? 12 months? 3 years?"
+      ],
+      "description": "The Project Plan is your roadmap \u2014 concrete milestones, deadlines, responsibilities, resource allocation, and risk mitigation.",
+      "what_is_needed": "Timeline with dates, milestone list, task owners, resource plan, risk assessment."
+    },
+    {
+      "id": "section_i",
+      "title": "Executive Summary",
+      "section_number": "Section I",
+      "objective": "Synthesize everything collected into a compelling executive summary",
+      "instructions": "This is the LAST section written but the FIRST section in the final document. Use ALL previously collected data to draft a compelling executive summary. Offer to write a draft based on everything shared, then let the user refine it. The summary should hint at traction, opportunity, and the funding request. Keep it to 1-2 paragraphs. Ask who the primary audience is so you can tailor the tone.",
+      "questions": [
+        "Who is the primary audience for this business plan? (lender, investor, SBA loan application, personal roadmap)",
+        "Is there anything from our discussion that you want to especially emphasize or de-emphasize?",
+        "Would you like me to draft an executive summary based on everything we've covered?"
+      ],
+      "description": "The Executive Summary is the first thing readers see. It's a concise overview of the entire plan \u2014 written last because it summarizes everything else.",
+      "what_is_needed": "All previous sections completed. This section pulls it all together."
+    }
+  ],
+
+  "completion": {
+    "message": "**Congratulations!** You've completed the BizPlan Outliner. All nine sections of your business plan outline are done.\n\nYou can download the full outline below, or continue chatting to refine any section.",
+    "summary_instructions": "Generate a complete business plan outline in markdown format. Start with a title page that includes the business name and today's date. Organize by section number (Section I through Section IX, in order). For each section, write 2-4 clear paragraphs summarizing what the user provided during our conversation. Use professional business language suitable for a lender or investor audience. Include specific numbers, dates, and details where the user provided them. Format it so it can be copied directly into a business plan document. At the end, add a 'Next Steps' section recommending they work with their NorCal SBDC advisor to refine the full plan and connect with the Finance Center for financial projections.",
+    "export_format": "markdown"
+  }
+}

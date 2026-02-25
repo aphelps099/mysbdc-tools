@@ -1,0 +1,77 @@
+{
+  "id": "business-plan-review",
+  "title": "Business Plan Review",
+  "description": "Evaluate and strengthen a client's business plan.",
+  "category": "client-advising",
+  "tag": "Client Advising",
+  "tagColor": "blue",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "maxTokens": 2500
+  },
+  "body": [
+    { "type": "text", "content": "I'm reviewing a business plan for " },
+    {
+      "type": "token",
+      "id": "biz",
+      "label": "Business Name",
+      "placeholder": "e.g. Sunrise Bakery LLC",
+      "tip": "Client's business name"
+    },
+    { "type": "text", "content": ", a " },
+    {
+      "type": "token",
+      "id": "stage",
+      "label": "Business Stage",
+      "placeholder": "e.g. startup, growth-stage",
+      "tip": "Current stage of the business"
+    },
+    { "type": "text", "content": " business in the " },
+    {
+      "type": "token",
+      "id": "industry",
+      "label": "Industry",
+      "placeholder": "e.g. Food & Beverage",
+      "tip": "Primary industry"
+    },
+    { "type": "text", "content": " industry." },
+    { "type": "label", "content": "Plan Details" },
+    { "type": "text", "content": "The plan is being prepared for " },
+    {
+      "type": "pills",
+      "id": "audience",
+      "label": "Target Audience",
+      "options": ["SBA Lender", "Angel Investor", "Grant Application", "Internal Strategy"],
+      "allowCustom": true,
+      "tip": "Who will read this plan?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Key concern areas: " },
+    {
+      "type": "token",
+      "id": "concerns",
+      "label": "Concerns",
+      "placeholder": "e.g. financial projections, market analysis",
+      "tip": "What needs the most attention?"
+    },
+    { "type": "label", "content": "Business Plan Content" },
+    {
+      "type": "block",
+      "id": "planContent",
+      "label": "Plan Text",
+      "placeholder": "Paste the business plan text or key sections here...",
+      "tip": "The more detail you include, the better the review"
+    },
+    { "type": "or" },
+    {
+      "type": "upload",
+      "id": "planFile",
+      "label": "Upload Plan",
+      "accept": ".pdf,.docx,.txt",
+      "tip": "Upload the business plan document"
+    },
+    { "type": "static", "content": "Evaluate this business plan across six dimensions: executive summary clarity, market analysis depth, financial projection realism, competitive positioning, operational feasibility, and team/management strength. For each dimension, provide a rating (Strong, Adequate, Needs Work) and specific feedback. End with the top 3 priority improvements." }
+  ]
+}

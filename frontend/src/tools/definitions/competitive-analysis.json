@@ -1,0 +1,62 @@
+{
+  "id": "competitive-analysis",
+  "title": "Competitive Analysis",
+  "description": "Build a competitive landscape overview to help clients understand their market position.",
+  "category": "client-advising",
+  "tag": "Client Advising",
+  "tagColor": "blue",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "maxTokens": 2500
+  },
+  "body": [
+    { "type": "text", "content": "Help me build a competitive analysis for my SBDC client." },
+    { "type": "label", "content": "Client Business" },
+    { "type": "text", "content": "Business: " },
+    {
+      "type": "token",
+      "id": "biz",
+      "label": "Business Name",
+      "placeholder": "e.g. Sunrise Bakery LLC",
+      "tip": "Client's business name"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Industry: " },
+    {
+      "type": "token",
+      "id": "industry",
+      "label": "Industry",
+      "placeholder": "e.g. Food & Beverage",
+      "tip": "Business industry"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Location: " },
+    {
+      "type": "token",
+      "id": "location",
+      "label": "Location",
+      "placeholder": "e.g. Sacramento, CA",
+      "tip": "Where the business operates"
+    },
+    { "type": "label", "content": "Known Competitors" },
+    {
+      "type": "multi",
+      "id": "competitors",
+      "label": "Top Competitors",
+      "placeholder": "e.g. Main Street Bakery — established, strong foot traffic",
+      "max": 5,
+      "tip": "List competitors and what you know about them"
+    },
+    { "type": "label", "content": "Client's Edge" },
+    {
+      "type": "block",
+      "id": "differentiator",
+      "label": "What Makes Them Different",
+      "placeholder": "What does this business do better or differently than competitors? e.g. 'Only gluten-free bakery in the area, strong Instagram following, 20 years baking experience'",
+      "tip": "Unique strengths, specialties, or advantages"
+    },
+    { "type": "static", "content": "As an SBDC advisor, I need a competitive analysis framework I can walk through with my client. Please provide:\n\n1. Competitive Landscape Overview — summarize the market and where the client fits\n2. Competitor Comparison Matrix — a table comparing the client vs. competitors on key factors (price, quality, location, online presence, unique offerings)\n3. Client's Competitive Advantages — what they should lean into based on their differentiators\n4. Vulnerability Assessment — where competitors have an edge and what to watch for\n5. Positioning Recommendations — 3-5 specific strategies to strengthen their market position\n6. Discussion Questions — 5 questions to dig deeper with the client about their competitive situation\n\nKeep it practical and actionable. Use plain language suitable for a small business owner." }
+  ]
+}

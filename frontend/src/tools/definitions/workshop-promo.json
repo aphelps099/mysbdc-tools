@@ -1,0 +1,98 @@
+{
+  "id": "workshop-promo",
+  "title": "Workshop Promotion Generator",
+  "description": "Generate platform-specific promotional copy for SBDC workshops.",
+  "category": "communications",
+  "tag": "Communications",
+  "tagColor": "coral",
+  "version": "1.0",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "maxTokens": 2500
+  },
+  "body": [
+    { "type": "text", "content": "Generate promotional copy for this SBDC workshop:" },
+    { "type": "label", "content": "Workshop Details" },
+    { "type": "text", "content": "Topic: " },
+    {
+      "type": "token",
+      "id": "topic",
+      "label": "Workshop Topic",
+      "placeholder": "e.g. AI Tools for Small Business",
+      "tip": "Workshop title or topic"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Target audience: " },
+    {
+      "type": "token",
+      "id": "audience",
+      "label": "Target Audience",
+      "placeholder": "e.g. early-stage entrepreneurs",
+      "tip": "Who should attend?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Key learning outcome: " },
+    {
+      "type": "token",
+      "id": "outcome",
+      "label": "Primary Benefit",
+      "placeholder": "e.g. identify 3 AI tools to implement this week",
+      "tip": "What will attendees DO after?"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Length: " },
+    {
+      "type": "token",
+      "id": "length",
+      "label": "Workshop Length",
+      "placeholder": "e.g. 90 minutes",
+      "tip": "Duration"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Format: " },
+    {
+      "type": "pills",
+      "id": "format",
+      "label": "Format",
+      "options": ["In-Person", "Virtual", "Hybrid"],
+      "tip": "Delivery format"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Instructor: " },
+    {
+      "type": "token",
+      "id": "instructor",
+      "label": "Instructor",
+      "placeholder": "e.g. Jane Smith, SBDC Business Advisor",
+      "tip": "Name and credential"
+    },
+    { "type": "br" },
+    { "type": "text", "content": "Date/Time: " },
+    {
+      "type": "token",
+      "id": "datetime",
+      "label": "Date & Time",
+      "placeholder": "e.g. March 15, 2026, 10am-11:30am PT",
+      "tip": "When is the workshop?"
+    },
+    { "type": "label", "content": "Platforms" },
+    { "type": "text", "content": "Generate copy for: " },
+    {
+      "type": "token",
+      "id": "platforms",
+      "label": "Platforms",
+      "placeholder": "e.g. LinkedIn, Newsletter, Instagram",
+      "tip": "Which channels? (comma-separated)"
+    },
+    { "type": "label", "content": "Special Notes" },
+    {
+      "type": "block",
+      "id": "notes",
+      "label": "Special Notes",
+      "placeholder": "e.g. Free toolkit included, limited to 30 spots, SBA loan bonus session...",
+      "tip": "Any unique angle or detail"
+    },
+    { "type": "static", "content": "You are a marketing copywriter for the Northern California Small Business Development Center (NorCal SBDC), creating on-brand workshop promotion content under the \"Your Business People\" framework.\n\nBrand voice: direct and accessible, action-oriented, specific about outcomes, authentic.\n\nFor each platform requested, provide 3 variations following platform best practices:\n- LinkedIn: 200-300 words, professional tone, Hook > Content > Proof > CTA, 2-3 hashtags\n- Newsletter: 150-250 words, warm tone, subject line (40-60 chars), 3 key takeaways, CTA with deadline\n- Instagram: 150-200 words, energetic tone, emoji bullets, 5-7 hashtags, \"Link in bio\" CTA\n- Twitter/X: Under 280 chars, punchy and benefit-forward, 1-2 hashtags, urgency\n\nAlways lead with outcomes not features. Use specific numbers and timeframes. Use norcalsbdc.org/workshops as the registration link if none provided." }
+  ]
+}
