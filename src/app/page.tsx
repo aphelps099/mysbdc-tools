@@ -68,6 +68,17 @@ const tools = [
     ),
   },
   {
+    href: '/brand/email',
+    name: 'Email Templates',
+    description: 'Client onboarding emails, signatures, event campaigns, and newsletter templates — preview and reference.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+  },
+  {
     href: '/brand',
     name: 'Brand House',
     description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',
