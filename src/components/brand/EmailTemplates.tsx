@@ -635,6 +635,7 @@ export default function EmailTemplates() {
           </p>
         </div>
 
+        <div style={{ maxWidth: 360 }}>
         <a
           href="/brand/emails/email-signatures.html"
           target="_blank"
@@ -680,6 +681,7 @@ export default function EmailTemplates() {
             </div>
           </div>
         </a>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════════
