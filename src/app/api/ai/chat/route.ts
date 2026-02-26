@@ -4,7 +4,7 @@ import { CHAT_SYSTEM_LOCKED, CHAT_SYSTEM_UNLOCKED } from '@/lib/prompts/chat';
 export const dynamic = 'force-dynamic';
 
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-const MODEL = 'claude-sonnet-4-5-20241022';
+const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 2048;
 const MAX_RETRIES = 2;
 const RETRY_DELAY_MS = 1000;
