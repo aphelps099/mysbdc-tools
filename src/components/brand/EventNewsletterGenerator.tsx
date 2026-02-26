@@ -613,7 +613,7 @@ export default function EventNewsletterGenerator() {
     setAiLoading(true);
     setAiError('');
     try {
-      const res = await fetch('/api/newsletter-ai', {
+      const res = await fetch('/api/ai/newsletter-events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
