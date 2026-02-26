@@ -123,8 +123,9 @@ function SbdcLogo({ className = '' }: { className?: string }) {
   return (
     <svg
       className={`sbdc-logo ${className}`}
-      viewBox="0 0 222.28 106.92"
+      viewBox="-2 -14 226.28 122.92"
       xmlns="http://www.w3.org/2000/svg"
+      overflow="visible"
       style={{ width: '100%', height: 'auto' }}
     >
       <g>
