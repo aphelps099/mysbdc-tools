@@ -5,11 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>SBDC Day — NorCal SBDC</title>
-  <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+<style>
+
+        /* ── Brand Fonts (local) ── */
+        @font-face { font-family: 'GT Era Display'; src: url('/fonts/GT-Era-Display-Thin-Trial.otf') format('opentype'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'GT Era Display'; src: url('/fonts/GT-Era-Display-Light-Trial.otf') format('opentype'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'GT Era Display'; src: url('/fonts/GT-Era-Display-Medium-Trial.otf') format('opentype'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'GT Era Text'; src: url('/fonts/GT-Era-Text-Thin-Trial.otf') format('opentype'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'GT Era Text'; src: url('/fonts/GT-Era-Text-Medium-Trial.otf') format('opentype'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'GT Era Text'; src: url('/fonts/GT-Era-Text-Medium-Trial.otf') format('opentype'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'GT Era Text'; src: url('/fonts/GT-Era-Text-Bold-Trial.otf') format('opentype'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'GT Era Text'; src: url('/fonts/GT-Era-Text-Heavy-Trial.otf') format('opentype'); font-weight: 900; font-display: swap; }
+        @font-face { font-family: 'GT America'; src: url('/fonts/GT-America-Standard-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'GT America'; src: url('/fonts/GT-America-Standard-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'GT America'; src: url('/fonts/GT-America-Standard-Medium.otf') format('opentype'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'GT America'; src: url('/fonts/GT-America-Standard-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'GT America Mono'; src: url('/fonts/GT-America-Mono-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+
     body, table, td, p, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-    body { margin: 0; padding: 0; background: #0f1c2e; -webkit-font-smoothing: antialiased; font-family: 'proxima-nova', 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { margin: 0; padding: 0; background: #0f1c2e; -webkit-font-smoothing: antialiased; font-family: 'GT Era Text', 'GT America', -apple-system, sans-serif; }
 
     /* ── Page Chrome ── */
     .page-nav {
@@ -18,7 +32,7 @@
         display: flex; align-items: center;
         padding: 0 clamp(24px, 4vw, 48px);
         background: #0f1c2e;
-        font-family: 'proxima-nova', 'Proxima Nova', -apple-system, sans-serif;
+        font-family: 'GT Era Text', 'GT America', -apple-system, sans-serif;
     }
     .page-nav a.back-link {
         display: inline-flex; align-items: center; gap: 6px;
@@ -44,7 +58,7 @@
     }
     .page-hero-inner { max-width: 600px; }
     .page-hero .hero-crumb {
-        font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+        font-family: 'GT Era Text', 'GT America', -apple-system, sans-serif;
         font-size: 12px; font-weight: 300;
         color: rgba(255,255,255,0.3); margin-bottom: 20px;
     }
@@ -54,13 +68,13 @@
     }
     .page-hero .hero-crumb a:hover { color: rgba(255,255,255,0.7); }
     .page-hero h1 {
-        font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+        font-family: 'GT Era Display', 'GT America', sans-serif;
         font-size: clamp(28px, 4vw, 44px); font-weight: 200;
         color: #ffffff; letter-spacing: -0.03em;
         line-height: 1.08; margin: 0 0 16px;
     }
     .page-hero .hero-desc {
-        font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+        font-family: 'GT Era Text', 'GT America', -apple-system, sans-serif;
         font-size: 14px; font-weight: 300; line-height: 1.6;
         color: rgba(255,255,255,0.4); max-width: 480px; margin: 0;
     }
@@ -68,7 +82,7 @@
         padding: 40px clamp(24px, 4vw, 48px) 80px;
     }
 
-    .mono { font-family: 'Roboto Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace; }
+    .mono { font-family: 'JetBrains Mono', 'GT America Mono', monospace; }
 
     :root {
         --navy: #0F1C2E;
@@ -96,7 +110,7 @@
     }
 
     .email-label-left {
-        font-family: 'Roboto Mono', monospace;
+        font-family: 'JetBrains Mono', 'GT America Mono', monospace;
         font-size: 10px;
         font-weight: 600;
         letter-spacing: 0.15em;
@@ -105,7 +119,7 @@
     }
 
     .email-label-right {
-        font-family: 'Roboto Mono', monospace;
+        font-family: 'JetBrains Mono', 'GT America Mono', monospace;
         font-size: 9px;
         font-weight: 500;
         letter-spacing: 0.1em;
@@ -154,6 +168,9 @@
         body { padding: 16px !important; }
     }
   </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
