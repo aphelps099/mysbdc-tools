@@ -22,7 +22,7 @@ type SectionId = typeof SECTIONS[number]['id'];
 
 // ── Hero Stats ──
 const HERO_STATS = [
-  { num: '$547M', label: 'Capital Accessed' },
+  { num: '$549M', label: 'Capital Accessed' },
   { num: '$58', label: 'Return per $1' },
   { num: '16', label: 'Centers' },
   { num: '36', label: 'Counties Served' },
@@ -80,7 +80,7 @@ const RESOURCES = [
 // ── Value Proposition ──
 const VALUE_STATS = [
   { num: '$58', label: 'Return for every $1 invested in SBDC \u2014 SBA verified' },
-  { num: '$547M', label: 'Capital accessed by NorCal SBDC clients last year' },
+  { num: '$549M', label: 'Capital accessed by NorCal SBDC clients last year' },
   { num: '7,500+', label: 'Entrepreneurs served annually across the network' },
   { num: '20 yrs', label: 'Partnering with lenders across Northern California' },
 ] as const;
@@ -118,7 +118,7 @@ const PHRASES = [
   { label: 'CTA', text: 'Your business, funded.' },
   { label: 'Mission', text: 'We reach the businesses you want to fund.' },
   { label: 'Scale', text: '16 centers. 36 counties. One network.' },
-  { label: 'Impact', text: '$547M in capital accessed. That\u2019s your pipeline, strengthened.' },
+  { label: 'Impact', text: '$549M in capital accessed. That\u2019s your pipeline, strengthened.' },
 ] as const;
 
 // ── Mini Preview Mockups ──
