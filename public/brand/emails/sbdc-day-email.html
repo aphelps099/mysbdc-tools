@@ -13,19 +13,119 @@
 
     .mono { font-family: 'Roboto Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace; }
 
+    :root {
+        --navy: #0F1C2E;
+        --sky: #9EC4E0;
+        --pool: #8FC5D9;
+        --cream: #F5F2EB;
+        --maroon: #8A2432;
+    }
+
+    .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .email-label {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #0a0a0a;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .email-label-left {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--pool);
+    }
+
+    .email-label-right {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        color: #666;
+    }
+
+    .email-meta {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #f5f5f5;
+        padding: 20px 24px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .email-meta-row {
+        display: flex;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .email-meta-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .email-meta-label {
+        width: 70px;
+        color: #888;
+        font-weight: 500;
+    }
+
+    .email-meta-value {
+        color: #333;
+    }
+
+    .email-meta-value strong {
+        font-weight: 600;
+    }
+
     @media screen and (max-width: 600px) {
       .wrapper { width: 100% !important; }
       .headline { font-size: 44px !important; }
       .stat-number { font-size: 48px !important; }
     }
+
+    @media (max-width: 640px) {
+        body { padding: 16px !important; }
+    }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f8f7f4;">
+<body style="margin: 0; padding: 40px; background-color: #e8e8e8; -webkit-font-smoothing: antialiased;">
   
   <div style="display: none; max-height: 0; overflow: hidden;">
     300+ advisors. 18 centers. $547M in capital accessed. Today we celebrate the people behind the numbers.
   </div>
-  
+
+  <div class="email-label">
+      <div class="email-label-left">SBDC Day 2026</div>
+      <div class="email-label-right">Event Email</div>
+  </div>
+
+  <div class="email-meta">
+      <div class="email-meta-row">
+          <div class="email-meta-label">From:</div>
+          <div class="email-meta-value"><strong>NorCal SBDC</strong> &lt;hello@norcalsbdc.org&gt;</div>
+      </div>
+      <div class="email-meta-row">
+          <div class="email-meta-label">Subject:</div>
+          <div class="email-meta-value"><strong>Your Business People.</strong></div>
+      </div>
+      <div class="email-meta-row">
+          <div class="email-meta-label">Preview:</div>
+          <div class="email-meta-value">300+ advisors. 18 centers. $547M in capital accessed. Today we celebrate the people behind the numbers.</div>
+      </div>
+  </div>
+
+  <div class="email-container">
+
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f8f7f4;">
     <tr>
       <td align="center" style="padding: 40px 16px;">
@@ -164,6 +264,8 @@
       </td>
     </tr>
   </table>
-  
+
+  </div>
+
 </body>
 </html>

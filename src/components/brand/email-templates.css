@@ -3,8 +3,8 @@
    Prefix: et-
    ═══════════════════════════════════════════════════════ */
 
-/* ── Preview cards ── */
-.et-preview-card {
+/* ── Resource cards ── */
+.et-card {
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -12,53 +12,9 @@
   transition: box-shadow 0.35s ease,
               transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.et-preview-card:hover {
+.et-card:hover {
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.12);
   transform: translateY(-3px);
-}
-
-/* ── Iframe container ── */
-.et-iframe-wrap {
-  position: relative;
-  overflow: hidden;
-  background: #e8e8e8;
-}
-
-.et-iframe-wrap iframe {
-  border: none;
-  width: 600px;
-  transform-origin: top left;
-  pointer-events: none;
-}
-
-/* ── Onboarding sequence cards ── */
-.et-onboarding-card {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  transition: box-shadow 0.35s ease,
-              transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-}
-.et-onboarding-card:hover {
-  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.12);
-  transform: translateY(-3px);
-}
-
-/* ── Signature preview ── */
-.et-sig-wrap {
-  position: relative;
-  overflow: hidden;
-  border-radius: 0;
-  background: #0a0a0a;
-}
-
-.et-sig-wrap iframe {
-  border: none;
-  width: 900px;
-  transform-origin: top left;
-  pointer-events: none;
 }
 
 /* ── Tag badge ── */

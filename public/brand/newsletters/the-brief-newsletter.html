@@ -24,16 +24,52 @@
         
         body {
             font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #e0e0e0;
+            background: #1a1a1a;
             padding: 40px;
             -webkit-font-smoothing: antialiased;
         }
-        
+
+        .newsletter-label {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .newsletter-label-left {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--pool);
+        }
+
+        .newsletter-label-right {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: #666;
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 16px !important; }
+        }
+
         .newsletter {
             max-width: 600px;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.1);
         }
         
         /* =============================================
@@ -587,6 +623,11 @@
 </head>
 <body>
 
+    <div class="newsletter-label">
+        <div class="newsletter-label-left">The Brief · Newsletter</div>
+        <div class="newsletter-label-right">Monthly · 600px</div>
+    </div>
+    <div class="newsletter-container">
     <div class="newsletter">
         
         <!-- Anniversary Strip -->
@@ -785,6 +826,7 @@
         </div>
         
     </div>
+    </div><!-- /.newsletter-container -->
 
 </body>
 </html>
