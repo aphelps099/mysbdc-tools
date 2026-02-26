@@ -17,7 +17,7 @@ const SECTIONS = [
   { id: 'colors',     label: 'Colors' },
   { id: 'typography', label: 'Type' },
   { id: 'logo',       label: 'Logo' },
-  { id: 'voice',      label: 'Voice' },
+  { id: 'voice',      label: 'Voice & Messaging' },
   { id: 'journey',    label: 'Journey' },
   { id: 'programs',   label: 'Network' },
 ] as const;
@@ -55,6 +55,64 @@ const VOICE_ATTRIBUTES = [
     contrast: 'not passive',
     description: 'Every piece of messaging should move someone toward a next step. We connect, prepare, advise, and grow. Our language does something.',
   },
+] as const;
+
+// ── YBB Tagline Variants ──
+const TAGLINE_VARIANTS = [
+  {
+    word: 'People',
+    tagline: 'Your Business, People.',
+    description: 'Advising relationships, mentorship, and the human side of the network.',
+    color: '#8FC5D9',
+  },
+  {
+    word: 'Funded',
+    tagline: 'Your Business, Funded.',
+    description: 'Lender-facing materials, capital access campaigns, and financial readiness.',
+    color: '#1D5AA7',
+  },
+  {
+    word: 'Connected',
+    tagline: 'Your Business, Connected.',
+    description: 'Partnerships, referral networks, and ecosystem collaboration.',
+    color: '#0f1c2e',
+  },
+] as const;
+
+// ── Three Pillars ──
+const PILLARS = [
+  {
+    name: 'People',
+    sub: 'Your Business, People.',
+    description: 'The advisors, mentors, and specialists who show up for entrepreneurs every day. This pillar humanizes the network \u2014 it\u2019s not a program, it\u2019s people.',
+    proofs: ['200+ advisors across 16 centers', 'Industry specialists in manufacturing, tech, food & beverage', 'Bilingual advisors serving diverse communities'],
+    color: '#8FC5D9',
+  },
+  {
+    name: 'Funded',
+    sub: 'Your Business, Funded.',
+    description: 'Capital access is the engine. Loan packaging, SBA lending guidance, grant readiness, and investor connections that turn plans into action.',
+    proofs: ['$549M in capital accessed', 'Partnerships with 50+ lenders', 'SBA loan packaging with a strong approval rate'],
+    color: '#1D5AA7',
+  },
+  {
+    name: 'Connected',
+    sub: 'Your Business, Connected.',
+    description: 'The network effect. Workshops, peer cohorts, lender introductions, and referral pathways that plug entrepreneurs into the ecosystem they need.',
+    proofs: ['200+ workshops annually', 'Partnerships with chambers, cities, and EDCs', 'Referral network spanning 36 counties'],
+    color: '#0f1c2e',
+  },
+] as const;
+
+// ── Approved Language ──
+const APPROVED_LANGUAGE = [
+  { useThis: 'Your business, better', insteadOf: 'Add momentum', why: 'Our brand tagline \u2014 own it' },
+  { useThis: 'No-fee advising', insteadOf: 'Free consulting', why: 'Value without devaluing' },
+  { useThis: 'Entrepreneurs', insteadOf: 'Clients / customers', why: 'Centers the person' },
+  { useThis: 'Expert advisors', insteadOf: 'Counselors', why: 'Positions as knowledgeable peers' },
+  { useThis: 'Capital access', insteadOf: 'Loans / funding', why: 'Broader financial pathways' },
+  { useThis: 'NorCal SBDC', insteadOf: 'The SBDC', why: 'Consistent brand name' },
+  { useThis: 'Serving 36 counties', insteadOf: 'Regional', why: 'Specificity builds credibility' },
 ] as const;
 
 // ── Client Journey ──
@@ -206,12 +264,12 @@ function useActiveSection(): SectionId {
 export default function BrandHouse() {
   useScrollReveal();
   const activeSection = useActiveSection();
-  const [copiedHex, setCopiedHex] = useState<string | null>(null);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
 
-  const copyHex = useCallback((hex: string) => {
+  const copyToClipboard = useCallback((hex: string) => {
     navigator.clipboard.writeText(hex).catch(() => {});
-    setCopiedHex(hex);
-    setTimeout(() => setCopiedHex(null), 1500);
+    setCopiedText(hex);
+    setTimeout(() => setCopiedText(null), 1500);
   }, []);
 
   const scrollTo = useCallback((id: string) => {
@@ -466,8 +524,8 @@ export default function BrandHouse() {
           {PALETTE.map((color) => (
             <button
               key={color.hex}
-              className={`bh-swatch ${copiedHex === color.hex ? 'bh-copy-success' : ''}`}
-              onClick={() => copyHex(color.hex)}
+              className={`bh-swatch ${copiedText === color.hex ? 'bh-copy-success' : ''}`}
+              onClick={() => copyToClipboard(color.hex)}
               style={{
                 background: color.hex,
                 borderRadius: 16,
@@ -500,7 +558,7 @@ export default function BrandHouse() {
                 display: 'block',
                 marginTop: 10,
               }}>
-                {copiedHex === color.hex ? 'Copied!' : color.hex}
+                {copiedText === color.hex ? 'Copied!' : color.hex}
               </span>
               <span style={{
                 fontFamily: 'var(--era-text)',
@@ -769,63 +827,262 @@ export default function BrandHouse() {
       </section>
 
       {/* ════════════════════════════════════════════
-         S6: BRAND VOICE
+         S6: VOICE & MESSAGING
          ════════════════════════════════════════════ */}
       <section id="voice" className="bh-section" style={{ padding: '140px 24px', maxWidth: 1080, margin: '0 auto' }}>
-        <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Tone</span>
-        <h2 style={{
-          fontFamily: 'var(--display)',
-          fontSize: 'clamp(32px, 6vw, 64px)',
-          fontWeight: 100,
-          letterSpacing: '-0.035em',
-          color: 'var(--p-ink)',
-          margin: '16px 0 72px',
+        {/* ── Block 1: Primary Tagline ── */}
+        <span className="learn-kicker" style={{ color: 'var(--p-muted)' }}>Brand Platform</span>
+        <div
+          className="bh-tagline-display"
+          onClick={() => copyToClipboard('Your Business, Better.')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') copyToClipboard('Your Business, Better.'); }}
+          style={{ margin: '16px 0 24px' }}
+        >
+          <h2 style={{
+            fontFamily: 'var(--display)',
+            fontSize: 'clamp(40px, 8vw, 96px)',
+            fontWeight: 100,
+            letterSpacing: '-0.04em',
+            lineHeight: 1,
+            color: 'var(--p-ink)',
+            margin: 0,
+          }}>
+            Your Business, Better.
+          </h2>
+          <span style={{
+            fontFamily: 'var(--era-text)', fontSize: 10, fontWeight: 500,
+            letterSpacing: '0.06em', color: 'var(--p-muted)',
+            display: 'inline-block', marginTop: 12,
+          }}>
+            {copiedText === 'Your Business, Better.' ? 'Copied!' : 'Click to copy'}
+          </span>
+        </div>
+        <p style={{
+          fontFamily: 'var(--era-text)',
+          fontSize: 15,
+          color: 'var(--p-mid)',
+          lineHeight: 1.7,
+          maxWidth: 560,
+          marginBottom: 72,
         }}>
-          Brand Voice
-        </h2>
+          The signature brand platform that unifies every NorCal SBDC message under one promise:
+          we meet you where you are and move your business forward.
+        </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {VOICE_ATTRIBUTES.map((attr, i) => (
+        {/* ── Block 2: Tagline Variants ── */}
+        <div className="bh-variant-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 12,
+          marginBottom: 24,
+        }}>
+          {TAGLINE_VARIANTS.map((v) => (
             <div
-              key={attr.trait}
-              className="bh-voice-card bh-voice-layout"
+              key={v.word}
+              className="bh-variant-card"
+              onClick={() => copyToClipboard(v.tagline)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter') copyToClipboard(v.tagline); }}
               style={{
-                padding: '44px 0',
-                borderBottom: i < VOICE_ATTRIBUTES.length - 1 ? '1px solid var(--p-line, #e7e2da)' : 'none',
-                display: 'grid',
-                gridTemplateColumns: '200px 1fr',
-                gap: 32,
-                alignItems: 'baseline',
+                background: 'var(--p-cream, #faf8f4)',
+                borderRadius: 12,
+                padding: '28px 24px 24px',
+                borderLeft: `3px solid ${v.color}`,
               }}
             >
-              <div>
-                <h3 style={{
-                  fontFamily: 'var(--display)',
-                  fontSize: 'clamp(26px, 3.5vw, 40px)',
-                  fontWeight: 300,
-                  color: 'var(--p-ink)',
-                  margin: 0,
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.1,
-                }}>
-                  {attr.trait}
-                </h3>
-                <span style={{
-                  fontFamily: 'var(--era-text)', fontSize: 10, fontWeight: 500, letterSpacing: '0.08em',
-                  color: 'var(--p-muted)', textTransform: 'uppercase' as const,
-                  display: 'block', marginTop: 6,
-                }}>
-                  {attr.contrast}
-                </span>
+              <div style={{
+                fontFamily: 'var(--display)',
+                fontSize: 'clamp(18px, 2.5vw, 24px)',
+                fontWeight: 300,
+                color: 'var(--p-ink)',
+                letterSpacing: '-0.02em',
+                marginBottom: 10,
+              }}>
+                {v.tagline}
               </div>
               <p style={{
-                fontFamily: 'var(--era-text)', fontSize: 15, color: 'var(--p-mid)',
-                lineHeight: 1.7, margin: 0, maxWidth: 520,
+                fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)',
+                lineHeight: 1.5, margin: 0,
               }}>
-                {attr.description}
+                {v.description}
               </p>
+              <span style={{
+                fontFamily: 'var(--era-text)', fontSize: 9, fontWeight: 500,
+                letterSpacing: '0.06em', color: 'var(--p-muted)',
+                display: 'block', marginTop: 12,
+              }}>
+                {copiedText === v.tagline ? 'Copied!' : 'Click to copy'}
+              </span>
             </div>
           ))}
+        </div>
+        <p style={{
+          fontFamily: 'var(--era-text)', fontSize: 12, color: 'var(--p-muted)',
+          lineHeight: 1.5, marginBottom: 96,
+        }}>
+          Always include the comma. Always include the period. Structure: <strong style={{ color: 'var(--p-ink)' }}>Your Business, [Word].</strong>
+        </p>
+
+        {/* ── Block 3: Three Pillars ── */}
+        <h3 style={{
+          fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
+          color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
+        }}>
+          The Three Pillars
+        </h3>
+        <div className="bh-pillar-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 12,
+          marginBottom: 96,
+        }}>
+          {PILLARS.map((pillar) => (
+            <div
+              key={pillar.name}
+              className="bh-pillar-card"
+              style={{
+                background: 'var(--p-cream, #faf8f4)',
+                borderRadius: 12,
+                padding: '0 24px 24px',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Accent bar */}
+              <div style={{
+                height: 3,
+                background: pillar.color,
+                margin: '0 -24px 24px',
+              }} />
+              <h4 style={{
+                fontFamily: 'var(--display)', fontSize: 20, fontWeight: 300,
+                color: 'var(--p-ink)', margin: '0 0 4px', letterSpacing: '-0.01em',
+              }}>
+                {pillar.name}
+              </h4>
+              <span style={{
+                fontFamily: 'var(--era-text)', fontSize: 11, fontWeight: 500,
+                color: 'var(--p-muted)', display: 'block', marginBottom: 14,
+              }}>
+                {pillar.sub}
+              </span>
+              <p style={{
+                fontFamily: 'var(--era-text)', fontSize: 13, color: 'var(--p-mid)',
+                lineHeight: 1.6, margin: '0 0 16px',
+              }}>
+                {pillar.description}
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {pillar.proofs.map((proof) => (
+                  <span key={proof} style={{
+                    fontFamily: 'var(--era-text)', fontSize: 11, fontWeight: 500,
+                    color: 'var(--p-mid)', display: 'flex', alignItems: 'baseline', gap: 6,
+                  }}>
+                    <span style={{ color: pillar.color, fontSize: 8, flexShrink: 0 }}>&bull;</span>
+                    {proof}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Block 4: Voice & Tone ── */}
+        <div style={{
+          borderTop: '1px solid var(--p-line, #e7e2da)',
+          paddingTop: 72,
+          marginBottom: 96,
+        }}>
+          <h3 style={{
+            fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
+            color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
+          }}>
+            Voice &amp; Tone
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {VOICE_ATTRIBUTES.map((attr, i) => (
+              <div
+                key={attr.trait}
+                className="bh-voice-card bh-voice-layout"
+                style={{
+                  padding: '44px 0',
+                  borderBottom: i < VOICE_ATTRIBUTES.length - 1 ? '1px solid var(--p-line, #e7e2da)' : 'none',
+                  display: 'grid',
+                  gridTemplateColumns: '200px 1fr',
+                  gap: 32,
+                  alignItems: 'baseline',
+                }}
+              >
+                <div>
+                  <h4 style={{
+                    fontFamily: 'var(--display)',
+                    fontSize: 'clamp(26px, 3.5vw, 40px)',
+                    fontWeight: 300,
+                    color: 'var(--p-ink)',
+                    margin: 0,
+                    letterSpacing: '-0.025em',
+                    lineHeight: 1.1,
+                  }}>
+                    {attr.trait}
+                  </h4>
+                  <span style={{
+                    fontFamily: 'var(--era-text)', fontSize: 10, fontWeight: 500, letterSpacing: '0.08em',
+                    color: 'var(--p-muted)', textTransform: 'uppercase' as const,
+                    display: 'block', marginTop: 6,
+                  }}>
+                    {attr.contrast}
+                  </span>
+                </div>
+                <p style={{
+                  fontFamily: 'var(--era-text)', fontSize: 15, color: 'var(--p-mid)',
+                  lineHeight: 1.7, margin: 0, maxWidth: 520,
+                }}>
+                  {attr.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Block 5: Approved Language ── */}
+        <h3 style={{
+          fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
+          color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
+        }}>
+          Approved Language
+        </h3>
+        <p style={{
+          fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
+          lineHeight: 1.6, maxWidth: 480, marginBottom: 32,
+        }}>
+          Consistent terminology strengthens the brand. Use these substitutions across all communications.
+        </p>
+        <div style={{
+          background: 'var(--p-cream, #faf8f4)',
+          borderRadius: 12,
+          overflow: 'hidden',
+          border: '1px solid var(--p-line, #e7e2da)',
+        }}>
+          <table className="bh-lang-table">
+            <thead>
+              <tr>
+                <th>Use This</th>
+                <th>Instead Of</th>
+                <th className="bh-lang-why">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {APPROVED_LANGUAGE.map((row) => (
+                <tr key={row.useThis}>
+                  <td className="bh-lang-use">{row.useThis}</td>
+                  <td className="bh-lang-instead">{row.insteadOf}</td>
+                  <td className="bh-lang-why">{row.why}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
