@@ -63,7 +63,7 @@ const RESOURCES = [
     meta: 'Ads \u00b7 Multiple Formats',
     badge: 'Ad Grid',
     badgePool: true,
-    href: '/brand/lender-guides/partner-lender-content-wall.html',
+    href: '/brand/content-wall',
     preview: 'wall',
   },
   {
@@ -295,10 +295,10 @@ export default function LenderResources() {
           href="/brand"
           className="shrink-0 no-underline"
           style={{
-            fontFamily: 'var(--mono)',
+            fontFamily: 'var(--era-text)',
             color: 'var(--p-muted, #a8a29e)',
             fontSize: 10,
-            fontWeight: 400,
+            fontWeight: 500,
             letterSpacing: '0.1em',
             textTransform: 'uppercase' as const,
             marginRight: 20,
@@ -316,9 +316,9 @@ export default function LenderResources() {
             onClick={() => scrollTo(id)}
             className={`bh-nav-item cursor-pointer whitespace-nowrap shrink-0 ${activeSection === id ? 'bh-active' : ''}`}
             style={{
-              fontFamily: 'var(--mono)',
+              fontFamily: 'var(--era-text)',
               fontSize: 10,
-              fontWeight: activeSection === id ? 700 : 400,
+              fontWeight: activeSection === id ? 700 : 500,
               letterSpacing: '0.08em',
               textTransform: 'uppercase' as const,
               padding: '20px 12px',
