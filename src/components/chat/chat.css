@@ -245,6 +245,49 @@
   cursor: not-allowed;
 }
 
+/* ── Mic button ── */
+.chat-mic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary, #8a8a8a);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--duration-fast, 150ms) var(--ease);
+}
+
+.chat-mic-btn:hover:not(:disabled) {
+  color: var(--royal, #1D5AA7);
+  background: var(--cream, #f0efeb);
+}
+
+.chat-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chat-mic-btn--active {
+  color: #ffffff;
+  background: var(--brick, #a82039);
+  animation: chatMicPulse 1.5s ease-in-out infinite;
+}
+
+.chat-mic-btn--active:hover:not(:disabled) {
+  background: #8a1a2f;
+  color: #ffffff;
+}
+
+/* Textarea glow when listening */
+.chat-textarea--listening {
+  border-color: var(--brick, #a82039);
+  box-shadow: 0 0 0 2px rgba(168, 32, 57, 0.15);
+}
+
 /* ── Unlock toast ── */
 .chat-unlock-toast {
   position: fixed;
@@ -266,6 +309,15 @@
 }
 
 /* ── Animations ── */
+@keyframes chatMicPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(168, 32, 57, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(168, 32, 57, 0);
+  }
+}
+
 @keyframes chatFadeIn {
   from {
     opacity: 0;
@@ -474,7 +526,8 @@
     opacity: 0.6;
   }
 
-  .chat-attach-btn {
+  .chat-attach-btn,
+  .chat-mic-btn {
     width: 36px;
     height: 36px;
   }
