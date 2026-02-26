@@ -8,7 +8,7 @@
   flex-direction: column;
   height: 100dvh;
   background: var(--cream, #f0efeb);
-  font-family: var(--sans);
+  font-family: var(--display);
 }
 
 /* ── Header bar ── */
@@ -47,7 +47,7 @@
 }
 
 .chat-title {
-  font-family: var(--sans);
+  font-family: var(--display);
   font-size: 16px;
   font-weight: 500;
   color: var(--navy, #0f1c2e);
@@ -198,7 +198,7 @@
   border: 1px solid var(--rule, rgba(0, 0, 0, 0.12));
   border-radius: var(--radius-lg, 12px);
   padding: 14px 18px;
-  font-family: var(--sans);
+  font-family: var(--display);
   font-size: 18px;
   font-weight: 300;
   line-height: 1.5;
