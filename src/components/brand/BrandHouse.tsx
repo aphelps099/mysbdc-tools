@@ -355,7 +355,7 @@ export default function BrandHouse() {
         }}
       >
         {/* Animated SVG Logo — draws itself via .sbdc-logo in globals.css */}
-        <div style={{ width: 'clamp(200px, 40vw, 340px)', marginBottom: 64 }}>
+        <div style={{ width: 'clamp(140px, 28vw, 240px)', marginBottom: 56 }}>
           <SbdcLogo />
         </div>
 
@@ -1481,85 +1481,117 @@ export default function BrandHouse() {
             style={{
               background: 'var(--p-sand, #f3efe8)',
               borderRadius: 20,
-              padding: 'clamp(32px, 5vw, 56px)',
               maxWidth: 640,
               width: '100%',
-              maxHeight: '80vh',
-              overflow: 'auto',
-              position: 'relative',
+              maxHeight: '85vh',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
               boxShadow: '0 40px 80px -20px rgba(0,0,0,0.3)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setShowLangModal(false)}
-              style={{
-                position: 'absolute',
-                top: 20,
-                right: 20,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--p-muted)',
-                padding: 4,
-              }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-
-            <span style={{
-              fontFamily: 'var(--era-text)', fontSize: 10, fontWeight: 700,
-              letterSpacing: '0.1em', textTransform: 'uppercase' as const,
-              color: 'var(--p-muted)', display: 'block', marginBottom: 12,
-            }}>
-              Brand Guidelines
-            </span>
-            <h3 style={{
-              fontFamily: 'var(--display)', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 100,
-              color: 'var(--p-ink)', margin: '0 0 12px', letterSpacing: '-0.025em',
-            }}>
-              Approved Language
-            </h3>
-            <p style={{
-              fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
-              lineHeight: 1.6, maxWidth: 480, margin: '0 0 32px',
-            }}>
-              Consistent terminology strengthens the brand. Use these substitutions across all communications.
-            </p>
+            {/* Modal Header */}
             <div style={{
-              background: 'var(--p-cream, #faf8f4)',
-              borderRadius: 12,
-              overflow: 'hidden',
-              border: '1px solid var(--p-line, #e7e2da)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              padding: '16px 24px',
+              borderBottom: '1px solid var(--p-line, #e7e2da)',
+              flexShrink: 0,
             }}>
-              <table className="bh-lang-table">
-                <thead>
-                  <tr>
-                    <th>Use This</th>
-                    <th>Instead Of</th>
-                    <th className="bh-lang-why">Why</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {APPROVED_LANGUAGE.map((row) => (
-                    <tr key={row.useThis}>
-                      <td className="bh-lang-use">{row.useThis}</td>
-                      <td className="bh-lang-instead">{row.insteadOf}</td>
-                      <td className="bh-lang-why">{row.why}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <button
+                onClick={() => setShowLangModal(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--p-muted)',
+                  padding: '4px 8px',
+                  borderRadius: 6,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  fontFamily: 'var(--era-text)',
+                  fontSize: 12,
+                  fontWeight: 500,
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--p-ink, #1a1a1a)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--p-muted)'; }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+                Back
+              </button>
+              <div style={{ width: 1, height: 16, background: 'var(--p-line, #e7e2da)' }} />
+              <span style={{
+                fontFamily: 'var(--era-text)', fontSize: 11, fontWeight: 500,
+                color: 'var(--p-muted)', letterSpacing: '0.02em',
+              }}>
+                Brand House
+              </span>
+              <span style={{ color: 'var(--p-line)', fontSize: 11 }}>/</span>
+              <span style={{
+                fontFamily: 'var(--era-text)', fontSize: 11, fontWeight: 600,
+                color: 'var(--p-ink)',
+              }}>
+                Voice &amp; Messaging
+              </span>
             </div>
 
-            <p style={{
-              fontFamily: 'var(--era-text)', fontSize: 12, color: 'var(--p-muted)',
-              marginTop: 20, fontStyle: 'italic',
+            {/* Modal Body */}
+            <div style={{
+              padding: 'clamp(28px, 5vw, 48px)',
+              overflow: 'auto',
+              flex: 1,
             }}>
-              Always use &ldquo;NorCal SBDC&rdquo; &mdash; never &ldquo;the SBDC.&rdquo; Comma before &ldquo;better.&rdquo; Period at the end.
-            </p>
+              <h3 style={{
+                fontFamily: 'var(--display)', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 100,
+                color: 'var(--p-ink)', margin: '0 0 12px', letterSpacing: '-0.025em',
+              }}>
+                Approved Language
+              </h3>
+              <p style={{
+                fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
+                lineHeight: 1.6, maxWidth: 480, margin: '0 0 32px',
+              }}>
+                Consistent terminology strengthens the brand. Use these substitutions across all communications.
+              </p>
+              <div style={{
+                background: 'var(--p-cream, #faf8f4)',
+                borderRadius: 12,
+                overflow: 'hidden',
+                border: '1px solid var(--p-line, #e7e2da)',
+              }}>
+                <table className="bh-lang-table">
+                  <thead>
+                    <tr>
+                      <th>Use This</th>
+                      <th>Instead Of</th>
+                      <th className="bh-lang-why">Why</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {APPROVED_LANGUAGE.map((row) => (
+                      <tr key={row.useThis}>
+                        <td className="bh-lang-use">{row.useThis}</td>
+                        <td className="bh-lang-instead">{row.insteadOf}</td>
+                        <td className="bh-lang-why">{row.why}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p style={{
+                fontFamily: 'var(--era-text)', fontSize: 12, color: 'var(--p-muted)',
+                marginTop: 20, fontStyle: 'italic',
+              }}>
+                Always use &ldquo;NorCal SBDC&rdquo; &mdash; never &ldquo;the SBDC.&rdquo; Comma before &ldquo;better.&rdquo; Period at the end.
+              </p>
+            </div>
           </div>
         </div>
       )}
