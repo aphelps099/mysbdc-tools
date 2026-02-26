@@ -1,66 +1,49 @@
 /* ═══════════════════════════════════════════════════════
    Brand House — Premium Creative System
-   Prefix: bh-  (collision-free)
+   Prefix: bh-
    ═══════════════════════════════════════════════════════ */
 
-/* ── Scroll-triggered reveal — editorial pace ── */
+/* ── Scroll-triggered reveal ── */
 @keyframes bhReveal {
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: none; }
 }
-
-.bh-section {
-  opacity: 0;
-}
-
+.bh-section { opacity: 0; }
 .bh-section.bh-visible {
   animation: bhReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ── Stagger within revealed sections ── */
+/* ── Stagger ── */
 .bh-stagger-1.bh-visible { animation-delay: 0.06s; }
 .bh-stagger-2.bh-visible { animation-delay: 0.12s; }
 .bh-stagger-3.bh-visible { animation-delay: 0.18s; }
 .bh-stagger-4.bh-visible { animation-delay: 0.24s; }
 .bh-stagger-5.bh-visible { animation-delay: 0.30s; }
 
-/* ── Hero — cinematic entrance ── */
+/* ── Hero — cinematic entrance (delays for post-SVG-draw) ── */
 @keyframes bhHeroType {
-  from { opacity: 0; transform: translateY(48px); filter: blur(6px); }
+  from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
   to   { opacity: 1; transform: none; filter: blur(0); }
 }
-
 @keyframes bhLineGrow {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
 }
-
 @keyframes bhFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+/* SVG logo draws 0–1.3s, then text sequence follows */
 .bh-hero-title {
-  animation: bhHeroType 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  animation: bhHeroType 1s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both;
 }
-
 .bh-hero-rule {
   transform-origin: center;
-  animation: bhLineGrow 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+  animation: bhLineGrow 0.7s cubic-bezier(0.22, 1, 0.36, 1) 2.1s both;
 }
-
 .bh-hero-sub {
-  animation: bhFadeIn 0.8s ease 1.2s both;
-}
-
-/* ── Scroll indicator ── */
-@keyframes bhBounce {
-  0%, 100% { transform: translateY(0); opacity: 0.3; }
-  50%      { transform: translateY(8px); opacity: 0.7; }
-}
-
-.bh-scroll-indicator {
-  animation: bhBounce 2.5s ease-in-out infinite;
+  animation: bhFadeIn 0.7s ease 2.5s both;
 }
 
 /* ── Grain texture overlay ── */
@@ -70,7 +53,6 @@
   50% { transform: translate(2%, 1%); }
   75% { transform: translate(-1%, 2%); }
 }
-
 .bh-grain::before {
   content: '';
   position: absolute;
@@ -83,6 +65,15 @@
   animation: bhGrain 8s steps(10) infinite;
 }
 
+/* ── Scroll indicator ── */
+@keyframes bhBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50%      { transform: translateY(8px); opacity: 0.7; }
+}
+.bh-scroll-indicator {
+  animation: bhBounce 2.5s ease-in-out infinite;
+}
+
 /* ── Color swatches ── */
 .bh-swatch {
   cursor: pointer;
@@ -93,7 +84,6 @@
   transform: translateY(-4px);
   box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
 }
-
 @keyframes bhCopyPulse {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.03); }
@@ -104,13 +94,8 @@
 }
 
 /* ── Sticky nav ── */
-.bh-nav {
-  scrollbar-width: none;
-}
-.bh-nav::-webkit-scrollbar {
-  display: none;
-}
-
+.bh-nav { scrollbar-width: none; }
+.bh-nav::-webkit-scrollbar { display: none; }
 .bh-nav-item {
   position: relative;
   transition: color 0.25s ease;
@@ -150,16 +135,35 @@
   transform: translateY(-2px);
 }
 
-/* ── Voice card hover ── */
+/* ── Voice cards ── */
 .bh-voice-card {
   transition: background 0.3s ease;
   border-radius: 4px;
 }
 
-/* ── Journey stage hover ── */
-.bh-stage {
-  transition: background 0.3s ease;
-  border-radius: 8px;
+/* ── Journey architecture diagram ── */
+.bh-journey-flow {
+  display: flex;
+  position: relative;
+}
+.bh-journey-connector {
+  position: absolute;
+  top: 27px;
+  left: 48px;
+  right: 48px;
+  height: 2px;
+  background: var(--p-line, #e7e2da);
+  z-index: 1;
+}
+.bh-journey-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 0 8px;
 }
 
 /* ── Program cards ── */
@@ -175,9 +179,7 @@
 }
 
 /* ── Smooth scroll ── */
-.bh-scroll {
-  scroll-behavior: smooth;
-}
+.bh-scroll { scroll-behavior: smooth; }
 
 /* ── Mobile responsive ── */
 @media (max-width: 768px) {
@@ -196,6 +198,25 @@
   }
   .bh-partner-grid {
     grid-template-columns: 1fr !important;
+  }
+  /* Journey: vertical on mobile */
+  .bh-journey-flow {
+    flex-direction: column !important;
+  }
+  .bh-journey-connector {
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 27px !important;
+    right: unset !important;
+    width: 2px !important;
+    height: auto !important;
+  }
+  .bh-journey-stage {
+    flex-direction: row !important;
+    text-align: left !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+    padding: 24px 0 !important;
   }
 }
 
