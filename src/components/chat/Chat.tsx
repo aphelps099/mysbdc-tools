@@ -56,6 +56,9 @@ function readFileAsText(file: File): Promise<string> {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SpeechRecognitionInstance = any;
+
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState('');
@@ -65,10 +68,13 @@ export default function Chat() {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [files, setFiles] = useState<FileAttachment[]>([]);
   const [fileError, setFileError] = useState('');
+  const [isListening, setIsListening] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance>(null);
+  const inputBeforeVoiceRef = useRef('');
 
   // Auto-scroll to bottom on new messages or streaming content
   const scrollToBottom = useCallback(() => {
@@ -159,6 +165,80 @@ export default function Chat() {
 
   const removeFile = useCallback((idx: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
+  }, []);
+
+  // ── Voice-to-text ──
+  const toggleVoice = useCallback(() => {
+    // Stop if already listening
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setFileError('Speech recognition is not supported in this browser');
+      setTimeout(() => setFileError(''), 5000);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    // Capture whatever text is already in the input before we start
+    inputBeforeVoiceRef.current = input;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: { results: Iterable<unknown> | ArrayLike<unknown>; }) => {
+      let finalTranscript = '';
+      let interimTranscript = '';
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Array.from(event.results).forEach((result: any) => {
+        if (result.isFinal) {
+          finalTranscript += result[0].transcript;
+        } else {
+          interimTranscript += result[0].transcript;
+        }
+      });
+
+      const prefix = inputBeforeVoiceRef.current;
+      const separator = prefix && !prefix.endsWith(' ') ? ' ' : '';
+      const voiceText = finalTranscript + interimTranscript;
+      setInput(prefix + separator + voiceText);
+    };
+
+    recognition.onerror = (event: { error: string }) => {
+      if (event.error !== 'aborted') {
+        setFileError(`Voice error: ${event.error}`);
+        setTimeout(() => setFileError(''), 5000);
+      }
+      recognitionRef.current = null;
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      recognitionRef.current = null;
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  }, [input]);
+
+  // Clean up speech recognition on unmount
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
   }, []);
 
   // ── Handle submit ──
@@ -423,19 +503,43 @@ export default function Chat() {
 
           <textarea
             ref={textareaRef}
-            className="chat-textarea"
+            className={`chat-textarea${isListening ? ' chat-textarea--listening' : ''}`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={
-              unlocked
-                ? 'Ask anything...'
-                : 'Draft a social post, email, talking points...'
+              isListening
+                ? 'Listening...'
+                : unlocked
+                  ? 'Ask anything...'
+                  : 'Draft a social post, email, talking points...'
             }
             disabled={isStreaming}
             rows={1}
             aria-label="Chat message"
           />
+
+          {/* Mic button */}
+          <button
+            type="button"
+            className={`chat-mic-btn${isListening ? ' chat-mic-btn--active' : ''}`}
+            onClick={toggleVoice}
+            disabled={isStreaming}
+            aria-label={isListening ? 'Stop listening' : 'Start voice input'}
+          >
+            {isListening ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" x2="12" y1="19" y2="22" />
+              </svg>
+            )}
+          </button>
+
           <button
             type="submit"
             className="chat-send-btn"
