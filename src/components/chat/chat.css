@@ -141,10 +141,12 @@
 }
 
 .chat-bubble--assistant {
+  position: relative;
   background: var(--white, #ffffff);
   color: var(--navy, #0f1c2e);
   border-bottom-left-radius: 6px;
   box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08));
+  padding-bottom: 32px;
 }
 
 /* ── Streaming indicator (three dots) ── */
@@ -308,6 +310,147 @@
   }
 }
 
+/* ── Copy button on assistant bubbles ── */
+.chat-copy-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  background: transparent;
+  color: var(--text-tertiary, #8a8a8a);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--duration-fast, 150ms) var(--ease),
+              background var(--duration-fast, 150ms) var(--ease),
+              color var(--duration-fast, 150ms) var(--ease);
+}
+
+.chat-bubble--assistant:hover .chat-copy-btn {
+  opacity: 1;
+}
+
+.chat-copy-btn:hover {
+  background: var(--cream, #f0efeb);
+  color: var(--text-primary, #0a1528);
+}
+
+.chat-copy-btn--copied {
+  opacity: 1;
+  color: #16a34a;
+}
+
+.chat-copy-btn--copied:hover {
+  color: #16a34a;
+  background: transparent;
+}
+
+/* ── File upload ── */
+.chat-file-input-hidden {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-attach-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary, #8a8a8a);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--duration-fast, 150ms) var(--ease),
+              background var(--duration-fast, 150ms) var(--ease);
+}
+
+.chat-attach-btn:hover:not(:disabled) {
+  color: var(--royal, #1D5AA7);
+  background: var(--cream, #f0efeb);
+}
+
+.chat-attach-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── File chips bar ── */
+.chat-files-bar {
+  max-width: var(--chat-max-width, 1600px);
+  margin: 0 auto 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chat-file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 10px;
+  background: var(--cream, #f0efeb);
+  border: 1px solid var(--rule, rgba(0, 0, 0, 0.12));
+  border-radius: 999px;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--text-secondary, #4a5568);
+  line-height: 1;
+}
+
+.chat-file-chip-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-file-chip-size {
+  color: var(--text-tertiary, #8a8a8a);
+  font-size: 10px;
+}
+
+.chat-file-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-tertiary, #8a8a8a);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--duration-fast, 150ms) var(--ease),
+              background var(--duration-fast, 150ms) var(--ease);
+}
+
+.chat-file-chip-remove:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--brick, #a82039);
+}
+
+/* ── File error ── */
+.chat-file-error {
+  max-width: var(--chat-max-width, 1600px);
+  margin: 0 auto 8px;
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  color: var(--brick, #a82039);
+  padding: 0 4px;
+}
+
 /* ── Mobile adjustments ── */
 @media (max-width: 640px) {
   .chat-bubble {
@@ -325,5 +468,18 @@
 
   .chat-textarea {
     font-size: 16px;
+  }
+
+  .chat-copy-btn {
+    opacity: 0.6;
+  }
+
+  .chat-attach-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .chat-file-chip-name {
+    max-width: 80px;
   }
 }

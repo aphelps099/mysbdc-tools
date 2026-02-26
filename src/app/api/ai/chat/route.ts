@@ -14,9 +14,15 @@ interface ChatMessage {
   content: string;
 }
 
+interface FileContext {
+  name: string;
+  content: string;
+}
+
 interface ChatRequestBody {
   messages: ChatMessage[];
   unlocked?: boolean;
+  fileContext?: FileContext[];
 }
 
 export async function POST(req: NextRequest) {
@@ -39,7 +45,32 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'messages array is required' }, { status: 400 });
   }
 
-  const system = body.unlocked ? CHAT_SYSTEM_UNLOCKED : CHAT_SYSTEM_LOCKED;
+  // Validate file context size server-side
+  if (body.fileContext) {
+    const totalSize = body.fileContext.reduce((sum, f) => sum + f.content.length, 0);
+    if (totalSize > 600_000) {
+      return Response.json(
+        { error: 'File context too large. Maximum 500KB total.' },
+        { status: 400 },
+      );
+    }
+    if (body.fileContext.length > 5) {
+      return Response.json(
+        { error: 'Maximum 5 files allowed.' },
+        { status: 400 },
+      );
+    }
+  }
+
+  let system = body.unlocked ? CHAT_SYSTEM_UNLOCKED : CHAT_SYSTEM_LOCKED;
+
+  // Inject uploaded file contents as reference documents
+  if (body.fileContext?.length) {
+    const docs = body.fileContext
+      .map((f) => `--- ${f.name} ---\n${f.content}`)
+      .join('\n\n');
+    system += `\n\n## REFERENCE DOCUMENTS\nThe user has uploaded the following files for context. Use them to inform your responses:\n\n${docs}`;
+  }
 
   // Retry loop for transient errors
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
