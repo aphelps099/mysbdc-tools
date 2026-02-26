@@ -166,6 +166,77 @@
   padding: 0 8px;
 }
 
+/* ── Tagline display ── */
+.bh-tagline-display {
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bh-tagline-display:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Variant cards ── */
+.bh-variant-card {
+  transition: box-shadow 0.35s ease,
+              transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.bh-variant-card:hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* ── Pillar cards ── */
+.bh-pillar-card {
+  transition: box-shadow 0.35s ease,
+              transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bh-pillar-card:hover {
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ── Language table ── */
+.bh-lang-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--era-text, sans-serif);
+}
+.bh-lang-table th {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--p-muted, #a8a29e);
+  text-align: left;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--p-line, #e7e2da);
+}
+.bh-lang-table td {
+  font-size: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--p-line, #e7e2da);
+  vertical-align: top;
+  color: var(--p-mid, #57534e);
+}
+.bh-lang-table tr:last-child td {
+  border-bottom: none;
+}
+.bh-lang-use {
+  font-weight: 500;
+  color: var(--p-ink, #1a1a1a);
+}
+.bh-lang-instead {
+  text-decoration: line-through;
+  text-decoration-color: rgba(0, 0, 0, 0.15);
+  color: var(--p-muted, #a8a29e);
+}
+.bh-lang-why {
+  font-style: italic;
+  color: var(--p-muted, #a8a29e);
+  font-size: 13px;
+}
+
 /* ── Program cards ── */
 .bh-program-card {
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
@@ -198,6 +269,18 @@
   }
   .bh-partner-grid {
     grid-template-columns: 1fr !important;
+  }
+  .bh-variant-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bh-pillar-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bh-lang-table .bh-lang-why {
+    display: none;
+  }
+  .bh-lang-table th:last-child {
+    display: none;
   }
   /* Journey: vertical on mobile */
   .bh-journey-flow {
