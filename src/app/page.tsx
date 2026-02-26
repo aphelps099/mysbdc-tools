@@ -10,6 +10,27 @@ import Image from 'next/image';
 
 const tools = [
   {
+    href: '/chat',
+    name: 'Brand Chat',
+    description: 'AI-powered brand content assistant — draft social posts, emails, talking points, and more via chat.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+      </svg>
+    ),
+  },
+  {
+    href: '/brand/email',
+    name: 'Email Templates',
+    description: 'Client onboarding emails, signatures, event campaigns, and newsletter templates — preview and reference.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+  },
+  {
     href: '/intake',
     name: 'Smart 641 Intake',
     description: 'Client intake wizard — collects info for the SBA 641 form in a guided, conversational flow.',
@@ -68,27 +89,6 @@ const tools = [
     ),
   },
   {
-    href: '/brand/email',
-    name: 'Email Templates',
-    description: 'Client onboarding emails, signatures, event campaigns, and newsletter templates — preview and reference.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>
-    ),
-  },
-  {
-    href: '/chat',
-    name: 'Brand Chat',
-    description: 'AI-powered brand content assistant — draft social posts, emails, talking points, and more via chat.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-      </svg>
-    ),
-  },
-  {
     href: '/brand',
     name: 'Brand House',
     description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',
@@ -102,21 +102,9 @@ const tools = [
 
 export default function Home() {
   return (
-    <div
-      style={{
-        minHeight: '100dvh',
-        background: 'var(--cream, #f0efeb)',
-        fontFamily: 'var(--sans)',
-      }}
-    >
+    <div className="tools-page">
       {/* ── Header ── */}
-      <header
-        style={{
-          padding: '48px 24px 0',
-          maxWidth: 820,
-          margin: '0 auto',
-        }}
-      >
+      <header className="tools-header">
         <Image
           src="/sbdc-blue-2026.png"
           alt="NorCal SBDC"
@@ -125,120 +113,29 @@ export default function Home() {
           style={{ marginBottom: 32 }}
           priority
         />
-        <h1
-          style={{
-            fontFamily: 'var(--display, var(--sans))',
-            fontSize: 'clamp(28px, 5vw, 42px)',
-            fontWeight: 500,
-            letterSpacing: '-0.03em',
-            lineHeight: 1.1,
-            color: 'var(--navy, #0f1c2e)',
-            margin: 0,
-          }}
-        >
-          Tools
-        </h1>
-        <p
-          style={{
-            fontFamily: 'var(--sans)',
-            fontSize: 15,
-            color: 'var(--text-secondary, #4a5568)',
-            marginTop: 8,
-            marginBottom: 0,
-            fontWeight: 300,
-            lineHeight: 1.6,
-          }}
-        >
-          Client-facing SBDC tools — intake, milestones, impact tracking, and more.
+        <h1 className="tools-title">Tools</h1>
+        <p className="tools-desc">
+          Internal tools for the NorCal SBDC team — content generation,
+          client intake, milestone tracking, and brand resources.
         </p>
-
-        <hr
-          style={{
-            border: 'none',
-            borderTop: '1px solid var(--rule, rgba(0,0,0,0.12))',
-            margin: '24px 0 0',
-          }}
-        />
+        <hr className="tools-rule" />
       </header>
 
       {/* ── Tool cards ── */}
-      <main
-        style={{
-          maxWidth: 820,
-          margin: '0 auto',
-          padding: '24px 24px 64px',
-          display: 'grid',
-          gap: 16,
-        }}
-      >
-        {tools.map((tool) => (
+      <main className="tools-grid">
+        {tools.map((tool, i) => (
           <Link
             key={tool.href}
             href={tool.href}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 16,
-              padding: '20px 24px',
-              background: 'var(--white, #ffffff)',
-              borderRadius: 'var(--radius-lg, 12px)',
-              textDecoration: 'none',
-              color: 'inherit',
-              boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.08))',
-              transition:
-                'transform var(--duration-normal, 250ms) var(--ease, cubic-bezier(0.16,1,0.3,1)), box-shadow var(--duration-normal, 250ms) var(--ease, cubic-bezier(0.16,1,0.3,1))',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow =
-                'var(--shadow-md, 0 4px 12px rgba(0,0,0,0.1))';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = '';
-              e.currentTarget.style.boxShadow =
-                'var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.08))';
-            }}
+            className="tools-card"
+            style={{ animationDelay: `${0.08 + i * 0.04}s` }}
           >
-            <span
-              style={{
-                flexShrink: 0,
-                width: 48,
-                height: 48,
-                borderRadius: 10,
-                background: 'var(--cream, #f0efeb)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--royal, #1D5AA7)',
-              }}
-            >
+            <span className="tools-card-icon">
               {tool.icon}
             </span>
             <span>
-              <span
-                style={{
-                  display: 'block',
-                  fontFamily: 'var(--sans)',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  color: 'var(--navy, #0f1c2e)',
-                  lineHeight: 1.3,
-                }}
-              >
-                {tool.name}
-              </span>
-              <span
-                style={{
-                  display: 'block',
-                  fontSize: 14,
-                  color: 'var(--text-secondary, #4a5568)',
-                  fontWeight: 300,
-                  lineHeight: 1.5,
-                  marginTop: 4,
-                }}
-              >
-                {tool.description}
-              </span>
+              <span className="tools-card-name">{tool.name}</span>
+              <span className="tools-card-desc">{tool.description}</span>
             </span>
           </Link>
         ))}
