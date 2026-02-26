@@ -1121,78 +1121,160 @@ textarea:focus-visible {
 
 
 /* ───────────────────────────────────────────────
-   Login Page
+   Login Page — Premium dark gate
    ─────────────────────────────────────────────── */
 
 .login-page {
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--cream, #f0efeb);
+  background: #0f1c2e;
+  position: relative;
+  overflow: hidden;
   padding: 24px;
 }
 
-.login-card {
+/* ── Animated star background ── */
+
+.login-star {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 52vh;
+  height: 52vh;
+  min-width: 320px;
+  min-height: 320px;
+  pointer-events: none;
+  z-index: 0;
+  animation: loginStarFloat 120s linear infinite;
+}
+
+.login-star-svg {
   width: 100%;
-  max-width: 400px;
-  background: var(--white, #ffffff);
-  border-radius: var(--radius-lg, 12px);
-  padding: 48px 40px;
-  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+  height: 100%;
+}
+
+.login-star-path {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 2.5;
+  fill: rgba(255, 255, 255, 0);
+  stroke-dasharray: 1800;
+  stroke-dashoffset: 1800;
+  animation:
+    loginStarDraw 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards,
+    loginStarFill 1.6s ease 1.8s forwards;
+}
+
+@keyframes loginStarDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes loginStarFill {
+  to { fill: rgba(255, 255, 255, 0.05); }
+}
+
+@keyframes loginStarFloat {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ── Content ── */
+
+.login-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
   text-align: center;
+  opacity: 0;
+  animation: loginFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
 .login-logo {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: loginFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
 }
 
 .login-logo img {
   height: auto;
-  max-width: 200px;
+  max-width: 180px;
 }
 
-.login-title {
+.login-heading {
   font-family: var(--display);
-  font-size: 28px;
-  font-weight: 300;
-  color: var(--navy, #0f1c2e);
-  letter-spacing: -0.02em;
-  margin: 0 0 8px;
+  font-size: 52px;
+  font-weight: 100;
+  color: #ffffff;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0;
+  opacity: 0;
+  animation: loginFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
 }
 
-.login-subtitle {
-  font-family: var(--sans);
-  font-size: 14px;
-  color: var(--text-tertiary, #8a8a8a);
-  margin: 0 0 32px;
+.login-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--royal, #1D5AA7);
+  margin: 24px auto 32px;
+  transform: scaleX(0);
+  animation: loginDividerExpand 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
 }
+
+@keyframes loginDividerExpand {
+  to { transform: scaleX(1); }
+}
+
+@keyframes loginFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Form ── */
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  opacity: 0;
+  animation: loginFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards;
 }
 
 .login-input {
   width: 100%;
-  padding: 14px 18px;
-  border: 1px solid var(--rule, rgba(0, 0, 0, 0.12));
-  border-radius: var(--radius-md, 8px);
+  padding: 14px 0;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
   font-family: var(--sans);
   font-size: 16px;
-  color: var(--text-primary, #0a1528);
-  background: var(--cream, #f0efeb);
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: transparent;
   outline: none;
-  transition: border-color var(--duration-fast, 150ms) var(--ease);
+  transition: border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: center;
 }
 
 .login-input:focus {
-  border-color: var(--royal, #1D5AA7);
+  border-bottom-color: var(--pool, #8FC5D9);
 }
 
 .login-input::placeholder {
-  color: var(--text-tertiary, #8a8a8a);
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .login-error {
@@ -1200,28 +1282,105 @@ textarea:focus-visible {
   font-size: 12px;
   color: var(--brick, #a82039);
   margin: 0;
-  text-align: left;
+  letter-spacing: 0.02em;
 }
 
 .login-btn {
   width: 100%;
   padding: 14px;
-  border: none;
-  border-radius: var(--radius-md, 8px);
-  background: var(--navy, #0f1c2e);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0;
+  background: transparent;
   color: #ffffff;
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background var(--duration-fast, 150ms) var(--ease);
+  transition:
+    background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .login-btn:hover:not(:disabled) {
   background: var(--royal, #1D5AA7);
+  border-color: var(--royal, #1D5AA7);
 }
 
 .login-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* ── Footer ── */
+
+.login-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+  z-index: 1;
+  opacity: 0;
+  animation: loginFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1.3s forwards;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.login-footer-sep {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.login-footer-name {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.login-footer-link {
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.login-footer-link:hover {
+  color: var(--pool, #8FC5D9);
+  border-bottom-color: var(--pool, #8FC5D9);
+}
+
+/* ── Mobile adjustments ── */
+
+@media (max-width: 640px) {
+  .login-star {
+    width: 70vw;
+    height: 70vw;
+    min-width: 260px;
+    min-height: 260px;
+    left: 50%;
+  }
+
+  .login-heading {
+    font-size: 40px;
+    letter-spacing: 0.08em;
+  }
+
+  .login-content {
+    max-width: 320px;
+    padding: 0 16px;
+  }
+
+  .login-footer {
+    position: relative;
+    margin-top: 48px;
+    padding: 16px;
+    font-size: 11px;
+  }
 }
