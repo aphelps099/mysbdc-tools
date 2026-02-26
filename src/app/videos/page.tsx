@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/context/ThemeContext';
    Collection of all SBDC brand & training videos.
    ═══════════════════════════════════════════════════════ */
 
+const featured = { id: 'NEUTodo7QU0', label: 'AI Masterclass' };
+
 const videos = [
   { id: '94zN2ijDlD8' },
   { id: 'WcJOAKLsYPo' },
@@ -17,6 +19,14 @@ const videos = [
   { id: 'yO9uhS7bfcI' },
   { id: 'cDSQ2C3kAXA' },
   { id: 'sEfJyYNaPm0' },
+];
+
+const olderVideos = [
+  { id: 'bIVYCzbLmIc' },
+  { id: 'zWgGYaOf_5k' },
+  { id: 'lBA9wkQ-Wto' },
+  { id: '9zXHPwsQoC0' },
+  { id: 'taUTw5_vFSw' },
 ];
 
 function VideoCard({ id }: { id: string }) {
@@ -149,18 +159,72 @@ export default function VideosPage() {
             </p>
           </div>
 
+          {/* Featured video */}
+          <section style={{ marginBottom: 48 }}>
+            <p
+              className="text-[10px] font-bold tracking-[0.12em] uppercase"
+              style={{ fontFamily: 'var(--mono)', color: 'var(--royal, #1D5AA7)', margin: '0 0 12px' }}
+            >
+              Featured
+            </p>
+            <div style={{ maxWidth: 800 }}>
+              <VideoCard id={featured.id} />
+              <p
+                className="text-[15px] font-medium mt-3"
+                style={{ fontFamily: 'var(--sans)', color: 'var(--p-ink, #0f1c2e)', margin: '12px 0 0' }}
+              >
+                {featured.label}
+              </p>
+            </div>
+          </section>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: 'var(--p-line, rgba(0,0,0,0.08))', margin: '0 0 32px' }} />
+
           {/* Video grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 400px), 1fr))',
-              gap: 24,
-            }}
-          >
-            {videos.map((video) => (
-              <VideoCard key={video.id} id={video.id} />
-            ))}
-          </div>
+          <section>
+            <p
+              className="text-[10px] font-bold tracking-[0.12em] uppercase"
+              style={{ fontFamily: 'var(--mono)', color: 'var(--p-muted, #8a8a8a)', margin: '0 0 16px' }}
+            >
+              All Videos
+            </p>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 400px), 1fr))',
+                gap: 24,
+              }}
+            >
+              {videos.map((video) => (
+                <VideoCard key={video.id} id={video.id} />
+              ))}
+            </div>
+          </section>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: 'var(--p-line, rgba(0,0,0,0.08))', margin: '48px 0 32px' }} />
+
+          {/* Older videos */}
+          <section>
+            <p
+              className="text-[10px] font-bold tracking-[0.12em] uppercase"
+              style={{ fontFamily: 'var(--mono)', color: 'var(--p-muted, #8a8a8a)', margin: '0 0 16px' }}
+            >
+              Older Videos
+            </p>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 400px), 1fr))',
+                gap: 24,
+              }}
+            >
+              {olderVideos.map((video) => (
+                <VideoCard key={video.id} id={video.id} />
+              ))}
+            </div>
+          </section>
         </main>
       </div>
     </ThemeProvider>
