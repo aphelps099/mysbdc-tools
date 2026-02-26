@@ -16,6 +16,7 @@ const SECTIONS = [
   { id: 'signatures', label: 'Signatures' },
   { id: 'events',     label: 'Special Events' },
   { id: 'trainings',  label: 'Trainings' },
+  { id: 'generator',  label: 'Generator' },
 ] as const;
 
 type SectionId = typeof SECTIONS[number]['id'];
@@ -824,6 +825,72 @@ export default function EmailTemplates() {
             </a>
           ))}
         </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+         EVENT NEWSLETTER GENERATOR — CTA
+         ════════════════════════════════════════════ */}
+      <section id="generator" className="bh-section" style={{ padding: '96px 24px', maxWidth: 1080, margin: '0 auto' }}>
+        <div style={{ borderTop: '1px solid var(--p-line)', paddingTop: 28, marginBottom: 40 }}>
+          <h2 style={{
+            fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
+            color: 'var(--p-ink)', letterSpacing: '-0.015em', marginBottom: 8,
+          }}>
+            Event Newsletter Generator
+          </h2>
+          <p style={{
+            fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
+            lineHeight: 1.6, maxWidth: 520,
+          }}>
+            Build Constant Contact-ready HTML event newsletters. Add your events, pick a layout, let AI write the copy, and export with one click.
+          </p>
+        </div>
+
+        <a
+          href="/brand/email/events-generator"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 12,
+            padding: '40px 48px',
+            background: '#0f1c2e',
+            color: '#ffffff',
+            textDecoration: 'none',
+            transition: 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease',
+            maxWidth: 520,
+            width: '100%',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 16px 40px -8px rgba(0,0,0,0.2)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700,
+              letterSpacing: '0.12em', textTransform: 'uppercase' as const,
+              color: '#8FC5D9', marginBottom: 12,
+            }}>
+              Interactive Tool
+            </div>
+            <div style={{
+              fontFamily: 'var(--display)', fontSize: 'clamp(18px, 2.5vw, 24px)', fontWeight: 300,
+              letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 8,
+            }}>
+              Open the Generator &rarr;
+            </div>
+            <div style={{
+              fontFamily: 'var(--era-text)', fontSize: 13, fontWeight: 400,
+              color: 'rgba(255,255,255,0.4)', lineHeight: 1.5,
+            }}>
+              Form input &middot; 3 layout templates &middot; AI copy assist &middot; Live preview &middot; Copy HTML
+            </div>
+          </div>
+        </a>
       </section>
 
       {/* ── Footer ── */}
