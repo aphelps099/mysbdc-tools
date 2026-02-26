@@ -320,7 +320,6 @@
   /* Content Wall: 2-col on tablet */
   .cw-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    padding: 0 24px 64px !important;
   }
 }
 
@@ -331,6 +330,5 @@
   /* Content Wall: 1-col on small mobile */
   .cw-grid {
     grid-template-columns: 1fr !important;
-    padding: 0 16px 48px !important;
   }
 }
