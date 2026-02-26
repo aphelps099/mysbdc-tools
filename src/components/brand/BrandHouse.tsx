@@ -272,6 +272,7 @@ export default function BrandHouse() {
   useScrollReveal();
   const activeSection = useActiveSection();
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const [showLangModal, setShowLangModal] = useState(false);
 
   const copyToClipboard = useCallback((hex: string) => {
     navigator.clipboard.writeText(hex).catch(() => {});
@@ -492,18 +493,18 @@ export default function BrandHouse() {
               flexWrap: 'wrap',
             }}
           >
-            {['Connect', 'Prepare', 'Advise', 'Grow'].map((word, i) => (
+            {['People', 'Funded', 'Connected'].map((word, i) => (
               <span
                 key={word}
                 style={{
                   fontFamily: 'var(--display)',
                   fontSize: 'clamp(16px, 2.5vw, 24px)',
                   fontWeight: 300,
-                  color: i === 3 ? '#8FC5D9' : 'rgba(255,255,255,0.25)',
+                  color: i === 2 ? '#8FC5D9' : 'rgba(255,255,255,0.25)',
                   letterSpacing: '-0.02em',
                 }}
               >
-                {word}{i < 3 ? ' /' : ''}
+                {word}{i < 2 ? ' /' : ''}
               </span>
             ))}
           </div>
@@ -1053,43 +1054,54 @@ export default function BrandHouse() {
           </div>
         </div>
 
-        {/* ── Block 5: Approved Language ── */}
-        <h3 style={{
-          fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 300,
-          color: 'var(--p-ink)', marginBottom: 32, letterSpacing: '-0.015em',
-        }}>
-          Approved Language
-        </h3>
-        <p style={{
-          fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
-          lineHeight: 1.6, maxWidth: 480, marginBottom: 32,
-        }}>
-          Consistent terminology strengthens the brand. Use these substitutions across all communications.
-        </p>
-        <div style={{
-          background: 'var(--p-cream, #faf8f4)',
-          borderRadius: 12,
-          overflow: 'hidden',
-          border: '1px solid var(--p-line, #e7e2da)',
-        }}>
-          <table className="bh-lang-table">
-            <thead>
-              <tr>
-                <th>Use This</th>
-                <th>Instead Of</th>
-                <th className="bh-lang-why">Why</th>
-              </tr>
-            </thead>
-            <tbody>
-              {APPROVED_LANGUAGE.map((row) => (
-                <tr key={row.useThis}>
-                  <td className="bh-lang-use">{row.useThis}</td>
-                  <td className="bh-lang-instead">{row.insteadOf}</td>
-                  <td className="bh-lang-why">{row.why}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* ── Block 5: Approved Language — trigger for modal ── */}
+        <div style={{ marginTop: 64, paddingTop: 48, borderTop: '1px solid var(--p-line, #e7e2da)' }}>
+          <button
+            onClick={() => setShowLangModal(true)}
+            style={{
+              background: 'none',
+              border: '1px solid var(--p-line, #e7e2da)',
+              borderRadius: 12,
+              padding: '20px 28px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              width: '100%',
+              maxWidth: 420,
+              transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--p-blue, #2456e3)';
+              e.currentTarget.style.boxShadow = '0 4px 16px -4px rgba(0,0,0,0.08)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--p-line, #e7e2da)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--p-muted, #a8a29e)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+            </svg>
+            <div style={{ textAlign: 'left' }}>
+              <span style={{
+                fontFamily: 'var(--display)', fontSize: 15, fontWeight: 500,
+                color: 'var(--p-ink)', display: 'block', letterSpacing: '-0.01em',
+              }}>
+                Approved Language Guide
+              </span>
+              <span style={{
+                fontFamily: 'var(--era-text)', fontSize: 12, color: 'var(--p-muted)',
+              }}>
+                Terminology &amp; substitutions for brand consistency
+              </span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--p-muted)" strokeWidth="1.5" strokeLinecap="round" style={{ marginLeft: 'auto', flexShrink: 0 }}>
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -1445,6 +1457,112 @@ export default function BrandHouse() {
           </span>
         </a>
       </section>
+
+      {/* ── Approved Language Modal ── */}
+      {showLangModal && (
+        <div
+          className="bh-modal-overlay"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            padding: 24,
+          }}
+          onClick={() => setShowLangModal(false)}
+        >
+          <div
+            className="bh-modal-content"
+            style={{
+              background: 'var(--p-sand, #f3efe8)',
+              borderRadius: 20,
+              padding: 'clamp(32px, 5vw, 56px)',
+              maxWidth: 640,
+              width: '100%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              position: 'relative',
+              boxShadow: '0 40px 80px -20px rgba(0,0,0,0.3)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowLangModal(false)}
+              style={{
+                position: 'absolute',
+                top: 20,
+                right: 20,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--p-muted)',
+                padding: 4,
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+
+            <span style={{
+              fontFamily: 'var(--era-text)', fontSize: 10, fontWeight: 700,
+              letterSpacing: '0.1em', textTransform: 'uppercase' as const,
+              color: 'var(--p-muted)', display: 'block', marginBottom: 12,
+            }}>
+              Brand Guidelines
+            </span>
+            <h3 style={{
+              fontFamily: 'var(--display)', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 100,
+              color: 'var(--p-ink)', margin: '0 0 12px', letterSpacing: '-0.025em',
+            }}>
+              Approved Language
+            </h3>
+            <p style={{
+              fontFamily: 'var(--era-text)', fontSize: 14, color: 'var(--p-mid)',
+              lineHeight: 1.6, maxWidth: 480, margin: '0 0 32px',
+            }}>
+              Consistent terminology strengthens the brand. Use these substitutions across all communications.
+            </p>
+            <div style={{
+              background: 'var(--p-cream, #faf8f4)',
+              borderRadius: 12,
+              overflow: 'hidden',
+              border: '1px solid var(--p-line, #e7e2da)',
+            }}>
+              <table className="bh-lang-table">
+                <thead>
+                  <tr>
+                    <th>Use This</th>
+                    <th>Instead Of</th>
+                    <th className="bh-lang-why">Why</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {APPROVED_LANGUAGE.map((row) => (
+                    <tr key={row.useThis}>
+                      <td className="bh-lang-use">{row.useThis}</td>
+                      <td className="bh-lang-instead">{row.insteadOf}</td>
+                      <td className="bh-lang-why">{row.why}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p style={{
+              fontFamily: 'var(--era-text)', fontSize: 12, color: 'var(--p-muted)',
+              marginTop: 20, fontStyle: 'italic',
+            }}>
+              Always use &ldquo;NorCal SBDC&rdquo; &mdash; never &ldquo;the SBDC.&rdquo; Comma before &ldquo;better.&rdquo; Period at the end.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ── Footer ── */}
       <footer
