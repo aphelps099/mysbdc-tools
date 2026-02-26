@@ -9,7 +9,63 @@
     <link rel="stylesheet" href="https://use.typekit.net/wsk6qef.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        
+        /* ── Page Chrome ── */
+        .page-nav {
+            position: sticky; top: 0; z-index: 100;
+            height: 56px;
+            display: flex; align-items: center;
+            padding: 0 clamp(24px, 4vw, 48px);
+            background: #0f1c2e;
+            font-family: 'proxima-nova', 'Proxima Nova', -apple-system, sans-serif;
+        }
+        .page-nav a.back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 13px; font-weight: 400;
+            transition: color 0.2s ease;
+        }
+        .page-nav a.back-link:hover { color: #ffffff; }
+        .page-nav .nav-sep {
+            width: 1px; height: 16px; background: rgba(255,255,255,0.12);
+            margin: 0 16px;
+        }
+        .page-nav .crumb {
+            font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.35);
+            letter-spacing: 0.02em;
+        }
+        .page-nav .crumb-active {
+            font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.8);
+        }
+        .page-hero {
+            background: #0f1c2e;
+            padding: clamp(36px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(32px, 4vw, 44px);
+        }
+        .page-hero-inner { max-width: 600px; }
+        .page-hero .hero-crumb {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: 12px; font-weight: 300;
+            color: rgba(255,255,255,0.3); margin-bottom: 20px;
+        }
+        .page-hero .hero-crumb a {
+            color: rgba(255,255,255,0.3); text-decoration: none;
+            transition: color 0.2s;
+        }
+        .page-hero .hero-crumb a:hover { color: rgba(255,255,255,0.7); }
+        .page-hero h1 {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: clamp(28px, 4vw, 44px); font-weight: 200;
+            color: #ffffff; letter-spacing: -0.03em;
+            line-height: 1.08; margin: 0 0 16px;
+        }
+        .page-hero .hero-desc {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: 14px; font-weight: 300; line-height: 1.6;
+            color: rgba(255,255,255,0.4); max-width: 480px; margin: 0;
+        }
+        .page-content {
+            padding: 40px clamp(24px, 4vw, 48px) 80px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -22,34 +78,10 @@
         }
         
         body {
+            margin: 0; padding: 0;
+            background: #0f1c2e;
             font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0a0a;
-            padding: 40px;
             -webkit-font-smoothing: antialiased;
-        }
-        
-        .gallery-header {
-            text-align: center;
-            padding: 60px 0 80px;
-            border-bottom: 1px solid #1a1a1a;
-            margin-bottom: 60px;
-        }
-        
-        .gallery-label {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: var(--pool);
-            margin-bottom: 16px;
-        }
-        
-        .gallery-title {
-            font-size: 48px;
-            font-weight: 300;
-            color: white;
-            letter-spacing: -0.02em;
         }
         
         .section {
@@ -514,46 +546,28 @@
             border-radius: 4px;
         }
 
-        .email-label {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #111;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 6px 6px 0 0;
-        }
-
-        .email-label-left {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--pool);
-        }
-
-        .email-label-right {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            color: #666;
-        }
     </style>
 </head>
 <body>
 
-    <div class="email-label">
-        <div class="email-label-left">Email Signatures</div>
-        <div class="email-label-right">8 Styles · Gallery</div>
+<nav class="page-nav">
+    <a href="/brand/email" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Email Templates
+    </a>
+    <div class="nav-sep"></div>
+    <span class="crumb">Brand House</span>
+    <span style="color: rgba(255,255,255,0.2); margin: 0 8px; font-size: 11px;">/</span>
+    <span class="crumb-active">Signatures</span>
+</nav>
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="hero-crumb"><a href="/brand">Brand House</a> / <a href="/brand/email">Email</a> / Signatures</div>
+        <h1>Email Signatures</h1>
+        <p class="hero-desc">Eight styles from ultra-minimal text-only to bold card layouts. Includes implementation notes for Gmail, Outlook, and Apple Mail.</p>
     </div>
-
-    <div class="gallery-header">
-        <div class="gallery-label">NorCal SBDC · Brand Collateral</div>
-        <div class="gallery-title">Email Signatures</div>
-    </div>
+</div>
+<div class="page-content" style="background: #0a0a0a;">
 
     <!-- S1 -->
     <div class="section">
@@ -768,6 +782,8 @@
             </div>
         </div>
     </div>
+
+</div><!-- /.page-content -->
 
 </body>
 </html>

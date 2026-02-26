@@ -11,7 +11,64 @@
     <style>
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
+        /* ── Page Chrome ── */
+        .page-nav {
+            position: sticky; top: 0; z-index: 100;
+            height: 56px;
+            display: flex; align-items: center;
+            padding: 0 clamp(24px, 4vw, 48px);
+            background: #0f1c2e;
+            font-family: 'proxima-nova', 'Proxima Nova', -apple-system, sans-serif;
+        }
+        .page-nav a.back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 13px; font-weight: 400;
+            transition: color 0.2s ease;
+        }
+        .page-nav a.back-link:hover { color: #ffffff; }
+        .page-nav .nav-sep {
+            width: 1px; height: 16px; background: rgba(255,255,255,0.12);
+            margin: 0 16px;
+        }
+        .page-nav .crumb {
+            font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.35);
+            letter-spacing: 0.02em;
+        }
+        .page-nav .crumb-active {
+            font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.8);
+        }
+        .page-hero {
+            background: #0f1c2e;
+            padding: clamp(36px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(32px, 4vw, 44px);
+        }
+        .page-hero-inner { max-width: 600px; }
+        .page-hero .hero-crumb {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: 12px; font-weight: 300;
+            color: rgba(255,255,255,0.3); margin-bottom: 20px;
+        }
+        .page-hero .hero-crumb a {
+            color: rgba(255,255,255,0.3); text-decoration: none;
+            transition: color 0.2s;
+        }
+        .page-hero .hero-crumb a:hover { color: rgba(255,255,255,0.7); }
+        .page-hero h1 {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: clamp(28px, 4vw, 44px); font-weight: 200;
+            color: #ffffff; letter-spacing: -0.03em;
+            line-height: 1.08; margin: 0 0 16px;
+        }
+        .page-hero .hero-desc {
+            font-family: 'proxima-nova', 'Proxima Nova', sans-serif;
+            font-size: 14px; font-weight: 300; line-height: 1.6;
+            color: rgba(255,255,255,0.4); max-width: 480px; margin: 0;
+        }
+        .page-content {
+            padding: 40px clamp(24px, 4vw, 48px) 80px;
+        }
+
         :root {
             --navy: #0F1C2E;
             --sky: #9EC4E0;
@@ -21,12 +78,7 @@
             --maroon: #8A2432;
         }
         
-        body {
-            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #e8e8e8;
-            padding: 40px;
-            -webkit-font-smoothing: antialiased;
-        }
+        body { margin: 0; padding: 0; background: #0f1c2e; -webkit-font-smoothing: antialiased; font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif; }
         
         .email-container {
             max-width: 600px;
@@ -453,6 +505,25 @@
 </head>
 <body>
 
+<nav class="page-nav">
+    <a href="/brand/email" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Email Templates
+    </a>
+    <div class="nav-sep"></div>
+    <span class="crumb">Brand House</span>
+    <span style="color: rgba(255,255,255,0.2); margin: 0 8px; font-size: 11px;">/</span>
+    <span class="crumb-active">Special Events</span>
+</nav>
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="hero-crumb"><a href="/brand">Brand House</a> / <a href="/brand/email">Email</a> / Special Events</div>
+        <h1>SBDC Day 2026</h1>
+        <p class="hero-desc">Two-email campaign celebrating SBDC Day and 20 years of momentum. Email 1: kick-off with impact stats. Email 2: success stories from across the network.</p>
+    </div>
+</div>
+<div class="page-content" style="background: #e8e8e8;">
+
     <!-- ==========================================
          EMAIL 1: KICK-OFF — 20 YEARS OF MOMENTUM
     ========================================== -->
@@ -669,6 +740,8 @@
         </div>
         
     </div>
+
+</div>
 
 </body>
 </html>
