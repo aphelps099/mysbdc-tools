@@ -1,17 +1,18 @@
 'use client';
 
+import { useState, useCallback } from 'react';
 import './brand.css';
 
 /* ═══════════════════════════════════════════════════════
-   ContentWall — Partner & Lender Outreach Content Gallery
-   Rebuilt from static HTML using the Brand House design system.
+   ContentWall — LinkedIn Social Content Toolkit
+   Ready-to-post partner & lender content for SBDC
+   advisors and staff. Download PNG + copy caption.
    ═══════════════════════════════════════════════════════ */
 
-// ── Colors ──
+// ── Brand Colors ──
 const C = {
   navy: '#162d50',
   deepNavy: '#0f1c2e',
-  royal: '#1D5AA7',
   dusty: '#5d7a9c',
   pool: '#8FC5D9',
   cream: '#faf8f4',
@@ -20,284 +21,465 @@ const C = {
   white: '#ffffff',
 } as const;
 
-// ── Card Types ──
+// ── Post Visual Types ──
 
-type CardData =
-  | { type: 'bignumber'; bg: string; fg: string; grain?: boolean; eyebrow: string; number: string; label: string; cta: string }
-  | { type: 'quote'; bg: string; fg: string; grain?: boolean; text: string; attr: string }
-  | { type: 'headline'; bg: string; fg: string; grain?: boolean; brand: string; text: string; sub: string; cta: string }
-  | { type: 'statement'; bg: string; fg: string; grain?: boolean; text: string }
-  | { type: 'list'; bg: string; fg: string; brand: string; title: string; items: string[]; cta: string }
-  | { type: 'minimal'; bg: string; fg: string; text: string }
-  | { type: 'badge'; bg: string; fg: string; grain?: boolean; badge: string; text: string; cta: string }
-  | { type: 'split'; topBg: string; topFg: string; num: string; label: string; botBg: string; botFg: string; text: string; cta: string };
+type PostVisual =
+  | { layout: 'stat'; bg: string; fg: string; kicker: string; number: string; context: string; tagline: string }
+  | { layout: 'statement'; bg: string; fg: string; kicker?: string; lines: string[]; tagline?: string }
+  | { layout: 'quote'; bg: string; fg: string; text: string; attr: string }
+  | { layout: 'headline'; bg: string; fg: string; kicker: string; headline: string; em?: string; context: string }
+  | { layout: 'badge'; bg: string; fg: string; badge: string; text: string; tagline?: string };
 
-type BillboardData =
-  | { variant: 'stat'; bg: string; fg: string; grain?: boolean; eyebrow: string; number: string; context: string; brandUrl: string }
-  | { variant: 'content'; bg: string; fg: string; grain?: boolean; brandTop: string; headline: string; em: string; stats: string; bgNum: string };
-
-interface WallSection {
-  label: string;
-  billboards?: BillboardData[];
-  cards?: CardData[];
+interface SocialPost {
+  id: string;
+  filename: string;
+  caption: string;
+  tags: string;
+  visual: PostVisual;
 }
 
-// ── Content Data ──
+type BillboardVisual =
+  | { layout: 'hero'; bg: string; fg: string; accent: string; number: string; headline: string; sub: string }
+  | { layout: 'banner'; bg: string; fg: string; headline: string; sub: string; brand: string };
 
-const WALL: WallSection[] = [
+interface SocialBillboard {
+  id: string;
+  filename: string;
+  caption: string;
+  tags: string;
+  visual: BillboardVisual;
+}
+
+// ── Post Content (10 curated LinkedIn posts) ──
+
+const POSTS: SocialPost[] = [
   {
-    label: 'Billboards',
-    billboards: [
-      {
-        variant: 'stat',
-        bg: C.deepNavy, fg: C.cream, grain: true,
-        eyebrow: 'We Send You',
-        number: 'Loan-Ready',
-        context: 'clients with clean financials, solid plans, and realistic asks.',
-        brandUrl: 'norcalsbdc.org/partners',
-      },
-      {
-        variant: 'content',
-        bg: C.navy, fg: C.cream, grain: true,
-        brandTop: 'For Lenders & Partners',
-        headline: 'We do the prep work.',
-        em: 'You close the deal.',
-        stats: 'Free loan packaging. Financial projections. Business plan review. All before they reach your desk.',
-        bgNum: '$58',
-      },
-    ],
+    id: 'post-549m',
+    filename: 'norcal-sbdc-549m-funded',
+    caption: '$549M in capital accessed by NorCal SBDC clients. That\u2019s not a projection \u2014 it\u2019s what happens when small businesses get the right support at the right time.\n\nYour business, funded.',
+    tags: '#SBDC #SmallBusiness #NorCalSBDC #CapitalAccess #YourBusinessFunded',
+    visual: {
+      layout: 'stat',
+      bg: C.navy, fg: C.cream,
+      kicker: 'NORCAL SBDC',
+      number: '$549M',
+      context: 'in capital accessed by our clients',
+      tagline: 'Your business, funded.',
+    },
   },
   {
-    label: 'Value to Lenders',
-    cards: [
-      { type: 'bignumber', bg: C.navy, fg: C.cream, grain: true, eyebrow: 'ROI', number: '$58', label: 'return for every $1\ninvested in SBDC', cta: 'SBA verified →' },
-      { type: 'headline', bg: C.cream, fg: C.deepNavy, brand: 'FOR LENDERS', text: 'We don\u2019t compete with you.', sub: 'We make your pipeline stronger.', cta: 'Partner with us →' },
-      { type: 'quote', bg: C.brick, fg: C.white, grain: true, text: '\u201CSBDC referrals close faster. The prep work is already done.\u201D', attr: '— Community Bank Lender' },
-      { type: 'bignumber', bg: C.deepNavy, fg: C.cream, eyebrow: 'Last Year', number: '$549M', label: 'Capital accessed\nby our clients', cta: 'Be part of it →' },
-    ],
+    id: 'post-58roi',
+    filename: 'norcal-sbdc-58-roi',
+    caption: 'For every $1 invested in SBDC, the economy gets $58 back. That\u2019s not a talking point \u2014 it\u2019s SBA-verified impact.\n\nYour business, funded.',
+    tags: '#SBDC #EconomicImpact #SmallBusiness #ROI #SBAVerified',
+    visual: {
+      layout: 'stat',
+      bg: C.deepNavy, fg: C.cream,
+      kicker: 'SBA VERIFIED',
+      number: '$58',
+      context: 'return for every $1 invested in SBDC',
+      tagline: 'Your business, funded.',
+    },
   },
   {
-    label: 'What We Do (For Lenders)',
-    cards: [
-      { type: 'list', bg: C.sand, fg: C.deepNavy, brand: 'Before They Reach You', title: 'We prepare them.', items: ['Clean financial statements', 'Realistic loan amounts', 'Complete documentation', 'Solid business plans'], cta: 'norcalsbdc.org/partners' },
-      { type: 'statement', bg: C.dusty, fg: C.white, grain: true, text: 'Less back-and-forth.\nFaster closes.\nBetter clients.' },
-      { type: 'headline', bg: C.navy, fg: C.cream, brand: 'FOR LENDERS', text: 'Your underwriters will thank you.', sub: 'Complete packages. Realistic asks. Prepared borrowers.', cta: 'Learn more →' },
-      { type: 'split', topBg: C.brick, topFg: C.white, num: 'Free', label: 'What we charge clients', botBg: C.deepNavy, botFg: C.cream, text: 'They get expert prep. You get loan-ready referrals. Everyone wins.', cta: 'Partner now →' },
-    ],
+    id: 'post-network',
+    filename: 'norcal-sbdc-network-connected',
+    caption: 'From Shasta to Solano \u2014 16 centers, 36 counties, one mission. No-fee advising for every small business in Northern California.\n\nYour business, connected.',
+    tags: '#NorCalSBDC #SmallBusiness #NorthernCalifornia #BusinessAdvising #YourBusinessConnected',
+    visual: {
+      layout: 'statement',
+      bg: C.cream, fg: C.deepNavy,
+      kicker: 'THE NETWORK',
+      lines: ['16 centers.', '36 counties.', 'One network.'],
+      tagline: 'Your business, connected.',
+    },
   },
   {
-    label: 'CDFIs & Mission Lenders',
-    cards: [
-      { type: 'headline', bg: C.deepNavy, fg: C.cream, grain: true, brand: 'FOR CDFIs', text: 'Same mission. Different tools.', sub: 'You lend. We advise. Together we build.', cta: 'Let\u2019s partner →' },
-      { type: 'bignumber', bg: C.cream, fg: C.deepNavy, eyebrow: 'Network', number: '16', label: 'Centers across\nNorthern California', cta: 'Find your local center →' },
-      { type: 'quote', bg: C.dusty, fg: C.white, text: '\u201CThey\u2019re an extension of our team. We couldn\u2019t serve this many small businesses without them.\u201D', attr: '— CDFI Partner' },
-      { type: 'statement', bg: C.brick, fg: C.white, grain: true, text: 'We reach the businesses you want to fund.' },
-    ],
+    id: 'post-lenders',
+    filename: 'norcal-sbdc-lender-prep-work',
+    caption: 'We don\u2019t compete with lenders \u2014 we make your pipeline stronger. Clean financials. Solid plans. Realistic asks. All prepped before they reach your desk.\n\nYour business, funded.',
+    tags: '#LenderPartners #SBDC #LoanPackaging #SmallBusinessLending #YourBusinessFunded',
+    visual: {
+      layout: 'headline',
+      bg: C.deepNavy, fg: C.cream,
+      kicker: 'FOR LENDERS',
+      headline: 'We do the prep work.',
+      em: 'You close the deal.',
+      context: 'No-fee loan packaging, financial projections, and business plan review.',
+    },
   },
   {
-    label: 'Economic Development Partners',
-    cards: [
-      { type: 'bignumber', bg: C.navy, fg: C.cream, grain: true, eyebrow: 'Coverage', number: '36', label: 'Counties across\nNorthern California', cta: 'See our network →' },
-      { type: 'headline', bg: C.sand, fg: C.deepNavy, brand: 'FOR CITIES & COUNTIES', text: 'Your constituents. Our advisors.', sub: 'Free small business support for your community.', cta: 'Partner with us →' },
-      { type: 'list', bg: C.deepNavy, fg: C.cream, brand: 'We Provide', title: 'At no cost to you.', items: ['One-on-one advising', 'Workshops & training', 'Loan packaging', 'Disaster recovery support'], cta: 'norcalsbdc.org' },
-      { type: 'bignumber', bg: C.brick, fg: C.white, eyebrow: 'Businesses', number: '8,500+', label: 'Served last year\nacross the network', cta: 'Join us →' },
-    ],
+    id: 'post-8500',
+    filename: 'norcal-sbdc-8500-people',
+    caption: 'Behind every number is a person with a plan. 8,500+ entrepreneurs advised last year \u2014 each one closer to their goal.\n\nYour business, people.',
+    tags: '#SBDC #Entrepreneurs #SmallBusiness #NorCalSBDC #YourBusinessPeople',
+    visual: {
+      layout: 'stat',
+      bg: C.brick, fg: C.white,
+      kicker: 'LAST YEAR',
+      number: '8,500+',
+      context: 'entrepreneurs advised across the network',
+      tagline: 'Your business, people.',
+    },
   },
   {
-    label: 'Referral Partners (CPAs, Attorneys, Chambers)',
-    cards: [
-      { type: 'headline', bg: C.cream, fg: C.deepNavy, brand: 'FOR CPAs & ATTORNEYS', text: 'Send us the ones you can\u2019t bill.', sub: 'We\u2019ll get them ready for you.', cta: 'Refer a client →' },
-      { type: 'statement', bg: C.navy, fg: C.cream, grain: true, text: 'Free for them.\nFree for you.\nFunded by SBA.' },
-      { type: 'headline', bg: C.dusty, fg: C.white, brand: 'FOR CHAMBERS', text: 'Add value to your membership.', sub: 'Free expert advising for your members.', cta: 'Partner with SBDC →' },
-      { type: 'badge', bg: C.deepNavy, fg: C.cream, grain: true, badge: '20 Years', text: 'Trusted by partners across Northern California.', cta: 'norcalsbdc.org' },
-    ],
+    id: 'post-nofee',
+    filename: 'norcal-sbdc-no-fee-better',
+    caption: 'Expert business advising doesn\u2019t have to cost a thing. Loan packaging, financial projections, business plans, and training \u2014 all at no fee to you.\n\nYour business, better.',
+    tags: '#SBDC #NoFeeAdvising #SmallBusiness #BusinessAdvising #YourBusinessBetter',
+    visual: {
+      layout: 'statement',
+      bg: C.dusty, fg: C.white,
+      lines: ['Expert advising.', 'Loan packaging.', 'Financial projections.', 'All at no fee.'],
+      tagline: 'Your business, better.',
+    },
   },
   {
-    label: 'The Ask',
-    cards: [
-      { type: 'headline', bg: C.brick, fg: C.white, grain: true, brand: 'NORCAL SBDC', text: 'Refer your clients.', sub: 'We\u2019ll send them back ready.', cta: 'Start referring →' },
-      { type: 'headline', bg: C.cream, fg: C.deepNavy, brand: 'NORCAL SBDC', text: 'Co-host a workshop.', sub: 'Your audience. Our expertise. Shared impact.', cta: 'Let\u2019s plan one →' },
-      { type: 'headline', bg: C.navy, fg: C.cream, brand: 'NORCAL SBDC', text: 'Join our lender network.', sub: 'Get referrals. Close more loans.', cta: 'Apply now →' },
-      { type: 'minimal', bg: C.sand, fg: C.deepNavy, text: 'Questions?\n\npartners@norcalsbdc.org' },
-    ],
+    id: 'post-testimonial',
+    filename: 'norcal-sbdc-lender-testimonial',
+    caption: 'When lenders trust the pipeline, deals close faster. That\u2019s what happens when borrowers show up prepared.\n\nPartner with NorCal SBDC.',
+    tags: '#LenderPartners #SBDC #SmallBusinessLending #CommunityBanking',
+    visual: {
+      layout: 'quote',
+      bg: C.navy, fg: C.cream,
+      text: '\u201CSBDC referrals close faster. The prep work is already done.\u201D',
+      attr: '\u2014 Community Bank Lender',
+    },
+  },
+  {
+    id: 'post-cdfi',
+    filename: 'norcal-sbdc-cdfi-partnership',
+    caption: 'CDFIs and SBDCs \u2014 same mission, different tools. You provide the capital, we provide the preparation. Together we reach the businesses that need it most.\n\nYour business, connected.',
+    tags: '#CDFI #SBDC #CommunityLending #SmallBusiness #YourBusinessConnected',
+    visual: {
+      layout: 'headline',
+      bg: C.deepNavy, fg: C.cream,
+      kicker: 'FOR CDFIs',
+      headline: 'You lend. We advise.',
+      context: 'Together we reach the businesses that need capital most.',
+    },
+  },
+  {
+    id: 'post-20years',
+    filename: 'norcal-sbdc-20-years',
+    caption: 'Two decades of helping small businesses access capital, build plans, and grow. 20 years of trusted partnerships with lenders across Northern California.\n\nHere\u2019s to 20 more.',
+    tags: '#NorCalSBDC #20Years #SmallBusiness #Anniversary #Partnership',
+    visual: {
+      layout: 'badge',
+      bg: C.deepNavy, fg: C.cream,
+      badge: '20 YEARS',
+      text: 'of trusted partnership across Northern California.',
+      tagline: 'norcalsbdc.org',
+    },
+  },
+  {
+    id: 'post-pipeline',
+    filename: 'norcal-sbdc-pipeline',
+    caption: 'Complete packages. Realistic asks. Prepared borrowers. That\u2019s what NorCal SBDC delivers to lending partners.\n\nLess back-and-forth, faster closes, better outcomes.\n\nYour business, funded.',
+    tags: '#LenderPartners #SBDC #SmallBusinessLending #LoanPackaging #YourBusinessFunded',
+    visual: {
+      layout: 'statement',
+      bg: C.cream, fg: C.deepNavy,
+      kicker: 'FOR LENDERS',
+      lines: ['Less back-and-forth.', 'Faster closes.', 'Better clients.'],
+      tagline: 'Partner with NorCal SBDC.',
+    },
   },
 ];
 
-// ── Card Renderer ──
+// ── Billboard Content (2 curated banners) ──
 
-function WallCard({ card }: { card: CardData }) {
+const BILLBOARDS: SocialBillboard[] = [
+  {
+    id: 'bb-funded',
+    filename: 'norcal-sbdc-billboard-funded',
+    caption: '$549M in capital accessed. 8,500+ entrepreneurs served. 16 centers across 36 counties. This is what happens when small businesses get the right support.\n\nYour business, funded.',
+    tags: '#NorCalSBDC #SmallBusiness #CapitalAccess #YourBusinessFunded',
+    visual: {
+      layout: 'hero',
+      bg: C.navy, fg: C.cream, accent: C.pool,
+      number: '$549M',
+      headline: 'Your business, funded.',
+      sub: 'NorCal SBDC  \u00b7  norcalsbdc.org',
+    },
+  },
+  {
+    id: 'bb-loanready',
+    filename: 'norcal-sbdc-billboard-loan-ready',
+    caption: 'We don\u2019t compete with lenders \u2014 we make your pipeline stronger. Our advisors prepare borrowers with clean financials, solid plans, and realistic asks before they ever reach your desk.\n\nYour business, funded.',
+    tags: '#LenderPartners #SBDC #LoanPackaging #SmallBusinessLending',
+    visual: {
+      layout: 'banner',
+      bg: C.deepNavy, fg: C.cream,
+      headline: 'We send you loan-ready clients.',
+      sub: 'Clean financials. Solid plans. Realistic asks.',
+      brand: 'norcalsbdc.org/partners',
+    },
+  },
+];
+
+// ── Visual Renderers ──
+
+function PostVisualCard({ visual, id }: { visual: PostVisual; id: string }) {
   const base: React.CSSProperties = {
-    borderRadius: 12,
+    width: '100%',
+    aspectRatio: '1',
+    borderRadius: 16,
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
-    aspectRatio: '1',
     position: 'relative',
   };
 
-  switch (card.type) {
-    case 'bignumber':
+  switch (visual.layout) {
+    case 'stat':
       return (
-        <div className={card.grain ? 'bh-grain' : ''} style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(20px, 3vw, 32px)', justifyContent: 'space-between' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', opacity: 0.6 }}>{card.eyebrow}</div>
-          <div>
-            <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(48px, 6vw, 72px)', lineHeight: 0.9, letterSpacing: '-0.03em', fontWeight: 100 }}>{card.number}</div>
-            <div style={{ fontFamily: 'var(--era-text)', fontSize: 13, opacity: 0.8, lineHeight: 1.4, marginTop: 8, whiteSpace: 'pre-line' }}>{card.label}</div>
+        <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, padding: 48, justifyContent: 'space-between' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.5 }}>
+            {visual.kicker}
           </div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.05em' }}>{card.cta}</div>
-        </div>
-      );
-
-    case 'quote':
-      return (
-        <div className={card.grain ? 'bh-grain' : ''} style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(24px, 3vw, 32px)', justifyContent: 'center' }}>
-          <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(20px, 2.5vw, 24px)', fontWeight: 200, fontStyle: 'italic', lineHeight: 1.3, marginBottom: 16 }}>{card.text}</div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.05em', opacity: 0.6 }}>{card.attr}</div>
-        </div>
-      );
-
-    case 'headline':
-      return (
-        <div className={card.grain ? 'bh-grain' : ''} style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(24px, 3vw, 32px)', justifyContent: 'space-between' }}>
-          <div style={{ fontFamily: 'var(--era-text)', fontSize: 12, fontWeight: 700, letterSpacing: '0.02em', opacity: 0.8 }}>{card.brand}</div>
           <div>
-            <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 200, lineHeight: 1.15 }}>{card.text}</div>
-            <div style={{ fontFamily: 'var(--era-text)', fontSize: 13, opacity: 0.7, lineHeight: 1.5, marginTop: 8 }}>{card.sub}</div>
+            <div style={{ fontFamily: 'var(--display)', fontSize: 80, fontWeight: 100, lineHeight: 0.9, letterSpacing: '-0.03em' }}>
+              {visual.number}
+            </div>
+            <div style={{ fontFamily: 'var(--era-text)', fontSize: 16, opacity: 0.7, lineHeight: 1.4, marginTop: 12 }}>
+              {visual.context}
+            </div>
           </div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600 }}>{card.cta}</div>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 22, fontWeight: 200, fontStyle: 'italic', letterSpacing: '-0.01em' }}>
+            {visual.tagline}
+          </div>
         </div>
       );
 
     case 'statement':
       return (
-        <div className={card.grain ? 'bh-grain' : ''} style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(28px, 4vw, 40px)', justifyContent: 'center', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 200, fontStyle: 'italic', lineHeight: 1.2, whiteSpace: 'pre-line' }}>{card.text}</div>
-        </div>
-      );
-
-    case 'list':
-      return (
-        <div style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(20px, 3vw, 28px)', justifyContent: 'space-between' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.5 }}>{card.brand}</div>
-          <div>
-            <div style={{ fontFamily: 'var(--display)', fontSize: 24, fontWeight: 200, fontStyle: 'italic', margin: '12px 0' }}>{card.title}</div>
-            <ul style={{ listStyle: 'none', fontFamily: 'var(--era-text)', fontSize: 12, lineHeight: 1.8, opacity: 0.8, padding: 0 }}>
-              {card.items.map((item) => (
-                <li key={item} style={{ display: 'flex', gap: 6 }}>
-                  <span style={{ opacity: 0.5 }}>&rarr;</span>{item}
-                </li>
-              ))}
-            </ul>
+        <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, padding: 48, justifyContent: 'space-between' }}>
+          {visual.kicker && (
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.5 }}>
+              {visual.kicker}
+            </div>
+          )}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            {visual.lines.map((line, i) => (
+              <div key={i} style={{
+                fontFamily: 'var(--display)',
+                fontSize: 32,
+                fontWeight: 200,
+                lineHeight: 1.35,
+                letterSpacing: '-0.015em',
+              }}>
+                {line}
+              </div>
+            ))}
           </div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, marginTop: 16 }}>{card.cta}</div>
+          {visual.tagline && (
+            <div style={{ fontFamily: 'var(--display)', fontSize: 20, fontWeight: 200, fontStyle: 'italic', opacity: 0.7 }}>
+              {visual.tagline}
+            </div>
+          )}
         </div>
       );
 
-    case 'minimal':
+    case 'quote':
       return (
-        <div style={{ ...base, background: card.bg, color: card.fg, padding: 32, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{card.text}</div>
+        <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, padding: 48, justifyContent: 'center' }}>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 13, fontWeight: 200, letterSpacing: '0.2em', opacity: 0.3, marginBottom: 20 }}>
+            \u275D
+          </div>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 26, fontWeight: 200, fontStyle: 'italic', lineHeight: 1.35, marginBottom: 24 }}>
+            {visual.text}
+          </div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.05em', opacity: 0.5 }}>
+            {visual.attr}
+          </div>
+        </div>
+      );
+
+    case 'headline':
+      return (
+        <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, padding: 48, justifyContent: 'space-between' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.5 }}>
+            {visual.kicker}
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--display)', fontSize: 36, fontWeight: 100, lineHeight: 1.15, letterSpacing: '-0.02em' }}>
+              {visual.headline}
+            </div>
+            {visual.em && (
+              <div style={{ fontFamily: 'var(--display)', fontSize: 36, fontWeight: 200, fontStyle: 'italic', lineHeight: 1.15, color: C.pool, letterSpacing: '-0.02em' }}>
+                {visual.em}
+              </div>
+            )}
+            <div style={{ fontFamily: 'var(--era-text)', fontSize: 15, opacity: 0.6, lineHeight: 1.5, marginTop: 16 }}>
+              {visual.context}
+            </div>
+          </div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, opacity: 0.4, letterSpacing: '0.04em' }}>
+            norcalsbdc.org
+          </div>
         </div>
       );
 
     case 'badge':
       return (
-        <div className={card.grain ? 'bh-grain' : ''} style={{ ...base, background: card.bg, color: card.fg, padding: 'clamp(24px, 3vw, 32px)', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', border: '2px solid currentColor', padding: '8px 12px', opacity: 0.8 }}>{card.badge}</div>
-          <div style={{ fontFamily: 'var(--display)', fontSize: 24, fontWeight: 200, fontStyle: 'italic', lineHeight: 1.2 }}>{card.text}</div>
-          <div style={{ fontFamily: 'var(--era-text)', fontSize: 12, fontWeight: 600 }}>{card.cta}</div>
-        </div>
-      );
-
-    case 'split':
-      return (
-        <div style={{ ...base, aspectRatio: '1' }}>
-          <div style={{ flex: 1, background: card.topBg, color: card.topFg, padding: 'clamp(16px, 2.5vw, 24px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-            <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(40px, 5vw, 56px)', fontWeight: 100, lineHeight: 0.9 }}>{card.num}</div>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 8 }}>{card.label}</div>
+        <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, padding: 48, justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{
+            fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+            letterSpacing: '0.12em', textTransform: 'uppercase',
+            border: '2px solid currentColor', padding: '10px 16px',
+            opacity: 0.7,
+          }}>
+            {visual.badge}
           </div>
-          <div style={{ flex: 1, background: card.botBg, color: card.botFg, padding: 'clamp(16px, 2.5vw, 24px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div style={{ fontFamily: 'var(--era-text)', fontSize: 14, lineHeight: 1.5 }}>{card.text}</div>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600 }}>{card.cta}</div>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 30, fontWeight: 200, fontStyle: 'italic', lineHeight: 1.25 }}>
+            {visual.text}
           </div>
+          {visual.tagline && (
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, opacity: 0.4, letterSpacing: '0.04em' }}>
+              {visual.tagline}
+            </div>
+          )}
         </div>
       );
   }
 }
 
-// ── Billboard Renderer ──
+function BillboardVisualCard({ visual, id }: { visual: BillboardVisual; id: string }) {
+  const base: React.CSSProperties = {
+    width: '100%',
+    aspectRatio: '1.91 / 1',
+    borderRadius: 16,
+    overflow: 'hidden',
+    position: 'relative',
+  };
 
-function Billboard({ data }: { data: BillboardData }) {
-  if (data.variant === 'stat') {
+  if (visual.layout === 'hero') {
     return (
-      <div
-        className={data.grain ? 'bh-grain' : ''}
-        style={{
-          gridColumn: '1 / -1',
-          aspectRatio: '4 / 1',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 'clamp(32px, 5vw, 64px)',
-          borderRadius: 12,
-          background: data.bg,
-          color: data.fg,
-          overflow: 'hidden',
-          position: 'relative',
-        }}
-      >
-        <div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 'clamp(10px, 1.2vw, 14px)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 8 }}>{data.eyebrow}</div>
-          <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(64px, 10vw, 140px)', fontWeight: 100, lineHeight: 0.85, letterSpacing: '-0.03em' }}>{data.number}</div>
+      <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, display: 'flex', alignItems: 'center', padding: '0 64px' }}>
+        {/* Background number */}
+        <div style={{
+          position: 'absolute', top: '50%', right: '-2%',
+          transform: 'translateY(-50%)',
+          fontFamily: 'var(--display)', fontSize: 280, fontWeight: 100,
+          color: 'rgba(255,255,255,0.035)', lineHeight: 0.8, pointerEvents: 'none',
+        }}>
+          {visual.number}
         </div>
-        <div style={{ textAlign: 'right', maxWidth: 350 }}>
-          <div style={{ fontFamily: 'var(--era-text)', fontSize: 'clamp(16px, 2vw, 24px)', lineHeight: 1.3, marginBottom: 16 }}>{data.context}</div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 'clamp(10px, 1.2vw, 14px)', fontWeight: 600, letterSpacing: '0.03em' }}>{data.brandUrl}</div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 80, fontWeight: 100, lineHeight: 0.9, letterSpacing: '-0.03em', marginBottom: 8 }}>
+            {visual.number}
+          </div>
+          <div style={{ fontFamily: 'var(--display)', fontSize: 42, fontWeight: 200, fontStyle: 'italic', color: visual.accent, marginBottom: 20 }}>
+            {visual.headline}
+          </div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 600, opacity: 0.4, letterSpacing: '0.06em' }}>
+            {visual.sub}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className={data.grain ? 'bh-grain' : ''}
-      style={{
-        gridColumn: '1 / -1',
-        aspectRatio: '4 / 1',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'clamp(32px, 5vw, 64px)',
-        borderRadius: 12,
-        background: data.bg,
-        color: data.fg,
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
-      {/* Background number */}
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        right: '-5%',
-        transform: 'translateY(-50%)',
-        fontFamily: 'var(--display)',
-        fontSize: 'clamp(150px, 25vw, 300px)',
-        fontWeight: 100,
-        color: 'rgba(255,255,255,0.04)',
-        lineHeight: 0.8,
-        pointerEvents: 'none',
-      }}>
-        {data.bgNum}
-      </div>
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 750 }}>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 24 }}>{data.brandTop}</div>
-        <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 100, lineHeight: 1.1, marginBottom: 24 }}>
-          {data.headline} <em style={{ fontStyle: 'italic', color: C.brick }}>{data.em}</em>
+    <div id={id} style={{ ...base, background: visual.bg, color: visual.fg, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 64px' }}>
+      <div style={{ maxWidth: '55%' }}>
+        <div style={{ fontFamily: 'var(--display)', fontSize: 44, fontWeight: 100, lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+          {visual.headline}
         </div>
-        <div style={{ fontFamily: 'var(--era-text)', fontSize: 'clamp(14px, 1.5vw, 18px)', opacity: 0.7, lineHeight: 1.5 }}>{data.stats}</div>
+      </div>
+      <div style={{ textAlign: 'right', maxWidth: '38%' }}>
+        <div style={{ fontFamily: 'var(--era-text)', fontSize: 18, opacity: 0.6, lineHeight: 1.4, marginBottom: 16 }}>
+          {visual.sub}
+        </div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 600, opacity: 0.4, letterSpacing: '0.04em' }}>
+          {visual.brand}
+        </div>
       </div>
     </div>
+  );
+}
+
+// ── Action Buttons ──
+
+function DownloadButton({ elementId, filename, loading, onDownload }: {
+  elementId: string;
+  filename: string;
+  loading: boolean;
+  onDownload: (id: string, name: string) => void;
+}) {
+  return (
+    <button
+      onClick={() => onDownload(elementId, filename)}
+      disabled={loading}
+      style={{
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 8,
+        padding: '8px 14px',
+        color: loading ? 'rgba(255,255,255,0.3)' : C.pool,
+        fontFamily: 'var(--mono)',
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: '0.06em',
+        cursor: loading ? 'wait' : 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        transition: 'all 0.2s ease',
+      }}
+    >
+      {loading ? (
+        <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid rgba(143,197,217,0.3)', borderTopColor: C.pool, borderRadius: '50%', animation: 'cw-spin 0.8s linear infinite' }} />
+      ) : (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+      )}
+      {loading ? 'Generating...' : 'Download PNG'}
+    </button>
+  );
+}
+
+function CopyButton({ text, copied, onCopy }: {
+  text: string;
+  copied: boolean;
+  onCopy: (text: string) => void;
+}) {
+  return (
+    <button
+      onClick={() => onCopy(text)}
+      style={{
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 8,
+        padding: '8px 14px',
+        color: copied ? '#6ee7b7' : 'rgba(255,255,255,0.5)',
+        fontFamily: 'var(--mono)',
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: '0.06em',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        transition: 'all 0.2s ease',
+      }}
+    >
+      {copied ? (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ) : (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+      )}
+      {copied ? 'Copied!' : 'Copy Caption'}
+    </button>
   );
 }
 
@@ -306,8 +488,47 @@ function Billboard({ data }: { data: BillboardData }) {
 // ═══════════════════════════════════════════════════════
 
 export default function ContentWall() {
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleDownload = useCallback(async (elementId: string, filename: string) => {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    setDownloadingId(elementId);
+    try {
+      const { default: html2canvas } = await import('html2canvas');
+      const canvas = await html2canvas(el, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = `${filename}.png`;
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Failed to generate PNG:', err);
+    } finally {
+      setDownloadingId(null);
+    }
+  }, []);
+
+  const handleCopy = useCallback((text: string, id: string) => {
+    const full = text;
+    navigator.clipboard.writeText(full).catch(() => {});
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2500);
+  }, []);
+
   return (
     <div style={{ background: '#0a0a0a', minHeight: '100dvh' }}>
+      {/* Spinner keyframe */}
+      <style>{`@keyframes cw-spin { to { transform: rotate(360deg); } }`}</style>
+
       {/* ── Nav Bar ── */}
       <nav
         style={{
@@ -317,7 +538,7 @@ export default function ContentWall() {
           height: 56,
           display: 'flex',
           alignItems: 'center',
-          background: 'rgba(10,10,10,0.9)',
+          background: 'rgba(10,10,10,0.92)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -357,87 +578,158 @@ export default function ContentWall() {
           textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.6)',
         }}>
-          Content Wall
+          Social Content
         </span>
       </nav>
 
       {/* ── Page Header ── */}
-      <header style={{ padding: 'clamp(40px, 6vw, 80px) 48px 48px', maxWidth: 1400, margin: '0 auto' }}>
+      <header style={{ padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px) 48px', maxWidth: 1200, margin: '0 auto' }}>
         <div style={{
           fontFamily: 'var(--mono)',
           fontSize: 11,
           fontWeight: 700,
           letterSpacing: '0.15em',
           textTransform: 'uppercase',
-          color: C.brick,
+          color: C.pool,
           marginBottom: 12,
         }}>
-          B2B Outreach
+          LinkedIn Content Library
         </div>
         <h1 style={{
           fontFamily: 'var(--display)',
-          fontSize: 'clamp(36px, 6vw, 56px)',
+          fontSize: 'clamp(32px, 5vw, 52px)',
           fontWeight: 100,
           color: C.cream,
           letterSpacing: '-0.03em',
           lineHeight: 1.05,
-          margin: 0,
+          margin: '0 0 16px',
         }}>
-          Partner &amp; Lender Content
+          Partner &amp; Lender Social Content
         </h1>
         <p style={{
           fontFamily: 'var(--era-text)',
-          fontSize: 16,
-          color: C.dusty,
-          marginTop: 12,
-          maxWidth: 600,
-          lineHeight: 1.5,
+          fontSize: 15,
+          color: 'rgba(255,255,255,0.4)',
+          maxWidth: 540,
+          lineHeight: 1.6,
+          margin: 0,
         }}>
-          Ads, one-pagers, and messaging for lenders, CDFIs, banks, economic development orgs, and referral partners.
+          Ready-to-post content for SBDC advisors and staff. Download the image, copy the caption, and share on LinkedIn. That simple.
         </p>
       </header>
 
-      {/* ── Content Grid ── */}
-      <div
-        className="cw-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 16,
-          padding: '0 48px 96px',
-          maxWidth: 1400,
-          margin: '0 auto',
-        }}
-      >
-        {WALL.map((section, si) => (
-          <div key={si} style={{ display: 'contents' }}>
-            {/* Row Label */}
-            <div style={{
-              gridColumn: '1 / -1',
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: '#444',
-              padding: si === 0 ? '0 0 16px' : '32px 0 16px',
-              borderTop: si === 0 ? 'none' : '1px solid #222',
-              marginTop: si === 0 ? 0 : 16,
-            }}>
-              {section.label}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 clamp(24px, 4vw, 48px) 96px' }}>
+
+        {/* ════════════════════════════════════════════
+           BILLBOARDS
+           ════════════════════════════════════════════ */}
+        <div style={{
+          fontFamily: 'var(--mono)',
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          color: '#444',
+          marginBottom: 20,
+        }}>
+          LinkedIn Banners
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32, marginBottom: 64 }}>
+          {BILLBOARDS.map((bb) => (
+            <div key={bb.id} style={{ background: '#111', borderRadius: 16, overflow: 'hidden' }}>
+              <BillboardVisualCard visual={bb.visual} id={bb.id} />
+              {/* Caption + Actions */}
+              <div style={{ padding: '20px 24px' }}>
+                <div style={{
+                  fontFamily: 'var(--era-text)', fontSize: 13, color: 'rgba(255,255,255,0.55)',
+                  lineHeight: 1.6, whiteSpace: 'pre-line', marginBottom: 8,
+                }}>
+                  {bb.caption}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--mono)', fontSize: 11, color: C.pool,
+                  opacity: 0.6, marginBottom: 16,
+                }}>
+                  {bb.tags}
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <DownloadButton
+                    elementId={bb.id}
+                    filename={bb.filename}
+                    loading={downloadingId === bb.id}
+                    onDownload={handleDownload}
+                  />
+                  <CopyButton
+                    text={`${bb.caption}\n\n${bb.tags}`}
+                    copied={copiedId === bb.id}
+                    onCopy={(text) => handleCopy(text, bb.id)}
+                  />
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
 
-            {/* Billboards */}
-            {section.billboards?.map((bb, bi) => (
-              <Billboard key={`bb-${bi}`} data={bb} />
-            ))}
+        {/* ════════════════════════════════════════════
+           POSTS
+           ════════════════════════════════════════════ */}
+        <div style={{
+          fontFamily: 'var(--mono)',
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          color: '#444',
+          marginBottom: 20,
+          paddingTop: 32,
+          borderTop: '1px solid #1a1a1a',
+        }}>
+          Square Posts
+        </div>
 
-            {/* Cards */}
-            {section.cards?.map((card, ci) => (
-              <WallCard key={`card-${ci}`} card={card} />
-            ))}
-          </div>
-        ))}
+        <div
+          className="cw-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 24,
+          }}
+        >
+          {POSTS.map((post) => (
+            <div key={post.id} style={{ background: '#111', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <PostVisualCard visual={post.visual} id={post.id} />
+              {/* Caption + Actions */}
+              <div style={{ padding: '20px 20px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{
+                  fontFamily: 'var(--era-text)', fontSize: 12.5, color: 'rgba(255,255,255,0.5)',
+                  lineHeight: 1.6, whiteSpace: 'pre-line', marginBottom: 8, flex: 1,
+                }}>
+                  {post.caption}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, color: C.pool,
+                  opacity: 0.5, marginBottom: 16, lineHeight: 1.5,
+                }}>
+                  {post.tags}
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <DownloadButton
+                    elementId={post.id}
+                    filename={post.filename}
+                    loading={downloadingId === post.id}
+                    onDownload={handleDownload}
+                  />
+                  <CopyButton
+                    text={`${post.caption}\n\n${post.tags}`}
+                    copied={copiedId === post.id}
+                    onCopy={(text) => handleCopy(text, post.id)}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
