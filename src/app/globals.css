@@ -847,9 +847,8 @@ textarea:focus-visible {
   fill: #e2e6eb;
   stroke: #e2e6eb;
 }
-.theme-dark .preview-theme .sbdc-logo .norcal-text path {
+.theme-dark .preview-theme .sbdc-logo .norcal-text {
   fill: #6b7280;
-  stroke: #6b7280;
 }
 
 /* Selection highlight in dark preview */
@@ -878,14 +877,13 @@ textarea:focus-visible {
   animation: drawLogo 1s cubic-bezier(0.4,0,0.2,1) 0.15s forwards,
              showFill 0.3s ease 0.9s forwards;
 }
-.sbdc-logo .norcal-text path {
+.sbdc-logo .norcal-text {
   fill: var(--p-navy, #162d50);
-  stroke-width: 0.4;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: drawText 0.7s cubic-bezier(0.4,0,0.2,1) 0.4s forwards,
-             showFill 0.25s ease 1s forwards;
+  opacity: 0;
+  stroke: none;
+  animation: showNorcal 0.5s ease 0.7s forwards;
 }
+@keyframes showNorcal { to { opacity: 1; } }
 @keyframes drawLogo { to { stroke-dashoffset: 0; } }
 @keyframes drawText { to { stroke-dashoffset: 0; } }
 @keyframes showFill  { to { fill-opacity: 1; stroke-opacity: 0; } }
@@ -899,11 +897,9 @@ textarea:focus-visible {
   stroke-dashoffset: 0;
   animation: none;
 }
-.preview-drawer .sbdc-logo .norcal-text path {
+.preview-drawer .sbdc-logo .norcal-text {
   fill: rgba(22,45,80,0.45);
-  stroke: rgba(22,45,80,0.25);
-  fill-opacity: 1;
-  stroke-dashoffset: 0;
+  opacity: 1;
   animation: none;
 }
 
@@ -913,9 +909,8 @@ textarea:focus-visible {
   fill: rgba(255,255,255,0.88);
   stroke: rgba(255,255,255,0.5);
 }
-.theme-dark .preview-drawer .sbdc-logo .norcal-text path {
+.theme-dark .preview-drawer .sbdc-logo .norcal-text {
   fill: rgba(255,255,255,0.6);
-  stroke: rgba(255,255,255,0.3);
 }
 
 /* ── AI Policy Modal animations ── */
