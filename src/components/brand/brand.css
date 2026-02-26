@@ -249,6 +249,22 @@
   border-color: var(--p-blue, #2456e3);
 }
 
+/* ── Modal ── */
+@keyframes bhOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes bhModalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.bh-modal-overlay {
+  animation: bhOverlayIn 0.25s ease both;
+}
+.bh-modal-content {
+  animation: bhModalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
 /* ── Smooth scroll ── */
 .bh-scroll { scroll-behavior: smooth; }
 
