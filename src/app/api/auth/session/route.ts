@@ -18,7 +18,7 @@ function signToken(payload: string): string {
   return `${payload}.${sig}`;
 }
 
-export function verifyToken(token: string): boolean {
+function verifyToken(token: string): boolean {
   const lastDot = token.lastIndexOf('.');
   if (lastDot === -1) return false;
   const payload = token.slice(0, lastDot);
