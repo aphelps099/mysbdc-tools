@@ -459,5 +459,17 @@ export async function POST(req: NextRequest): Promise<Response> {
     neoserraResult: neoserraResult ?? intakeResult,
     pinResult: pinResult ?? undefined,
     applicationId,
+    // Temporary debug — remove after confirming PIN creation works
+    _debug: {
+      backendOk,
+      backendStatus: intakeResult ? 'parsed' : 'null',
+      clientId,
+      pinAttempted: clientId !== '0' && clientId !== '',
+      pinResult: pinResult ?? 'not attempted',
+      neoserraBaseSet: !!neoserraUrl(),
+      neoserraKeySet: !!neoserraKey(),
+      intakeResultKeys: intakeResult ? Object.keys(intakeResult) : [],
+      rawNeoserraResult: neoserraResult ?? null,
+    },
   });
 }
