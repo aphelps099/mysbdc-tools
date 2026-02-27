@@ -71,8 +71,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     veteran: '',
     education: '',
     language: '',
-    referral: tfgData.referralSource ?? '',
-    referralOther: tfgData.referrerName ?? '',
+    referral: '',       // Don't send — TFG values aren't valid Neoserra reffrom codes
+    referralOther: '',  // Referral info preserved in tfgData bundle below
     newsletter: '',
     centerId: 107,
 
@@ -107,6 +107,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       timeWorking: tfgData.timeWorking,
       supportNeeds: tfgData.supportNeeds,
       otherSupport: tfgData.otherSupport,
+      referralSource: tfgData.referralSource,
+      referrerName: tfgData.referrerName,
       pitchDeckFileName: tfgData.pitchDeckFileName,
       readinessScore: tfgData.readinessScore,
     },
