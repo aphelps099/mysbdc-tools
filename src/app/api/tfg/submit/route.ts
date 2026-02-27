@@ -183,13 +183,16 @@ async function createPin(
   }
 
   const payload = buildPinPayload(tfgData, clientId);
+  const url = `${base}/api/v1/tfg2026/new`;
+
+  console.log(`[tfg/submit] Creating PIN for clientId=${clientId} → POST ${url}`);
 
   try {
-    const res = await fetch(`${base}/api/v1/tfg2026/new`, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `apikey ${key}`,
+        'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify(payload),
     });
@@ -197,10 +200,11 @@ async function createPin(
     const body = await res.json().catch(() => null);
 
     if (!res.ok || (body && body.status === 'fail')) {
-      console.warn('[tfg/submit] PIN creation failed:', JSON.stringify(body));
+      console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}):`, JSON.stringify(body));
       return body;
     }
 
+    console.log(`[tfg/submit] PIN created successfully:`, JSON.stringify(body));
     return body;
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
