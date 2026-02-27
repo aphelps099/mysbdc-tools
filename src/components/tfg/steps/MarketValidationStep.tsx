@@ -63,14 +63,13 @@ export default function MarketValidationStep({ data, onChange, onNext, onBack }:
           <label className="s641-label">
             Have you participated in I-Corps or a similar customer validation program? *
           </label>
-          <div style={{ display: 'flex', gap: 10, marginTop: 4, flexWrap: 'wrap' }}>
+          <div className="s641-pills">
             {ICORPS_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 className={`s641-card s641-card-compact ${data.icorpsStatus === opt.value ? 'selected' : ''}`}
                 onClick={() => onChange({ icorpsStatus: opt.value })}
-                style={{ flex: 1, minWidth: 120 }}
               >
                 <div className="s641-card-check">
                   {data.icorpsStatus === opt.value && (
@@ -101,14 +100,13 @@ export default function MarketValidationStep({ data, onChange, onNext, onBack }:
 
         <div className="s641-field">
           <label className="s641-label">Customer Discovery: Have you conducted interviews? *</label>
-          <div style={{ display: 'flex', gap: 10, marginTop: 4, flexWrap: 'wrap' }}>
+          <div className="s641-pills">
             {INTERVIEW_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 className={`s641-card s641-card-compact ${data.interviewStatus === opt.value ? 'selected' : ''}`}
                 onClick={() => onChange({ interviewStatus: opt.value })}
-                style={{ flex: 1, minWidth: 120 }}
               >
                 <div className="s641-card-check">
                   {data.interviewStatus === opt.value && (

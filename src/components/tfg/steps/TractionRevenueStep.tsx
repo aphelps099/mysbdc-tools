@@ -53,7 +53,7 @@ export default function TractionRevenueStep({ data, onChange, onNext, onBack }: 
       <div className="s641-fields">
         <div className="s641-field">
           <label className="s641-label">What stage has your product reached? *</label>
-          <div className="s641-fields" style={{ gap: 8, marginTop: 4 }}>
+          <div className="s641-pills">
             {PRODUCT_STAGES.map((stage) => (
               <button
                 key={stage.value}
@@ -91,7 +91,7 @@ export default function TractionRevenueStep({ data, onChange, onNext, onBack }: 
 
         <div className="s641-field">
           <label className="s641-label">Revenue Stage *</label>
-          <div style={{ display: 'flex', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
+          <div className="s641-pills">
             {REVENUE_STAGES.map((stage, i) => (
               <button
                 key={revenueKey(stage, i)}
