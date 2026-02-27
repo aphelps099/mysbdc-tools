@@ -36,8 +36,6 @@ export default function CompanyContactStep({ data, onChange, onNext }: Props) {
       </p>
 
       <div className="s641-fields">
-        <div className="tfg-section-label">Company Information</div>
-
         <div className="s641-row">
           <div className="s641-field">
             <label className="s641-label">Company Name *</label>
@@ -60,8 +58,6 @@ export default function CompanyContactStep({ data, onChange, onNext }: Props) {
             />
           </div>
         </div>
-
-        <div className="tfg-section-label">Primary Contact</div>
 
         <div className="s641-row">
           <div className="s641-field">

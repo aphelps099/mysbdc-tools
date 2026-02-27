@@ -59,7 +59,7 @@ export default function FinancingRunwayStep({ data, onChange, onNext, onBack }: 
 
         <div className="s641-field">
           <label className="s641-label">Most recent round *</label>
-          <div className="s641-pills" style={{ marginTop: 4 }}>
+          <div className="s641-pills">
             {ROUND_OPTIONS.map((round) => (
               <button
                 key={round.id}
@@ -82,7 +82,7 @@ export default function FinancingRunwayStep({ data, onChange, onNext, onBack }: 
 
         <div className="s641-field">
           <label className="s641-label">Currently raising capital? *</label>
-          <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+          <div className="s641-pills">
             <button
               type="button"
               className={`s641-card s641-card-compact ${data.raisingCapital === 'true' ? 'selected' : ''}`}

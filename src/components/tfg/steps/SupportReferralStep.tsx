@@ -76,7 +76,7 @@ export default function SupportReferralStep({ data, onChange, onNext, onBack }: 
         <div className="s641-field">
           <label className="s641-label">What support do you need? *</label>
           <p className="s641-hint">Check all that apply</p>
-          <div className="s641-pills" style={{ marginTop: 4 }}>
+          <div className="s641-pills">
             {SUPPORT_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
@@ -109,11 +109,9 @@ export default function SupportReferralStep({ data, onChange, onNext, onBack }: 
           </div>
         )}
 
-        <div className="tfg-section-label">Referral</div>
-
         <div className="s641-field">
           <label className="s641-label">How did you hear about TFG? *</label>
-          <div style={{ display: 'flex', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
+          <div className="s641-pills">
             {REFERRAL_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -143,8 +141,6 @@ export default function SupportReferralStep({ data, onChange, onNext, onBack }: 
             onChange={(e) => onChange({ referrerName: e.target.value })}
           />
         </div>
-
-        <div className="tfg-section-label">Upload &amp; Signature</div>
 
         <div className="s641-field">
           <label className="s641-label">Upload Pitch Deck / Executive Summary *</label>

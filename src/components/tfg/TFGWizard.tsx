@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import type { TFGApplicationData, TFGSubmitResult, TFGStepId } from './types';
 import { createEmptyTFGApplication, getVisibleSteps, calculateReadinessScore } from './types';
-import { submitTFGApplication, uploadPitchDeck } from './tfg-api';
+import { submitTFGApplication } from './tfg-api';
 import CompanyContactStep from './steps/CompanyContactStep';
 import IndustrySectorStep from './steps/IndustrySectorStep';
 import VisionProductStep from './steps/VisionProductStep';
@@ -47,18 +47,12 @@ export default function TFGWizard() {
   const handleSubmit = useCallback(async () => {
     setSubmitting(true);
     try {
-      // Upload pitch deck if present
-      let fileId: string | undefined;
-      if (data.pitchDeckFile) {
-        const uploadResult = await uploadPitchDeck(data.pitchDeckFile);
-        fileId = uploadResult.fileId;
-      }
-
-      // Calculate readiness score
+      // Calculate readiness score (sent to backend, never shown to client)
       const score = calculateReadinessScore(data);
       const submitData = { ...data, readinessScore: score };
 
-      const res = await submitTFGApplication(submitData, fileId);
+      // Single multipart submission (JSON fields + pitch deck file)
+      const res = await submitTFGApplication(submitData);
       setResult(res);
     } catch (err) {
       setResult({
