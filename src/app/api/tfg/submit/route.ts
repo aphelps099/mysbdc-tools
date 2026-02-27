@@ -332,6 +332,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Step 1: Create client via backend intake endpoint
   let intakeResult: Record<string, unknown> | null = null;
+  let backendOk = false;
 
   try {
     const res = await fetch(`${backendUrl()}/api/intake/submit`, {
@@ -340,12 +341,17 @@ export async function POST(req: NextRequest): Promise<Response> {
       body: JSON.stringify(intakePayload),
     });
 
-    if (!res.ok) {
-      console.warn(`[tfg/submit] Backend returned ${res.status}; using success stub`);
-      return Response.json({ success: true, neoserraResult: { stub: true } });
-    }
+    backendOk = res.ok;
 
-    intakeResult = await res.json();
+    // Always try to parse response — even non-OK responses may contain the client ID
+    const body = await res.json().catch(() => null);
+    intakeResult = body;
+
+    if (!res.ok) {
+      console.warn(`[tfg/submit] Backend returned ${res.status}:`, JSON.stringify(body));
+    } else {
+      console.log(`[tfg/submit] Backend response:`, JSON.stringify(body));
+    }
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
     console.warn(`[tfg/submit] Backend unreachable (${reason}); using success stub`);
@@ -353,16 +359,22 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Step 2: Populate TFG Application 2026 PIN form directly via Neoserra API
-  const neoserraResult = (intakeResult as Record<string, unknown>).neoserraResult as Record<string, unknown> | undefined;
+  //
+  // Extract clientId from whichever shape the backend returns:
+  //   - intakeResult.neoserraResult.id  (standard intake path)
+  //   - intakeResult.id                 (fallback / direct Neoserra shape)
+  const neoserraResult = (intakeResult as Record<string, unknown>)?.neoserraResult as Record<string, unknown> | undefined;
   const clientId = String(
-    neoserraResult?.id ?? (intakeResult as Record<string, unknown>).id ?? '0',
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown>)?.id ?? '0',
   );
+
+  console.log(`[tfg/submit] Extracted clientId=${clientId} (backendOk=${backendOk}, neoserraResult=${JSON.stringify(neoserraResult)})`);
 
   let pinResult: Record<string, unknown> | null = null;
   if (clientId && clientId !== '0') {
     pinResult = await createPin(tfgData, clientId);
   } else {
-    console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation');
+    console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation. Full intakeResult:', JSON.stringify(intakeResult));
   }
 
   // ── Step 3: Upload pitch deck to Google Drive ───────────────
@@ -443,7 +455,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   return Response.json({
-    success: (intakeResult as Record<string, unknown>).success ?? true,
+    success: (intakeResult as Record<string, unknown>)?.success ?? true,
     neoserraResult: neoserraResult ?? intakeResult,
     pinResult: pinResult ?? undefined,
     applicationId,
