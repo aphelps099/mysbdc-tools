@@ -31,6 +31,16 @@ const tools = [
     ),
   },
   {
+    href: '/tfg-apply',
+    name: 'TFG Application',
+    description: 'Tech Futures Group application — multi-step startup intake with Neoserra PIN integration.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+      </svg>
+    ),
+  },
+  {
     href: '/intake',
     name: 'Smart 641 Intake',
     description: 'Client intake wizard — collects info for the SBA 641 form in a guided, conversational flow.',
