@@ -12,11 +12,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "googleapis": "^171.4.0",
     "html2canvas": "^1.4.1",
     "next": "^15.1.0",
     "pdfjs-dist": "^5.4.624",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "resend": "^6.9.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
