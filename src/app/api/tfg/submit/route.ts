@@ -5,8 +5,9 @@
  *   - `data`      — JSON string of all TFG application fields
  *   - `pitchDeck` — optional file upload
  *
- * Maps TFG fields to the intake format and forwards to the backend's
- * existing /api/intake/submit endpoint.
+ * Two-step flow:
+ *   1. Create client via backend's /api/intake/submit
+ *   2. Populate the TFG Application 2026 PIN form via Neoserra REST API
  */
 
 import { NextRequest } from 'next/server';
@@ -16,6 +17,199 @@ export const dynamic = 'force-dynamic';
 function backendUrl(): string {
   return (process.env.BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
 }
+
+function neoserraUrl(): string {
+  return (process.env.NEOSERRA_BASE_URL || '').replace(/\/+$/, '');
+}
+
+function neoserraKey(): string {
+  return process.env.NEOSERRA_API_KEY || '';
+}
+
+// ─── Value translation maps ─────────────────────────────────
+// Our form IDs → Neoserra coded values (only where they differ)
+
+const SECTOR_MAP: Record<string, string> = {
+  'SaaS_B2B': 'SaaS (B2B)',
+  'SaaS_B2C': 'SaaS (B2C)',
+  'Biotech': 'Biotech',
+  'HealthTech': 'Health Tech/MedTech',
+  'ClimateTech': 'Climate Tech',
+  'FinTech': 'FinTech',
+  'AgTech': 'AgTech',
+  'Other': 'Other',
+};
+
+const REVENUE_MAP: Record<string, string> = {
+  '0-0': 'Pre-Revenue',
+  '1-1': 'Pilot Revenue',
+  '2-2': 'Less thank $500K', // Neoserra typo — must match their code list exactly
+  'under1mm': 'Less than $1M',
+  'over1mm': 'Greater than $1M',
+};
+
+const SUPPORT_MAP: Record<string, string> = {
+  'Go-to-Market': 'Go-to-Market',
+  'Positioning / Marketing': 'Positioning/Marketing',
+  'Investment Readiness': 'Investment Readiness',
+  'Product Development': 'Product Development',
+  'Business Development': 'Business Development',
+  'Federal SBIR/STTR Funding': 'Federal SBIR/STTR Funding',
+  'Other Federal Grants': 'Other Federal Grants & Contracts',
+  'State Grants': 'State Grants',
+  'Other': 'Other',
+};
+
+const REFERRAL_MAP: Record<string, string> = {
+  'Accelerator': 'Accelerator',
+  'Referral': 'Referreal', // Neoserra typo — must match their code list exactly
+  'SBDC': 'SBDC',
+  'Event': 'Event',
+  'Investor': 'Investor',
+  'Social Media': 'Social Media',
+  'Other': 'Other',
+};
+
+// ─── PIN payload builder ─────────────────────────────────────
+
+function str(v: unknown): string {
+  return typeof v === 'string' ? v : '';
+}
+
+function mapMulti(values: unknown, map: Record<string, string>): string {
+  if (!Array.isArray(values)) return '';
+  return values.map((v: string) => map[v] ?? v).join(',');
+}
+
+function formatTeam(members: unknown): string {
+  if (!Array.isArray(members)) return '';
+  return members
+    .filter((m: { name?: string }) => m.name?.trim())
+    .map((m: { name: string; linkedinUrl?: string }) =>
+      m.linkedinUrl?.trim() ? `${m.name} — ${m.linkedinUrl}` : m.name,
+    )
+    .join('\n');
+}
+
+function formatAddress(d: Record<string, unknown>): string {
+  const parts = [str(d.streetAddress), str(d.city), str(d.state), str(d.zipCode)];
+  const street = parts[0];
+  const cityStateZip = [parts[1], parts[2]].filter(Boolean).join(', ')
+    + (parts[3] ? ` ${parts[3]}` : '');
+  return [street, cityStateZip].filter(Boolean).join(', ');
+}
+
+function buildPinPayload(
+  d: Record<string, unknown>,
+  clientId: string,
+): Record<string, unknown> {
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+  return {
+    clientId,
+    date: today,
+    centerId: '34',
+
+    // Contact details
+    tfgweb: str(d.website),
+    firstname: str(d.firstName),
+    lastname: str(d.lastName),
+    tfgemail: str(d.email),
+    tfgphone: str(d.phone),
+    tfglinkedi: str(d.linkedin),
+    contactaddress: formatAddress(d),
+    stateofinc: str(d.stateOfIncorporation),
+
+    // Industry
+    industrysect: mapMulti(d.industrySectors, SECTOR_MAP),
+    otherindustry: str(d.otherIndustry),
+
+    // Vision & Product
+    tfgvision: str(d.vision),
+    tfgproblem: str(d.problem),
+    tfgsolut: str(d.solution),
+
+    // Market & Validation
+    marketopp: str(d.marketOpportunity),
+    icorpsstat: str(d.icorpsStatus),
+    icorpsdet: str(d.icorpsDetails),
+    cusdiscint: str(d.interviewStatus),
+    numintcomp: parseInt(str(d.interviewCount), 10) || undefined,
+    intlearn: str(d.interviewLearnings),
+    icpidealcustomerprofile: str(d.idealCustomerProfile),
+
+    // Traction & Revenue
+    productstage: str(d.productStage),
+    inmarkstat: str(d.inMarketStatus),
+    revstage: REVENUE_MAP[str(d.revenueStage)] ?? str(d.revenueStage),
+    sbirsttrstat: str(d.sbirStatus),
+    keyachievement: str(d.recentAchievements),
+
+    // Financing & Runway
+    totalfundrec: str(d.totalFunding),
+    recround: mapMulti(d.lastRound, {}), // values match exactly
+    currentlyraisingcapital: str(d.raisingCapital),
+    raisedetails: str(d.raiseDetails),
+    runmonth: parseFloat(str(d.runwayMonths)) || undefined,
+
+    // Team
+    cofteam: formatTeam(d.teamMembers),
+    teamfit: str(d.teamFit),
+    timeproj: str(d.timeWorking),
+
+    // Support & Referral
+    suppneed: mapMulti(d.supportNeeds, SUPPORT_MAP),
+    othsupp: str(d.otherSupport),
+    referral: REFERRAL_MAP[str(d.referralSource)] ?? str(d.referralSource),
+    referrer: str(d.referrerName),
+
+    // Signature & Score
+    digitalsignature: str(d.signature),
+    readiscore: typeof d.readinessScore === 'number' ? d.readinessScore : undefined,
+  };
+}
+
+// ─── Neoserra PIN creation ───────────────────────────────────
+
+async function createPin(
+  tfgData: Record<string, unknown>,
+  clientId: string,
+): Promise<Record<string, unknown> | null> {
+  const base = neoserraUrl();
+  const key = neoserraKey();
+  if (!base || !key) {
+    console.warn('[tfg/submit] NEOSERRA_BASE_URL or NEOSERRA_API_KEY not set; skipping PIN creation');
+    return null;
+  }
+
+  const payload = buildPinPayload(tfgData, clientId);
+
+  try {
+    const res = await fetch(`${base}/api/v1/tfg2026/new`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `apikey ${key}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const body = await res.json().catch(() => null);
+
+    if (!res.ok || (body && body.status === 'fail')) {
+      console.warn('[tfg/submit] PIN creation failed:', JSON.stringify(body));
+      return body;
+    }
+
+    return body;
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(`[tfg/submit] PIN creation error: ${reason}`);
+    return null;
+  }
+}
+
+// ─── Main handler ────────────────────────────────────────────
 
 export async function POST(req: NextRequest): Promise<Response> {
   let tfgData: Record<string, unknown>;
@@ -30,7 +224,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
     tfgData = JSON.parse(raw);
-  } catch (err) {
+  } catch {
     return Response.json(
       { success: false, error: 'Invalid form data' },
       { status: 400 },
@@ -114,6 +308,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     },
   };
 
+  // Step 1: Create client via backend intake endpoint
+  let intakeResult: Record<string, unknown> | null = null;
+
   try {
     const res = await fetch(`${backendUrl()}/api/intake/submit`, {
       method: 'POST',
@@ -122,29 +319,33 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
 
     if (!res.ok) {
-      // Backend may not fully support TFG yet — return success stub
-      // so the form flow works end-to-end during development
-      console.warn(
-        `[tfg/submit] Backend returned ${res.status}; using success stub`,
-      );
-      return Response.json({
-        success: true,
-        neoserraResult: { stub: true },
-      });
+      console.warn(`[tfg/submit] Backend returned ${res.status}; using success stub`);
+      return Response.json({ success: true, neoserraResult: { stub: true } });
     }
 
-    const result = await res.json();
-    return Response.json({
-      success: result.success ?? true,
-      neoserraResult: result.neoserraResult ?? result,
-    });
+    intakeResult = await res.json();
   } catch (err) {
-    // Backend unreachable — return success stub
     const reason = err instanceof Error ? err.message : String(err);
     console.warn(`[tfg/submit] Backend unreachable (${reason}); using success stub`);
-    return Response.json({
-      success: true,
-      neoserraResult: { stub: true },
-    });
+    return Response.json({ success: true, neoserraResult: { stub: true } });
   }
+
+  // Step 2: Populate TFG Application 2026 PIN form directly via Neoserra API
+  const neoserraResult = (intakeResult as Record<string, unknown>).neoserraResult as Record<string, unknown> | undefined;
+  const clientId = String(
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown>).id ?? '0',
+  );
+
+  let pinResult: Record<string, unknown> | null = null;
+  if (clientId && clientId !== '0') {
+    pinResult = await createPin(tfgData, clientId);
+  } else {
+    console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation');
+  }
+
+  return Response.json({
+    success: (intakeResult as Record<string, unknown>).success ?? true,
+    neoserraResult: neoserraResult ?? intakeResult,
+    pinResult: pinResult ?? undefined,
+  });
 }
