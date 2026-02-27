@@ -125,13 +125,20 @@
   border-bottom-color: var(--tfg-accent);
 }
 
-/* Select keeps rounded style */
+/* Select — solid dark background to prevent OS widget bleed-through */
 .tfg-theme .s641-select {
-  background: transparent;
+  background-color: var(--tfg-surface);
   border: 1px solid var(--tfg-border);
   border-radius: 8px;
   color: var(--tfg-text);
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.tfg-theme .s641-select option {
+  background: var(--tfg-surface);
+  color: var(--tfg-text);
 }
 
 .tfg-theme .s641-select:focus {
