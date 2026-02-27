@@ -80,11 +80,12 @@ export const config = {
      * Match all routes EXCEPT:
      * - /login (the login page itself)
      * - /api/auth/* (auth endpoints)
+     * - /tfg-apply (public TFG application form)
      * - /_next/* (Next.js internals)
      * - /fonts/* (static font files)
      * - /brand/* static assets
      * - favicon, images, static files
      */
-    '/((?!login|api/auth|_next|fonts|brand/assets|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
+    '/((?!login|api/auth|tfg-apply|_next|fonts|brand/assets|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
   ],
 };
