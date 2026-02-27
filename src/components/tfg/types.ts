@@ -79,6 +79,7 @@ export interface TFGApplicationData {
 export interface TFGSubmitResult {
   success: boolean;
   neoserraResult?: Record<string, unknown>;
+  applicationId?: string;
   error?: string;
 }
 
