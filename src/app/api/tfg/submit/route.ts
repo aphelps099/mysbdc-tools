@@ -187,7 +187,7 @@ async function createPin(
   clientId: string,
 ): Promise<Record<string, unknown>> {
   const base = neoserraUrl();
-  const key = neoserraKey();
+  const key = neoserraKey().trim(); // trim any accidental whitespace
   if (!base || !key) {
     console.warn('[tfg/submit] NEOSERRA_BASE_URL or NEOSERRA_API_KEY not set; skipping PIN creation');
     return { _pinStatus: 'skipped', reason: 'missing_env', baseSet: !!base, keySet: !!key };
@@ -195,45 +195,69 @@ async function createPin(
 
   const payload = buildPinPayload(tfgData, clientId);
   const url = `${base}/api/v1/tfg2026/new`;
+  const maskedKey = key.length > 8
+    ? `${key.slice(0, 4)}...${key.slice(-4)} (len=${key.length})`
+    : `(len=${key.length})`;
 
   console.log(`[tfg/submit] Creating PIN for clientId=${clientId} → POST ${url}`);
+  console.log(`[tfg/submit] API key: ${maskedKey}`);
+  console.log(`[tfg/submit] PIN payload keys: ${Object.keys(payload).join(', ')}`);
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${key}`,
-      },
-      body: JSON.stringify(payload),
-    });
+  // Try both auth formats — Bearer (per docs) then apikey (per some implementations)
+  const authFormats = [
+    { label: 'Bearer', header: `Bearer ${key}` },
+    { label: 'apikey', header: `apikey ${key}` },
+  ];
 
-    const rawText = await res.text();
-    let body: Record<string, unknown> | null = null;
+  for (const auth of authFormats) {
     try {
-      body = JSON.parse(rawText);
-    } catch {
-      // Response was not JSON
-    }
+      console.log(`[tfg/submit] Trying auth format: ${auth.label}`);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth.header,
+        },
+        body: JSON.stringify(payload),
+      });
 
-    if (!res.ok || (body && body.status === 'fail')) {
-      console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}):`, rawText.slice(0, 500));
-      return {
-        _pinStatus: 'http_error',
-        httpStatus: res.status,
-        statusText: res.statusText,
-        body: body ?? rawText.slice(0, 300),
-        url,
-      };
-    }
+      const rawText = await res.text();
+      let body: Record<string, unknown> | null = null;
+      try {
+        body = JSON.parse(rawText);
+      } catch {
+        // Response was not JSON
+      }
 
-    console.log(`[tfg/submit] PIN created successfully:`, JSON.stringify(body));
-    return { _pinStatus: 'ok', ...(body ?? {}) };
-  } catch (err) {
-    const reason = err instanceof Error ? err.message : String(err);
-    console.warn(`[tfg/submit] PIN creation error: ${reason}`);
-    return { _pinStatus: 'fetch_error', error: reason, url };
+      // If 401/403, try the next auth format
+      if ((res.status === 401 || res.status === 403) && auth !== authFormats[authFormats.length - 1]) {
+        console.warn(`[tfg/submit] ${auth.label} auth returned ${res.status}, trying next format...`);
+        continue;
+      }
+
+      if (!res.ok || (body && body.status === 'fail')) {
+        console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}, auth=${auth.label}):`, rawText.slice(0, 500));
+        return {
+          _pinStatus: 'http_error',
+          httpStatus: res.status,
+          statusText: res.statusText,
+          body: body ?? rawText.slice(0, 300),
+          url,
+          authFormat: auth.label,
+          keyPreview: maskedKey,
+        };
+      }
+
+      console.log(`[tfg/submit] PIN created successfully (auth=${auth.label}):`, JSON.stringify(body));
+      return { _pinStatus: 'ok', authFormat: auth.label, ...(body ?? {}) };
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
+      console.warn(`[tfg/submit] PIN creation error (auth=${auth.label}): ${reason}`);
+      return { _pinStatus: 'fetch_error', error: reason, url, authFormat: auth.label };
+    }
   }
+
+  return { _pinStatus: 'all_auth_failed', url, keyPreview: maskedKey };
 }
 
 // ─── Main handler ────────────────────────────────────────────
