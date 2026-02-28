@@ -95,11 +95,11 @@
 .tfg-theme .s641-input {
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--tfg-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0;
   color: var(--tfg-text);
   padding: 12px 0;
-  transition: border-color 200ms ease;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
 }
 
 .tfg-theme .s641-input::placeholder {
@@ -109,42 +109,47 @@
 
 .tfg-theme .s641-input:focus {
   border-bottom-color: var(--tfg-accent);
-  box-shadow: none;
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
   outline: none;
 }
 
-/* Textareas keep subtle bg for visual grounding */
+/* Textareas — transparent, bottom-border only (matching inputs) */
 .tfg-theme .s641-textarea {
-  background: var(--tfg-surface);
-  border: 1px solid var(--tfg-border);
-  border-radius: 8px;
-  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+  padding: 12px 0;
+  resize: vertical;
 }
 
 .tfg-theme .s641-textarea:focus {
-  border-color: var(--tfg-accent);
   border-bottom-color: var(--tfg-accent);
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
 }
 
-/* Select — solid dark background to prevent OS widget bleed-through */
+/* Select — transparent, bottom-border only */
 .tfg-theme .s641-select {
-  background-color: var(--tfg-surface);
-  border: 1px solid var(--tfg-border);
-  border-radius: 8px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
   color: var(--tfg-text);
+  padding: 12px 24px 12px 0;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 14px center;
+  background-position: right 0 center;
 }
 
 .tfg-theme .s641-select option {
-  background: var(--tfg-surface);
+  background: #131316;
   color: var(--tfg-text);
 }
 
 .tfg-theme .s641-select:focus {
-  border-color: var(--tfg-accent);
-  box-shadow: none;
+  border-bottom-color: var(--tfg-accent);
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
 }
 
 .tfg-theme .s641-input-signature {
@@ -155,12 +160,13 @@
 
 .tfg-theme .s641-card {
   background: transparent;
-  border-color: var(--tfg-border);
+  border-color: rgba(255, 255, 255, 0.15);
   color: var(--tfg-text);
+  transition: border-color 200ms ease, background 200ms ease;
 }
 
 .tfg-theme .s641-card:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .tfg-theme .s641-card.selected {
@@ -170,7 +176,7 @@
 }
 
 .tfg-theme .s641-card-check {
-  border-color: var(--tfg-border);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .tfg-theme .s641-card.selected .s641-card-check {
@@ -191,12 +197,13 @@
 
 .tfg-theme .s641-pill {
   background: transparent;
-  border-color: var(--tfg-border);
+  border-color: rgba(255, 255, 255, 0.15);
   color: var(--tfg-muted);
+  transition: border-color 200ms ease, color 200ms ease;
 }
 
 .tfg-theme .s641-pill:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
   color: var(--tfg-text);
 }
 
@@ -207,7 +214,7 @@
 }
 
 .tfg-theme .s641-pill-check {
-  border-color: var(--tfg-border);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .tfg-theme .s641-pill.selected .s641-pill-check {
@@ -303,7 +310,7 @@
 
 /* File upload — minimal dashed area */
 .tfg-file-upload {
-  border: 1px dashed var(--tfg-border);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   padding: 20px;
   text-align: center;
@@ -389,7 +396,7 @@
   padding: 6px 12px;
   border-radius: 6px;
   background: none;
-  border: 1px dashed var(--tfg-border);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
   color: var(--tfg-muted);
   font-family: var(--era-text, 'GT Era Text', sans-serif);
   font-size: 12px;
