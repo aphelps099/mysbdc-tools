@@ -25,6 +25,7 @@ function TFGApplyInner() {
         background: '#0d0d0d',
         display: 'flex',
         flexDirection: 'column',
+        overflowX: 'hidden',
       }}
     >
       {/* Header */}
