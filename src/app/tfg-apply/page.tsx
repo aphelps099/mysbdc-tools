@@ -39,21 +39,25 @@ function TFGApplyInner() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4eff00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png"
+            alt=""
+            height={32}
+            style={{ display: 'block', height: 32, width: 'auto' }}
+          />
           <div>
             <div style={{
-              fontFamily: 'var(--era-text, system-ui)',
+              fontFamily: "'GT America Extended', 'GT America', system-ui, sans-serif",
               fontSize: 18,
-              fontWeight: 700,
+              fontWeight: 500,
               color: '#e2e6eb',
               letterSpacing: '-0.01em',
             }}>
               Tech Futures Group
             </div>
             <div style={{
-              fontFamily: 'var(--mono, monospace)',
+              fontFamily: "'Roboto Mono', 'GT America Mono', monospace",
               fontSize: 10,
               fontWeight: 500,
               color: '#4eff00',
@@ -86,9 +90,9 @@ function TFGApplyInner() {
         style={{
           padding: '16px 24px',
           textAlign: 'center',
-          fontFamily: 'var(--era-text, system-ui)',
-          fontSize: 11,
-          color: '#8b949e',
+          fontFamily: "'Roboto Mono', 'GT America Mono', monospace",
+          fontSize: 10,
+          color: '#484f58',
           borderTop: '1px solid #2d333b',
           letterSpacing: '0.02em',
         }}
