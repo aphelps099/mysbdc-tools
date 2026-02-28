@@ -378,6 +378,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // ── Step 4: Send notification emails via Resend ─────────
+  // Resend free tier: 2 requests/second. Space sends out and retry on 429.
   const resendKey = process.env.RESEND_API_KEY;
   const emailResults: { client?: unknown; admin?: unknown; error?: string } = {};
 
@@ -394,10 +395,27 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
 
+    // Helper: send with one retry on 429 rate-limit
+    async function sendWithRetry(
+      opts: Parameters<typeof resend.emails.send>[0],
+    ) {
+      const first = await resend.emails.send(opts);
+      if (
+        first.error &&
+        'statusCode' in first.error &&
+        (first.error as { statusCode?: number }).statusCode === 429
+      ) {
+        console.warn('[tfg/submit] Rate-limited — retrying after 1.5 s');
+        await new Promise((r) => setTimeout(r, 1500));
+        return resend.emails.send(opts);
+      }
+      return first;
+    }
+
     // Client confirmation email
     if (str(tfgData.email)) {
       try {
-        const clientRes = await resend.emails.send({
+        const clientRes = await sendWithRetry({
           from,
           replyTo,
           to: [str(tfgData.email)],
@@ -415,9 +433,12 @@ export async function POST(req: NextRequest): Promise<Response> {
       }
     }
 
+    // Space sends to stay under Resend's 2/sec rate limit
+    await new Promise((r) => setTimeout(r, 1000));
+
     // Admin notification email
     try {
-      const adminRes = await resend.emails.send({
+      const adminRes = await sendWithRetry({
         from,
         replyTo,
         to: TFG_ADMIN_RECIPIENTS,
