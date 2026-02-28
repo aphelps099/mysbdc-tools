@@ -254,10 +254,7 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Header -->
   <div class="header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="32" style="display:block;height:32px;width:auto;" />
-      <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/tfg-lime-ring@4x.png" alt="" height="32" style="display:block;height:32px;width:auto;" />
-    </div>
+    <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="28" height="28" style="display:block;width:28px;height:28px;" />
     <span class="submitted-at">${esc(submittedDate)}</span>
   </div>
 
@@ -369,7 +366,7 @@ function notFoundHtml(): string {
 </head>
 <body style="margin:0;padding:0;background:#0d0d0d;color:#6e7681;font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;">
 <div style="text-align:center;">
-  <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="36" style="display:block;margin:0 auto 16px;height:36px;width:auto;" />
+  <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="32" height="32" style="display:block;margin:0 auto 16px;width:32px;height:32px;" />
   <h1 style="font-size:24px;color:#e2e6eb;margin-bottom:8px;">Application not found</h1>
   <p style="font-size:14px;">This link may have expired or the ID is invalid.</p>
 </div>
