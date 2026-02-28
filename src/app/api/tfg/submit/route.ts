@@ -318,6 +318,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Step 1: Create client via backend intake endpoint
   let intakeResult: Record<string, unknown> | null = null;
+  let backendFailed = false;
 
   try {
     const res = await fetch(`${backendUrl()}/api/intake/submit`, {
@@ -327,21 +328,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
 
     if (!res.ok) {
-      console.warn(`[tfg/submit] Backend returned ${res.status}; using success stub`);
-      return Response.json({ success: true, neoserraResult: { stub: true } });
+      console.warn(`[tfg/submit] Backend returned ${res.status}; continuing with stub`);
+      backendFailed = true;
+    } else {
+      intakeResult = await res.json();
     }
-
-    intakeResult = await res.json();
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
-    console.warn(`[tfg/submit] Backend unreachable (${reason}); using success stub`);
-    return Response.json({ success: true, neoserraResult: { stub: true } });
+    console.warn(`[tfg/submit] Backend unreachable (${reason}); continuing with stub`);
+    backendFailed = true;
   }
 
   // Step 2: Populate TFG Application 2026 PIN form directly via Neoserra API
-  const neoserraResult = (intakeResult as Record<string, unknown>).neoserraResult as Record<string, unknown> | undefined;
+  const neoserraResult = (intakeResult as Record<string, unknown> | null)?.neoserraResult as Record<string, unknown> | undefined;
   const clientId = String(
-    neoserraResult?.id ?? (intakeResult as Record<string, unknown>).id ?? '0',
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown> | null)?.id ?? '0',
   );
 
   let pinResult: Record<string, unknown> | null = null;
@@ -418,8 +419,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   return Response.json({
-    success: (intakeResult as Record<string, unknown>).success ?? true,
-    neoserraResult: neoserraResult ?? intakeResult,
+    success: backendFailed ? true : ((intakeResult as Record<string, unknown>)?.success ?? true),
+    neoserraResult: backendFailed ? { stub: true } : (neoserraResult ?? intakeResult),
     pinResult: pinResult ?? undefined,
     applicationId,
   });
