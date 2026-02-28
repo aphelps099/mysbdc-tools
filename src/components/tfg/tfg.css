@@ -632,3 +632,124 @@
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Connected-box form fields
+   ═══════════════════════════════════════════════════════════
+   Fields share a single outer border with thin inner dividers
+   creating the "+" crosshair pattern between cells.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Outer container */
+.tfg-box {
+  border: 1px solid var(--tfg-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Row — 2-col grid by default */
+.tfg-box-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* 3-col variant */
+.tfg-box-row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Full-width single cell row */
+.tfg-box-row-1 {
+  grid-template-columns: 1fr;
+}
+
+/* Horizontal divider between rows */
+.tfg-box-row + .tfg-box-row,
+.tfg-box-row + .tfg-box-row-3,
+.tfg-box-row + .tfg-box-row-1,
+.tfg-box-row-3 + .tfg-box-row,
+.tfg-box-row-3 + .tfg-box-row-3,
+.tfg-box-row-3 + .tfg-box-row-1,
+.tfg-box-row-1 + .tfg-box-row,
+.tfg-box-row-1 + .tfg-box-row-3,
+.tfg-box-row-1 + .tfg-box-row-1 {
+  border-top: 1px solid var(--tfg-border);
+}
+
+/* Each cell */
+.tfg-box-cell {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 200ms ease;
+}
+
+/* Vertical divider — border-left on non-first cells */
+.tfg-box-cell + .tfg-box-cell {
+  border-left: 1px solid var(--tfg-border);
+}
+
+/* Focus highlight — subtle accent wash on the active cell */
+.tfg-box-cell:focus-within {
+  background: rgba(78, 255, 0, 0.024);
+}
+
+/* Labels inside connected boxes — tighter, smaller */
+.tfg-box-cell .s641-label {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+/* Strip individual borders from inputs inside connected boxes */
+.tfg-box-cell .s641-input {
+  border: none;
+  border-radius: 0;
+  padding: 6px 0;
+  background: transparent;
+  font-size: 15px;
+  color: var(--tfg-text);
+}
+
+.tfg-box-cell .s641-input:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.tfg-box-cell .s641-input::placeholder {
+  color: var(--tfg-muted);
+  opacity: 0.5;
+}
+
+/* Selects inside connected boxes — keep dropdown arrow */
+.tfg-box-cell .s641-select {
+  border: none;
+  border-radius: 0;
+  padding: 6px 32px 6px 0;
+  background-color: transparent;
+  font-size: 15px;
+  color: var(--tfg-text);
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+}
+
+.tfg-box-cell .s641-select:focus {
+  box-shadow: none;
+  border: none;
+}
+
+/* ── Responsive: stack to single-column on mobile ── */
+
+@media (max-width: 540px) {
+  .tfg-box-row {
+    grid-template-columns: 1fr;
+  }
+  .tfg-box-row-3 {
+    grid-template-columns: 1fr;
+  }
+  /* On mobile, stacked cells get horizontal dividers instead of vertical */
+  .tfg-box-cell + .tfg-box-cell {
+    border-left: none;
+    border-top: 1px solid var(--tfg-border);
+  }
+}
