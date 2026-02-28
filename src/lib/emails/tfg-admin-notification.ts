@@ -133,15 +133,15 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 
   <!-- Data rows -->
   <tr>
-    <td style="padding:32px 0;border-top:1px solid rgba(255,255,255,0.04);">
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+    <td style="padding:32px 0 0;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.10);">
         ${row('Applicant', `${esc(d.firstName)} ${esc(d.lastName)}`)}
         ${row('Email', d.email ? `<a href="mailto:${esc(d.email)}" style="color:#4eff00;text-decoration:none;">${esc(d.email)}</a>` : '\u2014')}
         ${row('Phone', esc(d.phone) || '\u2014')}
         ${row('Website', d.website ? `<a href="${esc(d.website)}" style="color:#4eff00;text-decoration:none;">${esc(d.website)}</a>` : '\u2014')}
         ${row('Sectors', esc(sectors))}
         ${row('Product', esc(d.productStage) || '\u2014')}
-        ${row('Revenue', esc(d.revenueStage) || '\u2014')}
+        ${rowLast('Revenue', esc(d.revenueStage) || '\u2014')}
       </table>
     </td>
   </tr>
@@ -149,7 +149,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- CTA Buttons -->
   ${onePagerBtn || pitchDeckBtn ? `
   <tr>
-    <td style="padding:0 0 56px;">
+    <td style="padding:28px 0 48px;">
       ${onePagerBtn}${pitchDeckBtn}
     </td>
   </tr>
@@ -157,7 +157,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 
   <!-- Footer -->
   <tr>
-    <td style="padding:24px 0 0;border-top:1px solid rgba(255,255,255,0.04);">
+    <td style="padding:24px 0 0;border-top:1px solid rgba(255,255,255,0.08);">
       <p style="font-family:${MONO};font-size:10px;color:#333;margin:0;letter-spacing:0.04em;">
         Tech Futures Group \u2014 A program of the NorCal SBDC
       </p>
@@ -177,8 +177,16 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 function row(label: string, value: string): string {
   return `
   <tr>
-    <td style="padding:8px 0;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:100px;vertical-align:top;">${label}</td>
-    <td style="padding:8px 0;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;">${value}</td>
+    <td style="padding:10px 14px;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:90px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.06);">${label}</td>
+    <td style="padding:10px 14px;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;border-bottom:1px solid rgba(255,255,255,0.06);">${value}</td>
+  </tr>`;
+}
+
+function rowLast(label: string, value: string): string {
+  return `
+  <tr>
+    <td style="padding:10px 14px;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:90px;vertical-align:top;">${label}</td>
+    <td style="padding:10px 14px;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;">${value}</td>
   </tr>`;
 }
 
