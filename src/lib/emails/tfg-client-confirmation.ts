@@ -64,7 +64,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
 
   <!-- Logo -->
   <tr>
-    <td style="padding:0 0 64px;">
+    <td style="padding:0 0 48px;">
       <img src="${LOGO_URL}" alt="Tech Futures Group" height="56" style="display:block;height:56px;width:auto;" />
     </td>
   </tr>
@@ -100,7 +100,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
 
   <!-- Status pill -->
   <tr>
-    <td style="padding:0 0 56px;">
+    <td style="padding:0 0 40px;">
       <div style="display:inline-block;padding:6px 14px;border:1px solid rgba(78,255,0,0.15);background:rgba(78,255,0,0.03);">
         <span style="font-family:${MONO};font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#4eff00;">Application Received</span>
       </div>
@@ -109,7 +109,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
 
   <!-- Next step block -->
   <tr>
-    <td style="padding:32px 0 0;border-top:1px solid rgba(255,255,255,0.04);">
+    <td style="padding:32px 0 0;border-top:1px solid rgba(255,255,255,0.08);">
       <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#484f58;">Next Step</span>
     </td>
   </tr>
@@ -124,7 +124,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
 
   <!-- CTA Button -->
   <tr>
-    <td style="padding:0 0 64px;">
+    <td style="padding:0 0 48px;">
       <a href="${CALENDLY_URL}" target="_blank" rel="noopener noreferrer"
          style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">Schedule Intro Call</a>
     </td>
@@ -132,7 +132,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
 
   <!-- Contact block -->
   <tr>
-    <td style="padding:24px 0;border-top:1px solid rgba(255,255,255,0.04);">
+    <td style="padding:24px 0;border-top:1px solid rgba(255,255,255,0.08);">
       <p style="font-family:${SANS};font-size:13px;color:#6e7681;margin:0 0 6px;">
         Questions? Reach out at
         <a href="mailto:gabriel@techfuturesgroup.org" style="color:#4eff00;text-decoration:none;">gabriel@techfuturesgroup.org</a>
