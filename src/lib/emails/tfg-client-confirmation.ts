@@ -18,9 +18,8 @@ interface ClientEmailData {
   companyName: string;
 }
 
-/* Shared font stack */
+/* Single font stack — hierarchy via size/weight/spacing, not font-family */
 const SANS = "'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
-const MONO = "'Roboto Mono', 'SF Mono', 'Consolas', monospace";
 
 export function buildClientConfirmationHtml({ firstName, companyName }: ClientEmailData): string {
   const fontUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Regular.otf`;
@@ -46,7 +45,6 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
     font-weight: 500;
     font-style: normal;
   }
-  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 </style>
 </head>
 <body style="margin:0;padding:0;background:#0a0a0a;-webkit-font-smoothing:antialiased;">
@@ -102,7 +100,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <tr>
     <td style="padding:0 0 40px;">
       <div style="display:inline-block;padding:6px 14px;border:1px solid rgba(78,255,0,0.15);background:rgba(78,255,0,0.03);">
-        <span style="font-family:${MONO};font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#4eff00;">Application Received</span>
+        <span style="font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#4eff00;">Application Received</span>
       </div>
     </td>
   </tr>
@@ -110,7 +108,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <!-- Next step block -->
   <tr>
     <td style="padding:32px 0 0;border-top:1px solid rgba(255,255,255,0.08);">
-      <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#484f58;">Next Step</span>
+      <span style="font-family:${SANS};font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#484f58;">Next Step</span>
     </td>
   </tr>
   <tr>
@@ -126,7 +124,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <tr>
     <td style="padding:0 0 48px;">
       <a href="${CALENDLY_URL}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">Schedule Intro Call</a>
+         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;">Schedule Intro Call</a>
     </td>
   </tr>
 
@@ -137,7 +135,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
         Questions? Reach out at
         <a href="mailto:gabriel@techfuturesgroup.org" style="color:#4eff00;text-decoration:none;">gabriel@techfuturesgroup.org</a>
       </p>
-      <p style="font-family:${MONO};font-size:10px;color:#333;margin:0;letter-spacing:0.02em;">
+      <p style="font-family:${SANS};font-size:11px;color:#333;margin:0;letter-spacing:0.01em;">
         This is a confirmation of the application you submitted at tools.norcalsbdc.org.
       </p>
     </td>
@@ -146,10 +144,10 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <!-- Footer -->
   <tr>
     <td style="padding:24px 0 0;">
-      <p style="font-family:${MONO};font-size:10px;color:#333;margin:0;letter-spacing:0.04em;">
+      <p style="font-family:${SANS};font-size:11px;color:#333;margin:0;letter-spacing:0.02em;">
         Tech Futures Group \u2014 A program of the NorCal SBDC
       </p>
-      <p style="font-family:${MONO};font-size:10px;color:#262626;margin:4px 0 0;letter-spacing:0.02em;">
+      <p style="font-family:${SANS};font-size:11px;color:#262626;margin:4px 0 0;letter-spacing:0.01em;">
         Funded in part through a Cooperative Agreement with the U.S. SBA
       </p>
     </td>

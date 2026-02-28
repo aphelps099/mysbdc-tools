@@ -152,8 +152,6 @@ function renderOnePager(app: StoredApplication): string {
     font-weight: 500;
     font-style: normal;
   }
-  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -200,19 +198,19 @@ function renderOnePager(app: StoredApplication): string {
   }
 
   .masthead-brand-tag {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
+    font-family: inherit;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #4eff00;
   }
 
   .masthead-date {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
+    font-family: inherit;
+    font-size: 11px;
     color: #484f58;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     margin-bottom: 32px;
   }
 
@@ -226,15 +224,15 @@ function renderOnePager(app: StoredApplication): string {
   }
 
   .masthead-score {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 12px;
+    font-family: inherit;
+    font-size: 13px;
     color: #6e7681;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.01em;
   }
 
   .masthead-score-value {
-    font-weight: 700;
-    font-size: 13px;
+    font-weight: 600;
+    font-size: 14px;
   }
 
   /* ── Sections ── */
@@ -243,10 +241,10 @@ function renderOnePager(app: StoredApplication): string {
   }
 
   .section-label {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
+    font-family: inherit;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #484f58;
     margin-bottom: 14px;
@@ -266,19 +264,25 @@ function renderOnePager(app: StoredApplication): string {
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
+  .fields tr:nth-child(even) {
+    background: rgba(255,255,255,0.025);
+  }
+
   .fields tr:last-child {
     border-bottom: none;
   }
 
   .field-label {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
     color: #6e7681;
     padding: 10px 16px;
     vertical-align: top;
     white-space: nowrap;
     width: 140px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
   }
 
   .field-value {
@@ -298,10 +302,10 @@ function renderOnePager(app: StoredApplication): string {
   }
 
   .prose-label {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
+    font-family: inherit;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: #6e7681;
     margin-bottom: 6px;
@@ -327,10 +331,10 @@ function renderOnePager(app: StoredApplication): string {
     padding: 12px 24px;
     background: #4eff00;
     color: #0a0a0a;
-    font-family: 'Roboto Mono', monospace;
+    font-family: inherit;
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
     margin-top: 8px;
@@ -346,7 +350,7 @@ function renderOnePager(app: StoredApplication): string {
     border-top: 1px solid rgba(255,255,255,0.08);
   }
   .footer p {
-    font-family: 'Roboto Mono', monospace;
+    font-family: inherit;
     font-size: 10px;
     color: #333;
     letter-spacing: 0.04em;
