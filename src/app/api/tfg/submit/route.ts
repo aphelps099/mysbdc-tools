@@ -13,6 +13,7 @@
 
 import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
+import { saveApplication } from '@/lib/tfg-storage';
 import { buildClientConfirmationHtml } from '@/lib/emails/tfg-client-confirmation';
 import {
   buildAdminNotificationHtml,
@@ -350,7 +351,29 @@ export async function POST(req: NextRequest): Promise<Response> {
     console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation');
   }
 
-  // ── Step 3: Send notification emails (fire-and-forget) ────
+  // ── Step 3: Persist application data for one-pager ─────────
+  const applicationId = crypto.randomUUID();
+  const appUrl = (process.env.APP_URL || '').replace(/\/+$/, '');
+  let onePagerUrl = '';
+
+  try {
+    await saveApplication(
+      applicationId,
+      tfgData,
+      null,  // pitchDeckUrl — not wired yet
+      str(tfgData.pitchDeckFileName) || null,
+      clientId !== '0' ? clientId : null,
+    );
+    if (appUrl) {
+      onePagerUrl = `${appUrl}/api/tfg/applications/${applicationId}`;
+    }
+    console.log(`[tfg/submit] Application saved: ${applicationId}`);
+  } catch (err: unknown) {
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(`[tfg/submit] Failed to save application: ${reason}`);
+  }
+
+  // ── Step 4: Send notification emails (fire-and-forget) ────
   const resendKey = process.env.RESEND_API_KEY;
 
   if (resendKey) {
@@ -370,7 +393,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       }).catch((e: unknown) => console.warn('[tfg/submit] Client email failed:', e));
     }
 
-    // Admin notification email
+    // Admin notification email with one-pager link
     resend.emails.send({
       from,
       to: TFG_ADMIN_RECIPIENTS,
@@ -386,7 +409,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         productStage: str(tfgData.productStage),
         revenueStage: str(tfgData.revenueStage),
         readinessScore: typeof tfgData.readinessScore === 'number' ? tfgData.readinessScore : 0,
-        onePagerUrl: '',
+        onePagerUrl,
         pitchDeckUrl: null,
       }),
     }).catch((e: unknown) => console.warn('[tfg/submit] Admin email failed:', e));
@@ -398,5 +421,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     success: (intakeResult as Record<string, unknown>).success ?? true,
     neoserraResult: neoserraResult ?? intakeResult,
     pinResult: pinResult ?? undefined,
+    applicationId,
   });
 }
