@@ -46,15 +46,30 @@ export default function FinancingRunwayStep({ data, onChange, onNext, onBack }: 
       <p className="s641-subtitle">Tell us about your funding history and current capital position.</p>
 
       <div className="s641-fields">
-        <div className="s641-field">
-          <label className="s641-label">Total funding received so far (grants, equity, debt) *</label>
-          <p className="s641-hint">Enter amount in USD</p>
-          <input
-            className="s641-input"
-            placeholder="$250,000"
-            value={data.totalFunding}
-            onChange={(e) => onChange({ totalFunding: e.target.value })}
-          />
+        {/* ── Connected box: Funding + Runway ── */}
+        <div className="tfg-box">
+          <div className="tfg-box-row">
+            <div className="tfg-box-cell">
+              <label className="s641-label">Total Funding Received *</label>
+              <input
+                className="s641-input"
+                placeholder="$250,000"
+                value={data.totalFunding}
+                onChange={(e) => onChange({ totalFunding: e.target.value })}
+              />
+            </div>
+            <div className="tfg-box-cell">
+              <label className="s641-label">Runway (Months) *</label>
+              <input
+                className="s641-input"
+                type="number"
+                min="0"
+                placeholder="12"
+                value={data.runwayMonths}
+                onChange={(e) => onChange({ runwayMonths: e.target.value })}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="s641-field">
@@ -134,19 +149,6 @@ export default function FinancingRunwayStep({ data, onChange, onNext, onBack }: 
             <CharCount current={data.raiseDetails.length} max={300} />
           </div>
         )}
-
-        <div className="s641-field">
-          <label className="s641-label">How many months will your existing capital last? *</label>
-          <p className="s641-hint">Runway in months</p>
-          <input
-            className="s641-input"
-            type="number"
-            min="0"
-            placeholder="12"
-            value={data.runwayMonths}
-            onChange={(e) => onChange({ runwayMonths: e.target.value })}
-          />
-        </div>
       </div>
 
       <div className="s641-nav">

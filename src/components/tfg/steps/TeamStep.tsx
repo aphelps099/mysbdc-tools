@@ -54,24 +54,28 @@ export default function TeamStep({ data, onChange, onNext, onBack }: Props) {
 
           <div style={{ marginTop: 4 }}>
             {data.teamMembers.map((member, i) => (
-              <div key={i} className="tfg-team-row">
-                <div className="s641-field">
-                  {i === 0 && <label className="s641-label" style={{ fontSize: 10 }}>Name</label>}
-                  <input
-                    className="s641-input"
-                    placeholder="Jane Smith"
-                    value={member.name}
-                    onChange={(e) => updateMember(i, { name: e.target.value })}
-                  />
-                </div>
-                <div className="s641-field">
-                  {i === 0 && <label className="s641-label" style={{ fontSize: 10 }}>LinkedIn URL</label>}
-                  <input
-                    className="s641-input"
-                    placeholder="https://linkedin.com/in/..."
-                    value={member.linkedinUrl}
-                    onChange={(e) => updateMember(i, { linkedinUrl: e.target.value })}
-                  />
+              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'stretch', marginTop: i > 0 ? 8 : 0 }}>
+                <div className="tfg-box" style={{ flex: 1 }}>
+                  <div className="tfg-box-row">
+                    <div className="tfg-box-cell">
+                      {i === 0 && <label className="s641-label">Name</label>}
+                      <input
+                        className="s641-input"
+                        placeholder="Jane Smith"
+                        value={member.name}
+                        onChange={(e) => updateMember(i, { name: e.target.value })}
+                      />
+                    </div>
+                    <div className="tfg-box-cell">
+                      {i === 0 && <label className="s641-label">LinkedIn URL</label>}
+                      <input
+                        className="s641-input"
+                        placeholder="https://linkedin.com/in/..."
+                        value={member.linkedinUrl}
+                        onChange={(e) => updateMember(i, { linkedinUrl: e.target.value })}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <button
                   type="button"
