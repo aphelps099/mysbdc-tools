@@ -5,12 +5,19 @@
  *   - `data`      — JSON string of all TFG application fields
  *   - `pitchDeck` — optional file upload
  *
- * Two-step flow:
+ * Flow:
  *   1. Create client via backend's /api/intake/submit
  *   2. Populate the TFG Application 2026 PIN form via Neoserra REST API
+ *   3. Send notification emails via Resend (fire-and-forget)
  */
 
 import { NextRequest } from 'next/server';
+import { Resend } from 'resend';
+import { buildClientConfirmationHtml } from '@/lib/emails/tfg-client-confirmation';
+import {
+  buildAdminNotificationHtml,
+  TFG_ADMIN_RECIPIENTS,
+} from '@/lib/emails/tfg-admin-notification';
 
 export const dynamic = 'force-dynamic';
 
@@ -341,6 +348,50 @@ export async function POST(req: NextRequest): Promise<Response> {
     pinResult = await createPin(tfgData, clientId);
   } else {
     console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation');
+  }
+
+  // ── Step 3: Send notification emails (fire-and-forget) ────
+  const resendKey = process.env.RESEND_API_KEY;
+
+  if (resendKey) {
+    const resend = new Resend(resendKey);
+    const from = process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>';
+
+    // Client confirmation email
+    if (str(tfgData.email)) {
+      resend.emails.send({
+        from,
+        to: [str(tfgData.email)],
+        subject: "You're in — Tech Futures Group",
+        html: buildClientConfirmationHtml({
+          firstName: str(tfgData.firstName),
+          companyName: str(tfgData.companyName),
+        }),
+      }).catch((e: unknown) => console.warn('[tfg/submit] Client email failed:', e));
+    }
+
+    // Admin notification email
+    resend.emails.send({
+      from,
+      to: TFG_ADMIN_RECIPIENTS,
+      subject: `[TFG] New Application: ${str(tfgData.companyName)}`,
+      html: buildAdminNotificationHtml({
+        firstName: str(tfgData.firstName),
+        lastName: str(tfgData.lastName),
+        companyName: str(tfgData.companyName),
+        email: str(tfgData.email),
+        phone: str(tfgData.phone),
+        website: str(tfgData.website),
+        industrySectors: Array.isArray(tfgData.industrySectors) ? tfgData.industrySectors as string[] : [],
+        productStage: str(tfgData.productStage),
+        revenueStage: str(tfgData.revenueStage),
+        readinessScore: typeof tfgData.readinessScore === 'number' ? tfgData.readinessScore : 0,
+        onePagerUrl: '',
+        pitchDeckUrl: null,
+      }),
+    }).catch((e: unknown) => console.warn('[tfg/submit] Admin email failed:', e));
+  } else {
+    console.warn('[tfg/submit] RESEND_API_KEY not set; skipping emails');
   }
 
   return Response.json({
