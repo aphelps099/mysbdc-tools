@@ -72,6 +72,7 @@
 /* ── Typography ── */
 
 .tfg-theme .s641-question {
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   color: var(--tfg-text);
   letter-spacing: -0.02em;
 }
@@ -81,6 +82,7 @@
 }
 
 .tfg-theme .s641-label {
+  font-family: 'Roboto Mono', var(--mono, monospace);
   color: var(--tfg-muted);
 }
 
@@ -279,7 +281,7 @@
 
 /* Character counter */
 .tfg-char-count {
-  font-family: var(--mono, 'SF Mono', monospace);
+  font-family: 'Roboto Mono', var(--mono, monospace);
   font-size: 10px;
   text-align: right;
   margin-top: 4px;
@@ -306,7 +308,7 @@
   text-align: center;
   cursor: pointer;
   transition: border-color 200ms ease;
-  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   font-size: 13px;
   color: var(--tfg-muted);
 }
@@ -388,7 +390,7 @@
   background: none;
   border: 1px dashed var(--tfg-border);
   color: var(--tfg-muted);
-  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -431,7 +433,7 @@
 
 /* Section divider — subtle, no decoration */
 .tfg-section-label {
-  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
@@ -459,7 +461,7 @@
 }
 
 .tfg-review-label {
-  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
@@ -473,7 +475,7 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 4px 0;
-  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-family: var(--gt-extended, 'GT America Extended', sans-serif);
   font-size: 13px;
   gap: 16px;
 }

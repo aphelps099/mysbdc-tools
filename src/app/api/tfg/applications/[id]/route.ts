@@ -254,7 +254,10 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Header -->
   <div class="header">
-    <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="28" height="28" style="display:block;width:28px;height:28px;" />
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="28" height="28" style="display:block;width:28px;height:28px;" />
+      <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/tfg-lime-ring@4x.png" alt="" width="28" height="28" style="display:block;width:28px;height:28px;" />
+    </div>
     <span class="submitted-at">${esc(submittedDate)}</span>
   </div>
 
