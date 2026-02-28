@@ -43,9 +43,8 @@ function TFGApplyInner() {
           <img
             src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png"
             alt=""
-            width={28}
-            height={28}
-            style={{ display: 'block', width: 28, height: 28 }}
+            height={32}
+            style={{ display: 'block', height: 32, width: 'auto' }}
           />
           <div>
             <div style={{
