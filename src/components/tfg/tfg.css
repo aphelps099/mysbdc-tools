@@ -640,9 +640,9 @@
    creating the "+" crosshair pattern between cells.
    ═══════════════════════════════════════════════════════════ */
 
-/* Outer container */
+/* Outer container — stronger border than default theme border */
 .tfg-box {
-  border: 1px solid var(--tfg-border);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -673,7 +673,7 @@
 .tfg-box-row-1 + .tfg-box-row,
 .tfg-box-row-1 + .tfg-box-row-3,
 .tfg-box-row-1 + .tfg-box-row-1 {
-  border-top: 1px solid var(--tfg-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* Each cell */
@@ -682,11 +682,31 @@
   display: flex;
   flex-direction: column;
   transition: background-color 200ms ease;
+  position: relative;
+}
+
+/* Electric green underline — animates from center on focus */
+.tfg-box-cell::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--tfg-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 8px rgba(78, 255, 0, 0.3);
+}
+
+.tfg-box-cell:focus-within::after {
+  transform: scaleX(1);
 }
 
 /* Vertical divider — border-left on non-first cells */
 .tfg-box-cell + .tfg-box-cell {
-  border-left: 1px solid var(--tfg-border);
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* Focus highlight — subtle accent wash on the active cell */
@@ -750,6 +770,6 @@
   /* On mobile, stacked cells get horizontal dividers instead of vertical */
   .tfg-box-cell + .tfg-box-cell {
     border-left: none;
-    border-top: 1px solid var(--tfg-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
   }
 }
