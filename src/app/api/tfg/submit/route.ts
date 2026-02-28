@@ -87,9 +87,9 @@ function str(v: unknown): string {
   return typeof v === 'string' ? v : '';
 }
 
-function mapMulti(values: unknown, map: Record<string, string>): string {
-  if (!Array.isArray(values)) return '';
-  return values.map((v: string) => map[v] ?? v).join(',');
+function mapMulti(values: unknown, map: Record<string, string>): string[] {
+  if (!Array.isArray(values)) return [];
+  return values.map((v: string) => map[v] ?? v);
 }
 
 function formatTeam(members: unknown): string {
@@ -117,9 +117,10 @@ function buildPinPayload(
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
   return {
+    // Required fields
     clientId,
     date: today,
-    centerId: '34',
+    centerId: '34', // NorCal SBDC / TFG
 
     // Contact details
     tfgweb: str(d.website),
@@ -131,7 +132,7 @@ function buildPinPayload(
     contactaddress: formatAddress(d),
     stateofinc: str(d.stateOfIncorporation),
 
-    // Industry
+    // Industry (array of coded values)
     industrysect: mapMulti(d.industrySectors, SECTOR_MAP),
     otherindustry: str(d.otherIndustry),
 
@@ -158,7 +159,7 @@ function buildPinPayload(
 
     // Financing & Runway
     totalfundrec: str(d.totalFunding),
-    recround: mapMulti(d.lastRound, {}), // values match exactly
+    recround: mapMulti(d.lastRound, {}), // array — values match exactly
     currentlyraisingcapital: str(d.raisingCapital),
     raisedetails: str(d.raiseDetails),
     runmonth: parseFloat(str(d.runwayMonths)) || undefined,
@@ -168,7 +169,7 @@ function buildPinPayload(
     teamfit: str(d.teamFit),
     timeproj: str(d.timeWorking),
 
-    // Support & Referral
+    // Support & Referral (array of coded values)
     suppneed: mapMulti(d.supportNeeds, SUPPORT_MAP),
     othsupp: str(d.otherSupport),
     referral: REFERRAL_MAP[str(d.referralSource)] ?? str(d.referralSource),
@@ -177,6 +178,12 @@ function buildPinPayload(
     // Signature & Score
     digitalsignature: str(d.signature),
     readiscore: typeof d.readinessScore === 'number' ? d.readinessScore : undefined,
+
+    // Standard Neoserra fields (required per API docs)
+    fundarea: '-',
+    femaEnergy: '-',
+    isReportable: 'false',
+    memo: 'Submitted via TFG online application',
   };
 }
 
@@ -201,63 +208,47 @@ async function createPin(
 
   console.log(`[tfg/submit] Creating PIN for clientId=${clientId} → POST ${url}`);
   console.log(`[tfg/submit] API key: ${maskedKey}`);
-  console.log(`[tfg/submit] PIN payload keys: ${Object.keys(payload).join(', ')}`);
+  console.log(`[tfg/submit] PIN payload:`, JSON.stringify(payload));
 
-  // Try both auth formats — Bearer (per docs) then apikey (per some implementations)
-  const authFormats = [
-    { label: 'Bearer', header: `Bearer ${key}` },
-    { label: 'apikey', header: `apikey ${key}` },
-  ];
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`,
+        'User-Agent': 'MYSBDC-Tools/1.0',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-  for (const auth of authFormats) {
+    const rawText = await res.text();
+    let body: Record<string, unknown> | null = null;
     try {
-      console.log(`[tfg/submit] Trying auth format: ${auth.label}`);
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': auth.header,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const rawText = await res.text();
-      let body: Record<string, unknown> | null = null;
-      try {
-        body = JSON.parse(rawText);
-      } catch {
-        // Response was not JSON
-      }
-
-      // If 401/403, try the next auth format
-      if ((res.status === 401 || res.status === 403) && auth !== authFormats[authFormats.length - 1]) {
-        console.warn(`[tfg/submit] ${auth.label} auth returned ${res.status}, trying next format...`);
-        continue;
-      }
-
-      if (!res.ok || (body && body.status === 'fail')) {
-        console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}, auth=${auth.label}):`, rawText.slice(0, 500));
-        return {
-          _pinStatus: 'http_error',
-          httpStatus: res.status,
-          statusText: res.statusText,
-          body: body ?? rawText.slice(0, 300),
-          url,
-          authFormat: auth.label,
-          keyPreview: maskedKey,
-        };
-      }
-
-      console.log(`[tfg/submit] PIN created successfully (auth=${auth.label}):`, JSON.stringify(body));
-      return { _pinStatus: 'ok', authFormat: auth.label, ...(body ?? {}) };
-    } catch (err) {
-      const reason = err instanceof Error ? err.message : String(err);
-      console.warn(`[tfg/submit] PIN creation error (auth=${auth.label}): ${reason}`);
-      return { _pinStatus: 'fetch_error', error: reason, url, authFormat: auth.label };
+      body = JSON.parse(rawText);
+    } catch {
+      // Response was not JSON
     }
-  }
 
-  return { _pinStatus: 'all_auth_failed', url, keyPreview: maskedKey };
+    if (!res.ok || (body && body.status === 'fail')) {
+      console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}):`, rawText.slice(0, 500));
+      return {
+        _pinStatus: 'http_error',
+        httpStatus: res.status,
+        statusText: res.statusText,
+        body: body ?? rawText.slice(0, 300),
+        url,
+        keyPreview: maskedKey,
+      };
+    }
+
+    console.log(`[tfg/submit] PIN created successfully:`, JSON.stringify(body));
+    return { _pinStatus: 'ok', ...(body ?? {}) };
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(`[tfg/submit] PIN creation error: ${reason}`);
+    return { _pinStatus: 'fetch_error', error: reason, url, keyPreview: maskedKey };
+  }
 }
 
 // ─── Main handler ────────────────────────────────────────────
