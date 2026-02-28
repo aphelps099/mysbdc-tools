@@ -44,7 +44,7 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <!-- Logo -->
   <tr>
     <td style="padding:0 0 56px;">
-      <img src="${LOGO_URL}" alt="Tech Futures Group" width="36" height="36" style="display:block;width:36px;height:36px;" />
+      <img src="${LOGO_URL}" alt="Tech Futures Group" height="40" style="display:block;height:40px;width:auto;" />
     </td>
   </tr>
 
