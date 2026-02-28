@@ -127,10 +127,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- Score -->
   <tr>
     <td style="padding:0 0 40px;">
-      <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border:1px solid rgba(255,255,255,0.06);">
-        <span style="font-family:${MONO};font-size:18px;font-weight:700;color:${scoreColor};letter-spacing:-0.02em;">${d.readinessScore}</span>
-        <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#6e7681;">${esc(scoreLabel)}</span>
-      </div>
+      <span style="font-family:${MONO};font-size:12px;color:#6e7681;letter-spacing:0.04em;">Readiness <span style="font-weight:700;font-size:13px;color:${scoreColor};">${d.readinessScore}/10</span> &mdash; ${esc(scoreLabel)}</span>
     </td>
   </tr>
 

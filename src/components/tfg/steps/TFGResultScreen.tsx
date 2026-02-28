@@ -48,9 +48,6 @@ export default function TFGResultScreen({ result, data }: Props) {
           </p>
 
           <div className="s641-result-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-            </svg>
             Application Received
           </div>
 
