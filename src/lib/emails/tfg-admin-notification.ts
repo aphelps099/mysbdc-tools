@@ -1,8 +1,8 @@
 /**
  * TFG Admin Notification Email — new application alert.
  *
- * Dark-theme, Pentagram-minimal design.
- * TFG lightning logo, GT America Extended headings, Roboto Mono labels.
+ * Pentagram-minimal. Confident spacing. Typography-driven hierarchy.
+ * Self-hosted GT America Extended via @font-face for Apple Mail/iOS.
  */
 
 export const TFG_ADMIN_RECIPIENTS = [
@@ -14,6 +14,8 @@ export const TFG_ADMIN_RECIPIENTS = [
 
 const LOGO_URL =
   'https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png';
+
+const APP_ORIGIN = process.env.NEXT_PUBLIC_APP_URL || 'https://tools.norcalsbdc.org';
 
 interface AdminEmailData {
   firstName: string;
@@ -30,7 +32,14 @@ interface AdminEmailData {
   pitchDeckUrl: string | null;
 }
 
+/* Shared font stacks */
+const SANS = "'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+const MONO = "'Roboto Mono', 'SF Mono', 'Consolas', monospace";
+
 export function buildAdminNotificationHtml(d: AdminEmailData): string {
+  const fontUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Regular.otf`;
+  const fontMedUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Medium.otf`;
+
   const scoreLabel =
     d.readinessScore >= 6
       ? 'Investor-Ready'
@@ -48,15 +57,14 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   const sectors =
     d.industrySectors.length > 0 ? d.industrySectors.join(', ') : '\u2014';
 
-  // Only render CTA buttons when URLs are present
   const onePagerBtn = d.onePagerUrl
     ? `<a href="${esc(d.onePagerUrl)}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0d0d0d;font-family:'GT America Extended','Roboto Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:0;">View One-Pager</a>`
+         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">View One-Pager</a>`
     : '';
 
   const pitchDeckBtn = d.pitchDeckUrl
     ? `<a href="${esc(d.pitchDeckUrl)}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 28px;border:1px solid rgba(255,255,255,0.15);color:#e2e6eb;font-family:'GT America Extended','Roboto Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:0;margin-left:12px;">Pitch Deck</a>`
+         style="display:inline-block;padding:14px 28px;border:1px solid rgba(255,255,255,0.12);color:#e2e6eb;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;margin-left:12px;">Pitch Deck</a>`
     : '';
 
   return `<!DOCTYPE html>
@@ -67,60 +75,68 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>New TFG Application: ${esc(d.companyName)}</title>
 <style>
+  @font-face {
+    font-family: 'GT America Extended';
+    src: url('${fontUrl}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'GT America Extended';
+    src: url('${fontMedUrl}') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+  }
   @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 </style>
 </head>
-<body style="margin:0;padding:0;background:#0d0d0d;-webkit-font-smoothing:antialiased;">
+<body style="margin:0;padding:0;background:#0a0a0a;-webkit-font-smoothing:antialiased;">
 
 <!-- Preheader -->
-<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#0d0d0d;">
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#0a0a0a;">
   New application from ${esc(d.firstName)} ${esc(d.lastName)} \u2014 ${esc(d.companyName)}. Score: ${d.readinessScore} (${esc(scoreLabel)}).
 </div>
 
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#0d0d0d;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#0a0a0a;">
 <tr>
-<td align="center" style="padding:48px 20px 64px;">
+<td align="center" style="padding:64px 24px 80px;">
 
-<table role="presentation" width="520" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;width:100%;">
+<table role="presentation" width="500" cellspacing="0" cellpadding="0" border="0" style="max-width:500px;width:100%;">
 
   <!-- Logo -->
   <tr>
-    <td style="padding:0 0 48px;">
-      <img src="${LOGO_URL}" alt="TFG" height="64" style="display:block;height:64px;width:auto;" />
+    <td style="padding:0 0 56px;">
+      <img src="${LOGO_URL}" alt="Tech Futures Group" height="56" style="display:block;height:56px;width:auto;" />
     </td>
   </tr>
 
-  <!-- Label -->
+  <!-- Type label -->
   <tr>
-    <td style="padding:0 0 16px;">
-      <span style="font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#6e7681;">New Application</span>
+    <td style="padding:0 0 12px;">
+      <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#4eff00;">New Application</span>
     </td>
   </tr>
 
   <!-- Company name -->
   <tr>
-    <td style="padding:0 0 12px;">
-      <h1 style="font-family:'GT America Extended',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:28px;font-weight:700;color:#ffffff;margin:0;letter-spacing:-0.5px;line-height:1.15;">${esc(d.companyName)}</h1>
+    <td style="padding:0 0 16px;">
+      <h1 style="font-family:${SANS};font-size:30px;font-weight:500;color:#ffffff;margin:0;letter-spacing:-0.5px;line-height:1.15;">${esc(d.companyName)}</h1>
     </td>
   </tr>
 
-  <!-- Score badge -->
+  <!-- Score -->
   <tr>
     <td style="padding:0 0 40px;">
-      <span style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;color:${scoreColor};">${d.readinessScore} \u2014 ${esc(scoreLabel)}</span>
-    </td>
-  </tr>
-
-  <!-- Divider -->
-  <tr>
-    <td style="padding:0 0 32px;">
-      <div style="width:32px;height:2px;background:#4eff00;"></div>
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border:1px solid rgba(255,255,255,0.06);">
+        <span style="font-family:${MONO};font-size:18px;font-weight:700;color:${scoreColor};letter-spacing:-0.02em;">${d.readinessScore}</span>
+        <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#6e7681;">${esc(scoreLabel)}</span>
+      </div>
     </td>
   </tr>
 
   <!-- Data rows -->
   <tr>
-    <td style="padding:0 0 32px;">
+    <td style="padding:32px 0;border-top:1px solid rgba(255,255,255,0.04);">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
         ${row('Applicant', `${esc(d.firstName)} ${esc(d.lastName)}`)}
         ${row('Email', d.email ? `<a href="mailto:${esc(d.email)}" style="color:#4eff00;text-decoration:none;">${esc(d.email)}</a>` : '\u2014')}
@@ -136,23 +152,16 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- CTA Buttons -->
   ${onePagerBtn || pitchDeckBtn ? `
   <tr>
-    <td style="padding:0 0 48px;">
+    <td style="padding:0 0 56px;">
       ${onePagerBtn}${pitchDeckBtn}
     </td>
   </tr>
   ` : ''}
 
-  <!-- Footer divider -->
-  <tr>
-    <td style="padding:0 0 24px;">
-      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
-    </td>
-  </tr>
-
   <!-- Footer -->
   <tr>
-    <td>
-      <p style="font-family:'Roboto Mono',monospace;font-size:10px;color:#484f58;margin:0;letter-spacing:0.04em;">
+    <td style="padding:24px 0 0;border-top:1px solid rgba(255,255,255,0.04);">
+      <p style="font-family:${MONO};font-size:10px;color:#333;margin:0;letter-spacing:0.04em;">
         Tech Futures Group \u2014 A program of the NorCal SBDC
       </p>
     </td>
@@ -171,8 +180,8 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 function row(label: string, value: string): string {
   return `
   <tr>
-    <td style="padding:8px 0;font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#6e7681;width:100px;vertical-align:top;">${label}</td>
-    <td style="padding:8px 0;font-family:'GT America Extended',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;color:#e2e6eb;font-weight:500;">${value}</td>
+    <td style="padding:8px 0;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:100px;vertical-align:top;">${label}</td>
+    <td style="padding:8px 0;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;">${value}</td>
   </tr>`;
 }
 

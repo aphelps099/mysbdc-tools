@@ -3,12 +3,19 @@
  *
  * Accessed by admin team from links in notification emails.
  * Uses unguessable UUIDs for security (no auth required).
+ *
+ * Design: Pentagram-minimal. Dark field. Typography-forward.
  */
 
 import { NextRequest } from 'next/server';
 import { loadApplication, type StoredApplication } from '@/lib/tfg-storage';
 
 export const dynamic = 'force-dynamic';
+
+const LOGO_URL =
+  'https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png';
+
+const APP_ORIGIN = process.env.NEXT_PUBLIC_APP_URL || 'https://tools.norcalsbdc.org';
 
 export async function GET(
   _req: NextRequest,
@@ -99,7 +106,7 @@ function renderOnePager(app: StoredApplication): string {
         .map((m) => {
           const li = m.linkedinUrl?.trim();
           return li
-            ? `<a href="${esc(li)}" style="color:#4eff00;text-decoration:none;">${esc(m.name!)}</a>`
+            ? `<a href="${esc(li)}">${esc(m.name!)}</a>`
             : esc(m.name!);
         })
         .join('<br>')
@@ -113,180 +120,236 @@ function renderOnePager(app: StoredApplication): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  });
+
+  const submittedTime = new Date(app.submittedAt).toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
   });
+
+  const fontUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Regular.otf`;
+  const fontMedUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Medium.otf`;
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(str(d.companyName))} — TFG Application</title>
+<title>${esc(str(d.companyName))} \u2014 TFG Application</title>
 <style>
+  @font-face {
+    font-family: 'GT America Extended';
+    src: url('${fontUrl}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'GT America Extended';
+    src: url('${fontMedUrl}') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+  }
   @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    background: #0d0d0d;
+    background: #0a0a0a;
     color: #e2e6eb;
-    font-family: 'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .container {
-    max-width: 720px;
+
+  .page {
+    max-width: 680px;
     margin: 0 auto;
-    padding: 40px 24px 80px;
+    padding: 64px 32px 96px;
   }
-  .header {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
+
+  /* ── Masthead ── */
+  .masthead {
+    padding-bottom: 48px;
+    margin-bottom: 48px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
-  .header-top {
+
+  .masthead-logo {
+    display: block;
+    height: 56px;
+    width: auto;
+    margin-bottom: 48px;
+  }
+
+  .masthead-meta {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
   }
-  .header-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .header-brand-name {
-    font-family: 'GT America Extended', -apple-system, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #6e7681;
-    letter-spacing: -0.01em;
-  }
-  .tfg-mark {
+
+  .masthead-type {
     font-family: 'Roboto Mono', monospace;
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #6e7681;
+    color: #4eff00;
   }
-  .submitted-at {
+
+  .masthead-date {
     font-family: 'Roboto Mono', monospace;
     font-size: 10px;
+    color: #484f58;
+    letter-spacing: 0.02em;
+  }
+
+  .masthead h1 {
+    font-size: 36px;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .masthead-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .masthead-score-num {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .masthead-score-label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: #6e7681;
   }
-  h1 {
-    font-size: 32px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -1px;
-    margin-bottom: 8px;
-  }
-  .score-badge {
-    display: inline-block;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 4px 12px;
-    border-radius: 4px;
-    margin-bottom: 32px;
-  }
-  .divider {
-    width: 48px;
-    height: 3px;
-    background: #4eff00;
-    margin-bottom: 32px;
-    display: none;
-  }
+
+  /* ── Sections ── */
   .section {
-    margin-bottom: 28px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 40px;
   }
-  .section:first-of-type { border-top: none; padding-top: 0; }
+
   .section-label {
     font-family: 'Roboto Mono', monospace;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #6e7681;
-    margin-bottom: 12px;
+    color: #484f58;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
   }
-  .fields { width: 100%; border-collapse: collapse; }
+
+  .fields {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
   .field-label {
-    font-size: 12px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 11px;
     color: #6e7681;
-    padding: 5px 16px 5px 0;
+    padding: 6px 24px 6px 0;
     vertical-align: top;
     white-space: nowrap;
     width: 140px;
   }
+
   .field-value {
-    font-size: 13px;
+    font-size: 14px;
     color: #e2e6eb;
-    font-weight: 500;
-    padding: 5px 0;
+    font-weight: 400;
+    padding: 6px 0;
     word-break: break-word;
   }
+
   .field-long {
-    font-size: 13px;
-    color: #c0c8d0;
-    padding: 4px 0 12px;
-    line-height: 1.7;
+    font-size: 14px;
+    color: #b0b8c4;
+    padding: 4px 0 16px;
+    line-height: 1.75;
   }
-  a { color: #4eff00; text-decoration: none; }
-  a:hover { text-decoration: underline; }
+
+  a {
+    color: #4eff00;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
   .pitch-deck-btn {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background: #4eff00;
-    color: #0d0d0d;
-    font-size: 13px;
+    color: #0a0a0a;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 11px;
     font-weight: 700;
-    border-radius: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-decoration: none;
     margin-top: 8px;
   }
-  .pitch-deck-btn:hover { background: #3dcc00; text-decoration: none; }
+  .pitch-deck-btn:hover {
+    background: #3dcc00;
+    text-decoration: none;
+  }
+
   .footer {
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    text-align: center;
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.04);
   }
   .footer p {
-    font-size: 11px;
-    color: #6e7681;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    color: #333;
+    letter-spacing: 0.04em;
   }
+  .footer p + p { margin-top: 4px; }
+
   @media (max-width: 600px) {
-    h1 { font-size: 24px; }
-    .field-label { display: block; width: auto; padding-bottom: 0; }
-    .field-value { display: block; padding-bottom: 8px; }
+    .page { padding: 40px 20px 64px; }
+    .masthead h1 { font-size: 26px; }
+    .masthead-logo { height: 44px; }
+    .field-label { display: block; width: auto; padding-bottom: 2px; }
+    .field-value { display: block; padding-bottom: 10px; }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-top">
-      <div class="header-brand">
-        <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="48" style="display:block;height:48px;width:auto;" />
-        <span class="header-brand-name">Tech Futures Group</span>
-      </div>
-      <span class="submitted-at">${esc(submittedDate)}</span>
+  <!-- Masthead -->
+  <div class="masthead">
+    <img src="${LOGO_URL}" alt="Tech Futures Group" class="masthead-logo" />
+
+    <div class="masthead-meta">
+      <span class="masthead-type">Application</span>
+      <span class="masthead-date">${esc(submittedDate)} \u2014 ${esc(submittedTime)}</span>
     </div>
 
     <h1>${esc(str(d.companyName))}</h1>
 
-    <div style="display:flex;align-items:center;gap:16px;">
-      <div class="score-badge" style="background:rgba(255,255,255,0.06);color:${scoreColor};">
-        Readiness: ${scoreNum} &mdash; ${esc(scoreLabel)}
-      </div>
-      <span class="tfg-mark">Application</span>
+    <div class="masthead-score">
+      <span class="masthead-score-num" style="color:${scoreColor};">${scoreNum}</span>
+      <span class="masthead-score-label">${esc(scoreLabel)}</span>
     </div>
   </div>
 
@@ -346,7 +409,7 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Team -->
   ${section('Team', [
-    fieldHtml('Members', team || '—'),
+    fieldHtml('Members', team || '\u2014'),
     longField('Team Fit', d.teamFit),
     field('Time Working', d.timeWorking),
   ].join(''))}
@@ -362,7 +425,7 @@ function renderOnePager(app: StoredApplication): string {
   <!-- Pitch Deck -->
   ${app.pitchDeckUrl ? `
   <div class="section">
-    <div class="section-label">PITCH DECK</div>
+    <div class="section-label">Pitch Deck</div>
     <a href="${esc(app.pitchDeckUrl)}" target="_blank" rel="noopener noreferrer" class="pitch-deck-btn">
       ${esc(app.pitchDeckFileName || 'Download Pitch Deck')} &rarr;
     </a>
@@ -371,8 +434,8 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Footer -->
   <div class="footer">
-    <p>Tech Futures Group &mdash; A program of the NorCal SBDC</p>
-    <p style="margin-top:4px;">Application ID: ${esc(app.id)}</p>
+    <p>Tech Futures Group \u2014 A program of the NorCal SBDC</p>
+    <p>${esc(app.id)}</p>
   </div>
 
 </div>
@@ -386,13 +449,13 @@ function notFoundHtml(): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Not Found — TFG</title>
+<title>Not Found \u2014 TFG</title>
 </head>
-<body style="margin:0;padding:0;background:#0d0d0d;color:#6e7681;font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;">
+<body style="margin:0;padding:0;background:#0a0a0a;color:#6e7681;font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;">
 <div style="text-align:center;">
-  <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="32" style="display:block;margin:0 auto 16px;height:32px;width:auto;" />
-  <h1 style="font-size:24px;color:#e2e6eb;margin-bottom:8px;">Application not found</h1>
-  <p style="font-size:14px;">This link may have expired or the ID is invalid.</p>
+  <img src="${LOGO_URL}" alt="TFG" height="48" style="display:block;margin:0 auto 24px;height:48px;width:auto;" />
+  <h1 style="font-size:20px;color:#e2e6eb;margin-bottom:8px;font-weight:500;">Application not found</h1>
+  <p style="font-size:13px;">This link may have expired or the ID is invalid.</p>
 </div>
 </body>
 </html>`;
