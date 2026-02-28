@@ -837,6 +837,21 @@
   border: none;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Mobile — prevent wobble, tighten layout
+   ═══════════════════════════════════════════════════════════ */
+
+/* Kill overscroll bounce on the page when TFG form is present */
+body:has(.tfg-theme) {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+}
+
+/* Prevent any horizontal scroll/jiggle within the form */
+.tfg-theme {
+  overflow-x: hidden;
+}
+
 /* ── Responsive: stack to single-column on mobile ── */
 
 @media (max-width: 540px) {
@@ -850,5 +865,25 @@
   .tfg-box-cell + .tfg-box-cell {
     border-left: none;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* Tighter content padding on small screens */
+  .tfg-theme .s641-content {
+    padding-top: 24px;
+  }
+
+  /* Compact nav spacing */
+  .tfg-theme .s641-nav {
+    padding-top: 28px;
+  }
+
+  /* Slightly smaller question text on mobile */
+  .tfg-theme .s641-question {
+    font-size: clamp(20px, 5vw, 28px);
+  }
+
+  /* Tighter subtitle margin */
+  .tfg-theme .s641-subtitle {
+    margin-bottom: 24px;
   }
 }

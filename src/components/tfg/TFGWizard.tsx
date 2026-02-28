@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { TFGApplicationData, TFGSubmitResult, TFGStepId } from './types';
 import { createEmptyTFGApplication, getVisibleSteps, calculateReadinessScore } from './types';
 import { submitTFGApplication } from './tfg-api';
@@ -31,6 +31,11 @@ export default function TFGWizard() {
   const visibleSteps = getVisibleSteps();
   const currentStep = visibleSteps[stepIndex] as TFGStepId | undefined;
   const progress = visibleSteps.length > 0 ? (stepIndex / visibleSteps.length) * 100 : 0;
+
+  /* Scroll to top of form whenever the step changes */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [stepIndex]);
 
   const onChange = useCallback((patch: Partial<TFGApplicationData>) => {
     setData((prev) => ({ ...prev, ...patch }));
