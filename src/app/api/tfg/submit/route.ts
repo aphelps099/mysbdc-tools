@@ -436,10 +436,14 @@ export async function POST(req: NextRequest): Promise<Response> {
     const resend = new Resend(resendKey);
     const from = process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>';
 
+    // Build batch of emails to send in a single API call (avoids rate-limiting
+    // when the Python backend also sends emails using the same Resend key).
+    const batch: { from: string; to: string[]; subject: string; html: string }[] = [];
+
     // Client confirmation email (NO score)
     if (str(tfgData.email)) {
       emailDebug.clientEmailAttempted = true;
-      resend.emails.send({
+      batch.push({
         from,
         to: [str(tfgData.email)],
         subject: "You're in.",
@@ -447,14 +451,14 @@ export async function POST(req: NextRequest): Promise<Response> {
           firstName: str(tfgData.firstName),
           companyName: str(tfgData.companyName),
         }),
-      }).catch((err) => console.warn('[tfg/submit] Client email failed:', err));
+      });
     }
 
     // Admin notification email
     if (onePagerUrl) {
       emailDebug.adminEmailAttempted = true;
       emailDebug.adminRecipients = TFG_ADMIN_RECIPIENTS;
-      resend.emails.send({
+      batch.push({
         from,
         to: TFG_ADMIN_RECIPIENTS,
         subject: `[TFG] New Application: ${str(tfgData.companyName)}`,
@@ -472,7 +476,13 @@ export async function POST(req: NextRequest): Promise<Response> {
           onePagerUrl,
           pitchDeckUrl,
         }),
-      }).catch((err) => console.warn('[tfg/submit] Admin email failed:', err));
+      });
+    }
+
+    // Send all emails in one API call to avoid 429 rate-limit errors
+    if (batch.length > 0) {
+      emailDebug.batchSize = batch.length;
+      resend.batch.send(batch).catch((err) => console.warn('[tfg/submit] Batch email failed:', err));
     }
   } else {
     emailDebug.skipped = 'RESEND_API_KEY not set';
