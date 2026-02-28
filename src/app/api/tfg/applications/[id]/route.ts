@@ -51,12 +51,17 @@ function str(v: unknown): string {
   return typeof v === 'string' ? v : '';
 }
 
-function section(title: string, rows: string): string {
+function section(title: string, content: string): string {
   return `
   <div class="section">
     <div class="section-label">${esc(title)}</div>
-    <table class="fields">${rows}</table>
+    ${content}
   </div>`;
+}
+
+function kvBlock(rows: string): string {
+  if (!rows.trim()) return '';
+  return `<table class="fields">${rows}</table>`;
 }
 
 function field(label: string, value: unknown): string {
@@ -82,12 +87,10 @@ function longField(label: string, value: unknown): string {
   const v = str(value);
   if (!v) return '';
   return `
-    <tr>
-      <td class="field-label" colspan="2">${esc(label)}</td>
-    </tr>
-    <tr>
-      <td class="field-long" colspan="2">${esc(v)}</td>
-    </tr>`;
+    <div class="prose-block">
+      <div class="prose-label">${esc(label)}</div>
+      <p class="prose-text">${esc(v)}</p>
+    </div>`;
 }
 
 // ─── Main Renderer ───────────────────────────────────────────
@@ -175,25 +178,32 @@ function renderOnePager(app: StoredApplication): string {
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
-  .masthead-logo {
-    display: block;
-    height: 56px;
-    width: auto;
+  .masthead-brand {
+    display: flex;
+    align-items: center;
+    gap: 0;
     margin-bottom: 48px;
   }
 
-  .masthead-meta {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    margin-bottom: 24px;
+  .masthead-brand-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #e2e6eb;
+    letter-spacing: -0.01em;
   }
 
-  .masthead-type {
+  .masthead-brand-sep {
+    margin: 0 10px;
+    color: rgba(255,255,255,0.12);
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  .masthead-brand-tag {
     font-family: 'Roboto Mono', monospace;
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #4eff00;
   }
@@ -203,6 +213,7 @@ function renderOnePager(app: StoredApplication): string {
     font-size: 10px;
     color: #484f58;
     letter-spacing: 0.02em;
+    margin-bottom: 32px;
   }
 
   .masthead h1 {
@@ -215,32 +226,20 @@ function renderOnePager(app: StoredApplication): string {
   }
 
   .masthead-score {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 14px;
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .masthead-score-num {
     font-family: 'Roboto Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .masthead-score-label {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 12px;
     color: #6e7681;
+    letter-spacing: 0.04em;
+  }
+
+  .masthead-score-value {
+    font-weight: 700;
+    font-size: 13px;
   }
 
   /* ── Sections ── */
   .section {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
   }
 
   .section-label {
@@ -250,14 +249,16 @@ function renderOnePager(app: StoredApplication): string {
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #484f58;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
 
+  /* Key-value table rows */
   .fields {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 8px;
   }
 
   .field-label {
@@ -278,11 +279,28 @@ function renderOnePager(app: StoredApplication): string {
     word-break: break-word;
   }
 
-  .field-long {
+  /* Long-form prose blocks — visually distinct from KV rows */
+  .prose-block {
+    margin: 16px 0;
+    padding-left: 16px;
+    border-left: 2px solid rgba(78, 255, 0, 0.15);
+  }
+
+  .prose-label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6e7681;
+    margin-bottom: 6px;
+  }
+
+  .prose-text {
     font-size: 14px;
     color: #b0b8c4;
-    padding: 4px 0 16px;
-    line-height: 1.75;
+    line-height: 1.8;
+    margin: 0;
   }
 
   a {
@@ -338,23 +356,24 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Masthead -->
   <div class="masthead">
-    <img src="${LOGO_URL}" alt="Tech Futures Group" class="masthead-logo" />
-
-    <div class="masthead-meta">
-      <span class="masthead-type">Application</span>
-      <span class="masthead-date">${esc(submittedDate)} \u2014 ${esc(submittedTime)}</span>
+    <div class="masthead-brand">
+      <span class="masthead-brand-name">Tech Futures Group</span>
+      <span class="masthead-brand-sep">|</span>
+      <span class="masthead-brand-tag">Application</span>
     </div>
+
+    <div class="masthead-date">${esc(submittedDate)} &middot; ${esc(submittedTime)}</div>
 
     <h1>${esc(str(d.companyName))}</h1>
 
     <div class="masthead-score">
-      <span class="masthead-score-num" style="color:${scoreColor};">${scoreNum}</span>
-      <span class="masthead-score-label">${esc(scoreLabel)}</span>
+      Readiness <span class="masthead-score-value" style="color:${scoreColor};">${scoreNum}/10</span>
+      &mdash; ${esc(scoreLabel)}
     </div>
   </div>
 
   <!-- Company & Contact -->
-  ${section('Company & Contact', [
+  ${section('Company & Contact', kvBlock([
     field('Company', d.companyName),
     fieldHtml('Website', str(d.website) ? `<a href="${esc(str(d.website))}">${esc(str(d.website))}</a>` : ''),
     field('Name', `${str(d.firstName)} ${str(d.lastName)}`),
@@ -363,13 +382,13 @@ function renderOnePager(app: StoredApplication): string {
     fieldHtml('LinkedIn', str(d.linkedin) ? `<a href="${esc(str(d.linkedin))}">${esc(str(d.linkedin))}</a>` : ''),
     field('Address', [str(d.streetAddress), str(d.city), str(d.state), str(d.zipCode)].filter(Boolean).join(', ')),
     field('State of Incorporation', d.stateOfIncorporation),
-  ].join(''))}
+  ].join('')))}
 
   <!-- Industry -->
-  ${section('Industry & Focus', [
+  ${section('Industry & Focus', kvBlock([
     field('Sectors', sectors),
     field('Other Industry', d.otherIndustry),
-  ].join(''))}
+  ].join('')))}
 
   <!-- Vision & Product -->
   ${section('Vision & Product', [
@@ -381,46 +400,62 @@ function renderOnePager(app: StoredApplication): string {
   <!-- Market & Validation -->
   ${section('Market & Validation', [
     longField('Market Opportunity', d.marketOpportunity),
-    field('I-Corps Status', d.icorpsStatus),
+    kvBlock([
+      field('I-Corps Status', d.icorpsStatus),
+    ].join('')),
     longField('I-Corps Details', d.icorpsDetails),
-    field('Customer Interviews', d.interviewStatus),
-    field('# Interviews', d.interviewCount),
+    kvBlock([
+      field('Customer Interviews', d.interviewStatus),
+      field('# Interviews', d.interviewCount),
+    ].join('')),
     longField('Interview Learnings', d.interviewLearnings),
     longField('Ideal Customer Profile', d.idealCustomerProfile),
   ].join(''))}
 
   <!-- Traction & Revenue -->
   ${section('Traction & Revenue', [
-    field('Product Stage', d.productStage),
+    kvBlock([
+      field('Product Stage', d.productStage),
+    ].join('')),
     longField('In-Market Status', d.inMarketStatus),
-    field('Revenue Stage', d.revenueStage),
+    kvBlock([
+      field('Revenue Stage', d.revenueStage),
+    ].join('')),
     longField('SBIR/STTR Status', d.sbirStatus),
     longField('Recent Achievements', d.recentAchievements),
   ].join(''))}
 
   <!-- Financing & Runway -->
   ${section('Financing & Runway', [
-    field('Total Funding', d.totalFunding),
-    field('Last Round', lastRound),
-    field('Raising Capital', d.raisingCapital === 'true' ? 'Yes' : d.raisingCapital === 'false' ? 'No' : str(d.raisingCapital)),
+    kvBlock([
+      field('Total Funding', d.totalFunding),
+      field('Last Round', lastRound),
+      field('Raising Capital', d.raisingCapital === 'true' ? 'Yes' : d.raisingCapital === 'false' ? 'No' : str(d.raisingCapital)),
+    ].join('')),
     longField('Raise Details', d.raiseDetails),
-    field('Runway (months)', d.runwayMonths),
+    kvBlock([
+      field('Runway (months)', d.runwayMonths),
+    ].join('')),
   ].join(''))}
 
   <!-- Team -->
   ${section('Team', [
-    fieldHtml('Members', team || '\u2014'),
+    kvBlock([
+      fieldHtml('Members', team || '\u2014'),
+    ].join('')),
     longField('Team Fit', d.teamFit),
-    field('Time Working', d.timeWorking),
+    kvBlock([
+      field('Time Working', d.timeWorking),
+    ].join('')),
   ].join(''))}
 
   <!-- Support & Referral -->
-  ${section('Support & Referral', [
+  ${section('Support & Referral', kvBlock([
     field('Support Needs', supportNeeds),
     field('Other Support', d.otherSupport),
     field('Referral Source', d.referralSource),
     field('Referrer', d.referrerName),
-  ].join(''))}
+  ].join('')))}
 
   <!-- Pitch Deck -->
   ${app.pitchDeckUrl ? `
