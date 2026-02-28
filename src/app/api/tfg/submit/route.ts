@@ -318,6 +318,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Step 1: Create client via backend intake endpoint
   let intakeResult: Record<string, unknown> | null = null;
+  let backendFailed = false;
 
   try {
     const res = await fetch(`${backendUrl()}/api/intake/submit`, {
@@ -327,21 +328,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
 
     if (!res.ok) {
-      console.warn(`[tfg/submit] Backend returned ${res.status}; using success stub`);
-      return Response.json({ success: true, neoserraResult: { stub: true } });
+      console.warn(`[tfg/submit] Backend returned ${res.status}; continuing with stub`);
+      backendFailed = true;
+    } else {
+      intakeResult = await res.json();
     }
-
-    intakeResult = await res.json();
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
-    console.warn(`[tfg/submit] Backend unreachable (${reason}); using success stub`);
-    return Response.json({ success: true, neoserraResult: { stub: true } });
+    console.warn(`[tfg/submit] Backend unreachable (${reason}); continuing with stub`);
+    backendFailed = true;
   }
 
   // Step 2: Populate TFG Application 2026 PIN form directly via Neoserra API
-  const neoserraResult = (intakeResult as Record<string, unknown>).neoserraResult as Record<string, unknown> | undefined;
+  const neoserraResult = (intakeResult as Record<string, unknown> | null)?.neoserraResult as Record<string, unknown> | undefined;
   const clientId = String(
-    neoserraResult?.id ?? (intakeResult as Record<string, unknown>).id ?? '0',
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown> | null)?.id ?? '0',
   );
 
   let pinResult: Record<string, unknown> | null = null;
@@ -373,54 +374,82 @@ export async function POST(req: NextRequest): Promise<Response> {
     console.warn(`[tfg/submit] Failed to save application: ${reason}`);
   }
 
-  // ── Step 4: Send notification emails (fire-and-forget) ────
+  // ── Step 4: Send notification emails via Resend ─────────
   const resendKey = process.env.RESEND_API_KEY;
+  const emailResults: { client?: unknown; admin?: unknown; error?: string } = {};
 
   if (resendKey) {
     const resend = new Resend(resendKey);
     const from = process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>';
+    const replyTo = 'gabriel@techfuturesgroup.org';
+
+    // Warn loudly if still using Resend sandbox domain
+    if (from.includes('resend.dev')) {
+      console.warn(
+        '[tfg/submit] ⚠️  RESEND_FROM is using resend.dev sandbox — emails will only deliver to the Resend account owner. ' +
+        'Set RESEND_FROM to a verified domain (e.g. "Tech Futures Group <noreply@techfuturesgroup.org>") for production.',
+      );
+    }
 
     // Client confirmation email
     if (str(tfgData.email)) {
-      resend.emails.send({
-        from,
-        to: [str(tfgData.email)],
-        subject: "You're in — Tech Futures Group",
-        html: buildClientConfirmationHtml({
-          firstName: str(tfgData.firstName),
-          companyName: str(tfgData.companyName),
-        }),
-      }).catch((e: unknown) => console.warn('[tfg/submit] Client email failed:', e));
+      try {
+        const clientRes = await resend.emails.send({
+          from,
+          replyTo,
+          to: [str(tfgData.email)],
+          subject: "You're in — Tech Futures Group",
+          html: buildClientConfirmationHtml({
+            firstName: str(tfgData.firstName),
+            companyName: str(tfgData.companyName),
+          }),
+        });
+        emailResults.client = clientRes;
+        console.log('[tfg/submit] Client email sent:', JSON.stringify(clientRes));
+      } catch (e: unknown) {
+        emailResults.client = { error: e instanceof Error ? e.message : String(e) };
+        console.error('[tfg/submit] Client email FAILED:', e);
+      }
     }
 
-    // Admin notification email with one-pager link
-    resend.emails.send({
-      from,
-      to: TFG_ADMIN_RECIPIENTS,
-      subject: `[TFG] New Application: ${str(tfgData.companyName)}`,
-      html: buildAdminNotificationHtml({
-        firstName: str(tfgData.firstName),
-        lastName: str(tfgData.lastName),
-        companyName: str(tfgData.companyName),
-        email: str(tfgData.email),
-        phone: str(tfgData.phone),
-        website: str(tfgData.website),
-        industrySectors: Array.isArray(tfgData.industrySectors) ? tfgData.industrySectors as string[] : [],
-        productStage: str(tfgData.productStage),
-        revenueStage: str(tfgData.revenueStage),
-        readinessScore: typeof tfgData.readinessScore === 'number' ? tfgData.readinessScore : 0,
-        onePagerUrl,
-        pitchDeckUrl: null,
-      }),
-    }).catch((e: unknown) => console.warn('[tfg/submit] Admin email failed:', e));
+    // Admin notification email
+    try {
+      const adminRes = await resend.emails.send({
+        from,
+        replyTo,
+        to: TFG_ADMIN_RECIPIENTS,
+        subject: `[TFG] New Application: ${str(tfgData.companyName)}`,
+        html: buildAdminNotificationHtml({
+          firstName: str(tfgData.firstName),
+          lastName: str(tfgData.lastName),
+          companyName: str(tfgData.companyName),
+          email: str(tfgData.email),
+          phone: str(tfgData.phone),
+          website: str(tfgData.website),
+          industrySectors: Array.isArray(tfgData.industrySectors) ? tfgData.industrySectors as string[] : [],
+          productStage: str(tfgData.productStage),
+          revenueStage: str(tfgData.revenueStage),
+          readinessScore: typeof tfgData.readinessScore === 'number' ? tfgData.readinessScore : 0,
+          onePagerUrl,
+          pitchDeckUrl: null,
+        }),
+      });
+      emailResults.admin = adminRes;
+      console.log('[tfg/submit] Admin email sent:', JSON.stringify(adminRes));
+    } catch (e: unknown) {
+      emailResults.admin = { error: e instanceof Error ? e.message : String(e) };
+      console.error('[tfg/submit] Admin email FAILED:', e);
+    }
   } else {
+    emailResults.error = 'RESEND_API_KEY not set — no emails sent';
     console.warn('[tfg/submit] RESEND_API_KEY not set; skipping emails');
   }
 
   return Response.json({
-    success: (intakeResult as Record<string, unknown>).success ?? true,
-    neoserraResult: neoserraResult ?? intakeResult,
+    success: backendFailed ? true : ((intakeResult as Record<string, unknown>)?.success ?? true),
+    neoserraResult: backendFailed ? { stub: true } : (neoserraResult ?? intakeResult),
     pinResult: pinResult ?? undefined,
     applicationId,
+    emailResults,
   });
 }
