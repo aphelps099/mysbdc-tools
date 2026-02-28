@@ -217,6 +217,8 @@ async function createPin(
         headers: {
           'Content-Type': 'application/json',
           'Authorization': auth.header,
+          'User-Agent': 'MYSBDC-Tools/1.0',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(payload),
       });
