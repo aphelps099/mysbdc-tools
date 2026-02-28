@@ -124,11 +124,12 @@ function renderOnePager(app: StoredApplication): string {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(str(d.companyName))} — TFG Application</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #0d0d0d;
     color: #e2e6eb;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 14px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -145,15 +146,15 @@ function renderOnePager(app: StoredApplication): string {
     margin-bottom: 12px;
   }
   .tfg-mark {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #4eff00;
+    color: #6e7681;
   }
   .submitted-at {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Roboto Mono', monospace;
     font-size: 10px;
     color: #6e7681;
   }
@@ -166,7 +167,7 @@ function renderOnePager(app: StoredApplication): string {
   }
   .score-badge {
     display: inline-block;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Roboto Mono', monospace;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -187,7 +188,7 @@ function renderOnePager(app: StoredApplication): string {
   }
   .section:first-of-type { border-top: none; padding-top: 0; }
   .section-label {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Roboto Mono', monospace;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.15em;
@@ -253,7 +254,7 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Header -->
   <div class="header">
-    <span class="tfg-mark">TECH FUTURES GROUP</span>
+    <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="28" height="28" style="display:block;width:28px;height:28px;" />
     <span class="submitted-at">${esc(submittedDate)}</span>
   </div>
 
@@ -365,7 +366,7 @@ function notFoundHtml(): string {
 </head>
 <body style="margin:0;padding:0;background:#0d0d0d;color:#6e7681;font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;">
 <div style="text-align:center;">
-  <p style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.15em;color:#4eff00;margin-bottom:16px;">TECH FUTURES GROUP</p>
+  <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" width="32" height="32" style="display:block;margin:0 auto 16px;width:32px;height:32px;" />
   <h1 style="font-size:24px;color:#e2e6eb;margin-bottom:8px;">Application not found</h1>
   <p style="font-size:14px;">This link may have expired or the ID is invalid.</p>
 </div>
