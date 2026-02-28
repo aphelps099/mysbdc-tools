@@ -32,9 +32,8 @@ interface AdminEmailData {
   pitchDeckUrl: string | null;
 }
 
-/* Shared font stacks */
+/* Single font stack — hierarchy via size/weight/spacing, not font-family */
 const SANS = "'GT America Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
-const MONO = "'Roboto Mono', 'SF Mono', 'Consolas', monospace";
 
 export function buildAdminNotificationHtml(d: AdminEmailData): string {
   const fontUrl = `${APP_ORIGIN}/fonts/GT-America-Extended-Regular.otf`;
@@ -59,12 +58,12 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 
   const onePagerBtn = d.onePagerUrl
     ? `<a href="${esc(d.onePagerUrl)}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">View One-Pager</a>`
+         style="display:inline-block;padding:14px 28px;background:#4eff00;color:#0a0a0a;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;">View One-Pager</a>`
     : '';
 
   const pitchDeckBtn = d.pitchDeckUrl
     ? `<a href="${esc(d.pitchDeckUrl)}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 28px;border:1px solid rgba(255,255,255,0.12);color:#e2e6eb;font-family:${MONO};font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;margin-left:12px;">Pitch Deck</a>`
+         style="display:inline-block;padding:14px 28px;border:1px solid rgba(255,255,255,0.12);color:#e2e6eb;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;margin-left:12px;">Pitch Deck</a>`
     : '';
 
   return `<!DOCTYPE html>
@@ -87,7 +86,6 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
     font-weight: 500;
     font-style: normal;
   }
-  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 </style>
 </head>
 <body style="margin:0;padding:0;background:#0a0a0a;-webkit-font-smoothing:antialiased;">
@@ -113,7 +111,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- Type label -->
   <tr>
     <td style="padding:0 0 12px;">
-      <span style="font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#4eff00;">New Application</span>
+      <span style="font-family:${SANS};font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#4eff00;">New Application</span>
     </td>
   </tr>
 
@@ -127,7 +125,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- Score -->
   <tr>
     <td style="padding:0 0 40px;">
-      <span style="font-family:${MONO};font-size:12px;color:#6e7681;letter-spacing:0.04em;">Readiness <span style="font-weight:700;font-size:13px;color:${scoreColor};">${d.readinessScore}/10</span> &mdash; ${esc(scoreLabel)}</span>
+      <span style="font-family:${SANS};font-size:13px;color:#6e7681;letter-spacing:0.01em;">Readiness <span style="font-weight:600;font-size:14px;color:${scoreColor};">${d.readinessScore}/10</span> &mdash; ${esc(scoreLabel)}</span>
     </td>
   </tr>
 
@@ -135,13 +133,13 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <tr>
     <td style="padding:32px 0 0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.10);">
-        ${row('Applicant', `${esc(d.firstName)} ${esc(d.lastName)}`)}
-        ${row('Email', d.email ? `<a href="mailto:${esc(d.email)}" style="color:#4eff00;text-decoration:none;">${esc(d.email)}</a>` : '\u2014')}
-        ${row('Phone', esc(d.phone) || '\u2014')}
-        ${row('Website', d.website ? `<a href="${esc(d.website)}" style="color:#4eff00;text-decoration:none;">${esc(d.website)}</a>` : '\u2014')}
-        ${row('Sectors', esc(sectors))}
-        ${row('Product', esc(d.productStage) || '\u2014')}
-        ${rowLast('Revenue', esc(d.revenueStage) || '\u2014')}
+        ${row('Applicant', `${esc(d.firstName)} ${esc(d.lastName)}`, 0)}
+        ${row('Email', d.email ? `<a href="mailto:${esc(d.email)}" style="color:#4eff00;text-decoration:none;">${esc(d.email)}</a>` : '\u2014', 1)}
+        ${row('Phone', esc(d.phone) || '\u2014', 2)}
+        ${row('Website', d.website ? `<a href="${esc(d.website)}" style="color:#4eff00;text-decoration:none;">${esc(d.website)}</a>` : '\u2014', 3)}
+        ${row('Sectors', esc(sectors), 4)}
+        ${row('Product', esc(d.productStage) || '\u2014', 5)}
+        ${row('Revenue', esc(d.revenueStage) || '\u2014', 6, true)}
       </table>
     </td>
   </tr>
@@ -158,7 +156,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- Footer -->
   <tr>
     <td style="padding:24px 0 0;border-top:1px solid rgba(255,255,255,0.08);">
-      <p style="font-family:${MONO};font-size:10px;color:#333;margin:0;letter-spacing:0.04em;">
+      <p style="font-family:${SANS};font-size:11px;color:#333;margin:0;letter-spacing:0.02em;">
         Tech Futures Group \u2014 A program of the NorCal SBDC
       </p>
     </td>
@@ -174,19 +172,13 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
 </html>`;
 }
 
-function row(label: string, value: string): string {
+function row(label: string, value: string, i: number, isLast = false): string {
+  const bg = i % 2 === 0 ? 'background:rgba(255,255,255,0.025);' : '';
+  const border = isLast ? '' : 'border-bottom:1px solid rgba(255,255,255,0.06);';
   return `
   <tr>
-    <td style="padding:10px 14px;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:90px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.06);">${label}</td>
-    <td style="padding:10px 14px;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;border-bottom:1px solid rgba(255,255,255,0.06);">${value}</td>
-  </tr>`;
-}
-
-function rowLast(label: string, value: string): string {
-  return `
-  <tr>
-    <td style="padding:10px 14px;font-family:${MONO};font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#484f58;width:90px;vertical-align:top;">${label}</td>
-    <td style="padding:10px 14px;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;">${value}</td>
+    <td style="${bg}${border}padding:10px 14px;font-family:${SANS};font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#6e7681;width:90px;vertical-align:top;">${label}</td>
+    <td style="${bg}${border}padding:10px 14px;font-family:${SANS};font-size:14px;color:#e2e6eb;font-weight:400;">${value}</td>
   </tr>`;
 }
 
