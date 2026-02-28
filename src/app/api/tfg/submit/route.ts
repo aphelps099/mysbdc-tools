@@ -203,7 +203,7 @@ async function createPin(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${key}`,
+        'Authorization': `apikey ${key}`,
       },
       body: JSON.stringify(payload),
     });
