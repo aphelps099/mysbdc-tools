@@ -48,25 +48,31 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Staggered field reveal ── */
+/* ── More breathing room between form sections ── */
+
+.tfg-theme .s641-fields {
+  gap: 28px;
+}
+
+/* ── Staggered field reveal — each box slides up + fades with stagger ── */
 
 .tfg-theme .s641-fields > * {
-  animation: tfgReveal 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: tfgReveal 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-.tfg-theme .s641-fields > *:nth-child(1) { animation-delay: 0ms; }
-.tfg-theme .s641-fields > *:nth-child(2) { animation-delay: 50ms; }
-.tfg-theme .s641-fields > *:nth-child(3) { animation-delay: 100ms; }
-.tfg-theme .s641-fields > *:nth-child(4) { animation-delay: 150ms; }
-.tfg-theme .s641-fields > *:nth-child(5) { animation-delay: 200ms; }
-.tfg-theme .s641-fields > *:nth-child(6) { animation-delay: 250ms; }
-.tfg-theme .s641-fields > *:nth-child(7) { animation-delay: 300ms; }
-.tfg-theme .s641-fields > *:nth-child(8) { animation-delay: 350ms; }
-.tfg-theme .s641-fields > *:nth-child(9) { animation-delay: 400ms; }
-.tfg-theme .s641-fields > *:nth-child(10) { animation-delay: 450ms; }
+.tfg-theme .s641-fields > *:nth-child(1) { animation-delay: 80ms; }
+.tfg-theme .s641-fields > *:nth-child(2) { animation-delay: 180ms; }
+.tfg-theme .s641-fields > *:nth-child(3) { animation-delay: 280ms; }
+.tfg-theme .s641-fields > *:nth-child(4) { animation-delay: 380ms; }
+.tfg-theme .s641-fields > *:nth-child(5) { animation-delay: 460ms; }
+.tfg-theme .s641-fields > *:nth-child(6) { animation-delay: 540ms; }
+.tfg-theme .s641-fields > *:nth-child(7) { animation-delay: 620ms; }
+.tfg-theme .s641-fields > *:nth-child(8) { animation-delay: 700ms; }
+.tfg-theme .s641-fields > *:nth-child(9) { animation-delay: 780ms; }
+.tfg-theme .s641-fields > *:nth-child(10) { animation-delay: 860ms; }
 
 @keyframes tfgReveal {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ── Typography — GT America Extended for TFG brand ── */
@@ -519,7 +525,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--tfg-muted);
-  margin: 28px 0 12px;
+  margin: 36px 0 14px;
   padding: 0;
   border: none;
 }
@@ -572,6 +578,119 @@
   font-weight: 500;
   text-align: right;
   word-break: break-word;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Splash / gate screen
+   ═══════════════════════════════════════════════════════════ */
+
+.tfg-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #4eff00;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  animation: tfgSplashIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tfg-splash.tfg-splash-exit {
+  animation: tfgSplashOut 500ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+@keyframes tfgSplashIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes tfgSplashOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.05); }
+}
+
+/* Title block */
+.tfg-splash-title {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 700;
+  color: #0d0d0d;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-align: center;
+  margin: 0 0 8px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
+@keyframes tfgSplashTitle {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtitle / program label */
+.tfg-splash-sub {
+  font-family: var(--mono, 'SF Mono', monospace);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(13, 13, 13, 0.55);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 40px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+
+/* Brief terms / expectations */
+.tfg-splash-terms {
+  max-width: 400px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(13, 13, 13, 0.65);
+  text-align: center;
+  margin: 0 0 36px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+}
+
+.tfg-splash-terms strong {
+  color: #0d0d0d;
+  font-weight: 600;
+}
+
+/* CTA button — dark on green */
+.tfg-splash-btn {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 100px;
+  border: none;
+  background: #0d0d0d;
+  color: #4eff00;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 450ms both;
+}
+
+.tfg-splash-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.tfg-splash-btn:active {
+  transform: scale(0.98);
+}
+
+/* Duration hint */
+.tfg-splash-meta {
+  font-family: var(--mono, 'SF Mono', monospace);
+  font-size: 10px;
+  color: rgba(13, 13, 13, 0.35);
+  letter-spacing: 0.06em;
+  margin-top: 16px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 550ms both;
 }
 
 /* ═══════════════════════════════════════════════════════════

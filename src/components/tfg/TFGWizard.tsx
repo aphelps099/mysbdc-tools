@@ -22,7 +22,38 @@ import './tfg.css';
    Uses the Neoserra PIN/custom form system for submission.
    ═══════════════════════════════════════════════════════ */
 
+/* ── Splash / gate screen ── */
+function TFGSplash({ onContinue }: { onContinue: () => void }) {
+  const [exiting, setExiting] = useState(false);
+
+  const handleContinue = () => {
+    setExiting(true);
+    setTimeout(onContinue, 480); // matches animation duration
+  };
+
+  return (
+    <div className={`tfg-splash${exiting ? ' tfg-splash-exit' : ''}`}>
+      <h1 className="tfg-splash-title">Apply to TFG</h1>
+      <p className="tfg-splash-sub">Tech Futures Group</p>
+
+      <p className="tfg-splash-terms">
+        This application is for <strong>early-stage technology startups</strong> in
+        the NorCal SBDC region seeking mentorship, investor connections, and
+        growth support. You&apos;ll need details about your company, product,
+        traction, team, and financing.
+      </p>
+
+      <button className="tfg-splash-btn" onClick={handleContinue}>
+        Begin Application
+      </button>
+
+      <span className="tfg-splash-meta">Takes about 10 minutes</span>
+    </div>
+  );
+}
+
 export default function TFGWizard() {
+  const [showSplash, setShowSplash] = useState(true);
   const [data, setData] = useState<TFGApplicationData>(createEmptyTFGApplication);
   const [stepIndex, setStepIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -68,6 +99,10 @@ export default function TFGWizard() {
       setSubmitting(false);
     }
   }, [data]);
+
+  if (showSplash) {
+    return <TFGSplash onContinue={() => setShowSplash(false)} />;
+  }
 
   if (result) {
     return (
