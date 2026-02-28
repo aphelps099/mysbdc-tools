@@ -81,6 +81,7 @@ export interface TFGSubmitResult {
   neoserraResult?: Record<string, unknown>;
   pinResult?: Record<string, unknown> | null;
   applicationId?: string;
+  emailResults?: { client?: unknown; admin?: unknown; error?: string };
   error?: string;
 }
 
