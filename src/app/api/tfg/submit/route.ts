@@ -5,12 +5,23 @@
  *   - `data`      — JSON string of all TFG application fields
  *   - `pitchDeck` — optional file upload
  *
- * Two-step flow:
+ * Flow:
  *   1. Create client via backend's /api/intake/submit
  *   2. Populate the TFG Application 2026 PIN form via Neoserra REST API
+ *   3. Upload pitch deck to Google Drive (if present)
+ *   4. Persist application JSON to disk
+ *   5. Send notification emails via Resend (fire-and-forget)
  */
 
 import { NextRequest } from 'next/server';
+import { Resend } from 'resend';
+import { uploadPitchDeck } from '@/lib/google-drive';
+import { saveApplication } from '@/lib/tfg-storage';
+import { buildClientConfirmationHtml } from '@/lib/emails/tfg-client-confirmation';
+import {
+  buildAdminNotificationHtml,
+  TFG_ADMIN_RECIPIENTS,
+} from '@/lib/emails/tfg-admin-notification';
 
 export const dynamic = 'force-dynamic';
 
@@ -217,6 +228,7 @@ async function createPin(
 
 export async function POST(req: NextRequest): Promise<Response> {
   let tfgData: Record<string, unknown>;
+  let pitchDeckFile: File | null = null;
 
   try {
     const fd = await req.formData();
@@ -228,6 +240,12 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
     tfgData = JSON.parse(raw);
+
+    // Extract pitch deck file (if present)
+    const deck = fd.get('pitchDeck');
+    if (deck && deck instanceof File && deck.size > 0) {
+      pitchDeckFile = deck;
+    }
   } catch {
     return Response.json(
       { success: false, error: 'Invalid form data' },
@@ -347,9 +365,87 @@ export async function POST(req: NextRequest): Promise<Response> {
     console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation');
   }
 
+  // ── Step 3: Upload pitch deck to Google Drive ───────────────
+  let pitchDeckUrl: string | null = null;
+  const pitchDeckFileName = str(tfgData.pitchDeckFileName) || pitchDeckFile?.name || null;
+
+  if (pitchDeckFile) {
+    try {
+      const buffer = Buffer.from(await pitchDeckFile.arrayBuffer());
+      const result = await uploadPitchDeck(pitchDeckFile.name, buffer, pitchDeckFile.type || 'application/octet-stream');
+      if (result) {
+        pitchDeckUrl = result.webViewLink;
+        console.log(`[tfg/submit] Pitch deck uploaded to Drive: ${pitchDeckUrl}`);
+      }
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
+      console.warn(`[tfg/submit] Pitch deck upload failed: ${reason}`);
+    }
+  }
+
+  // ── Step 4: Persist application data ──────────────────────
+  const applicationId = crypto.randomUUID();
+
+  try {
+    await saveApplication(applicationId, tfgData, pitchDeckUrl, pitchDeckFileName, clientId !== '0' ? clientId : null);
+    console.log(`[tfg/submit] Application saved: ${applicationId}`);
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(`[tfg/submit] Failed to save application: ${reason}`);
+  }
+
+  // ── Step 5: Send notification emails (fire-and-forget) ────
+  const resendKey = process.env.RESEND_API_KEY;
+  const appUrl = (process.env.APP_URL || '').replace(/\/+$/, '');
+  const onePagerUrl = appUrl ? `${appUrl}/api/tfg/applications/${applicationId}` : '';
+
+  if (resendKey) {
+    const resend = new Resend(resendKey);
+    const from = process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>';
+
+    // Client confirmation email (NO score)
+    if (str(tfgData.email)) {
+      resend.emails.send({
+        from,
+        to: [str(tfgData.email)],
+        subject: "You're in.",
+        html: buildClientConfirmationHtml({
+          firstName: str(tfgData.firstName),
+          companyName: str(tfgData.companyName),
+        }),
+      }).catch((err) => console.warn('[tfg/submit] Client email failed:', err));
+    }
+
+    // Admin notification email
+    if (onePagerUrl) {
+      resend.emails.send({
+        from,
+        to: TFG_ADMIN_RECIPIENTS,
+        subject: `[TFG] New Application: ${str(tfgData.companyName)}`,
+        html: buildAdminNotificationHtml({
+          firstName: str(tfgData.firstName),
+          lastName: str(tfgData.lastName),
+          companyName: str(tfgData.companyName),
+          email: str(tfgData.email),
+          phone: str(tfgData.phone),
+          website: str(tfgData.website),
+          industrySectors: Array.isArray(tfgData.industrySectors) ? tfgData.industrySectors as string[] : [],
+          productStage: str(tfgData.productStage),
+          revenueStage: str(tfgData.revenueStage),
+          readinessScore: typeof tfgData.readinessScore === 'number' ? tfgData.readinessScore : 0,
+          onePagerUrl,
+          pitchDeckUrl,
+        }),
+      }).catch((err) => console.warn('[tfg/submit] Admin email failed:', err));
+    }
+  } else {
+    console.warn('[tfg/submit] RESEND_API_KEY not set; skipping emails');
+  }
+
   return Response.json({
     success: (intakeResult as Record<string, unknown>).success ?? true,
     neoserraResult: neoserraResult ?? intakeResult,
     pinResult: pinResult ?? undefined,
+    applicationId,
   });
 }
