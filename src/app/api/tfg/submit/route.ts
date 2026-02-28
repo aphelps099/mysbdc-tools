@@ -419,7 +419,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           from,
           replyTo,
           to: [str(tfgData.email)],
-          subject: "You're in — Tech Futures Group",
+          subject: "Application Received — Tech Futures Group",
           html: buildClientConfirmationHtml({
             firstName: str(tfgData.firstName),
             companyName: str(tfgData.companyName),

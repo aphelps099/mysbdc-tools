@@ -494,3 +494,73 @@
   text-align: right;
   word-break: break-word;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Animations — snap-fade entrances
+   ═══════════════════════════════════════════════════════════ */
+
+/* Header logo scales in from 0.6 → 1 with a snappy spring */
+.tfg-logo-pop {
+  animation: tfgLogoPop 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes tfgLogoPop {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Header entrance — snap fade from left */
+.tfg-header-entrance {
+  animation: tfgSnapFade 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tfgSnapFade {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Result screen — staggered snap-fade entrance ── */
+
+.tfg-theme .s641-result {
+  animation: tfgResultFade 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tfgResultFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Success icon — scale pop with overshoot */
+.tfg-theme .s641-result-icon {
+  animation: tfgIconPop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 100ms;
+}
+
+@keyframes tfgIconPop {
+  from { opacity: 0; transform: scale(0.3); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Title snaps up */
+.tfg-theme .s641-result-title {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 250ms;
+}
+
+/* Description fades up staggered */
+.tfg-theme .s641-result-desc {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 350ms;
+}
+
+/* Badge snaps in */
+.tfg-theme .s641-result-badge {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 450ms;
+}
+
+@keyframes tfgSnapUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

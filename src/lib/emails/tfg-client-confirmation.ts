@@ -44,14 +44,14 @@ export function buildClientConfirmationHtml({ firstName, companyName }: ClientEm
   <!-- Logo -->
   <tr>
     <td style="padding:0 0 56px;">
-      <img src="${LOGO_URL}" alt="Tech Futures Group" height="40" style="display:block;height:40px;width:auto;" />
+      <img src="${LOGO_URL}" alt="Tech Futures Group" height="64" style="display:block;height:64px;width:auto;" />
     </td>
   </tr>
 
   <!-- Headline -->
   <tr>
     <td style="padding:0 0 24px;">
-      <h1 style="font-family:'GT America Extended',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:36px;font-weight:700;color:#ffffff;margin:0;letter-spacing:-1px;line-height:1.1;">You\u2019re in.</h1>
+      <h1 style="font-family:'GT America Extended',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:36px;font-weight:700;color:#ffffff;margin:0;letter-spacing:-1px;line-height:1.1;">Application Received</h1>
     </td>
   </tr>
 
