@@ -86,7 +86,7 @@ export function buildAdminNotificationHtml(d: AdminEmailData): string {
   <!-- Logo -->
   <tr>
     <td style="padding:0 0 48px;">
-      <img src="${LOGO_URL}" alt="TFG" width="32" height="32" style="display:block;width:32px;height:32px;" />
+      <img src="${LOGO_URL}" alt="TFG" height="36" style="display:block;height:36px;width:auto;" />
     </td>
   </tr>
 
