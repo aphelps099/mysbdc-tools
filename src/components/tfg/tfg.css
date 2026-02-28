@@ -69,9 +69,10 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Typography ── */
+/* ── Typography — GT America Extended for TFG brand ── */
 
 .tfg-theme .s641-question {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
   color: var(--tfg-text);
   letter-spacing: -0.02em;
 }
@@ -218,6 +219,7 @@
 /* ── Buttons — restrained ── */
 
 .tfg-theme .s641-btn-primary {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
   background: var(--tfg-accent);
   color: #0d0d0d;
   font-weight: 600;
@@ -244,6 +246,7 @@
 /* ── Result screen ── */
 
 .tfg-theme .s641-result-title {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
   color: var(--tfg-text);
 }
 

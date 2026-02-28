@@ -37,6 +37,22 @@
 }
 
 @font-face {
+  font-family: 'GT America Extended';
+  src: url('/fonts/GT-America-Extended-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GT America Extended';
+  src: url('/fonts/GT-America-Extended-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'GT America Mono';
   src: url('/fonts/GT-America-Mono-Regular.otf') format('opentype');
   font-weight: 400;
@@ -177,6 +193,7 @@
 
   /* Typography */
   --sans: 'GT America', -apple-system, Helvetica, sans-serif;
+  --extended: 'GT America Extended', 'GT America', -apple-system, Helvetica, sans-serif;
   --serif: 'Tobias', Georgia, serif;
   --mono: 'GT America Mono', 'SF Mono', monospace;
   --display: 'GT Era Display', 'GT America', sans-serif;
@@ -300,9 +317,10 @@ body {
    Typography Utilities
    ─────────────────────────────────────────────── */
 
-.font-serif { font-family: var(--serif); }
-.font-sans  { font-family: var(--sans); }
-.font-mono  { font-family: var(--mono); }
+.font-serif     { font-family: var(--serif); }
+.font-sans      { font-family: var(--sans); }
+.font-extended  { font-family: var(--extended); }
+.font-mono      { font-family: var(--mono); }
 
 .text-display {
   font-family: var(--serif);
