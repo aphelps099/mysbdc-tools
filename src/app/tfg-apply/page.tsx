@@ -33,20 +33,20 @@ function TFGApplyInner() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '20px 24px',
+          padding: '24px 24px',
           borderBottom: '1px solid #2d333b',
           background: '#111318',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4eff00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <div className="tfg-header-entrance" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <svg className="tfg-logo-pop" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4eff00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
           </svg>
           <div>
             <div style={{
-              fontFamily: 'var(--era-text, system-ui)',
-              fontSize: 18,
-              fontWeight: 700,
+              fontFamily: 'var(--extended, system-ui)',
+              fontSize: 20,
+              fontWeight: 500,
               color: '#e2e6eb',
               letterSpacing: '-0.01em',
             }}>
