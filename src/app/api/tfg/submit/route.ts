@@ -185,12 +185,12 @@ function buildPinPayload(
 async function createPin(
   tfgData: Record<string, unknown>,
   clientId: string,
-): Promise<Record<string, unknown> | null> {
+): Promise<Record<string, unknown>> {
   const base = neoserraUrl();
   const key = neoserraKey();
   if (!base || !key) {
     console.warn('[tfg/submit] NEOSERRA_BASE_URL or NEOSERRA_API_KEY not set; skipping PIN creation');
-    return null;
+    return { _pinStatus: 'skipped', reason: 'missing_env', baseSet: !!base, keySet: !!key };
   }
 
   const payload = buildPinPayload(tfgData, clientId);
@@ -208,19 +208,31 @@ async function createPin(
       body: JSON.stringify(payload),
     });
 
-    const body = await res.json().catch(() => null);
+    const rawText = await res.text();
+    let body: Record<string, unknown> | null = null;
+    try {
+      body = JSON.parse(rawText);
+    } catch {
+      // Response was not JSON
+    }
 
     if (!res.ok || (body && body.status === 'fail')) {
-      console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}):`, JSON.stringify(body));
-      return body;
+      console.warn(`[tfg/submit] PIN creation failed (HTTP ${res.status}):`, rawText.slice(0, 500));
+      return {
+        _pinStatus: 'http_error',
+        httpStatus: res.status,
+        statusText: res.statusText,
+        body: body ?? rawText.slice(0, 300),
+        url,
+      };
     }
 
     console.log(`[tfg/submit] PIN created successfully:`, JSON.stringify(body));
-    return body;
+    return { _pinStatus: 'ok', ...(body ?? {}) };
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
     console.warn(`[tfg/submit] PIN creation error: ${reason}`);
-    return null;
+    return { _pinStatus: 'fetch_error', error: reason, url };
   }
 }
 
@@ -374,6 +386,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (clientId && clientId !== '0') {
     pinResult = await createPin(tfgData, clientId);
   } else {
+    pinResult = { _pinStatus: 'skipped', reason: 'no_clientId', clientId };
     console.warn('[tfg/submit] No valid clientId from intake — skipping PIN creation. Full intakeResult:', JSON.stringify(intakeResult));
   }
 
@@ -411,12 +424,21 @@ export async function POST(req: NextRequest): Promise<Response> {
   const appUrl = (process.env.APP_URL || '').replace(/\/+$/, '');
   const onePagerUrl = appUrl ? `${appUrl}/api/tfg/applications/${applicationId}` : '';
 
+  const emailDebug: Record<string, unknown> = {
+    resendKeySet: !!resendKey,
+    appUrl: appUrl || '(not set)',
+    onePagerUrl: onePagerUrl || '(not set)',
+    clientEmail: str(tfgData.email) || '(empty)',
+    fromAddress: process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>',
+  };
+
   if (resendKey) {
     const resend = new Resend(resendKey);
     const from = process.env.RESEND_FROM || 'Tech Futures Group <onboarding@resend.dev>';
 
     // Client confirmation email (NO score)
     if (str(tfgData.email)) {
+      emailDebug.clientEmailAttempted = true;
       resend.emails.send({
         from,
         to: [str(tfgData.email)],
@@ -430,6 +452,8 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Admin notification email
     if (onePagerUrl) {
+      emailDebug.adminEmailAttempted = true;
+      emailDebug.adminRecipients = TFG_ADMIN_RECIPIENTS;
       resend.emails.send({
         from,
         to: TFG_ADMIN_RECIPIENTS,
@@ -451,6 +475,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       }).catch((err) => console.warn('[tfg/submit] Admin email failed:', err));
     }
   } else {
+    emailDebug.skipped = 'RESEND_API_KEY not set';
     console.warn('[tfg/submit] RESEND_API_KEY not set; skipping emails');
   }
 
@@ -459,13 +484,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     neoserraResult: neoserraResult ?? intakeResult,
     pinResult: pinResult ?? undefined,
     applicationId,
-    // Temporary debug — remove after confirming PIN creation works
+    // Temporary debug — remove after confirming full pipeline works
     _debug: {
       backendOk,
       backendStatus: intakeResult ? 'parsed' : 'null',
       clientId,
-      pinAttempted: clientId !== '0' && clientId !== '',
-      pinResult: pinResult ?? 'not attempted',
+      pinResult,
+      emailDebug,
       neoserraBaseSet: !!neoserraUrl(),
       neoserraKeySet: !!neoserraKey(),
       intakeResultKeys: intakeResult ? Object.keys(intakeResult) : [],
