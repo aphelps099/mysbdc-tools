@@ -12,16 +12,27 @@ export default function TFGResultScreen({ result, data }: Props) {
     <div className="s641-result">
       {result.success ? (
         <>
-          {/* Success icon */}
-          <div className="s641-result-icon">
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-              <circle cx="32" cy="32" r="30" stroke="var(--tfg-accent, #4eff00)" strokeWidth="2" />
+          {/* Animated lightning bolt icon — TFG brand mark */}
+          <div className="s641-result-icon tfg-bolt-wrap">
+            {/* Expanding ring */}
+            <div className="tfg-bolt-ring" />
+            {/* Glow backdrop */}
+            <div className="tfg-bolt-glow" />
+            {/* Lightning SVG with stroke draw-on */}
+            <svg
+              className="tfg-bolt-svg"
+              width="80"
+              height="80"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path
-                d="M20 32L28 40L44 24"
-                stroke="var(--tfg-accent, #4eff00)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                className="tfg-bolt-path"
+                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                stroke="#4eff00"
+                strokeWidth="1.2"
               />
             </svg>
           </div>
@@ -37,9 +48,8 @@ export default function TFGResultScreen({ result, data }: Props) {
           </p>
 
           <div className="s641-result-badge">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M5 8L7 10L11 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
             </svg>
             Application Received
           </div>

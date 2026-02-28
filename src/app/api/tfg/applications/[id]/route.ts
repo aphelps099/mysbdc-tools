@@ -140,10 +140,27 @@ function renderOnePager(app: StoredApplication): string {
     padding: 40px 24px 80px;
   }
   .header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .header-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-brand-name {
+    font-family: 'GT America Extended', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6e7681;
+    letter-spacing: -0.01em;
   }
   .tfg-mark {
     font-family: 'Roboto Mono', monospace;
@@ -180,6 +197,7 @@ function renderOnePager(app: StoredApplication): string {
     height: 3px;
     background: #4eff00;
     margin-bottom: 32px;
+    display: none;
   }
   .section {
     margin-bottom: 28px;
@@ -254,17 +272,23 @@ function renderOnePager(app: StoredApplication): string {
 
   <!-- Header -->
   <div class="header">
-    <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="28" style="display:block;height:28px;width:auto;" />
-    <span class="submitted-at">${esc(submittedDate)}</span>
+    <div class="header-top">
+      <div class="header-brand">
+        <img src="https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png" alt="TFG" height="48" style="display:block;height:48px;width:auto;" />
+        <span class="header-brand-name">Tech Futures Group</span>
+      </div>
+      <span class="submitted-at">${esc(submittedDate)}</span>
+    </div>
+
+    <h1>${esc(str(d.companyName))}</h1>
+
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="score-badge" style="background:rgba(255,255,255,0.06);color:${scoreColor};">
+        Readiness: ${scoreNum} &mdash; ${esc(scoreLabel)}
+      </div>
+      <span class="tfg-mark">Application</span>
+    </div>
   </div>
-
-  <h1>${esc(str(d.companyName))}</h1>
-
-  <div class="score-badge" style="background:rgba(255,255,255,0.06);color:${scoreColor};">
-    Readiness: ${scoreNum} &mdash; ${esc(scoreLabel)}
-  </div>
-
-  <div class="divider"></div>
 
   <!-- Company & Contact -->
   ${section('Company & Contact', [
