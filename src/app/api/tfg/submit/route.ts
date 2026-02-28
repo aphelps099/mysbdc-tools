@@ -265,6 +265,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     programSignup: 'tfg',
     specialPrograms: ['tfg'],
 
+    // Suppress backend emails — TFG sends its own branded emails via Resend
+    sendEmails: false,
+
     // Defaults for required intake fields
     goals: [],
     gender: '',
