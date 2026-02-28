@@ -156,13 +156,19 @@
   border-bottom-width: 2px;
 }
 
-/* ── Cards — transparent, minimal border ── */
+/* ── Cards — tight, radio-button style ── */
 
 .tfg-theme .s641-card {
   background: transparent;
   border-color: rgba(255, 255, 255, 0.15);
   color: var(--tfg-text);
+  padding: 10px 14px;
+  gap: 10px;
   transition: border-color 200ms ease, background 200ms ease;
+}
+
+.tfg-theme .s641-card-compact {
+  padding: 10px 14px;
 }
 
 .tfg-theme .s641-card:hover {
@@ -175,14 +181,33 @@
   box-shadow: none;
 }
 
+/* Radio circle — green outline by default, filled on select */
 .tfg-theme .s641-card-check {
-  border-color: rgba(255, 255, 255, 0.15);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--tfg-accent);
+  position: relative;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+/* Hide the SVG checkmark — CSS handles the radio dot */
+.tfg-theme .s641-card-check svg {
+  display: none;
 }
 
 .tfg-theme .s641-card.selected .s641-card-check {
   background: var(--tfg-accent);
   border-color: var(--tfg-accent);
-  color: #0d0d0d;
+}
+
+/* Inner dot — dark center on selected radio */
+.tfg-theme .s641-card.selected .s641-card-check::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: #0d0d0d;
 }
 
 .tfg-theme .s641-card-title {
@@ -191,6 +216,11 @@
 
 .tfg-theme .s641-card-desc {
   color: var(--tfg-muted);
+}
+
+/* Tighter pills/card grid spacing */
+.tfg-theme .s641-pills {
+  gap: 6px;
 }
 
 /* ── Pills — transparent, hairline ── */
