@@ -1,0 +1,1008 @@
+/* ═══════════════════════════════════════════════════════════
+   TFG Application — Ultra-minimalist dark theme
+   ═══════════════════════════════════════════════════════════
+   Pentagram NYC studio aesthetic. Nothing until you need it.
+   Typography-forward. Restraint over decoration.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Theme Variables ── */
+
+.tfg-theme {
+  --tfg-bg: #0d0d0d;
+  --tfg-surface: #131316;
+  --tfg-border: rgba(255, 255, 255, 0.08);
+  --tfg-text: #e2e6eb;
+  --tfg-muted: #6e7681;
+  --tfg-accent: #4eff00;
+  --tfg-accent-hover: #3dcc00;
+  --tfg-accent-glow: rgba(78, 255, 0, 0.08);
+  --tfg-accent-subtle: rgba(78, 255, 0, 0.04);
+}
+
+/* ── Shell ── */
+
+.tfg-theme .s641-shell {
+  background: transparent;
+}
+
+/* ── Progress — barely visible 1px line ── */
+
+.tfg-theme .s641-progress {
+  height: 1px;
+  background: var(--tfg-border);
+}
+
+.tfg-theme .s641-progress-bar {
+  background: var(--tfg-accent);
+  transition: width 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Step entrance — fluid reveal ── */
+
+.tfg-theme .s641-step {
+  animation: tfgStepEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes tfgStepEnter {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── More breathing room between form sections ── */
+
+.tfg-theme .s641-fields {
+  gap: 28px;
+}
+
+/* ── Staggered field reveal — each box slides up + fades with stagger ── */
+
+.tfg-theme .s641-fields > * {
+  animation: tfgReveal 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.tfg-theme .s641-fields > *:nth-child(1) { animation-delay: 80ms; }
+.tfg-theme .s641-fields > *:nth-child(2) { animation-delay: 180ms; }
+.tfg-theme .s641-fields > *:nth-child(3) { animation-delay: 280ms; }
+.tfg-theme .s641-fields > *:nth-child(4) { animation-delay: 380ms; }
+.tfg-theme .s641-fields > *:nth-child(5) { animation-delay: 460ms; }
+.tfg-theme .s641-fields > *:nth-child(6) { animation-delay: 540ms; }
+.tfg-theme .s641-fields > *:nth-child(7) { animation-delay: 620ms; }
+.tfg-theme .s641-fields > *:nth-child(8) { animation-delay: 700ms; }
+.tfg-theme .s641-fields > *:nth-child(9) { animation-delay: 780ms; }
+.tfg-theme .s641-fields > *:nth-child(10) { animation-delay: 860ms; }
+
+@keyframes tfgReveal {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Typography — GT America Extended for TFG brand ── */
+
+.tfg-theme .s641-question {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  color: var(--tfg-text);
+  letter-spacing: -0.02em;
+}
+
+.tfg-theme .s641-subtitle {
+  color: var(--tfg-muted);
+}
+
+.tfg-theme .s641-label {
+  color: var(--tfg-muted);
+}
+
+.tfg-theme .s641-hint {
+  color: var(--tfg-muted);
+  opacity: 0.8;
+}
+
+/* ── Inputs — transparent, bottom-border only ── */
+
+.tfg-theme .s641-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+  color: var(--tfg-text);
+  padding: 12px 0;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.tfg-theme .s641-input::placeholder {
+  color: var(--tfg-muted);
+  opacity: 0.5;
+}
+
+.tfg-theme .s641-input:focus {
+  border-bottom-color: var(--tfg-accent);
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
+  outline: none;
+}
+
+/* Textareas — transparent, bottom-border only (matching inputs) */
+.tfg-theme .s641-textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+  padding: 12px 0;
+  resize: vertical;
+}
+
+.tfg-theme .s641-textarea:focus {
+  border-bottom-color: var(--tfg-accent);
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
+}
+
+/* Select — transparent, bottom-border only */
+.tfg-theme .s641-select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+  color: var(--tfg-text);
+  padding: 12px 24px 12px 0;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+}
+
+.tfg-theme .s641-select option {
+  background: #131316;
+  color: var(--tfg-text);
+}
+
+.tfg-theme .s641-select:focus {
+  border-bottom-color: var(--tfg-accent);
+  box-shadow: 0 1px 0 0 var(--tfg-accent);
+}
+
+.tfg-theme .s641-input-signature {
+  border-bottom-width: 2px;
+}
+
+/* ── Cards — connected radio stack (shared outer border) ── */
+
+.tfg-theme .s641-card {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--tfg-text);
+  padding: 10px 14px;
+  gap: 10px;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.tfg-theme .s641-card-compact {
+  padding: 10px 14px;
+}
+
+.tfg-theme .s641-card:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.tfg-theme .s641-card.selected {
+  border-color: var(--tfg-accent);
+  background: var(--tfg-accent-subtle);
+  box-shadow: none;
+}
+
+/* Radio circle — dark teal outline by default, bright green fill on select */
+.tfg-theme .s641-card-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #345c52;
+  position: relative;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+/* Hide the SVG checkmark — CSS handles the radio dot */
+.tfg-theme .s641-card-check svg {
+  display: none;
+}
+
+.tfg-theme .s641-card.selected .s641-card-check {
+  background: var(--tfg-accent);
+  border-color: var(--tfg-accent);
+}
+
+/* Inner dot — dark center on selected radio */
+.tfg-theme .s641-card.selected .s641-card-check::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: #0d0d0d;
+}
+
+.tfg-theme .s641-card-title {
+  color: var(--tfg-text);
+}
+
+.tfg-theme .s641-card-desc {
+  color: var(--tfg-muted);
+}
+
+/* ── Connected stack — cards share one outer border with inner dividers ── */
+
+.tfg-theme .s641-pills:has(.s641-card) {
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tfg-theme .s641-pills > .s641-card {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.tfg-theme .s641-pills > .s641-card:last-child {
+  border-bottom: none;
+}
+
+.tfg-theme .s641-pills > .s641-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tfg-theme .s641-pills > .s641-card.selected {
+  background: var(--tfg-accent-subtle);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Green left accent on selected row */
+.tfg-theme .s641-pills > .s641-card.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--tfg-accent);
+}
+
+/* Tighter pills spacing (pills only — card stacks override to 0) */
+.tfg-theme .s641-pills {
+  gap: 6px;
+}
+
+/* ── Pills — transparent, hairline ── */
+
+.tfg-theme .s641-pill {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--tfg-muted);
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.tfg-theme .s641-pill:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--tfg-text);
+}
+
+.tfg-theme .s641-pill.selected {
+  border-color: var(--tfg-accent);
+  background: transparent;
+  color: var(--tfg-accent);
+}
+
+.tfg-theme .s641-pill-check {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tfg-theme .s641-pill.selected .s641-pill-check {
+  background: var(--tfg-accent);
+  border-color: var(--tfg-accent);
+  color: #0d0d0d;
+}
+
+/* ── Buttons — restrained ── */
+
+.tfg-theme .s641-btn-primary {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  background: var(--tfg-accent);
+  color: #0d0d0d;
+  font-weight: 600;
+  padding: 10px 22px;
+}
+
+.tfg-theme .s641-btn-primary:hover {
+  background: var(--tfg-accent-hover);
+  box-shadow: none;
+}
+
+.tfg-theme .s641-btn-primary:disabled {
+  opacity: 0.25;
+}
+
+.tfg-theme .s641-btn-back {
+  color: var(--tfg-muted);
+}
+
+.tfg-theme .s641-btn-back:hover {
+  color: var(--tfg-text);
+}
+
+/* ── Result screen ── */
+
+.tfg-theme .s641-result-title {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  color: var(--tfg-text);
+}
+
+.tfg-theme .s641-result-desc {
+  color: var(--tfg-muted);
+}
+
+.tfg-theme .s641-result-badge {
+  background: var(--tfg-accent-subtle);
+  color: var(--tfg-accent);
+}
+
+.tfg-theme .s641-result-error {
+  background: rgba(220, 38, 38, 0.06);
+  border-color: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+}
+
+/* ── Spinner ── */
+
+.tfg-theme .s641-spinner {
+  border-color: var(--tfg-border);
+  border-top-color: var(--tfg-accent);
+}
+
+.tfg-theme .s641-submitting-text {
+  color: var(--tfg-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TFG-specific components
+   ═══════════════════════════════════════════════════════════ */
+
+/* Character counter */
+.tfg-char-count {
+  font-family: var(--mono, 'SF Mono', monospace);
+  font-size: 10px;
+  text-align: right;
+  margin-top: 4px;
+  color: var(--tfg-muted);
+  opacity: 0.6;
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
+.tfg-char-count.tfg-char-warning {
+  color: #d97706;
+  opacity: 1;
+}
+
+.tfg-char-count.tfg-char-over {
+  color: #f87171;
+  opacity: 1;
+}
+
+/* File upload — minimal dashed area */
+.tfg-file-upload {
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 200ms ease;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  color: var(--tfg-muted);
+}
+
+.tfg-file-upload:hover {
+  border-color: var(--tfg-accent);
+}
+
+.tfg-file-upload-icon {
+  display: block;
+  margin: 0 auto 8px;
+  color: var(--tfg-muted);
+  opacity: 0.5;
+}
+
+.tfg-file-upload-formats {
+  font-size: 11px;
+  color: var(--tfg-muted);
+  opacity: 0.5;
+  margin-top: 4px;
+}
+
+.tfg-file-selected {
+  border-style: solid;
+  border-color: var(--tfg-accent);
+  color: var(--tfg-accent);
+}
+
+.tfg-file-selected-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.tfg-file-remove {
+  background: none;
+  border: none;
+  color: var(--tfg-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  transition: color 150ms ease;
+}
+
+.tfg-file-remove:hover {
+  color: #f87171;
+}
+
+/* Team member rows */
+.tfg-team-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.tfg-team-row + .tfg-team-row {
+  margin-top: 8px;
+}
+
+@media (max-width: 540px) {
+  .tfg-team-row {
+    grid-template-columns: 1fr auto;
+  }
+  .tfg-team-row .s641-field:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.tfg-add-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: none;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: var(--tfg-muted);
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.tfg-add-row:hover {
+  border-color: var(--tfg-accent);
+  color: var(--tfg-accent);
+}
+
+.tfg-remove-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: var(--tfg-muted);
+  cursor: pointer;
+  transition: color 150ms ease;
+  margin-bottom: 4px;
+}
+
+.tfg-remove-row:hover {
+  color: #f87171;
+}
+
+/* Conditional fade-in */
+.tfg-fade-in {
+  animation: tfgFadeIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tfgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Section divider — subtle, no decoration */
+.tfg-section-label {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tfg-muted);
+  margin: 36px 0 14px;
+  padding: 0;
+  border: none;
+}
+
+.tfg-section-label:first-child {
+  margin-top: 0;
+}
+
+/* ── Review page — flat layout ── */
+
+.tfg-review-section {
+  padding: 0;
+}
+
+.tfg-review-section + .tfg-review-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--tfg-border);
+}
+
+.tfg-review-label {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tfg-muted);
+  margin-bottom: 6px;
+}
+
+.tfg-review-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 4px 0;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  gap: 16px;
+}
+
+.tfg-review-row-label {
+  color: var(--tfg-muted);
+  font-weight: 400;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tfg-review-row-value {
+  color: var(--tfg-text);
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Splash / gate screen
+   ═══════════════════════════════════════════════════════════ */
+
+.tfg-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #4eff00;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  animation: tfgSplashIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tfg-splash.tfg-splash-exit {
+  animation: tfgSplashOut 500ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+@keyframes tfgSplashIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes tfgSplashOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.05); }
+}
+
+/* Title block */
+.tfg-splash-title {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 700;
+  color: #0d0d0d;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-align: center;
+  margin: 0 0 8px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
+@keyframes tfgSplashTitle {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtitle / program label */
+.tfg-splash-sub {
+  font-family: var(--mono, 'SF Mono', monospace);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(13, 13, 13, 0.55);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 40px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+
+/* Brief terms / expectations */
+.tfg-splash-terms {
+  max-width: 400px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(13, 13, 13, 0.65);
+  text-align: center;
+  margin: 0 0 36px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+}
+
+.tfg-splash-terms strong {
+  color: #0d0d0d;
+  font-weight: 600;
+}
+
+/* CTA button — dark on green */
+.tfg-splash-btn {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 100px;
+  border: none;
+  background: #0d0d0d;
+  color: #4eff00;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 450ms both;
+}
+
+.tfg-splash-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.tfg-splash-btn:active {
+  transform: scale(0.98);
+}
+
+/* Duration hint */
+.tfg-splash-meta {
+  font-family: var(--mono, 'SF Mono', monospace);
+  font-size: 10px;
+  color: rgba(13, 13, 13, 0.35);
+  letter-spacing: 0.06em;
+  margin-top: 16px;
+  animation: tfgSplashTitle 600ms cubic-bezier(0.16, 1, 0.3, 1) 550ms both;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Animations — snap-fade entrances
+   ═══════════════════════════════════════════════════════════ */
+
+/* Header entrance — snap fade from left */
+.tfg-header-entrance {
+  animation: tfgSnapFade 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tfgSnapFade {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Result screen — staggered snap-fade entrance ── */
+
+.tfg-theme .s641-result {
+  animation: tfgResultFade 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tfgResultFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Lightning bolt hero animation ── */
+
+/* Container: holds bolt + ring + glow, centered */
+.tfg-bolt-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+}
+
+/* Override the old icon-pop — bolt-wrap handles its own animation */
+.tfg-theme .tfg-bolt-wrap.s641-result-icon {
+  animation: none;
+}
+
+/* Expanding ring: fades out as it grows */
+.tfg-bolt-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #4eff00;
+  opacity: 0;
+  animation: tfgRingExpand 900ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+}
+
+@keyframes tfgRingExpand {
+  0%   { opacity: 0.8; transform: scale(0.3); }
+  70%  { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* Green glow backdrop — fades in then pulses */
+.tfg-bolt-glow {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(78, 255, 0, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  animation:
+    tfgGlowIn 500ms ease 400ms both,
+    tfgGlowPulse 2.5s ease-in-out 900ms infinite;
+}
+
+@keyframes tfgGlowIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes tfgGlowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.15); }
+}
+
+/* The bolt SVG itself */
+.tfg-bolt-svg {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  filter: drop-shadow(0 0 8px rgba(78, 255, 0, 0.4));
+  animation: tfgBoltAppear 400ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms both;
+}
+
+@keyframes tfgBoltAppear {
+  from { opacity: 0; transform: scale(0.4) rotate(-8deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Stroke draw-on: path draws itself */
+.tfg-bolt-path {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation:
+    tfgStrokeDraw 700ms cubic-bezier(0.22, 1, 0.36, 1) 400ms both,
+    tfgStrokeFill 400ms ease 1000ms both;
+}
+
+@keyframes tfgStrokeDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* After draw completes, fill in with accent */
+@keyframes tfgStrokeFill {
+  from { fill: transparent; }
+  to   { fill: rgba(78, 255, 0, 0.12); }
+}
+
+/* Title snaps up — later delay to let bolt finish */
+.tfg-theme .s641-result-title {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 700ms;
+}
+
+/* Description fades up staggered */
+.tfg-theme .s641-result-desc {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 850ms;
+}
+
+/* Badge snaps in */
+.tfg-theme .s641-result-badge {
+  animation: tfgSnapUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 1000ms;
+}
+
+@keyframes tfgSnapUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Connected-box form fields
+   ═══════════════════════════════════════════════════════════
+   Fields share a single outer border with thin inner dividers
+   creating the "+" crosshair pattern between cells.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Outer container — stronger border than default theme border */
+.tfg-box {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Row — 2-col grid by default */
+.tfg-box-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* 3-col variant */
+.tfg-box-row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Full-width single cell row */
+.tfg-box-row-1 {
+  grid-template-columns: 1fr;
+}
+
+/* Horizontal divider between rows */
+.tfg-box-row + .tfg-box-row,
+.tfg-box-row + .tfg-box-row-3,
+.tfg-box-row + .tfg-box-row-1,
+.tfg-box-row-3 + .tfg-box-row,
+.tfg-box-row-3 + .tfg-box-row-3,
+.tfg-box-row-3 + .tfg-box-row-1,
+.tfg-box-row-1 + .tfg-box-row,
+.tfg-box-row-1 + .tfg-box-row-3,
+.tfg-box-row-1 + .tfg-box-row-1 {
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Each cell */
+.tfg-box-cell {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 200ms ease;
+  position: relative;
+}
+
+/* Electric green underline — animates from center on focus */
+.tfg-box-cell::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--tfg-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 8px rgba(78, 255, 0, 0.3);
+}
+
+.tfg-box-cell:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* Vertical divider — border-left on non-first cells */
+.tfg-box-cell + .tfg-box-cell {
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Focus highlight — subtle accent wash on the active cell */
+.tfg-box-cell:focus-within {
+  background: rgba(78, 255, 0, 0.024);
+}
+
+/* Labels inside connected boxes — tighter, smaller */
+.tfg-box-cell .s641-label {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+/* Strip individual borders from inputs inside connected boxes */
+.tfg-box-cell .s641-input {
+  border: none;
+  border-radius: 0;
+  padding: 6px 0;
+  background: transparent;
+  font-size: 15px;
+  color: var(--tfg-text);
+}
+
+.tfg-box-cell .s641-input:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.tfg-box-cell .s641-input::placeholder {
+  color: var(--tfg-muted);
+  opacity: 0.5;
+}
+
+/* Selects inside connected boxes — keep dropdown arrow */
+.tfg-box-cell .s641-select {
+  border: none;
+  border-radius: 0;
+  padding: 6px 32px 6px 0;
+  background-color: transparent;
+  font-size: 15px;
+  color: var(--tfg-text);
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+}
+
+.tfg-box-cell .s641-select:focus {
+  box-shadow: none;
+  border: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile — prevent wobble, tighten layout
+   ═══════════════════════════════════════════════════════════ */
+
+/* Kill overscroll bounce on the page when TFG form is present */
+body:has(.tfg-theme) {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+}
+
+/* Prevent any horizontal scroll/jiggle within the form */
+.tfg-theme {
+  overflow-x: hidden;
+}
+
+/* ── Responsive: stack to single-column on mobile ── */
+
+@media (max-width: 540px) {
+  .tfg-box-row {
+    grid-template-columns: 1fr;
+  }
+  .tfg-box-row-3 {
+    grid-template-columns: 1fr;
+  }
+  /* On mobile, stacked cells get horizontal dividers instead of vertical */
+  .tfg-box-cell + .tfg-box-cell {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* Tighter content padding on small screens */
+  .tfg-theme .s641-content {
+    padding-top: 24px;
+  }
+
+  /* Compact nav spacing */
+  .tfg-theme .s641-nav {
+    padding-top: 28px;
+  }
+
+  /* Slightly smaller question text on mobile */
+  .tfg-theme .s641-question {
+    font-size: clamp(20px, 5vw, 28px);
+  }
+
+  /* Tighter subtitle margin */
+  .tfg-theme .s641-subtitle {
+    margin-bottom: 24px;
+  }
+}
