@@ -10,7 +10,7 @@ import './tfg-title-card.css';
    ═══════════════════════════════════════════════════════ */
 
 const TFG_LOGO_URL =
-  'https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png';
+  'https://www.techfuturesgroup.org/wp-content/uploads/2026/01/tfg-lime-ring@4x.png';
 
 // ── TFG Color schemes ──
 const SCHEMES = [
@@ -291,25 +291,9 @@ export default function TFGTitleCard() {
             />
           )}
 
-          {/* Corner accent — thin electric green border */}
-          <div
-            className={animClass('tc-corner', (baseDelay + 150 + titleWords.length * wordDelay + 400) * speed)}
-            style={{
-              position: 'absolute',
-              top: 24,
-              right: 24,
-              width: 48,
-              height: 48,
-              border: `1.5px solid ${colors.accent}`,
-              borderRadius: 4,
-              animationDelay: `${(baseDelay + 150 + titleWords.length * wordDelay + 400) * speed}ms`,
-              zIndex: 1,
-            }}
-          />
-
           {/* Watermark */}
           <div
-            className={animClass('tc-watermark', (baseDelay + 150 + titleWords.length * wordDelay + 500) * speed)}
+            className={animClass('tc-watermark', (baseDelay + 150 + titleWords.length * wordDelay + 400) * speed)}
             style={{
               position: 'absolute',
               bottom: 20,
@@ -320,7 +304,7 @@ export default function TFGTitleCard() {
               letterSpacing: '0.1em',
               color: colors.fg,
               textTransform: 'uppercase',
-              animationDelay: `${(baseDelay + 150 + titleWords.length * wordDelay + 500) * speed}ms`,
+              animationDelay: `${(baseDelay + 150 + titleWords.length * wordDelay + 400) * speed}ms`,
               zIndex: 1,
             }}
           >
