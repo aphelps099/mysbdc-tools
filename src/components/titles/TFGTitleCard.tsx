@@ -35,6 +35,15 @@ const LAYOUTS = [
 
 type LayoutId = typeof LAYOUTS[number]['id'];
 
+// ── Title font options ──
+const FONTS = [
+  { id: 'extended', label: 'Extended',  family: "var(--extended, 'GT America Extended', sans-serif)", weight: 500, spacing: '-0.03em' },
+  { id: 'tobias',   label: 'Tobias',    family: "var(--serif, 'Tobias', Georgia, serif)",             weight: 500, spacing: '-0.02em' },
+  { id: 'sans',     label: 'Sans',      family: "var(--sans, 'GT America', sans-serif)",              weight: 600, spacing: '-0.02em' },
+] as const;
+
+type FontId = typeof FONTS[number]['id'];
+
 export default function TFGTitleCard() {
   // ── Content state ──
   const [title, setTitle] = useState('Building Tomorrow\'s Startups');
@@ -44,6 +53,7 @@ export default function TFGTitleCard() {
   // ── Style state ──
   const [scheme, setScheme] = useState<SchemeId>('dark');
   const [layout, setLayout] = useState<LayoutId>('center');
+  const [titleFont, setTitleFont] = useState<FontId>('extended');
   const [speed, setSpeed] = useState(1);
   const [showGrain, setShowGrain] = useState(true);
   const [showLogo, setShowLogo] = useState(true);
@@ -54,6 +64,7 @@ export default function TFGTitleCard() {
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const colors = SCHEMES.find((s) => s.id === scheme) ?? SCHEMES[0];
+  const fontConfig = FONTS.find((f) => f.id === titleFont) ?? FONTS[0];
   const needsDarkLogo = scheme === 'green' || scheme === 'white';
 
   // Clear all pending timers
@@ -203,13 +214,13 @@ export default function TFGTitleCard() {
             {/* Title — word-by-word reveal */}
             <h1
               style={{
-                fontFamily: "var(--extended, 'GT America Extended', sans-serif)",
+                fontFamily: fontConfig.family,
                 fontSize: 'clamp(28px, 4.5vw, 56px)',
-                fontWeight: 500,
+                fontWeight: fontConfig.weight,
                 lineHeight: 1.1,
                 color: colors.fg,
                 margin: 0,
-                letterSpacing: '-0.03em',
+                letterSpacing: fontConfig.spacing,
               }}
             >
               {titleWords.map((word, i) => {
@@ -271,11 +282,11 @@ export default function TFGTitleCard() {
                 position: 'absolute',
                 top: 24,
                 left: 28,
-                height: 40,
+                height: 56,
                 width: 'auto',
                 animationDelay: '0ms',
                 zIndex: 1,
-                filter: needsDarkLogo ? 'brightness(0)' : 'none',
+                filter: needsDarkLogo ? 'brightness(0)' : `drop-shadow(0 1px 4px rgba(0,0,0,0.5))`,
               }}
             />
           )}
@@ -420,6 +431,22 @@ export default function TFGTitleCard() {
                   className={`tfg-tc-option ${layout === l.id ? 'tfg-tc-option-active' : ''}`}
                 >
                   {l.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Title font */}
+          <div>
+            <label className="tfg-tc-label">Font</label>
+            <div className="flex gap-1">
+              {FONTS.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setTitleFont(f.id)}
+                  className={`tfg-tc-option ${titleFont === f.id ? 'tfg-tc-option-active' : ''}`}
+                >
+                  {f.label}
                 </button>
               ))}
             </div>
