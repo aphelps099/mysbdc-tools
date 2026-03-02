@@ -1,0 +1,148 @@
+/* ═══════════════════════════════════════════════════════
+   TFG Title Card — Dark theme with electric green accent
+   Pentagram NYC minimalism. Typography-forward.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── TFG Controls panel — dark surface ── */
+.tfg-tc-controls {
+  animation: tcControlsIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── TFG-specific input styling ── */
+.tfg-tc-input {
+  font-family: var(--sans, 'GT America', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e6eb;
+  outline: none;
+  transition: border-color 150ms ease;
+}
+
+.tfg-tc-input:focus {
+  border-color: #4eff00;
+}
+
+.tfg-tc-input::placeholder {
+  color: #6e7681;
+}
+
+/* Extended variant for title input */
+.tfg-tc-input-extended {
+  font-family: var(--extended, 'GT America Extended', sans-serif);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Subtitle input */
+.tfg-tc-input-subtitle {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* Kicker input */
+.tfg-tc-input-kicker {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── TFG label ── */
+.tfg-tc-label {
+  display: block;
+  font-family: var(--sans, 'GT America', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6e7681;
+  margin-bottom: 6px;
+}
+
+/* ── TFG button base ── */
+.tfg-tc-btn {
+  font-family: var(--sans, 'GT America', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #6e7681;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.tfg-tc-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e2e6eb;
+}
+
+/* Primary play button */
+.tfg-tc-btn-play {
+  background: #4eff00;
+  color: #0d0d0d;
+  border: none;
+  padding: 9px 20px;
+  box-shadow: 0 2px 12px rgba(78, 255, 0, 0.25);
+}
+
+.tfg-tc-btn-play:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(78, 255, 0, 0.35);
+  color: #0d0d0d;
+}
+
+/* ── TFG scheme swatch ── */
+.tfg-tc-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 2px solid transparent;
+}
+
+.tfg-tc-swatch-active {
+  transform: scale(1.1);
+}
+
+/* ── TFG option button (layout, speed, grain) ── */
+.tfg-tc-option {
+  font-family: var(--sans, 'GT America', sans-serif);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  color: #6e7681;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.tfg-tc-option:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e2e6eb;
+}
+
+.tfg-tc-option-active {
+  background: #4eff00;
+  color: #0d0d0d;
+  border-color: #4eff00;
+  font-weight: 700;
+}
+
+/* Speed option — mono font */
+.tfg-tc-option-mono {
+  font-family: var(--mono, 'GT America Mono', monospace);
+  min-width: 38px;
+  text-align: center;
+}
