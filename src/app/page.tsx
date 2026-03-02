@@ -99,6 +99,16 @@ const tools = [
     ),
   },
   {
+    href: '/titles/tfg',
+    name: 'TFG Title Cards',
+    description: 'TFG-branded animated title cards — dark theme with electric green accent for video screen-recording.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+      </svg>
+    ),
+  },
+  {
     href: '/brand',
     name: 'Brand House',
     description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',
