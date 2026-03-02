@@ -9,6 +9,9 @@ import './tfg-title-card.css';
    Dark theme, electric green accent, GT America Extended
    ═══════════════════════════════════════════════════════ */
 
+const TFG_LOGO_URL =
+  'https://www.techfuturesgroup.org/wp-content/uploads/2026/01/TFG-lightning@4x.png';
+
 // ── TFG Color schemes ──
 const SCHEMES = [
   { id: 'dark',  label: 'Dark',  bg: '#0d0d0d', fg: '#e2e6eb', accent: '#4eff00', muted: 'rgba(226,230,235,0.4)',  line: 'rgba(255,255,255,0.1)' },
@@ -43,6 +46,7 @@ export default function TFGTitleCard() {
   const [layout, setLayout] = useState<LayoutId>('center');
   const [speed, setSpeed] = useState(1);
   const [showGrain, setShowGrain] = useState(true);
+  const [showLogo, setShowLogo] = useState(true);
 
   // ── Animation state ──
   const [phase, setPhase] = useState<Phase>('idle');
@@ -50,6 +54,7 @@ export default function TFGTitleCard() {
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const colors = SCHEMES.find((s) => s.id === scheme) ?? SCHEMES[0];
+  const needsDarkLogo = scheme === 'green' || scheme === 'white';
 
   // Clear all pending timers
   const clearTimers = useCallback(() => {
@@ -256,6 +261,25 @@ export default function TFGTitleCard() {
             )}
           </div>
 
+          {/* TFG logo — top-left */}
+          {showLogo && (
+            <img
+              src={TFG_LOGO_URL}
+              alt="TFG"
+              className={animClass('tc-corner', 0)}
+              style={{
+                position: 'absolute',
+                top: 24,
+                left: 28,
+                height: 40,
+                width: 'auto',
+                animationDelay: '0ms',
+                zIndex: 1,
+                filter: needsDarkLogo ? 'brightness(0)' : 'none',
+              }}
+            />
+          )}
+
           {/* Corner accent — thin electric green border */}
           <div
             className={animClass('tc-corner', (baseDelay + 150 + titleWords.length * wordDelay + 400) * speed)}
@@ -426,6 +450,18 @@ export default function TFGTitleCard() {
               style={{ fontWeight: 600, padding: '5px 12px' }}
             >
               {showGrain ? 'ON' : 'OFF'}
+            </button>
+          </div>
+
+          {/* Logo toggle */}
+          <div>
+            <label className="tfg-tc-label">Logo</label>
+            <button
+              onClick={() => setShowLogo((l) => !l)}
+              className={`tfg-tc-option ${showLogo ? 'tfg-tc-option-active' : ''}`}
+              style={{ fontWeight: 600, padding: '5px 12px' }}
+            >
+              {showLogo ? 'ON' : 'OFF'}
             </button>
           </div>
 
