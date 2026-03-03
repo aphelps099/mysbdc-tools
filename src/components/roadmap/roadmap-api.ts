@@ -2,9 +2,19 @@ import type { RoadmapApplicationData, RoadmapSubmitResult } from './types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
-/** Neoserra center ID where Roadmap applications flow */
+/**
+ * Neoserra center / database ID for the Roadmap for Innovation program.
+ * All R4I applications flow into this center.
+ */
 export const NEOSERRA_CENTER_ID = 113;
 
+/**
+ * Submit a Roadmap for Innovation application.
+ *
+ * Posts to /api/roadmap/submit which is proxied by the Next.js
+ * catch-all route handler to the backend (BACKEND_URL).
+ * The backend creates the Neoserra client record in center 113.
+ */
 export async function submitRoadmapApplication(
   data: RoadmapApplicationData,
 ): Promise<RoadmapSubmitResult> {
@@ -13,7 +23,7 @@ export async function submitRoadmapApplication(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...data,
-      neoserracenterId: NEOSERRA_CENTER_ID,
+      centerId: NEOSERRA_CENTER_ID,
     }),
   });
 

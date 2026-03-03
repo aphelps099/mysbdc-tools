@@ -7,6 +7,7 @@ import { submitRoadmapApplication } from './roadmap-api';
 import ContactStep from './steps/ContactStep';
 import CompanyStep from './steps/CompanyStep';
 import InterestsStep from './steps/InterestsStep';
+import RoadmapWrapupStep from './steps/RoadmapWrapupStep';
 import RoadmapReviewStep from './steps/RoadmapReviewStep';
 import RoadmapResultScreen from './steps/RoadmapResultScreen';
 import '../intake/smart641.css';
@@ -141,6 +142,8 @@ export default function RoadmapWizard() {
         return <CompanyStep data={data} onChange={onChange} onNext={goNext} onBack={goBack} />;
       case 'interests':
         return <InterestsStep data={data} onChange={onChange} onNext={goNext} onBack={goBack} />;
+      case 'wrapup':
+        return <RoadmapWrapupStep data={data} onChange={onChange} onNext={goNext} onBack={goBack} />;
       case 'review':
         return <RoadmapReviewStep data={data} onBack={goBack} onSubmit={handleSubmit} submitting={submitting} />;
       default:
