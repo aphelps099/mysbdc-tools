@@ -4,7 +4,8 @@
  * Flow:
  *   1. Map R4I fields to intake-compatible payload (with all required fields)
  *   2. Create client via backend /api/intake/submit
- *   3. Send welcome email via Resend
+ *   3. Send welcome email to applicant via Resend
+ *   4. Send admin notification email (with notes + NeoSerra link) via Resend
  *
  * The backend creates the client + contact record in NeoSerra.
  * R4I application details are passed as `notes` in the intake payload
@@ -15,6 +16,10 @@
 import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { buildR4iWelcomeHtml } from '@/lib/emails/r4i-client-welcome';
+import {
+  buildR4iAdminNotificationHtml,
+  R4I_ADMIN_RECIPIENTS,
+} from '@/lib/emails/r4i-admin-notification';
 import {
   COACHING_OPTIONS,
   GROUP_COURSE_OPTIONS,
@@ -181,58 +186,90 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const neoserraResult = (intakeResult as Record<string, unknown>)?.neoserraResult as Record<string, unknown> | undefined;
 
-  // Step 2: Send welcome email via Resend
+  // Step 2: Send emails via Resend
   const resendKey = process.env.RESEND_API_KEY;
-  let emailResult: unknown = null;
+  const emailResults: { client?: unknown; admin?: unknown } = {};
+  const notes = buildR4iNotes(r4iData);
+  const neoserraClientId = String(
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown>)?.id ?? '',
+  );
 
-  if (resendKey && str(r4iData.email)) {
-    try {
-      const resend = new Resend(resendKey);
-      const from = process.env.RESEND_FROM_SBDC
-        || process.env.RESEND_FROM
-        || 'California SBDC <onboarding@resend.dev>';
+  if (resendKey) {
+    const resend = new Resend(resendKey);
+    const from = process.env.RESEND_FROM_SBDC
+      || process.env.RESEND_FROM
+      || 'NorCal SBDC <noreply@norcalsbdc.org>';
 
-      // Helper: retry once on 429 rate-limit (Resend free tier: 2 req/s)
-      async function sendWithRetry(
-        opts: Parameters<typeof resend.emails.send>[0],
+    // Helper: retry once on 429 rate-limit (Resend free tier: 2 req/s)
+    async function sendWithRetry(
+      opts: Parameters<typeof resend.emails.send>[0],
+    ) {
+      const first = await resend.emails.send(opts);
+      if (
+        first.error &&
+        'statusCode' in first.error &&
+        (first.error as { statusCode?: number }).statusCode === 429
       ) {
-        const first = await resend.emails.send(opts);
-        if (
-          first.error &&
-          'statusCode' in first.error &&
-          (first.error as { statusCode?: number }).statusCode === 429
-        ) {
-          console.warn('[r4i/submit] Rate-limited — retrying after 1.5 s');
-          await new Promise((r) => setTimeout(r, 1500));
-          return resend.emails.send(opts);
-        }
-        return first;
+        console.warn('[r4i/submit] Rate-limited — retrying after 1.5 s');
+        await new Promise((r) => setTimeout(r, 1500));
+        return resend.emails.send(opts);
       }
+      return first;
+    }
 
-      const result = await sendWithRetry({
+    // 2a: Client welcome email
+    if (str(r4iData.email)) {
+      try {
+        const result = await sendWithRetry({
+          from,
+          to: [str(r4iData.email)],
+          subject: 'Application Received — Roadmap for Innovation',
+          html: buildR4iWelcomeHtml({
+            firstName: str(r4iData.firstName),
+            companyName: str(r4iData.companyName),
+          }),
+        });
+        emailResults.client = result;
+        console.log('[r4i/submit] Welcome email sent:', JSON.stringify(result));
+      } catch (e: unknown) {
+        emailResults.client = { error: e instanceof Error ? e.message : String(e) };
+        console.error('[r4i/submit] Welcome email FAILED:', e);
+      }
+    }
+
+    // 2b: Admin notification email (with application notes + NeoSerra link)
+    try {
+      // Small delay to avoid rate-limiting after client email
+      await new Promise((r) => setTimeout(r, 600));
+
+      const adminResult = await sendWithRetry({
         from,
-        to: [str(r4iData.email)],
-        subject: 'Application Received — Roadmap for Innovation',
-        html: buildR4iWelcomeHtml({
+        to: R4I_ADMIN_RECIPIENTS,
+        subject: `New R4I Application: ${str(r4iData.companyName) || `${str(r4iData.firstName)} ${str(r4iData.lastName)}`}`,
+        html: buildR4iAdminNotificationHtml({
           firstName: str(r4iData.firstName),
+          lastName: str(r4iData.lastName),
           companyName: str(r4iData.companyName),
+          email: str(r4iData.email),
+          phone: str(r4iData.phone),
+          notes,
+          neoserraClientId: neoserraClientId || null,
         }),
       });
-
-      emailResult = result;
-      console.log('[r4i/submit] Welcome email sent:', JSON.stringify(result));
+      emailResults.admin = adminResult;
+      console.log('[r4i/submit] Admin notification sent:', JSON.stringify(adminResult));
     } catch (e: unknown) {
-      emailResult = { error: e instanceof Error ? e.message : String(e) };
-      console.error('[r4i/submit] Welcome email FAILED:', e);
+      emailResults.admin = { error: e instanceof Error ? e.message : String(e) };
+      console.error('[r4i/submit] Admin notification FAILED:', e);
     }
-  } else if (!resendKey) {
-    console.warn('[r4i/submit] RESEND_API_KEY not set; skipping welcome email');
+  } else {
+    console.warn('[r4i/submit] RESEND_API_KEY not set; skipping emails');
   }
 
   return Response.json({
     success: (intakeResult as Record<string, unknown>)?.success ?? true,
     applicationId: (intakeResult as Record<string, unknown>)?.id ?? null,
     neoserraResult: neoserraResult ?? null,
-    emailResult,
+    emailResults,
   });
 }

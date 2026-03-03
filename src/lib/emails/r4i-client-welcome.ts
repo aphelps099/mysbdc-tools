@@ -21,7 +21,15 @@ interface R4iEmailData {
 const SANS =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 
+function titleCase(s: string): string {
+  return s
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): string {
+  const name = titleCase(firstName);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +87,7 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
       </h1>
 
       <p style="font-family:${SANS};font-size:15px;color:#4b5563;line-height:1.7;margin:0 0 24px;">
-        Thank you, ${esc(firstName)}! Your application${companyName ? ` for <strong>${esc(companyName)}</strong>` : ''} has been
+        Thank you, ${esc(name)}! Your application${companyName ? ` for <strong>${esc(companyName)}</strong>` : ''} has been
         submitted to the Roadmap for Innovation program.
       </p>
 
@@ -99,7 +107,7 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
           <td style="padding:0 0 16px;">
             <p style="font-family:${SANS};font-size:14px;color:#4b5563;line-height:1.6;margin:0;">
               <strong style="color:#1f2937;">Schedule your onboarding call</strong><br/>
-              Pick a time that works for you so we can learn about your goals and match you with the right coach.
+              If you have not already done so, pick a time that works for you so we can learn about your goals and match you with the right coach.
             </p>
           </td>
         </tr>
@@ -134,7 +142,7 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
   <tr>
     <td style="background:#f8fafc;padding:28px 40px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
       <p style="font-family:${SANS};font-size:14px;color:#6b7280;line-height:1.6;margin:0 0 16px;">
-        Ready to get started? Schedule your onboarding call now:
+        Ready to get started? If you haven\u2019t already, schedule your onboarding call now:
       </p>
       <a href="${CALENDLY_URL}" target="_blank" rel="noopener noreferrer"
          style="display:inline-block;padding:12px 28px;background:#1b3a5c;color:#ffffff;font-family:${SANS};font-size:14px;font-weight:600;text-decoration:none;border-radius:6px;">
