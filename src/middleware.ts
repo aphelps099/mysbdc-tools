@@ -87,6 +87,6 @@ export const config = {
      * - /brand/* static assets
      * - favicon, images, static files
      */
-    '/((?!login|api/auth|api/tfg|tfg-apply|_next|fonts|brand/assets|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
+    '/((?!login|api/auth|api/tfg|api/roadmap|tfg-apply|roadmap-apply|_next|fonts|brand/assets|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
   ],
 };
