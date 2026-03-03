@@ -10,6 +10,12 @@
 import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { buildR4iWelcomeHtml } from '@/lib/emails/r4i-client-welcome';
+import {
+  COACHING_OPTIONS,
+  GROUP_COURSE_OPTIONS,
+  EMPLOYEE_RANGES,
+  YEARS_RANGES,
+} from '@/components/roadmap/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +27,64 @@ function backendUrl(): string {
 
 function str(v: unknown): string {
   return typeof v === 'string' ? v : '';
+}
+
+function arr(v: unknown): string[] {
+  return Array.isArray(v) ? v.map(String) : [];
+}
+
+/** Map stored id values back to human-readable labels */
+function lookupLabel(value: string, options: { value: string; label: string }[]): string {
+  return options.find((o) => o.value === value)?.label ?? value;
+}
+
+function lookupLabels(
+  ids: string[],
+  options: { id: string; label: string }[],
+): string {
+  return ids.map((id) => options.find((o) => o.id === id)?.label ?? id).join(', ');
+}
+
+/**
+ * Build a structured notes string from R4I-specific fields so the reviewer
+ * can see everything in the NeoSerra client record at a glance.
+ */
+function buildR4iNotes(d: Record<string, unknown>): string {
+  const lines: string[] = [];
+
+  lines.push('— R4I Application Details —');
+
+  if (str(d.productDescription)) {
+    lines.push(`Products / Manufacturing: ${str(d.productDescription)}`);
+  }
+
+  if (str(d.yearsInOperation)) {
+    lines.push(`Years in Operation: ${lookupLabel(str(d.yearsInOperation), YEARS_RANGES)}`);
+  }
+
+  if (str(d.employeeCount)) {
+    lines.push(`Employees: ${lookupLabel(str(d.employeeCount), EMPLOYEE_RANGES)}`);
+  }
+
+  if (str(d.website)) {
+    lines.push(`Website: ${str(d.website)}`);
+  }
+
+  const coaching = arr(d.coachingInterests);
+  if (coaching.length) {
+    lines.push(`Coaching Interests: ${lookupLabels(coaching, COACHING_OPTIONS)}`);
+  }
+
+  const courses = arr(d.groupCourses);
+  if (courses.length) {
+    lines.push(`Group Courses: ${lookupLabels(courses, GROUP_COURSE_OPTIONS)}`);
+  }
+
+  if (str(d.biggestChallenge)) {
+    lines.push(`Biggest Challenge: ${str(d.biggestChallenge)}`);
+  }
+
+  return lines.join('\n');
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -51,7 +115,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     businessStatus: 'B',
     companyName: r4iData.companyName ?? '',
     website: r4iData.website ?? '',
-    businessDescription: r4iData.productDescription ?? '',
+    businessDescription: buildR4iNotes(r4iData),
 
     // Signature
     signature: r4iData.signature ?? '',
