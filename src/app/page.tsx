@@ -53,6 +53,16 @@ const tools = [
     ),
   },
   {
+    href: '/roadmap-apply',
+    name: 'R4I Application',
+    description: 'Roadmap for Innovation — California SBDC manufacturer coaching & training application (Neoserra DB 113).',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 6l6 6-6 6" /><path d="M4 12h12" /><circle cx="19" cy="12" r="2" />
+      </svg>
+    ),
+  },
+  {
     href: '/milestones',
     name: 'Milestone Collection',
     description: 'Collect client milestones — jobs created, capital accessed, revenue changes, and more.',

@@ -11,14 +11,14 @@ export const NEOSERRA_CENTER_ID = 113;
 /**
  * Submit a Roadmap for Innovation application.
  *
- * Posts to /api/roadmap/submit which is proxied by the Next.js
- * catch-all route handler to the backend (BACKEND_URL).
- * The backend creates the Neoserra client record in center 113.
+ * Reuses the existing /api/intake/submit endpoint (which already
+ * handles Neoserra client creation) — we just force centerId=113
+ * so it lands in the R4I center/database.
  */
 export async function submitRoadmapApplication(
   data: RoadmapApplicationData,
 ): Promise<RoadmapSubmitResult> {
-  const res = await fetch(`${API_BASE}/api/roadmap/submit`, {
+  const res = await fetch(`${API_BASE}/api/intake/submit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

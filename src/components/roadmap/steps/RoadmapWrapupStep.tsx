@@ -47,23 +47,6 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
           )}
         </div>
 
-        {/* Newsletter */}
-        <div className="s641-field">
-          <label className="s641-label">Subscribe to SBDC newsletter?</label>
-          <p className="s641-hint">Stay informed about workshops, resources, and program updates.</p>
-          <div className="s641-pills" style={{ marginTop: 8 }}>
-            {['Yes', 'No'].map((val) => (
-              <button
-                key={val}
-                className={`s641-pill ${data.newsletter === val ? 'selected' : ''}`}
-                onClick={() => onChange({ newsletter: val })}
-              >
-                {val === 'Yes' ? 'Subscribe' : 'No thanks'}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Terms of Service */}
         <div className="s641-tos">
           <div className="s641-tos-header">Information Notice — OMB Approval No.: 3245-0324</div>
