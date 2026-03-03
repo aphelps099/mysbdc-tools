@@ -97,7 +97,7 @@ export const COACHING_OPTIONS = [
 ];
 
 export const GROUP_COURSE_OPTIONS = [
-  { id: 'strategic_planning', label: 'Strategic Planning for Manufacturers', desc: 'Bi-weekly bootcamp with Vivian Campbell' },
+  { id: 'strategic_planning', label: 'Strategic Planning for Manufacturers', desc: '6 sessions over 12 weeks \u2014 Wednesdays, 9\u201310:30 AM' },
   { id: 'supply_chain', label: 'Supply Chain Procurement Training', desc: '5-week course with Barbara Weg' },
 ];
 
