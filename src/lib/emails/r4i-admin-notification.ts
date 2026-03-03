@@ -2,8 +2,7 @@
  * R4I Admin Notification Email — new application alert.
  *
  * Sent to admins when a new Roadmap for Innovation application is submitted.
- * Includes applicant info, full application notes, and a link to the
- * NeoSerra client record.
+ * Includes applicant contact info and full application details.
  */
 
 export const R4I_ADMIN_RECIPIENTS = [
@@ -24,24 +23,12 @@ interface R4iAdminEmailData {
   email: string;
   phone: string;
   notes: string;
-  neoserraClientId: string | null;
 }
 
 const SANS =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 
-const NEOSERRA_BASE = 'https://www.neoserra.com/clie_display.aspx?clie_key=';
-
 export function buildR4iAdminNotificationHtml(d: R4iAdminEmailData): string {
-  const clientUrl = d.neoserraClientId
-    ? `${NEOSERRA_BASE}${encodeURIComponent(d.neoserraClientId)}`
-    : '';
-
-  const clientBtn = clientUrl
-    ? `<a href="${esc(clientUrl)}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:12px 28px;background:#2e7d32;color:#ffffff;font-family:${SANS};font-size:13px;font-weight:600;text-decoration:none;border-radius:6px;">View Client Record in NeoSerra</a>`
-    : `<span style="font-family:${SANS};font-size:13px;color:#9ca3af;">NeoSerra client record not available</span>`;
-
   // Format notes into HTML lines
   const notesHtml = d.notes
     ? d.notes
@@ -147,27 +134,13 @@ export function buildR4iAdminNotificationHtml(d: R4iAdminEmailData): string {
 
   <!-- Application Notes -->
   <tr>
-    <td style="background:#ffffff;padding:24px 40px 0;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+    <td style="background:#ffffff;padding:24px 40px 28px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
       <h2 style="font-family:${SANS};font-size:14px;font-weight:600;color:#1b3a5c;margin:0 0 12px;text-transform:uppercase;letter-spacing:0.03em;">
         Application Details
       </h2>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
         ${notesHtml}
       </table>
-    </td>
-  </tr>
-
-  <!-- Divider -->
-  <tr>
-    <td style="background:#ffffff;padding:24px 40px 0;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
-      <div style="border-top:1px solid #e5e7eb;"></div>
-    </td>
-  </tr>
-
-  <!-- CTA -->
-  <tr>
-    <td style="background:#ffffff;padding:24px 40px 32px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
-      ${clientBtn}
     </td>
   </tr>
 

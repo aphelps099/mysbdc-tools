@@ -190,9 +190,6 @@ export async function POST(req: NextRequest): Promise<Response> {
   const resendKey = process.env.RESEND_API_KEY;
   const emailResults: { client?: unknown; admin?: unknown } = {};
   const notes = buildR4iNotes(r4iData);
-  const neoserraClientId = String(
-    neoserraResult?.id ?? (intakeResult as Record<string, unknown>)?.id ?? '',
-  );
 
   if (resendKey) {
     const resend = new Resend(resendKey);
@@ -236,7 +233,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       }
     }
 
-    // 2b: Admin notification email (with application notes + NeoSerra link)
+    // 2b: Admin notification email (with application details)
     try {
       // Small delay to avoid rate-limiting after client email
       await new Promise((r) => setTimeout(r, 600));
@@ -252,7 +249,6 @@ export async function POST(req: NextRequest): Promise<Response> {
           email: str(r4iData.email),
           phone: str(r4iData.phone),
           notes,
-          neoserraClientId: neoserraClientId || null,
         }),
       });
       emailResults.admin = adminResult;
