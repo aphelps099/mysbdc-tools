@@ -2,7 +2,7 @@
    Roadmap for Innovation — California SBDC
    ═══════════════════════════════════════════════════════════
    Clean, professional manufacturing theme.
-   Warm whites + teal accent. Approachable, not startup-y.
+   Navy (#2e4368) + bright blue (#4c8cff) brand palette.
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Theme Variables ── */
@@ -13,10 +13,11 @@
   --rm-border: #e2ded6;
   --rm-text: #1a1a1a;
   --rm-muted: #7c7872;
-  --rm-accent: #0e7c6b;
-  --rm-accent-hover: #0a6357;
-  --rm-accent-glow: rgba(14, 124, 107, 0.08);
-  --rm-accent-subtle: rgba(14, 124, 107, 0.04);
+  --rm-accent: #4c8cff;
+  --rm-accent-hover: #3a78e8;
+  --rm-accent-glow: rgba(76, 140, 255, 0.10);
+  --rm-accent-subtle: rgba(76, 140, 255, 0.05);
+  --rm-navy: #2e4368;
 }
 
 /* ── Override base s641 colors inside the theme ── */
@@ -138,7 +139,7 @@
 
 .rm-theme .s641-btn-primary:hover {
   background: var(--rm-accent-hover);
-  box-shadow: 0 2px 12px rgba(14, 124, 107, 0.2);
+  box-shadow: 0 2px 12px rgba(76, 140, 255, 0.25);
 }
 
 .rm-theme .s641-btn-primary:disabled {
@@ -201,7 +202,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: linear-gradient(160deg, #0e7c6b 0%, #0a5c50 60%, #074a40 100%);
+  background: linear-gradient(160deg, #3a5280 0%, #2e4368 50%, #1e2e48 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -224,6 +225,33 @@
   to   { opacity: 0; transform: scale(1.05); }
 }
 
+/* ── Splash logos ── */
+
+.rm-splash-logos {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 50ms both;
+}
+
+.rm-splash-logo-r4i {
+  height: 40px;
+  width: auto;
+}
+
+.rm-splash-logo-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.rm-splash-logo-sbdc {
+  height: 32px;
+  width: auto;
+  opacity: 0.85;
+}
+
 .rm-splash-badge {
   font-family: var(--era-text, 'GT Era Text', sans-serif);
   font-size: 11px;
@@ -232,7 +260,7 @@
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 16px;
-  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 50ms both;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
 }
 
 .rm-splash-title {
@@ -305,8 +333,8 @@
   padding: 14px 36px;
   border-radius: 100px;
   border: none;
-  background: #ffffff;
-  color: #0e7c6b;
+  background: #4c8cff;
+  color: #ffffff;
   cursor: pointer;
   transition: transform 150ms ease, box-shadow 150ms ease;
   animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both;
@@ -369,8 +397,38 @@
 }
 
 .rm-result-next-list li::marker {
-  color: var(--rm-accent, #0e7c6b);
+  color: var(--rm-accent, #4c8cff);
   font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Header logos
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-header-logos {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rm-header-logo-r4i {
+  height: 28px;
+  width: auto;
+}
+
+.rm-header-divider {
+  width: 1px;
+  height: 24px;
+  background: #e2ded6;
+}
+
+.rm-header-label {
+  font-family: var(--era-text, system-ui);
+  font-size: 11px;
+  font-weight: 600;
+  color: #4c8cff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 /* ═══════════════════════════════════════════════════════════

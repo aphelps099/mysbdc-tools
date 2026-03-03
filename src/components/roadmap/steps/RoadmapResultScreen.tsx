@@ -13,8 +13,8 @@ export default function RoadmapResultScreen({ result, data }: Props) {
       {/* Success icon */}
       <div className="s641-result-icon">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="23" stroke="var(--rm-accent, #0e7c6b)" strokeWidth="2"/>
-          <path d="M15 24L21 30L33 18" stroke="var(--rm-accent, #0e7c6b)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="24" cy="24" r="23" stroke="var(--rm-accent, #4c8cff)" strokeWidth="2"/>
+          <path d="M15 24L21 30L33 18" stroke="var(--rm-accent, #4c8cff)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
 
@@ -28,7 +28,7 @@ export default function RoadmapResultScreen({ result, data }: Props) {
       </p>
 
       {result.success && (
-        <div className="s641-result-badge" style={{ background: 'rgba(14, 124, 107, 0.05)', color: '#0e7c6b' }}>
+        <div className="s641-result-badge" style={{ background: 'rgba(76, 140, 255, 0.06)', color: '#4c8cff' }}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
             <path d="M5 8L7 10L11 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
