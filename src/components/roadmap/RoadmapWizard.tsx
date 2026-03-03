@@ -27,7 +27,24 @@ function RoadmapSplash({ onContinue }: { onContinue: () => void }) {
 
   return (
     <div className={`rm-splash${exiting ? ' rm-splash-exit' : ''}`}>
-      <div className="rm-splash-badge">California SBDC</div>
+      {/* Logos */}
+      <div className="rm-splash-logos">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://www.roadmap4innovation.com/hs-fs/hubfs/R4I-Logo-Solid-White.png?width=550&height=122&name=R4I-Logo-Solid-White.png"
+          alt="Roadmap 4 Innovation"
+          className="rm-splash-logo-r4i"
+        />
+        <div className="rm-splash-logo-divider" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://www.californiasbdc.org/wp-content/uploads/sites/34/2022/11/americas-sbdc-california-white-180h.png"
+          alt="California SBDC"
+          className="rm-splash-logo-sbdc"
+        />
+      </div>
+
+      <div className="rm-splash-badge">A Statewide Partnership</div>
       <h1 className="rm-splash-title">Roadmap for Small Manufacturers</h1>
       <p className="rm-splash-sub">
         Free expert coaching and hands-on training to strengthen

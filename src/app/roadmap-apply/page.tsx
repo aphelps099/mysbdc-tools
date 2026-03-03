@@ -34,39 +34,20 @@ function RoadmapApplyInner() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '20px 24px',
+          padding: '16px 24px',
           borderBottom: '1px solid #e2ded6',
-          background: '#ffffff',
+          background: '#2e4368',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-          <span style={{
-            fontFamily: 'var(--display, system-ui)',
-            fontSize: 17,
-            fontWeight: 300,
-            color: '#1a1a1a',
-            letterSpacing: '-0.01em',
-          }}>
-            Roadmap
-            <span style={{ color: '#0e7c6b', fontWeight: 500 }}> 4 </span>
-            Innovation
-          </span>
-          <span style={{
-            margin: '0 12px',
-            color: '#e2ded6',
-            fontSize: 18,
-            fontWeight: 300,
-          }}>
-            |
-          </span>
-          <span style={{
-            fontFamily: 'var(--era-text, system-ui)',
-            fontSize: 11,
-            fontWeight: 600,
-            color: '#0e7c6b',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase' as const,
-          }}>
+        <div className="rm-header-logos">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://www.roadmap4innovation.com/hs-fs/hubfs/R4I-Logo-Solid-White.png?width=550&height=122&name=R4I-Logo-Solid-White.png"
+            alt="Roadmap 4 Innovation"
+            className="rm-header-logo-r4i"
+          />
+          <div className="rm-header-divider" style={{ background: 'rgba(255,255,255,0.2)' }} />
+          <span className="rm-header-label" style={{ color: 'rgba(255,255,255,0.7)' }}>
             Application
           </span>
         </div>
