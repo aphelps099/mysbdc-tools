@@ -30,7 +30,10 @@ export interface RoadmapApplicationData {
 
   // Wrap-up
   referralSource: string;
+  referralOther: string;
+  newsletter: string;
   signature: string;
+  privacyRelease: string;
 }
 
 export interface RoadmapSubmitResult {
@@ -43,12 +46,14 @@ export type RoadmapStepId =
   | 'contact'
   | 'company'
   | 'interests'
+  | 'wrapup'
   | 'review';
 
 export const ROADMAP_STEP_ORDER: RoadmapStepId[] = [
   'contact',
   'company',
   'interests',
+  'wrapup',
   'review',
 ];
 
@@ -76,7 +81,10 @@ export function createEmptyRoadmapApplication(): RoadmapApplicationData {
     groupCourses: [],
     biggestChallenge: '',
     referralSource: '',
+    referralOther: '',
+    newsletter: '',
     signature: '',
+    privacyRelease: '',
   };
 }
 

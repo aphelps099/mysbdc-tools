@@ -51,6 +51,8 @@ export default function RoadmapReviewStep({ data, onBack, onSubmit, submitting }
         {courseLabels && <SummaryRow label="Courses" value={courseLabels} />}
         {data.biggestChallenge && <SummaryRow label="Challenge" value={data.biggestChallenge} />}
         {data.referralSource && <SummaryRow label="Referral" value={referralLabel} />}
+        <SummaryRow label="Signature" value={data.signature} />
+        {data.privacyRelease && <SummaryRow label="Privacy Release" value={data.privacyRelease} />}
       </div>
 
       <div className="s641-nav" style={{ paddingTop: 32 }}>
