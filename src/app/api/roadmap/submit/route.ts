@@ -23,7 +23,6 @@ import {
 import {
   COACHING_OPTIONS,
   GROUP_COURSE_OPTIONS,
-  EMPLOYEE_RANGES,
   YEARS_RANGES,
 } from '@/components/roadmap/types';
 
@@ -55,6 +54,52 @@ function lookupLabels(
   return ids.map((id) => options.find((o) => o.id === id)?.label ?? id).join(', ');
 }
 
+/** Map R4I referral source values to NeoSerra reffrom codes. */
+const REFERRAL_TO_REFFROM: Record<string, string> = {
+  sbdc: 'D',      // Small Business Development Center (SBDC)
+  sba: 'N',       // Small Business Administration District Office (SBA)
+  calosba: 'SG',  // State Government Agency
+  mep: 'ZZ',      // Partners: APEX/PTAC, SCORE, WBC, VBOC
+  industry: 'TA', // Trade Associations
+  peer: 'BU',     // Business Owner
+  web: 'IW',      // Internet: Website
+  social: 'SM',   // Internet: Social Media
+  event: 'EV',    // Event
+  other: 'O',     // Other
+};
+
+/** Best-effort mapping from free-text job title to NeoSerra position codes. */
+function mapTitleToPosition(title: string): string {
+  const t = title.toLowerCase().trim();
+  if (!t) return 'OWN';
+  if (/\bceo\b|chief executive/i.test(t)) return 'CEO';
+  if (/\bvice\s*president\b|\bvp\b/i.test(t)) return 'VPR';
+  if (/\bpresident\b/i.test(t)) return 'PR';
+  if (/\bowner\b|\bfounder\b|\bco-?founder\b/i.test(t)) return 'OWN';
+  if (/\bsole\s*proprietor\b/i.test(t)) return 'SP';
+  if (/\bgeneral\s*manager\b|\bgm\b/i.test(t)) return 'GM';
+  if (/\bpartner\b/i.test(t)) return 'PTR';
+  if (/\bmanager\b|\bdirector\b|\bsupervisor\b|\bemployee\b/i.test(t)) return 'EMP';
+  return 'OWN'; // R4I applicants are typically business owners
+}
+
+/** Map R4I coaching interest IDs to NeoSerra step2 (MultipleSelection) codes. */
+const COACHING_TO_STEP2: Record<string, string> = {
+  lean: 'Supply Chain/Inventory Management',
+  quality: 'Certifications/Contracting',
+  cybersecurity: 'Cybersecurity Assistance',
+  hr: 'HR/Managing Employees',
+  food: 'Marketing/Sales',
+  financial: 'Business Accounting/Budget',
+  strategy: 'Managing a Business',
+};
+
+/** Map R4I group course IDs to NeoSerra step2 codes. */
+const COURSE_TO_STEP2: Record<string, string> = {
+  strategic_planning: 'Managing a Business',
+  supply_chain: 'Supply Chain/Inventory Management',
+};
+
 /**
  * Build a structured notes string from R4I-specific fields so the reviewer
  * can see everything in the NeoSerra client record at a glance.
@@ -70,10 +115,6 @@ function buildR4iNotes(d: Record<string, unknown>): string {
 
   if (str(d.yearsInOperation)) {
     lines.push(`Years in Operation: ${lookupLabel(str(d.yearsInOperation), YEARS_RANGES)}`);
-  }
-
-  if (str(d.employeeCount)) {
-    lines.push(`Employees: ${lookupLabel(str(d.employeeCount), EMPLOYEE_RANGES)}`);
   }
 
   if (str(d.website)) {
@@ -109,6 +150,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
+  // Map R4I referral source to NeoSerra reffrom code
+  const r4iReferral = str(r4iData.referralSource);
+  const neoReffrom = REFERRAL_TO_REFFROM[r4iReferral] || '';
+
+  // Map R4I coaching interests + group courses to NeoSerra Step Two codes
+  const coaching = arr(r4iData.coachingInterests);
+  const courses = arr(r4iData.groupCourses);
+  const stepTwoCodes = new Set<string>();
+  for (const id of coaching) {
+    if (COACHING_TO_STEP2[id]) stepTwoCodes.add(COACHING_TO_STEP2[id]);
+  }
+  for (const id of courses) {
+    if (COURSE_TO_STEP2[id]) stepTwoCodes.add(COURSE_TO_STEP2[id]);
+  }
+
   // Map R4I fields to intake-compatible payload with all required fields
   const intakePayload = {
     // Contact
@@ -126,9 +182,19 @@ export async function POST(req: NextRequest): Promise<Response> {
     companyName: r4iData.companyName ?? '',
     website: r4iData.website ?? '',
     businessDescription: r4iData.productDescription ?? '',
+    position: mapTitleToPosition(str(r4iData.title)),
 
     // Structured R4I application details → NeoSerra Contact "notes" field
     notes: buildR4iNotes(r4iData),
+
+    // NeoSerra Step Two: Areas of Assistance (mapped from coaching interests)
+    stepTwo: [...stepTwoCodes],
+
+    // NeoSerra If Other: Biggest challenge / additional assistance needed
+    ifOther: str(r4iData.biggestChallenge),
+
+    // NeoSerra business type — R4I applicants are manufacturers
+    bustype: 'MF',
 
     // Signature
     signature: r4iData.signature ?? '',
@@ -149,8 +215,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     veteran: '',
     education: '',
     language: '',
-    referral: '',
-    referralOther: '',
+    referral: neoReffrom,
+    referralOther: r4iReferral === 'other' ? str(r4iData.referralOther) : '',
     newsletter: '',
     centerId: NEOSERRA_CENTER_ID,
   };
