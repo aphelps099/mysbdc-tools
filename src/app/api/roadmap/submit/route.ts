@@ -207,6 +207,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Suppress backend emails — R4I sends its own
     sendEmails: false,
 
+    // Mark as eCenter intake so record appears in "New Sign-ups" queue
+    intake: true,
+
     // Defaults for required intake fields
     goals: [],
     gender: '',

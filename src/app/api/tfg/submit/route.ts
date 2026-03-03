@@ -268,6 +268,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Suppress backend emails — TFG sends its own branded emails via Resend
     sendEmails: false,
 
+    // Mark as eCenter intake so record appears in "New Sign-ups" queue
+    intake: true,
+
     // Defaults for required intake fields
     goals: [],
     gender: '',
