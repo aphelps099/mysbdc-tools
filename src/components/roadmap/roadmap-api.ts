@@ -3,33 +3,24 @@ import type { RoadmapApplicationData, RoadmapSubmitResult } from './types';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 /**
- * Neoserra center / database ID for the Roadmap for Innovation program.
- * All R4I applications flow into this center.
- */
-export const NEOSERRA_CENTER_ID = 113;
-
-/**
  * Submit a Roadmap for Innovation application.
  *
- * Reuses the existing /api/intake/submit endpoint (which already
- * handles Neoserra client creation) — we just force centerId=113
- * so it lands in the R4I center/database.
+ * Routes through /api/roadmap/submit which maps fields to the
+ * intake-compatible payload, creates the Neoserra client, and
+ * sends the welcome email.
  */
 export async function submitRoadmapApplication(
   data: RoadmapApplicationData,
 ): Promise<RoadmapSubmitResult> {
-  const res = await fetch(`${API_BASE}/api/intake/submit`, {
+  const res = await fetch(`${API_BASE}/api/roadmap/submit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ...data,
-      centerId: NEOSERRA_CENTER_ID,
-    }),
+    body: JSON.stringify(data),
   });
 
   if (!res.ok) {
-    const text = await res.text().catch(() => 'Unknown error');
-    throw new Error(`Submission failed (${res.status}): ${text}`);
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error || `Submission failed (${res.status})`);
   }
 
   return res.json();
