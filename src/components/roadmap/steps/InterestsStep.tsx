@@ -98,7 +98,7 @@ export default function InterestsStep({ data, onChange, onNext, onBack }: Props)
           <textarea
             className="s641-input s641-textarea"
             rows={3}
-            placeholder="Tell us what's keeping you up at night..."
+            placeholder="e.g. supply chain delays, workforce retention, scaling production..."
             value={data.biggestChallenge}
             onChange={(e) => onChange({ biggestChallenge: e.target.value })}
           />
