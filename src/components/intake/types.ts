@@ -62,6 +62,9 @@ export interface IntakeData {
 
   // Center (default 107 = Aaron Phelps Test Center)
   centerId: number | null;
+
+  // eCenter intake flag — backend forwards to NeoSerra so record appears in "New Sign-ups"
+  intake?: boolean;
 }
 
 export interface IntakeResult {
@@ -148,5 +151,6 @@ export function createEmptyIntake(): IntakeData {
     signature: '',
     privacyRelease: 'No',
     centerId: 107,
+    intake: true,
   };
 }
