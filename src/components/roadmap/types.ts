@@ -19,7 +19,6 @@ export interface RoadmapApplicationData {
   city: string;
   state: string;
   zipCode: string;
-  employeeCount: string;     // Range selector
   yearsInOperation: string;  // Range selector
   productDescription: string; // What they manufacture
 
@@ -73,7 +72,6 @@ export function createEmptyRoadmapApplication(): RoadmapApplicationData {
     city: '',
     state: 'CA',
     zipCode: '',
-    employeeCount: '',
     yearsInOperation: '',
     productDescription: '',
     coachingInterests: [],
@@ -99,15 +97,6 @@ export const COACHING_OPTIONS = [
 export const GROUP_COURSE_OPTIONS = [
   { id: 'strategic_planning', label: 'Strategic Planning for Manufacturers', desc: '6 sessions over 12 weeks \u2014 Wednesdays, 9\u201310:30 AM' },
   { id: 'supply_chain', label: 'Supply Chain Procurement Training', desc: '5-week course with Barbara Weg' },
-];
-
-export const EMPLOYEE_RANGES = [
-  { value: '1-5', label: '1–5 employees' },
-  { value: '6-19', label: '6–19 employees' },
-  { value: '20-49', label: '20–49 employees' },
-  { value: '50-99', label: '50–99 employees' },
-  { value: '100-249', label: '100–249 employees' },
-  { value: '250+', label: '250+ employees' },
 ];
 
 export const YEARS_RANGES = [

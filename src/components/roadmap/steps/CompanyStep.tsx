@@ -1,7 +1,7 @@
 'use client';
 
 import type { RoadmapApplicationData } from '../types';
-import { EMPLOYEE_RANGES, YEARS_RANGES } from '../types';
+import { YEARS_RANGES } from '../types';
 
 interface Props {
   data: RoadmapApplicationData;
@@ -23,7 +23,6 @@ export default function CompanyStep({ data, onChange, onNext, onBack }: Props) {
     data.city.trim() &&
     data.state &&
     data.zipCode.trim() &&
-    data.employeeCount &&
     data.productDescription.trim();
 
   return (
@@ -105,33 +104,18 @@ export default function CompanyStep({ data, onChange, onNext, onBack }: Props) {
           </div>
         </div>
 
-        <div className="s641-row">
-          <div className="s641-field">
-            <label className="s641-label">Number of Employees</label>
-            <select
-              className="s641-select"
-              value={data.employeeCount}
-              onChange={(e) => onChange({ employeeCount: e.target.value })}
-            >
-              <option value="">Select...</option>
-              {EMPLOYEE_RANGES.map((r) => (
-                <option key={r.value} value={r.value}>{r.label}</option>
-              ))}
-            </select>
-          </div>
-          <div className="s641-field">
-            <label className="s641-label">Years in Operation</label>
-            <select
-              className="s641-select"
-              value={data.yearsInOperation}
-              onChange={(e) => onChange({ yearsInOperation: e.target.value })}
-            >
-              <option value="">Select...</option>
-              {YEARS_RANGES.map((r) => (
-                <option key={r.value} value={r.value}>{r.label}</option>
-              ))}
-            </select>
-          </div>
+        <div className="s641-field">
+          <label className="s641-label">Years in Operation</label>
+          <select
+            className="s641-select"
+            value={data.yearsInOperation}
+            onChange={(e) => onChange({ yearsInOperation: e.target.value })}
+          >
+            <option value="">Select...</option>
+            {YEARS_RANGES.map((r) => (
+              <option key={r.value} value={r.value}>{r.label}</option>
+            ))}
+          </select>
         </div>
 
         <div className="s641-field">
