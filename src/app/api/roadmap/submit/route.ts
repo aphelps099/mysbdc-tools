@@ -196,8 +196,8 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (resendKey) {
     const resend = new Resend(resendKey);
-    // R4I uses its own dedicated sender — not shared with TFG
-    const from = 'NorCal SBDC <noreply@norcalsbdc.org>';
+    const from = process.env.RESEND_FROM_SBDC
+      || 'California SBDC <noreply@californiasbdc.org>';
 
     // Helper: retry once on 429 rate-limit (Resend free tier: 2 req/s)
     async function sendWithRetry(
