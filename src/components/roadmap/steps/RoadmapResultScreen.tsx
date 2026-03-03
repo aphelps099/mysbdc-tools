@@ -1,6 +1,9 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import type { RoadmapApplicationData, RoadmapSubmitResult } from '../types';
+
+const CALENDLY_URL = 'https://calendly.com/maggie-132/sbdc-r4i';
 
 interface Props {
   result: RoadmapSubmitResult;
@@ -22,9 +25,8 @@ export default function RoadmapResultScreen({ result, data }: Props) {
         Thank you, {data.firstName}!
       </h2>
       <p className="s641-result-desc">
-        Your application to the California Roadmap for Small Manufacturers
-        program has been received. Our team will review your information and
-        reach out to schedule your first coaching session.
+        Your application has been received. Schedule your onboarding
+        call below to get started.
       </p>
 
       {result.success && (
@@ -43,15 +45,57 @@ export default function RoadmapResultScreen({ result, data }: Props) {
         </div>
       )}
 
-      <div className="rm-result-next-steps">
-        <h3 className="rm-result-next-title">What happens next?</h3>
-        <ol className="rm-result-next-list">
-          <li>A program coordinator will review your application</li>
-          <li>You&apos;ll receive an email confirmation within 2 business days</li>
-          <li>We&apos;ll match you with a coach based on your interests</li>
-          <li>Your first coaching session will be scheduled</li>
-        </ol>
-      </div>
+      {/* Calendly Scheduling */}
+      <CalendlyEmbed data={data} />
+    </div>
+  );
+}
+
+/* ── Calendly Inline Widget ─────────────────────────── */
+
+function CalendlyEmbed({ data }: { data: RoadmapApplicationData }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams({
+      name: `${data.firstName} ${data.lastName}`.trim(),
+      email: data.email,
+      a1: data.phone,
+    });
+    const fullUrl = `${CALENDLY_URL}?${params.toString()}`;
+
+    const existing = document.querySelector('script[src*="calendly.com/assets/external/widget.js"]');
+    if (!existing) {
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.head.appendChild(script);
+      script.onload = () => initWidget(fullUrl);
+    } else {
+      initWidget(fullUrl);
+    }
+
+    function initWidget(url: string) {
+      if (containerRef.current && (window as any).Calendly) {
+        (window as any).Calendly.initInlineWidget({
+          url,
+          parentElement: containerRef.current,
+        });
+      }
+    }
+  }, [data.firstName, data.lastName, data.email, data.phone]);
+
+  return (
+    <div className="s641-calendly">
+      <div className="s641-calendly-header">Schedule your onboarding call</div>
+      <p className="s641-calendly-desc">
+        Pick a time that works for you — a quick call to review your
+        goals and get matched with the right coach.
+      </p>
+      <div
+        ref={containerRef}
+        className="s641-calendly-widget"
+      />
     </div>
   );
 }
