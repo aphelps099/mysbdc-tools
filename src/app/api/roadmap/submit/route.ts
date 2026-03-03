@@ -115,7 +115,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     businessStatus: 'B',
     companyName: r4iData.companyName ?? '',
     website: r4iData.website ?? '',
-    businessDescription: buildR4iNotes(r4iData),
+    businessDescription: r4iData.productDescription ?? '',
+
+    // Structured R4I application details → NeoSerra Contact "notes" field
+    notes: buildR4iNotes(r4iData),
 
     // Signature
     signature: r4iData.signature ?? '',
