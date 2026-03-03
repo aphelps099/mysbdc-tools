@@ -1,0 +1,392 @@
+/* ═══════════════════════════════════════════════════════════
+   Roadmap for Innovation — California SBDC
+   ═══════════════════════════════════════════════════════════
+   Clean, professional manufacturing theme.
+   Warm whites + teal accent. Approachable, not startup-y.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Theme Variables ── */
+
+.rm-theme {
+  --rm-bg: #f7f5f0;
+  --rm-surface: #ffffff;
+  --rm-border: #e2ded6;
+  --rm-text: #1a1a1a;
+  --rm-muted: #7c7872;
+  --rm-accent: #0e7c6b;
+  --rm-accent-hover: #0a6357;
+  --rm-accent-glow: rgba(14, 124, 107, 0.08);
+  --rm-accent-subtle: rgba(14, 124, 107, 0.04);
+}
+
+/* ── Override base s641 colors inside the theme ── */
+
+.rm-theme .s641-progress {
+  height: 2px;
+  background: var(--rm-border);
+}
+
+.rm-theme .s641-progress-bar {
+  background: var(--rm-accent);
+}
+
+.rm-theme .s641-question {
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-subtitle {
+  color: var(--rm-muted);
+}
+
+.rm-theme .s641-label {
+  color: var(--rm-muted);
+}
+
+/* ── Inputs ── */
+
+.rm-theme .s641-input {
+  border-color: var(--rm-border);
+  background: var(--rm-surface);
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-input::placeholder {
+  color: #b5b0a8;
+}
+
+.rm-theme .s641-input:focus {
+  border-color: var(--rm-accent);
+  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+}
+
+.rm-theme .s641-select {
+  border-color: var(--rm-border);
+  background-color: var(--rm-surface);
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-select:focus {
+  border-color: var(--rm-accent);
+  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+}
+
+/* ── Cards ── */
+
+.rm-theme .s641-card {
+  border-color: var(--rm-border);
+  background: var(--rm-surface);
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-card:hover {
+  border-color: var(--rm-accent);
+}
+
+.rm-theme .s641-card.selected {
+  border-color: var(--rm-accent);
+  background: var(--rm-accent-subtle);
+  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+}
+
+.rm-theme .s641-card-check {
+  border-color: var(--rm-border);
+}
+
+.rm-theme .s641-card.selected .s641-card-check {
+  background: var(--rm-accent);
+  border-color: var(--rm-accent);
+}
+
+.rm-theme .s641-card-desc {
+  color: var(--rm-muted);
+}
+
+/* ── Pills ── */
+
+.rm-theme .s641-pill {
+  border-color: var(--rm-border);
+  background: var(--rm-surface);
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-pill:hover {
+  border-color: var(--rm-accent);
+}
+
+.rm-theme .s641-pill.selected {
+  border-color: var(--rm-accent);
+  background: var(--rm-accent-subtle);
+  color: var(--rm-accent);
+}
+
+.rm-theme .s641-pill-check {
+  border-color: var(--rm-border);
+}
+
+.rm-theme .s641-pill.selected .s641-pill-check {
+  background: var(--rm-accent);
+  border-color: var(--rm-accent);
+  color: white;
+}
+
+/* ── Buttons ── */
+
+.rm-theme .s641-btn-primary {
+  background: var(--rm-accent);
+  color: white;
+}
+
+.rm-theme .s641-btn-primary:hover {
+  background: var(--rm-accent-hover);
+  box-shadow: 0 2px 12px rgba(14, 124, 107, 0.2);
+}
+
+.rm-theme .s641-btn-primary:disabled {
+  opacity: 0.35;
+}
+
+.rm-theme .s641-btn-back {
+  color: var(--rm-muted);
+}
+
+.rm-theme .s641-btn-back:hover {
+  color: var(--rm-text);
+}
+
+/* ── Summary ── */
+
+.rm-theme .s641-summary {
+  background: #faf8f4;
+  border-color: var(--rm-border);
+}
+
+.rm-theme .s641-summary-row {
+  border-color: var(--rm-border);
+}
+
+.rm-theme .s641-summary-label {
+  color: var(--rm-muted);
+}
+
+.rm-theme .s641-summary-value {
+  color: var(--rm-text);
+}
+
+/* ── Spinner ── */
+
+.rm-theme .s641-spinner {
+  border-color: var(--rm-border);
+  border-top-color: var(--rm-accent);
+}
+
+.rm-theme .s641-submitting-text {
+  color: var(--rm-muted);
+}
+
+/* ── Result ── */
+
+.rm-theme .s641-result-title {
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-result-desc {
+  color: var(--rm-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Splash / gate screen
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: linear-gradient(160deg, #0e7c6b 0%, #0a5c50 60%, #074a40 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  animation: rmSplashIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rm-splash.rm-splash-exit {
+  animation: rmSplashOut 500ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+@keyframes rmSplashIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rmSplashOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.05); }
+}
+
+.rm-splash-badge {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 50ms both;
+}
+
+.rm-splash-title {
+  font-family: var(--display, 'GT Era Display', sans-serif);
+  font-size: clamp(28px, 7vw, 48px);
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-align: center;
+  margin: 0 0 12px;
+  max-width: 500px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
+.rm-splash-sub {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 420px;
+  margin: 0 0 36px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+
+@keyframes rmSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats row */
+.rm-splash-highlights {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 40px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+}
+
+.rm-splash-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rm-splash-stat-value {
+  font-family: var(--display, 'GT Era Display', sans-serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.rm-splash-stat-label {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* CTA button */
+.rm-splash-btn {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 100px;
+  border: none;
+  background: #ffffff;
+  color: #0e7c6b;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both;
+}
+
+.rm-splash-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.rm-splash-btn:active {
+  transform: scale(0.98);
+}
+
+/* Duration hint */
+.rm-splash-meta {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+  margin-top: 16px;
+  animation: rmSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 500ms both;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Result — "What happens next" card
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-result-next-steps {
+  margin-top: 32px;
+  text-align: left;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 24px;
+  background: #faf8f4;
+  border: 1px solid #e2ded6;
+  border-radius: 10px;
+}
+
+.rm-result-next-title {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.rm-result-next-list {
+  margin: 0;
+  padding: 0 0 0 20px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  line-height: 1.8;
+  color: #57534e;
+}
+
+.rm-result-next-list li {
+  padding-left: 4px;
+}
+
+.rm-result-next-list li::marker {
+  color: var(--rm-accent, #0e7c6b);
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 540px) {
+  .rm-splash-highlights {
+    gap: 20px;
+  }
+
+  .rm-splash-stat-value {
+    font-size: 22px;
+  }
+
+  .rm-splash-title {
+    font-size: clamp(24px, 6vw, 36px);
+  }
+}
