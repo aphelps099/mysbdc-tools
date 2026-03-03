@@ -31,7 +31,6 @@ export interface RoadmapApplicationData {
   // Wrap-up
   referralSource: string;
   referralOther: string;
-  newsletter: string;
   signature: string;
   privacyRelease: string;
 }
@@ -82,7 +81,6 @@ export function createEmptyRoadmapApplication(): RoadmapApplicationData {
     biggestChallenge: '',
     referralSource: '',
     referralOther: '',
-    newsletter: '',
     signature: '',
     privacyRelease: '',
   };
