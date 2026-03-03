@@ -4,12 +4,12 @@
  * Flow:
  *   1. Map R4I fields to intake-compatible payload (with all required fields)
  *   2. Create client via backend /api/intake/submit
- *   3. Update NeoSerra Contact "notes" via direct API call using indivId
- *   4. Send welcome email via Resend
+ *   3. Send welcome email via Resend
  *
- * The intake returns { id: "423577", indivId: "542254", ... } where:
- *   - id      = CLIENT reference (e.g. @08423577)
- *   - indivId = CONTACT reference — this is what the Contact API needs
+ * The backend creates the client + contact record in NeoSerra.
+ * R4I application details are passed as `notes` in the intake payload
+ * so they appear on the contact record alongside all other fields
+ * (business status, signature, etc.).
  */
 
 import { NextRequest } from 'next/server';
@@ -28,14 +28,6 @@ const NEOSERRA_CENTER_ID = 113;
 
 function backendUrl(): string {
   return (process.env.BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
-}
-
-function neoserraUrl(): string {
-  return (process.env.NEOSERRA_BASE_URL || '').replace(/\/+$/, '');
-}
-
-function neoserraKey(): string {
-  return process.env.NEOSERRA_API_KEY || '';
 }
 
 function str(v: unknown): string {
@@ -187,44 +179,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
-  // Step 2: Update NeoSerra Contact "notes" with structured R4I details
-  // neoserraResult.indivId is the CONTACT reference (not .id which is the CLIENT)
-  let notesResult: Record<string, unknown> | null = null;
   const neoserraResult = (intakeResult as Record<string, unknown>)?.neoserraResult as Record<string, unknown> | undefined;
-  const contactRef = String(neoserraResult?.indivId ?? '');
 
-  const base = neoserraUrl();
-  const key = neoserraKey();
-
-  if (base && key && contactRef && contactRef !== '') {
-    try {
-      const notesRes = await fetch(`${base}/api/v1/contacts/${contactRef}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`,
-        },
-        body: JSON.stringify({ notes: buildR4iNotes(r4iData) }),
-      });
-
-      notesResult = await notesRes.json().catch(() => null);
-
-      if (!notesRes.ok) {
-        console.warn('[r4i/submit] Contact notes update failed:', JSON.stringify(notesResult));
-      } else {
-        console.log(`[r4i/submit] Contact notes updated for indivId: ${contactRef}`);
-      }
-    } catch (err) {
-      const reason = err instanceof Error ? err.message : String(err);
-      console.warn(`[r4i/submit] Contact notes update error: ${reason}`);
-    }
-  } else if (!base || !key) {
-    console.warn('[r4i/submit] NEOSERRA_BASE_URL or NEOSERRA_API_KEY not set; skipping notes update');
-  } else {
-    console.warn('[r4i/submit] No indivId in neoserraResult — skipping notes update');
-  }
-
-  // Step 3: Send welcome email via Resend
+  // Step 2: Send welcome email via Resend
   const resendKey = process.env.RESEND_API_KEY;
   let emailResult: unknown = null;
 
@@ -235,7 +192,24 @@ export async function POST(req: NextRequest): Promise<Response> {
         || process.env.RESEND_FROM
         || 'California SBDC <onboarding@resend.dev>';
 
-      const result = await resend.emails.send({
+      // Helper: retry once on 429 rate-limit (Resend free tier: 2 req/s)
+      async function sendWithRetry(
+        opts: Parameters<typeof resend.emails.send>[0],
+      ) {
+        const first = await resend.emails.send(opts);
+        if (
+          first.error &&
+          'statusCode' in first.error &&
+          (first.error as { statusCode?: number }).statusCode === 429
+        ) {
+          console.warn('[r4i/submit] Rate-limited — retrying after 1.5 s');
+          await new Promise((r) => setTimeout(r, 1500));
+          return resend.emails.send(opts);
+        }
+        return first;
+      }
+
+      const result = await sendWithRetry({
         from,
         to: [str(r4iData.email)],
         subject: 'Application Received — Roadmap for Innovation',
@@ -259,7 +233,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     success: (intakeResult as Record<string, unknown>)?.success ?? true,
     applicationId: (intakeResult as Record<string, unknown>)?.id ?? null,
     neoserraResult: neoserraResult ?? null,
-    notesResult,
     emailResult,
   });
 }
