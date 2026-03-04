@@ -51,10 +51,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Password required' }, { status: 400 });
   }
 
-  // Timing-safe comparison
+  // Timing-safe comparison — check main password first, then lender password
   const a = Buffer.from(body.password);
   const b = Buffer.from(appPassword);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) {
+  const mainMatch = a.length === b.length && timingSafeEqual(a, b);
+
+  // Second password: LENDER_PASSWORD → redirects to lender resources
+  const lenderPassword = process.env.LENDER_PASSWORD;
+  let lenderMatch = false;
+  if (!mainMatch && lenderPassword) {
+    const c = Buffer.from(lenderPassword);
+    lenderMatch = a.length === c.length && timingSafeEqual(a, c);
+  }
+
+  if (!mainMatch && !lenderMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
@@ -63,7 +73,10 @@ export async function POST(req: NextRequest) {
   const payload = `${nonce}:${Date.now()}`;
   const token = signToken(payload);
 
-  const res = NextResponse.json({ ok: true });
+  const res = NextResponse.json({
+    ok: true,
+    ...(lenderMatch ? { redirect: '/brand/lender-resources' } : {}),
+  });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

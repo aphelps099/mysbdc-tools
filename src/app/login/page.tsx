@@ -28,7 +28,8 @@ export default function LoginPage() {
       });
 
       if (res.ok) {
-        router.push('/');
+        const data = await res.json().catch(() => ({}));
+        router.push(data.redirect || '/');
         router.refresh();
       } else {
         const data = await res.json().catch(() => ({ error: 'Invalid password' }));
