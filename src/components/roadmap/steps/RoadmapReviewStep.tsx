@@ -41,12 +41,11 @@ export default function RoadmapReviewStep({ data, onBack, onSubmit, submitting }
         <SummaryRow label="Name" value={`${data.firstName} ${data.lastName}`} />
         <SummaryRow label="Email" value={data.email} />
         <SummaryRow label="Phone" value={data.phone} />
-        {data.title && <SummaryRow label="Title" value={data.title} />}
+        {data.title && <SummaryRow label="Position" value={data.title} />}
         <SummaryRow label="Company" value={data.companyName} />
         <SummaryRow label="Location" value={`${data.city}, ${data.state} ${data.zipCode}`} />
-        {data.yearsInOperation && <SummaryRow label="Years in Biz" value={data.yearsInOperation} />}
         <SummaryRow label="Products" value={data.productDescription} />
-        {coachingLabels && <SummaryRow label="Coaching" value={coachingLabels} />}
+        {coachingLabels && <SummaryRow label="Advising" value={coachingLabels} />}
         {courseLabels && <SummaryRow label="Courses" value={courseLabels} />}
         {data.biggestChallenge && <SummaryRow label="Challenge" value={data.biggestChallenge} />}
         {data.referralSource && <SummaryRow label="Referral" value={referralLabel} />}

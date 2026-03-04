@@ -19,7 +19,7 @@ export default function ContactStep({ data, onChange, onNext }: Props) {
     <div className="s641-step">
       <h2 className="s641-question">Tell us about yourself</h2>
       <p className="s641-subtitle">
-        We&apos;ll use this to connect you with the right coach or training program.
+        We&apos;ll use this to connect you with the right advisor or training program.
       </p>
 
       <div className="s641-fields">
@@ -70,7 +70,7 @@ export default function ContactStep({ data, onChange, onNext }: Props) {
 
         <div className="s641-field">
           <label className="s641-label">
-            Your Title / Role <span className="s641-optional">optional</span>
+            Your Position
           </label>
           <input
             className="s641-input"

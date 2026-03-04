@@ -15,7 +15,7 @@ import './roadmap.css';
 
 /* ═══════════════════════════════════════════════════════
    Roadmap for Innovation — Application Wizard
-   California SBDC small manufacturer coaching & training
+   California SBDC small manufacturer advising & training
    ═══════════════════════════════════════════════════════ */
 
 function RoadmapSplash({ onContinue }: { onContinue: () => void }) {
@@ -48,18 +48,18 @@ function RoadmapSplash({ onContinue }: { onContinue: () => void }) {
       <div className="rm-splash-badge">A Statewide Partnership</div>
       <h1 className="rm-splash-title">Roadmap for Small Manufacturers</h1>
       <p className="rm-splash-sub">
-        Free expert coaching and hands-on training to strengthen
+        Free expert advising and hands-on training to strengthen
         operations and grow your business.
       </p>
 
       <div className="rm-splash-highlights">
         <div className="rm-splash-stat">
           <span className="rm-splash-stat-value">100%</span>
-          <span className="rm-splash-stat-label">No-Cost Program</span>
+          <span className="rm-splash-stat-label">No-Fee Program</span>
         </div>
         <div className="rm-splash-stat">
           <span className="rm-splash-stat-value">1:1</span>
-          <span className="rm-splash-stat-label">Expert Coaching</span>
+          <span className="rm-splash-stat-label">Expert Advising</span>
         </div>
         <div className="rm-splash-stat">
           <span className="rm-splash-stat-value">7+</span>

@@ -49,7 +49,7 @@ export default function RoadmapResultScreen({ result, data }: Props) {
         Thank you, {data.firstName}!
       </h2>
       <p className="s641-result-desc">
-        Your application has been received. Schedule your onboarding
+        Your application has been received. Schedule your intake
         call below to get started.
       </p>
 
@@ -103,10 +103,10 @@ function CalendlyEmbed({ data }: { data: RoadmapApplicationData }) {
 
   return (
     <div className="s641-calendly">
-      <div className="s641-calendly-header">Schedule your onboarding call</div>
+      <div className="s641-calendly-header">Schedule your intake call</div>
       <p className="s641-calendly-desc">
-        Pick a time that works for you — a quick call to review your
-        goals and get matched with the right coach.
+        Pick a time that works for you and we will give you a quick call to
+        review your goals and connect you with the right advisor.
       </p>
       <div
         ref={containerRef}

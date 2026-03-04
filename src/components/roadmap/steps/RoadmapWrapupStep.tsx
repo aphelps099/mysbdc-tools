@@ -56,23 +56,43 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
               Development Center (SBDC) Network, an SBA Resource Partner. I agree to
               cooperate should I be selected to participate in surveys designed to evaluate
               SBDC services. I understand that any information disclosed will be held in
-              strict confidence.
+              strict confidence. (The SBDC will not provide my personal information to
+              commercial entities.) I authorize the SBDC to furnish relevant information
+              to the assigned Business Advisor(s). I further understand that the
+              advisor(s) agree not to:
             </p>
-            <p>
-              I authorize the SBDC to furnish relevant information to the assigned Business
-              Advisor(s). I further understand that the advisor(s) agree not to recommend
-              goods or services from sources in which they have an interest, and not to
-              accept fees or commissions developing from this counseling relationship.
-            </p>
+            <ul style={{ margin: '8px 0', paddingLeft: 24 }}>
+              <li>recommend goods or services from sources in which he/she has an interest, and</li>
+              <li>accept fees or commissions developing from this counseling relationship.</li>
+            </ul>
             <p>
               In consideration of the counselor(s) furnishing management or technical
               assistance, I waive all claims against SBA personnel, and that of its Resource
               Partners, host organizations, and SBDC Advisors arising from this assistance.
             </p>
+            <p>
+              I certify that I am legally authorized to receive taxpayer-funded assistance
+              under federal law. I understand that, pursuant to Executive Order (issued
+              February 19, 2025), the California Small Business Development Center is
+              prohibited from providing services funded by taxpayer dollars to individuals
+              not lawfully present in the United States. I affirm that the information
+              provided is accurate.
+            </p>
             <div className="s641-tos-highlight">
               By accepting these terms, I give my consent to participate in surveys designed
-              to evaluate the services and impact of the California SBDC Network.
+              to evaluate the services and impact of the California SBDC Network. Surveys
+              are sent twice a year and responses are kept confidential. Responses typically
+              take less than five minutes and ask about four key areas: business start-up,
+              growth in sales, jobs created, and/or loans/grants.
             </div>
+            <p style={{ fontSize: '0.85em', color: '#6b7280', marginTop: 12 }}>
+              Please note: You are not required to respond to any collection information
+              unless it displays a currently valid OMB approval number. Comments on the
+              burden should be sent to: U.S. Small Business Administration, 409 3rd Street,
+              SW, Washington, DC 20416, and to: Desk Officer SBA, Office of Management and
+              Budget, New Executive Office Building, Room 10202, Washington, D.C., 20503.
+              OMB Approval (3245-0324). PLEASE DO NOT SEND FORMS TO OMB.
+            </p>
           </div>
           <button
             type="button"

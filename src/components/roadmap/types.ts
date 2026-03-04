@@ -1,7 +1,7 @@
 /** Roadmap for Innovation — California SBDC
  *
  * Application form for the statewide small manufacturer
- * coaching & training program. Basic intake only.
+ * advising & training program. Basic intake only.
  */
 
 export interface RoadmapApplicationData {
@@ -10,7 +10,7 @@ export interface RoadmapApplicationData {
   lastName: string;
   email: string;
   phone: string;
-  title: string;             // Job title / role
+  title: string;             // Position
 
   // Company
   companyName: string;
@@ -22,7 +22,7 @@ export interface RoadmapApplicationData {
   yearsInOperation: string;  // Range selector
   productDescription: string; // What they manufacture
 
-  // Interests — coaching areas + group training courses
+  // Interests — advising areas + group training courses
   coachingInterests: string[];
   groupCourses: string[];
   biggestChallenge: string;  // Free text — what's your #1 challenge?
@@ -90,7 +90,7 @@ export const COACHING_OPTIONS = [
   { id: 'cybersecurity', label: 'Cybersecurity', desc: 'DFARS, NIST 800-171, CMMC Level 2 readiness' },
   { id: 'hr', label: 'Human Resources', desc: 'Workforce practices for small manufacturing teams' },
   { id: 'food', label: 'Food Market Development', desc: 'Food & beverage market channels, sales growth' },
-  { id: 'financial', label: 'Financial Coaching', desc: 'Costs, pricing, and profitability guidance' },
+  { id: 'financial', label: 'Financial Advising', desc: 'Costs, pricing, and profitability guidance' },
   { id: 'strategy', label: 'Strategy & Leadership', desc: 'Decision-making, leadership, day-to-day management' },
 ];
 

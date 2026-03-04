@@ -1,7 +1,6 @@
 'use client';
 
 import type { RoadmapApplicationData } from '../types';
-import { YEARS_RANGES } from '../types';
 
 interface Props {
   data: RoadmapApplicationData;
@@ -102,20 +101,6 @@ export default function CompanyStep({ data, onChange, onNext, onBack }: Props) {
               maxLength={10}
             />
           </div>
-        </div>
-
-        <div className="s641-field">
-          <label className="s641-label">Years in Operation</label>
-          <select
-            className="s641-select"
-            value={data.yearsInOperation}
-            onChange={(e) => onChange({ yearsInOperation: e.target.value })}
-          >
-            <option value="">Select...</option>
-            {YEARS_RANGES.map((r) => (
-              <option key={r.value} value={r.value}>{r.label}</option>
-            ))}
-          </select>
         </div>
 
         <div className="s641-field">
