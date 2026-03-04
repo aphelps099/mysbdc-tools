@@ -57,11 +57,13 @@ export async function POST(req: NextRequest) {
   const mainMatch = a.length === b.length && timingSafeEqual(a, b);
 
   // Second password: LENDER_PASSWORD → redirects to lender resources
+  // Case-insensitive comparison for lender password (user convenience)
   const lenderPassword = process.env.LENDER_PASSWORD;
   let lenderMatch = false;
   if (!mainMatch && lenderPassword) {
-    const c = Buffer.from(lenderPassword);
-    lenderMatch = a.length === c.length && timingSafeEqual(a, c);
+    const lowerInput = Buffer.from(body.password.toLowerCase());
+    const lowerLender = Buffer.from(lenderPassword.toLowerCase());
+    lenderMatch = lowerInput.length === lowerLender.length && timingSafeEqual(lowerInput, lowerLender);
   }
 
   if (!mainMatch && !lenderMatch) {
