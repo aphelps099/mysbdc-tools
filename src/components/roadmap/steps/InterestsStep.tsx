@@ -31,14 +31,14 @@ export default function InterestsStep({ data, onChange, onNext, onBack }: Props)
     <div className="s641-step">
       <h2 className="s641-question">What are you interested in?</h2>
       <p className="s641-subtitle">
-        Select the coaching areas and/or group training courses that
+        Select the advising areas and/or group training courses that
         match your needs. Choose as many as you like.
       </p>
 
       <div className="s641-fields" style={{ gap: 28 }}>
-        {/* 1:1 Coaching */}
+        {/* 1:1 Advising */}
         <div className="s641-field">
-          <label className="s641-label">Individual Coaching Areas</label>
+          <label className="s641-label">Individual Advising Areas</label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
             {COACHING_OPTIONS.map((opt) => (
               <button

@@ -123,7 +123,7 @@ function buildR4iNotes(d: Record<string, unknown>): string {
 
   const coaching = arr(d.coachingInterests);
   if (coaching.length) {
-    lines.push(`Coaching Interests: ${lookupLabels(coaching, COACHING_OPTIONS)}`);
+    lines.push(`Advising Interests: ${lookupLabels(coaching, COACHING_OPTIONS)}`);
   }
 
   const courses = arr(d.groupCourses);

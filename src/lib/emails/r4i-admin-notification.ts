@@ -7,7 +7,6 @@
 
 export const R4I_ADMIN_RECIPIENTS = [
   'phelps@norcalsbdc.org',
-  'maggie@norcalsbdc.org',
 ];
 
 const R4I_LOGO =

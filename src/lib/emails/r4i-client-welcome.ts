@@ -106,8 +106,8 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
           </td>
           <td style="padding:0 0 16px;">
             <p style="font-family:${SANS};font-size:14px;color:#4b5563;line-height:1.6;margin:0;">
-              <strong style="color:#1f2937;">Schedule your onboarding call</strong><br/>
-              If you have not already done so, pick a time that works for you so we can learn about your goals and match you with the right coach.
+              <strong style="color:#1f2937;">Schedule your intake call</strong><br/>
+              If you have not already done so, pick a time that works for you so we can learn about your goals and match you with the right advisor.
             </p>
           </td>
         </tr>
@@ -117,8 +117,8 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
           </td>
           <td style="padding:0 0 16px;">
             <p style="font-family:${SANS};font-size:14px;color:#4b5563;line-height:1.6;margin:0;">
-              <strong style="color:#1f2937;">Brief interview &amp; onboarding</strong><br/>
-              We\u2019ll connect with you to complete program onboarding and get you set up for coaching and training.
+              <strong style="color:#1f2937;">Brief interview &amp; intake</strong><br/>
+              We\u2019ll connect with you to complete program intake and get you set up for advising and training.
             </p>
           </td>
         </tr>
@@ -129,7 +129,7 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
           <td style="padding:0;">
             <p style="font-family:${SANS};font-size:14px;color:#4b5563;line-height:1.6;margin:0;">
               <strong style="color:#1f2937;">Start your program</strong><br/>
-              Begin 1:1 coaching sessions and enroll in group training courses \u2014 all at no cost to you.
+              Begin 1:1 advising sessions and enroll in group training courses \u2014 all at no fee to you.
             </p>
           </td>
         </tr>
@@ -142,11 +142,11 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
   <tr>
     <td style="background:#f8fafc;padding:28px 40px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
       <p style="font-family:${SANS};font-size:14px;color:#6b7280;line-height:1.6;margin:0 0 16px;">
-        Ready to get started? If you haven\u2019t already, schedule your onboarding call now:
+        Ready to get started? If you haven\u2019t already, schedule your intake call now:
       </p>
       <a href="${CALENDLY_URL}" target="_blank" rel="noopener noreferrer"
          style="display:inline-block;padding:12px 28px;background:#1b3a5c;color:#ffffff;font-family:${SANS};font-size:14px;font-weight:600;text-decoration:none;border-radius:6px;">
-        Schedule Onboarding Call
+        Schedule Intake Call
       </a>
     </td>
   </tr>
