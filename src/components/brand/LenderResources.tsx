@@ -276,8 +276,8 @@ export default function LenderResources() {
   const [showTitleCard, setShowTitleCard] = useState(true);
   const [titleCardExiting, setTitleCardExiting] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const titleTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  const exitTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const titleTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const openViewer = useCallback((href: string) => {
     const idx = VIEWABLE.findIndex((r) => r.href === href);
