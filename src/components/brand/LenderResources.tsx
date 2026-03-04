@@ -273,18 +273,54 @@ export default function LenderResources() {
   const [toast, setToast] = useState<string | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIdx, setViewerIdx] = useState(0);
+  const [showTitleCard, setShowTitleCard] = useState(true);
+  const [titleCardExiting, setTitleCardExiting] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const titleTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const openViewer = useCallback((href: string) => {
     const idx = VIEWABLE.findIndex((r) => r.href === href);
     if (idx >= 0) {
       setViewerIdx(idx);
+      setShowTitleCard(true);
+      setTitleCardExiting(false);
       setViewerOpen(true);
     }
   }, []);
 
+  const dismissTitleCard = useCallback(() => {
+    setTitleCardExiting(true);
+    clearTimeout(titleTimerRef.current);
+    clearTimeout(exitTimerRef.current);
+    exitTimerRef.current = setTimeout(() => {
+      setShowTitleCard(false);
+      setTitleCardExiting(false);
+    }, 400);
+  }, []);
+
   const viewerPrev = useCallback(() => setViewerIdx((i) => Math.max(0, i - 1)), []);
   const viewerNext = useCallback(() => setViewerIdx((i) => Math.min(VIEWABLE.length - 1, i + 1)), []);
+
+  // Title card auto-dismiss timer
+  useEffect(() => {
+    if (!viewerOpen) return;
+    setShowTitleCard(true);
+    setTitleCardExiting(false);
+    clearTimeout(titleTimerRef.current);
+    clearTimeout(exitTimerRef.current);
+    titleTimerRef.current = setTimeout(() => {
+      setTitleCardExiting(true);
+      exitTimerRef.current = setTimeout(() => {
+        setShowTitleCard(false);
+        setTitleCardExiting(false);
+      }, 400);
+    }, 3100);
+    return () => {
+      clearTimeout(titleTimerRef.current);
+      clearTimeout(exitTimerRef.current);
+    };
+  }, [viewerOpen, viewerIdx]);
 
   // Body scroll lock + keyboard nav for document viewer
   useEffect(() => {
@@ -751,6 +787,7 @@ export default function LenderResources() {
             </button>
             <div className="dv-title">
               <span className="dv-title-name">{VIEWABLE[viewerIdx]?.name}</span>
+              <span className="dv-draft-pill">DRAFT</span>
               <span className="dv-title-count">
                 {String(viewerIdx + 1).padStart(2, '0')} / {String(VIEWABLE.length).padStart(2, '0')}
               </span>
@@ -781,15 +818,40 @@ export default function LenderResources() {
             </button>
           </div>
 
-          {/* iframe — takes all remaining space */}
-          <iframe
-            ref={iframeRef}
-            key={viewerIdx}
-            src={VIEWABLE[viewerIdx]?.href}
-            title={VIEWABLE[viewerIdx]?.name}
-            className="dv-iframe"
-            sandbox="allow-same-origin allow-scripts"
-          />
+          {/* Content area — title card overlays the iframe */}
+          <div className="dv-content-area">
+            {showTitleCard && (
+              <div
+                className={`dv-title-card${titleCardExiting ? ' dv-title-card-exit' : ''}`}
+                onClick={dismissTitleCard}
+                role="button"
+                tabIndex={0}
+                aria-label="Dismiss title card"
+              >
+                <div className="dv-title-card-inner">
+                  <span className="dv-title-card-badge">DRAFT</span>
+                  <h2 className="dv-title-card-name">{VIEWABLE[viewerIdx]?.name}</h2>
+                  <p className="dv-title-card-desc">
+                    {RESOURCES.find((r) => r.href === VIEWABLE[viewerIdx]?.href)?.description}
+                  </p>
+                  <span className="dv-title-card-meta">
+                    {RESOURCES.find((r) => r.href === VIEWABLE[viewerIdx]?.href)?.meta}
+                  </span>
+                  <span className="dv-title-card-counter">
+                    {String(viewerIdx + 1).padStart(2, '0')} / {String(VIEWABLE.length).padStart(2, '0')}
+                  </span>
+                </div>
+              </div>
+            )}
+            <iframe
+              ref={iframeRef}
+              key={viewerIdx}
+              src={VIEWABLE[viewerIdx]?.href}
+              title={VIEWABLE[viewerIdx]?.name}
+              className="dv-iframe"
+              sandbox="allow-same-origin allow-scripts"
+            />
+          </div>
         </div>
       )}
 

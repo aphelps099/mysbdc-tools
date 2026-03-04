@@ -187,6 +187,20 @@
   color: #ffffff;
 }
 
+/* ── DRAFT toolbar pill ── */
+.dv-draft-pill {
+  font-family: var(--mono, monospace);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8FC5D9;
+  border: 1px solid rgba(143, 197, 217, 0.25);
+  padding: 2px 8px;
+  border-radius: 3px;
+  opacity: 0.5;
+}
+
 /* ── Open in new tab link ── */
 .dv-open-tab {
   font-family: var(--mono, monospace);
@@ -202,13 +216,142 @@
   color: #8FC5D9;
 }
 
-/* ── iframe: fills all remaining space ── */
+/* ── Content area: positions title card over iframe ── */
+.dv-content-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* ── iframe: fills content area ── */
 .dv-iframe {
   flex: 1;
   width: 100%;
   min-height: 0;
   border: none;
   background: #1a1a1a;
+}
+
+/* ════════════════════════════════════════════════════════
+   Title Card — animated intro overlay
+   ════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'GT Era Display';
+  src: url('/fonts/GT-Era-Display-Thin-Trial.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'GT Era Display';
+  src: url('/fonts/GT-Era-Display-Light-Trial.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'GT Era Display';
+  src: url('/fonts/GT-Era-Display-Medium-Trial.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'GT Era Text';
+  src: url('/fonts/GT-Era-Text-Medium-Trial.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dv-title-card {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f1c2e;
+  cursor: pointer;
+  animation: dvCardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dv-title-card-exit {
+  animation: dvCardOut 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+
+@keyframes dvCardIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dvCardOut {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(1.01) translateY(-12px); }
+}
+
+.dv-title-card-inner {
+  text-align: center;
+  max-width: 520px;
+  padding: 48px 32px;
+  animation: dvCardContentIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@keyframes dvCardContentIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dv-title-card-badge {
+  display: inline-block;
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(143, 197, 217, 0.7);
+  border: 1px solid rgba(143, 197, 217, 0.2);
+  padding: 4px 14px;
+  border-radius: 3px;
+  margin-bottom: 28px;
+}
+
+.dv-title-card-name {
+  font-family: 'GT Era Display', var(--display, sans-serif);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 100;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 0 0 18px;
+}
+
+.dv-title-card-desc {
+  font-family: 'GT Era Text', var(--era-text, sans-serif);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.38);
+  margin-bottom: 24px;
+}
+
+.dv-title-card-meta {
+  display: block;
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.18);
+  margin-bottom: 12px;
+}
+
+.dv-title-card-counter {
+  display: block;
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.12);
 }
 
 /* ── Responsive ── */
