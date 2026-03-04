@@ -14,7 +14,7 @@ interface Props {
 export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Props) {
   const [tosExpanded, setTosExpanded] = useState(false);
 
-  const valid = data.referralSource && data.signature.trim();
+  const valid = data.referralSource && data.signature.trim() && data.tosAgreed;
 
   return (
     <div className="s641-step">
@@ -50,6 +50,19 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
         {/* Terms of Service */}
         <div className="s641-tos">
           <div className="s641-tos-header">Information Notice — OMB Approval No.: 3245-0324</div>
+
+          {/* Certification — displayed prominently at the top */}
+          <div style={{ padding: '16px 20px', background: '#fef9e7', borderBottom: '1px solid #e5e7eb' }}>
+            <p style={{ fontSize: '0.93em', color: '#1f2937', lineHeight: 1.65, margin: 0 }}>
+              I certify that I am legally authorized to receive taxpayer-funded assistance
+              under federal law. I understand that, pursuant to Executive Order (issued
+              February 19, 2025), the California Small Business Development Center is
+              prohibited from providing services funded by taxpayer dollars to individuals
+              not lawfully present in the United States. I affirm that the information
+              provided is accurate.
+            </p>
+          </div>
+
           <div className={`s641-tos-body ${tosExpanded ? 's641-tos-expanded' : ''}`}>
             <p>
               I request business counseling service from the California Small Business
@@ -69,14 +82,6 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
               In consideration of the counselor(s) furnishing management or technical
               assistance, I waive all claims against SBA personnel, and that of its Resource
               Partners, host organizations, and SBDC Advisors arising from this assistance.
-            </p>
-            <p>
-              I certify that I am legally authorized to receive taxpayer-funded assistance
-              under federal law. I understand that, pursuant to Executive Order (issued
-              February 19, 2025), the California Small Business Development Center is
-              prohibited from providing services funded by taxpayer dollars to individuals
-              not lawfully present in the United States. I affirm that the information
-              provided is accurate.
             </p>
             <div className="s641-tos-highlight">
               By accepting these terms, I give my consent to participate in surveys designed
@@ -101,6 +106,29 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
           >
             {tosExpanded ? 'Show less' : 'Read full terms'}
           </button>
+
+          {/* Agreement checkbox */}
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 10,
+              padding: '14px 20px',
+              borderTop: '1px solid #e5e7eb',
+              cursor: 'pointer',
+              fontSize: '0.9em',
+              lineHeight: 1.55,
+              color: '#1f2937',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={data.tosAgreed}
+              onChange={(e) => onChange({ tosAgreed: e.target.checked })}
+              style={{ marginTop: 3, accentColor: '#1b3a5c' }}
+            />
+            I have read and agree to the terms above.
+          </label>
         </div>
 
         {/* Signature */}
@@ -112,6 +140,7 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
             placeholder="Jane A. Smith"
             value={data.signature}
             onChange={(e) => onChange({ signature: e.target.value })}
+            disabled={!data.tosAgreed}
           />
         </div>
 

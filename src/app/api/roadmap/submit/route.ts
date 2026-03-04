@@ -68,6 +68,7 @@ const REFERRAL_TO_REFFROM: Record<string, string> = {
   sbdc: 'D',      // Small Business Development Center (SBDC)
   sba: 'N',       // Small Business Administration District Office (SBA)
   calosba: 'SG',  // State Government Agency
+  CT: 'CT',       // CMTC (California Manufacturing Technology Consulting)
   mep: 'ZZ',      // Partners: APEX/PTAC, SCORE, WBC, VBOC
   industry: 'TA', // Trade Associations
   peer: 'BU',     // Business Owner

@@ -31,6 +31,7 @@ export interface RoadmapApplicationData {
   // Wrap-up
   referralSource: string;
   referralOther: string;
+  tosAgreed: boolean;
   signature: string;
   privacyRelease: string;
 }
@@ -81,6 +82,7 @@ export function createEmptyRoadmapApplication(): RoadmapApplicationData {
     biggestChallenge: '',
     referralSource: '',
     referralOther: '',
+    tosAgreed: false,
     signature: '',
     privacyRelease: '',
   };
@@ -97,8 +99,8 @@ export const COACHING_OPTIONS = [
 ];
 
 export const GROUP_COURSE_OPTIONS = [
-  { id: 'strategic_planning', label: 'Strategic Planning for Manufacturers', desc: '6 sessions over 12 weeks \u2014 Wednesdays, 9\u201310:30 AM' },
-  { id: 'supply_chain', label: 'Supply Chain Procurement Training', desc: '5-week course with Barbara Weg' },
+  { id: 'strategic_planning', label: 'Strategic Planning for Manufacturers', desc: 'Starts April 1 — every other Wednesday for 6 sessions over 12 weeks' },
+  { id: 'supply_chain', label: 'Supply Chain Procurement Training', desc: 'Starts April 6 — every other Wednesday for 6 sessions over 12 weeks' },
 ];
 
 export const POSITION_OPTIONS = [
@@ -126,6 +128,7 @@ export const REFERRAL_SOURCES = [
   { value: 'sbdc', label: 'SBDC' },
   { value: 'sba', label: 'SBA' },
   { value: 'calosba', label: 'CalOSBA' },
+  { value: 'CT', label: 'CMTC' },
   { value: 'mep', label: 'MEP Center' },
   { value: 'industry', label: 'Industry Association' },
   { value: 'peer', label: 'Peer / Business Owner' },
