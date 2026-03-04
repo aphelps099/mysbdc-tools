@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import Modal from '@/components/ui/Modal';
 import './brand.css';
 import './lender-resources.css';
 
@@ -89,23 +90,23 @@ const VALUE_STATS = [
 const TALKING_POINTS = [
   {
     title: 'For Banks & Lenders',
-    lead: 'We don\u2019t compete with you \u2014 we make your pipeline stronger.',
-    body: 'SBDC referrals come with clean financials, solid business plans, and realistic loan amounts. Our advisors do the prep work so your underwriters can close faster.',
+    lead: 'Your next closed loan is sitting in our office right now.',
+    body: 'We do the unglamorous work\u2014financials, projections, reality checks\u2014so your underwriters get clean packages. Less back-and-forth. Faster closes. Better paper.',
   },
   {
     title: 'For CDFIs',
-    lead: 'Same mission, different tools.',
-    body: 'You lend, we advise. Together we reach the businesses that need capital most. Our 16 centers across NorCal are embedded in the communities you serve.',
+    lead: 'You fund them. We build them.',
+    body: 'Your capital. Our advising. Together we reach the businesses that banks won\u2019t touch and CDFIs exist to serve. 16 centers, embedded in the communities you\u2019re already lending into.',
   },
   {
     title: 'For Cities & Counties',
-    lead: 'Your constituents, our advisors.',
-    body: 'No-fee small business support for your community. We serve 36 counties and generate measurable economic impact: job creation, revenue growth, and business starts.',
+    lead: '7,500 constituents served. Zero budget line.',
+    body: 'Free, confidential business advising across 36 counties. Job creation, revenue growth, business starts\u2014measurable outcomes with no cost to your office. We\u2019re already in your community.',
   },
   {
     title: 'The ROI Conversation',
-    lead: '$58 back for every $1 invested',
-    body: '\u2014 that\u2019s the SBA-verified return. Our no-fee advising model doesn\u2019t just help entrepreneurs, it creates measurable economic impact that benefits the entire lending ecosystem.',
+    lead: 'Fifty-eight to one.',
+    body: 'For every dollar invested in SBDC, the economy gets fifty-eight back. SBA-verified. That\u2019s not a pitch\u2014it\u2019s an audit finding.',
   },
 ] as const;
 
@@ -264,10 +265,38 @@ function useActiveSection(): SectionId {
 // Main Component
 // ═══════════════════════════════════════════════════════
 
+// ── Viewable resources (HTML files that open in modal) ──
+const VIEWABLE = RESOURCES.filter((r) => r.href.startsWith('/brand/lender-guides/'));
+
 export default function LenderResources() {
   useScrollReveal();
   const activeSection = useActiveSection();
   const [toast, setToast] = useState<string | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIdx, setViewerIdx] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const openViewer = useCallback((href: string) => {
+    const idx = VIEWABLE.findIndex((r) => r.href === href);
+    if (idx >= 0) {
+      setViewerIdx(idx);
+      setViewerOpen(true);
+    }
+  }, []);
+
+  const viewerPrev = useCallback(() => setViewerIdx((i) => Math.max(0, i - 1)), []);
+  const viewerNext = useCallback(() => setViewerIdx((i) => Math.min(VIEWABLE.length - 1, i + 1)), []);
+
+  // Keyboard nav for document viewer (arrows for prev/next)
+  useEffect(() => {
+    if (!viewerOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); viewerPrev(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); viewerNext(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [viewerOpen, viewerPrev, viewerNext]);
 
   const copyPhrase = useCallback((text: string) => {
     navigator.clipboard.writeText(text).catch(() => {});
@@ -433,14 +462,17 @@ export default function LenderResources() {
         </div>
 
         <div className="lr-resource-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
-          {RESOURCES.map((res) => (
+          {RESOURCES.map((res) => {
+            const isViewable = res.href.startsWith('/brand/lender-guides/');
+            return (
             <a
               key={res.name}
               href={res.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={isViewable ? undefined : '_blank'}
+              rel={isViewable ? undefined : 'noopener noreferrer'}
+              onClick={isViewable ? (e) => { e.preventDefault(); openViewer(res.href); } : undefined}
               className="lr-resource-card"
-              style={{ background: 'var(--p-cream, #faf8f4)', borderRadius: 0 }}
+              style={{ background: 'var(--p-cream, #faf8f4)', borderRadius: 0, cursor: 'pointer' }}
             >
               {/* Preview area */}
               <div style={{
@@ -480,7 +512,8 @@ export default function LenderResources() {
                 </div>
               </div>
             </a>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -663,7 +696,7 @@ export default function LenderResources() {
             Questions about lender resources, co-branded materials, or partnership opportunities.
           </div>
           <a
-            href="mailto:phelps@norcalsbdc.org"
+            href="mailto:scott@norcalsbdc.org"
             className="lr-cta-link"
             style={{
               fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 400,
@@ -676,7 +709,7 @@ export default function LenderResources() {
               display: 'inline-flex', alignItems: 'center', gap: 8,
             }}
           >
-            phelps@norcalsbdc.org
+            scott@norcalsbdc.org
           </a>
         </div>
       </div>
@@ -696,6 +729,78 @@ export default function LenderResources() {
       >
         NorCal SBDC &mdash; Lender Resources &mdash; 2026
       </footer>
+
+      {/* ════════════════════════════════════════════
+         DOCUMENT VIEWER MODAL
+         ════════════════════════════════════════════ */}
+      <Modal
+        open={viewerOpen}
+        onClose={() => setViewerOpen(false)}
+        size="full"
+        containerStyle={{
+          background: '#0a0e14',
+          maxWidth: 1400,
+          maxHeight: '96vh',
+          marginTop: '2vh',
+        }}
+      >
+        {/* Toolbar */}
+        <div className="dv-toolbar">
+          <button
+            className="dv-arrow"
+            onClick={viewerPrev}
+            disabled={viewerIdx === 0}
+            aria-label="Previous document"
+          >
+            &#8592;
+          </button>
+          <div className="dv-title">
+            <span className="dv-title-name">{VIEWABLE[viewerIdx]?.name}</span>
+            <span className="dv-title-count">
+              {String(viewerIdx + 1).padStart(2, '0')} / {String(VIEWABLE.length).padStart(2, '0')}
+            </span>
+          </div>
+          <button
+            className="dv-arrow"
+            onClick={viewerNext}
+            disabled={viewerIdx === VIEWABLE.length - 1}
+            aria-label="Next document"
+          >
+            &#8594;
+          </button>
+          <button
+            className="dv-close"
+            onClick={() => setViewerOpen(false)}
+            aria-label="Close viewer"
+          >
+            &#215;
+          </button>
+        </div>
+
+        {/* iframe */}
+        <div className="dv-viewport">
+          <iframe
+            ref={iframeRef}
+            key={viewerIdx}
+            src={VIEWABLE[viewerIdx]?.href}
+            title={VIEWABLE[viewerIdx]?.name}
+            className="dv-iframe"
+            sandbox="allow-same-origin allow-scripts"
+          />
+        </div>
+
+        {/* Bottom nav */}
+        <div className="dv-nav">
+          <a
+            href={VIEWABLE[viewerIdx]?.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dv-open-tab"
+          >
+            Open in new tab &rarr;
+          </a>
+        </div>
+      </Modal>
 
       {/* ── Toast ── */}
       {toast && (
