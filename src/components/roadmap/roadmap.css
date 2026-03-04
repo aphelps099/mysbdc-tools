@@ -1,8 +1,9 @@
 /* ═══════════════════════════════════════════════════════════
    Roadmap for Innovation — California SBDC
    ═══════════════════════════════════════════════════════════
-   Clean, professional manufacturing theme.
+   Warm professional manufacturing theme.
    Navy (#2e4368) + bright blue (#4c8cff) brand palette.
+   Typography-driven. Confident whitespace. Every detail deliberate.
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Theme Variables ── */
@@ -11,8 +12,9 @@
   --rm-bg: #f7f5f0;
   --rm-surface: #ffffff;
   --rm-border: #e2ded6;
+  --rm-border-strong: #d4cfc6;
   --rm-text: #1a1a1a;
-  --rm-muted: #7c7872;
+  --rm-muted: #8a847c;
   --rm-accent: #4c8cff;
   --rm-accent-hover: #3a78e8;
   --rm-accent-glow: rgba(76, 140, 255, 0.10);
@@ -20,7 +22,42 @@
   --rm-navy: #2e4368;
 }
 
-/* ── Override base s641 colors inside the theme ── */
+/* ═══════════════════════════════════════════════════════════
+   Step entrance — staggered field cascade
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-theme .s641-step {
+  animation: rmStepEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rmStepEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rm-theme .s641-fields > * {
+  animation: rmFieldReveal 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rm-theme .s641-fields > *:nth-child(1)  { animation-delay: 60ms; }
+.rm-theme .s641-fields > *:nth-child(2)  { animation-delay: 140ms; }
+.rm-theme .s641-fields > *:nth-child(3)  { animation-delay: 220ms; }
+.rm-theme .s641-fields > *:nth-child(4)  { animation-delay: 300ms; }
+.rm-theme .s641-fields > *:nth-child(5)  { animation-delay: 370ms; }
+.rm-theme .s641-fields > *:nth-child(6)  { animation-delay: 440ms; }
+.rm-theme .s641-fields > *:nth-child(7)  { animation-delay: 510ms; }
+.rm-theme .s641-fields > *:nth-child(8)  { animation-delay: 570ms; }
+.rm-theme .s641-fields > *:nth-child(9)  { animation-delay: 630ms; }
+.rm-theme .s641-fields > *:nth-child(10) { animation-delay: 690ms; }
+
+@keyframes rmFieldReveal {
+  from { opacity: 0; transform: translateY(14px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Progress bar — refined
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-progress {
   height: 2px;
@@ -29,68 +66,134 @@
 
 .rm-theme .s641-progress-bar {
   background: var(--rm-accent);
+  transition: width 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 8px rgba(76, 140, 255, 0.20);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Typography — tighter, more confident
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-question {
   color: var(--rm-text);
+  letter-spacing: -0.015em;
 }
 
 .rm-theme .s641-subtitle {
   color: var(--rm-muted);
+  margin-bottom: 32px;
 }
 
 .rm-theme .s641-label {
   color: var(--rm-muted);
+  font-size: 10.5px;
+  letter-spacing: 0.10em;
 }
 
-/* ── Inputs ── */
+.rm-theme .s641-hint {
+  color: var(--rm-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Fields — more breathing room
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-theme .s641-fields {
+  gap: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Inputs — refined border, tighter feel
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-input {
   border-color: var(--rm-border);
   background: var(--rm-surface);
   color: var(--rm-text);
+  border-radius: 6px;
+  padding: 11px 12px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .rm-theme .s641-input::placeholder {
-  color: #b5b0a8;
+  color: #b8b3ab;
 }
 
 .rm-theme .s641-input:focus {
   border-color: var(--rm-accent);
-  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+  box-shadow:
+    0 0 0 3px var(--rm-accent-glow),
+    inset 0 1px 2px rgba(76, 140, 255, 0.04);
+}
+
+.rm-theme .s641-textarea {
+  border-radius: 6px;
 }
 
 .rm-theme .s641-select {
   border-color: var(--rm-border);
   background-color: var(--rm-surface);
   color: var(--rm-text);
+  border-radius: 6px;
+  padding: 11px 38px 11px 12px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .rm-theme .s641-select:focus {
   border-color: var(--rm-accent);
-  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+  box-shadow:
+    0 0 0 3px var(--rm-accent-glow),
+    inset 0 1px 2px rgba(76, 140, 255, 0.04);
 }
 
-/* ── Cards ── */
+/* ═══════════════════════════════════════════════════════════
+   Cards — tighter, left-accent on selection
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-card {
   border-color: var(--rm-border);
   background: var(--rm-surface);
   color: var(--rm-text);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+  position: relative;
+}
+
+.rm-theme .s641-card-compact {
+  padding: 11px 14px;
 }
 
 .rm-theme .s641-card:hover {
   border-color: var(--rm-accent);
+  background: rgba(76, 140, 255, 0.015);
 }
 
 .rm-theme .s641-card.selected {
   border-color: var(--rm-accent);
   background: var(--rm-accent-subtle);
-  box-shadow: 0 0 0 3px var(--rm-accent-glow);
+  box-shadow: none;
+}
+
+/* Blue left accent on selected card */
+.rm-theme .s641-card.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 8px 0 0 8px;
+  background: var(--rm-accent);
 }
 
 .rm-theme .s641-card-check {
-  border-color: var(--rm-border);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-width: 1.5px;
+  border-color: var(--rm-border-strong);
+  transition: background 150ms ease, border-color 150ms ease;
 }
 
 .rm-theme .s641-card.selected .s641-card-check {
@@ -98,16 +201,24 @@
   border-color: var(--rm-accent);
 }
 
-.rm-theme .s641-card-desc {
-  color: var(--rm-muted);
+.rm-theme .s641-card-title {
+  font-size: 14px;
 }
 
-/* ── Pills ── */
+.rm-theme .s641-card-desc {
+  color: var(--rm-muted);
+  font-size: 12.5px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Pills — cleaner
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-pill {
   border-color: var(--rm-border);
   background: var(--rm-surface);
   color: var(--rm-text);
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
 }
 
 .rm-theme .s641-pill:hover {
@@ -121,7 +232,7 @@
 }
 
 .rm-theme .s641-pill-check {
-  border-color: var(--rm-border);
+  border-color: var(--rm-border-strong);
 }
 
 .rm-theme .s641-pill.selected .s641-pill-check {
@@ -130,20 +241,37 @@
   color: white;
 }
 
-/* ── Buttons ── */
+/* ═══════════════════════════════════════════════════════════
+   Navigation — confident, separated
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-theme .s641-nav {
+  padding-top: 40px;
+  border-top: 1px solid var(--rm-border);
+  margin-top: 8px;
+}
 
 .rm-theme .s641-btn-primary {
   background: var(--rm-accent);
   color: white;
+  box-shadow: 0 1px 3px rgba(76, 140, 255, 0.15);
+  transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 .rm-theme .s641-btn-primary:hover {
   background: var(--rm-accent-hover);
-  box-shadow: 0 2px 12px rgba(76, 140, 255, 0.25);
+  box-shadow: 0 3px 14px rgba(76, 140, 255, 0.25);
+  transform: translateY(-0.5px);
+}
+
+.rm-theme .s641-btn-primary:active {
+  transform: translateY(0);
 }
 
 .rm-theme .s641-btn-primary:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
+  box-shadow: none;
+  transform: none;
 }
 
 .rm-theme .s641-btn-back {
@@ -154,26 +282,64 @@
   color: var(--rm-text);
 }
 
-/* ── Summary ── */
+/* ═══════════════════════════════════════════════════════════
+   Summary / Review — elevated card
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-summary {
-  background: #faf8f4;
-  border-color: var(--rm-border);
+  background: #faf9f6;
+  border: 1px solid var(--rm-border);
+  border-left: 3px solid var(--rm-accent);
+  border-radius: 2px 8px 8px 2px;
+  padding: 20px 20px 20px 22px;
 }
 
 .rm-theme .s641-summary-row {
-  border-color: var(--rm-border);
+  border-color: rgba(226, 222, 214, 0.6);
+  padding: 8px 0;
+  font-size: 13.5px;
 }
 
 .rm-theme .s641-summary-label {
-  color: var(--rm-muted);
+  color: #a8a29e;
+  font-size: 13px;
 }
 
 .rm-theme .s641-summary-value {
   color: var(--rm-text);
+  font-weight: 600;
 }
 
-/* ── Spinner ── */
+/* ═══════════════════════════════════════════════════════════
+   TOS block — polished
+   ═══════════════════════════════════════════════════════════ */
+
+.rm-theme .s641-tos {
+  border-color: var(--rm-border);
+  background: #faf9f6;
+  border-radius: 8px;
+}
+
+.rm-theme .s641-tos-header {
+  color: var(--rm-text);
+}
+
+.rm-theme .s641-tos-body {
+  color: var(--rm-muted);
+}
+
+.rm-theme .s641-tos-toggle {
+  color: var(--rm-accent);
+}
+
+.rm-theme .s641-tos-highlight {
+  background: rgba(76, 140, 255, 0.04);
+  border-left-color: var(--rm-accent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Spinner
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-spinner {
   border-color: var(--rm-border);
@@ -184,7 +350,9 @@
   color: var(--rm-muted);
 }
 
-/* ── Result ── */
+/* ═══════════════════════════════════════════════════════════
+   Result screen
+   ═══════════════════════════════════════════════════════════ */
 
 .rm-theme .s641-result-title {
   color: var(--rm-text);
@@ -192,6 +360,11 @@
 
 .rm-theme .s641-result-desc {
   color: var(--rm-muted);
+}
+
+.rm-theme .s641-result-badge {
+  background: rgba(76, 140, 255, 0.06);
+  color: var(--rm-accent);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -370,9 +543,9 @@
   margin-left: auto;
   margin-right: auto;
   padding: 24px;
-  background: #faf8f4;
+  background: #faf9f6;
   border: 1px solid #e2ded6;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .rm-result-next-title {
@@ -446,5 +619,17 @@
 
   .rm-splash-title {
     font-size: clamp(24px, 6vw, 36px);
+  }
+
+  .rm-theme .s641-nav {
+    padding-top: 32px;
+  }
+
+  .rm-theme .s641-subtitle {
+    margin-bottom: 24px;
+  }
+
+  .rm-theme .s641-question {
+    font-size: clamp(22px, 5vw, 30px);
   }
 }
