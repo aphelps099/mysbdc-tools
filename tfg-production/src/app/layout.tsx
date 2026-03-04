@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Tech Futures Group',
-  description: 'TFG Application & AI Content Tools — NorCal SBDC',
+  title: 'Apply for R4I',
+  description: 'Ready for Impact Application — NorCal SBDC',
 };
 
 export default function RootLayout({
