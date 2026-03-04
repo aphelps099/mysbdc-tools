@@ -60,6 +60,17 @@ export default function CompanyContactStep({ data, onChange, onNext }: Props) {
               />
             </div>
           </div>
+          <div className="tfg-box-row tfg-box-row-1">
+            <div className="tfg-box-cell">
+              <label className="s641-label">Date Established</label>
+              <input
+                className="s641-input"
+                type="date"
+                value={data.dateEstablished}
+                onChange={(e) => onChange({ dateEstablished: e.target.value })}
+              />
+            </div>
+          </div>
         </div>
 
         {/* ── Box 2: Contact ── */}

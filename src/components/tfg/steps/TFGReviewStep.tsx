@@ -50,6 +50,7 @@ export default function TFGReviewStep({ data, onBack, onSubmit, submitting }: Pr
           <div className="tfg-review-label">Company &amp; Contact</div>
           <ReviewRow label="Company" value={data.companyName} />
           <ReviewRow label="Website" value={data.website} />
+          <ReviewRow label="Date Established" value={data.dateEstablished} />
           <ReviewRow label="Name" value={`${data.firstName} ${data.lastName}`} />
           <ReviewRow label="Email" value={data.email} />
           <ReviewRow label="Phone" value={data.phone} />

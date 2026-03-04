@@ -13,6 +13,7 @@ export interface TFGApplicationData {
   // Company Info
   companyName: string;        // GF field 2
   website: string;            // GF field 3
+  dateEstablished: string;    // date (YYYY-MM-DD)
 
   // Primary Contact
   firstName: string;          // GF field 5
@@ -147,6 +148,7 @@ export function createEmptyTFGApplication(): TFGApplicationData {
   return {
     companyName: '',
     website: '',
+    dateEstablished: '',
     firstName: '',
     lastName: '',
     email: '',
