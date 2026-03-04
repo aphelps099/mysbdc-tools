@@ -51,9 +51,9 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
         <div className="s641-tos">
           <div className="s641-tos-header">Information Notice — OMB Approval No.: 3245-0324</div>
 
-          {/* Certification — displayed prominently at the top */}
-          <div style={{ padding: '16px 20px', background: '#fef9e7', borderBottom: '1px solid #e5e7eb' }}>
-            <p style={{ fontSize: '0.93em', color: '#1f2937', lineHeight: 1.65, margin: 0 }}>
+          {/* Certification — displayed at the top */}
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid #e5e7eb' }}>
+            <p style={{ fontSize: '0.82em', color: '#6b7280', lineHeight: 1.6, margin: 0 }}>
               I certify that I am legally authorized to receive taxpayer-funded assistance
               under federal law. I understand that, pursuant to Executive Order (issued
               February 19, 2025), the California Small Business Development Center is
@@ -111,13 +111,14 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
           <label
             style={{
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: 10,
-              padding: '14px 20px',
+              alignItems: 'center',
+              gap: 12,
+              padding: '16px 20px',
               borderTop: '1px solid #e5e7eb',
               cursor: 'pointer',
-              fontSize: '0.9em',
-              lineHeight: 1.55,
+              fontSize: '1.05em',
+              fontWeight: 500,
+              lineHeight: 1.4,
               color: '#1f2937',
             }}
           >
@@ -125,7 +126,7 @@ export default function RoadmapWrapupStep({ data, onChange, onNext, onBack }: Pr
               type="checkbox"
               checked={data.tosAgreed}
               onChange={(e) => onChange({ tosAgreed: e.target.checked })}
-              style={{ marginTop: 3, accentColor: '#1b3a5c' }}
+              style={{ width: 20, height: 20, accentColor: '#1b3a5c', flexShrink: 0 }}
             />
             I have read and agree to the terms above.
           </label>
