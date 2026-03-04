@@ -1,7 +1,7 @@
 'use client';
 
 import type { RoadmapApplicationData } from '../types';
-import { COACHING_OPTIONS, GROUP_COURSE_OPTIONS, REFERRAL_SOURCES } from '../types';
+import { COACHING_OPTIONS, GROUP_COURSE_OPTIONS, POSITION_OPTIONS, REFERRAL_SOURCES } from '../types';
 
 interface Props {
   data: RoadmapApplicationData;
@@ -41,7 +41,7 @@ export default function RoadmapReviewStep({ data, onBack, onSubmit, submitting }
         <SummaryRow label="Name" value={`${data.firstName} ${data.lastName}`} />
         <SummaryRow label="Email" value={data.email} />
         <SummaryRow label="Phone" value={data.phone} />
-        {data.title && <SummaryRow label="Position" value={data.title} />}
+        {data.title && <SummaryRow label="Position" value={POSITION_OPTIONS.find((o) => o.value === data.title)?.label || data.title} />}
         <SummaryRow label="Company" value={data.companyName} />
         <SummaryRow label="Location" value={`${data.city}, ${data.state} ${data.zipCode}`} />
         <SummaryRow label="Products" value={data.productDescription} />

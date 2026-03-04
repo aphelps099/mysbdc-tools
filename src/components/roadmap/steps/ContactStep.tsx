@@ -1,6 +1,7 @@
 'use client';
 
 import type { RoadmapApplicationData } from '../types';
+import { POSITION_OPTIONS } from '../types';
 
 interface Props {
   data: RoadmapApplicationData;
@@ -69,15 +70,16 @@ export default function ContactStep({ data, onChange, onNext }: Props) {
         </div>
 
         <div className="s641-field">
-          <label className="s641-label">
-            Your Position
-          </label>
-          <input
-            className="s641-input"
-            placeholder="Owner, Plant Manager, VP of Operations..."
+          <label className="s641-label">Your Position</label>
+          <select
+            className="s641-select"
             value={data.title}
             onChange={(e) => onChange({ title: e.target.value })}
-          />
+          >
+            {POSITION_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
         </div>
       </div>
 

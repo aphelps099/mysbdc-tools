@@ -68,19 +68,10 @@ const REFERRAL_TO_REFFROM: Record<string, string> = {
   other: 'O',     // Other
 };
 
-/** Best-effort mapping from free-text job title to NeoSerra position codes. */
-function mapTitleToPosition(title: string): string {
-  const t = title.toLowerCase().trim();
-  if (!t) return 'OWN';
-  if (/\bceo\b|chief executive/i.test(t)) return 'CEO';
-  if (/\bvice\s*president\b|\bvp\b/i.test(t)) return 'VPR';
-  if (/\bpresident\b/i.test(t)) return 'PR';
-  if (/\bowner\b|\bfounder\b|\bco-?founder\b/i.test(t)) return 'OWN';
-  if (/\bsole\s*proprietor\b/i.test(t)) return 'SP';
-  if (/\bgeneral\s*manager\b|\bgm\b/i.test(t)) return 'GM';
-  if (/\bpartner\b/i.test(t)) return 'PTR';
-  if (/\bmanager\b|\bdirector\b|\bsupervisor\b|\bemployee\b/i.test(t)) return 'EMP';
-  return 'OWN'; // R4I applicants are typically business owners
+/** Position is now a dropdown sending NeoSerra codes directly. Fallback to OWN. */
+const VALID_POSITIONS = new Set(['CEO', 'VPR', 'PR', 'OWN', 'SP', 'GM', 'PTR', 'EMP']);
+function resolvePosition(code: string): string {
+  return VALID_POSITIONS.has(code) ? code : 'OWN';
 }
 
 /** Map R4I coaching interest IDs to NeoSerra step2 (MultipleSelection) codes. */
@@ -182,7 +173,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     companyName: r4iData.companyName ?? '',
     website: r4iData.website ?? '',
     businessDescription: r4iData.productDescription ?? '',
-    position: mapTitleToPosition(str(r4iData.title)),
+    position: resolvePosition(str(r4iData.title)),
 
     // Structured R4I application details → NeoSerra Contact "notes" field
     notes: buildR4iNotes(r4iData),

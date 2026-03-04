@@ -99,6 +99,18 @@ export const GROUP_COURSE_OPTIONS = [
   { id: 'supply_chain', label: 'Supply Chain Procurement Training', desc: '5-week course with Barbara Weg' },
 ];
 
+export const POSITION_OPTIONS = [
+  { value: '', label: 'Select...' },
+  { value: 'OWN', label: 'Owner' },
+  { value: 'CEO', label: 'CEO' },
+  { value: 'PR', label: 'President' },
+  { value: 'VPR', label: 'Vice President' },
+  { value: 'GM', label: 'General Manager' },
+  { value: 'PTR', label: 'Partner' },
+  { value: 'SP', label: 'Sole Proprietor' },
+  { value: 'EMP', label: 'Employee' },
+];
+
 export const YEARS_RANGES = [
   { value: 'pre', label: 'Not yet started' },
   { value: '<1', label: 'Less than 1 year' },
