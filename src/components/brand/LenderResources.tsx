@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-import Modal from '@/components/ui/Modal';
 import './brand.css';
 import './lender-resources.css';
 
@@ -287,15 +286,20 @@ export default function LenderResources() {
   const viewerPrev = useCallback(() => setViewerIdx((i) => Math.max(0, i - 1)), []);
   const viewerNext = useCallback(() => setViewerIdx((i) => Math.min(VIEWABLE.length - 1, i + 1)), []);
 
-  // Keyboard nav for document viewer (arrows for prev/next)
+  // Body scroll lock + keyboard nav for document viewer
   useEffect(() => {
     if (!viewerOpen) return;
+    document.body.style.overflow = 'hidden';
     const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.preventDefault(); setViewerOpen(false); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); viewerPrev(); }
       if (e.key === 'ArrowRight') { e.preventDefault(); viewerNext(); }
     };
     window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handler);
+    };
   }, [viewerOpen, viewerPrev, viewerNext]);
 
   const copyPhrase = useCallback((text: string) => {
@@ -731,54 +735,53 @@ export default function LenderResources() {
       </footer>
 
       {/* ════════════════════════════════════════════
-         DOCUMENT VIEWER MODAL
+         DOCUMENT VIEWER — fullscreen overlay
          ════════════════════════════════════════════ */}
-      <Modal
-        open={viewerOpen}
-        onClose={() => setViewerOpen(false)}
-        size="full"
-        containerStyle={{
-          background: '#0a0e14',
-          maxWidth: 1400,
-          maxHeight: '96vh',
-          marginTop: '2vh',
-        }}
-      >
-        {/* Toolbar */}
-        <div className="dv-toolbar">
-          <button
-            className="dv-arrow"
-            onClick={viewerPrev}
-            disabled={viewerIdx === 0}
-            aria-label="Previous document"
-          >
-            &#8592;
-          </button>
-          <div className="dv-title">
-            <span className="dv-title-name">{VIEWABLE[viewerIdx]?.name}</span>
-            <span className="dv-title-count">
-              {String(viewerIdx + 1).padStart(2, '0')} / {String(VIEWABLE.length).padStart(2, '0')}
-            </span>
+      {viewerOpen && (
+        <div className="dv-overlay">
+          {/* Toolbar */}
+          <div className="dv-toolbar">
+            <button
+              className="dv-arrow"
+              onClick={viewerPrev}
+              disabled={viewerIdx === 0}
+              aria-label="Previous document"
+            >
+              &#8592;
+            </button>
+            <div className="dv-title">
+              <span className="dv-title-name">{VIEWABLE[viewerIdx]?.name}</span>
+              <span className="dv-title-count">
+                {String(viewerIdx + 1).padStart(2, '0')} / {String(VIEWABLE.length).padStart(2, '0')}
+              </span>
+            </div>
+            <button
+              className="dv-arrow"
+              onClick={viewerNext}
+              disabled={viewerIdx === VIEWABLE.length - 1}
+              aria-label="Next document"
+            >
+              &#8594;
+            </button>
+            <a
+              href={VIEWABLE[viewerIdx]?.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dv-open-tab"
+              style={{ marginLeft: 8 }}
+            >
+              Open &rarr;
+            </a>
+            <button
+              className="dv-close"
+              onClick={() => setViewerOpen(false)}
+              aria-label="Close viewer"
+            >
+              &#215;
+            </button>
           </div>
-          <button
-            className="dv-arrow"
-            onClick={viewerNext}
-            disabled={viewerIdx === VIEWABLE.length - 1}
-            aria-label="Next document"
-          >
-            &#8594;
-          </button>
-          <button
-            className="dv-close"
-            onClick={() => setViewerOpen(false)}
-            aria-label="Close viewer"
-          >
-            &#215;
-          </button>
-        </div>
 
-        {/* iframe */}
-        <div className="dv-viewport">
+          {/* iframe — takes all remaining space */}
           <iframe
             ref={iframeRef}
             key={viewerIdx}
@@ -788,19 +791,7 @@ export default function LenderResources() {
             sandbox="allow-same-origin allow-scripts"
           />
         </div>
-
-        {/* Bottom nav */}
-        <div className="dv-nav">
-          <a
-            href={VIEWABLE[viewerIdx]?.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="dv-open-tab"
-          >
-            Open in new tab &rarr;
-          </a>
-        </div>
-      </Modal>
+      )}
 
       {/* ── Toast ── */}
       {toast && (
