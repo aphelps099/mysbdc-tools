@@ -4,8 +4,9 @@
  * Flow:
  *   1. Map R4I fields to intake-compatible payload (with all required fields)
  *   2. Create client via backend /api/intake/submit
- *   3. Send welcome email to applicant via Resend
- *   4. Send admin notification email (with notes + NeoSerra link) via Resend
+ *   3. Populate R4I PIN form directly via NeoSerra REST API
+ *   4. Send welcome email to applicant via Resend
+ *   5. Send admin notification email (with notes + NeoSerra link) via Resend
  *
  * The backend creates the client + contact record in NeoSerra.
  * R4I application details are passed as `notes` in the intake payload
@@ -32,6 +33,14 @@ const NEOSERRA_CENTER_ID = 113;
 
 function backendUrl(): string {
   return (process.env.BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
+}
+
+function neoserraUrl(): string {
+  return (process.env.NEOSERRA_BASE_URL || '').replace(/\/+$/, '');
+}
+
+function neoserraKey(): string {
+  return process.env.NEOSERRA_API_KEY || '';
 }
 
 function str(v: unknown): string {
@@ -127,6 +136,74 @@ function buildR4iNotes(d: Record<string, unknown>): string {
   }
 
   return lines.join('\n');
+}
+
+// ─── R4I PIN payload builder ─────────────────────────────────
+
+function buildR4iPinPayload(
+  d: Record<string, unknown>,
+  clientId: string,
+): Record<string, unknown> {
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+  // Map coaching interest IDs to human-readable labels for NeoSerra multi-select
+  const advisingLabels = arr(d.coachingInterests)
+    .map((id) => COACHING_OPTIONS.find((o) => o.id === id)?.label ?? id)
+    .join(',');
+
+  // Map group course IDs to human-readable labels for NeoSerra multi-select
+  const courseLabels = arr(d.groupCourses)
+    .map((id) => GROUP_COURSE_OPTIONS.find((o) => o.id === id)?.label ?? id)
+    .join(',');
+
+  return {
+    clientId,
+    date: today,
+    centerId: '113',
+    r4iadvising: advisingLabels,
+    r4icourses: courseLabels,
+    r4ichallenge: str(d.biggestChallenge),
+  };
+}
+
+// ─── NeoSerra R4I PIN creation ───────────────────────────────
+
+async function createR4iPin(
+  r4iData: Record<string, unknown>,
+  clientId: string,
+): Promise<Record<string, unknown> | null> {
+  const base = neoserraUrl();
+  const key = neoserraKey();
+  if (!base || !key) {
+    console.warn('[r4i/submit] NEOSERRA_BASE_URL or NEOSERRA_API_KEY not set; skipping PIN creation');
+    return null;
+  }
+
+  const payload = buildR4iPinPayload(r4iData, clientId);
+
+  try {
+    const res = await fetch(`${base}/api/v1/r4i/new`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${key}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const body = await res.json().catch(() => null);
+
+    if (!res.ok || (body && body.status === 'fail')) {
+      console.warn('[r4i/submit] PIN creation failed:', JSON.stringify(body));
+      return body;
+    }
+
+    return body;
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    console.warn(`[r4i/submit] PIN creation error: ${reason}`);
+    return null;
+  }
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -246,7 +323,19 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const neoserraResult = (intakeResult as Record<string, unknown>)?.neoserraResult as Record<string, unknown> | undefined;
 
-  // Step 2: Send emails via Resend
+  // Step 2: Populate R4I PIN form directly via NeoSerra API
+  const clientId = String(
+    neoserraResult?.id ?? (intakeResult as Record<string, unknown>)?.id ?? '0',
+  );
+
+  let pinResult: Record<string, unknown> | null = null;
+  if (clientId && clientId !== '0') {
+    pinResult = await createR4iPin(r4iData, clientId);
+  } else {
+    console.warn('[r4i/submit] No valid clientId from intake — skipping PIN creation');
+  }
+
+  // Step 3: Send emails via Resend
   const resendKey = process.env.RESEND_API_KEY;
   const emailResults: { client?: unknown; admin?: unknown } = {};
   const notes = buildR4iNotes(r4iData);
@@ -325,6 +414,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     success: (intakeResult as Record<string, unknown>)?.success ?? true,
     applicationId: (intakeResult as Record<string, unknown>)?.id ?? null,
     neoserraResult: neoserraResult ?? null,
+    pinResult: pinResult ?? undefined,
     emailResults,
   });
 }
