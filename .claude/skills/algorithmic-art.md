@@ -84,7 +84,7 @@ STEP 0: READ THE TEMPLATE FIRST
 CRITICAL: BEFORE writing any HTML:
 
 Read templates/viewer.html using the Read tool
-Study the exact structure, styling, and Anthropic branding
+Study the exact structure, styling, and NorCal SBDC branding
 Use that file as the LITERAL STARTING POINT - not just inspiration
 Keep all FIXED sections exactly as shown (header, sidebar structure, Anthropic colors/fonts, seed controls, action buttons)
 Replace only the VARIABLE sections marked in the file's comments (algorithm, parameters, UI controls for parameters)
@@ -98,7 +98,7 @@ Avoid:
 Follow these practices:
 
 - Copy the template's exact HTML structure
-- Keep Anthropic branding (Poppins/Lora fonts, light colors, gradient backdrop)
+- Keep NorCal SBDC branding (GT Era Display/GT America fonts, light colors, gradient backdrop)
 - Maintain the sidebar layout (Seed -> Parameters -> Colors? -> Actions)
 - Replace only the p5.js algorithm and parameter controls
 
@@ -200,7 +200,7 @@ The templates/viewer.html file is the foundation. It contains the exact structur
 
 FIXED (always include exactly as shown):
 - Layout structure (header, sidebar, main canvas area)
-- Anthropic branding (UI colors, fonts, gradients)
+- NorCal SBDC branding (UI colors, fonts, gradients)
 - Seed section in sidebar: Seed display, Previous/Next buttons, Random button, Jump to seed input + Go button
 - Actions section in sidebar: Regenerate button, Reset button
 
@@ -270,7 +270,7 @@ Requirements:
 - Seed controls must work (prev/next/random/jump/display)
 - All parameters must have UI controls
 - Regenerate, Reset, Download buttons must work
-- Keep Anthropic branding (UI styling, not art colors)
+- Keep NorCal SBDC branding (UI styling, not art colors)
 
 USING THE ARTIFACT
 The HTML artifact works immediately:
@@ -301,4 +301,4 @@ Critical reminder:
 - The template is the STARTING POINT, not inspiration
 - The algorithm is where to create something unique
 - Don't copy the flow field example - build what the philosophy demands
-- But DO keep the exact UI structure and Anthropic branding from the template
+- But DO keep the exact UI structure and NorCal SBDC branding from the template

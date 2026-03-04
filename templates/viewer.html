@@ -5,11 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algorithmic Art Viewer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         /* ============================================
+           Font Faces — Local GT fonts
+           ============================================ */
+        @font-face {
+            font-family: 'GT America';
+            src: url('/fonts/GT-America-Standard-Light.otf') format('opentype');
+            font-weight: 300; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT America';
+            src: url('/fonts/GT-America-Standard-Regular.otf') format('opentype');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT America';
+            src: url('/fonts/GT-America-Standard-Medium.otf') format('opentype');
+            font-weight: 500; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT America';
+            src: url('/fonts/GT-America-Standard-Bold.otf') format('opentype');
+            font-weight: 700; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT America Mono';
+            src: url('/fonts/GT-America-Mono-Regular.otf') format('opentype');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT Era Display';
+            src: url('/fonts/GT-Era-Display-Light-Trial.otf') format('opentype');
+            font-weight: 300; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'GT Era Display';
+            src: url('/fonts/GT-Era-Display-Medium-Trial.otf') format('opentype');
+            font-weight: 500; font-style: normal; font-display: swap;
+        }
+
+        /* ============================================
            FIXED: Do not modify these styles
-           They define the Anthropic branding and layout
+           They define the NorCal SBDC branding and layout
            ============================================ */
         * {
             margin: 0;
@@ -18,7 +56,7 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             background: linear-gradient(135deg, #faf8f5 0%, #f0ebe4 50%, #e8e0d8 100%);
             min-height: 100vh;
             color: #2d2a26;
@@ -52,7 +90,7 @@
         }
 
         .header h1 {
-            font-family: 'Lora', serif;
+            font-family: 'GT Era Display', 'GT America', sans-serif;
             font-size: 18px;
             font-weight: 600;
             color: #2d2a26;
@@ -90,7 +128,7 @@
         }
 
         .sidebar-section h3 {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
@@ -101,7 +139,7 @@
 
         /* Seed Controls - FIXED */
         .seed-display {
-            font-family: 'Lora', serif;
+            font-family: 'GT Era Display', 'GT America', sans-serif;
             font-size: 24px;
             font-weight: 600;
             color: #c96442;
@@ -120,7 +158,7 @@
             border: 1px solid rgba(180, 170, 158, 0.4);
             border-radius: 6px;
             background: white;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             font-size: 12px;
             font-weight: 500;
             color: #2d2a26;
@@ -145,7 +183,7 @@
             padding: 7px 10px;
             border: 1px solid rgba(180, 170, 158, 0.4);
             border-radius: 6px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             font-size: 12px;
             background: white;
             color: #2d2a26;
@@ -162,7 +200,7 @@
             border-radius: 6px;
             background: #c96442;
             color: white;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
@@ -243,7 +281,7 @@
             border: 1px solid rgba(180, 170, 158, 0.4);
             border-radius: 8px;
             background: white;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'GT America', -apple-system, Helvetica, sans-serif;
             font-size: 13px;
             font-weight: 500;
             color: #2d2a26;
