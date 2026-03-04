@@ -45,17 +45,27 @@ export default function CompanyStep({ data, onChange, onNext, onBack }: Props) {
             />
           </div>
           <div className="s641-field">
-            <label className="s641-label">
-              Website <span className="s641-optional">optional</span>
-            </label>
+            <label className="s641-label">Date Established</label>
             <input
               className="s641-input"
-              type="url"
-              placeholder="https://yourcompany.com"
-              value={data.website}
-              onChange={(e) => onChange({ website: e.target.value })}
+              type="date"
+              value={data.dateEstablished}
+              onChange={(e) => onChange({ dateEstablished: e.target.value })}
             />
           </div>
+        </div>
+
+        <div className="s641-field">
+          <label className="s641-label">
+            Website <span className="s641-optional">optional</span>
+          </label>
+          <input
+            className="s641-input"
+            type="url"
+            placeholder="https://yourcompany.com"
+            value={data.website}
+            onChange={(e) => onChange({ website: e.target.value })}
+          />
         </div>
 
         <div className="s641-field">

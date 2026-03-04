@@ -19,6 +19,7 @@ export interface RoadmapApplicationData {
   city: string;
   state: string;
   zipCode: string;
+  dateEstablished: string;   // MM/DD/YYYY or YYYY-MM-DD (date input)
   yearsInOperation: string;  // Range selector
   productDescription: string; // What they manufacture
 
@@ -72,6 +73,7 @@ export function createEmptyRoadmapApplication(): RoadmapApplicationData {
     city: '',
     state: 'CA',
     zipCode: '',
+    dateEstablished: '',
     yearsInOperation: '',
     productDescription: '',
     coachingInterests: [],

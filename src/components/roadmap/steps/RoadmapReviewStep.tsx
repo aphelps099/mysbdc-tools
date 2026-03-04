@@ -43,6 +43,7 @@ export default function RoadmapReviewStep({ data, onBack, onSubmit, submitting }
         <SummaryRow label="Phone" value={data.phone} />
         {data.title && <SummaryRow label="Position" value={POSITION_OPTIONS.find((o) => o.value === data.title)?.label || data.title} />}
         <SummaryRow label="Company" value={data.companyName} />
+        {data.dateEstablished && <SummaryRow label="Established" value={data.dateEstablished} />}
         <SummaryRow label="Location" value={`${data.city}, ${data.state} ${data.zipCode}`} />
         <SummaryRow label="Products" value={data.productDescription} />
         {coachingLabels && <SummaryRow label="Advising" value={coachingLabels} />}

@@ -113,6 +113,10 @@ function buildR4iNotes(d: Record<string, unknown>): string {
     lines.push(`Products / Manufacturing: ${str(d.productDescription)}`);
   }
 
+  if (str(d.dateEstablished)) {
+    lines.push(`Date Established: ${str(d.dateEstablished)}`);
+  }
+
   if (str(d.yearsInOperation)) {
     lines.push(`Years in Operation: ${lookupLabel(str(d.yearsInOperation), YEARS_RANGES)}`);
   }
@@ -248,6 +252,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Business — R4I applicants are existing manufacturers
     businessStatus: 'B',
     companyName: r4iData.companyName ?? '',
+    dateEstablished: r4iData.dateEstablished ?? '',
     website: r4iData.website ?? '',
     businessDescription: r4iData.productDescription ?? '',
     position: resolvePosition(str(r4iData.title)),
