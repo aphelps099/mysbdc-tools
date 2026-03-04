@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Resources Walkthrough — NorCal SBDC</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Font Faces ── */
+        @font-face {
+            font-family: 'GT Era Display';
+            src: url('/fonts/GT-Era-Display-Thin-Trial.otf') format('opentype');
+            font-weight: 100;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Display';
+            src: url('/fonts/GT-Era-Display-Light-Trial.otf') format('opentype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Display';
+            src: url('/fonts/GT-Era-Display-Medium-Trial.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Text';
+            src: url('/fonts/GT-Era-Text-Thin-Trial.otf') format('opentype');
+            font-weight: 100;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Text';
+            src: url('/fonts/GT-Era-Text-Medium-Trial.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Text';
+            src: url('/fonts/GT-Era-Text-Medium-Trial.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Text';
+            src: url('/fonts/GT-Era-Text-Bold-Trial.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GT Era Text';
+            src: url('/fonts/GT-Era-Text-Heavy-Trial.otf') format('opentype');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+        /* ── Reset & Variables ── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0F1C2E;
+            --navy-light: #1a2d42;
+            --sky: #9EC4E0;
+            --pool: #8FC5D9;
+            --cream: #F5F2EB;
+            --maroon: #8A2432;
+            --white: #ffffff;
+            --display: 'GT Era Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            --text: 'GT Era Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'JetBrains Mono', 'SF Mono', monospace;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            background: #0a0a0a;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Slide Engine ── */
+        .deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide-inner {
+            width: min(100vw, calc(100vh * 16 / 9));
+            height: min(100vh, calc(100vw * 9 / 16));
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ── Backgrounds ── */
+        .bg-navy { background: var(--navy); }
+        .bg-cream { background: var(--cream); }
+        .bg-maroon { background: var(--maroon); }
+
+        .grain::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ── Slide Content Layout ── */
+        .s-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(40px, 5vh, 80px) clamp(48px, 6vw, 120px);
+        }
+
+        .s-center {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .s-left {
+            justify-content: center;
+        }
+
+        /* ── Typography ── */
+        .t-huge {
+            font-family: var(--display);
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 100;
+            letter-spacing: -0.035em;
+            line-height: 1.05;
+        }
+
+        .t-headline {
+            font-family: var(--display);
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 100;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+        }
+
+        .t-section {
+            font-family: var(--display);
+            font-size: clamp(2.2rem, 4.5vw, 4rem);
+            font-weight: 100;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .t-stat {
+            font-family: var(--display);
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 100;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .t-body {
+            font-family: var(--text);
+            font-size: clamp(0.9rem, 1.4vw, 1.25rem);
+            font-weight: 400;
+            line-height: 1.65;
+        }
+
+        .t-label {
+            font-family: var(--mono);
+            font-size: clamp(0.55rem, 0.8vw, 0.75rem);
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .t-sub {
+            font-family: var(--text);
+            font-size: clamp(0.75rem, 1.1vw, 1rem);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* ── Colors ── */
+        .c-white { color: var(--white); }
+        .c-pool { color: var(--pool); }
+        .c-sky { color: var(--sky); }
+        .c-navy { color: var(--navy); }
+        .c-maroon { color: var(--maroon); }
+        .c-muted { color: rgba(255,255,255,0.35); }
+        .c-muted-dk { color: rgba(15,28,46,0.4); }
+
+        /* ── Utilities ── */
+        .mb-8 { margin-bottom: 8px; }
+        .mb-12 { margin-bottom: 12px; }
+        .mb-16 { margin-bottom: 16px; }
+        .mb-24 { margin-bottom: 24px; }
+        .mb-32 { margin-bottom: 32px; }
+        .mb-40 { margin-bottom: 40px; }
+        .mb-48 { margin-bottom: 48px; }
+        .mt-auto { margin-top: auto; }
+
+        .line-pool {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pool), var(--sky));
+            border-radius: 2px;
+        }
+        .line-pool-center { margin-left: auto; margin-right: auto; }
+
+        /* ── Stagger Animations ── */
+        .slide.active .s-content > * {
+            animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+            opacity: 0;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: none; }
+        }
+        .slide.active .s-content > *:nth-child(1) { animation-delay: 0.08s; }
+        .slide.active .s-content > *:nth-child(2) { animation-delay: 0.16s; }
+        .slide.active .s-content > *:nth-child(3) { animation-delay: 0.24s; }
+        .slide.active .s-content > *:nth-child(4) { animation-delay: 0.32s; }
+        .slide.active .s-content > *:nth-child(5) { animation-delay: 0.40s; }
+        .slide.active .s-content > *:nth-child(6) { animation-delay: 0.48s; }
+        .slide.active .s-content > *:nth-child(7) { animation-delay: 0.56s; }
+        .slide.active .s-content > *:nth-child(8) { animation-delay: 0.64s; }
+
+        /* ── Navigation ── */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 6px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.35);
+            font-size: 20px;
+            transition: all 0.25s ease;
+            z-index: 100;
+            font-family: var(--text);
+        }
+        .nav-arrow:hover {
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            border-color: rgba(255,255,255,0.12);
+        }
+        .nav-prev { left: 20px; }
+        .nav-next { right: 20px; }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 28px;
+            right: 36px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 0.1em;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pool), var(--sky));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 200;
+        }
+
+        /* ── Grids ── */
+        .stat-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(12px, 2vw, 32px);
+        }
+        .stat-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(12px, 2vw, 32px);
+        }
+        .stat-cell {
+            padding: clamp(16px, 2vw, 28px);
+            border-radius: 4px;
+        }
+        .stat-cell-navy { background: rgba(15,28,46,0.5); }
+        .stat-cell-cream { background: rgba(255,255,255,0.06); }
+        .stat-cell-white { background: var(--white); }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(8px, 1.2vw, 16px);
+        }
+        .tier-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: clamp(16px, 1.8vw, 28px);
+        }
+        .tier-card.premier { border-color: var(--pool); }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(24px, 4vw, 64px);
+        }
+
+        .arrow-list {
+            list-style: none;
+            padding: 0;
+        }
+        .arrow-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: clamp(8px, 1vw, 14px);
+        }
+        .arrow-list li::before {
+            content: '\2192';
+            color: var(--pool);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .arrow-list-dark li::before {
+            color: var(--maroon);
+        }
+
+        /* Steps */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(12px, 1.5vw, 20px);
+            margin-bottom: clamp(12px, 1.5vw, 20px);
+        }
+        .step-num {
+            font-family: var(--display);
+            font-weight: 100;
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            color: var(--pool);
+            flex-shrink: 0;
+            width: 2em;
+            text-align: center;
+        }
+        .step-num-dark { color: var(--maroon); }
+
+        /* ── Sponsor preview ── */
+        .sponsor-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(12px, 2vw, 24px);
+        }
+        .sponsor-box {
+            border: 1px dashed rgba(15,28,46,0.15);
+            border-radius: 6px;
+            padding: clamp(20px, 2.5vw, 40px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+        }
+
+        /* ── Email mockup ── */
+        .email-mock {
+            width: clamp(200px, 22vw, 320px);
+            background: var(--white);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        .email-mock-header {
+            background: var(--navy);
+            padding: 12px 16px;
+            font-family: var(--mono);
+            font-size: 8px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .email-mock-hero {
+            background: linear-gradient(135deg, var(--pool), #1D5AA7);
+            padding: 20px 16px;
+            font-family: var(--display);
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--white);
+            line-height: 1.3;
+        }
+        .email-mock-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 12px;
+            background: var(--cream);
+            font-family: var(--mono);
+            font-size: 7px;
+            color: var(--navy);
+            letter-spacing: 0.02em;
+        }
+        .email-mock-body {
+            padding: 14px 16px;
+            font-family: var(--text);
+            font-size: 9px;
+            color: #444;
+            line-height: 1.6;
+        }
+        .email-mock-cta {
+            margin: 0 16px 14px;
+            padding: 8px;
+            background: var(--pool);
+            color: var(--navy);
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 3px;
+        }
+        .email-mock-footer {
+            background: var(--navy);
+            padding: 8px 16px;
+            font-family: var(--mono);
+            font-size: 6px;
+            color: rgba(255,255,255,0.3);
+            text-align: center;
+        }
+
+        /* ── Carousel grid ── */
+        .carousel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(8px, 1.2vw, 16px);
+            max-width: 85%;
+        }
+        .carousel-thumb {
+            aspect-ratio: 4/5;
+            border-radius: 4px;
+            padding: 12%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-thumb-navy {
+            background: var(--navy);
+        }
+        .carousel-thumb-cream {
+            background: var(--cream);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        .carousel-thumb-brick {
+            background: #c23a3a;
+        }
+        .carousel-thumb-num {
+            font-family: var(--mono);
+            font-size: clamp(6px, 0.6vw, 8px);
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .carousel-thumb-text {
+            font-family: var(--display);
+            font-size: clamp(8px, 0.9vw, 12px);
+            font-weight: 300;
+            line-height: 1.3;
+        }
+
+        /* ── Story card ── */
+        .story-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 6px;
+            padding: clamp(20px, 2.5vw, 36px);
+        }
+        .story-quote {
+            font-family: var(--text);
+            font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        /* ── Split slide ── */
+        .split-slide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            height: 100%;
+        }
+        .split-left {
+            background: var(--cream);
+            padding: clamp(40px, 5vh, 80px) clamp(36px, 4vw, 72px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .split-right {
+            background: var(--navy);
+            padding: clamp(40px, 5vh, 80px) clamp(36px, 4vw, 72px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* ── Value Prop stat cells ── */
+        .vp-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(4px, 0.6vw, 8px);
+        }
+        .vp-cell {
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: clamp(24px, 3vw, 44px) clamp(16px, 2vw, 28px);
+        }
+
+        /* ── Logo ── */
+        .logo-sm { height: clamp(28px, 3vh, 44px); }
+        .logo-lg { height: clamp(36px, 4.5vh, 56px); }
+
+        /* Star watermark */
+        .star-wm {
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: clamp(120px, 16vw, 240px);
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ── Responsive ── */
+        @media (max-aspect-ratio: 16/9) {
+            .slide-inner { width: 100vw; height: calc(100vw * 9 / 16); }
+        }
+        @media (min-aspect-ratio: 16/9) {
+            .slide-inner { height: 100vh; width: calc(100vh * 16 / 9); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .slide { transition: none; }
+            .slide.active .s-content > * { animation: none; opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progress"></div>
+
+<!-- Navigation -->
+<button class="nav-arrow nav-prev" id="btnPrev" aria-label="Previous slide">&#8592;</button>
+<button class="nav-arrow nav-next" id="btnNext" aria-label="Next slide">&#8594;</button>
+<div class="slide-counter" id="counter">1 / 25</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE DECK
+     ════════════════════════════════════════════ -->
+<div class="deck" id="deck">
+
+    <!-- ─────────────────────────────────────
+         SLIDE 1: TITLE
+         ───────────────────────────────────── -->
+    <div class="slide active" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-lg mb-48">
+                <div class="t-label c-pool mb-24">Partnership Resources</div>
+                <h1 class="t-huge c-white mb-32">LENDER<br>RESOURCES</h1>
+                <div class="line-pool line-pool-center mb-32"></div>
+                <p class="t-body c-sky mb-8">Scott Rogalski</p>
+                <p class="t-label c-muted">2026</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 2: TITLE CARD — Lending Partners Guide
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-maroon">
+            <div class="s-content s-center">
+                <div class="t-label c-pool mb-24" style="opacity:0.7">Document 01</div>
+                <h2 class="t-section c-white mb-32">Lending Partners<br>Guide</h2>
+                <div class="line-pool line-pool-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 3: Cover
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-sm mb-40">
+                <div class="t-label c-pool mb-16">Partnership Opportunities</div>
+                <h2 class="t-huge c-white mb-24">Lending Partners<br>Guide</h2>
+                <p class="t-body c-sky mb-40">Your Business People. Your Lending Partners.</p>
+                <div style="width:100px;height:3px;background:linear-gradient(90deg,var(--pool),var(--sky));margin:0 auto 24px;border-radius:2px"></div>
+                <p class="t-label c-muted">2026</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 4: Director's Message
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-32">A Message From Our Director</div>
+                <h2 class="t-headline c-navy mb-24" style="max-width:70%">Dear Partners,</h2>
+                <div style="max-width:72%">
+                    <p class="t-body c-navy mb-16" style="opacity:0.7">For 20 years, NorCal SBDC has helped small businesses access the capital they need to start, grow, and thrive.</p>
+                    <p class="t-body c-navy mb-16" style="opacity:0.7"><strong style="font-weight:700;opacity:1">None of this happens without partners like you.</strong></p>
+                    <p class="t-body c-navy mb-16" style="opacity:0.7">Our lending partners don't just provide capital&mdash;they provide confidence. When a business owner walks into your office with a solid plan, accurate financials, and clear goals, that's our advisors at work. When they walk out with funding, that's partnership at work.</p>
+                    <p class="t-body c-navy" style="opacity:0.7">This guide outlines how we can work together to support the businesses that make our region stronger.</p>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-wm" style="opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 5: The Opportunity
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-16">The Opportunity</div>
+                <h2 class="t-headline c-white mb-24">We prepare clients.<br>You fund them.</h2>
+                <p class="t-body c-sky mb-32" style="max-width:60%;opacity:0.7">Every year, our advisors work with hundreds of business owners who need capital. We help them:</p>
+                <ul class="arrow-list t-body c-white mb-40" style="max-width:60%">
+                    <li>Build loan-ready business plans</li>
+                    <li>Prepare accurate financial projections</li>
+                    <li>Understand their financing options</li>
+                    <li>Present themselves professionally</li>
+                </ul>
+                <div class="stat-grid-3 mt-auto" style="max-width:65%">
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px">
+                        <div class="t-stat c-pool mb-8" style="font-size:clamp(1.8rem,3.5vw,3rem)">$547M</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.5rem,0.65vw,0.65rem)">Capital Accessed (2024)</div>
+                    </div>
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px">
+                        <div class="t-stat c-pool mb-8" style="font-size:clamp(1.8rem,3.5vw,3rem)">7,500+</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.5rem,0.65vw,0.65rem)">Clients Advised</div>
+                    </div>
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px">
+                        <div class="t-stat c-pool mb-8" style="font-size:clamp(1.8rem,3.5vw,3rem)">73%</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.5rem,0.65vw,0.65rem)">Loan-Ready Referrals</div>
+                    </div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 6: How It Works (Split)
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="mixed">
+        <div class="slide-inner">
+            <div class="split-slide">
+                <div class="split-left">
+                    <div class="t-label c-maroon mb-16">The Client Journey</div>
+                    <h3 class="t-headline c-navy mb-32" style="font-size:clamp(1.4rem,2.5vw,2.2rem)">From intake<br>to funding.</h3>
+                    <div class="step">
+                        <span class="step-num step-num-dark">1</span>
+                        <div><strong class="t-sub c-navy" style="font-weight:700">Intake</strong><br><span class="t-sub c-navy" style="opacity:0.6">Business owner contacts SBDC for help</span></div>
+                    </div>
+                    <div class="step">
+                        <span class="step-num step-num-dark">2</span>
+                        <div><strong class="t-sub c-navy" style="font-weight:700">Advising</strong><br><span class="t-sub c-navy" style="opacity:0.6">Advisor assesses needs, identifies funding options</span></div>
+                    </div>
+                    <div class="step">
+                        <span class="step-num step-num-dark">3</span>
+                        <div><strong class="t-sub c-navy" style="font-weight:700">Preparation</strong><br><span class="t-sub c-navy" style="opacity:0.6">Business plan, financials, loan package developed</span></div>
+                    </div>
+                    <div class="step">
+                        <span class="step-num step-num-dark">4</span>
+                        <div><strong class="t-sub c-navy" style="font-weight:700">Referral</strong><br><span class="t-sub c-navy" style="opacity:0.6">Client connected to appropriate lending partner</span></div>
+                    </div>
+                </div>
+                <div class="split-right">
+                    <div class="t-label c-pool mb-16">Partner Benefits</div>
+                    <h3 class="t-headline c-white mb-32" style="font-size:clamp(1.4rem,2.5vw,2.2rem)">What you<br>receive.</h3>
+                    <ul class="arrow-list t-sub c-white" style="opacity:0.85">
+                        <li>Loan-ready referrals with complete packages</li>
+                        <li>Direct line to SBDC advisors for questions</li>
+                        <li>Co-branded workshop opportunities</li>
+                        <li>Recognition in SBDC communications</li>
+                        <li>Access to network of 300+ advisors across 36 counties</li>
+                    </ul>
+                    <p class="t-body c-pool mt-auto" style="font-style:italic;font-weight:500;margin-top:auto;padding-top:24px">We don't compete with you.<br>We prepare clients for you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 7: Sponsorship Tiers
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-16">Partnership Levels</div>
+                <h2 class="t-headline c-white mb-40">Choose your level of partnership.</h2>
+                <div class="tier-grid">
+                    <div class="tier-card premier">
+                        <div class="t-label c-pool mb-12">Premier Partner</div>
+                        <div class="t-stat c-white mb-16" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$5,000</div>
+                        <ul class="arrow-list t-sub c-white" style="opacity:0.7;font-size:clamp(0.6rem,0.8vw,0.8rem)">
+                            <li>Full-page feature in Guide</li>
+                            <li>Logo on all marketing</li>
+                            <li>Quarterly referral reports</li>
+                            <li>Co-hosted workshop (1/yr)</li>
+                            <li>Newsletter feature</li>
+                        </ul>
+                    </div>
+                    <div class="tier-card">
+                        <div class="t-label c-sky mb-12">Gold Partner</div>
+                        <div class="t-stat c-white mb-16" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$3,000</div>
+                        <ul class="arrow-list t-sub c-white" style="opacity:0.7;font-size:clamp(0.6rem,0.8vw,0.8rem)">
+                            <li>Half-page feature</li>
+                            <li>Select marketing</li>
+                            <li>Bi-annual reports</li>
+                            <li>Workshop participation</li>
+                        </ul>
+                    </div>
+                    <div class="tier-card">
+                        <div class="t-label c-sky mb-12">Silver Partner</div>
+                        <div class="t-stat c-white mb-16" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$1,500</div>
+                        <ul class="arrow-list t-sub c-white" style="opacity:0.7;font-size:clamp(0.6rem,0.8vw,0.8rem)">
+                            <li>Quarter-page listing</li>
+                            <li>Website logo</li>
+                            <li>Annual summary</li>
+                        </ul>
+                    </div>
+                    <div class="tier-card">
+                        <div class="t-label c-sky mb-12">Bronze Partner</div>
+                        <div class="t-stat c-white mb-16" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$750</div>
+                        <ul class="arrow-list t-sub c-white" style="opacity:0.7;font-size:clamp(0.6rem,0.8vw,0.8rem)">
+                            <li>Name listing</li>
+                            <li>Website recognition</li>
+                            <li>Annual report thanks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 8: Sponsor Templates
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-16">Sponsor Templates</div>
+                <h2 class="t-headline c-navy mb-12">Premier &amp; Gold partner layouts.</h2>
+                <p class="t-body c-navy mb-40" style="opacity:0.5;max-width:55%">Each sponsor gets a dedicated feature page with logo, description, loan types, and contact info.</p>
+                <div class="sponsor-preview">
+                    <div class="sponsor-box">
+                        <div class="t-label c-maroon mb-8">Premier — Full Page</div>
+                        <div style="width:60px;height:60px;border:2px dashed rgba(15,28,46,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center">
+                            <span class="t-label c-navy" style="opacity:0.3;font-size:8px">LOGO</span>
+                        </div>
+                        <p class="t-sub c-navy" style="opacity:0.5;font-size:clamp(0.6rem,0.8vw,0.8rem)">Full description, loan types, contact block, tagline</p>
+                    </div>
+                    <div class="sponsor-box">
+                        <div class="t-label c-maroon mb-8">Gold — Half Page</div>
+                        <div style="display:flex;gap:12px">
+                            <div style="width:40px;height:40px;border:2px dashed rgba(15,28,46,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center">
+                                <span class="t-label c-navy" style="opacity:0.3;font-size:7px">LOGO</span>
+                            </div>
+                            <div style="width:40px;height:40px;border:2px dashed rgba(15,28,46,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center">
+                                <span class="t-label c-navy" style="opacity:0.3;font-size:7px">LOGO</span>
+                            </div>
+                        </div>
+                        <p class="t-sub c-navy" style="opacity:0.5;font-size:clamp(0.6rem,0.8vw,0.8rem)">Condensed listing with logo and contact</p>
+                    </div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-wm" style="opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 9: Success Stories
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-16">Partnership in Action</div>
+                <h2 class="t-headline c-white mb-12">When preparation meets partnership.</h2>
+                <p class="t-body c-sky mb-32" style="opacity:0.6">Real results from real partnerships.</p>
+                <div class="two-col" style="gap:clamp(12px,2vw,24px)">
+                    <div class="story-card">
+                        <p class="story-quote">&ldquo;My bank said no three times. Then I met my SBDC advisor. She connected me with the right lender, and eighteen months later, I have three locations.&rdquo;</p>
+                        <div style="display:flex;gap:24px;margin-top:12px">
+                            <div>
+                                <div class="t-stat c-pool" style="font-size:clamp(1.4rem,2vw,2rem)">$250K</div>
+                                <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Funded</div>
+                            </div>
+                            <div>
+                                <div class="t-stat c-pool" style="font-size:clamp(1.4rem,2vw,2rem)">3</div>
+                                <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Locations</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <p class="story-quote">&ldquo;The SBDC prepared everything&mdash;business plan, financials, the full package. When I walked into the bank, they were impressed.&rdquo;</p>
+                        <div style="display:flex;gap:24px;margin-top:12px">
+                            <div>
+                                <div class="t-stat c-pool" style="font-size:clamp(1.4rem,2vw,2rem)">$175K</div>
+                                <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Funded</div>
+                            </div>
+                            <div>
+                                <div class="t-stat c-pool" style="font-size:clamp(1.4rem,2vw,2rem)">8</div>
+                                <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Jobs Created</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="t-body c-pool mt-auto" style="font-style:italic;padding-top:20px">These aren't outliers. They're Tuesday.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 10: About the SBDC
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-8">About NorCal SBDC</div>
+                <p class="t-sub c-sky mb-24" style="opacity:0.5">Part of the Northern California SBDC Network</p>
+                <h2 class="t-headline c-white mb-32" style="max-width:70%">For 20 years, we've provided free, confidential business advising to entrepreneurs across Northern California.</h2>
+                <div class="t-label c-pool mb-16">What We Do</div>
+                <div class="two-col" style="max-width:80%">
+                    <ul class="arrow-list t-sub c-white" style="opacity:0.8">
+                        <li>Business plan development</li>
+                        <li>Financial projections &amp; analysis</li>
+                        <li>Loan package preparation</li>
+                    </ul>
+                    <ul class="arrow-list t-sub c-white" style="opacity:0.8">
+                        <li>Market research &amp; strategy</li>
+                        <li>Government contracting assistance</li>
+                        <li>Disaster recovery support</li>
+                    </ul>
+                </div>
+                <p class="t-headline c-white mb-32" style="font-size:clamp(1.2rem,2vw,1.8rem);margin-top:32px;font-weight:300">$0 cost to clients. Ever.</p>
+                <div class="stat-grid-4 mt-auto" style="max-width:80%">
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px;text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.5rem,2.5vw,2.2rem)">7,500+</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Clients</div>
+                    </div>
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px;text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.5rem,2.5vw,2.2rem)">$549M</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Capital</div>
+                    </div>
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px;text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.5rem,2.5vw,2.2rem)">200+</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Workshops</div>
+                    </div>
+                    <div class="stat-cell stat-cell-cream" style="border-radius:4px;text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.5rem,2.5vw,2.2rem)">35</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Advisors</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 11: Thank You
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-center">
+                <div class="t-label c-maroon mb-16">Thank You</div>
+                <h2 class="t-headline c-navy mb-24">To our lending partners.</h2>
+                <p class="t-body c-navy mb-40" style="max-width:55%;opacity:0.6;text-align:center">You make this work possible. Every dollar our clients access, every job they create, every dream they realize&mdash;it starts with a conversation and ends with partnership.</p>
+                <div style="display:flex;gap:clamp(16px,3vw,40px);align-items:center;justify-content:center;margin-bottom:40px">
+                    <div style="padding:16px 28px;background:var(--white);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
+                        <div class="t-label c-maroon" style="font-size:clamp(0.5rem,0.6vw,0.65rem)">Premier Partners</div>
+                    </div>
+                    <div style="padding:14px 24px;background:var(--white);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
+                        <div class="t-label c-navy" style="font-size:clamp(0.5rem,0.6vw,0.65rem);opacity:0.5">Gold Partners</div>
+                    </div>
+                    <div style="padding:12px 20px;background:var(--white);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
+                        <div class="t-label c-navy" style="font-size:clamp(0.45rem,0.55vw,0.6rem);opacity:0.35">Silver &amp; Bronze</div>
+                    </div>
+                </div>
+                <p class="t-body c-navy" style="font-weight:500">Thank you for believing in small business.</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-wm" style="opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 12: Back Cover
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-lg mb-40">
+                <div class="line-pool line-pool-center mb-32"></div>
+                <p class="t-headline c-white mb-12" style="font-size:clamp(1.2rem,2vw,1.8rem);font-weight:300">Your Business People.</p>
+                <p class="t-label c-muted">norcalsbdc.org</p>
+                <p class="t-label c-muted" style="margin-top:8px;opacity:0.4">Since 2006</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm" style="width:clamp(180px,25vw,360px);opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 13: TITLE CARD — Spotlight Campaign
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-maroon">
+            <div class="s-content s-center">
+                <div class="t-label c-pool mb-24" style="opacity:0.7">Document 02</div>
+                <h2 class="t-section c-white mb-32">Lender Spotlight<br>Campaign</h2>
+                <div class="line-pool line-pool-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 14: The Hook
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <div class="t-label c-pool mb-16">Monthly Lender Spotlight</div>
+                <div class="t-stat c-white" style="font-size:clamp(4rem,10vw,9rem)">$10M<span style="color:var(--pool)">+</span></div>
+                <p class="t-headline c-sky mb-24" style="font-size:clamp(1rem,1.8vw,1.5rem);font-weight:400">In Active Loan Demand</p>
+                <p class="t-body c-sky mb-48" style="opacity:0.5;max-width:50%;text-align:center">Borrowers who are prepared, qualified, and actively seeking capital. They're sitting in our offices right now.</p>
+                <div class="stat-grid-3" style="max-width:50%">
+                    <div style="text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">35</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Capital Advisors</div>
+                    </div>
+                    <div style="text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">36</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Counties</div>
+                    </div>
+                    <div style="text-align:center">
+                        <div class="t-stat c-pool mb-4" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">2,400+</div>
+                        <div class="t-label c-muted" style="font-size:clamp(0.45rem,0.55vw,0.6rem)">Active Clients</div>
+                    </div>
+                </div>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 15: The Offer
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-16">Partnership Program</div>
+                <h2 class="t-headline c-navy mb-32">Get in front of borrowers ready to close.</h2>
+                <div class="two-col mb-40">
+                    <div>
+                        <div class="t-label c-maroon mb-12">Who You'll Reach</div>
+                        <ul class="arrow-list arrow-list-dark t-sub c-navy" style="opacity:0.7">
+                            <li>$25K &ndash; $500K loan sizes</li>
+                            <li>2+ years in business</li>
+                            <li>620+ credit (advisor-verified)</li>
+                            <li>Financials organized, ready to close</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="t-label c-maroon mb-12">What You Get</div>
+                        <ul class="arrow-list arrow-list-dark t-sub c-navy" style="opacity:0.7">
+                            <li>60-min session with 35 advisors</li>
+                            <li>Added to our Lender Matrix</li>
+                            <li>Direct intros to matching clients</li>
+                            <li>Quarterly pipeline reports</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display:flex;gap:clamp(16px,3vw,40px);padding:clamp(16px,2vw,28px);background:var(--navy);border-radius:6px;align-items:center">
+                    <div>
+                        <div class="t-label c-pool mb-4" style="font-size:clamp(0.5rem,0.6vw,0.65rem)">Monthly Spotlight</div>
+                        <div class="t-stat c-white" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$3,000</div>
+                    </div>
+                    <div style="width:1px;height:48px;background:rgba(255,255,255,0.1)"></div>
+                    <div>
+                        <div class="t-label c-pool mb-4" style="font-size:clamp(0.5rem,0.6vw,0.65rem)">Premier Partner</div>
+                        <div class="t-stat c-white" style="font-size:clamp(1.6rem,2.5vw,2.4rem)">$5,000</div>
+                    </div>
+                    <div style="margin-left:auto">
+                        <div class="t-sub c-pool" style="font-weight:500">One lender per month. Reserve yours.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 16: Email Template
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content" style="flex-direction:row;align-items:center;gap:clamp(40px,6vw,100px)">
+                <div style="flex:1">
+                    <div class="t-label c-pool mb-16">Digital Outreach</div>
+                    <h2 class="t-headline c-white mb-16">Email Template</h2>
+                    <p class="t-body c-sky mb-32" style="opacity:0.5;max-width:400px">Ready-to-send Constant Contact email with $10M+ hook, stat highlights, benefit list, and dual pricing CTA.</p>
+                    <ul class="arrow-list t-sub c-white" style="opacity:0.6">
+                        <li>Hero headline with loan demand stat</li>
+                        <li>3-column stats bar (Advisors, Clients, Loan-Ready %)</li>
+                        <li>Benefit list with dual pricing tiers</li>
+                        <li>One-click CTA: &ldquo;Reserve Your Spotlight&rdquo;</li>
+                    </ul>
+                </div>
+                <div class="email-mock">
+                    <div class="email-mock-header">NorCal SBDC &middot; Partnership Program</div>
+                    <div class="email-mock-hero">Get in front of <em>$10M+</em> in active loan demand.</div>
+                    <div class="email-mock-stats">
+                        <span><strong>35</strong> Advisors</span>
+                        <span><strong>2,400+</strong> Clients</span>
+                        <span><strong>73%</strong> Loan-Ready</span>
+                    </div>
+                    <div class="email-mock-body">
+                        <strong>What you get:</strong><br>
+                        &bull; 60-min advisor session<br>
+                        &bull; Lender Matrix listing<br>
+                        &bull; Direct client intros<br>
+                        &bull; Pipeline reports
+                    </div>
+                    <div class="email-mock-cta">Reserve Your Spotlight</div>
+                    <div class="email-mock-footer">Your Business People &middot; norcalsbdc.org</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 17: LinkedIn Carousel
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-16">Social Media</div>
+                <h2 class="t-headline c-navy mb-12">LinkedIn Carousel</h2>
+                <p class="t-body c-navy mb-32" style="opacity:0.5">6-slide carousel for LinkedIn posts. Export as 1080&times;1350px PNGs.</p>
+                <div class="carousel-grid">
+                    <div class="carousel-thumb carousel-thumb-navy">
+                        <div class="carousel-thumb-num c-pool">01 / 06</div>
+                        <div class="carousel-thumb-text c-white">$10M+ in loan demand.<br><em style="color:var(--pool)">One phone call away.</em></div>
+                    </div>
+                    <div class="carousel-thumb carousel-thumb-cream">
+                        <div class="carousel-thumb-num c-maroon">02 / 06</div>
+                        <div class="carousel-thumb-text c-navy">Finding qualified borrowers is expensive.</div>
+                    </div>
+                    <div class="carousel-thumb carousel-thumb-navy">
+                        <div class="carousel-thumb-num c-pool">03 / 06</div>
+                        <div class="carousel-thumb-text c-white" style="font-size:clamp(12px,1.3vw,18px);font-weight:100">73%</div>
+                        <div class="carousel-thumb-text c-sky" style="font-size:clamp(6px,0.7vw,9px);margin-top:4px">loan-ready on first contact</div>
+                    </div>
+                    <div class="carousel-thumb carousel-thumb-cream">
+                        <div class="carousel-thumb-num c-maroon">04 / 06</div>
+                        <div class="carousel-thumb-text c-navy">Direct access to 35 capital advisors.</div>
+                    </div>
+                    <div class="carousel-thumb carousel-thumb-navy">
+                        <div class="carousel-thumb-num c-pool">05 / 06</div>
+                        <div class="carousel-thumb-text c-white" style="font-size:clamp(12px,1.3vw,18px);font-weight:100">2,400+</div>
+                        <div class="carousel-thumb-text c-sky" style="font-size:clamp(6px,0.7vw,9px);margin-top:4px">clients seeking capital</div>
+                    </div>
+                    <div class="carousel-thumb carousel-thumb-brick">
+                        <div class="carousel-thumb-num c-white" style="opacity:0.6">06 / 06</div>
+                        <div class="carousel-thumb-text c-white">One lender spotlight per month.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 18: TITLE CARD — Talking Points
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-maroon">
+            <div class="s-content s-center">
+                <div class="t-label c-pool mb-24" style="opacity:0.7">Messaging</div>
+                <h2 class="t-section c-white mb-32">Talking<br>Points</h2>
+                <div class="line-pool line-pool-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 19: Banks & Lenders
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-24">Talking Point &mdash; Banks &amp; Lenders</div>
+                <h2 class="t-headline c-white mb-32" style="max-width:75%;font-size:clamp(2rem,4vw,3.2rem)">&ldquo;We don't compete with you&mdash;<br>we make your pipeline stronger.&rdquo;</h2>
+                <p class="t-body c-sky" style="max-width:60%;opacity:0.65">SBDC referrals come with clean financials, solid business plans, and realistic loan amounts. Our advisors do the prep work so your underwriters can close faster.</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 20: CDFIs
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-24">Talking Point &mdash; CDFIs</div>
+                <h2 class="t-headline c-navy mb-32" style="max-width:75%;font-size:clamp(2rem,4vw,3.2rem)">&ldquo;Same mission,<br>different tools.&rdquo;</h2>
+                <p class="t-body c-navy" style="max-width:60%;opacity:0.55">You lend, we advise. Together we reach the businesses that need capital most. Our 16 centers across NorCal are embedded in the communities you serve.</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-wm" style="opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 21: Cities & Counties
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-left">
+                <div class="t-label c-pool mb-24">Talking Point &mdash; Cities &amp; Counties</div>
+                <h2 class="t-headline c-white mb-32" style="max-width:75%;font-size:clamp(2rem,4vw,3.2rem)">&ldquo;Your constituents,<br>our advisors.&rdquo;</h2>
+                <p class="t-body c-sky" style="max-width:60%;opacity:0.65">No-fee small business support for your community. We serve 36 counties and generate measurable economic impact: job creation, revenue growth, and business starts.</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 22: ROI Conversation
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="light">
+        <div class="slide-inner bg-cream">
+            <div class="s-content s-left">
+                <div class="t-label c-maroon mb-24">Talking Point &mdash; The ROI Conversation</div>
+                <h2 class="t-headline c-navy mb-32" style="max-width:80%;font-size:clamp(2rem,4vw,3.2rem)">&ldquo;$58 back for every<br>$1 invested.&rdquo;</h2>
+                <p class="t-body c-navy" style="max-width:60%;opacity:0.55">&mdash; that's the SBA-verified return. Our no-fee advising model doesn't just help entrepreneurs, it creates measurable economic impact that benefits the entire lending ecosystem.</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starblue@4x.png" alt="" class="star-wm" style="opacity:0.03">
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 23: Value Proposition
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center" style="justify-content:center">
+                <div class="t-label c-pool mb-16">Value Proposition</div>
+                <h2 class="t-headline c-white mb-12">The numbers that matter.</h2>
+                <p class="t-body c-sky mb-48" style="opacity:0.5">When talking to lenders and partners.</p>
+                <div class="vp-grid" style="width:90%;max-width:900px">
+                    <div class="vp-cell" style="text-align:center">
+                        <div class="t-stat c-pool mb-12" style="font-size:clamp(2.5rem,5vw,4.5rem)">$58</div>
+                        <p class="t-sub c-sky" style="opacity:0.65">Return for every $1 invested in SBDC &mdash; SBA verified</p>
+                    </div>
+                    <div class="vp-cell" style="text-align:center">
+                        <div class="t-stat c-pool mb-12" style="font-size:clamp(2.5rem,5vw,4.5rem)">$549M</div>
+                        <p class="t-sub c-sky" style="opacity:0.65">Capital accessed by NorCal SBDC clients last year</p>
+                    </div>
+                    <div class="vp-cell" style="text-align:center">
+                        <div class="t-stat c-pool mb-12" style="font-size:clamp(2.5rem,5vw,4.5rem)">7,500+</div>
+                        <p class="t-sub c-sky" style="opacity:0.65">Entrepreneurs served annually across the network</p>
+                    </div>
+                    <div class="vp-cell" style="text-align:center">
+                        <div class="t-stat c-pool mb-12" style="font-size:clamp(2.5rem,5vw,4.5rem)">20 yrs</div>
+                        <p class="t-sub c-sky" style="opacity:0.65">Partnering with lenders across Northern California</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 24: Closing CTA
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <div class="t-label c-pool mb-24">Ready to Partner?</div>
+                <h2 class="t-section c-white mb-32">Let's talk.</h2>
+                <p class="t-body c-sky mb-40" style="max-width:45%;opacity:0.6;text-align:center">Questions about lender resources, co-branded materials, or partnership opportunities.</p>
+                <div style="padding:20px 40px;border:1px solid rgba(143,197,217,0.3);border-radius:6px;margin-bottom:32px">
+                    <p class="t-body c-pool" style="font-weight:500;letter-spacing:0.02em">phelps@norcalsbdc.org</p>
+                </div>
+                <div class="line-pool line-pool-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────
+         SLIDE 25: End
+         ───────────────────────────────────── -->
+    <div class="slide" data-bg="dark">
+        <div class="slide-inner bg-navy grain">
+            <div class="s-content s-center">
+                <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/sbdc-white-2026.png" alt="NorCal SBDC" class="logo-lg mb-48">
+                <div class="line-pool line-pool-center mb-40"></div>
+                <p class="t-section c-white mb-16" style="font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:100">Your Business People.</p>
+                <p class="t-label c-muted mb-8">norcalsbdc.org</p>
+                <p class="t-label c-muted" style="opacity:0.35">Since 2006</p>
+            </div>
+            <img src="https://www.norcalsbdc.org/wp-content/uploads/2026/01/starwhite@4x.png" alt="" class="star-wm" style="width:clamp(200px,28vw,400px);opacity:0.025">
+        </div>
+    </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     NAVIGATION SCRIPT
+     ════════════════════════════════════════════ -->
+<script>
+(function() {
+    var slides = document.querySelectorAll('.slide');
+    var total = slides.length;
+    var current = 0;
+    var counter = document.getElementById('counter');
+    var progress = document.getElementById('progress');
+    var btnPrev = document.getElementById('btnPrev');
+    var btnNext = document.getElementById('btnNext');
+    var transitioning = false;
+
+    function goTo(n) {
+        if (transitioning) return;
+        if (n < 0 || n >= total) return;
+        transitioning = true;
+        slides[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        counter.textContent = (current + 1) + ' / ' + total;
+        progress.style.width = ((current + 1) / total * 100) + '%';
+        updateNavColors();
+        setTimeout(function() { transitioning = false; }, 600);
+    }
+
+    function nextSlide() { goTo(current + 1); }
+    function prevSlide() { goTo(current - 1); }
+
+    function updateNavColors() {
+        var bg = slides[current].getAttribute('data-bg');
+        var isLight = (bg === 'light');
+        btnPrev.style.color = isLight ? 'rgba(15,28,46,0.25)' : 'rgba(255,255,255,0.35)';
+        btnPrev.style.background = isLight ? 'rgba(15,28,46,0.04)' : 'rgba(255,255,255,0.04)';
+        btnPrev.style.borderColor = isLight ? 'rgba(15,28,46,0.08)' : 'rgba(255,255,255,0.06)';
+        btnNext.style.color = isLight ? 'rgba(15,28,46,0.25)' : 'rgba(255,255,255,0.35)';
+        btnNext.style.background = isLight ? 'rgba(15,28,46,0.04)' : 'rgba(255,255,255,0.04)';
+        btnNext.style.borderColor = isLight ? 'rgba(15,28,46,0.08)' : 'rgba(255,255,255,0.06)';
+        counter.style.color = isLight ? 'rgba(15,28,46,0.25)' : 'rgba(255,255,255,0.25)';
+    }
+
+    // Button clicks
+    btnPrev.addEventListener('click', function(e) { e.stopPropagation(); prevSlide(); });
+    btnNext.addEventListener('click', function(e) { e.stopPropagation(); nextSlide(); });
+
+    // Keyboard
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+        if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    });
+
+    // Click left/right halves
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.nav-arrow')) return;
+        var x = e.clientX / window.innerWidth;
+        if (x > 0.6) nextSlide();
+        else if (x < 0.4) prevSlide();
+    });
+
+    // Touch swipe
+    var touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', function(e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) nextSlide(); else prevSlide();
+        }
+    });
+
+    // Initial state
+    updateNavColors();
+    progress.style.width = (1 / total * 100) + '%';
+})();
+</script>
+
+</body>
+</html>
