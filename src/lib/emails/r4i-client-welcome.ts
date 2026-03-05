@@ -158,7 +158,7 @@ export function buildR4iWelcomeHtml({ firstName, companyName }: R4iEmailData): s
         Your team at SBDC
       </p>
       <p style="font-family:${SANS};font-size:12px;color:#d1d5db;margin:0;line-height:1.6;">
-        Roadmap for Innovation \u2014 A program provided in partnership between the California SBDC and Roadmap 4 Innovation<br/>
+        California Roadmap for Small Manufacturers \u2014 A program provided in partnership between the California SBDC and Roadmap 4 Innovation<br/>
         Funded in part through a Cooperative Agreement with the U.S. SBA
       </p>
     </td>
