@@ -64,7 +64,15 @@ export async function POST(req: NextRequest) {
     lenderMatch = a.length === c.length && timingSafeEqual(a, c);
   }
 
-  if (!mainMatch && !lenderMatch) {
+  // Third password: MILESTONES_PASSWORD → redirects to milestones page
+  const milestonesPassword = process.env.MILESTONES_PASSWORD;
+  let milestonesMatch = false;
+  if (!mainMatch && !lenderMatch && milestonesPassword) {
+    const d = Buffer.from(milestonesPassword);
+    milestonesMatch = a.length === d.length && timingSafeEqual(a, d);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
@@ -76,6 +84,7 @@ export async function POST(req: NextRequest) {
   const res = NextResponse.json({
     ok: true,
     ...(lenderMatch ? { redirect: '/brand/lender-resources' } : {}),
+    ...(milestonesMatch ? { redirect: '/milestones' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
