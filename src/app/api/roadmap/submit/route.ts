@@ -68,7 +68,7 @@ const REFERRAL_TO_REFFROM: Record<string, string> = {
   sbdc: 'D',      // Small Business Development Center (SBDC)
   sba: 'N',       // Small Business Administration District Office (SBA)
   calosba: 'SG',  // State Government Agency
-  CT: 'CT',       // CMTC (California Manufacturing Technology Consulting)
+  CT: 'CT',       // Roadmap 4 Innovation (R4I)
   mep: 'ZZ',      // Partners: APEX/PTAC, SCORE, WBC, VBOC
   industry: 'TA', // Trade Associations
   peer: 'BU',     // Business Owner
@@ -86,13 +86,13 @@ function resolvePosition(code: string): string {
 
 /** Map R4I coaching interest IDs to NeoSerra step2 (MultipleSelection) codes. */
 const COACHING_TO_STEP2: Record<string, string> = {
-  lean: 'Supply Chain/Inventory Management',
-  quality: 'Certifications/Contracting',
+  lean: 'Lean Operations',
+  quality: 'Quality Systems',
   cybersecurity: 'Cybersecurity Assistance',
   hr: 'HR/Managing Employees',
-  food: 'Marketing/Sales',
-  financial: 'Business Accounting/Budget',
-  strategy: 'Managing a Business',
+  food: 'Food Market Development',
+  financial: 'Financial Advising',
+  strategy: 'Strategy & Leadership',
 };
 
 /** Map R4I group course IDs to NeoSerra step2 codes. */
