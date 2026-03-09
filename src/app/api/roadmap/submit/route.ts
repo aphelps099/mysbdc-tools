@@ -86,13 +86,13 @@ function resolvePosition(code: string): string {
 
 /** Map R4I coaching interest IDs to NeoSerra step2 (MultipleSelection) codes. */
 const COACHING_TO_STEP2: Record<string, string> = {
-  lean: 'Supply Chain/Inventory Management',
-  quality: 'Certifications/Contracting',
+  lean: 'Lean Operations',
+  quality: 'Quality Systems',
   cybersecurity: 'Cybersecurity Assistance',
   hr: 'HR/Managing Employees',
-  food: 'Marketing/Sales',
-  financial: 'Business Accounting/Budget',
-  strategy: 'Managing a Business',
+  food: 'Food Market Development',
+  financial: 'Financial Advising',
+  strategy: 'Strategy & Leadership',
 };
 
 /** Map R4I group course IDs to NeoSerra step2 codes. */
