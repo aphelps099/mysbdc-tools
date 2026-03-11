@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, type FormEvent, type KeyboardEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
+import MarkdownMessage from './MarkdownMessage';
 import './chat.css';
 
 /* ═══════════════════════════════════════════════════════
@@ -404,7 +405,11 @@ export default function Chat() {
               className={`chat-message chat-message--${msg.role}`}
             >
               <div className={`chat-bubble chat-bubble--${msg.role}`}>
-                {msg.content}
+                {msg.role === 'assistant' ? (
+                  <MarkdownMessage content={msg.content} />
+                ) : (
+                  msg.content
+                )}
                 {/* Show typing indicator for empty streaming assistant message */}
                 {msg.role === 'assistant' &&
                   msg.content === '' &&
