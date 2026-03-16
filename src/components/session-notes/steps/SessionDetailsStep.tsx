@@ -1,6 +1,7 @@
 'use client';
 
 import type { SessionNoteData } from '../types';
+import { SESSION_TYPES, CONTACT_TYPES, SBA_AREAS, FUNDING_SOURCES } from '../types';
 
 interface Props {
   data: SessionNoteData;
@@ -10,7 +11,14 @@ interface Props {
 }
 
 export default function SessionDetailsStep({ data, onChange, onNext, onBack }: Props) {
-  const valid = data.subject.trim().length > 0 && data.sessionDate.length > 0;
+  const valid =
+    data.subject.trim().length > 0 &&
+    data.sessionDate.length > 0 &&
+    data.sessionType.length > 0 &&
+    data.contactType.length > 0 &&
+    data.counselingArea.length > 0 &&
+    data.fundingSource.length > 0 &&
+    data.contactDuration.length > 0;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && valid) {
@@ -26,6 +34,7 @@ export default function SessionDetailsStep({ data, onChange, onNext, onBack }: P
       </p>
 
       <div className="s641-fields">
+        {/* Subject */}
         <div className="s641-field">
           <label className="s641-label">Subject *</label>
           <input
@@ -38,9 +47,10 @@ export default function SessionDetailsStep({ data, onChange, onNext, onBack }: P
           />
         </div>
 
+        {/* Date + Duration + Prep */}
         <div className="s641-row">
           <div className="s641-field">
-            <label className="s641-label">Session Date</label>
+            <label className="s641-label">Session Date *</label>
             <input
               className="s641-input"
               type="date"
@@ -49,19 +59,19 @@ export default function SessionDetailsStep({ data, onChange, onNext, onBack }: P
             />
           </div>
           <div className="s641-field">
-            <label className="s641-label">Duration (minutes)</label>
+            <label className="s641-label">Contact Time (min) *</label>
             <input
               className="s641-input"
               type="number"
               min="1"
               max="480"
               placeholder="60"
-              value={data.durationMinutes}
-              onChange={(e) => onChange({ durationMinutes: e.target.value })}
+              value={data.contactDuration}
+              onChange={(e) => onChange({ contactDuration: e.target.value })}
             />
           </div>
           <div className="s641-field">
-            <label className="s641-label">Prep Time (minutes)</label>
+            <label className="s641-label">Prep Time (min)</label>
             <input
               className="s641-input"
               type="number"
@@ -72,6 +82,81 @@ export default function SessionDetailsStep({ data, onChange, onNext, onBack }: P
               onChange={(e) => onChange({ prepTimeMinutes: e.target.value })}
             />
           </div>
+        </div>
+
+        {/* Session Type + Contact Type */}
+        <div className="s641-row">
+          <div className="s641-field">
+            <label className="s641-label">Session Type *</label>
+            <select
+              className="s641-input"
+              value={data.sessionType}
+              onChange={(e) => onChange({ sessionType: e.target.value })}
+            >
+              {SESSION_TYPES.map((t) => (
+                <option key={t.code} value={t.code}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="s641-field">
+            <label className="s641-label">Contact Type *</label>
+            <select
+              className="s641-input"
+              value={data.contactType}
+              onChange={(e) => onChange({ contactType: e.target.value })}
+            >
+              {CONTACT_TYPES.map((t) => (
+                <option key={t.code} value={t.code}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Counseling Area + Funding Source */}
+        <div className="s641-row">
+          <div className="s641-field">
+            <label className="s641-label">Counseling Area *</label>
+            <select
+              className="s641-input"
+              value={data.counselingArea}
+              onChange={(e) => onChange({ counselingArea: e.target.value })}
+            >
+              <option value="">Select...</option>
+              {SBA_AREAS.map((a) => (
+                <option key={a.code} value={a.code}>{a.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="s641-field">
+            <label className="s641-label">Funding Source *</label>
+            <select
+              className="s641-input"
+              value={data.fundingSource}
+              onChange={(e) => onChange({ fundingSource: e.target.value })}
+            >
+              <option value="">Select...</option>
+              {FUNDING_SOURCES.map((f) => (
+                <option key={f.code} value={f.code}>{f.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Number of People */}
+        <div className="s641-row">
+          <div className="s641-field">
+            <label className="s641-label">Number of People</label>
+            <input
+              className="s641-input"
+              type="number"
+              min="1"
+              max="100"
+              value={data.nbrPeople}
+              onChange={(e) => onChange({ nbrPeople: e.target.value })}
+            />
+          </div>
+          <div className="s641-field" />
+          <div className="s641-field" />
         </div>
       </div>
 

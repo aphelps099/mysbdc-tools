@@ -42,13 +42,20 @@ export default function ReviewEditStep({ data, onChange, onBack, onResult }: Pro
     try {
       const result = await submitSessionNote({
         clientId: data.clientId,
+        contactId: data.contactId || undefined,
+        counselorId: data.counselorId || undefined,
+        centerId: data.clientCenterId || undefined,
         subject: data.subject.trim(),
         memo: buildMemo(data.sections),
         sessionDate: data.sessionDate,
-        durationMinutes: parseInt(data.durationMinutes, 10) || 60,
+        contactDuration: parseInt(data.contactDuration, 10) || 60,
+        sessionType: data.sessionType,
+        contactType: data.contactType,
+        counselingArea: data.counselingArea,
+        fundingSource: data.fundingSource,
+        nbrPeople: parseInt(data.nbrPeople, 10) || 1,
         prepTimeMinutes: parseInt(data.prepTimeMinutes, 10) || 0,
-        counselorId: data.counselorId || undefined,
-        centerId: data.clientCenterId || undefined,
+        language: data.language || 'EN',
       });
       onResult(result);
     } catch (err) {

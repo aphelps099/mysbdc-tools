@@ -36,13 +36,20 @@ export async function formatNotesWithAi(rawText: string): Promise<NoteSections> 
 /** Submit session note to NeoSerra counseling API. */
 export async function submitSessionNote(payload: {
   clientId: string;
+  contactId?: string;
+  counselorId?: string;
+  centerId?: string;
   subject: string;
   memo: string;
   sessionDate: string;
-  durationMinutes: number;
-  prepTimeMinutes: number;
-  counselorId?: string;
-  centerId?: string;
+  contactDuration: number;
+  sessionType: string;
+  contactType: string;
+  counselingArea: string;
+  fundingSource: string;
+  nbrPeople: number;
+  prepTimeMinutes?: number;
+  language?: string;
 }): Promise<SessionNoteResult> {
   const res = await fetch(`${API_BASE}/api/session-notes/submit`, {
     method: 'POST',
