@@ -85,11 +85,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Build NeoSerra counseling payload with all mandatory fields
+  // Note: clients, contacts, counselors are "List" types — pass as arrays
   const counselingPayload: Record<string, unknown> = {
-    // Client / contact / counselor linkage
-    clients: payload.clientId,
-    contacts: payload.contactId || undefined,
-    counselors: payload.counselorId || undefined,
+    // Client / contact / counselor linkage (array format for List types)
+    clients: [payload.clientId],
+    contacts: payload.contactId ? [payload.contactId] : undefined,
+    counselors: payload.counselorId ? [payload.counselorId] : undefined,
 
     // Mandatory fields
     text: payload.subject.trim(),
