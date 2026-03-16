@@ -72,6 +72,25 @@ export default function ResultScreen({ result }: Props) {
         )}
       </p>
 
+      {result.relationshipWarning && (
+        <div style={{
+          marginTop: 16,
+          padding: '12px 16px',
+          background: 'rgba(217, 119, 6, 0.1)',
+          border: '1px solid rgba(217, 119, 6, 0.3)',
+          borderRadius: 8,
+          color: '#b45309',
+          fontSize: 13,
+          lineHeight: 1.5,
+          textAlign: 'left',
+        }}>
+          <strong>Warning:</strong> The client-contact relationship could not be confirmed.
+          The record may not appear on the client profile in NeoSerra.
+          <br />
+          <span style={{ fontSize: 12, opacity: 0.8 }}>{result.relationshipWarning}</span>
+        </div>
+      )}
+
       <div style={{ marginTop: 24, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         <a href="/session-notes" className="s641-btn s641-btn-primary" style={{ textDecoration: 'none' }}>
           Add Another Note

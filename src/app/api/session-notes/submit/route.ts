@@ -28,6 +28,31 @@ function formatDuration(minutes: number): string {
   return `${h}:${String(m).padStart(2, '0')}`;
 }
 
+/** Ensure a client↔contact relationship exists in NeoSerra before creating counseling records. */
+async function ensureRelationship(
+  base: string,
+  key: string,
+  clientId: string,
+  contactId: string,
+): Promise<{ ok: boolean; status: number; body: unknown; error?: string }> {
+  try {
+    const url = `${base}/api/v1/relationships/${encodeURIComponent(clientId)}/${encodeURIComponent(contactId)}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`,
+      },
+      body: JSON.stringify({}),
+    });
+    const body = await res.json().catch(() => null);
+    return { ok: res.ok, status: res.status, body };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { ok: false, status: 0, body: null, error: msg };
+  }
+}
+
 interface SubmitPayload {
   // Client / contact linkage
   clientId: string;
@@ -120,6 +145,18 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (counselingPayload[k] === undefined) delete counselingPayload[k];
   }
 
+  // Ensure client↔contact relationship exists before creating counseling record
+  let relationshipWarning: string | undefined;
+  if (payload.contactId?.trim()) {
+    const rel = await ensureRelationship(base, key, payload.clientId, payload.contactId);
+    if (rel.ok) {
+      console.log(`[session-notes/submit:relationship] Linked client ${payload.clientId} ↔ contact ${payload.contactId} (${rel.status})`);
+    } else {
+      relationshipWarning = `Relationship linkage returned ${rel.status}: ${rel.error || JSON.stringify(rel.body)}`;
+      console.warn(`[session-notes/submit:relationship] ${relationshipWarning}`);
+    }
+  }
+
   try {
     const res = await fetch(`${base}/api/v1/counseling/`, {
       method: 'POST',
@@ -139,6 +176,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           success: false,
           error: body?.message || body?.error || `NeoSerra returned ${res.status}`,
           neoserraResponse: body,
+          ...(relationshipWarning ? { relationshipWarning } : {}),
         },
         { status: 502 },
       );
@@ -149,12 +187,13 @@ export async function POST(req: NextRequest): Promise<Response> {
       success: true,
       counselingId: body?.id || body?.counselingId,
       neoserraResponse: body,
+      ...(relationshipWarning ? { relationshipWarning } : {}),
     });
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
     console.warn(`[session-notes/submit] NeoSerra request error: ${reason}`);
     return Response.json(
-      { success: false, error: `Failed to reach NeoSerra: ${reason}` },
+      { success: false, error: `Failed to reach NeoSerra: ${reason}`, ...(relationshipWarning ? { relationshipWarning } : {}) },
       { status: 502 },
     );
   }

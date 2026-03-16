@@ -151,6 +151,7 @@ export interface SessionNoteResult {
   success: boolean;
   counselingId?: string;
   error?: string;
+  relationshipWarning?: string;
 }
 
 // ─── Steps ──────────────────────────────────────────────────
