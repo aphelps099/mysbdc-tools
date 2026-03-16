@@ -5,8 +5,14 @@
  * record in NeoSerra via the REST API.
  *
  * All mandatory NeoSerra counseling fields are included:
- * contactDuration, date, type, contactType, sbaArea, text,
- * fundarea, centerId, nbrpeople, clients, contacts, counselors
+ * contact (duration), date, type, contactType, sbaArea, text,
+ * fundarea, centerId, nbrpeople, clients, counselors
+ *
+ * Payload format matches official Neoserra API examples:
+ * - clients/contacts are plain strings (not arrays)
+ * - counselors is an array of {counselor, prep, travel} objects
+ * - duration field is "contact" in decimal hours (e.g. "1.0")
+ * - POST URL ends with /new
  */
 
 import { NextRequest } from 'next/server';
@@ -21,11 +27,10 @@ function neoserraKey(): string {
   return process.env.NEOSERRA_API_KEY || '';
 }
 
-/** Convert minutes (number) to "H:MM" duration string for NeoSerra. */
+/** Convert minutes (number) to decimal hours string for NeoSerra (e.g. 90 → "1.5"). */
 function formatDuration(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return `${h}:${String(m).padStart(2, '0')}`;
+  const hours = minutes / 60;
+  return hours.toFixed(1);
 }
 
 /** Ensure a client↔contact relationship exists in NeoSerra before creating counseling records. */
@@ -35,6 +40,8 @@ async function ensureRelationship(
   clientId: string,
   contactId: string,
 ): Promise<{ ok: boolean; status: number; body: unknown; error?: string }> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
     const url = `${base}/api/v1/relationships/${encodeURIComponent(clientId)}/${encodeURIComponent(contactId)}`;
     const res = await fetch(url, {
@@ -44,10 +51,13 @@ async function ensureRelationship(
         'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify({}),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     const body = await res.json().catch(() => null);
     return { ok: res.ok, status: res.status, body };
   } catch (err) {
+    clearTimeout(timeout);
     const msg = err instanceof Error ? err.message : String(err);
     return { ok: false, status: 0, body: null, error: msg };
   }
@@ -116,28 +126,36 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
-  // Build NeoSerra counseling payload with all mandatory fields
-  // Note: clients, contacts, counselors are "List" types — pass as arrays
+  // Build NeoSerra counseling payload matching official API examples:
+  // - clients/contacts are plain strings (not arrays)
+  // - counselors is an array of objects with counselor/prep/travel
+  // - duration field is "contact" (not "contactDuration"), decimal hours
+  // - URL must end with /new
+  const prepHours = payload.prepTimeMinutes ? (payload.prepTimeMinutes / 60).toFixed(1) : '0';
+
   const counselingPayload: Record<string, unknown> = {
-    // Client / contact / counselor linkage (array format for List types)
-    clients: [payload.clientId],
-    contacts: payload.contactId ? [payload.contactId] : undefined,
-    counselors: payload.counselorId ? [payload.counselorId] : undefined,
+    clients: payload.clientId,
+    contacts: payload.contactId || undefined,
+    counselors: payload.counselorId
+      ? [{ counselor: payload.counselorId, prep: prepHours, travel: '0' }]
+      : undefined,
 
     // Mandatory fields
-    text: payload.subject.trim(),
-    memo: payload.memo.trim(),
+    contact: formatDuration(payload.contactDuration),
     date: payload.sessionDate,
-    contactDuration: formatDuration(payload.contactDuration),
     type: payload.sessionType,
     contactType: payload.contactType,
     sbaArea: payload.counselingArea,
+    text: payload.subject.trim(),
     fundarea: payload.fundingSource,
     centerId: payload.centerId || undefined,
     nbrpeople: String(payload.nbrPeople || 1),
+    memo: payload.memo.trim(),
+    isReportable: 'true',
 
     // Optional
     language: payload.language || 'EN',
+    covid19: 'false',
   };
 
   // Remove undefined values
@@ -157,8 +175,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   }
 
-  const counselingUrl = `${base}/api/v1/counseling`;
+  const counselingUrl = `${base}/api/v1/counseling/new`;
   console.log('[session-notes/submit] POST', counselingUrl, JSON.stringify(counselingPayload));
+
+  // 30-second timeout — Neoserra sometimes hangs without responding
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000);
 
   try {
     const res = await fetch(counselingUrl, {
@@ -168,7 +190,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify(counselingPayload),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
     const body = await res.json().catch(() => null);
     console.log(`[session-notes/submit] NeoSerra responded ${res.status}:`, JSON.stringify(body));
@@ -192,7 +216,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       ...(relationshipWarning ? { relationshipWarning } : {}),
     });
   } catch (err) {
-    const reason = err instanceof Error ? err.message : String(err);
+    clearTimeout(timeout);
+    const isTimeout = err instanceof DOMException && err.name === 'AbortError';
+    const reason = isTimeout
+      ? 'Request timed out after 30s — NeoSerra did not respond'
+      : (err instanceof Error ? err.message : String(err));
     console.warn(`[session-notes/submit] fetch failed for ${counselingUrl}: ${reason}`);
     return Response.json(
       { success: false, error: `Failed to reach NeoSerra: ${reason}`, ...(relationshipWarning ? { relationshipWarning } : {}) },
