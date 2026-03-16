@@ -1,7 +1,6 @@
 /** Session Notes — shared types and step definitions */
 
 // ─── Reuse Neoserra types from milestones ───────────────────
-// We import the same contact/client types used by the milestones wizard.
 
 export interface NeoserraContact {
   id: string;
@@ -37,6 +36,75 @@ export interface NoteSections {
   followUp: string;     // Actions before next session
 }
 
+// ─── NeoSerra coded value options ───────────────────────────
+
+export const SESSION_TYPES = [
+  { code: 'F', label: 'Follow-up' },
+  { code: 'I', label: 'Initial / New' },
+  { code: 'A', label: 'Administrative' },
+] as const;
+
+export const CONTACT_TYPES = [
+  { code: 'VC', label: 'Video-conferencing' },
+  { code: 'PH', label: 'Phone' },
+  { code: 'ON', label: 'Center Site (in-person)' },
+  { code: 'AT', label: 'Client Site (in-person)' },
+  { code: 'EM', label: 'Online (email or chat)' },
+] as const;
+
+export const SBA_AREAS = [
+  { code: '1', label: 'Start-up Assistance' },
+  { code: '3', label: 'Marketing / Sales' },
+  { code: '7', label: 'Managing a Business' },
+  { code: '2', label: 'Financing / Capital' },
+  { code: 'BP', label: 'Business Plan' },
+  { code: 'LS', label: 'Legal Structure / Licensure' },
+  { code: 'FM', label: 'Financial Management' },
+  { code: '5', label: 'Business Accounting / Budget' },
+  { code: 'EC', label: 'eCommerce' },
+  { code: 'SM', label: 'Social Media' },
+  { code: '9', label: 'HR / Managing Employees' },
+  { code: '6', label: 'Cash Flow Management' },
+  { code: 'ES', label: 'Expansion / Scaling' },
+  { code: '4', label: 'Government Contracting' },
+  { code: 'HC', label: 'Government Certifications' },
+  { code: 'I1', label: 'Investment Funding' },
+  { code: 'T1', label: 'Technology Commercialization' },
+  { code: 'AP-GIP', label: 'SBIR/STTR/Innovation Programs' },
+  { code: 'BK', label: 'Bookkeeping' },
+  { code: '10', label: 'Technology / Computers' },
+  { code: 'AI', label: 'Artificial Intelligence (AI)' },
+  { code: 'CR', label: 'Customer Relations' },
+  { code: '8', label: 'Engineering R&D' },
+  { code: '20', label: 'Intellectual Property' },
+  { code: '11', label: 'International Trade' },
+  { code: '12', label: 'Buy/Sell Business' },
+  { code: 'DP', label: 'Disaster Planning / Recovery' },
+  { code: 'IAA', label: 'Intake Assessment' },
+  { code: 'OT', label: 'Other' },
+] as const;
+
+export const FUNDING_SOURCES = [
+  { code: 'S', label: 'SBA' },
+  { code: 'Local', label: 'Local' },
+  { code: '3', label: 'State (CIP)' },
+  { code: '+', label: 'SSBCI' },
+  { code: 'O', label: 'Other' },
+  { code: 'E', label: 'Alameda County' },
+  { code: 'C', label: 'CDBG' },
+  { code: 'CTP', label: 'City of Sacramento cTAP' },
+  { code: 'DOR', label: 'Department of Rehab' },
+  { code: ']', label: 'Program Income' },
+  { code: 'SJC', label: 'San Joaquin County' },
+  { code: 'CZI', label: 'Chan Zuckerberg Initiative' },
+  { code: 'IT', label: 'APY' },
+  { code: 'P2', label: 'z_TAP PRIME (FY25)' },
+  { code: '!', label: 'z_USDA (FY23-26)' },
+  { code: '2', label: 'z_WBC EP (FY23-25)' },
+  { code: 'P1', label: 'z_West PRIME (FY25-26)' },
+  { code: 'CCRPT', label: 'zz_CCRP TAP (WBC FY26)' },
+] as const;
+
 // ─── Session note form data ─────────────────────────────────
 
 export interface SessionNoteData {
@@ -54,21 +122,27 @@ export interface SessionNoteData {
   clientCenterId: string;
   counselorId: string;
 
-  // Step 3: Session details
-  sessionDate: string;      // YYYY-MM-DD
-  durationMinutes: string;  // e.g. "60"
-  prepTimeMinutes: string;  // e.g. "15"
-  subject: string;          // Mandatory "text" field in Neoserra
+  // Step 3: Session details — mandatory NeoSerra fields
+  sessionDate: string;        // YYYY-MM-DD (mandatory)
+  contactDuration: string;    // minutes as string (mandatory: contactDuration)
+  prepTimeMinutes: string;    // minutes as string (optional)
+  subject: string;            // mandatory: text
+  sessionType: string;        // mandatory: type — 'I' | 'F' | 'A'
+  contactType: string;        // mandatory: contactType — 'ON' | 'AT' | 'EM' | 'PH' | 'VC'
+  counselingArea: string;     // mandatory: sbaArea
+  fundingSource: string;      // mandatory: fundarea
+  language: string;           // optional: language (default 'EN')
+  nbrPeople: string;          // mandatory: nbrpeople (default '1')
 
   // Step 4: Raw notes input (AI-first flow)
-  rawNotes: string;         // Pasted raw text / transcript
-  useManualEntry: boolean;  // Toggle for manual section entry
+  rawNotes: string;
+  useManualEntry: boolean;
 
   // Step 5: Structured sections (AI-formatted or manually entered)
   sections: NoteSections;
 
   // AI formatting state
-  aiFormatted: boolean;     // Whether AI has formatted the sections
+  aiFormatted: boolean;
 }
 
 // ─── Submission result ──────────────────────────────────────
@@ -108,9 +182,15 @@ export function createEmptySessionNote(): SessionNoteData {
     clientCenterId: '',
     counselorId: '',
     sessionDate: today,
-    durationMinutes: '60',
+    contactDuration: '60',
     prepTimeMinutes: '15',
     subject: '',
+    sessionType: 'F',
+    contactType: 'VC',
+    counselingArea: '',
+    fundingSource: '',
+    language: 'EN',
+    nbrPeople: '1',
     rawNotes: '',
     useManualEntry: false,
     sections: {

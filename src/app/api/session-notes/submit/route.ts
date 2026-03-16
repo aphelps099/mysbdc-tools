@@ -4,8 +4,9 @@
  * Accepts JSON with session note data and creates a counseling
  * record in NeoSerra via the REST API.
  *
- * POST /api/session-notes/submit
- * Body: { clientId, subject, memo, sessionDate, durationMinutes, prepTimeMinutes, counselorId?, centerId? }
+ * All mandatory NeoSerra counseling fields are included:
+ * contactDuration, date, type, contactType, sbaArea, text,
+ * fundarea, centerId, nbrpeople, clients, contacts, counselors
  */
 
 import { NextRequest } from 'next/server';
@@ -21,14 +22,26 @@ function neoserraKey(): string {
 }
 
 interface SubmitPayload {
+  // Client / contact linkage
   clientId: string;
-  subject: string;
-  memo: string;
-  sessionDate: string;
-  durationMinutes: number;
-  prepTimeMinutes: number;
+  contactId?: string;
   counselorId?: string;
   centerId?: string;
+
+  // Mandatory NeoSerra fields
+  subject: string;          // → text
+  memo: string;             // → memo (session notes)
+  sessionDate: string;      // → date
+  contactDuration: number;  // → contactDuration (minutes)
+  sessionType: string;      // → type (I/F/A)
+  contactType: string;      // → contactType (ON/AT/EM/PH/VC)
+  counselingArea: string;   // → sbaArea
+  fundingSource: string;    // → fundarea
+  nbrPeople: number;        // → nbrpeople
+
+  // Optional
+  prepTimeMinutes?: number;
+  language?: string;
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -44,21 +57,20 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Validate required fields
-  if (!payload.clientId?.trim()) {
+  const missing: string[] = [];
+  if (!payload.clientId?.trim()) missing.push('clientId');
+  if (!payload.subject?.trim()) missing.push('subject');
+  if (!payload.memo?.trim()) missing.push('memo');
+  if (!payload.sessionDate) missing.push('sessionDate');
+  if (!payload.contactDuration) missing.push('contactDuration');
+  if (!payload.sessionType) missing.push('sessionType');
+  if (!payload.contactType) missing.push('contactType');
+  if (!payload.counselingArea) missing.push('counselingArea');
+  if (!payload.fundingSource) missing.push('fundingSource');
+
+  if (missing.length > 0) {
     return Response.json(
-      { success: false, error: 'clientId is required' },
-      { status: 400 },
-    );
-  }
-  if (!payload.subject?.trim()) {
-    return Response.json(
-      { success: false, error: 'subject is required' },
-      { status: 400 },
-    );
-  }
-  if (!payload.memo?.trim()) {
-    return Response.json(
-      { success: false, error: 'memo (session notes) is required' },
+      { success: false, error: `Missing required fields: ${missing.join(', ')}` },
       { status: 400 },
     );
   }
@@ -72,25 +84,32 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
-  // Build NeoSerra counseling payload
+  // Build NeoSerra counseling payload with all mandatory fields
   const counselingPayload: Record<string, unknown> = {
-    clientId: payload.clientId,
+    // Client / contact / counselor linkage
+    clients: payload.clientId,
+    contacts: payload.contactId || undefined,
+    counselors: payload.counselorId || undefined,
+
+    // Mandatory fields
     text: payload.subject.trim(),
     memo: payload.memo.trim(),
-    date: payload.sessionDate || new Date().toISOString().split('T')[0],
+    date: payload.sessionDate,
+    contactDuration: payload.contactDuration,
+    type: payload.sessionType,
+    contactType: payload.contactType,
+    sbaArea: payload.counselingArea,
+    fundarea: payload.fundingSource,
+    centerId: payload.centerId || undefined,
+    nbrpeople: payload.nbrPeople || 1,
+
+    // Optional
+    language: payload.language || 'EN',
   };
 
-  if (payload.durationMinutes) {
-    counselingPayload.duration = payload.durationMinutes;
-  }
-  if (payload.prepTimeMinutes) {
-    counselingPayload.prepTime = payload.prepTimeMinutes;
-  }
-  if (payload.counselorId) {
-    counselingPayload.counselorId = payload.counselorId;
-  }
-  if (payload.centerId) {
-    counselingPayload.centerId = payload.centerId;
+  // Remove undefined values
+  for (const k of Object.keys(counselingPayload)) {
+    if (counselingPayload[k] === undefined) delete counselingPayload[k];
   }
 
   try {
