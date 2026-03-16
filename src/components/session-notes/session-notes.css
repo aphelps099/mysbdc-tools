@@ -1,0 +1,108 @@
+/* ═══════════════════════════════════════════════════════════
+   Session Notes — extends Smart 641 design language
+   ═══════════════════════════════════════════════════════════
+   Reuses s641-* classes from smart641.css for shared elements.
+   sn-* namespace for session-notes-specific styles only.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Textareas ── */
+
+.sn-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+}
+
+.sn-textarea-lg {
+  min-height: 240px;
+}
+
+/* ── Link-style buttons ── */
+
+.sn-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--p-blue, #2456e3);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(36, 86, 227, 0.3);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 150ms ease;
+}
+
+.sn-link-btn:hover {
+  text-decoration-color: var(--p-blue, #2456e3);
+}
+
+/* ── AI badge ── */
+
+.sn-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  margin-left: 8px;
+  border-radius: 12px;
+  background: rgba(36, 86, 227, 0.08);
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--p-blue, #2456e3);
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+/* ── Review sections ── */
+
+.sn-review-section {
+  border: 1px solid var(--p-line, #e7e2da);
+  border-radius: 10px;
+  padding: 16px;
+  transition: border-color 150ms ease;
+}
+
+.sn-review-section:hover {
+  border-color: rgba(36, 86, 227, 0.2);
+}
+
+.sn-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sn-review-header .s641-label {
+  margin-bottom: 0;
+}
+
+.sn-edit-btn {
+  background: none;
+  border: 1px solid var(--p-line, #e7e2da);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--p-blue, #2456e3);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.sn-edit-btn:hover {
+  background: rgba(36, 86, 227, 0.04);
+  border-color: rgba(36, 86, 227, 0.2);
+}
+
+.sn-review-text {
+  font-family: var(--era-text, 'GT Era Text', sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--p-ink, #1a1a1a);
+  white-space: pre-wrap;
+}
