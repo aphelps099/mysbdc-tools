@@ -56,9 +56,15 @@ export async function submitSessionNote(payload: {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
+  // Always try to parse JSON so we preserve neoserraResponse for the UI
+  const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const text = await res.text().catch(() => 'Unknown error');
-    throw new Error(`Submission failed (${res.status}): ${text}`);
+    return {
+      success: false,
+      error: data?.error || `Submission failed (${res.status})`,
+      neoserraResponse: data?.neoserraResponse,
+      relationshipWarning: data?.relationshipWarning,
+    };
   }
-  return res.json();
+  return data as SessionNoteResult;
 }

@@ -152,6 +152,7 @@ export interface SessionNoteResult {
   counselingId?: string;
   error?: string;
   relationshipWarning?: string;
+  neoserraResponse?: Record<string, unknown>;
 }
 
 // ─── Steps ──────────────────────────────────────────────────
