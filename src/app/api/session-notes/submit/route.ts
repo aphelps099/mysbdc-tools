@@ -157,8 +157,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   }
 
+  const counselingUrl = `${base}/api/v1/counseling/`;
+  console.log('[session-notes/submit] POST', counselingUrl, JSON.stringify(counselingPayload));
+
   try {
-    const res = await fetch(`${base}/api/v1/counseling/`, {
+    const res = await fetch(counselingUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -168,9 +171,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
 
     const body = await res.json().catch(() => null);
+    console.log(`[session-notes/submit] NeoSerra responded ${res.status}:`, JSON.stringify(body));
 
     if (!res.ok || (body && body.status === 'fail')) {
-      console.warn('[session-notes/submit] NeoSerra counseling creation failed:', JSON.stringify(body));
       return Response.json(
         {
           success: false,
@@ -182,7 +185,6 @@ export async function POST(req: NextRequest): Promise<Response> {
       );
     }
 
-    console.log('[session-notes/submit] Counseling record created:', JSON.stringify(body));
     return Response.json({
       success: true,
       counselingId: body?.id || body?.counselingId,
@@ -191,7 +193,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
-    console.warn(`[session-notes/submit] NeoSerra request error: ${reason}`);
+    console.warn(`[session-notes/submit] fetch failed for ${counselingUrl}: ${reason}`);
     return Response.json(
       { success: false, error: `Failed to reach NeoSerra: ${reason}`, ...(relationshipWarning ? { relationshipWarning } : {}) },
       { status: 502 },

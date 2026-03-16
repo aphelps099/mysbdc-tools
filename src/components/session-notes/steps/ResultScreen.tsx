@@ -26,6 +26,14 @@ export default function ResultScreen({ result }: Props) {
             {result.error}
           </div>
         )}
+        {result.neoserraResponse && (
+          <details style={{ marginTop: 12, fontSize: 12, textAlign: 'left', color: '#9ca3af' }}>
+            <summary style={{ cursor: 'pointer' }}>API Response</summary>
+            <pre style={{ marginTop: 8, padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 6, overflow: 'auto', maxHeight: 200 }}>
+              {JSON.stringify(result.neoserraResponse, null, 2)}
+            </pre>
+          </details>
+        )}
         <div style={{ marginTop: 24 }}>
           <a href="/session-notes" className="s641-btn s641-btn-primary" style={{ textDecoration: 'none' }}>
             Try Again
@@ -89,6 +97,15 @@ export default function ResultScreen({ result }: Props) {
           <br />
           <span style={{ fontSize: 12, opacity: 0.8 }}>{result.relationshipWarning}</span>
         </div>
+      )}
+
+      {result.neoserraResponse && (
+        <details style={{ marginTop: 12, fontSize: 12, textAlign: 'left', color: '#9ca3af' }}>
+          <summary style={{ cursor: 'pointer' }}>API Response</summary>
+          <pre style={{ marginTop: 8, padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 6, overflow: 'auto', maxHeight: 200 }}>
+            {JSON.stringify(result.neoserraResponse, null, 2)}
+          </pre>
+        </details>
       )}
 
       <div style={{ marginTop: 24, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
