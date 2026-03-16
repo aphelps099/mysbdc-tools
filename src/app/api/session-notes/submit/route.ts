@@ -35,6 +35,8 @@ async function ensureRelationship(
   clientId: string,
   contactId: string,
 ): Promise<{ ok: boolean; status: number; body: unknown; error?: string }> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
     const url = `${base}/api/v1/relationships/${encodeURIComponent(clientId)}/${encodeURIComponent(contactId)}`;
     const res = await fetch(url, {
@@ -44,10 +46,13 @@ async function ensureRelationship(
         'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify({}),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     const body = await res.json().catch(() => null);
     return { ok: res.ok, status: res.status, body };
   } catch (err) {
+    clearTimeout(timeout);
     const msg = err instanceof Error ? err.message : String(err);
     return { ok: false, status: 0, body: null, error: msg };
   }
@@ -160,6 +165,10 @@ export async function POST(req: NextRequest): Promise<Response> {
   const counselingUrl = `${base}/api/v1/counseling`;
   console.log('[session-notes/submit] POST', counselingUrl, JSON.stringify(counselingPayload));
 
+  // 30-second timeout — Neoserra sometimes hangs without responding
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000);
+
   try {
     const res = await fetch(counselingUrl, {
       method: 'POST',
@@ -168,7 +177,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify(counselingPayload),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
     const body = await res.json().catch(() => null);
     console.log(`[session-notes/submit] NeoSerra responded ${res.status}:`, JSON.stringify(body));
@@ -192,7 +203,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       ...(relationshipWarning ? { relationshipWarning } : {}),
     });
   } catch (err) {
-    const reason = err instanceof Error ? err.message : String(err);
+    clearTimeout(timeout);
+    const isTimeout = err instanceof DOMException && err.name === 'AbortError';
+    const reason = isTimeout
+      ? 'Request timed out after 30s — NeoSerra did not respond'
+      : (err instanceof Error ? err.message : String(err));
     console.warn(`[session-notes/submit] fetch failed for ${counselingUrl}: ${reason}`);
     return Response.json(
       { success: false, error: `Failed to reach NeoSerra: ${reason}`, ...(relationshipWarning ? { relationshipWarning } : {}) },
