@@ -21,6 +21,13 @@ function neoserraKey(): string {
   return process.env.NEOSERRA_API_KEY || '';
 }
 
+/** Convert minutes (number) to "H:MM" duration string for NeoSerra. */
+function formatDuration(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `${h}:${String(m).padStart(2, '0')}`;
+}
+
 interface SubmitPayload {
   // Client / contact linkage
   clientId: string;
@@ -96,7 +103,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     text: payload.subject.trim(),
     memo: payload.memo.trim(),
     date: payload.sessionDate,
-    contactDuration: payload.contactDuration,
+    contactDuration: formatDuration(payload.contactDuration),
     type: payload.sessionType,
     contactType: payload.contactType,
     sbaArea: payload.counselingArea,
