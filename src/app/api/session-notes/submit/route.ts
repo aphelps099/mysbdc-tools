@@ -134,7 +134,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     sbaArea: payload.counselingArea,
     fundarea: payload.fundingSource,
     centerId: payload.centerId || undefined,
-    nbrpeople: payload.nbrPeople || 1,
+    nbrpeople: String(payload.nbrPeople || 1),
 
     // Optional
     language: payload.language || 'EN',
@@ -157,7 +157,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   }
 
-  const counselingUrl = `${base}/api/v1/counseling/`;
+  const counselingUrl = `${base}/api/v1/counseling`;
   console.log('[session-notes/submit] POST', counselingUrl, JSON.stringify(counselingPayload));
 
   try {
