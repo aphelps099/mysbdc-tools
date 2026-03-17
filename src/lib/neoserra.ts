@@ -24,61 +24,97 @@ export function neoserraKey(): string {
  * To find IDs: GET /api/v1/centers/{centerReference}
  */
 const CENTER_MAP: Record<string, string> = {
-  // LEAD / Regional / NorCal (the network-level center)
-  'norcal': '1',
-  'regional': '1',
-  'lead': '1',
-  'network': '1',
-  'norcal sbdc': '1',
-  // Butte College SBDC
+  // ── Active NorCal SBDC Centers ──
+
+  // Santa Cruz SBDC (9) — Santa Cruz, Monterey, San Benito
+  'santa cruz': '9',
+  'monterey': '9',
+  'san benito': '9',
+
+  // North Coast SBDC (13) — Humboldt, Del Norte
+  'north coast': '13',
+  'humboldt': '13',
+  'del norte': '13',
+
+  // San Francisco SBDC (15)
+  'san francisco': '15',
+  'sf': '15',
+
+  // Solano-Napa SBDC (18) — Solano, Napa
+  'solano-napa': '18',
+  'solano napa': '18',
+  'solano': '18',
+  'napa': '18',
+
+  // NorCal SBDC — Regional Lead (23)
+  'norcal': '23',
+  'regional': '23',
+  'lead': '23',
+  'network': '23',
+  'norcal sbdc': '23',
+
+  // Mendocino SBDC (24)
+  'mendocino': '24',
+
+  // Marin SBDC (36)
+  'marin': '36',
+
+  // Butte College SBDC (39) — Butte, Glenn, Tehama, Plumas, Colusa
   'butte': '39',
   'butte college': '39',
-  // Capital Region SBDC
-  'capital region': '10',
-  'capital': '10',
-  // Central Coast SBDC
-  'central coast': '12',
-  // Contra Costa SBDC
-  'contra costa': '14',
-  // Gavilan SBDC
-  'gavilan': '16',
-  // Greater Sacramento SBDC
-  'sacramento': '18',
-  'sac': '18',
-  'greater sacramento': '18',
-  // Humboldt SBDC
-  'humboldt': '20',
-  // Lake County SBDC
-  'lake': '22',
-  'lake county': '22',
-  // Marin SBDC
-  'marin': '24',
-  // Mendocino WBC
-  'mendocino': '26',
+
+  // Shasta-Cascade SBDC (40) — Shasta, Siskiyou, Trinity, Modoc, Lassen
+  'shasta': '40',
+  'shasta-cascade': '40',
+  'shasta cascade': '40',
+
+  // Sierra SBDC (43) — Nevada, Placer, El Dorado
+  'sierra': '43',
+  'placer': '43',
+  'el dorado': '43',
+
+  // San Joaquin SBDC (68) — San Joaquin, Stanislaus, Merced, + more
+  'san joaquin': '68',
+  'stockton': '68',
+
+  // San Mateo SBDC (69)
+  'san mateo': '69',
+
+  // Silicon Valley SBDC (70) — Santa Clara
+  'silicon valley': '70',
+  'sv': '70',
+  'santa clara': '70',
+
+  // East Bay SBDC (71) — Alameda, Contra Costa
+  'east bay': '71',
+  'alameda': '71',
+  'contra costa': '71',
+
+  // Sacramento Valley SBDC (72) — Sacramento, Yolo, Sutter, Yuba
+  'sacramento': '72',
+  'sac': '72',
+  'sacramento valley': '72',
+  'yolo': '72',
+
+  // Sonoma SBDC (73)
+  'sonoma': '73',
+
+  // Lake County SBDC (105)
+  'lake': '105',
+  'lake county': '105',
+
+  // ── Special / Program Centers ──
   'mendocino wbc': '26',
-  // Napa-Sonoma SBDC
-  'napa': '28',
-  'sonoma': '28',
-  'napa-sonoma': '28',
-  'napa sonoma': '28',
-  // North Coast SBDC
-  'north coast': '30',
-  // San Joaquin SBDC
-  'san joaquin': '32',
-  'stockton': '32',
-  // San Mateo SBDC
-  'san mateo': '34',
-  // Santa Cruz SBDC
-  'santa cruz': '36',
-  // Shasta SBDC
-  'shasta': '38',
-  // Silicon Valley SBDC
-  'silicon valley': '40',
-  'sv': '40',
-  // Solano SBDC
-  'solano': '42',
-  // Yolo SBDC
-  'yolo': '44',
+  'regional training': '47',
+  'eats': '63',
+  'norcal sbdc eats': '63',
+  'sbdctech': '75',
+  'access sbdc': '77',
+
+  // ── Affiliates ──
+  'tech futures group': '34',
+  'tfg': '34',
+  'finance center': '38',
 };
 
 /**

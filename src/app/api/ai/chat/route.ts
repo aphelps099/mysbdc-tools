@@ -139,7 +139,7 @@ async function executeTool(
           centerId = resolveCenterId(centerName);
           if (!centerId) {
             return JSON.stringify({
-              error: `Could not resolve center name "${centerName}". Known centers: NorCal (LEAD), Butte, Capital Region, Central Coast, Contra Costa, Gavilan, Greater Sacramento, Humboldt, Lake County, Marin, Mendocino WBC, Napa-Sonoma, North Coast, San Joaquin, San Mateo, Santa Cruz, Shasta, Silicon Valley, Solano, Yolo.`,
+              error: `Could not resolve center name "${centerName}". Known centers: NorCal (Regional Lead), Santa Cruz, North Coast, San Francisco, Solano-Napa, Mendocino, Marin, Butte, Shasta-Cascade, Sierra, San Joaquin, San Mateo, Silicon Valley, East Bay, Sacramento Valley, Sonoma, Lake County.`,
             });
           }
         }
