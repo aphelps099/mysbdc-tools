@@ -8,6 +8,21 @@ import Image from 'next/image';
    Landing page with links to every tool in the suite.
    ═══════════════════════════════════════════════════════ */
 
+/* Featured campaign — rendered separately with accent styling */
+const featured = {
+  href: '/brand/social/sbdc-day-grid.html',
+  name: 'SBDC Day Social Grid',
+  description: '25 ready-to-post social media graphics for SBDC Day — captions, hashtags, carousel preview & quick export.',
+  date: 'March 18, 2026',
+  icon: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+    </svg>
+  ),
+};
+
 const tools = [
   {
     href: '/chat',
@@ -173,6 +188,51 @@ export default function Home() {
         </p>
         <hr className="tools-rule" />
       </header>
+
+      {/* ── Featured campaign card ── */}
+      <div className="tools-grid" style={{ paddingBottom: 0 }}>
+        <a
+          href={featured.href}
+          className="tools-card"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            background: 'rgba(143, 197, 217, 0.15)',
+            border: '1px solid rgba(143, 197, 217, 0.3)',
+            animationDelay: '0.04s',
+          }}
+        >
+          <span
+            className="tools-card-icon"
+            style={{ background: 'rgba(143, 197, 217, 0.25)', color: '#0f1c2e' }}
+          >
+            {featured.icon}
+          </span>
+          <span>
+            <span className="tools-card-name" style={{ color: '#0f1c2e' }}>
+              {featured.name}
+              <span
+                style={{
+                  display: 'inline-block',
+                  marginLeft: 10,
+                  fontSize: 10,
+                  fontFamily: 'var(--mono)',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  color: '#1D5AA7',
+                  background: 'rgba(29, 90, 167, 0.1)',
+                  padding: '3px 8px',
+                  borderRadius: 4,
+                  verticalAlign: 'middle',
+                }}
+              >
+                {featured.date}
+              </span>
+            </span>
+            <span className="tools-card-desc">{featured.description}</span>
+          </span>
+        </a>
+      </div>
 
       {/* ── Tool cards ── */}
       <main className="tools-grid">
