@@ -5,6 +5,9 @@ import {
   fetchRecentEvents,
   fetchAttendees,
   fetchTrainers,
+  fetchMilestoneLog,
+  anonymizeMilestone,
+  fetchImpactData,
 } from '@/lib/neoserra';
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +42,7 @@ type ContentBlock = any;
 
 // ── Tool definitions ──
 
-const TRAINING_TOOLS = [
+const CHAT_TOOLS = [
   {
     name: 'get_recent_trainings',
     description:
@@ -88,6 +91,35 @@ const TRAINING_TOOLS = [
       required: ['conference_id'],
     },
   },
+  {
+    name: 'get_milestone_spotlight',
+    description:
+      'Get recent anonymized milestone submissions to generate success story spotlights. Returns milestone categories (jobs created, funding secured, sales growth, business started) by center — all client PII is stripped. Use when users ask for success stories, spotlights, recent wins, or want to celebrate impact.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        days: {
+          type: 'number',
+          description: 'Number of days to look back. Default 7.',
+        },
+      },
+    },
+  },
+  {
+    name: 'get_impact_snapshot',
+    description:
+      'Get live NorCal SBDC impact metrics — capital accessed, jobs created, businesses started, revenue growth. Includes per-center breakdowns. Use when users ask about impact, performance, numbers, or want talking points, social posts, or board report content with real data.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        period: {
+          type: 'string',
+          enum: ['this_month', 'quarter', 'ytd', 'all_time'],
+          description: 'Time period for impact data. Default: this_month.',
+        },
+      },
+    },
+  },
 ];
 
 // ── Tool execution ──
@@ -107,7 +139,7 @@ async function executeTool(
           centerId = resolveCenterId(centerName);
           if (!centerId) {
             return JSON.stringify({
-              error: `Could not resolve center name "${centerName}". Known centers: NorCal (LEAD), Butte, Capital Region, Central Coast, Contra Costa, Gavilan, Greater Sacramento, Humboldt, Lake County, Marin, Mendocino WBC, Napa-Sonoma, North Coast, San Joaquin, San Mateo, Santa Cruz, Shasta, Silicon Valley, Solano, Yolo.`,
+              error: `Could not resolve center name "${centerName}". Known centers: NorCal (Regional Lead), Santa Cruz, North Coast, San Francisco, Solano-Napa, Mendocino, Marin, Butte, Shasta-Cascade, Sierra, San Joaquin, San Mateo, Silicon Valley, East Bay, Sacramento Valley, Sonoma, Lake County.`,
             });
           }
         }
@@ -166,6 +198,36 @@ async function executeTool(
         });
       }
 
+      case 'get_milestone_spotlight': {
+        const days = (input.days as number) || 7;
+        const entries = await fetchMilestoneLog(days);
+        const anonymized = entries.map(anonymizeMilestone);
+        return JSON.stringify({
+          count: anonymized.length,
+          days,
+          note: 'All client PII has been stripped. Use center name + category only when writing about these milestones.',
+          milestones: anonymized,
+        });
+      }
+
+      case 'get_impact_snapshot': {
+        const period = (input.period as string) || 'this_month';
+        const impact = await fetchImpactData(period);
+        return JSON.stringify({
+          period: impact.period,
+          since: impact.since,
+          capital_accessed: impact.capital_accessed,
+          jobs_created: impact.jobs_created,
+          jobs_ft: impact.jobs_ft,
+          jobs_pt: impact.jobs_pt,
+          businesses_started: impact.businesses_started,
+          revenue_growth: impact.revenue_growth,
+          total_submissions: impact.total_submissions,
+          by_center: impact.by_center,
+          recent_activity_count: impact.recent.length,
+        });
+      }
+
       default:
         return JSON.stringify({ error: `Unknown tool: ${name}` });
     }
@@ -201,7 +263,7 @@ async function anthropicCall(
         model: MODEL,
         max_tokens: MAX_TOKENS,
         system,
-        tools: TRAINING_TOOLS,
+        tools: CHAT_TOOLS,
         messages,
       }),
     });
@@ -253,7 +315,7 @@ async function anthropicStream(
         model: MODEL,
         max_tokens: MAX_TOKENS,
         system,
-        tools: TRAINING_TOOLS,
+        tools: CHAT_TOOLS,
         stream: true,
         messages,
       }),
