@@ -26,6 +26,14 @@ export default function ResultScreen({ result }: Props) {
             {result.error}
           </div>
         )}
+        {result.neoserraResponse && (
+          <details style={{ marginTop: 12, textAlign: 'left', maxWidth: 600, margin: '12px auto 0' }}>
+            <summary style={{ cursor: 'pointer', fontSize: 14, color: '#6b7280' }}>API Response</summary>
+            <pre style={{ background: '#f3f4f6', padding: 12, borderRadius: 8, fontSize: 12, overflow: 'auto', marginTop: 8 }}>
+              {JSON.stringify(result.neoserraResponse, null, 2)}
+            </pre>
+          </details>
+        )}
         <div style={{ marginTop: 24 }}>
           <a href="/session-notes" className="s641-btn s641-btn-primary" style={{ textDecoration: 'none' }}>
             Try Again

@@ -93,32 +93,35 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Build NeoSerra counseling payload with all mandatory fields
   // Note: clients, contacts, counselors are "List" types — pass as arrays
+  // All scalar values sent as strings to match NeoSerra's expected format
   const counselingPayload: Record<string, unknown> = {
     // Client / contact / counselor linkage (array format for List types)
     clients: [payload.clientId],
     contacts: payload.contactId ? [payload.contactId] : undefined,
     counselors: payload.counselorId ? [payload.counselorId] : undefined,
 
-    // Mandatory fields
+    // Mandatory fields (all as strings)
     text: payload.subject.trim(),
     memo: payload.memo.trim(),
     date: payload.sessionDate,
-    contactDuration: formatDuration(payload.contactDuration),
+    contact: formatDuration(payload.contactDuration),
     type: payload.sessionType,
     contactType: payload.contactType,
     sbaArea: payload.counselingArea,
     fundarea: payload.fundingSource,
     centerId: payload.centerId || undefined,
-    nbrpeople: payload.nbrPeople || 1,
-
-    // Optional
+    nbrpeople: String(payload.nbrPeople || 1),
+    isReportable: 'true',
     language: payload.language || 'EN',
+    covid19: 'false',
   };
 
-  // Remove undefined values
+  // Remove undefined values so NeoSerra doesn't receive null/undefined fields
   for (const k of Object.keys(counselingPayload)) {
     if (counselingPayload[k] === undefined) delete counselingPayload[k];
   }
+
+  console.log('[session-notes/submit] Sending payload:', JSON.stringify(counselingPayload));
 
   try {
     const res = await fetch(`${base}/api/v1/counseling/`, {
@@ -137,7 +140,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       return Response.json(
         {
           success: false,
-          error: body?.message || body?.error || `NeoSerra returned ${res.status}`,
+          error: body?.exception || body?.message || body?.error || `NeoSerra returned ${res.status}`,
           neoserraResponse: body,
         },
         { status: 502 },

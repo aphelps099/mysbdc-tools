@@ -56,9 +56,13 @@ export async function submitSessionNote(payload: {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) {
-    const text = await res.text().catch(() => 'Unknown error');
-    throw new Error(`Submission failed (${res.status}): ${text}`);
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data?.success) {
+    return {
+      success: false,
+      error: data?.error || `Submission failed (${res.status})`,
+      neoserraResponse: data?.neoserraResponse,
+    };
   }
-  return res.json();
+  return data;
 }
