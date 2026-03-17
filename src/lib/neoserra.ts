@@ -1,8 +1,8 @@
 /**
- * Shared Neoserra API client — helpers and training data fetch functions.
+ * Shared Neoserra API client + backend proxy helpers.
  *
- * Uses NEOSERRA_BASE_URL and NEOSERRA_API_KEY env vars.
- * Bearer token auth per IETF RFC 6750.
+ * Neoserra direct: Uses NEOSERRA_BASE_URL and NEOSERRA_API_KEY env vars (Bearer auth).
+ * Backend proxy:   Uses BACKEND_URL for milestone log and Atlas impact data.
  */
 
 // ── Config helpers ──
@@ -107,6 +107,23 @@ export function getCenterNames(): string[] {
     }
   }
   return names;
+}
+
+/** Reverse lookup: center ID → human-readable name. */
+export function centerIdToName(centerId: string): string {
+  // Build reverse map: pick the longest alias per ID (most descriptive)
+  const reverseMap: Record<string, string> = {};
+  for (const [alias, id] of Object.entries(CENTER_MAP)) {
+    if (!reverseMap[id] || alias.length > reverseMap[id].length) {
+      reverseMap[id] = alias;
+    }
+  }
+  const name = reverseMap[centerId];
+  if (name) {
+    // Title case
+    return name.replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+  return `Center ${centerId}`;
 }
 
 // ── Types ──
@@ -231,4 +248,155 @@ export async function fetchTrainers(conferenceId: string): Promise<NeoserraTrain
   const path = `/api/v1/trainers/${encodeURIComponent(conferenceId)}`;
   const result = await neoserraGet<NeoserraTrainer[] | { data: NeoserraTrainer[] }>(path);
   return Array.isArray(result) ? result : (result.data || []);
+}
+
+// ══════════════════════════════════════════════════════════════
+// Backend proxy helpers (BACKEND_URL — not Neoserra directly)
+// ══════════════════════════════════════════════════════════════
+
+function backendUrl(): string {
+  return (process.env.BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
+}
+
+async function backendGet<T>(path: string): Promise<T> {
+  const base = backendUrl();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const url = `${base}${path}`;
+    console.log(`[backend] GET ${url}`);
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`Backend returned ${res.status}: ${text}`);
+    }
+
+    return await res.json() as T;
+  } catch (err) {
+    clearTimeout(timeout);
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('Backend request timed out after 15s');
+    }
+    throw err;
+  }
+}
+
+// ── Milestone Log ──
+
+export interface MilestoneLogEntry {
+  id: number;
+  timestamp: string;
+  name: string;
+  email: string;
+  clientId: string;
+  clientPublicId: string;
+  clientName: string;
+  centerId: string | null;
+  counselorId: string | null;
+  program: string | null;
+  categories: string[];
+  recordsCreated: number;
+  errors: string[];
+  details: { type: string; status: string }[];
+  signature: string;
+  emailNotifications: Record<string, string>;
+}
+
+interface MilestoneLogResponse {
+  count: number;
+  days: number;
+  submissions: MilestoneLogEntry[];
+}
+
+/** PII-safe milestone data for Claude. */
+export interface AnonymizedMilestone {
+  centerName: string;
+  categories: string[];
+  timestamp: string;
+  details: { type: string; status: string }[];
+}
+
+/** Strip all PII from a milestone entry. */
+export function anonymizeMilestone(entry: MilestoneLogEntry): AnonymizedMilestone {
+  return {
+    centerName: entry.centerId ? centerIdToName(entry.centerId) : 'NorCal SBDC',
+    categories: entry.categories,
+    timestamp: entry.timestamp,
+    details: entry.details,
+  };
+}
+
+/**
+ * Fetch recent milestone submissions from the backend.
+ * @param days - Number of days to look back (default 7)
+ */
+export async function fetchMilestoneLog(days = 7): Promise<MilestoneLogEntry[]> {
+  const result = await backendGet<MilestoneLogResponse>(`/api/milestones/log?days=${days}`);
+  return result.submissions || [];
+}
+
+// ── Atlas Impact Data ──
+
+export interface CenterImpact {
+  center_id: string;
+  center_name?: string;
+  capital: number;
+  jobs: number;
+  businesses: number;
+  revenue: number;
+  clients: number;
+}
+
+export interface ImpactData {
+  period: string;
+  since: string;
+  capital_accessed: number;
+  jobs_created: number;
+  jobs_ft: number;
+  jobs_pt: number;
+  businesses_started: number;
+  revenue_growth: number;
+  by_center: CenterImpact[];
+  total_submissions: number;
+  recent: { timestamp: string; center_id: string; category: string; delta: number }[];
+}
+
+/**
+ * Fetch impact data from the Atlas backend.
+ * The `recent` array is stripped of client_name before return.
+ * @param period - 'this_month' | 'quarter' | 'ytd' | 'all_time'
+ */
+export async function fetchImpactData(period = 'this_month'): Promise<ImpactData> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const raw = await backendGet<any>(`/api/atlas/impact?period=${encodeURIComponent(period)}`);
+
+  // Strip PII from recent activity entries
+  const recent = (raw.recent || []).map((r: Record<string, unknown>) => ({
+    timestamp: r.timestamp,
+    center_id: r.center_id,
+    category: r.category,
+    delta: r.delta,
+    // Deliberately omit: client_name, submitter_name, client_public_id
+  }));
+
+  return {
+    period: raw.period,
+    since: raw.since,
+    capital_accessed: raw.capital_accessed || 0,
+    jobs_created: raw.jobs_created || 0,
+    jobs_ft: raw.jobs_ft || 0,
+    jobs_pt: raw.jobs_pt || 0,
+    businesses_started: raw.businesses_started || 0,
+    revenue_growth: raw.revenue_growth || 0,
+    by_center: raw.by_center || [],
+    total_submissions: raw.total_submissions || 0,
+    recent,
+  };
 }

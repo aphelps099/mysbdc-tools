@@ -244,9 +244,9 @@ export default function Chat() {
 
   // ── Handle submit ──
   const handleSubmit = useCallback(
-    async (e?: FormEvent) => {
+    async (e?: FormEvent, overrideText?: string) => {
       e?.preventDefault();
-      const trimmed = input.trim();
+      const trimmed = (overrideText || input).trim();
       if (!trimmed || isStreaming) return;
 
       // Unlock detection
@@ -356,6 +356,12 @@ export default function Chat() {
     [input, isStreaming, messages, unlocked, files],
   );
 
+  // Suggestion chip click — submit with override text
+  const handleSuggestion = useCallback(
+    (text: string) => handleSubmit(undefined, text),
+    [handleSubmit],
+  );
+
   // Enter to submit (Shift+Enter for newline)
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -443,6 +449,28 @@ export default function Chat() {
               </div>
             </div>
           ))}
+
+          {/* ── Suggestion chips (shown only on fresh conversation) ── */}
+          {messages.length === 1 && !isStreaming && (
+            <div className="chat-suggestions">
+              {[
+                'What tools do we have?',
+                'Show me a success spotlight',
+                "What's our impact this month?",
+                'Recent trainings',
+                'Draft a social post',
+              ].map((suggestion) => (
+                <button
+                  key={suggestion}
+                  className="chat-suggestion-chip"
+                  onClick={() => handleSuggestion(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
       </div>
