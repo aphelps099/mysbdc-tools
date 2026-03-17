@@ -25,7 +25,7 @@ interface FileAttachment {
 const WELCOME_MESSAGE: Message = {
   role: 'assistant',
   content:
-    "I'm your NorCal SBDC brand assistant. I can help you draft social posts, email copy, newsletter content, success stories, talking points, and more.\n\nWhat would you like to create?",
+    "I'm your NorCal SBDC assistant. I can help you draft brand content, look up training events and attendance data, and answer questions about our tools.\n\nWhat can I help you with?",
 };
 
 const MAX_FILE_SIZE = 100_000;
