@@ -63,6 +63,7 @@ export async function submitSessionNote(payload: {
       success: false,
       error: data?.error || `Submission failed (${res.status})`,
       neoserraResponse: data?.neoserraResponse,
+      sentPayload: data?.sentPayload,
       relationshipWarning: data?.relationshipWarning,
     };
   }

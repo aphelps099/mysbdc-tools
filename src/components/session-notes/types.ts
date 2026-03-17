@@ -153,6 +153,7 @@ export interface SessionNoteResult {
   error?: string;
   relationshipWarning?: string;
   neoserraResponse?: Record<string, unknown>;
+  sentPayload?: Record<string, unknown>;
 }
 
 // ─── Steps ──────────────────────────────────────────────────

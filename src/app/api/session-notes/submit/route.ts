@@ -33,6 +33,12 @@ function formatDuration(minutes: number): string {
   return hours.toFixed(1);
 }
 
+/** Strip control characters that NeoSerra's parser may reject. Keeps \n and \t. */
+function sanitize(text: string): string {
+  // eslint-disable-next-line no-control-regex
+  return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+}
+
 /** Ensure a client↔contact relationship exists in NeoSerra before creating counseling records. */
 async function ensureRelationship(
   base: string,
@@ -146,11 +152,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     type: payload.sessionType,
     contactType: payload.contactType,
     sbaArea: payload.counselingArea,
-    text: payload.subject.trim(),
+    text: sanitize(payload.subject.trim()),
     fundarea: payload.fundingSource,
     centerId: payload.centerId || undefined,
     nbrpeople: String(payload.nbrPeople || 1),
-    memo: payload.memo.trim(),
+    memo: sanitize(payload.memo.trim()),
     isReportable: 'true',
 
     // Optional
@@ -201,8 +207,9 @@ export async function POST(req: NextRequest): Promise<Response> {
       return Response.json(
         {
           success: false,
-          error: body?.message || body?.error || `NeoSerra returned ${res.status}`,
+          error: body?.message || body?.exception || body?.error || `NeoSerra returned ${res.status}`,
           neoserraResponse: body,
+          sentPayload: counselingPayload,
           ...(relationshipWarning ? { relationshipWarning } : {}),
         },
         { status: 502 },

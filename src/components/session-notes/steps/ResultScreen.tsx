@@ -34,6 +34,14 @@ export default function ResultScreen({ result }: Props) {
             </pre>
           </details>
         )}
+        {result.sentPayload && (
+          <details style={{ marginTop: 8, fontSize: 12, textAlign: 'left', color: '#9ca3af' }}>
+            <summary style={{ cursor: 'pointer' }}>Sent Payload</summary>
+            <pre style={{ marginTop: 8, padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 6, overflow: 'auto', maxHeight: 300 }}>
+              {JSON.stringify(result.sentPayload, null, 2)}
+            </pre>
+          </details>
+        )}
         <div style={{ marginTop: 24 }}>
           <a href="/session-notes" className="s641-btn s641-btn-primary" style={{ textDecoration: 'none' }}>
             Try Again
