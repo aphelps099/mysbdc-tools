@@ -28,7 +28,7 @@ export default function TitlesPage() {
             <a
               href="/"
               className="text-[10px] font-bold tracking-[0.1em] uppercase no-underline transition-colors duration-150"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--p-ink, #0f1c2e)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--p-muted, #8a8a8a)'; }}
             >
@@ -37,14 +37,14 @@ export default function TitlesPage() {
             <div className="w-px h-4" style={{ background: 'var(--p-line, rgba(0,0,0,0.1))' }} />
             <span
               className="text-[11px] font-bold tracking-[0.08em] uppercase"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-ink, #0f1c2e)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-ink, #0f1c2e)' }}
             >
               Title Cards
             </span>
           </div>
           <span
             className="text-[9px] font-medium tracking-[0.08em] uppercase"
-            style={{ fontFamily: 'var(--mono)', color: 'var(--p-muted, #8a8a8a)' }}
+            style={{ fontFamily: "'proxima-nova', monospace", color: 'var(--p-muted, #8a8a8a)' }}
           >
             motion graphics
           </span>

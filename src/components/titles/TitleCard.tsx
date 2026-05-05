@@ -184,7 +184,7 @@ export default function TitleCard() {
               <span
                 className={animClass('tc-kicker', baseDelay * speed)}
                 style={{
-                  fontFamily: "var(--sans, 'GT America', sans-serif)",
+                  fontFamily: "'proxima-nova', sans-serif",
                   fontSize: 11,
                   fontWeight: 700,
                   letterSpacing: '0.14em',
@@ -199,7 +199,7 @@ export default function TitleCard() {
             {/* Title — word-by-word reveal */}
             <h1
               style={{
-                fontFamily: "var(--display, 'GT Era Display', sans-serif)",
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 'clamp(28px, 4.5vw, 56px)',
                 fontWeight: 300,
                 lineHeight: 1.15,
@@ -242,7 +242,7 @@ export default function TitleCard() {
               <p
                 className={animClass('tc-subtitle', (baseDelay + 150 + titleWords.length * wordDelay + 250) * speed)}
                 style={{
-                  fontFamily: "var(--era-text, 'GT Era Text', sans-serif)",
+                  fontFamily: "'proxima-nova', sans-serif",
                   fontSize: 'clamp(13px, 1.6vw, 18px)',
                   fontWeight: 400,
                   color: colors.muted,
@@ -280,7 +280,7 @@ export default function TitleCard() {
               position: 'absolute',
               bottom: 20,
               right: 28,
-              fontFamily: "var(--sans, 'GT America', sans-serif)",
+              fontFamily: "'proxima-nova', sans-serif",
               fontSize: 9,
               fontWeight: 500,
               letterSpacing: '0.1em',
@@ -305,7 +305,7 @@ export default function TitleCard() {
                 borderRadius: 6,
                 padding: '6px 12px',
                 fontSize: 10,
-                fontFamily: "var(--sans)",
+                fontFamily: "'proxima-nova', sans-serif",
                 letterSpacing: '0.06em',
                 opacity: 0.5,
                 transition: 'opacity 150ms ease',
@@ -333,7 +333,7 @@ export default function TitleCard() {
           <div className="flex-[0.3]">
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-1.5"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Kicker
             </label>
@@ -344,7 +344,7 @@ export default function TitleCard() {
               placeholder="INTRODUCING"
               className="w-full"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: '0.08em',
@@ -364,7 +364,7 @@ export default function TitleCard() {
           <div className="flex-1">
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-1.5"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Title
             </label>
@@ -375,7 +375,7 @@ export default function TitleCard() {
               placeholder="Your Title Here"
               className="w-full"
               style={{
-                fontFamily: "var(--display, 'GT Era Display', sans-serif)",
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 16,
                 fontWeight: 300,
                 padding: '8px 12px',
@@ -395,7 +395,7 @@ export default function TitleCard() {
         <div className="mb-5">
           <label
             className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-1.5"
-            style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+            style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
           >
             Subtitle
           </label>
@@ -406,7 +406,7 @@ export default function TitleCard() {
             placeholder="Supporting text goes here"
             className="w-full"
             style={{
-              fontFamily: "var(--era-text, 'GT Era Text', sans-serif)",
+              fontFamily: "'proxima-nova', sans-serif",
               fontSize: 14,
               fontWeight: 400,
               padding: '8px 12px',
@@ -429,7 +429,7 @@ export default function TitleCard() {
           <div>
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-2"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Color
             </label>
@@ -458,7 +458,7 @@ export default function TitleCard() {
           <div>
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-2"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Layout
             </label>
@@ -469,7 +469,7 @@ export default function TitleCard() {
                   onClick={() => setLayout(l.id)}
                   className="cursor-pointer transition-all duration-150"
                   style={{
-                    fontFamily: 'var(--sans)',
+                    fontFamily: "'proxima-nova', sans-serif",
                     fontSize: 10,
                     fontWeight: layout === l.id ? 700 : 500,
                     padding: '5px 10px',
@@ -490,7 +490,7 @@ export default function TitleCard() {
           <div>
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-2"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Speed
             </label>
@@ -501,7 +501,7 @@ export default function TitleCard() {
                   onClick={() => setSpeed(s)}
                   className="cursor-pointer transition-all duration-150"
                   style={{
-                    fontFamily: 'var(--mono)',
+                    fontFamily: "'proxima-nova', monospace",
                     fontSize: 10,
                     fontWeight: speed === s ? 700 : 400,
                     padding: '5px 8px',
@@ -523,7 +523,7 @@ export default function TitleCard() {
           <div>
             <label
               className="block text-[10px] font-bold tracking-[0.1em] uppercase mb-2"
-              style={{ fontFamily: 'var(--sans)', color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
               Grain
             </label>
@@ -531,7 +531,7 @@ export default function TitleCard() {
               onClick={() => setShowGrain((g) => !g)}
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 10,
                 fontWeight: 600,
                 padding: '5px 12px',
@@ -554,7 +554,7 @@ export default function TitleCard() {
               onClick={play}
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.06em',
@@ -576,7 +576,7 @@ export default function TitleCard() {
               onClick={exit}
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.06em',
@@ -596,7 +596,7 @@ export default function TitleCard() {
               onClick={loop}
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.06em',
@@ -615,7 +615,7 @@ export default function TitleCard() {
               onClick={reset}
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 11,
                 fontWeight: 600,
                 padding: '9px 14px',
@@ -633,7 +633,7 @@ export default function TitleCard() {
               title="Fullscreen (F)"
               className="cursor-pointer transition-all duration-150"
               style={{
-                fontFamily: 'var(--sans)',
+                fontFamily: "'proxima-nova', sans-serif",
                 fontSize: 11,
                 fontWeight: 600,
                 padding: '9px 14px',
@@ -652,7 +652,7 @@ export default function TitleCard() {
         <div
           className="mt-3 text-right"
           style={{
-            fontFamily: 'var(--mono)',
+            fontFamily: "'proxima-nova', monospace",
             fontSize: 9,
             color: 'var(--p-muted, #8a8a8a)',
             letterSpacing: '0.04em',

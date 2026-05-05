@@ -37,9 +37,9 @@ type LayoutId = typeof LAYOUTS[number]['id'];
 
 // ── Title font options ──
 const FONTS = [
-  { id: 'extended', label: 'Extended',  family: "var(--extended, 'GT America Extended', sans-serif)", weight: 500, spacing: '-0.03em' },
-  { id: 'tobias',   label: 'Tobias',    family: "var(--serif, 'Tobias', Georgia, serif)",             weight: 500, spacing: '-0.02em' },
-  { id: 'sans',     label: 'Sans',      family: "var(--sans, 'GT America', sans-serif)",              weight: 600, spacing: '-0.02em' },
+  { id: 'extended', label: 'Nova Bold',  family: "'proxima-nova', sans-serif",  weight: 700, spacing: '-0.03em' },
+  { id: 'tobias',   label: 'Sera',       family: "'proxima-sera', serif",       weight: 500, spacing: '-0.02em' },
+  { id: 'sans',     label: 'Nova',       family: "'proxima-nova', sans-serif",  weight: 400, spacing: '-0.02em' },
 ] as const;
 
 type FontId = typeof FONTS[number]['id'];
@@ -199,7 +199,7 @@ export default function TFGTitleCard() {
               <span
                 className={animClass('tc-kicker', baseDelay * speed)}
                 style={{
-                  fontFamily: "var(--sans, 'GT America', sans-serif)",
+                  fontFamily: "'proxima-nova', sans-serif",
                   fontSize: 11,
                   fontWeight: 700,
                   letterSpacing: '0.14em',
@@ -257,7 +257,7 @@ export default function TFGTitleCard() {
               <p
                 className={animClass('tc-subtitle', (baseDelay + 150 + titleWords.length * wordDelay + 250) * speed)}
                 style={{
-                  fontFamily: "var(--era-text, 'GT Era Text', sans-serif)",
+                  fontFamily: "'proxima-nova', sans-serif",
                   fontSize: 'clamp(13px, 1.6vw, 18px)',
                   fontWeight: 400,
                   color: colors.muted,
@@ -298,7 +298,7 @@ export default function TFGTitleCard() {
               position: 'absolute',
               bottom: 20,
               right: 28,
-              fontFamily: "var(--mono, 'GT America Mono', monospace)",
+              fontFamily: "'proxima-nova', monospace",
               fontSize: 9,
               fontWeight: 500,
               letterSpacing: '0.1em',
@@ -323,7 +323,7 @@ export default function TFGTitleCard() {
                 borderRadius: 6,
                 padding: '6px 12px',
                 fontSize: 10,
-                fontFamily: "var(--sans)",
+                fontFamily: "'proxima-nova', sans-serif",
                 letterSpacing: '0.06em',
                 opacity: 0.5,
                 transition: 'opacity 150ms ease',
@@ -516,7 +516,7 @@ export default function TFGTitleCard() {
         <div
           className="mt-3 text-right"
           style={{
-            fontFamily: 'var(--mono)',
+            fontFamily: "'proxima-nova', monospace",
             fontSize: 9,
             color: '#6e7681',
             letterSpacing: '0.04em',

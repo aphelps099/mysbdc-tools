@@ -26,7 +26,7 @@ export default function TFGTitlesPage() {
           <a
             href="/"
             className="text-[10px] font-bold tracking-[0.1em] uppercase no-underline transition-colors duration-150"
-            style={{ fontFamily: 'var(--sans)', color: '#6e7681' }}
+            style={{ fontFamily: "'proxima-nova', sans-serif", color: '#6e7681' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#e2e6eb'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#6e7681'; }}
           >
@@ -35,14 +35,14 @@ export default function TFGTitlesPage() {
           <div className="w-px h-4" style={{ background: 'rgba(255,255,255,0.1)' }} />
           <span
             className="text-[11px] font-bold tracking-[0.08em] uppercase"
-            style={{ fontFamily: 'var(--sans)', color: '#e2e6eb' }}
+            style={{ fontFamily: "'proxima-nova', sans-serif", color: '#e2e6eb' }}
           >
             TFG Title Cards
           </span>
         </div>
         <span
           className="text-[9px] font-medium tracking-[0.08em] uppercase"
-          style={{ fontFamily: 'var(--mono)', color: '#4eff00' }}
+          style={{ fontFamily: "'proxima-nova', monospace", color: '#4eff00' }}
         >
           tech futures group
         </span>
