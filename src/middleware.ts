@@ -38,24 +38,48 @@ async function hmacSha256(secret: string, message: string): Promise<string> {
   return bytesToHex(new Uint8Array(sig));
 }
 
-async function verifyToken(token: string): Promise<boolean> {
+type SessionScope = 'admin' | 'inject';
+
+/**
+ * Verify the signed session token. Returns the session scope, or null when
+ * the token is missing/invalid. The scope lives inside the signed payload
+ * (`scope:nonce:timestamp`); legacy payloads without a scope prefix are
+ * treated as full-access admin sessions.
+ */
+async function verifyToken(token: string): Promise<SessionScope | null> {
   const lastDot = token.lastIndexOf('.');
-  if (lastDot === -1) return false;
+  if (lastDot === -1) return null;
   const payload = token.slice(0, lastDot);
   const sig = token.slice(lastDot + 1);
 
   const expected = await hmacSha256(getSecret(), payload);
 
   // Constant-time comparison
-  if (sig.length !== expected.length) return false;
+  if (sig.length !== expected.length) return null;
   const a = hexToBytes(sig);
   const b = hexToBytes(expected);
-  if (a.length !== b.length) return false;
+  if (a.length !== b.length) return null;
   let diff = 0;
   for (let i = 0; i < a.length; i++) {
     diff |= a[i] ^ b[i];
   }
-  return diff === 0;
+  if (diff !== 0) return null;
+
+  const parts = payload.split(':');
+  return parts.length >= 3 && parts[0] === 'inject' ? 'inject' : 'admin';
+}
+
+/** Paths an inject-scoped session may reach: the inject page + the two APIs its UI calls. */
+const INJECT_ALLOWED_PATHS = [
+  '/admin/inject-r4i',
+  '/api/admin/inject-r4i',
+  '/api/admin/parse-r4i-email',
+];
+
+function isInjectAllowed(pathname: string): boolean {
+  return INJECT_ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
 }
 
 export async function middleware(req: NextRequest) {
@@ -65,10 +89,22 @@ export async function middleware(req: NextRequest) {
   }
 
   const token = req.cookies.get(COOKIE_NAME)?.value;
+  const scope = token ? await verifyToken(token) : null;
 
-  if (!token || !(await verifyToken(token))) {
+  if (!scope) {
     const loginUrl = new URL('/login', req.url);
     return NextResponse.redirect(loginUrl);
+  }
+
+  // Inject-scoped sessions can reach ONLY the inject tool
+  if (scope === 'inject' && !isInjectAllowed(req.nextUrl.pathname)) {
+    if (req.nextUrl.pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'This session is limited to the inject tool' },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL('/admin/inject-r4i', req.url));
   }
 
   return NextResponse.next();
