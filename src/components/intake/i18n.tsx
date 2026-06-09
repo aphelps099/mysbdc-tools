@@ -32,6 +32,7 @@ const translations: Record<string, Record<Locale, string>> = {
   'welcome.firstName': { en: 'First Name', es: 'Nombre', vi: 'Tên', zh: '名', fr: 'Prénom' },
   'welcome.lastName': { en: 'Last Name', es: 'Apellido', vi: 'Họ', zh: '姓', fr: 'Nom' },
   'welcome.email': { en: 'Email', es: 'Correo electrónico', vi: 'Email', zh: '电子邮件', fr: 'E-mail' },
+  'welcome.emailInvalid': { en: 'Please enter a valid email address (e.g. jane@example.com).', es: 'Ingrese un correo electrónico válido (ej. jane@example.com).', vi: 'Vui lòng nhập địa chỉ email hợp lệ (ví dụ: jane@example.com).', zh: '请输入有效的电子邮件地址（例如 jane@example.com）。', fr: 'Veuillez saisir une adresse e-mail valide (ex. jane@example.com).' },
   'welcome.phone': { en: 'Phone', es: 'Teléfono', vi: 'Điện thoại', zh: '电话', fr: 'Téléphone' },
   'welcome.address': { en: 'Home Address', es: 'Dirección', vi: 'Địa chỉ nhà', zh: '家庭住址', fr: 'Adresse' },
   'welcome.city': { en: 'City', es: 'Ciudad', vi: 'Thành phố', zh: '城市', fr: 'Ville' },

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { IntakeData } from '../types';
 import { resolveCenter, checkEmail, type ResolvedCenter } from '../smart641-api';
 import { useLanguage } from '../i18n';
+import { isValidEmail } from '@/lib/validate';
 
 interface Props {
   data: IntakeData;
@@ -29,6 +30,7 @@ export default function WelcomeStep({ data, onChange, onNext }: Props) {
   const { t } = useLanguage();
   const [detectedCenter, setDetectedCenter] = useState<ResolvedCenter | null>(null);
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null);
+  const [emailTouched, setEmailTouched] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const emailDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -70,10 +72,15 @@ export default function WelcomeStep({ data, onChange, onNext }: Props) {
     return () => { if (emailDebounceRef.current) clearTimeout(emailDebounceRef.current); };
   }, [data.email]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // NeoSerra hard-rejects malformed emails (kills the whole client creation),
+  // so the email must be well-formed — not just non-empty — to continue.
+  const emailValid = isValidEmail(data.email);
+  const showEmailError = emailTouched && data.email.trim() !== '' && !emailValid;
+
   const valid =
     data.firstName.trim() &&
     data.lastName.trim() &&
-    data.email.trim() &&
+    emailValid &&
     data.phone.trim() &&
     data.streetAddress.trim() &&
     data.city.trim() &&
@@ -117,7 +124,11 @@ export default function WelcomeStep({ data, onChange, onNext }: Props) {
               placeholder="jane@example.com"
               value={data.email}
               onChange={(e) => onChange({ email: e.target.value })}
+              onBlur={() => setEmailTouched(true)}
             />
+            {showEmailError && (
+              <p className="s641-field-error">{t('welcome.emailInvalid')}</p>
+            )}
           </div>
           <div className="s641-field">
             <label className="s641-label">{t('welcome.phone')}</label>

@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import type { TFGApplicationData } from '../types';
+import { isValidEmail } from '@/lib/validate';
 
 interface Props {
   data: TFGApplicationData;
@@ -16,11 +18,18 @@ const STATES = [
 ];
 
 export default function CompanyContactStep({ data, onChange, onNext }: Props) {
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  // NeoSerra hard-rejects malformed emails (kills the whole client creation),
+  // so the email must be well-formed — not just non-empty — to continue.
+  const emailValid = isValidEmail(data.email);
+  const showEmailError = emailTouched && data.email.trim() !== '' && !emailValid;
+
   const valid =
     data.companyName.trim() &&
     data.firstName.trim() &&
     data.lastName.trim() &&
-    data.email.trim() &&
+    emailValid &&
     data.phone.trim() &&
     data.streetAddress.trim() &&
     data.city.trim() &&
@@ -93,7 +102,13 @@ export default function CompanyContactStep({ data, onChange, onNext }: Props) {
                 placeholder="jane@example.com"
                 value={data.email}
                 onChange={(e) => onChange({ email: e.target.value })}
+                onBlur={() => setEmailTouched(true)}
               />
+              {showEmailError && (
+                <p className="s641-field-error">
+                  Please enter a valid email address (e.g. jane@example.com).
+                </p>
+              )}
             </div>
             <div className="tfg-box-cell">
               <label className="s641-label">Phone *</label>
