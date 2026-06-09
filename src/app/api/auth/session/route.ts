@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Password required' }, { status: 400 });
   }
 
-  // Timing-safe comparison — check main password first, then lender password
+  // Timing-safe comparison — check main password first, then scoped passwords
   const a = Buffer.from(body.password);
   const b = Buffer.from(appPassword);
   const mainMatch = a.length === b.length && timingSafeEqual(a, b);
@@ -72,19 +72,32 @@ export async function POST(req: NextRequest) {
     milestonesMatch = a.length === d.length && timingSafeEqual(a, d);
   }
 
-  if (!mainMatch && !lenderMatch && !milestonesMatch) {
+  // Fourth password: INJECT_PASSWORD → session scoped to ONLY the inject tool
+  const injectPassword = process.env.INJECT_PASSWORD;
+  let injectMatch = false;
+  if (!mainMatch && !lenderMatch && !milestonesMatch && injectPassword) {
+    const e = Buffer.from(injectPassword);
+    injectMatch = a.length === e.length && timingSafeEqual(a, e);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
-  // Create signed session token
+  // Create signed session token. The scope is baked into the signed payload
+  // so it cannot be altered client-side; middleware restricts inject-scoped
+  // sessions to the inject tool only.
+  const scope = injectMatch ? 'inject' : 'admin';
   const nonce = randomBytes(16).toString('hex');
-  const payload = `${nonce}:${Date.now()}`;
+  const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
 
   const res = NextResponse.json({
     ok: true,
+    scope,
     ...(lenderMatch ? { redirect: '/brand/lender-resources' } : {}),
     ...(milestonesMatch ? { redirect: '/milestones' } : {}),
+    ...(injectMatch ? { redirect: '/admin/inject-r4i' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
