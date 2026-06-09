@@ -10,6 +10,7 @@ import {
   type RoadmapApplicationData,
   createEmptyRoadmapApplication,
 } from '@/components/roadmap/types';
+import { isValidEmail } from '@/lib/validate';
 
 /* ═══════════════════════════════════════════════════════
    AdHocForm — the inject-R4I editable form.
@@ -293,6 +294,11 @@ export default function AdHocForm() {
         <Row>
           <Field label="Email">
             <input value={form.email} onChange={(e) => set('email', e.target.value)} style={inputStyle} />
+            {form.email.trim() !== '' && !isValidEmail(form.email) && (
+              <span style={{ display: 'block', color: '#f87171', fontSize: 12, marginTop: 4 }}>
+                Not a valid email — NeoSerra will reject the intake step.
+              </span>
+            )}
           </Field>
           <Field label="Phone" hint="Digits only">
             <input value={form.phone} onChange={(e) => set('phone', e.target.value)} style={inputStyle} />
