@@ -97,25 +97,23 @@ button{font-family:var(--sans);cursor:pointer;}
 .jrow .t{font-size:15px;font-weight:600;color:var(--navy);}
 .jrow .s{font-size:12px;color:var(--muted);margin-top:2px;}
 
-/* attended flip */
-.att{display:flex;justify-content:space-between;align-items:center;gap:16px;}
-.badge{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:14px;background:var(--sand);color:var(--muted);transition:.3s;}
+/* attendance roster (staff view) */
+.rr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink);}
+.rr.more{color:var(--muted);font-size:12.5px;}
+.badge{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:13px;background:var(--sand);color:var(--muted);transition:.3s;}
 .badge.ok{background:#E9F4EC;color:var(--green);}
+.badge.no{background:#FBEFF1;color:var(--red);}
 
 /* 641 demo */
 .q{font-family:var(--serif);font-size:19px;color:var(--navy);margin-bottom:16px;}
 .opts{display:flex;flex-direction:column;gap:9px;}
 .opts button{text-align:left;border:1px solid var(--line);border-radius:8px;padding:13px 16px;background:#fff;font-size:14px;color:var(--ink);transition:.15s;}
 .opts button:hover{border-color:var(--blue);}
-.scorebox{display:none;text-align:center;}
+.scorebox{display:none;}
 .scorebox.show{display:block;animation:tin .4s ease both;}
-.dial{width:128px;height:128px;border-radius:50%;margin:6px auto 16px;background:conic-gradient(var(--green) 0 0%, var(--sand) 0% 100%);display:flex;align-items:center;justify-content:center;}
-.dial .in{width:98px;height:98px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.dial .s{font-family:var(--serif);font-size:34px;color:var(--navy);line-height:1;}
-.dial .l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-.routeline{font-size:14px;color:var(--muted);}
-.routeline b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);margin-bottom:2px;}
-.routeline b.fast{color:var(--red);}
+.mava{width:46px;height:46px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex:none;}
+.pri{color:var(--red);font-weight:600;}
+.std{color:var(--muted);}
 
 /* win demo */
 .chips{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
@@ -229,16 +227,22 @@ button{font-family:var(--sans);cursor:pointer;}
   </div>
 </section>
 
-<!-- 5 · ATTENDANCE -->
+<!-- 5 · ATTENDANCE (staff side) -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker">Behind the scenes</div>
-    <h2>Attendance records itself.</h2>
-    <p class="sub">The morning after every training, every file is already up to date. No sign-in sheets. No spreadsheets.</p>
+    <div class="kicker">For staff — clients never see this</div>
+    <h2>The paperwork does itself.</h2>
+    <p class="sub">After every training, attendance lands in each client's file automatically — ready for SBA reporting. Staff wake up to finished paperwork.</p>
     <div class="stage">
-      <div class="card att">
-        <div><div class="t" style="font-size:15px;font-weight:600;color:var(--navy);">Getting Loan-Ready</div><div class="s" style="font-size:12px;color:var(--muted);margin-top:2px;">Tuesday's session</div></div>
-        <span class="badge" id="attBadge">Pending</span>
+      <div class="card">
+        <div style="margin-bottom:4px;">
+          <div style="font-size:15px;font-weight:600;color:var(--navy);">Getting Loan-Ready</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px;">Tuesday's session · 23 registered</div>
+        </div>
+        <div class="rr"><span>M. Velasquez</span><span class="badge">Pending</span></div>
+        <div class="rr"><span>A. Nguyen</span><span class="badge">Pending</span></div>
+        <div class="rr"><span>J. Ortiz</span><span class="badge">Pending</span></div>
+        <div class="rr more" id="rosterMore"><span>+ 20 more</span><span class="badge">Pending</span></div>
       </div>
       <div style="text-align:center;"><button class="btn gh replay" id="morningBtn">☀ The next morning</button></div>
     </div>
@@ -250,18 +254,24 @@ button{font-family:var(--sans);cursor:pointer;}
   <div class="wrap">
     <div class="kicker">Onboarding</div>
     <h2>A 641 you'll actually finish.</h2>
-    <p class="sub">Friendly questions, saved as you go. Your answers route you to the right start — instantly.</p>
+    <p class="sub">Friendly questions, saved as you go. Everyone gets an advisor — your answers just help us match the right one, fast.</p>
     <div class="stage">
       <div class="card" id="wizCard">
         <div class="q">How soon are you hoping to access capital?</div>
         <div class="opts">
-          <button data-score="100" data-fast="1">Within the next 90 days</button>
-          <button data-score="74">In 3–6 months</button>
-          <button data-score="48">Just exploring for now</button>
+          <button data-adv="D. Reyes" data-spec="Finance &amp; capital readiness" data-pri="1">Within the next 90 days</button>
+          <button data-adv="D. Reyes" data-spec="Finance &amp; capital readiness">In 3–6 months</button>
+          <button data-adv="S. Okafor" data-spec="Startup &amp; business planning">Just exploring for now</button>
         </div>
-        <div class="scorebox" id="scoreBox">
-          <div class="dial" id="dial"><div class="in"><span class="s" id="dialN">0</span><span class="l">Readiness</span></div></div>
-          <div class="routeline" id="routeLine"></div>
+        <div class="scorebox" id="matchBox">
+          <div style="display:flex;align-items:center;gap:14px;text-align:left;">
+            <span class="mava" id="matchAva">DR</span>
+            <div>
+              <div style="font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);">You're matched.</div>
+              <div style="font-size:13.5px;color:var(--ink);margin-top:2px;" id="matchWho"></div>
+              <div style="font-size:12.5px;margin-top:6px;" id="matchWhen"></div>
+            </div>
+          </div>
           <button class="btn gh replay" id="wizReplay">↺ Try another answer</button>
         </div>
       </div>
@@ -387,40 +397,35 @@ joinBtn.addEventListener('click',()=>{
   toast('Opening your personal room…','No meeting codes. No passcodes.');
 });
 
-/* 5 · attendance */
+/* 5 · attendance (staff view) */
 const morningBtn=document.getElementById('morningBtn');
 morningBtn.addEventListener('click',()=>{
   if(morningBtn.classList.contains('done'))return;
   morningBtn.classList.add('done');morningBtn.textContent='☀ Wednesday, 7:00 AM';
-  setTimeout(()=>{
-    const b=document.getElementById('attBadge');
-    b.classList.add('ok');b.textContent='Attended ✓';
-    toast('Recorded to your file','SBA-ready — and nobody lifted a finger');
-  },500);
+  const badges=[...document.querySelectorAll('.rr .badge')];
+  const states=[['ok','Attended ✓'],['ok','Attended ✓'],['no','No-show'],['ok','20 updated ✓']];
+  badges.forEach((b,i)=>setTimeout(()=>{
+    b.classList.add(states[i][0]);b.textContent=states[i][1];
+    if(i===badges.length-1)toast('23 files updated overnight','Zero data entry — SBA reporting already done');
+  },400+i*450));
 });
 
-/* 6 · 641 */
+/* 6 · 641 — everyone gets an advisor */
 const wizCard=document.getElementById('wizCard');
 wizCard.querySelectorAll('.opts button').forEach(b=>b.addEventListener('click',()=>{
-  const score=+b.dataset.score, fast=!!b.dataset.fast;
   wizCard.querySelector('.q').style.display='none';
   wizCard.querySelector('.opts').style.display='none';
-  const box=document.getElementById('scoreBox');box.classList.add('show');
-  const route=document.getElementById('routeLine');
-  route.innerHTML = fast
-    ? '<b class="fast">Fast-track</b>Straight to red-carpet advising — urgent capital is a priority signal.'
-    : score>=60
-      ? '<b>Advising-ready</b>Paired with an advisor + a 15-minute welcome call.'
-      : '<b>Training-first</b>Starter modules build readiness — advising follows.';
-  const dial=document.getElementById('dial'),dn=document.getElementById('dialN');
-  let v=0;const col=fast?'var(--red)':score>=60?'var(--green)':'var(--blue)';
-  const iv=setInterval(()=>{v+=2;if(v>=score){v=score;clearInterval(iv);}
-    dn.textContent=v;
-    dial.style.background='conic-gradient('+col+' 0 '+v+'%, var(--sand) '+v+'% 100%)';},16);
-  toast('Saved automatically','Matched with your Success Team');
+  document.getElementById('matchBox').classList.add('show');
+  const adv=b.dataset.adv, spec=b.dataset.spec, pri=!!b.dataset.pri;
+  document.getElementById('matchAva').textContent=adv.split(/[\s.]+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('matchWho').textContent=adv+' · '+spec;
+  document.getElementById('matchWhen').innerHTML=pri
+    ? '<span class="pri">Priority welcome call — this week.</span>'
+    : '<span class="std">Your 15-minute welcome call invite is on its way.</span>';
+  toast('Saved automatically','Advisor matched — welcome call coming');
 }));
 document.getElementById('wizReplay').addEventListener('click',()=>{
-  document.getElementById('scoreBox').classList.remove('show');
+  document.getElementById('matchBox').classList.remove('show');
   wizCard.querySelector('.q').style.display='';
   wizCard.querySelector('.opts').style.display='';
 });
