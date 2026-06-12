@@ -196,9 +196,10 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
         <h1>Success Atlas</h1>
       </div>
       <span class="sub">a fitness tracker for economic&nbsp;development</span>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--red);padding:4px 9px;border-radius:3px;">Internal preview · real client data</span>
     </div>
     <div class="topbar-actions">
-      <span class="live"><span class="dot"></span> Live · syncs from Neoserra</span>
+      <span class="live"><span class="dot"></span> Source: SBDC Milestones feed</span>
       <div class="seg" role="group" aria-label="View mode">
         <button id="viewMap" aria-pressed="true">Map</button>
         <button id="viewData" aria-pressed="false">Data</button>
@@ -274,6 +275,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
         <li><span class="dot9" style="background:var(--t-revenue)"></span>Revenue growth</li>
         <li><span class="dot9" style="background:var(--t-start)"></span>Business start</li>
       </ul>
+      <p style="margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);max-width:190px;">Pins for milestones pending center attribution are placed at illustrative locations.</p>
     </div>
   </div>
 
@@ -288,7 +290,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
 <div class="wrap">
   <section class="dataview" id="dataview" aria-label="Impact data, non-map view">
     <h2>Impact data — list &amp; table view</h2>
-    <p class="hint">A non-map equivalent of every milestone on the Atlas, for screen readers and detailed review. Reflects the active filters above. (WCAG 2.2 AA)</p>
+    <p class="hint">A non-map equivalent of every milestone on the Atlas, for screen readers and detailed review. Reflects the active filters above. Milestones without center attribution appear under &ldquo;Pending.&rdquo; (WCAG 2.2 AA)</p>
 
     <h3 style="font-size:15px;color:var(--navy-800);margin-bottom:12px;">Concentration by county</h3>
     <div class="county-grid" id="countyGrid"></div>
@@ -306,7 +308,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
             <th scope="col">Center</th>
             <th scope="col">County</th>
             <th scope="col" style="text-align:right">Value</th>
-            <th scope="col">Story shared</th>
+            <th scope="col">Share consent</th>
           </tr>
         </thead>
         <tbody id="impactBody"></tbody>
@@ -319,7 +321,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
 <footer>
   <div class="foot-inner">
     <span class="acro">Aggregate Tracking &amp; Layered Analytics System</span>
-    <span>Stories &amp; quotes appear only with explicit client share consent.</span>
+    <span>Source: SBDC Milestones feed · client entries Jul 2024 – Sep 2024 · stories publish only with explicit share consent.</span>
     <span>Funded in part through a cooperative agreement with the U.S. Small Business Administration.</span>
   </div>
 </footer>
@@ -328,12 +330,14 @@ footer{border-top:1px solid var(--line);margin-top:40px;}
 /* ════════════════════════════════════════════════════════════════
    SUCCESS ATLAS — data + logic (vanilla JS)
 
-   DATA NOTE: This prototype ships an anonymized demo dataset modeled
-   on the "SBDC Milestones Google Sheets Feed" structure (jobs / revenue
-   / funding / business-start) and mapped onto the REAL 17 active NorCal
-   SBDC centers. To wire the live feed, replace buildMilestones() with a
-   fetch to /api/atlas/impact (Neoserra) or the Google Sheet — the render
-   pipeline below is data-source agnostic.
+   DATA NOTE: The EVENTS array below is REAL network impact data,
+   parsed from the "SBDC Milestones Google Sheets Feed" (Sheet1).
+   Test rows, staff test entries, and duplicate submissions were
+   removed. The feed carries no center/ZIP column, so milestones
+   whose center is still unknown are flagged `c:null` and shown at
+   ILLUSTRATIVE map locations until the Neoserra center sync lands.
+   To wire the live feed, replace EVENTS with a fetch to
+   /api/atlas/impact — the render pipeline is data-source agnostic.
    ════════════════════════════════════════════════════════════════ */
 
 /* ── Real NorCal SBDC centers (IDs from src/lib/neoserra.ts) ── */
@@ -364,123 +368,476 @@ const TYPES = {
   business_start: { label:'Business start',   short:'Business start', color:'#E11D48', unit:'•' },
 };
 
-/* ── Demo milestones (anonymized; modeled on the Sheets feed) ──
-   c=centerId  co=county  t=type  a=amount/count  d=date  cons=consent  s=story  adv=advisor  b=business */
-const RAW = [
-  // San Francisco (15)
-  {b:'Mission Threads Apparel', c:'15', co:'San Francisco', t:'funding', a:185000, d:'2025-11-12', cons:1, adv:'Renee', s:'My advisor walked me line-by-line through an SBA 7(a) package — we closed $185K and signed our flagship lease the same month.'},
-  {b:'Dogpatch Roastery',       c:'15', co:'San Francisco', t:'revenue', a:240000, d:'2025-09-03', cons:1, adv:'Marcus', s:'We rebuilt our wholesale pricing model with the SBDC. Twelve months later revenue is up nearly a quarter-million.'},
-  {b:'Sunset Pediatric PT',     c:'15', co:'San Francisco', t:'jobs',    a:6,      d:'2026-01-22', cons:0, adv:'Renee', s:''},
-  {b:'Outer Richmond Bakehouse',c:'15', co:'San Francisco', t:'business_start', a:0, d:'2025-12-05', cons:1, adv:'Priya', s:'I came in with a recipe and a dream. The SBDC helped with the LLC, the lease, and my first hire. We open in spring.'},
-  {b:'Bayview Logistics Co.',   c:'15', co:'San Francisco', t:'funding', a:62000,  d:'2025-07-18', cons:0, adv:'Marcus', s:''},
-
-  // Silicon Valley (70)
-  {b:'Almaden Robotics',        c:'70', co:'Santa Clara',   t:'funding', a:1200000,d:'2025-10-30', cons:1, adv:'Daniel', s:'The SBDC prepped our SBIR Phase II narrative and intros to the Finance Center. We landed $1.2M in non-dilutive capital.'},
-  {b:'South Bay BioLabs',       c:'70', co:'Santa Clara',   t:'jobs',    a:18,     d:'2025-08-14', cons:1, adv:'Anh', s:'From four people to twenty-two in a year. The hiring and HR coaching from our advisor made the scale-up survivable.'},
-  {b:'Evergreen Tortilleria',   c:'70', co:'Santa Clara',   t:'revenue', a:310000, d:'2026-02-09', cons:0, adv:'Daniel', s:''},
-  {b:'Willow Glen Dental Arts', c:'70', co:'Santa Clara',   t:'jobs',    a:9,      d:'2025-06-27', cons:0, adv:'Anh', s:''},
-  {b:'Cupertino Cloudworks',    c:'70', co:'Santa Clara',   t:'business_start', a:0,d:'2025-11-01', cons:0, adv:'Daniel', s:''},
-
-  // East Bay (71)
-  {b:'Temescal Ferments',       c:'71', co:'Alameda',       t:'funding', a:95000,  d:'2025-09-19', cons:1, adv:'Lola', s:'A microloan we didn’t know existed, surfaced by our advisor, bridged us through our first wholesale contract.'},
-  {b:'Richmond Marine Repair',  c:'71', co:'Contra Costa',  t:'jobs',    a:7,      d:'2026-01-11', cons:0, adv:'Greg', s:''},
-  {b:'Berkeley Print Studio',   c:'71', co:'Alameda',       t:'revenue', a:88000,  d:'2025-10-07', cons:1, adv:'Lola', s:'We cleaned up QuickBooks and re-priced every service. Sales up, expenses down, and finally a real margin.'},
-  {b:'Concord Care Collective', c:'71', co:'Contra Costa',  t:'business_start', a:0,d:'2025-12-18', cons:0, adv:'Greg', s:''},
-
-  // San Mateo (69)
-  {b:'Half Moon Bay Kelp Co.',  c:'69', co:'San Mateo',     t:'funding', a:140000, d:'2025-08-22', cons:0, adv:'Sofia', s:''},
-  {b:'Unbubble Mental Health',  c:'69', co:'San Mateo',     t:'business_start', a:0,d:'2025-05-02', cons:1, adv:'Ben', s:'After the SBDC Health training series I registered my first LLC. Today I’m serving my first out-of-state client — and finally have hope of paying down my student loans by serving the underserved.'},
-  {b:'Redwood Shores Analytics',c:'69', co:'San Mateo',     t:'jobs',    a:11,     d:'2026-02-01', cons:0, adv:'Sofia', s:''},
-
-  // Sacramento Valley (72)
-  {b:'Midtown Provisions',      c:'72', co:'Sacramento',    t:'revenue', a:175000, d:'2025-09-28', cons:1, adv:'Theo', s:'Financial projections and a clear marketing plan turned a side hustle into our family’s full-time income.'},
-  {b:'Yolo Grain & Mill',       c:'72', co:'Yolo',          t:'funding', a:230000, d:'2025-11-15', cons:0, adv:'Theo', s:''},
-  {b:'Natomas Family Dentistry',c:'72', co:'Sacramento',    t:'jobs',    a:8,      d:'2025-07-09', cons:0, adv:'Camille', s:''},
-  {b:'Yuba City Hydroponics',   c:'72', co:'Sutter',        t:'business_start', a:0,d:'2026-01-30', cons:1, adv:'Camille', s:'Consistent guidance through start-up — business plan, branding, projections, and accounting software — got us open.'},
-
-  // San Joaquin (68)
-  {b:'Stockton Steel Fab',      c:'68', co:'San Joaquin',   t:'funding', a:410000, d:'2025-10-12', cons:0, adv:'Hector', s:''},
-  {b:'Modesto Almond Goods',    c:'68', co:'Stanislaus',    t:'revenue', a:520000, d:'2025-12-20', cons:1, adv:'Hector', s:'Export coaching opened three new international accounts. Best year we’ve ever had by a wide margin.'},
-  {b:'Merced Mobile Welding',   c:'68', co:'Merced',        t:'jobs',    a:4,      d:'2026-02-14', cons:0, adv:'Rosa', s:''},
-
-  // Sonoma (73)
-  {b:'Russian River Cidery',    c:'73', co:'Sonoma',        t:'funding', a:265000, d:'2025-09-05', cons:1, adv:'Will', s:'The SBDC helped us model a tasting-room expansion and secure the equipment loan to build it.'},
-  {b:'Sebastopol Soap Works',   c:'73', co:'Sonoma',        t:'revenue', a:64000,  d:'2025-11-22', cons:0, adv:'Will', s:''},
-  {b:'Petaluma Pet Supply',     c:'73', co:'Sonoma',        t:'jobs',    a:5,      d:'2026-01-08', cons:0, adv:'Nadia', s:''},
-
-  // Solano-Napa (18)
-  {b:'Vallejo Waterfront Grill',c:'18', co:'Solano',        t:'business_start', a:0,d:'2025-10-19', cons:0, adv:'Owen', s:''},
-  {b:'Napa Valley Stoneware',   c:'18', co:'Napa',          t:'revenue', a:120000, d:'2025-08-30', cons:1, adv:'Owen', s:'A wholesale strategy from our advisor put our ceramics into 40 new retail doors statewide.'},
-  {b:'Fairfield Fleet Services', c:'18',co:'Solano',        t:'jobs',    a:6,      d:'2026-01-17', cons:0, adv:'Maya', s:''},
-
-  // Marin (36)
-  {b:'Sausalito Sail Loft',     c:'36', co:'Marin',         t:'funding', a:78000,  d:'2025-09-11', cons:0, adv:'Grant', s:''},
-  {b:'Novato Nutrition Lab',    c:'36', co:'Marin',         t:'jobs',    a:12,     d:'2025-12-02', cons:1, adv:'Grant', s:'We added a full second shift this year. The workforce planning template the SBDC gave us made it possible.'},
-
-  // Santa Cruz (9)
-  {b:'Capitola Surf Craft',     c:'9',  co:'Santa Cruz',    t:'revenue', a:96000,  d:'2025-10-25', cons:0, adv:'Iris', s:''},
-  {b:'Salinas Valley Greens',   c:'9',  co:'Monterey',      t:'funding', a:330000, d:'2025-11-08', cons:1, adv:'Iris', s:'A cold-storage equipment loan we structured with the SBDC let us hold produce longer and sell at better prices.'},
-  {b:'Hollister Hardware Co.',  c:'9',  co:'San Benito',    t:'jobs',    a:3,      d:'2026-02-06', cons:0, adv:'Pablo', s:''},
-
-  // Butte College (39)
-  {b:'Chico Craft Collective',  c:'39', co:'Butte',         t:'business_start', a:0,d:'2025-09-14', cons:0, adv:'Dana', s:''},
-  {b:'Oroville Olive Press',    c:'39', co:'Butte',         t:'revenue', a:54000,  d:'2025-12-09', cons:1, adv:'Dana', s:'Rebuilding our books and pricing after the fire years gave us our first profitable season in a long time.'},
-  {b:'Red Bluff Ranch Supply',  c:'39', co:'Tehama',        t:'jobs',    a:5,      d:'2026-01-25', cons:0, adv:'Cole', s:''},
-
-  // Shasta-Cascade (40)
-  {b:'Redding River Outfitters',c:'40', co:'Shasta',        t:'funding', a:88000,  d:'2025-10-03', cons:0, adv:'Joss', s:''},
-  {b:'Mount Shasta Spring Co.', c:'40', co:'Siskiyou',      t:'revenue', a:140000, d:'2025-11-29', cons:1, adv:'Joss', s:'A new e-commerce channel the SBDC helped us launch now reaches customers in 30 states.'},
-
-  // Sierra (43)
-  {b:'Auburn Trailworks',       c:'43', co:'Placer',        t:'jobs',    a:7,      d:'2025-09-21', cons:0, adv:'Vera', s:''},
-  {b:'Grass Valley Apothecary', c:'43', co:'Nevada',        t:'business_start', a:0,d:'2026-01-04', cons:1, adv:'Vera', s:'From idea to grand opening in nine months — the SBDC kept the licensing and financing on track the whole way.'},
-
-  // North Coast (13)
-  {b:'Eureka Bay Oysters',      c:'13', co:'Humboldt',      t:'funding', a:155000, d:'2025-10-16', cons:1, adv:'Sage', s:'Working capital we secured with the SBDC carried us through the slow season and into our biggest harvest yet.'},
-  {b:'Crescent City Net Co.',   c:'13', co:'Del Norte',     t:'jobs',    a:4,      d:'2026-02-11', cons:0, adv:'Sage', s:''},
-
-  // Mendocino (24)
-  {b:'Ukiah Valley Vintners',   c:'24', co:'Mendocino',     t:'revenue', a:72000,  d:'2025-11-19', cons:0, adv:'Bree', s:''},
-  {b:'Fort Bragg Glassworks',   c:'24', co:'Mendocino',     t:'business_start', a:0,d:'2025-12-28', cons:0, adv:'Bree', s:''},
-
-  // Lake County (105)
-  {b:'Clearlake Boatworks',     c:'105',co:'Lake',          t:'funding', a:46000,  d:'2026-01-13', cons:0, adv:'Quinn', s:''},
+/* ── REAL milestone events — SBDC Milestones Google Sheets Feed ──
+   Entries #25557–#26437 (submitted Jul 3 – Sep 17, 2024). Test rows,
+   staff tests, and duplicates removed. Contact emails excluded.
+   b=display name  sig=signer  t=type  a=value  d=event date
+   c=center id (null = pending Neoserra attribution)  s=client note
+   inst=institution  ft/pt=job split  eid=entry id  nsId=Neoserra client */
+const EVENTS = [
+ {
+  "b": "Monyka Burrell",
+  "t": "business_start",
+  "a": 0,
+  "d": "2023-09-18",
+  "c": null,
+  "sig": "Monyka Burrell",
+  "s": "Valuable insight from business planning to website development and learning social media marketing",
+  "eid": "25557",
+  "nsId": "379886"
+ },
+ {
+  "b": "Unbubble",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-05-02",
+  "c": "69",
+  "sig": "Claudia Cattaneo Auxier ;)",
+  "s": "At the beginning of this year, I took the inaugural San Mateo-SBDC Health training series. I graduated in April. In May I unofficially had my 4th child, also known officially as my first ever LLC registered in the state of California which I called “Unbubble”. As a newborn, it takes time to adjust and learn new skills. I started learning and working Unbubble public persona, the website, the domain, marketing and legal took time. Today I’m working with my first client out of state and with potential for more in this new journey thanks to the staff and team from NorCal/San Mateo SBDC\\!     For the first time I have hope that I may be able to actually pay all my student loan in mental health in this lifetime as I can continue serving the underserved marginalized population\\! Thanks to you, the founders and this program.    Thank you all and each of you for sharing your experiences and support and even after the classes were over\\!  Thank you Debbie and team for your email reminders each week, the content, the presenters and the video links\\!   Special thanks to Ben Martin for sharing your experience, practicality, honest feedback, and going the extra mile making the process more fun, less traumatic and smooth.",
+  "eid": "25617",
+  "nsId": "361089",
+  "basis": "explicit",
+  "why": "Client note names San Mateo SBDC"
+ },
+ {
+  "b": "Marta Koehne",
+  "t": "revenue",
+  "a": -185000.0,
+  "d": "2024-07-25",
+  "c": null,
+  "sig": "Marta Koehne",
+  "s": "Alan Gohary helped me clean up my QuickBooks online and reconcile my accounts to manage my financials better. Increased sales and decreased expenses.",
+  "eid": "25691",
+  "nsId": "302050"
+ },
+ {
+  "b": "Andrew R Feinstein",
+  "t": "jobs",
+  "a": 1.0,
+  "d": "2024-08-01",
+  "c": null,
+  "sig": "Andrew R Feinstein",
+  "s": "Consistent support and guidance in business development, walked me through the start-up process, exploring ideas, and prioritizing steps for success: business Plan help, branding, financial projections, and accounting software.",
+  "eid": "25821",
+  "nsId": "326455",
+  "ft": 1.0,
+  "pt": 0
+ },
+ {
+  "b": "Andrew R Feinstein",
+  "t": "funding",
+  "a": 4000.0,
+  "d": "2024-07-25",
+  "c": null,
+  "sig": "Andrew R Feinstein",
+  "s": "Consistent support and guidance in business development, walked me through the start-up process, exploring ideas, and prioritizing steps for success: business Plan help, branding, financial projections, and accounting software.",
+  "eid": "25821",
+  "nsId": "326455",
+  "inst": "Owner Investment"
+ },
+ {
+  "b": "Andrew R Feinstein",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-06-11",
+  "c": null,
+  "sig": "Andrew R Feinstein",
+  "s": "Consistent support and guidance in business development, walked me through the start-up process, exploring ideas, and prioritizing steps for success: business Plan help, branding, financial projections, and accounting software.",
+  "eid": "25821",
+  "nsId": "326455"
+ },
+ {
+  "b": "Rock Solid Handyman Services",
+  "t": "jobs",
+  "a": 1.0,
+  "d": "2024-08-03",
+  "c": null,
+  "sig": "Michael A Reynolds",
+  "s": "My advisor helped with guiding me through the proper steps, locating resources, saving time and effort, and minimizing distractions. Working with an experienced advisor helped me with my vision regarding the business and what I should focus on.",
+  "eid": "25848",
+  "nsId": "394677",
+  "ft": 1.0,
+  "pt": 0
+ },
+ {
+  "b": "Rock Solid Handyman Services",
+  "t": "funding",
+  "a": 5000.0,
+  "d": "2024-07-09",
+  "c": null,
+  "sig": "Michael A Reynolds",
+  "s": "My advisor helped with guiding me through the proper steps, locating resources, saving time and effort, and minimizing distractions. Working with an experienced advisor helped me with my vision regarding the business and what I should focus on.",
+  "eid": "25848",
+  "nsId": "394677",
+  "inst": "Owner"
+ },
+ {
+  "b": "Rock Solid Handyman Services",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-06-20",
+  "c": null,
+  "sig": "Michael A Reynolds",
+  "s": "My advisor helped with guiding me through the proper steps, locating resources, saving time and effort, and minimizing distractions. Working with an experienced advisor helped me with my vision regarding the business and what I should focus on.",
+  "eid": "25848",
+  "nsId": "394677"
+ },
+ {
+  "b": "Abrea Shavaun Tillman",
+  "t": "revenue",
+  "a": -75406.0,
+  "d": "2024-08-07",
+  "c": null,
+  "sig": "Abrea Shavaun Tillman",
+  "s": "Financial Planning, Licensing, Mentorship, Grant Application",
+  "eid": "25893",
+  "nsId": "339015"
+ },
+ {
+  "b": "Abrea Shavaun Tillman",
+  "t": "funding",
+  "a": 3000.0,
+  "d": "2024-04-05",
+  "c": null,
+  "sig": "Abrea Shavaun Tillman",
+  "s": "Financial Planning, Licensing, Mentorship, Grant Application",
+  "eid": "25893",
+  "nsId": "339015",
+  "inst": "Owner"
+ },
+ {
+  "b": "Abrea Shavaun Tillman",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-04-05",
+  "c": null,
+  "sig": "Abrea Shavaun Tillman",
+  "s": "Financial Planning, Licensing, Mentorship, Grant Application",
+  "eid": "25893",
+  "nsId": "339015"
+ },
+ {
+  "b": "NiaMani I Pitts",
+  "t": "jobs",
+  "a": 1.0,
+  "d": "2024-08-12",
+  "c": null,
+  "sig": "NiaMani I Pitts",
+  "s": "Scott Marcus has provided a blueprint that has helped take starting a business to a manageable scale.  The major accomplishments I’ve achieved in the past few months are 1) Getting a business license and business registration 2) purchased necessary supplies and equipment 3)Serviced my first client. Having regular check in appointments with Scott has helped me stay on track. I’m really grateful for the SBDC.",
+  "eid": "25945",
+  "nsId": "397825",
+  "ft": 1.0,
+  "pt": 0
+ },
+ {
+  "b": "NiaMani I Pitts",
+  "t": "revenue",
+  "a": 125.0,
+  "d": "2024-08-12",
+  "c": null,
+  "sig": "NiaMani I Pitts",
+  "s": "Scott Marcus has provided a blueprint that has helped take starting a business to a manageable scale.  The major accomplishments I’ve achieved in the past few months are 1) Getting a business license and business registration 2) purchased necessary supplies and equipment 3)Serviced my first client. Having regular check in appointments with Scott has helped me stay on track. I’m really grateful for the SBDC.",
+  "eid": "25945",
+  "nsId": "397825"
+ },
+ {
+  "b": "NiaMani I Pitts",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-08-09",
+  "c": null,
+  "sig": "NiaMani I Pitts",
+  "s": "Scott Marcus has provided a blueprint that has helped take starting a business to a manageable scale.  The major accomplishments I’ve achieved in the past few months are 1) Getting a business license and business registration 2) purchased necessary supplies and equipment 3)Serviced my first client. Having regular check in appointments with Scott has helped me stay on track. I’m really grateful for the SBDC.",
+  "eid": "25945",
+  "nsId": "397825"
+ },
+ {
+  "b": "Inner Light Crystals LLC",
+  "t": "funding",
+  "a": 100000.0,
+  "d": "2024-01-01",
+  "c": null,
+  "sig": "Jenny Jo Allen",
+  "s": "I received mentorship on budgeting, spreadsheets, retail profitability, securing a location, negotiating a lease, business planning, creating a presentation for potential investors. BTW - my new business name is Inner Light Crystals LLC",
+  "eid": "26037",
+  "nsId": "382755",
+  "inst": "private"
+ },
+ {
+  "b": "Inner Light Crystals LLC",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-01-01",
+  "c": null,
+  "sig": "Jenny Jo Allen",
+  "s": "I received mentorship on budgeting, spreadsheets, retail profitability, securing a location, negotiating a lease, business planning, creating a presentation for potential investors. BTW - my new business name is Inner Light Crystals LLC",
+  "eid": "26037",
+  "nsId": "382755"
+ },
+ {
+  "b": "Samira Bagheri",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-12-01",
+  "c": null,
+  "sig": "Samira Bagheri",
+  "s": "Helped me with pitch deck",
+  "eid": "26204",
+  "nsId": "393575"
+ },
+ {
+  "b": "Bhavi",
+  "t": "business_start",
+  "a": 0,
+  "d": "2023-09-22",
+  "c": null,
+  "sig": "Bhavi",
+  "s": "",
+  "eid": "26208",
+  "nsId": "388061"
+ },
+ {
+  "b": "Roland M McPhearson",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-06-01",
+  "c": null,
+  "sig": "Roland M McPhearson",
+  "s": "Excellent advice from Rob Gelphman",
+  "eid": "26212",
+  "nsId": "334696"
+ },
+ {
+  "b": "Sanjeev Jain",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-07-23",
+  "c": null,
+  "sig": "Sanjeev Jain",
+  "s": "SBDC helped in preparing to get my business funded. This was very helpful. Jeff and team were amazing with inputs. Please accept my appreciation and special thanks what you all do for startups.",
+  "eid": "26221",
+  "nsId": "398599"
+ },
+ {
+  "b": "Linda M. Allivato",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-03-17",
+  "c": "70",
+  "sig": "Linda M. Allivato",
+  "s": "SBDC has provided one-on-one counseling including personalized mentoring and advice from an experienced business professional.  Their established relationships with local partners have enabled me to work with Mechanical Engineering students at SJSU to help fine tune designs, complete prototypes, conduct tests, be ASTM/ISO compliant, and design protective packaging for the product I hope to be launching in Spring, 2025.  Having access to low cost/free engineering solutions is vital to the success of bringing my new product to market as I have limited personal funds to continue to invest in designs, drawings, prototypes, product components and testing which I have already paid for by myself.    SBDC has provided guidance on identifying target audiences and setting goals and assistance with developing a strong brand identity and messaging along with financial projections.  As we walk through the next four months fine tuning the product design and packaging with graduating senior ME students, it is my hope to work with SBDC on accessing loans and other funding opportunnities; to help me to continue to develop a strong and successful marketing strategy including building a website and being trained on social media.  The SBDC has without question, demonstrated to be an invaluable resource.  Thank you\\!",
+  "eid": "26224",
+  "nsId": "395939",
+  "basis": "inferred",
+  "why": "Client note cites SJSU partnership (Silicon Valley SBDC territory)"
+ },
+ {
+  "b": "Thien An",
+  "t": "business_start",
+  "a": 0,
+  "d": "2023-11-01",
+  "c": null,
+  "sig": "Thien An",
+  "s": "Helped me with my business plans, directions, marketing, overall accountability to make progress.",
+  "eid": "26236",
+  "nsId": "384863"
+ },
+ {
+  "b": "Young Gene Kim",
+  "t": "revenue",
+  "a": 30000.0,
+  "d": "2024-09-04",
+  "c": null,
+  "sig": "Young Gene Kim",
+  "s": "Supported numerous network igniting the consultancy",
+  "eid": "26250",
+  "nsId": "390554"
+ },
+ {
+  "b": "Young Gene Kim",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-07-02",
+  "c": null,
+  "sig": "Young Gene Kim",
+  "s": "Supported numerous network igniting the consultancy",
+  "eid": "26250",
+  "nsId": "390554"
+ },
+ {
+  "b": "Nati Sang",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-09-04",
+  "c": null,
+  "sig": "Nati Sang",
+  "s": "Put me in touch with Shawn Flynn who gave valuable feedback",
+  "eid": "26268",
+  "nsId": "400284"
+ },
+ {
+  "b": "Ahmad Barakat",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-05-01",
+  "c": null,
+  "sig": "Ahmad Barakat",
+  "s": "One-on-one counseling and online courses.",
+  "eid": "26327",
+  "nsId": "365011"
+ },
+ {
+  "b": "Maribel Pimentel",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-09-02",
+  "c": null,
+  "sig": "Maribel Pimentel",
+  "s": "Heard from Community members",
+  "eid": "26342",
+  "nsId": "401114"
+ },
+ {
+  "b": "Serena jowaisas",
+  "t": "revenue",
+  "a": 6000.0,
+  "d": "2024-09-10",
+  "c": null,
+  "sig": "Serena jowaisas",
+  "s": "Through business coaching I was able to offer more services.",
+  "eid": "26362",
+  "nsId": "362182"
+ },
+ {
+  "b": "Elizabeth Gifford",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-09-10",
+  "c": null,
+  "sig": "Elizabeth Gifford",
+  "s": "Webinar",
+  "eid": "26365",
+  "nsId": "396388"
+ },
+ {
+  "b": "Nadia Lissette Eberman",
+  "t": "funding",
+  "a": 400.0,
+  "d": "2024-09-07",
+  "c": null,
+  "sig": "Nadia Lissette Eberman",
+  "s": "information with financial planning, reviewing permits and license,",
+  "eid": "26408",
+  "nsId": "400834"
+ },
+ {
+  "b": "Nadia Lissette Eberman",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-07-25",
+  "c": null,
+  "sig": "Nadia Lissette Eberman",
+  "s": "information with financial planning, reviewing permits and license,",
+  "eid": "26408",
+  "nsId": "400834"
+ },
+ {
+  "b": "Jason David Ody",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-07-08",
+  "c": null,
+  "sig": "Jason David Ody",
+  "s": "Licensing Setup of business and structure Financial projections Bookkeeping",
+  "eid": "26420",
+  "nsId": "398372"
+ },
+ {
+  "b": "Daisy Grace Ching",
+  "t": "revenue",
+  "a": -53000.0,
+  "d": "2024-09-17",
+  "c": null,
+  "sig": "Daisy Grace Ching",
+  "s": "I was given multiple community resources and ideas to help with marketing",
+  "eid": "26425",
+  "nsId": "308904"
+ },
+ {
+  "b": "Samra Estates LLC",
+  "t": "jobs",
+  "a": 4.0,
+  "d": "2024-09-17",
+  "c": null,
+  "sig": "Robin Singh",
+  "s": "",
+  "eid": "26437",
+  "nsId": "402545",
+  "ft": 1.0,
+  "pt": 3.0
+ },
+ {
+  "b": "Samra Estates LLC",
+  "t": "revenue",
+  "a": 200000.0,
+  "d": "2024-09-17",
+  "c": null,
+  "sig": "Robin Singh",
+  "s": "",
+  "eid": "26437",
+  "nsId": "402545"
+ },
+ {
+  "b": "Samra Estates LLC",
+  "t": "business_start",
+  "a": 0,
+  "d": "2024-09-19",
+  "c": null,
+  "sig": "Robin Singh",
+  "s": "",
+  "eid": "26437",
+  "nsId": "402545"
+ }
 ];
 
-/* ── Build milestones: assign deterministic scattered coords near center city ── */
+/* ── Placement ──
+   The sheet feed has no ZIP/geo column. Milestones with a known center
+   pin near that center's city; everything else gets an ILLUSTRATIVE,
+   seeded placement across the service area and is labeled as such in
+   detail cards and the data table. */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
 function buildMilestones(){
-  const groups = {};
-  RAW.forEach(m=>{ (groups[m.c] ||= []).push(m); });
-  const out = [];
-  let id = 0;
-  Object.values(groups).forEach(arr=>{
-    arr.forEach((m,k)=>{
-      const ctr = CMAP[m.c];
-      const ang = k * 2.3999632;                 // golden angle for even spread
-      const rad = 0.020 + (k % 4) * 0.013;       // degrees from center
-      out.push(Object.assign({}, m, {
-        id: ++id,
-        lat: ctr.lat + rad * Math.sin(ang) * 0.72,
-        lng: ctr.lng + rad * Math.cos(ang),
-        centerName: ctr.name,
-        city: ctr.city,
-      }));
+  return EVENTS.map((e,i)=>{
+    const rnd = mulberry32(parseInt(e.eid,10)||(i+1)*7919);
+    const approx = !(e.c && CMAP[e.c]);
+    const ctr = approx ? CENTERS[Math.floor(rnd()*CENTERS.length)] : CMAP[e.c];
+    const jit = approx ? 0.16 : 0.05;
+    return Object.assign({}, e, {
+      id:i+1, a:Number(e.a), approx,
+      lat: ctr.lat + (rnd()-0.5)*2*jit*0.72,
+      lng: ctr.lng + (rnd()-0.5)*2*jit,
+      centerName: approx ? 'Pending attribution' : ctr.name,
+      city: approx ? '' : ctr.city,
+      co: approx ? null : ctr.counties[0],
     });
   });
-  return out;
 }
 const MILESTONES = buildMilestones();
 
 /* ── Format helpers ── */
-const fmtDollar = n => n>=1e6 ? '$'+(n/1e6).toFixed(n>=1e7?0:1)+'M'
-                     : n>=1e3 ? '$'+Math.round(n/1e3).toLocaleString()+'K'
-                     : '$'+Math.round(n).toLocaleString();
+const fmtDollar = n => {
+  const s = n<0 ? '−' : '';
+  n = Math.abs(n);
+  return s + (n>=1e6 ? '$'+(n/1e6).toFixed(n>=1e7?0:1)+'M'
+            : n>=1e3 ? '$'+Math.round(n/1e3).toLocaleString()+'K'
+            : '$'+Math.round(n).toLocaleString());
+};
 const fmtNum = n => Math.round(n).toLocaleString();
 const fmtDate = iso => new Date(iso+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 function valueLabel(m){
   if(m.t==='funding') return fmtDollar(m.a);
-  if(m.t==='revenue') return '+'+fmtDollar(m.a);
-  if(m.t==='jobs')    return '+'+m.a+' jobs';
+  if(m.t==='revenue') return (m.a>0?'+':'')+fmtDollar(m.a);
+  if(m.t==='jobs')    return '+'+m.a+' job'+(m.a===1?'':'s');
   return 'New start';
 }
 
@@ -494,7 +851,8 @@ const state = {
 
 function applyFilters(){
   return MILESTONES.filter(m=>{
-    if(state.center!=='all' && m.c!==state.center) return false;
+    if(state.center==='pending'){ if(!m.approx) return false; }
+    else if(state.center!=='all' && m.c!==state.center) return false;
     if(!state.types.has(m.t)) return false;
     const amtTypes = (m.t==='funding'||m.t==='revenue');
     if(amtTypes && state.min!=null && m.a < state.min) return false;
@@ -573,22 +931,28 @@ const detail = document.getElementById('detail');
 const detailBody = document.getElementById('detailBody');
 function showDetail(m){
   const ty = TYPES[m.t];
-  let storyHtml;
-  if(m.cons && m.s){
+  let storyHtml='';
+  if(m.s){
     storyHtml = `<div class="rule"></div><p class="story">${m.s}</p>
-      <p class="attrib">— ${m.b}, advised by ${m.adv} · ${m.centerName}</p>`;
+      <p class="attrib">— ${m.sig || m.b}${m.basis==='explicit' ? ' · '+m.centerName : ''}</p>
+      <p class="noconsent" style="margin-top:10px">Internal preview — verify share consent before publishing this story.</p>`;
   }else{
-    storyHtml = `<div class="rule"></div><p class="noconsent">Success story available once the client provides share consent.</p>`;
+    storyHtml = `<div class="rule"></div><p class="noconsent">No client note submitted with this milestone.</p>`;
   }
+  const locLine = m.approx
+    ? `<dd style="color:var(--red)">Illustrative — pending Neoserra sync</dd>`
+    : `<dd>${m.city}, ${m.co} County</dd>`;
   detailBody.innerHTML = `
     <span class="badge" style="background:${ty.color}">${ty.label}</span>
     <h2>${m.b}</h2>
-    <p class="meta">${m.city}, ${m.co} County · ${fmtDate(m.d)}</p>
+    <p class="meta">${fmtDate(m.d)} · Entry #${m.eid}</p>
     <p class="figure">${valueLabel(m)}</p>
     <dl>
       <dt>Center</dt><dd>${m.centerName}</dd>
-      <dt>County</dt><dd>${m.co}</dd>
-      <dt>Date verified</dt><dd>${fmtDate(m.d)}</dd>
+      <dt>Location</dt>${locLine}
+      ${m.inst? `<dt>Institution</dt><dd>${m.inst}</dd>`:''}
+      ${m.t==='jobs'? `<dt>Breakdown</dt><dd>${m.ft||0} full-time, ${m.pt||0} part-time</dd>`:''}
+      <dt>Neoserra client</dt><dd>#${m.nsId}</dd>
     </dl>
     ${storyHtml}`;
   detail.classList.add('show');
@@ -613,39 +977,44 @@ function animateCounter(el, target, fmt){
 function renderKpis(rows){
   const funding = rows.filter(r=>r.t==='funding').reduce((s,r)=>s+r.a,0);
   const jobs    = rows.filter(r=>r.t==='jobs').reduce((s,r)=>s+r.a,0);
-  const revenue = rows.filter(r=>r.t==='revenue').reduce((s,r)=>s+r.a,0);
+  const revUp   = rows.filter(r=>r.t==='revenue' && r.a>0);
+  const revDown = rows.filter(r=>r.t==='revenue' && r.a<0);
+  const revenue = revUp.reduce((s,r)=>s+r.a,0);
   const starts  = rows.filter(r=>r.t==='business_start').length;
   animateCounter(document.getElementById('kpiFunding'), funding, fmtDollar);
   animateCounter(document.getElementById('kpiJobs'), jobs, fmtNum);
   animateCounter(document.getElementById('kpiRevenue'), revenue, fmtDollar);
   animateCounter(document.getElementById('kpiStarts'), starts, fmtNum);
-  const cF=rows.filter(r=>r.t==='funding').length, cJ=rows.filter(r=>r.t==='jobs').length,
-        cR=rows.filter(r=>r.t==='revenue').length;
-  document.getElementById('kpiFundingDet').textContent = cF? `${cF} funding event${cF>1?'s':''}`:' ';
-  document.getElementById('kpiJobsDet').textContent    = cJ? `across ${cJ} businesses`:' ';
-  document.getElementById('kpiRevenueDet').textContent = cR? `${cR} reporting growth`:' ';
-  document.getElementById('kpiStartsDet').textContent  = starts? `new ventures launched`:' ';
+  const cF=rows.filter(r=>r.t==='funding').length;
+  const ft=rows.filter(r=>r.t==='jobs').reduce((s,r)=>s+(r.ft||0),0);
+  const pt=rows.filter(r=>r.t==='jobs').reduce((s,r)=>s+(r.pt||0),0);
+  document.getElementById('kpiFundingDet').textContent = cF? `${cF} funding event${cF>1?'s':''}`:' ';
+  document.getElementById('kpiJobsDet').textContent    = (ft+pt)? `${fmtNum(ft)} full-time, ${fmtNum(pt)} part-time`:' ';
+  document.getElementById('kpiRevenueDet').textContent = revUp.length
+    ? `${revUp.length} reporting growth` + (revDown.length? ` · ${revDown.length} reporting declines (${fmtDollar(revDown.reduce((s,r)=>s+r.a,0))})`:'')
+    : (revDown.length? `${revDown.length} reporting declines`:' ');
+  document.getElementById('kpiStartsDet').textContent  = starts? `verified new ventures`:' ';
 }
 
 /* ════════════════ DATA VIEW (table + county) ════════════════ */
 function renderData(rows){
-  // county roll-up
+  // county roll-up (unattributed milestones grouped under Pending)
   const byCounty = {};
   rows.forEach(m=>{
-    const k = m.co;
-    byCounty[k] ||= {county:k, center:m.centerName, funding:0, jobs:0, revenue:0, starts:0};
-    const g = byCounty[k];
+    const k = m.co || 'Pending attribution';
+    byCounty[k] ||= {county:k, center:m.centerName, funding:0, jobs:0, revenue:0, starts:0, n:0};
+    const g = byCounty[k]; g.n++;
     if(m.t==='funding') g.funding+=m.a;
     else if(m.t==='jobs') g.jobs+=m.a;
-    else if(m.t==='revenue') g.revenue+=m.a;
+    else if(m.t==='revenue') g.revenue+= (m.a>0? m.a:0);
     else g.starts+=1;
   });
   const cg = document.getElementById('countyGrid');
   const counties = Object.values(byCounty).sort((a,b)=>(b.funding+b.revenue)-(a.funding+a.revenue));
   cg.innerHTML = counties.length ? counties.map(g=>`
     <div class="county-cell">
-      <div class="cty">${g.county} County</div>
-      <div class="ctr">${g.center}</div>
+      <div class="cty">${g.county==='Pending attribution'? g.county : g.county+' County'}</div>
+      <div class="ctr">${g.county==='Pending attribution'? g.n+' milestones await Neoserra center sync' : g.center}</div>
       <div class="nums">
         <span><b>${fmtDollar(g.funding)}</b> cap</span>
         <span><b>${fmtNum(g.jobs)}</b> jobs</span>
@@ -663,9 +1032,9 @@ function renderData(rows){
       <td><span class="type-tag"><span class="sw" style="background:${ty.color}"></span>${ty.short}</span></td>
       <td>${m.b}</td>
       <td>${m.centerName}</td>
-      <td>${m.co}</td>
-      <td class="num">${valueLabel(m)}</td>
-      <td>${m.cons? 'Yes':'—'}</td>
+      <td>${m.co || '<span style="color:var(--muted)">Pending</span>'}</td>
+      <td class="num"${m.t==='revenue'&&m.a<0? ' style="color:var(--red)"':''}>${valueLabel(m)}</td>
+      <td><span style="color:var(--muted)">Pending</span></td>
     </tr>`;
   }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">No milestones match the current filters.</td></tr>';
 }
@@ -673,9 +1042,10 @@ function renderData(rows){
 /* ════════════════ MASTER RENDER ════════════════ */
 function render(){
   const rows = applyFilters();
+  const pend = rows.filter(r=>r.approx).length;
   document.getElementById('resultCount').textContent =
     `${rows.length} milestone${rows.length===1?'':'s'}` +
-    (state.center!=='all' ? ` · ${CMAP[state.center].name}` : ` · ${CENTERS.length} centers`);
+    (pend? ` · ${pend} pending center attribution`:'');
   renderKpis(rows);
   renderMap(rows);
   renderData(rows);
@@ -687,6 +1057,7 @@ const sel = document.getElementById('fCenter');
 CENTERS.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(c=>{
   const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; sel.appendChild(o);
 });
+const pendOpt=document.createElement('option'); pendOpt.value='pending'; pendOpt.textContent='— Pending attribution —'; sel.appendChild(pendOpt);
 sel.addEventListener('change',()=>{ state.center=sel.value; render(); });
 
 // type chips
@@ -738,13 +1109,15 @@ document.getElementById('modeHeat').addEventListener('click',()=>setMode('heat')
 /* ════════════════ EXPORT ════════════════ */
 document.getElementById('exportCsv').addEventListener('click',()=>{
   const rows=applyFilters().sort((a,b)=>b.d.localeCompare(a.d));
-  const cols=['date','type','business','center','county','value_raw','value_label','share_consent'];
+  const cols=['date','type','client','signer','neoserra_client_id','entry_id','center','county','value','institution','location_basis','share_consent','client_note'];
   const lines=[cols.join(',')];
+  const esc=v=>/[",\n]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:String(v);
   rows.forEach(m=>{
-    lines.push([m.d, TYPES[m.t].short, m.b, m.centerName, m.co,
-      (m.t==='funding'||m.t==='revenue'||m.t==='jobs')?m.a:0,
-      valueLabel(m).replace(/,/g,''), m.cons?'yes':'no']
-      .map(v=>/[",]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:v).join(','));
+    lines.push([m.d, TYPES[m.t].short, m.b, m.sig||'', m.nsId, m.eid,
+      m.centerName, m.co||'pending',
+      (m.t==='funding'||m.t==='revenue'||m.t==='jobs')?m.a:'start',
+      m.inst||'', m.approx?'illustrative':'center', 'pending', m.s||'']
+      .map(esc).join(','));
   });
   const blob=new Blob([lines.join('\n')],{type:'text/csv'});
   const a=document.createElement('a');
