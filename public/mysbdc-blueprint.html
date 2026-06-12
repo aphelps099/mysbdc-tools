@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MySBDC — Project Blueprint</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   MySBDC BLUEPRINT — design tokens (Candid.org / info-system)
+   ═══════════════════════════════════════════════════════ */
+:root{
+  --navy-900:#0B2A47; --navy-800:#12385A; --navy-600:#1D5AA7;
+  --sand-50:#F6F3EE;  --sand-100:#EFE9DF;
+  --red:#E11D48; --green:#15803D;
+  --ink:#1C2B3A; --muted:#6B7A8D; --line:#E4DFD6; --white:#fff;
+  --serif:'Source Serif 4', Georgia, serif;
+  --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--sans);color:var(--ink);background:var(--white);line-height:1.55;font-size:15px;}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;color:var(--navy-900);letter-spacing:-0.01em;}
+::selection{background:var(--navy-900);color:#fff;}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:2px;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+.kicker{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.redline{width:48px;height:2px;background:var(--red);margin:14px 0 18px;}
+
+/* ─── Sticky nav ─── */
+nav.toc{position:sticky;top:0;z-index:500;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+nav.toc .inner{max-width:1180px;margin:0 auto;padding:0 28px;display:flex;align-items:center;gap:4px;overflow-x:auto;}
+nav.toc .brand{font-family:var(--serif);font-weight:600;color:var(--navy-900);font-size:15px;padding:14px 18px 14px 0;white-space:nowrap;border-right:1px solid var(--line);margin-right:10px;}
+nav.toc a{font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;padding:15px 12px;white-space:nowrap;border-bottom:2px solid transparent;}
+nav.toc a:hover{color:var(--navy-900);}
+nav.toc a.on{color:var(--navy-900);border-bottom-color:var(--red);}
+
+/* ─── Hero ─── */
+header.hero{background:var(--navy-900);color:#fff;padding:84px 0 72px;}
+.hero .kicker{color:#9DB4CC;}
+.hero h1{color:#fff;font-size:54px;line-height:1.06;font-weight:300;margin:18px 0 8px;max-width:760px;}
+.hero h1 b{font-weight:600;}
+.hero .lede{font-size:18px;color:#C7D5E4;max-width:640px;margin-top:14px;font-family:var(--serif);}
+.northstar{display:inline-flex;align-items:center;gap:0;margin-top:36px;border:1px solid rgba(255,255,255,.25);border-radius:6px;overflow:hidden;flex-wrap:wrap;}
+.northstar span{padding:12px 22px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.northstar span+span{border-left:1px solid rgba(255,255,255,.25);}
+.northstar .ns-label{background:var(--red);}
+.hero .master{margin-top:30px;font-family:var(--serif);font-size:15px;color:#9DB4CC;font-style:italic;}
+.hero .master b{color:#fff;font-style:normal;}
+
+/* ─── Stat strip ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);}
+.stat{padding:30px 26px;border-right:1px solid var(--line);}
+.stat:last-child{border-right:none;}
+.stat .n{font-family:var(--serif);font-size:40px;font-weight:300;color:var(--navy-900);line-height:1;}
+.stat .n em{font-style:normal;color:var(--red);}
+.stat .t{font-size:12.5px;color:var(--muted);margin-top:8px;}
+
+/* ─── Sections ─── */
+section{padding:78px 0 30px;}
+section .head{max-width:680px;margin-bottom:42px;}
+section h2{font-size:34px;font-weight:300;}
+section .head p{color:var(--muted);margin-top:12px;font-size:15.5px;}
+.band{background:var(--sand-50);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+
+/* ─── Before / After ─── */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.ba>div{background:#fff;padding:30px 32px;}
+.ba .col-h{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.ba .was .col-h{color:var(--muted);}
+.ba .now .col-h{color:var(--red);}
+.ba ul{list-style:none;display:flex;flex-direction:column;gap:13px;}
+.ba li{padding-left:22px;position:relative;font-size:14px;color:var(--ink);}
+.ba .was li{color:var(--muted);}
+.ba .was li::before{content:"×";position:absolute;left:0;color:#C2533A;font-weight:700;}
+.ba .now li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700;}
+.removed{margin-top:26px;background:var(--sand-50);border:1px dashed var(--line);border-radius:6px;padding:18px 22px;font-size:13.5px;color:var(--muted);}
+.removed b{color:var(--navy-900);}
+
+/* ─── Project map ─── */
+.map-layer{border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden;}
+.map-layer+.map-arrow{text-align:center;color:var(--muted);font-size:20px;line-height:1;padding:10px 0;}
+.layer-tag{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--navy-800);display:inline-block;padding:5px 14px;border-bottom-right-radius:6px;}
+.layer-body{padding:24px 28px 28px;}
+.faces{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px;}
+.face{border:1px solid var(--line);border-top:3px solid var(--navy-900);border-radius:6px;padding:18px 20px;background:#fff;}
+.face .f-k{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);}
+.face h4{font-size:18px;margin:6px 0 8px;}
+.face p{font-size:13px;color:var(--muted);}
+.engines{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:6px;}
+.engine{border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--sand-50);}
+.engine .e-name{font-weight:700;font-size:13.5px;color:var(--navy-900);}
+.engine .e-role{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--navy-600);margin:4px 0 8px;}
+.engine .e-owns{font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;}
+.engine .e-owns b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.golden{margin-top:26px;border-left:3px solid var(--red);background:#fff;padding:20px 26px;border-radius:0 6px 6px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+.golden h4{font-size:17px;margin-bottom:6px;}
+.golden p{font-size:14px;color:var(--muted);max-width:760px;}
+
+/* ─── Journey timeline ─── */
+.journey{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;margin-top:8px;}
+.journey::before{content:"";position:absolute;top:17px;left:8%;right:8%;height:1px;background:var(--line);}
+.stop{position:relative;padding:0 12px;text-align:center;}
+.stop .dot{width:34px;height:34px;border-radius:50%;background:var(--navy-900);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;position:relative;z-index:1;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);}
+.stop h4{font-size:15px;margin:12px 0 6px;}
+.stop p{font-size:12px;color:var(--muted);}
+
+/* ═══ WIREFRAME CHROME ═══ */
+.browser{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 14px 40px rgba(11,42,71,.10);}
+.browser .bar{display:flex;align-items:center;gap:8px;background:var(--sand-100);border-bottom:1px solid var(--line);padding:9px 14px;}
+.browser .bar .b{width:10px;height:10px;border-radius:50%;background:#D6CFC2;}
+.browser .bar .url{flex:1;background:#fff;border:1px solid var(--line);border-radius:4px;font-size:11px;color:var(--muted);padding:4px 12px;max-width:340px;margin-left:8px;font-family:var(--sans);}
+.screen{padding:0;min-height:380px;}
+
+/* wf primitives */
+.wf-top{display:flex;align-items:center;justify-content:space-between;padding:13px 26px;border-bottom:1px solid var(--line);}
+.wf-logo{font-family:var(--serif);font-weight:700;color:var(--navy-900);font-size:16px;}
+.wf-logo small{display:block;font-family:var(--sans);font-weight:400;font-size:9.5px;color:var(--muted);letter-spacing:.06em;}
+.wf-nav{display:flex;gap:20px;font-size:12.5px;font-weight:600;color:var(--navy-800);}
+.wf-nav span.sel{border-bottom:2px solid var(--red);padding-bottom:3px;}
+.wf-user{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+.wf-ava{width:26px;height:26px;border-radius:50%;background:var(--navy-600);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.wf-btn{display:inline-block;background:var(--navy-900);color:#fff;font-size:12.5px;font-weight:600;padding:9px 20px;border-radius:5px;border:none;cursor:default;}
+.wf-btn.red{background:var(--red);}
+.wf-btn.ghost{background:#fff;color:var(--navy-900);border:1px solid var(--line);}
+.wf-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:3px;background:var(--sand-100);color:var(--navy-800);}
+.wf-chip.live{background:#E8F0FA;color:var(--navy-600);}
+.wf-chip.free{background:#E9F4EC;color:var(--green);}
+.wf-chip.paid{background:#FDF0F3;color:var(--red);}
+.wf-input{border:1px solid var(--line);border-radius:5px;padding:9px 12px;font-size:13px;color:var(--muted);background:#fff;}
+
+/* ─── Walkthrough stepper ─── */
+.steps-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;}
+.steps-nav button{font-family:var(--sans);font-size:12px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:20px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s;}
+.steps-nav button .num{width:18px;height:18px;border-radius:50%;background:var(--sand-100);color:var(--navy-800);font-size:10.5px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;}
+.steps-nav button[aria-pressed="true"]{border-color:var(--navy-900);color:var(--navy-900);background:#fff;}
+.steps-nav button[aria-pressed="true"] .num{background:var(--navy-900);color:#fff;}
+.walk{display:grid;grid-template-columns:1fr 320px;gap:30px;align-items:start;}
+.walk-panel{display:none;}
+.walk-panel.show{display:block;animation:fadeUp .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.walk-note{position:sticky;top:74px;}
+.walk-note .wn{border:1px solid var(--line);border-radius:8px;background:#fff;padding:22px 24px;display:none;}
+.walk-note .wn.show{display:block;animation:fadeUp .3s ease both;}
+.walk-note h4{font-size:17px;margin-bottom:8px;}
+.walk-note p{font-size:13.5px;color:var(--muted);}
+.walk-note .behind{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;}
+.walk-note .behind .bh{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.walk-note .behind p{font-size:12.5px;}
+.walk-ctl{display:flex;gap:8px;margin-top:14px;}
+.walk-ctl button{font-family:var(--sans);font-size:12px;font-weight:600;padding:9px 18px;border-radius:5px;border:1px solid var(--line);background:#fff;color:var(--navy-900);cursor:pointer;}
+.walk-ctl button.primary{background:var(--navy-900);color:#fff;border-color:var(--navy-900);}
+.walk-ctl button:disabled{opacity:.35;cursor:default;}
+
+/* training cards in catalog wf */
+.cat-grid{display:grid;grid-template-columns:200px 1fr;min-height:340px;}
+.cat-filters{border-right:1px solid var(--line);padding:20px;background:var(--sand-50);}
+.cat-filters .fh{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-800);margin:14px 0 8px;}
+.cat-filters .fh:first-child{margin-top:0;}
+.cat-filters label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.cbox{width:12px;height:12px;border:1.5px solid var(--muted);border-radius:3px;display:inline-block;flex:none;}
+.cbox.on{background:var(--navy-900);border-color:var(--navy-900);position:relative;}
+.cbox.on::after{content:"✓";color:#fff;font-size:9px;position:absolute;top:-2px;left:1px;}
+.cat-list{padding:20px 24px;display:flex;flex-direction:column;gap:14px;}
+.tcard{border:1px solid var(--line);border-radius:7px;padding:16px 18px;display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;background:#fff;}
+.tcard.hl{border-color:var(--navy-900);box-shadow:0 4px 16px rgba(11,42,71,.10);}
+.tdate{text-align:center;border-right:1px solid var(--line);padding-right:14px;}
+.tdate .mo{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);}
+.tdate .dy{font-family:var(--serif);font-size:26px;color:var(--navy-900);line-height:1.1;}
+.tcard h5{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--navy-900);margin-bottom:4px;}
+.tcard .tm{font-size:11.5px;color:var(--muted);}
+
+/* detail / confirm wf */
+.detail-wf{padding:30px 40px;}
+.detail-wf h3{font-size:26px;font-weight:600;margin:10px 0 6px;}
+.detail-wf .when{font-size:13.5px;color:var(--muted);margin-bottom:18px;}
+.learn{display:flex;flex-direction:column;gap:8px;margin:18px 0;max-width:430px;}
+.learn span{font-size:13px;color:var(--ink);padding-left:20px;position:relative;}
+.learn span::before{content:"—";position:absolute;left:0;color:var(--red);}
+.reg-row{display:flex;align-items:center;gap:16px;margin-top:22px;flex-wrap:wrap;}
+.reg-note{font-size:12px;color:var(--muted);}
+.confirm-wf{padding:46px 40px;text-align:center;}
+.bigcheck{width:54px;height:54px;border-radius:50%;background:var(--green);color:#fff;font-size:26px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.joinbox{margin:22px auto 0;max-width:420px;border:1px solid var(--line);border-radius:7px;padding:16px 20px;text-align:left;background:var(--sand-50);}
+.joinbox .jl{font-size:11px;color:var(--navy-600);word-break:break-all;}
+.joinbox .jh{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.cal-row{display:flex;gap:10px;justify-content:center;margin-top:18px;}
+
+/* my trainings wf */
+.mt-list{padding:24px 30px;display:flex;flex-direction:column;gap:12px;}
+.mt-row{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:7px;padding:14px 18px;}
+.mt-row .t{font-size:13.5px;font-weight:600;color:var(--navy-900);}
+.mt-row .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.mt-row.today{border-color:var(--green);background:#FAFDF9;}
+
+/* after / automation timeline */
+.auto-line{padding:34px 40px;}
+.auto-line .ev{display:grid;grid-template-columns:130px 16px 1fr;gap:14px;align-items:start;padding-bottom:22px;position:relative;}
+.auto-line .ev::before{content:"";position:absolute;left:136px;top:18px;bottom:0;width:1px;background:var(--line);}
+.auto-line .ev:last-child::before{display:none;}
+.auto-line .when{font-size:11px;color:var(--muted);text-align:right;padding-top:1px;}
+.auto-line .pip{width:11px;height:11px;border-radius:50%;background:var(--navy-900);margin-top:3px;position:relative;z-index:1;}
+.auto-line .pip.g{background:var(--green);}
+.auto-line .what{font-size:13px;color:var(--ink);}
+.auto-line .what b{color:var(--navy-900);}
+.auto-line .what small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;}
+
+/* staff strip */
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.phase{border:1px solid var(--line);border-radius:7px;background:#fff;padding:20px;position:relative;}
+.phase .pn{font-family:var(--serif);font-size:30px;color:var(--sand-100);position:absolute;top:10px;right:16px;font-weight:700;-webkit-text-stroke:1px var(--line);}
+.phase h4{font-size:15px;margin-bottom:7px;padding-right:30px;}
+.phase p{font-size:12.5px;color:var(--muted);}
+.phase .who{display:inline-block;margin-bottom:10px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:3px;}
+.phase .who.staff{background:#E8F0FA;color:var(--navy-600);}
+.phase .who.auto{background:#E9F4EC;color:var(--green);}
+
+/* ═══ Dashboard wireframe + hotspots ═══ */
+.dash-wrap{display:grid;grid-template-columns:1fr 300px;gap:30px;align-items:start;}
+.dash{position:relative;}
+.dash-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;padding:20px 24px 24px;}
+.dcard{border:1px solid var(--line);border-radius:8px;background:#fff;padding:18px 20px;position:relative;}
+.dcard .dh{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.next-step{border-top:3px solid var(--red);}
+.next-step h5{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--navy-900);margin-bottom:6px;}
+.next-step p{font-size:12.5px;color:var(--muted);margin-bottom:14px;}
+.greet{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:baseline;}
+.greet h3{font-size:23px;font-weight:600;}
+.greet .sub{font-size:12px;color:var(--muted);}
+.mini-atlas{display:flex;gap:14px;}
+.mini-atlas .ma{flex:1;}
+.mini-atlas .ma .v{font-family:var(--serif);font-size:19px;color:var(--navy-900);}
+.mini-atlas .ma .l{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.vids{display:flex;gap:10px;}
+.vid{flex:1;border:1px solid var(--line);border-radius:6px;aspect-ratio:16/10;background:var(--sand-50);display:flex;align-items:center;justify-content:center;position:relative;}
+.vid .play{width:22px;height:22px;border-radius:50%;background:var(--navy-900);position:relative;}
+.vid .play::after{content:"";position:absolute;left:8px;top:6px;border-left:7px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;}
+.vid .vt{position:absolute;bottom:5px;left:7px;font-size:8.5px;color:var(--muted);}
+.hotspot{position:absolute;width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;box-shadow:0 2px 8px rgba(225,29,72,.45);z-index:5;transition:.15s;border:none;outline-offset:2px;}
+.hotspot:hover{transform:scale(1.12);}
+.hotspot.on{background:var(--navy-900);box-shadow:0 2px 8px rgba(11,42,71,.5);}
+.spot-notes{position:sticky;top:74px;display:flex;flex-direction:column;gap:8px;}
+.spot-note{border:1px solid var(--line);border-radius:7px;background:#fff;padding:14px 16px;cursor:pointer;transition:.15s;}
+.spot-note .sn-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--navy-900);}
+.spot-note .sn-n{width:20px;height:20px;flex:none;border-radius:50%;background:var(--sand-100);color:var(--navy-800);font-size:11px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;}
+.spot-note p{font-size:12px;color:var(--muted);margin-top:6px;display:none;}
+.spot-note.on{border-color:var(--navy-900);box-shadow:0 4px 14px rgba(11,42,71,.10);}
+.spot-note.on .sn-n{background:var(--red);color:#fff;}
+.spot-note.on p{display:block;}
+
+/* ═══ Milestone demo ═══ */
+.ms-demo{max-width:560px;margin:0 auto;}
+.ms-shell{border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 14px 40px rgba(11,42,71,.10);overflow:hidden;}
+.ms-head{background:var(--navy-900);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+.ms-head .t{font-family:var(--serif);font-size:17px;}
+.ms-prog{display:flex;gap:5px;}
+.ms-prog span{width:26px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);}
+.ms-prog span.on{background:var(--red);}
+.ms-body{padding:28px 30px;min-height:250px;}
+.ms-q{font-family:var(--serif);font-size:20px;color:var(--navy-900);margin-bottom:18px;}
+.ms-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ms-opt{border:1px solid var(--line);border-radius:7px;padding:16px;cursor:pointer;background:#fff;text-align:left;font-family:var(--sans);transition:.15s;}
+.ms-opt:hover{border-color:var(--navy-800);}
+.ms-opt.sel{border-color:var(--navy-900);background:var(--sand-50);box-shadow:inset 0 0 0 1px var(--navy-900);}
+.ms-opt .o-t{font-size:13.5px;font-weight:700;color:var(--navy-900);}
+.ms-opt .o-s{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.ms-field{margin-bottom:14px;}
+.ms-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--navy-800);margin-bottom:6px;}
+.ms-field input,.ms-field textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:11px 13px;font-size:14px;font-family:var(--sans);color:var(--ink);}
+.ms-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:14px 24px;background:var(--sand-50);}
+.ms-foot .hint{font-size:11px;color:var(--muted);}
+.ms-foot button{font-family:var(--sans);font-size:13px;font-weight:600;padding:10px 22px;border-radius:6px;border:none;background:var(--navy-900);color:#fff;cursor:pointer;}
+.ms-foot button:disabled{opacity:.35;cursor:default;}
+.ms-done{text-align:center;padding:14px 0;}
+.ms-done .routes{display:flex;flex-direction:column;gap:8px;margin-top:20px;text-align:left;}
+.ms-done .routes div{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:11px 14px;}
+.ms-done .routes .ok{color:var(--green);font-weight:700;}
+
+/* ═══ 641 section ═══ */
+.w641{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}
+.w641 .pane{border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden;display:flex;flex-direction:column;}
+.w641 .pane .cap{padding:14px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);margin-top:auto;}
+.w641 .pane .cap b{color:var(--navy-900);}
+.wiz{padding:22px;flex:1;}
+.wiz .prog{height:4px;background:var(--sand-100);border-radius:2px;margin-bottom:6px;position:relative;}
+.wiz .prog::after{content:"";position:absolute;left:0;top:0;bottom:0;width:40%;background:var(--red);border-radius:2px;}
+.wiz .pmeta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:18px;}
+.wiz .save{color:var(--green);font-weight:700;}
+.wiz h5{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--navy-900);margin-bottom:14px;}
+.score-pane{padding:22px;text-align:center;flex:1;}
+.dial{width:120px;height:120px;border-radius:50%;margin:8px auto 12px;background:conic-gradient(var(--green) 0 73%, var(--sand-100) 73% 100%);display:flex;align-items:center;justify-content:center;}
+.dial .in{width:92px;height:92px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.dial .sc{font-family:var(--serif);font-size:30px;color:var(--navy-900);line-height:1;}
+.dial .sl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.signals{text-align:left;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:5px;margin-top:10px;}
+.signals span::before{content:"+ ";color:var(--green);font-weight:700;}
+.fork{padding:22px;flex:1;}
+.fork .route{border:1px solid var(--line);border-radius:7px;padding:13px 15px;margin-bottom:10px;}
+.fork .route .r-h{font-size:12.5px;font-weight:700;color:var(--navy-900);display:flex;justify-content:space-between;}
+.fork .route .r-h .th{color:var(--muted);font-weight:600;font-size:11px;}
+.fork .route p{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.fork .route.fast{border-color:var(--red);background:#FFF8F9;}
+
+/* ─── Outcomes ─── */
+.outs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.out{border:1px solid var(--line);border-top:3px solid var(--navy-900);border-radius:8px;padding:24px;background:#fff;}
+.out .o-n{font-family:var(--serif);font-size:34px;font-weight:300;color:var(--navy-900);}
+.out .o-n em{font-style:normal;color:var(--red);}
+.out h4{font-size:15px;margin:8px 0 6px;font-family:var(--sans);font-weight:700;}
+.out p{font-size:13px;color:var(--muted);}
+
+footer{border-top:1px solid var(--line);margin-top:80px;}
+footer .inner{max-width:1180px;margin:0 auto;padding:30px 28px 44px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+footer b{color:var(--navy-900);font-family:var(--serif);}
+
+@media(max-width:960px){
+  .stats,.faces,.engines,.phases,.w641,.outs{grid-template-columns:1fr 1fr;}
+  .journey{grid-template-columns:repeat(3,1fr);row-gap:34px;}
+  .journey::before{display:none;}
+  .walk,.dash-wrap{grid-template-columns:1fr;}
+  .walk-note,.spot-notes{position:static;}
+  .hero h1{font-size:38px;}
+  .ba{grid-template-columns:1fr;}
+}
+@media print{
+  nav.toc{position:static;}
+  .walk-panel{display:block !important;page-break-inside:avoid;margin-bottom:30px;}
+  .walk-note .wn{display:block !important;}
+  section{padding:34px 0 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ NAV ════════ -->
+<nav class="toc" aria-label="Sections">
+  <div class="inner">
+    <span class="brand">MySBDC Blueprint</span>
+    <a href="#overview">Overview</a>
+    <a href="#map">Project map</a>
+    <a href="#journey">Client journey</a>
+    <a href="#trainings">Trainings walkthrough</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#intake">Smart 641</a>
+    <a href="#outcomes">Outcomes</a>
+  </div>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<header class="hero" id="overview">
+  <div class="wrap">
+    <div class="kicker">NorCal SBDC · Project Blueprint · For internal review</div>
+    <h1>One front door for <b>every</b> small business we serve.</h1>
+    <p class="lede">MySBDC replaces 18+ separate regional websites with a single, unified portal — moving the network from a system of <em>discovery</em> to a system of <em>doing</em>.</p>
+    <div class="northstar" role="img" aria-label="North star: one login, one 641, one dashboard">
+      <span class="ns-label">North Star</span>
+      <span>One login</span><span>One 641</span><span>One dashboard</span>
+    </div>
+    <p class="master">Master brand line — <b>“SBDC: Your business. Better.”</b> &nbsp;·&nbsp; Pillars: <b>Funded</b> · <b>Connected</b> · <b>Guided</b></p>
+  </div>
+</header>
+
+<!-- ════════ STATS ════════ -->
+<div class="wrap">
+  <div class="stats" aria-label="Headline numbers">
+    <div class="stat"><div class="n">18+ <em>→ 1</em></div><div class="t">Regional websites consolidated into a single portal on one domain</div></div>
+    <div class="stat"><div class="n">~40<em>%</em></div><div class="t">Less administrative work — 5–10 staff hours saved per week, per center</div></div>
+    <div class="stat"><div class="n">80<em>%</em></div><div class="t">Fewer data-quality issues from a single, smart intake</div></div>
+    <div class="stat"><div class="n">&lt;60<em>s</em></div><div class="t">For a client to report a win that lands on the public impact map</div></div>
+  </div>
+</div>
+
+<!-- ════════ STRATEGY: BEFORE / AFTER ════════ -->
+<section>
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">The strategy</div>
+      <h2>One unified portal — on purpose.</h2>
+      <div class="redline"></div>
+      <p>The revised direction drops regional site-switching entirely. Clients land on one fast, network-wide front door. Local connection still happens — just quietly, in the background, where it belongs.</p>
+    </div>
+
+    <div class="ba">
+      <div class="was">
+        <div class="col-h">Today — 18 fragmented experiences</div>
+        <ul>
+          <li>A different website, look, and login for every region</li>
+          <li>Clients repeat their information at every step — the 641 is a chore</li>
+          <li>Events scattered across sites; registration handled by hand</li>
+          <li>Reporting assembled manually from spreadsheets, weeks later</li>
+          <li>Search-engine authority diluted across 18 separate domains</li>
+        </ul>
+      </div>
+      <div class="now">
+        <div class="col-h">MySBDC — one portal</div>
+        <ul>
+          <li>One website, one brand: “SBDC: Your business. Better.”</li>
+          <li>One account works everywhere — sign in once with Google, Microsoft, or email</li>
+          <li>Every training in one calendar with true one-click registration</li>
+          <li>Attendance, milestones, and impact reporting build themselves</li>
+          <li>All authority concentrated on a single domain: norcalsbdc.org</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="removed">
+      <b>Removed on purpose:</b> ZIP-code finders, “is this your center?” suggestion banners, “Nearby Today” prompts, and header logos that flip by region. Instead, the intake form captures each client’s business ZIP once and quietly routes them to the right <b>Success Team</b> behind the scenes. Clients never have to think about org structure — they just get the right people.
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PROJECT MAP ════════ -->
+<section class="band" id="map">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">Project map</div>
+      <h2>How the whole thing fits together.</h2>
+      <div class="redline"></div>
+      <p>No technical knowledge needed: there’s one front door that clients see, and an engine room of five specialist systems behind it that clients never see. The website doesn’t replace those systems — it gives them one face.</p>
+    </div>
+
+    <div class="map-layer">
+      <span class="layer-tag">What clients see — one front door · norcalsbdc.org</span>
+      <div class="layer-body">
+        <div class="faces">
+          <div class="face">
+            <div class="f-k">Discover</div>
+            <h4>Public website</h4>
+            <p>Browse trainings, capital checklists, advisor profiles, and success stories. Navigation follows the three brand pillars — <b>Funded · Connected · People</b> — with directory-style filters.</p>
+          </div>
+          <div class="face">
+            <div class="f-k">Do</div>
+            <h4>MySBDC dashboard</h4>
+            <p>The signed-in command center: complete the 641 once, register for trainings in one click, meet your advisor, and report wins in under a minute.</p>
+          </div>
+          <div class="face">
+            <div class="f-k">Show</div>
+            <h4>Success Atlas</h4>
+            <p>A public, real-time impact map. Every win clients log — funding, hires, revenue, business starts — rolls up into the network’s collective story.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-arrow" aria-hidden="true">⇅</div>
+
+    <div class="map-layer">
+      <span class="layer-tag">The engine room — five specialists, invisible to clients</span>
+      <div class="layer-body">
+        <div class="engines">
+          <div class="engine">
+            <div class="e-name">Neoserra</div>
+            <div class="e-role">The master filing cabinet</div>
+            <div class="e-owns"><b>Keeps the only copy of</b>Client records, advising sessions, and the live-events calendar. Staff enter things here once.</div>
+          </div>
+          <div class="engine">
+            <div class="e-name">Zoom</div>
+            <div class="e-role">The live classroom</div>
+            <div class="e-owns"><b>Keeps the only copy of</b>Webinar rooms, personal join links, and who actually attended.</div>
+          </div>
+          <div class="engine">
+            <div class="e-name">LearnWorlds</div>
+            <div class="e-role">The course library</div>
+            <div class="e-owns"><b>Keeps the only copy of</b>On-demand courses and each client’s learning progress. Opens with the same login.</div>
+          </div>
+          <div class="engine">
+            <div class="e-name">Constant Contact</div>
+            <div class="e-role">The newsletter machine</div>
+            <div class="e-owns"><b>Keeps the only copy of</b>Email lists and sends. Drafts a weekly digest of upcoming events by itself.</div>
+          </div>
+          <div class="engine">
+            <div class="e-name">Stripe</div>
+            <div class="e-role">The cash register</div>
+            <div class="e-owns"><b>Keeps the only copy of</b>Payments and receipts for paid trainings — one secure checkout for the whole network.</div>
+          </div>
+        </div>
+
+        <div class="golden">
+          <h4>The golden rule: one source of truth per data type</h4>
+          <p>Every fact lives in exactly one system, and the website simply <em>shows</em> it — it never keeps a competing copy. That single rule is why nothing drifts out of sync, why staff stop re-typing the same information into three places, and why the reports are always current.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CLIENT JOURNEY ════════ -->
+<section id="journey">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">The client journey</div>
+      <h2>From first visit to wins on the map.</h2>
+      <div class="redline"></div>
+    </div>
+    <div class="journey">
+      <div class="stop"><span class="dot">1</span><h4>Discover</h4><p>Land on one fast homepage. Browse by pillar: Funded, Connected, People.</p></div>
+      <div class="stop"><span class="dot">2</span><h4>One account</h4><p>Sign in once — Google, Microsoft, or email. It works across everything.</p></div>
+      <div class="stop"><span class="dot">3</span><h4>Smart 641</h4><p>A friendly 10-screen wizard replaces the dreaded form. It autosaves.</p></div>
+      <div class="stop"><span class="dot">4</span><h4>Right start</h4><p>A readiness score routes each client: advisor pairing or starter training.</p></div>
+      <div class="stop"><span class="dot">5</span><h4>Learn &amp; grow</h4><p>One-click registration for live trainings; the course library opens instantly.</p></div>
+      <div class="stop"><span class="dot">6</span><h4>Log wins</h4><p>Funding, hires, revenue — reported in under 60 seconds, shown on the Atlas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ TRAININGS WALKTHROUGH ════════ -->
+<section class="band" id="trainings">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">Immersive walkthrough · UX/UI</div>
+      <h2>Signing up for a training — the whole story.</h2>
+      <div class="redline"></div>
+      <p>Step through exactly what a client sees, from browsing to “you’re in” — and what happens automatically behind the curtain at each moment. <b>Click the steps</b> or use Next.</p>
+    </div>
+
+    <div class="steps-nav" role="tablist" aria-label="Walkthrough steps">
+      <button role="tab" aria-pressed="true" data-step="0"><span class="num">1</span>Browse</button>
+      <button role="tab" aria-pressed="false" data-step="1"><span class="num">2</span>Event page</button>
+      <button role="tab" aria-pressed="false" data-step="2"><span class="num">3</span>You’re in</button>
+      <button role="tab" aria-pressed="false" data-step="3"><span class="num">4</span>My Trainings</button>
+      <button role="tab" aria-pressed="false" data-step="4"><span class="num">5</span>Day of</button>
+      <button role="tab" aria-pressed="false" data-step="5"><span class="num">6</span>Afterwards</button>
+    </div>
+
+    <div class="walk">
+      <div class="walk-screens">
+
+        <!-- STEP 1: Browse -->
+        <div class="walk-panel show" data-panel="0">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/trainings</span></div>
+            <div class="screen">
+              <div class="wf-top">
+                <div class="wf-logo">SBDC<small>Your business. Better.</small></div>
+                <div class="wf-nav"><span>Funded</span><span class="sel">Connected</span><span>People</span></div>
+                <div class="wf-user"><span class="wf-ava">MV</span> Maria</div>
+              </div>
+              <div class="cat-grid">
+                <div class="cat-filters">
+                  <div class="fh">Topic</div>
+                  <label><span class="cbox on"></span> Capital &amp; loans</label>
+                  <label><span class="cbox"></span> Marketing</label>
+                  <label><span class="cbox"></span> Bookkeeping</label>
+                  <label><span class="cbox"></span> Starting up</label>
+                  <div class="fh">Format</div>
+                  <label><span class="cbox on"></span> Live online</label>
+                  <label><span class="cbox"></span> On-demand</label>
+                  <label><span class="cbox"></span> In person</label>
+                  <div class="fh">Price</div>
+                  <label><span class="cbox on"></span> Free</label>
+                  <label><span class="cbox"></span> Paid</label>
+                </div>
+                <div class="cat-list">
+                  <div class="tcard hl">
+                    <div class="tdate"><div class="mo">Jul</div><div class="dy">14</div></div>
+                    <div><h5>Getting Loan-Ready: What Lenders Actually Look For</h5><div class="tm">Tue · 10:00–11:00 AM · <span class="wf-chip live">Live online</span> <span class="wf-chip free">Free</span></div></div>
+                    <span class="wf-btn">Register</span>
+                  </div>
+                  <div class="tcard">
+                    <div class="tdate"><div class="mo">Jul</div><div class="dy">16</div></div>
+                    <div><h5>QuickBooks Clean-Up Clinic</h5><div class="tm">Thu · 1:00–2:30 PM · <span class="wf-chip live">Live online</span> <span class="wf-chip paid">$25</span></div></div>
+                    <span class="wf-btn ghost">Details</span>
+                  </div>
+                  <div class="tcard">
+                    <div class="tdate"><div class="mo">Any</div><div class="dy">⏵</div></div>
+                    <div><h5>Business Plan Basics — Starter Track</h5><div class="tm">Self-paced course · 6 short lessons <span class="wf-chip">On-demand</span></div></div>
+                    <span class="wf-btn ghost">Start</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Event detail -->
+        <div class="walk-panel" data-panel="1">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/trainings/loan-ready</span></div>
+            <div class="screen">
+              <div class="wf-top">
+                <div class="wf-logo">SBDC<small>Your business. Better.</small></div>
+                <div class="wf-nav"><span>Funded</span><span class="sel">Connected</span><span>People</span></div>
+                <div class="wf-user"><span class="wf-ava">MV</span> Maria</div>
+              </div>
+              <div class="detail-wf">
+                <span class="wf-chip live">Live online</span> <span class="wf-chip free">Free</span>
+                <h3>Getting Loan-Ready: What Lenders Actually Look For</h3>
+                <div class="when">Tuesday, July 14 · 10:00–11:00 AM PT · Presented by an SBDC finance advisor</div>
+                <div class="learn">
+                  <span>The five numbers every lender checks first</span>
+                  <span>How to fix the most common application red flags</span>
+                  <span>What to bring to your first advisor conversation</span>
+                </div>
+                <div class="reg-row">
+                  <span class="wf-btn red">Register — one click</span>
+                  <span class="reg-note">Signed in as <b>maria@velasquezcatering.com</b> — no forms to fill.<br/>Paid sessions add one secure checkout step here.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Confirmation -->
+        <div class="walk-panel" data-panel="2">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/trainings/loan-ready</span></div>
+            <div class="screen">
+              <div class="confirm-wf">
+                <div class="bigcheck">✓</div>
+                <h3 style="font-size:26px;font-weight:600;">You’re in, Maria.</h3>
+                <p style="color:var(--muted);font-size:14px;margin-top:6px;">Getting Loan-Ready · Tue, July 14 · 10:00 AM PT</p>
+                <div class="joinbox">
+                  <div class="jh">Your personal join link — saved to your dashboard</div>
+                  <div class="jl">zoom.us/j/91402··· (unique to you — no codes to dig for)</div>
+                </div>
+                <div class="cal-row">
+                  <span class="wf-btn ghost">Add to Google Calendar</span>
+                  <span class="wf-btn ghost">Add to Outlook</span>
+                </div>
+                <p style="font-size:12px;color:var(--muted);margin-top:18px;">Also added to <b>My Trainings</b> · a reminder email arrives the day before.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: My Trainings -->
+        <div class="walk-panel" data-panel="3">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/my/trainings</span></div>
+            <div class="screen">
+              <div class="wf-top">
+                <div class="wf-logo">SBDC<small>MySBDC dashboard</small></div>
+                <div class="wf-nav"><span>Overview</span><span class="sel">My Trainings</span><span>Milestones</span></div>
+                <div class="wf-user"><span class="wf-ava">MV</span> Maria</div>
+              </div>
+              <div class="mt-list">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Upcoming — live</div>
+                <div class="mt-row">
+                  <div><div class="t">Getting Loan-Ready: What Lenders Actually Look For</div><div class="s">Tue, Jul 14 · 10:00 AM PT · your join link is ready</div></div>
+                  <span class="wf-btn ghost">Join opens day-of</span>
+                </div>
+                <div class="mt-row">
+                  <div><div class="t">QuickBooks Clean-Up Clinic</div><div class="s">Thu, Jul 16 · 1:00 PM PT · paid · receipt in your email</div></div>
+                  <span class="wf-btn ghost">Join opens day-of</span>
+                </div>
+                <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;">In progress — on-demand</div>
+                <div class="mt-row">
+                  <div><div class="t">Business Plan Basics — Starter Track</div><div class="s">Lesson 3 of 6 · picks up where you left off</div></div>
+                  <span class="wf-btn">Continue</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: Day of -->
+        <div class="walk-panel" data-panel="4">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/my/trainings</span></div>
+            <div class="screen">
+              <div class="wf-top">
+                <div class="wf-logo">SBDC<small>MySBDC dashboard</small></div>
+                <div class="wf-nav"><span>Overview</span><span class="sel">My Trainings</span><span>Milestones</span></div>
+                <div class="wf-user"><span class="wf-ava">MV</span> Maria</div>
+              </div>
+              <div class="mt-list">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);">Today · Tuesday, July 14</div>
+                <div class="mt-row today">
+                  <div><div class="t">Getting Loan-Ready: What Lenders Actually Look For</div><div class="s">Starts in 12 minutes — one click, no meeting codes, no hunting through email</div></div>
+                  <span class="wf-btn" style="background:var(--green)">Join now</span>
+                </div>
+                <div class="mt-row">
+                  <div><div class="t">QuickBooks Clean-Up Clinic</div><div class="s">Thu, Jul 16 · 1:00 PM PT</div></div>
+                  <span class="wf-btn ghost">Join opens day-of</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: Afterwards -->
+        <div class="walk-panel" data-panel="5">
+          <div class="browser">
+            <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">behind the scenes — nothing for anyone to do</span></div>
+            <div class="screen">
+              <div class="auto-line">
+                <div class="ev"><div class="when">Tue · 11:02 AM</div><div class="pip"></div><div class="what"><b>Training ends.</b><small>Maria closes the window and gets on with her day.</small></div></div>
+                <div class="ev"><div class="when">Tue · overnight</div><div class="pip"></div><div class="what"><b>The portal checks the classroom’s attendance sheet.</b><small>Who joined, and for how long — collected automatically from Zoom.</small></div></div>
+                <div class="ev"><div class="when">Wed · by morning</div><div class="pip g"></div><div class="what"><b>Maria’s client record is updated: Attended ✓</b><small>No-shows are recorded too. The file in Neoserra is the single source of truth.</small></div></div>
+                <div class="ev"><div class="when">Always</div><div class="pip g"></div><div class="what"><b>SBA-compliant attendance reporting — complete.</b><small>No sign-in sheets, no spreadsheet reconciliation, no chasing. This is where the ~40% admin savings come from.</small></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky annotations -->
+      <aside class="walk-note" aria-live="polite">
+        <div class="wn show" data-note="0">
+          <h4>1 · Browse one calendar</h4>
+          <p>Every training across the entire network, in one place, with directory-style filters: topic, date, format, price. No more 18 different event pages.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>Staff create each event <b>once</b>, in Neoserra. The website notices new events overnight and publishes them automatically — virtual events even get their Zoom room created for them. Nobody re-types an event onto a website ever again.</p></div>
+          <div class="walk-ctl"><button disabled>← Back</button><button class="primary" data-go="1">Next →</button></div>
+        </div>
+        <div class="wn" data-note="1">
+          <h4>2 · One click, zero forms</h4>
+          <p>Because Maria is already signed in, the portal knows who she is. Registering is literally one click — name, email, and business details come along automatically.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>The moment she clicks, two things happen at once: the live classroom (Zoom) reserves her seat, and her client file (Neoserra) is marked “Registered.” For paid sessions, a secure checkout (Stripe) appears first — one step, receipt by email.</p></div>
+          <div class="walk-ctl"><button data-go="0">← Back</button><button class="primary" data-go="2">Next →</button></div>
+        </div>
+        <div class="wn" data-note="2">
+          <h4>3 · Instant confirmation</h4>
+          <p>A personal join link — unique to Maria — plus add-to-calendar buttons. The link is also saved to her dashboard, so losing the email doesn’t matter.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>The personalized link is what makes attendance tracking automatic later: when Maria joins through it, the system knows it’s her — no sign-in sheet needed.</p></div>
+          <div class="walk-ctl"><button data-go="1">← Back</button><button class="primary" data-go="3">Next →</button></div>
+        </div>
+        <div class="wn" data-note="3">
+          <h4>4 · My Trainings — only hers</h4>
+          <p>The dashboard shows just what Maria registered for: upcoming live sessions and in-progress courses. On-demand courses open instantly with the same login — no second password.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>This list isn’t a copy — it’s a live view of her registrations in Zoom and her course progress in LearnWorlds. One source of truth, displayed in one place.</p></div>
+          <div class="walk-ctl"><button data-go="2">← Back</button><button class="primary" data-go="4">Next →</button></div>
+        </div>
+        <div class="wn" data-note="4">
+          <h4>5 · Day of: just “Join now”</h4>
+          <p>No meeting IDs, no passcodes, no digging through a crowded inbox. The button lights up when it’s time.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>The button uses her personal join link — which is also how her attendance gets recorded without anyone lifting a finger.</p></div>
+          <div class="walk-ctl"><button data-go="3">← Back</button><button class="primary" data-go="5">Next →</button></div>
+        </div>
+        <div class="wn" data-note="5">
+          <h4>6 · Afterwards: the loop closes itself</h4>
+          <p>This is the step nobody sees — and the one that saves the most staff time. Attendance flows back to each client’s record automatically, overnight.</p>
+          <div class="behind"><div class="bh">Behind the curtain</div><p>Every night the portal compares who registered with who actually attended, and updates each client file in Neoserra: <b>Attended</b> or <b>No-show</b>. SBA-compliant tracking, complete, with zero manual entry.</p></div>
+          <div class="walk-ctl"><button data-go="4">← Back</button><button class="primary" data-go="0">Restart ↺</button></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Staff-side automation strip -->
+    <div style="margin-top:54px;">
+      <div class="head" style="margin-bottom:24px;">
+        <div class="kicker">Why there’s nothing to maintain</div>
+        <h2 style="font-size:24px;">A training’s life, start to finish.</h2>
+      </div>
+      <div class="phases">
+        <div class="phase"><span class="pn">1</span><span class="who staff">Staff · 5 minutes</span><h4>Create the event — once</h4><p>A staff member adds the training to Neoserra, the master calendar. That’s the only manual step in the entire lifecycle.</p></div>
+        <div class="phase"><span class="pn">2</span><span class="who auto">Automatic · overnight</span><h4>The portal sets the table</h4><p>The website spots the new event, creates the Zoom room for virtual sessions, and publishes the registration page. By morning it’s live.</p></div>
+        <div class="phase"><span class="pn">3</span><span class="who auto">Automatic · instant</span><h4>Clients register themselves</h4><p>One-click signup reserves the Zoom seat, marks the client file “Registered,” and drops the event into their dashboard with a personal join link.</p></div>
+        <div class="phase"><span class="pn">4</span><span class="who auto">Automatic · nightly</span><h4>Attendance closes the loop</h4><p>After the session, actual attendance flows back into each client record — Attended or No-show — ready for SBA reporting. No spreadsheets.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ DASHBOARD ════════ -->
+<section id="dashboard">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">Immersive wireframe · UX/UI</div>
+      <h2>The MySBDC dashboard — a personal command center.</h2>
+      <div class="redline"></div>
+      <p>One screen that always answers “what should I do next?” <b>Click the numbered markers</b> (or the notes on the right) to explore each part.</p>
+    </div>
+
+    <div class="dash-wrap">
+      <div class="dash">
+        <div class="browser">
+          <div class="bar"><span class="b"></span><span class="b"></span><span class="b"></span><span class="url">norcalsbdc.org/my</span></div>
+          <div class="screen">
+            <div class="wf-top">
+              <div class="wf-logo">SBDC<small>Your business. Better.</small></div>
+              <div class="wf-nav"><span class="sel">Overview</span><span>My Trainings</span><span>Milestones</span><span>My Advisor</span></div>
+              <div class="wf-user"><span class="wf-ava">MV</span> Maria</div>
+            </div>
+            <div class="greet">
+              <h3>Good morning, Maria.</h3>
+              <span class="sub">Velasquez Catering Co. · client since June 2026</span>
+            </div>
+            <div class="dash-grid">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div class="dcard next-step" style="position:relative;">
+                  <button class="hotspot" data-spot="1" style="top:-12px;left:-12px;" aria-label="About Your Next Step">1</button>
+                  <div class="dh">Your next step</div>
+                  <h5>Book your 15-minute Welcome Call</h5>
+                  <p>Your 641 is complete and you’ve been matched with the Success Team. Pick a time that works — it’s how everything starts.</p>
+                  <span class="wf-btn red">Choose a time</span>
+                </div>
+                <div class="dcard" style="position:relative;">
+                  <button class="hotspot" data-spot="2" style="top:-12px;left:-12px;" aria-label="About My Trainings">2</button>
+                  <div class="dh">My trainings</div>
+                  <div class="mt-row today" style="margin-bottom:8px;">
+                    <div><div class="t">Getting Loan-Ready</div><div class="s">Today · 10:00 AM</div></div>
+                    <span class="wf-btn" style="background:var(--green)">Join now</span>
+                  </div>
+                  <div class="mt-row">
+                    <div><div class="t">Business Plan Basics</div><div class="s">Lesson 3 of 6</div></div>
+                    <span class="wf-btn ghost">Continue</span>
+                  </div>
+                </div>
+                <div class="dcard" style="position:relative;">
+                  <button class="hotspot" data-spot="5" style="top:-12px;left:-12px;" aria-label="About the video rail">5</button>
+                  <div class="dh">Quick videos · 60–90 seconds each</div>
+                  <div class="vids">
+                    <div class="vid"><span class="play"></span><span class="vt">Welcome to SBDC</span></div>
+                    <div class="vid"><span class="play"></span><span class="vt">How milestones work</span></div>
+                    <div class="vid"><span class="play"></span><span class="vt">Director’s welcome</span></div>
+                    <div class="vid"><span class="play"></span><span class="vt">Client tips</span></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div class="dcard" style="position:relative;">
+                  <button class="hotspot" data-spot="3" style="top:-12px;left:-12px;" aria-label="About milestones">3</button>
+                  <div class="dh">Report a win</div>
+                  <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">Landed funding? Made a hire? Revenue up? Tell us in under a minute — it goes straight on your file and the network map.</p>
+                  <span class="wf-btn">Report a win</span>
+                </div>
+                <div class="dcard" style="position:relative;">
+                  <button class="hotspot" data-spot="4" style="top:-12px;left:-12px;" aria-label="About my advisor">4</button>
+                  <div class="dh">My advisor</div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="wf-ava" style="width:34px;height:34px;font-size:13px;">DR</span>
+                    <div><div style="font-size:13px;font-weight:700;color:var(--navy-900);">D. Reyes</div><div style="font-size:11px;color:var(--muted);">Finance &amp; capital readiness</div></div>
+                  </div>
+                  <div style="margin-top:12px;"><span class="wf-btn ghost">Message</span> <span class="wf-btn ghost">Book a session</span></div>
+                </div>
+                <div class="dcard" style="position:relative;">
+                  <button class="hotspot" data-spot="6" style="top:-12px;left:-12px;" aria-label="About the Atlas widget">6</button>
+                  <div class="dh">You’re part of this — network impact</div>
+                  <div class="mini-atlas">
+                    <div class="ma"><div class="v">$112K</div><div class="l">Funding</div></div>
+                    <div class="ma"><div class="v">+7</div><div class="l">Jobs</div></div>
+                    <div class="ma"><div class="v">21</div><div class="l">Starts</div></div>
+                  </div>
+                  <div style="margin-top:10px;font-size:11px;color:var(--navy-600);">View the Success Atlas →</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="spot-notes" aria-label="Dashboard annotations">
+        <div class="spot-note on" data-note-spot="1" tabindex="0">
+          <div class="sn-h"><span class="sn-n">1</span>Your Next Step — never a dead end</div>
+          <p>One persistent card that always knows the single most useful thing to do now, and updates itself: “Finish your 641” → “Book your welcome call” → “Register for orientation” → “Report your first win.” New clients are never left wondering what happens next.</p>
+        </div>
+        <div class="spot-note" data-note-spot="2" tabindex="0">
+          <div class="sn-h"><span class="sn-n">2</span>My Trainings — only what’s yours</div>
+          <p>Registered live sessions with one-click Join (lights up day-of), plus on-demand courses that resume where the client left off. No browsing required to get back to your stuff.</p>
+        </div>
+        <div class="spot-note" data-note-spot="3" tabindex="0">
+          <div class="sn-h"><span class="sn-n">3</span>Report a win — the 60-second milestone</div>
+          <p>A TurboTax-style mini-wizard for logging Funding, Hires, Revenue, or a Business Start. Three small steps, then it’s on the client’s official record and feeding the public Success Atlas. Try it below.</p>
+        </div>
+        <div class="spot-note" data-note-spot="4" tabindex="0">
+          <div class="sn-h"><span class="sn-n">4</span>My advisor — a person, not a portal</div>
+          <p>The client’s matched advisor with one-tap messaging and session booking. Advising sessions land on the official record automatically.</p>
+        </div>
+        <div class="spot-note" data-note-spot="5" tabindex="0">
+          <div class="sn-h"><span class="sn-n">5</span>Video rail — orientation in minutes</div>
+          <p>Four 60–90 second micro-videos: SBDC orientation, how milestones work, a director’s welcome, and client tips. Watchable in a coffee break.</p>
+        </div>
+        <div class="spot-note" data-note-spot="6" tabindex="0">
+          <div class="sn-h"><span class="sn-n">6</span>Success Atlas widget — you’re part of this</div>
+          <p>Live network totals embedded right in the dashboard, so every client sees the collective impact they contribute to. Links to the full public map.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ── Milestone wizard demo ── -->
+    <div style="margin-top:64px;">
+      <div class="head" style="margin-bottom:26px;max-width:560px;margin-left:auto;margin-right:auto;text-align:center;">
+        <div class="kicker">Try it — interactive</div>
+        <h2 style="font-size:24px;">The 60-second win report.</h2>
+        <p style="color:var(--muted);font-size:14px;margin-top:8px;">This is a working mock of the milestone mini-wizard. Click through it.</p>
+      </div>
+      <div class="ms-demo">
+        <div class="ms-shell">
+          <div class="ms-head">
+            <span class="t">Report a win</span>
+            <span class="ms-prog" id="msProg"><span class="on"></span><span></span><span></span></span>
+          </div>
+          <div class="ms-body" id="msBody"></div>
+          <div class="ms-foot">
+            <span class="hint" id="msHint">Step 1 of 3 — about 20 seconds</span>
+            <button id="msNext" disabled>Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SMART 641 ════════ -->
+<section class="band" id="intake">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">Onboarding</div>
+      <h2>The Smart 641 — a form people actually finish.</h2>
+      <div class="redline"></div>
+      <p>The traditional SBA Form 641 is the single biggest source of friction and bad data in the network. MySBDC replaces it with a friendly, autosaving wizard — and uses the answers to give every client the right start, automatically.</p>
+    </div>
+    <div class="w641">
+      <div class="pane">
+        <div class="wiz">
+          <div class="prog"></div>
+          <div class="pmeta"><span>Question 4 of 10</span><span class="save">✓ Saved automatically</span></div>
+          <h5>How soon are you hoping to access capital?</h5>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span class="wf-input" style="border-color:var(--navy-900);color:var(--navy-900);font-weight:600;">Within the next 90 days</span>
+            <span class="wf-input">3–6 months</span>
+            <span class="wf-input">Just exploring for now</span>
+          </div>
+        </div>
+        <div class="cap"><b>One question per screen,</b> plain language, smart branching — questions that don’t apply never appear. Stop anytime; it picks up where you left off.</div>
+      </div>
+      <div class="pane">
+        <div class="score-pane">
+          <div class="dial"><div class="in"><span class="sc">73</span><span class="sl">Readiness</span></div></div>
+          <div class="signals">
+            <span>Business is registered and operating</span>
+            <span>Financial documents mostly ready</span>
+            <span>Seeking capital within 90 days</span>
+          </div>
+        </div>
+        <div class="cap"><b>A readiness score (0–100)</b> is calculated on submission from status, document readiness, capital timeline, and credit signals. Clients never see homework — just the right next step.</div>
+      </div>
+      <div class="pane">
+        <div class="fork">
+          <div class="route">
+            <div class="r-h">Advising-ready <span class="th">score ≥ 60</span></div>
+            <p>Auto-paired with an advisor and invited to a 15-minute <b>Success Team Welcome Call</b> — white-glove from minute one.</p>
+          </div>
+          <div class="route">
+            <div class="r-h">Training-first <span class="th">score &lt; 60</span></div>
+            <p>Self-serve starter-track modules build readiness; the dashboard nudges them back to advising when they’re ready.</p>
+          </div>
+          <div class="route fast">
+            <div class="r-h">Fast-track <span class="th" style="color:var(--red)">automatic 100</span></div>
+            <p>Launching in &lt;90 days, or referred by a lender? Straight to red-carpet advisor access — no waiting.</p>
+          </div>
+        </div>
+        <div class="cap"><b>Two tracks plus a fast lane.</b> The business ZIP captured here quietly maps each client to the right Success Team — no region-picking by the client, ever.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ OUTCOMES ════════ -->
+<section id="outcomes">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker">What the network gets</div>
+      <h2>Why this is worth doing.</h2>
+      <div class="redline"></div>
+    </div>
+    <div class="outs">
+      <div class="out"><div class="o-n">~40<em>%</em></div><h4>Less admin work</h4><p>Registration, attendance, and weekly newsletter drafts run themselves — 5–10 staff hours back per week, per center, redirected to actual advising.</p></div>
+      <div class="out"><div class="o-n">80<em>%</em></div><h4>Cleaner data</h4><p>One smart intake instead of 18 variations means consistent, complete 641 records — and far less time spent fixing them.</p></div>
+      <div class="out"><div class="o-n">1</div><h4>Domain, brand, login</h4><p>All search authority on norcalsbdc.org; one accessibility standard (WCAG 2.2 AA); one place to patch, audit, and improve.</p></div>
+      <div class="out"><div class="o-n">Live</div><h4>Impact you can show</h4><p>Milestones flow to the Success Atlas in real time. Leadership, funders, and the SBA see “starts live” — not quarterly spreadsheets.</p></div>
+      <div class="out"><div class="o-n">&lt;60<em>s</em></div><h4>From win to map</h4><p>A client reports funding, a hire, or revenue growth in under a minute; it lands on their official record and the public map at once.</p></div>
+      <div class="out"><div class="o-n">0</div><h4>Repeated questions</h4><p>One login and one source of truth mean clients never re-enter what the network already knows. Respecting their time is the brand.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <span><b>MySBDC</b> · Project blueprint — internal planning document · June 2026</span>
+    <span>Design language: information-system style · navy &amp; sand · thin red rules · Source Serif 4 + Inter</span>
+    <span>All client names and data in wireframes are illustrative.</span>
+  </div>
+</footer>
+
+<script>
+/* ───────── Walkthrough stepper ───────── */
+const stepBtns=[...document.querySelectorAll('.steps-nav button')];
+const panels=[...document.querySelectorAll('.walk-panel')];
+const notes=[...document.querySelectorAll('.walk-note .wn')];
+function goStep(i){
+  stepBtns.forEach((b,k)=>b.setAttribute('aria-pressed',k===i));
+  panels.forEach((p,k)=>p.classList.toggle('show',k===i));
+  notes.forEach((n,k)=>n.classList.toggle('show',k===i));
+}
+stepBtns.forEach((b,i)=>b.addEventListener('click',()=>goStep(i)));
+document.querySelectorAll('.walk-ctl button[data-go]').forEach(b=>{
+  b.addEventListener('click',()=>goStep(parseInt(b.dataset.go,10)));
+});
+
+/* ───────── Dashboard hotspots ───────── */
+const spots=[...document.querySelectorAll('.hotspot')];
+const spotNotes=[...document.querySelectorAll('.spot-note')];
+function selSpot(id){
+  spots.forEach(s=>s.classList.toggle('on',s.dataset.spot===id));
+  spotNotes.forEach(n=>n.classList.toggle('on',n.dataset.noteSpot===id));
+}
+spots.forEach(s=>s.addEventListener('click',()=>selSpot(s.dataset.spot)));
+spotNotes.forEach(n=>{
+  n.addEventListener('click',()=>selSpot(n.dataset.noteSpot));
+  n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selSpot(n.dataset.noteSpot);}});
+});
+selSpot('1');
+
+/* ───────── Milestone wizard demo ───────── */
+const msBody=document.getElementById('msBody');
+const msNext=document.getElementById('msNext');
+const msHint=document.getElementById('msHint');
+const msProg=[...document.querySelectorAll('#msProg span')];
+let msStep=0, msType=null;
+
+const msTypes=[
+  {k:'funding', t:'Funding secured', s:'A loan, grant, or investment came through'},
+  {k:'hire',    t:'New hire',        s:'You added to your team'},
+  {k:'revenue', t:'Revenue growth',  s:'Sales are up since you started with us'},
+  {k:'start',   t:'Business start',  s:'You officially opened your doors'},
+];
+
+function msRender(){
+  msProg.forEach((p,i)=>p.classList.toggle('on',i<=msStep));
+  if(msStep===0){
+    msHint.textContent='Step 1 of 3 — about 20 seconds';
+    msNext.textContent='Next →'; msNext.disabled=!msType;
+    msBody.innerHTML='<div class="ms-q">Congrats! What kind of win is it?</div>'+
+      '<div class="ms-opts">'+msTypes.map(o=>
+        `<button class="ms-opt${msType===o.k?' sel':''}" data-k="${o.k}"><span class="o-t">${o.t}</span><span class="o-s" style="display:block">${o.s}</span></button>`).join('')+'</div>';
+    msBody.querySelectorAll('.ms-opt').forEach(b=>b.addEventListener('click',()=>{msType=b.dataset.k;msRender();}));
+  }else if(msStep===1){
+    msHint.textContent='Step 2 of 3 — the details';
+    msNext.textContent='Next →'; msNext.disabled=false;
+    const isMoney=(msType==='funding'||msType==='revenue');
+    msBody.innerHTML='<div class="ms-q">Tell us a little about it.</div>'+
+      (isMoney?'<div class="ms-field"><label>Amount</label><input value="$25,000" readonly/></div>':'')+
+      (msType==='hire'?'<div class="ms-field"><label>How many people?</label><input value="2 — one full-time, one part-time" readonly/></div>':'')+
+      (msType==='start'?'<div class="ms-field"><label>When did you open?</label><input value="June 2026" readonly/></div>':'')+
+      '<div class="ms-field"><label>When did it happen?</label><input value="This month" readonly/></div>'+
+      '<div class="ms-field"><label>How did SBDC help? (optional — this can become a success story)</label><textarea rows="2" readonly>My advisor helped me get the paperwork lender-ready.</textarea></div>';
+  }else if(msStep===2){
+    msHint.textContent='Step 3 of 3 — confirm & sign';
+    msNext.textContent='Submit ✓'; msNext.disabled=false;
+    msBody.innerHTML='<div class="ms-q">Looks right? Sign and send.</div>'+
+      '<div class="ms-field"><label>Type your name to sign</label><input value="Maria Velasquez" readonly/></div>'+
+      '<label style="display:flex;gap:9px;font-size:12.5px;color:var(--muted);align-items:flex-start;margin-top:6px;"><span class="cbox on" style="margin-top:2px;"></span> You may share my story publicly (with my approval on final wording).</label>';
+  }else{
+    msHint.textContent='Done — that took about 45 seconds';
+    msNext.textContent='Start over ↺'; msNext.disabled=false;
+    msBody.innerHTML='<div class="ms-done"><div class="bigcheck">✓</div>'+
+      '<div class="ms-q" style="margin-bottom:4px;">Recorded. Nice work, Maria.</div>'+
+      '<p style="font-size:13px;color:var(--muted)">Here’s everywhere that one report just went:</p>'+
+      '<div class="routes">'+
+      '<div><span class="ok">✓</span> Your official client file — updated (the master record)</div>'+
+      '<div><span class="ok">✓</span> Your advisor — notified, so they can celebrate with you</div>'+
+      '<div><span class="ok">✓</span> The Success Atlas — the network’s live impact map</div>'+
+      '<div><span class="ok">✓</span> SBA reporting — counted automatically, no paperwork</div>'+
+      '</div></div>';
+  }
+}
+msNext.addEventListener('click',()=>{ msStep=(msStep+1)%4; if(msStep===0){msType=null;} msRender(); });
+msRender();
+
+/* ───────── Active nav highlight ───────── */
+const navLinks=[...document.querySelectorAll('nav.toc a')];
+const sections=navLinks.map(a=>document.querySelector(a.getAttribute('href')));
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+},{rootMargin:'-30% 0px -60% 0px'});
+sections.forEach(s=>s&&io.observe(s));
+</script>
+</body>
+</html>
