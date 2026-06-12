@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MySBDC — Blueprint Deck</title>
+<title>Meet MySBDC</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,567 +19,315 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-snap-type:y proximity;scroll-behavior:smooth;}
-body{font-family:var(--sans);color:var(--ink);background:#fff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
-h1,h2,h3{font-family:var(--serif);font-weight:300;color:var(--navy);letter-spacing:-0.01em;}
+body{font-family:var(--sans);color:var(--ink);background:#fff;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+h1,h2{font-family:var(--serif);font-weight:300;color:var(--navy);letter-spacing:-0.015em;}
 ::selection{background:var(--navy);color:#fff;}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px;}
 button{font-family:var(--sans);cursor:pointer;}
 
-/* ── slides ── */
-.slide{min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;position:relative;padding:72px 0;}
-.slide .wrap{max-width:980px;margin:0 auto;padding:0 36px;width:100%;}
-.kicker{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-.kicker .live{color:var(--red);}
-.slide h2{font-size:34px;line-height:1.18;margin-bottom:10px;}
-.slide .lead{font-size:16px;color:var(--muted);max-width:600px;}
-.rule{width:40px;height:1px;background:var(--red);margin:22px 0 30px;}
+/* slides */
+.slide{min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;position:relative;padding:80px 0;}
+.slide .wrap{max-width:760px;margin:0 auto;padding:0 32px;width:100%;text-align:center;}
+.kicker{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:22px;}
+.slide h2{font-size:46px;line-height:1.12;}
+.sub{font-size:18px;color:var(--muted);margin-top:16px;max-width:520px;margin-left:auto;margin-right:auto;}
 
 /* deck chrome */
-.dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:90;}
+.dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:90;}
 .dots button{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;transition:.2s;}
 .dots button.on{background:var(--red);transform:scale(1.35);}
 .deckbar{position:fixed;bottom:0;left:0;right:0;z-index:90;display:flex;justify-content:space-between;align-items:center;padding:12px 26px;background:rgba(255,255,255,.92);border-top:1px solid var(--line);backdrop-filter:blur(6px);}
 .deckbar .t{font-family:var(--serif);font-weight:600;color:var(--navy);font-size:13px;}
-.deckbar .t small{font-family:var(--sans);font-weight:400;color:var(--muted);margin-left:10px;font-size:11px;}
 .deckbar .nav{display:flex;align-items:center;gap:14px;}
-.deckbar .cnt{font-size:12px;color:var(--muted);min-width:46px;text-align:center;}
+.deckbar .cnt{font-size:12px;color:var(--muted);min-width:44px;text-align:center;}
 .deckbar .nav button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--navy);font-size:14px;}
 .deckbar .nav button:hover{border-color:var(--navy);}
 
 /* toasts */
-#toasts{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
-.toast{background:var(--navy);color:#fff;border-radius:7px;padding:11px 20px;font-size:13px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(11,42,71,.3);animation:tin .25s ease both;max-width:480px;}
+#toasts{position:fixed;bottom:66px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+.toast{background:var(--navy);color:#fff;border-radius:8px;padding:12px 22px;font-size:13.5px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 32px rgba(11,42,71,.3);animation:tin .25s ease both;max-width:480px;text-align:left;}
 .toast.out{animation:tout .3s ease both;}
 .toast .c{color:#6EE7A0;font-weight:600;}
-.toast small{color:#9DB4CC;display:block;font-size:11px;}
+.toast small{color:#9DB4CC;display:block;font-size:11.5px;}
 @keyframes tin{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 @keyframes tout{to{opacity:0;transform:translateY(8px);}}
 
-/* generic rows */
-.rows .row{display:grid;grid-template-columns:190px 1fr;gap:24px;padding:15px 0;border-top:1px solid var(--line);align-items:baseline;}
-.rows .row:last-child{border-bottom:1px solid var(--line);}
-.row .a{font-weight:600;color:var(--navy);font-size:14px;}
-.row .a small{display:block;font-weight:400;font-family:var(--serif);font-style:italic;color:var(--blue);font-size:12.5px;}
-.row .b2{font-size:13.5px;color:var(--muted);}
-
-/* title slide */
-.s-title{background:var(--navy);}
-.s-title .kicker{color:#8FA8C4;}
-.s-title h1{color:#fff;font-size:52px;line-height:1.1;max-width:720px;}
-.s-title .sub{margin-top:22px;font-family:var(--serif);font-size:18px;color:#B9CADD;max-width:540px;}
-.ns{margin-top:40px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#8FA8C4;}
+/* navy slides */
+.dark{background:var(--navy);}
+.dark .kicker{color:#8FA8C4;}
+.dark h1{color:#fff;font-size:62px;line-height:1.06;}
+.dark .sub{color:#B9CADD;}
+.ns{margin-top:38px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#8FA8C4;}
 .ns b{color:#fff;font-weight:600;}
-.ns i{font-style:normal;color:var(--red);padding:0 12px;}
-.hint{margin-top:56px;font-size:12px;color:#8FA8C4;display:flex;align-items:center;gap:8px;}
-.key{display:inline-block;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:1px 8px;font-size:11px;color:#fff;}
+.ns i{font-style:normal;color:var(--red);padding:0 14px;}
+.hint{margin-top:60px;font-size:12.5px;color:#8FA8C4;}
+.key{display:inline-block;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:1px 9px;font-size:11px;color:#fff;margin-right:6px;}
 
-/* stats */
-.statrow{display:flex;gap:56px;flex-wrap:wrap;margin:34px 0 38px;}
-.statrow .n{font-family:var(--serif);font-size:40px;font-weight:300;color:var(--navy);line-height:1;}
-.statrow .n em{font-style:normal;color:var(--red);}
-.statrow .l{font-size:12px;color:var(--muted);margin-top:6px;max-width:160px;}
-.twocol{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
-.twocol h3{font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;}
-.twocol .was h3{color:var(--muted);} .twocol .now h3{color:var(--red);}
-.twocol li{list-style:none;padding:9px 0 9px 22px;border-top:1px solid var(--line);font-size:13.5px;position:relative;}
-.twocol .was li{color:var(--muted);}
-.twocol .was li::before{content:"×";position:absolute;left:2px;color:#C2533A;}
-.twocol .now li::before{content:"✓";position:absolute;left:0;color:var(--green);}
+/* 18 -> 1 */
+.bignum{font-family:var(--serif);font-size:120px;font-weight:300;color:var(--navy);line-height:1;margin-top:30px;}
+.bignum em{font-style:normal;color:var(--red);}
+.systems{margin-top:46px;font-size:13px;color:var(--muted);letter-spacing:.04em;}
+.systems b{color:var(--navy);font-weight:500;}
+.systems i{font-style:normal;color:var(--line);padding:0 10px;}
 
-/* pull quote */
-.pull{margin-top:30px;padding-left:22px;border-left:2px solid var(--red);}
-.pull p{font-family:var(--serif);font-size:16.5px;color:var(--navy);max-width:640px;}
-
-/* journey */
-.jstep{display:grid;grid-template-columns:46px 200px 1fr;gap:18px;padding:14px 0;border-top:1px solid var(--line);align-items:baseline;}
-.jstep:last-child{border-bottom:1px solid var(--line);}
-.jstep .n{font-family:var(--serif);font-size:20px;color:var(--red);}
-.jstep .t{font-weight:600;color:var(--navy);font-size:14px;}
-.jstep .d{font-size:13px;color:var(--muted);}
-
-/* ── wireframe chrome ── */
-.browser{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;box-shadow:0 18px 50px rgba(11,42,71,.10);}
-.bbar{display:flex;align-items:center;gap:7px;background:var(--sand);border-bottom:1px solid var(--line);padding:9px 16px;}
-.bbar i{width:9px;height:9px;border-radius:50%;background:#DCD5C8;}
-.bbar .u{font-size:11px;color:var(--muted);margin-left:10px;}
-.wf-top{display:flex;align-items:center;justify-content:space-between;padding:12px 26px;border-bottom:1px solid var(--line);}
-.wf-logo{font-family:var(--serif);font-weight:600;color:var(--navy);font-size:14px;}
-.wf-nav{display:flex;gap:20px;font-size:11.5px;font-weight:500;color:var(--muted);}
-.wf-nav .sel{color:var(--navy);border-bottom:2px solid var(--red);padding-bottom:2px;}
-.ava{width:25px;height:25px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex:none;}
-.btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;padding:9px 18px;border-radius:5px;border:none;transition:.15s;}
+/* demo stage */
+.stage{max-width:430px;margin:48px auto 0;text-align:left;}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;box-shadow:0 16px 44px rgba(11,42,71,.09);}
+.btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-size:13px;font-weight:600;padding:11px 22px;border-radius:7px;border:none;transition:.15s;}
 .btn:hover{filter:brightness(1.15);}
 .btn.red{background:var(--red);} .btn.grn{background:var(--green);}
 .btn.gh{background:#fff;color:var(--navy);border:1px solid var(--line);}
 .btn.gh:hover{border-color:var(--navy);filter:none;}
 .btn.done{background:#fff;color:var(--green);border:1px solid var(--green);cursor:default;}
+.btn.done:hover{filter:none;}
 .btn:disabled{opacity:.45;cursor:default;}
-.chip{display:inline-block;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:var(--sand);color:var(--navy);}
-.chip.g{color:var(--green);} .chip.r{color:var(--red);}
 
-/* demo layout: frame + side caption */
-.demo{display:grid;grid-template-columns:1fr 250px;gap:34px;align-items:start;}
-.side h3{font-size:19px;margin-bottom:6px;}
-.side p{font-size:13px;color:var(--muted);}
-.curtain{margin-top:20px;border-top:1px solid var(--line);padding-top:14px;}
-.curtain .h{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
-.curtain .ck{display:flex;gap:9px;font-size:12.5px;color:var(--muted);padding:5px 0;align-items:baseline;transition:.3s;}
-.curtain .ck b{font-weight:600;color:var(--line);transition:.3s;}
-.curtain .ck.on{color:var(--ink);}
-.curtain .ck.on b{color:var(--green);}
+/* training card */
+.tcard{display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:center;}
+.tdate{text-align:center;border-right:1px solid var(--line);padding-right:16px;}
+.tdate .m{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--red);}
+.tdate .d{font-family:var(--serif);font-size:30px;color:var(--navy);line-height:1.1;}
+.tcard h5{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--navy);}
+.tcard .s{font-size:12px;color:var(--muted);margin:3px 0 14px;}
+.after{font-size:12.5px;color:var(--green);margin-top:14px;display:none;}
+.after.show{display:block;animation:tin .35s ease both;}
 
-/* catalog */
-.tc{border:1px solid var(--line);border-radius:7px;padding:14px 18px;display:grid;grid-template-columns:54px 1fr auto;gap:16px;align-items:center;margin:0 26px;}
-.tc+.tc{margin-top:10px;}
-.tc.hl{border-color:var(--navy);}
-.tc.reg{border-color:var(--green);background:#FBFDFA;}
-.td{text-align:center;border-right:1px solid var(--line);padding-right:13px;}
-.td .m{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--red);}
-.td .d{font-family:var(--serif);font-size:22px;color:var(--navy);line-height:1.15;}
-.tc h5{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;}
-.tc .s{font-size:11px;color:var(--muted);}
-.cat-pad{padding:20px 0;}
+/* join row */
+.jrow{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.jrow .t{font-size:15px;font-weight:600;color:var(--navy);}
+.jrow .s{font-size:12px;color:var(--muted);margin-top:2px;}
 
-/* confirmation strip */
-.confstrip{margin:14px 26px 0;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:7px;padding:16px 20px;display:none;animation:tin .35s ease both;}
-.confstrip.show{display:block;}
-.confstrip .t{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--navy);}
-.confstrip .l{font-size:11.5px;color:var(--blue);margin:6px 0 12px;}
-.confstrip .l b{color:var(--muted);font-weight:400;display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;}
-
-/* my trainings rows */
-.mt{padding:22px 28px;display:flex;flex-direction:column;gap:10px;}
-.mt .h{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.mt .h.g{color:var(--green);}
-.mtr{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--line);border-radius:7px;padding:13px 17px;}
-.mtr.today{border-color:var(--green);}
-.mtr .t{font-size:12.5px;font-weight:600;color:var(--navy);}
-.mtr .s{font-size:11px;color:var(--muted);margin-top:1px;}
-
-/* after timeline */
-.aft{padding:6px 28px 20px;}
-.ev{display:grid;grid-template-columns:96px 14px 1fr;gap:13px;padding-bottom:16px;position:relative;opacity:.18;transition:opacity .5s;}
-.ev.on{opacity:1;}
-.ev::before{content:"";position:absolute;left:101px;top:15px;bottom:-2px;width:1px;background:var(--line);}
-.ev:last-child::before{display:none;}
-.ev .w{font-size:10px;color:var(--muted);text-align:right;padding-top:2px;}
-.ev .p{width:9px;height:9px;border-radius:50%;background:var(--navy);margin-top:4px;}
-.ev .p.g{background:var(--green);}
-.ev .t{font-size:12.5px;}
-.ev .t b{color:var(--navy);}
-.ev .t small{display:block;color:var(--muted);font-size:11px;}
-.ffwd{margin:4px 28px 22px;}
+/* attended flip */
+.att{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.badge{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:14px;background:var(--sand);color:var(--muted);transition:.3s;}
+.badge.ok{background:#E9F4EC;color:var(--green);}
 
 /* 641 demo */
-.wiz{border:1px solid var(--line);border-radius:9px;box-shadow:0 18px 50px rgba(11,42,71,.10);overflow:hidden;}
-.wiz .hd{background:var(--navy);color:#fff;padding:13px 22px;display:flex;justify-content:space-between;align-items:center;}
-.wiz .hd .t{font-family:var(--serif);font-size:15px;}
-.wiz .hd .sv{font-size:10.5px;color:#6EE7A0;opacity:0;transition:.3s;}
-.wiz .hd .sv.on{opacity:1;}
-.prog{height:3px;background:var(--sand);position:relative;}
-.prog i{position:absolute;inset:0;right:100%;background:var(--red);transition:right .4s ease;}
-.wiz .bd{padding:26px 28px;min-height:218px;}
-.wiz .q{font-family:var(--serif);font-size:19px;color:var(--navy);margin-bottom:16px;}
-.wiz .opts{display:flex;flex-direction:column;gap:8px;}
-.wiz .opts button{text-align:left;border:1px solid var(--line);border-radius:7px;padding:12px 15px;background:#fff;font-size:13.5px;color:var(--ink);transition:.15s;}
-.wiz .opts button:hover{border-color:var(--blue);}
-.wiz .meta{font-size:10.5px;color:var(--muted);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;}
-.scorewrap{display:none;text-align:center;padding-top:6px;}
-.scorewrap.show{display:block;animation:tin .4s ease both;}
-.dial{width:120px;height:120px;border-radius:50%;margin:0 auto 14px;background:conic-gradient(var(--green) 0 0%, var(--sand) 0% 100%);display:flex;align-items:center;justify-content:center;}
-.dial.fast{background:conic-gradient(var(--red) 0 0%, var(--sand) 0% 100%);}
-.dial .in{width:92px;height:92px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.dial .s{font-family:var(--serif);font-size:32px;color:var(--navy);line-height:1;}
-.dial .l{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-.routeout{font-size:13px;color:var(--muted);max-width:330px;margin:0 auto;}
-.routeout b{display:block;font-family:var(--serif);font-size:17px;color:var(--navy);font-weight:600;margin-bottom:3px;}
-.routeout b.fast{color:var(--red);}
-.replay{margin-top:16px;}
+.q{font-family:var(--serif);font-size:19px;color:var(--navy);margin-bottom:16px;}
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opts button{text-align:left;border:1px solid var(--line);border-radius:8px;padding:13px 16px;background:#fff;font-size:14px;color:var(--ink);transition:.15s;}
+.opts button:hover{border-color:var(--blue);}
+.scorebox{display:none;text-align:center;}
+.scorebox.show{display:block;animation:tin .4s ease both;}
+.dial{width:128px;height:128px;border-radius:50%;margin:6px auto 16px;background:conic-gradient(var(--green) 0 0%, var(--sand) 0% 100%);display:flex;align-items:center;justify-content:center;}
+.dial .in{width:98px;height:98px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.dial .s{font-family:var(--serif);font-size:34px;color:var(--navy);line-height:1;}
+.dial .l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.routeline{font-size:14px;color:var(--muted);}
+.routeline b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.routeline b.fast{color:var(--red);}
 
-/* dashboard */
-.dgrid{display:grid;grid-template-columns:1.55fr 1fr;gap:13px;padding:18px 26px 24px;}
-.dc{border:1px solid var(--line);border-radius:8px;padding:15px 18px;}
-.dc .h{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.greet{padding:18px 26px 0;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
-.greet h3{font-size:19px;font-weight:600;}
-.greet span{font-size:11px;color:var(--muted);}
-.nsc h5{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px;}
-.nsc p{font-size:11.5px;color:var(--muted);margin-bottom:10px;}
-.minia{display:flex;gap:16px;}
-.minia .v{font-family:var(--serif);font-size:17px;color:var(--navy);transition:.3s;}
-.minia .v.tick{color:var(--green);transform:scale(1.12);}
-.minia .l{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+/* win demo */
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.chips button{border:1px solid var(--line);border-radius:8px;padding:13px 14px;background:#fff;font-size:13.5px;font-weight:600;color:var(--navy);transition:.15s;text-align:left;}
+.chips button:hover{border-color:var(--blue);}
+.fld{margin:16px 0 14px;text-align:left;}
+.fld label{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.fld input{width:100%;border:1px solid var(--line);border-radius:7px;padding:12px 14px;font-size:15px;font-family:var(--sans);color:var(--ink);}
+.fld input:focus{border-color:var(--blue);outline:none;}
+.windone{display:none;text-align:center;}
+.windone.show{display:block;animation:tin .35s ease both;}
+.ck{width:46px;height:46px;border-radius:50%;background:var(--green);color:#fff;font-size:22px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.windone .big{font-family:var(--serif);font-size:20px;color:var(--navy);font-weight:600;}
+.windone p{font-size:13px;color:var(--muted);margin-top:4px;}
 
-/* milestone overlay */
-.dashwrap{position:relative;}
-.overlay{position:absolute;inset:0;background:rgba(11,42,71,.45);display:none;align-items:center;justify-content:center;z-index:10;border-radius:9px;}
-.overlay.show{display:flex;animation:tin .25s ease both;}
-.msh{width:400px;max-width:92%;background:#fff;border-radius:9px;overflow:hidden;box-shadow:0 24px 60px rgba(11,42,71,.4);}
-.msx{background:var(--navy);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;}
-.msx .t{font-family:var(--serif);font-size:14px;}
-.msx .x{background:none;border:none;color:#8FA8C4;font-size:16px;line-height:1;}
-.msp{display:flex;gap:4px;}
-.msp i{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.25);}
-.msp i.on{background:var(--red);}
-.msb{padding:20px 22px;min-height:190px;}
-.msq{font-family:var(--serif);font-size:16.5px;color:var(--navy);margin-bottom:13px;}
-.mso{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.mso button{text-align:left;border:1px solid var(--line);border-radius:7px;padding:11px 12px;background:#fff;}
-.mso button:hover{border-color:var(--blue);}
-.mso button.sel{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy);}
-.mso .t{font-size:12px;font-weight:600;color:var(--navy);display:block;}
-.mso .s{font-size:10px;color:var(--muted);}
-.fld{margin-bottom:11px;}
-.fld label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.fld input,.fld textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:13px;font-family:var(--sans);color:var(--ink);}
-.fld input:focus,.fld textarea:focus{border-color:var(--blue);outline:none;}
-.msf{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:11px 20px;background:#FCFBF8;}
-.msf .h{font-size:10.5px;color:var(--muted);}
-.cb{width:13px;height:13px;border:1.5px solid #C9C2B4;border-radius:3px;flex:none;display:inline-block;cursor:pointer;position:relative;}
-.cb.on{background:var(--navy);border-color:var(--navy);}
-.cb.on::after{content:"✓";color:#fff;font-size:9px;position:absolute;top:-3px;left:1.5px;}
+/* atlas counters */
+.counters{display:flex;justify-content:center;gap:64px;margin-top:50px;}
+.counters .v{font-family:var(--serif);font-size:54px;font-weight:300;color:var(--navy);line-height:1;transition:.3s;}
+.counters .v.tick{color:var(--green);transform:scale(1.08);}
+.counters .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.atl-note{margin-top:40px;font-size:13px;color:var(--muted);}
 
-/* lifecycle */
-.cyc{display:grid;grid-template-columns:46px 160px 1fr;gap:18px;padding:15px 0;border-top:1px solid var(--line);align-items:baseline;}
-.cyc:last-child{border-bottom:1px solid var(--line);}
-.cyc .n{font-family:var(--serif);font-size:20px;color:var(--red);}
-.cyc .w{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
-.cyc .w.st{color:var(--blue);} .cyc .w.au{color:var(--green);}
-.cyc .t b{display:block;color:var(--navy);font-size:13.5px;font-weight:600;}
-.cyc .t span{font-size:12.5px;color:var(--muted);}
+/* closer */
+.dark .big-close{font-size:54px;color:#fff;line-height:1.15;}
+.master{margin-top:30px;font-family:var(--serif);font-size:22px;color:#B9CADD;}
+.master b{color:#fff;font-weight:600;}
+.coming{margin-top:52px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#8FA8C4;}
 
-/* outcomes */
-.out{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:18px 0;border-top:1px solid var(--line);align-items:baseline;}
-.out:last-child{border-bottom:1px solid var(--line);}
-.out .n{font-family:var(--serif);font-size:32px;font-weight:300;color:var(--navy);}
-.out .n em{font-style:normal;color:var(--red);}
-.out .t b{display:block;color:var(--navy);font-size:14px;font-weight:600;}
-.out .t span{font-size:13px;color:var(--muted);}
-.closer{margin-top:44px;font-family:var(--serif);font-size:22px;color:var(--navy);}
-.closer b{font-weight:600;}
+.replay{margin-top:18px;}
 
-@media(max-width:880px){
-  .s-title h1{font-size:36px;}
-  .demo{grid-template-columns:1fr;}
-  .twocol{grid-template-columns:1fr;gap:24px;}
-  .dgrid{grid-template-columns:1fr;}
+@media(max-width:760px){
+  .dark h1{font-size:42px;}
+  .slide h2{font-size:32px;}
+  .bignum{font-size:80px;}
   .dots{display:none;}
-  .row,.jstep,.cyc,.out{grid-template-columns:1fr;gap:4px;}
+  .counters{gap:32px;}
+  .counters .v{font-size:38px;}
 }
 @media print{
-  .slide{min-height:0;page-break-after:always;padding:40px 0;}
+  .slide{min-height:0;page-break-after:always;}
   .deckbar,.dots,#toasts{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- deck chrome -->
 <div class="dots" id="dots" aria-label="Slides"></div>
 <div class="deckbar">
-  <span class="t">MySBDC <small>blueprint deck · internal · interactive demos inside</small></span>
+  <span class="t">MySBDC</span>
   <span class="nav">
-    <button id="prev" aria-label="Previous slide">←</button>
-    <span class="cnt" id="cnt">1 / 10</span>
-    <button id="next" aria-label="Next slide">→</button>
+    <button id="prev" aria-label="Previous">←</button>
+    <span class="cnt" id="cnt">1 / 9</span>
+    <button id="next" aria-label="Next">→</button>
   </span>
 </div>
 <div id="toasts" aria-live="polite"></div>
 
-<!-- ═══ 1 · TITLE ═══ -->
-<section class="slide s-title">
+<!-- 1 · TITLE -->
+<section class="slide dark">
   <div class="wrap">
-    <div class="kicker">NorCal SBDC · Project blueprint</div>
-    <h1>One front door for every small business we serve.</h1>
-    <p class="sub">MySBDC replaces 18+ regional websites with a single, unified portal — from a system of discovery to a system of doing.</p>
+    <div class="kicker">NorCal SBDC presents</div>
+    <h1>Meet MySBDC.</h1>
+    <p class="sub">Every SBDC service, behind one door.</p>
     <p class="ns"><b>One login</b><i>·</i><b>One 641</b><i>·</i><b>One dashboard</b></p>
-    <p class="hint"><span class="key">→</span> to advance &nbsp;·&nbsp; slides 5–8 are working demos — click everything</p>
+    <p class="hint"><span class="key">→</span> to advance — and yes, the demos really work.</p>
   </div>
 </section>
 
-<!-- ═══ 2 · THE IDEA ═══ -->
+<!-- 2 · 18 -> 1 -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker">The idea</div>
-    <h2>Simpler for clients. Simpler to run.</h2>
-    <p class="lead">One brand — <em>“SBDC: Your business. Better.”</em> — one account, one place where everything happens.</p>
-    <div class="statrow">
-      <div><div class="n">18 <em>→ 1</em></div><div class="l">websites become one portal</div></div>
-      <div><div class="n">~40<em>%</em></div><div class="l">less admin work for staff</div></div>
-      <div><div class="n">80<em>%</em></div><div class="l">fewer data-quality issues</div></div>
-      <div><div class="n">&lt;60<em>s</em></div><div class="l">to report a win</div></div>
-    </div>
-    <div class="twocol">
-      <div class="was"><h3>Today</h3><ul>
-        <li>A different website and login per region</li>
-        <li>Clients repeat their info at every step</li>
-        <li>Registration handled by hand</li>
-        <li>Reporting from spreadsheets, weeks later</li>
-      </ul></div>
-      <div class="now"><h3>MySBDC</h3><ul>
-        <li>One website, one brand, one account</li>
-        <li>One smart intake — never asked twice</li>
-        <li>One-click signup for any training</li>
-        <li>Attendance &amp; impact report themselves</li>
-      </ul></div>
-    </div>
+    <div class="kicker">The big move</div>
+    <h2>Eighteen websites.<br/>Becoming one.</h2>
+    <div class="bignum">18 <em>→</em> 1</div>
+    <p class="systems">Powered by the tools we already trust<br/><b>Neoserra</b><i>·</i><b>Zoom</b><i>·</i><b>LearnWorlds</b><i>·</i><b>Constant Contact</b><i>·</i><b>Stripe</b> — now with one face.</p>
   </div>
 </section>
 
-<!-- ═══ 3 · MAP ═══ -->
+<!-- 3 · ONE-CLICK SIGNUP -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker">How it fits together</div>
-    <h2>One front door. Five specialists behind it.</h2>
-    <div class="rule"></div>
-    <div class="rows">
-      <div class="row"><span class="a">Public website<small>discover</small></span><span class="b2">Trainings, capital checklists, advisors, stories — organized by Funded · Connected · People.</span></div>
-      <div class="row"><span class="a">MySBDC dashboard<small>do</small></span><span class="b2">The signed-in home: 641 once, one-click trainings, your advisor, report wins.</span></div>
-      <div class="row"><span class="a">Success Atlas<small>show</small></span><span class="b2">A public, live impact map of every win the network helps create.</span></div>
-    </div>
-    <div class="rows" style="margin-top:30px;">
-      <div class="row"><span class="a">Neoserra<small>the master filing cabinet</small></span><span class="b2">The only copy of client records, sessions, and the events calendar.</span></div>
-      <div class="row"><span class="a">Zoom<small>the live classroom</small></span><span class="b2">Runs webinars; knows who actually attended.</span></div>
-      <div class="row"><span class="a">LearnWorlds<small>the course library</small></span><span class="b2">On-demand courses — same login, no second password.</span></div>
-      <div class="row"><span class="a">Constant Contact<small>the newsletter machine</small></span><span class="b2">Drafts the weekly events digest by itself.</span></div>
-      <div class="row"><span class="a">Stripe<small>the cash register</small></span><span class="b2">One secure checkout for paid trainings.</span></div>
-    </div>
-    <div class="pull"><p>Every fact lives in exactly one system; the website simply shows it. That's why nothing drifts out of sync.</p></div>
-  </div>
-</section>
-
-<!-- ═══ 4 · JOURNEY ═══ -->
-<section class="slide">
-  <div class="wrap">
-    <div class="kicker">The client journey</div>
-    <h2>From first visit to wins on the map.</h2>
-    <div class="rule"></div>
-    <div class="jstep"><span class="n">1</span><span class="t">Discover</span><span class="d">One fast homepage; browse by pillar.</span></div>
-    <div class="jstep"><span class="n">2</span><span class="t">One account</span><span class="d">Sign in once — Google, Microsoft, or email — it works across everything.</span></div>
-    <div class="jstep"><span class="n">3</span><span class="t">Smart 641</span><span class="d">A friendly autosaving wizard replaces the dreaded form. <em>(demo: slide 7)</em></span></div>
-    <div class="jstep"><span class="n">4</span><span class="t">The right start</span><span class="d">A readiness score routes each client — advisor pairing or starter training.</span></div>
-    <div class="jstep"><span class="n">5</span><span class="t">Learn &amp; grow</span><span class="d">One-click registration for any training. <em>(demo: next slide)</em></span></div>
-    <div class="jstep"><span class="n">6</span><span class="t">Log wins</span><span class="d">Funding, hires, revenue — under a minute, straight to the Atlas. <em>(demo: slide 8)</em></span></div>
-  </div>
-</section>
-
-<!-- ═══ 5 · DEMO: SIGNUP ═══ -->
-<section class="slide">
-  <div class="wrap">
-    <div class="kicker"><span class="live">● Interactive</span> · Demo 1 of 4</div>
-    <h2>One-click training signup.</h2>
-    <div class="rule"></div>
-    <div class="demo">
-      <div class="browser">
-        <div class="bbar"><i></i><i></i><i></i><span class="u">norcalsbdc.org/trainings</span></div>
-        <div class="wf-top">
-          <span class="wf-logo">SBDC</span>
-          <span class="wf-nav"><span>Funded</span><span class="sel">Connected</span><span>People</span></span>
-          <span class="ava">MV</span>
-        </div>
-        <div class="cat-pad">
-          <div class="tc hl" id="regCard">
-            <div class="td"><div class="m">Jul</div><div class="d">14</div></div>
-            <div><h5>Getting Loan-Ready: What Lenders Actually Look For</h5><div class="s">Tue · 10:00 AM · <span class="chip">Live</span> <span class="chip g">Free</span></div></div>
-            <button class="btn" id="regBtn">Register</button>
-          </div>
-          <div class="tc">
-            <div class="td"><div class="m">Jul</div><div class="d">16</div></div>
-            <div><h5>QuickBooks Clean-Up Clinic</h5><div class="s">Thu · 1:00 PM · <span class="chip">Live</span> <span class="chip r">$25</span></div></div>
-            <button class="btn gh" data-toast="Paid sessions add one secure checkout step|Stripe handles the receipt — staff never touch it">Register · $25</button>
-          </div>
-          <div class="confstrip" id="confStrip">
-            <div class="t">You’re in, Maria.</div>
-            <div class="l"><b>Your personal join link — saved to your dashboard</b>zoom.us/j/91402··· (unique to you)</div>
-            <button class="btn gh" data-toast="Added to Google Calendar">Add to Google Calendar</button>
-            <button class="btn gh" data-toast="Added to Outlook">Add to Outlook</button>
-          </div>
-        </div>
-      </div>
-      <div class="side">
-        <h3>Click <em>Register</em>.</h3>
-        <p>Maria is signed in, so there's no form — her details ride along automatically.</p>
-        <div class="curtain">
-          <div class="h">Behind the curtain</div>
-          <div class="ck" id="ck1"><b>✓</b> Seat reserved in the live classroom (Zoom)</div>
-          <div class="ck" id="ck2"><b>✓</b> Client file marked “Registered” (Neoserra)</div>
-          <div class="ck" id="ck3"><b>✓</b> Personal join link issued &amp; saved</div>
+    <div class="kicker">Trainings</div>
+    <h2>Sign up in one click.</h2>
+    <p class="sub">You're already signed in — so there's no form. Try it.</p>
+    <div class="stage">
+      <div class="card tcard">
+        <div class="tdate"><div class="m">Jul</div><div class="d">14</div></div>
+        <div>
+          <h5>Getting Loan-Ready</h5>
+          <div class="s">Tuesday · 10:00 AM · Live online · Free</div>
+          <button class="btn" id="regBtn">Register</button>
+          <div class="after" id="regAfter">✓ Seat reserved · join link saved to your dashboard</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 6 · DEMO: DAY OF + LOOP ═══ -->
+<!-- 4 · JOIN -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker"><span class="live">● Interactive</span> · Demo 2 of 4</div>
-    <h2>Day of — and the loop that closes itself.</h2>
-    <div class="rule"></div>
-    <div class="demo">
-      <div class="browser">
-        <div class="bbar"><i></i><i></i><i></i><span class="u">norcalsbdc.org/my/trainings</span></div>
-        <div class="wf-top">
-          <span class="wf-logo">SBDC</span>
-          <span class="wf-nav"><span>Overview</span><span class="sel">My Trainings</span><span>Milestones</span></span>
-          <span class="ava">MV</span>
-        </div>
-        <div class="mt">
-          <div class="h g">Today · Tuesday, July 14</div>
-          <div class="mtr today">
-            <div><div class="t">Getting Loan-Ready</div><div class="s" id="joinSub">Starts in 12 minutes — no meeting codes, no inbox hunting</div></div>
-            <button class="btn grn" id="joinBtn">Join now</button>
-          </div>
-        </div>
-        <div class="ffwd"><button class="btn gh" id="ffwdBtn" disabled>⏩ Fast-forward to tomorrow morning</button></div>
-        <div class="aft">
-          <div class="ev"><div class="w">11:02 AM</div><div class="p"></div><div class="t"><b>Training ends.</b><small>Maria closes the window and gets on with her day.</small></div></div>
-          <div class="ev"><div class="w">overnight</div><div class="p"></div><div class="t"><b>The portal collects the attendance sheet.</b><small>Who joined, and for how long.</small></div></div>
-          <div class="ev"><div class="w">by morning</div><div class="p g"></div><div class="t"><b>Maria’s record: Attended ✓</b><small>No-shows recorded too — on the one master file.</small></div></div>
-          <div class="ev"><div class="w">always</div><div class="p g"></div><div class="t"><b>SBA-compliant reporting, complete.</b><small>No sign-in sheets. No spreadsheets. Nobody lifted a finger.</small></div></div>
-        </div>
+    <div class="kicker">Trainings</div>
+    <h2>When it's time, just join.</h2>
+    <p class="sub">No meeting codes. No inbox hunting. The button lights up when it's time.</p>
+    <div class="stage">
+      <div class="card jrow">
+        <div><div class="t">Getting Loan-Ready</div><div class="s" id="joinSub">Starts in 12 minutes</div></div>
+        <button class="btn grn" id="joinBtn">Join now</button>
       </div>
-      <div class="side">
-        <h3>Click <em>Join now</em>, then fast-forward.</h3>
-        <p>The join button uses Maria's personal link — which is exactly how her attendance records itself, automatically, overnight.</p>
-        <div class="curtain">
-          <div class="h">Why it matters</div>
-          <p style="font-size:12.5px;">This invisible last step is where most of the ~40% admin savings come from.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · ATTENDANCE -->
+<section class="slide">
+  <div class="wrap">
+    <div class="kicker">Behind the scenes</div>
+    <h2>Attendance records itself.</h2>
+    <p class="sub">The morning after every training, every file is already up to date. No sign-in sheets. No spreadsheets.</p>
+    <div class="stage">
+      <div class="card att">
+        <div><div class="t" style="font-size:15px;font-weight:600;color:var(--navy);">Getting Loan-Ready</div><div class="s" style="font-size:12px;color:var(--muted);margin-top:2px;">Tuesday's session</div></div>
+        <span class="badge" id="attBadge">Pending</span>
+      </div>
+      <div style="text-align:center;"><button class="btn gh replay" id="morningBtn">☀ The next morning</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · SMART 641 -->
+<section class="slide">
+  <div class="wrap">
+    <div class="kicker">Onboarding</div>
+    <h2>A 641 you'll actually finish.</h2>
+    <p class="sub">Friendly questions, saved as you go. Your answers route you to the right start — instantly.</p>
+    <div class="stage">
+      <div class="card" id="wizCard">
+        <div class="q">How soon are you hoping to access capital?</div>
+        <div class="opts">
+          <button data-score="100" data-fast="1">Within the next 90 days</button>
+          <button data-score="74">In 3–6 months</button>
+          <button data-score="48">Just exploring for now</button>
+        </div>
+        <div class="scorebox" id="scoreBox">
+          <div class="dial" id="dial"><div class="in"><span class="s" id="dialN">0</span><span class="l">Readiness</span></div></div>
+          <div class="routeline" id="routeLine"></div>
+          <button class="btn gh replay" id="wizReplay">↺ Try another answer</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 7 · DEMO: SMART 641 ═══ -->
+<!-- 7 · REPORT A WIN -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker"><span class="live">● Interactive</span> · Demo 3 of 4</div>
-    <h2>The Smart 641 — answer three questions.</h2>
-    <div class="rule"></div>
-    <div class="demo">
-      <div class="wiz">
-        <div class="hd"><span class="t">Tell us about your business</span><span class="sv" id="wizSave">✓ Saved automatically</span></div>
-        <div class="prog"><i id="wizProg"></i></div>
-        <div class="bd" id="wizBody"></div>
-      </div>
-      <div class="side">
-        <h3>It routes while you type.</h3>
-        <p>One question per screen, plain language, autosaving. On submit, a readiness score (0–100) sends each client down the right track — no waiting room, no homework.</p>
-        <div class="curtain">
-          <div class="h">The three tracks</div>
-          <p style="font-size:12.5px;"><b style="color:var(--navy)">Advising-ready</b> (≥60) — advisor + 15-min welcome call<br/>
-          <b style="color:var(--navy)">Training-first</b> (&lt;60) — starter modules build readiness<br/>
-          <b style="color:var(--red)">Fast-track</b> — urgent signals jump straight to red-carpet advising</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ 8 · DEMO: DASHBOARD ═══ -->
-<section class="slide">
-  <div class="wrap">
-    <div class="kicker"><span class="live">● Interactive</span> · Demo 4 of 4</div>
-    <h2>The dashboard — everything here is clickable.</h2>
-    <p class="lead">Book the welcome call. Report a win and watch it reach the Atlas. Sign with your own name.</p>
-    <div class="rule"></div>
-    <div class="dashwrap">
-      <div class="browser">
-        <div class="bbar"><i></i><i></i><i></i><span class="u">norcalsbdc.org/my</span></div>
-        <div class="wf-top">
-          <span class="wf-logo">SBDC</span>
-          <span class="wf-nav"><span class="sel">Overview</span><span>My Trainings</span><span>Milestones</span><span>My Advisor</span></span>
-          <span class="ava">MV</span>
-        </div>
-        <div class="greet"><h3>Good morning, Maria.</h3><span>Velasquez Catering Co.</span></div>
-        <div class="dgrid">
-          <div style="display:flex;flex-direction:column;gap:13px;">
-            <div class="dc nsc" style="border-top:2px solid var(--red);" id="nextCard">
-              <div class="h">Your next step</div>
-              <h5 id="nextT">Book your 15-minute Welcome Call</h5>
-              <p id="nextP">Your 641 is complete and you’ve been matched with your Success Team.</p>
-              <button class="btn red" id="bookBtn">Choose a time</button>
-            </div>
-            <div class="dc">
-              <div class="h">My trainings</div>
-              <div class="mtr today" style="margin-bottom:8px;"><div><div class="t">Getting Loan-Ready</div><div class="s">Today · 10:00 AM</div></div><button class="btn grn" data-toast="Opening your personal Zoom room…|Attendance will record itself overnight">Join now</button></div>
-              <div class="mtr"><div><div class="t">Business Plan Basics</div><div class="s">Lesson 3 of 6</div></div><button class="btn gh" data-toast="Resuming at Lesson 3 — same login, no second password">Continue</button></div>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:13px;">
-            <div class="dc">
-              <div class="h">Report a win</div>
-              <p style="font-size:11.5px;color:var(--muted);margin-bottom:10px;">Landed funding? Made a hire? Tell us in under a minute.</p>
-              <button class="btn" id="winBtn">Report a win</button>
-            </div>
-            <div class="dc">
-              <div class="h">My advisor</div>
-              <div style="display:flex;gap:9px;align-items:center;">
-                <span class="ava" style="width:30px;height:30px;font-size:11px;">DR</span>
-                <div><div style="font-size:12.5px;font-weight:600;color:var(--navy);">D. Reyes</div><div style="font-size:10.5px;color:var(--muted);">Finance &amp; capital readiness</div></div>
-              </div>
-              <div style="margin-top:10px;display:flex;gap:7px;">
-                <button class="btn gh" data-toast="Message sent to D. Reyes|Logged to your client file automatically">Message</button>
-                <button class="btn gh" data-toast="Session request sent|D. Reyes will confirm a time">Book a session</button>
-              </div>
-            </div>
-            <div class="dc">
-              <div class="h">Network impact — you’re part of this</div>
-              <div class="minia">
-                <div><div class="v" id="atFund">$112K</div><div class="l">Funding</div></div>
-                <div><div class="v" id="atJobs">+7</div><div class="l">Jobs</div></div>
-                <div><div class="v" id="atStart">21</div><div class="l">Starts</div></div>
-              </div>
-            </div>
+    <div class="kicker">Milestones</div>
+    <h2>Report a win in under a minute.</h2>
+    <p class="sub">Landed funding? Made a hire? Two taps and a signature.</p>
+    <div class="stage">
+      <div class="card">
+        <div id="winStep1">
+          <div class="q">What kind of win?</div>
+          <div class="chips">
+            <button data-t="funding">💵 Funding secured</button>
+            <button data-t="hire">👋 New hire</button>
+            <button data-t="revenue">📈 Revenue growth</button>
+            <button data-t="start">🎉 Business start</button>
           </div>
         </div>
-
-        <!-- milestone overlay -->
-        <div class="overlay" id="msOverlay">
-          <div class="msh">
-            <div class="msx">
-              <span class="t">Report a win</span>
-              <span style="display:flex;align-items:center;gap:12px;"><span class="msp" id="msProg"><i class="on"></i><i></i><i></i></span><button class="x" id="msClose" aria-label="Close">×</button></span>
-            </div>
-            <div class="msb" id="msBody"></div>
-            <div class="msf"><span class="h" id="msHint">Step 1 of 3</span><button class="btn" id="msNext" disabled>Next →</button></div>
-          </div>
+        <div id="winStep2" style="display:none;">
+          <div class="q" id="winQ2">Nice — sign it and you're done.</div>
+          <div class="fld"><label>Type your name to sign</label><input id="signIn" placeholder="Your name" autocomplete="off"/></div>
+          <button class="btn red" id="winSubmit" disabled>Submit ✓</button>
+        </div>
+        <div class="windone" id="winDone">
+          <div class="ck">✓</div>
+          <div class="big" id="doneName">On your record. On the map.</div>
+          <p>Your file, your advisor, and the live impact map — all updated at once.</p>
+          <button class="btn gh replay" id="winReplay">↺ Report another</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 9 · LIFECYCLE ═══ -->
+<!-- 8 · ATLAS -->
 <section class="slide">
   <div class="wrap">
-    <div class="kicker">Why there’s nothing to maintain</div>
-    <h2>A training’s life: one manual step, three automatic ones.</h2>
-    <div class="rule"></div>
-    <div class="cyc"><span class="n">1</span><span class="w st">Staff · 5 min</span><span class="t"><b>Create the event — once</b><span>Added to the master calendar. The only manual step in the lifecycle.</span></span></div>
-    <div class="cyc"><span class="n">2</span><span class="w au">Auto · overnight</span><span class="t"><b>The portal sets the table</b><span>Zoom room created, registration page published. Live by morning.</span></span></div>
-    <div class="cyc"><span class="n">3</span><span class="w au">Auto · instant</span><span class="t"><b>Clients register themselves</b><span>One click: seat reserved, file updated, personal join link issued.</span></span></div>
-    <div class="cyc"><span class="n">4</span><span class="w au">Auto · nightly</span><span class="t"><b>Attendance closes the loop</b><span>Attended or no-show, recorded on each file — ready for SBA reporting.</span></span></div>
+    <div class="kicker">The Success Atlas</div>
+    <h2>Watch it add up.</h2>
+    <p class="sub">Every win lands on a live, public impact map — as it happens, not in next quarter's spreadsheet.</p>
+    <div class="counters">
+      <div><div class="v" id="cFund">$0</div><div class="l">Funding</div></div>
+      <div><div class="v" id="cJobs">0</div><div class="l">Jobs</div></div>
+      <div><div class="v" id="cStart">0</div><div class="l">Business starts</div></div>
+    </div>
+    <p class="atl-note" id="atlNote">Leadership, funders, and the SBA see it live.</p>
   </div>
 </section>
 
-<!-- ═══ 10 · OUTCOMES ═══ -->
-<section class="slide">
+<!-- 9 · CLOSER -->
+<section class="slide dark">
   <div class="wrap">
-    <div class="kicker">What the network gets</div>
-    <h2>Why this is worth doing.</h2>
-    <div class="rule"></div>
-    <div class="out"><span class="n">~40<em>%</em></span><span class="t"><b>Less admin work</b><span>Registration, attendance, newsletters run themselves — 5–10 hours back per week, per center.</span></span></div>
-    <div class="out"><span class="n">80<em>%</em></span><span class="t"><b>Cleaner data</b><span>One smart intake instead of 18 variations: consistent, complete 641 records.</span></span></div>
-    <div class="out"><span class="n">1</span><span class="t"><b>Domain, brand, login</b><span>All authority on norcalsbdc.org; one standard; one place to improve.</span></span></div>
-    <div class="out"><span class="n">Live</span><span class="t"><b>Impact you can show</b><span>Wins reach the Success Atlas in real time — not in quarterly spreadsheets.</span></span></div>
-    <p class="closer">SBDC: <b>Your business. Better.</b></p>
+    <h2 class="big-close">One login.<br/>One 641.<br/>One dashboard.</h2>
+    <p class="master">SBDC: <b>Your business. Better.</b></p>
+    <p class="coming">Coming to norcalsbdc.org</p>
   </div>
 </section>
 
 <script>
-/* ════════ toast system ════════ */
+/* toasts */
 const toasts=document.getElementById('toasts');
 function toast(msg,sub){
   const t=document.createElement('div');
@@ -589,11 +337,8 @@ function toast(msg,sub){
   setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),320);},2600);
   while(toasts.children.length>3)toasts.firstChild.remove();
 }
-document.querySelectorAll('[data-toast]').forEach(b=>{
-  b.addEventListener('click',()=>{const[m,s]=b.dataset.toast.split('|');toast(m,s);});
-});
 
-/* ════════ deck navigation ════════ */
+/* deck nav */
 const slides=[...document.querySelectorAll('.slide')];
 const dots=document.getElementById('dots');
 slides.forEach((s,i)=>{
@@ -604,20 +349,15 @@ slides.forEach((s,i)=>{
 });
 const dbs=[...dots.children];
 let cur=0;
-function setCur(i){
-  cur=i;
-  dbs.forEach((d,k)=>d.classList.toggle('on',k===i));
-  document.getElementById('cnt').textContent=(i+1)+' / '+slides.length;
-}
+function setCur(i){cur=i;dbs.forEach((d,k)=>d.classList.toggle('on',k===i));
+  document.getElementById('cnt').textContent=(i+1)+' / '+slides.length;}
 setCur(0);
 const ob=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting)setCur(slides.indexOf(e.target));});
+  es.forEach(e=>{if(e.isIntersecting){setCur(slides.indexOf(e.target));
+    if(e.target.querySelector('#cFund'))runCounters();}});
 },{threshold:.55});
 slides.forEach(s=>ob.observe(s));
-function go(i){
-  i=Math.max(0,Math.min(slides.length-1,i));
-  slides[i].scrollIntoView({behavior:'smooth'});
-}
+function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({behavior:'smooth'});}
 document.getElementById('prev').addEventListener('click',()=>go(cur-1));
 document.getElementById('next').addEventListener('click',()=>go(cur+1));
 document.addEventListener('keydown',e=>{
@@ -626,167 +366,109 @@ document.addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}
 });
 
-/* ════════ demo 1: signup ════════ */
+/* 3 · register */
 const regBtn=document.getElementById('regBtn');
 regBtn.addEventListener('click',()=>{
-  if(regBtn.disabled)return;
+  if(regBtn.classList.contains('done'))return;
   regBtn.disabled=true;regBtn.textContent='Reserving…';
   setTimeout(()=>{
-    document.getElementById('ck1').classList.add('on');
-    setTimeout(()=>document.getElementById('ck2').classList.add('on'),420);
-    setTimeout(()=>document.getElementById('ck3').classList.add('on'),840);
-    regBtn.disabled=false;regBtn.className='btn done';regBtn.textContent='Registered ✓';
-    regBtn.onclick=null;
-    document.getElementById('regCard').classList.add('reg');
-    document.getElementById('confStrip').classList.add('show');
-    toast("You're in, Maria","Seat reserved · file updated · join link saved — all in one click");
-  },650);
+    regBtn.disabled=false;regBtn.className='btn done';regBtn.textContent="You're in ✓";
+    document.getElementById('regAfter').classList.add('show');
+    toast("You're in","No forms — your details came along automatically");
+  },600);
 });
 
-/* ════════ demo 2: day of ════════ */
+/* 4 · join */
 const joinBtn=document.getElementById('joinBtn');
-const ffwdBtn=document.getElementById('ffwdBtn');
 joinBtn.addEventListener('click',()=>{
   if(joinBtn.classList.contains('done'))return;
   joinBtn.className='btn done';joinBtn.textContent='In session ✓';
-  document.getElementById('joinSub').textContent='Joined through your personal link — attendance is recording itself';
-  toast('Opening your personal Zoom room…','No meeting codes. No passcodes.');
-  ffwdBtn.disabled=false;
-});
-ffwdBtn.addEventListener('click',()=>{
-  if(ffwdBtn.classList.contains('done'))return;
-  ffwdBtn.classList.add('done');ffwdBtn.disabled=true;ffwdBtn.textContent='Tomorrow morning ☀';
-  const evs=[...document.querySelectorAll('.ev')];
-  evs.forEach((ev,i)=>setTimeout(()=>{
-    ev.classList.add('on');
-    if(i===evs.length-1)toast('Attendance recorded: Attended ✓','SBA-compliant — and nobody lifted a finger');
-  },i*650));
+  document.getElementById('joinSub').textContent='Joined with your personal link';
+  toast('Opening your personal room…','No meeting codes. No passcodes.');
 });
 
-/* ════════ demo 3: smart 641 ════════ */
-const wizBody=document.getElementById('wizBody');
-const wizProg=document.getElementById('wizProg');
-const wizSave=document.getElementById('wizSave');
-const QS=[
-  {meta:'Question 1 of 3',q:'Where is your business today?',opts:[
-    ['Just an idea — exploring',15],['Registered, getting ready to launch',35],['Up and running, making sales',55]]},
-  {meta:'Question 2 of 3',q:'How soon are you hoping to access capital?',opts:[
-    ['Within the next 90 days',25,'fast'],['In 3–6 months',15],['Just exploring for now',5]]},
-  {meta:'Question 3 of 3',q:'How ready are your financial documents?',opts:[
-    ['Mostly ready — statements & projections',20],['Some of them',10],['Not yet — need help there',0]]},
-];
-let wq=0,wscore=0,wfast=false;
-function wizRender(){
-  wizProg.style.right=(100-(wq/QS.length)*100)+'%';
-  if(wq<QS.length){
-    const Q=QS[wq];
-    wizBody.innerHTML='<div class="meta">'+Q.meta+'</div><div class="q">'+Q.q+'</div>'+
-      '<div class="opts">'+Q.opts.map((o,i)=>'<button data-i="'+i+'">'+o[0]+'</button>').join('')+'</div>';
-    wizBody.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
-      const o=QS[wq].opts[+b.dataset.i];
-      wscore+=o[1]; if(o[2]==='fast')wfast=true;
-      wizSave.classList.add('on');setTimeout(()=>wizSave.classList.remove('on'),1100);
-      toast('Saved automatically','Stop anytime — it picks up where you left off');
-      wq++;wizRender();
-    }));
-  }else{
-    const final=wfast?100:Math.min(99,wscore+20);
-    const track=wfast?['Fast-track','Red-carpet advisor access — a lender-grade signal was detected. Welcome call gets scheduled first.',true]
-      :final>=60?['Advising-ready','Auto-paired with an advisor and invited to a 15-minute Success Team welcome call.',false]
-      :['Training-first','Starter-track modules build readiness first; the dashboard nudges advising when it’s time.',false];
-    wizProg.style.right='0%';
-    wizBody.innerHTML='<div class="scorewrap show">'+
-      '<div class="dial'+(wfast?' fast':'')+'" id="dial"><div class="in"><span class="s" id="dialN">0</span><span class="l">Readiness</span></div></div>'+
-      '<div class="routeout"><b class="'+(track[2]?'fast':'')+'">'+track[0]+'</b>'+track[1]+'</div>'+
-      '<button class="btn gh replay" id="wizReplay">↺ Try different answers</button></div>';
-    const dial=document.getElementById('dial'),dn=document.getElementById('dialN');
-    let v=0;const iv=setInterval(()=>{
-      v+=2;if(v>=final){v=final;clearInterval(iv);}
-      dn.textContent=v;
-      const col=wfast?'var(--red)':'var(--green)';
-      dial.style.background='conic-gradient('+col+' 0 '+v+'%, var(--sand) '+v+'% 100%)';
-    },18);
-    toast('Matched with your Success Team','Routed by your business ZIP — no region-picking, ever');
-    document.getElementById('wizReplay').addEventListener('click',()=>{wq=0;wscore=0;wfast=false;wizRender();});
-  }
-}
-wizRender();
-
-/* ════════ demo 4: dashboard ════════ */
-document.getElementById('bookBtn').addEventListener('click',function(){
-  if(this.classList.contains('done'))return;
-  this.className='btn done';this.textContent='Booked ✓';
-  document.getElementById('nextT').textContent='You’re booked: Tue · 2:30 PM';
-  document.getElementById('nextP').textContent='15 minutes with your Success Team. Your next step will update after the call.';
-  toast('Welcome call booked — Tue, 2:30 PM','Confirmation email on its way · added to your advisor’s calendar');
-});
-
-/* milestone wizard */
-const ov=document.getElementById('msOverlay');
-const msBody=document.getElementById('msBody'),msNext=document.getElementById('msNext'),
-      msHint=document.getElementById('msHint'),msProg=[...document.querySelectorAll('#msProg i')];
-let st=0,ty=null,signed='';
-const types=[
-  {k:'funding',t:'Funding secured',s:'Loan, grant, or investment'},
-  {k:'hire',t:'New hire',s:'You added to your team'},
-  {k:'revenue',t:'Revenue growth',s:'Sales are up'},
-  {k:'start',t:'Business start',s:'You officially opened'},
-];
-document.getElementById('winBtn').addEventListener('click',()=>{st=0;ty=null;signed='';ov.classList.add('show');msRender();});
-document.getElementById('msClose').addEventListener('click',()=>ov.classList.remove('show'));
-function msRender(){
-  msProg.forEach((p,i)=>p.classList.toggle('on',i<=Math.min(st,2)));
-  if(st===0){
-    msHint.textContent='Step 1 of 3';msNext.textContent='Next →';msNext.disabled=!ty;
-    msBody.innerHTML='<div class="msq">Congrats! What kind of win is it?</div><div class="mso">'+
-      types.map(o=>'<button class="'+(ty===o.k?'sel':'')+'" data-k="'+o.k+'"><span class="t">'+o.t+'</span><span class="s">'+o.s+'</span></button>').join('')+'</div>';
-    msBody.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ty=b.dataset.k;msRender();}));
-  }else if(st===1){
-    msHint.textContent='Step 2 of 3';msNext.textContent='Next →';msNext.disabled=false;
-    const money=(ty==='funding'||ty==='revenue');
-    msBody.innerHTML='<div class="msq">Tell us a little about it.</div>'+
-      (money?'<div class="fld"><label>Amount</label><input id="msAmt" value="$25,000"/></div>':'')+
-      (ty==='hire'?'<div class="fld"><label>How many people?</label><input id="msAmt" value="2"/></div>':'')+
-      '<div class="fld"><label>When did it happen?</label><input value="This month" readonly/></div>'+
-      '<div class="fld"><label>How did SBDC help? (optional)</label><textarea rows="2">My advisor helped me get the paperwork lender-ready.</textarea></div>';
-  }else if(st===2){
-    msHint.textContent='Step 3 of 3 — sign with your name';msNext.textContent='Submit ✓';
-    msBody.innerHTML='<div class="msq">Looks right? Sign and send.</div>'+
-      '<div class="fld"><label>Type your name to sign</label><input id="msSign" placeholder="Your name" autocomplete="off"/></div>'+
-      '<label style="display:flex;gap:9px;font-size:11.5px;color:var(--muted);margin-top:6px;align-items:flex-start;cursor:pointer;"><span class="cb on" id="msCb" style="margin-top:2px;"></span> You may share my story publicly (with my approval on final wording).</label>';
-    const si=document.getElementById('msSign');
-    msNext.disabled=true;
-    si.addEventListener('input',()=>{signed=si.value.trim();msNext.disabled=signed.length<2;});
-    document.getElementById('msCb').addEventListener('click',function(){this.classList.toggle('on');});
-    si.focus();
-  }else{
-    msHint.textContent='Done — about 45 seconds';msNext.textContent='Close';msNext.disabled=false;
-    msBody.innerHTML='<div style="text-align:center;padding-top:6px;">'+
-      '<div style="width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;font-size:21px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">✓</div>'+
-      '<div class="msq" style="margin-bottom:4px;">Recorded. Nice work, '+(signed.split(' ')[0]||'Maria')+'.</div>'+
-      '<p style="font-size:12px;color:var(--muted)">Signed “'+signed+'” — here’s everywhere it just went:</p>'+
-      '<div style="text-align:left;margin-top:12px;font-size:12px;color:var(--ink);display:flex;flex-direction:column;gap:7px;">'+
-      '<span><b style="color:var(--green)">✓</b> Your official client file — the master record</span>'+
-      '<span><b style="color:var(--green)">✓</b> Your advisor — notified to celebrate with you</span>'+
-      '<span><b style="color:var(--green)">✓</b> The Success Atlas — the live impact map</span>'+
-      '<span><b style="color:var(--green)">✓</b> SBA reporting — counted automatically</span></div></div>';
-    bumpAtlas();
-  }
-}
-msNext.addEventListener('click',()=>{
-  if(msNext.disabled)return;
-  if(st===3){ov.classList.remove('show');return;}
-  st++;msRender();
-});
-function bumpAtlas(){
-  const f=document.getElementById('atFund'),j=document.getElementById('atJobs'),s=document.getElementById('atStart');
+/* 5 · attendance */
+const morningBtn=document.getElementById('morningBtn');
+morningBtn.addEventListener('click',()=>{
+  if(morningBtn.classList.contains('done'))return;
+  morningBtn.classList.add('done');morningBtn.textContent='☀ Wednesday, 7:00 AM';
   setTimeout(()=>{
-    if(ty==='funding'||ty==='revenue'){f.textContent='$137K';f.classList.add('tick');}
-    else if(ty==='hire'){j.textContent='+9';j.classList.add('tick');}
-    else{s.textContent='22';s.classList.add('tick');}
-    toast('The Success Atlas just updated','Your win is on the network’s live impact map');
-    setTimeout(()=>[f,j,s].forEach(x=>x.classList.remove('tick')),1600);
-  },700);
+    const b=document.getElementById('attBadge');
+    b.classList.add('ok');b.textContent='Attended ✓';
+    toast('Recorded to your file','SBA-ready — and nobody lifted a finger');
+  },500);
+});
+
+/* 6 · 641 */
+const wizCard=document.getElementById('wizCard');
+wizCard.querySelectorAll('.opts button').forEach(b=>b.addEventListener('click',()=>{
+  const score=+b.dataset.score, fast=!!b.dataset.fast;
+  wizCard.querySelector('.q').style.display='none';
+  wizCard.querySelector('.opts').style.display='none';
+  const box=document.getElementById('scoreBox');box.classList.add('show');
+  const route=document.getElementById('routeLine');
+  route.innerHTML = fast
+    ? '<b class="fast">Fast-track</b>Straight to red-carpet advising — urgent capital is a priority signal.'
+    : score>=60
+      ? '<b>Advising-ready</b>Paired with an advisor + a 15-minute welcome call.'
+      : '<b>Training-first</b>Starter modules build readiness — advising follows.';
+  const dial=document.getElementById('dial'),dn=document.getElementById('dialN');
+  let v=0;const col=fast?'var(--red)':score>=60?'var(--green)':'var(--blue)';
+  const iv=setInterval(()=>{v+=2;if(v>=score){v=score;clearInterval(iv);}
+    dn.textContent=v;
+    dial.style.background='conic-gradient('+col+' 0 '+v+'%, var(--sand) '+v+'% 100%)';},16);
+  toast('Saved automatically','Matched with your Success Team');
+}));
+document.getElementById('wizReplay').addEventListener('click',()=>{
+  document.getElementById('scoreBox').classList.remove('show');
+  wizCard.querySelector('.q').style.display='';
+  wizCard.querySelector('.opts').style.display='';
+});
+
+/* 7 · win */
+let winType=null;
+document.querySelectorAll('#winStep1 .chips button').forEach(b=>b.addEventListener('click',()=>{
+  winType=b.dataset.t;
+  document.getElementById('winStep1').style.display='none';
+  document.getElementById('winStep2').style.display='';
+  document.getElementById('signIn').focus();
+}));
+const signIn=document.getElementById('signIn'),winSubmit=document.getElementById('winSubmit');
+signIn.addEventListener('input',()=>{winSubmit.disabled=signIn.value.trim().length<2;});
+winSubmit.addEventListener('click',()=>{
+  const name=signIn.value.trim();
+  document.getElementById('winStep2').style.display='none';
+  document.getElementById('doneName').textContent='On your record. On the map, '+name.split(' ')[0]+'.';
+  document.getElementById('winDone').classList.add('show');
+  winReported=true;
+  toast('Win recorded — signed “'+name+'”','Your advisor was notified · the Atlas just updated');
+});
+document.getElementById('winReplay').addEventListener('click',()=>{
+  document.getElementById('winDone').classList.remove('show');
+  document.getElementById('winStep1').style.display='';
+  signIn.value='';winSubmit.disabled=true;winType=null;
+});
+
+/* 8 · counters */
+let counted=false,winReported=false;
+function runCounters(){
+  if(counted)return;counted=true;
+  const ease=t=>1-Math.pow(1-t,3);
+  function count(el,target,fmt,bump){
+    const t0=performance.now(),dur=1300;
+    (function tick(t){
+      const p=Math.min((t-t0)/dur,1);
+      el.textContent=fmt(Math.round(target*ease(p)));
+      if(p<1)requestAnimationFrame(tick);
+      else if(bump)setTimeout(()=>{el.classList.add('tick');el.textContent=fmt(bump);
+        setTimeout(()=>el.classList.remove('tick'),1200);},900);
+    })(t0);
+  }
+  const extra=winReported;
+  count(document.getElementById('cFund'),112,n=>'$'+n+'K',extra&&(winType==='funding'||winType==='revenue')?137:null);
+  count(document.getElementById('cJobs'),7,n=>'+'+n,extra&&winType==='hire'?9:null);
+  count(document.getElementById('cStart'),21,n=>''+n,extra&&winType==='start'?22:null);
+  if(extra)document.getElementById('atlNote').textContent='That win you just reported? It’s already here.';
 }
 </script>
 </body>
