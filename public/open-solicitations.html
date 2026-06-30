@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open Solicitations &mdash; NorCal SBDC</title>
+  <style>
+    :root {
+      --rfp-blue: #1f5f7a;
+      --rfp-red: #e21b1b;
+      --rfq-lightblue: #9cc3e6;
+      --ink: #1a1a1a;
+      --muted: #555;
+      --line: #cfcfcf;
+      --highlight: #fff200;
+      --page-bg: #f4f5f7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--page-bg);
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      padding: 48px 40px 56px;
+      box-shadow: 0 2px 18px rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+    }
+
+    .page-title {
+      text-align: center;
+      color: var(--rfp-red);
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin: 0 0 36px;
+      text-transform: uppercase;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .col {
+      padding: 0 28px;
+      border-left: 1px solid var(--line);
+    }
+    .col:first-child { border-left: none; }
+
+    .col-heading {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 2px;
+      line-height: 1.2;
+    }
+    .col-number {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+    .col-desc {
+      font-size: 13px;
+      color: var(--ink);
+      margin: 0 0 22px;
+    }
+    .col-desc u { text-decoration: underline; }
+
+    .doc-link {
+      display: inline-block;
+      font-size: 19px;
+      font-weight: 700;
+      text-decoration: underline;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .apply-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      padding: 16px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      margin-bottom: 24px;
+      transition: filter 0.15s ease;
+    }
+    .apply-btn:hover { filter: brightness(1.08); }
+    .apply-blue      { background: var(--rfp-blue); }
+    .apply-red       { background: var(--rfp-red); }
+    .apply-lightblue { background: var(--rfq-lightblue); }
+
+    .dates-label {
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    table.dates {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+    table.dates td {
+      border: 1px solid var(--ink);
+      padding: 6px 8px;
+      vertical-align: middle;
+    }
+    table.dates td.date { white-space: nowrap; width: 38%; }
+    table.dates tr.bold td { font-weight: 700; }
+    table.dates tr.deadline td { background: var(--highlight); font-weight: 700; }
+    table.dates em { font-style: italic; }
+
+    .contact {
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+    .contact strong { color: var(--ink); }
+    .contact a { color: var(--rfp-blue); }
+
+    @media (max-width: 900px) {
+      .columns { grid-template-columns: 1fr; }
+      .col { border-left: none; border-top: 1px solid var(--line); padding: 28px 0 0; margin-top: 28px; }
+      .col:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+      .page { padding: 32px 22px; }
+      .page-title { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1 class="page-title">Open Solicitations</h1>
+
+    <div class="columns">
+      <!-- Column 1: RFP 01 -->
+      <section class="col">
+        <h2 class="col-heading">REQUEST FOR PROPOSALS (RFP)</h2>
+        <p class="col-number">NO. 2026-SBDC-01</p>
+        <p class="col-desc">
+          RFP #1 is for organizations that are interested in hosting one of eight
+          regional, <u>multi-county SBDCs</u> in Northern California.
+        </p>
+
+        <a class="doc-link" href="#">Link to full RFP document #1</a>
+        <a class="apply-btn apply-blue" href="#">Apply Here</a>
+
+        <p class="dates-label">IMPORTANT DATES:</p>
+        <table class="dates">
+          <tr><td class="date">July 17, 2026</td><td>RFP Issuance Date</td></tr>
+          <tr><td class="date">July 23, 2026</td><td>Bidders Conference #A: <em>ONLINE</em></td></tr>
+          <tr><td class="date">July 24, 2026</td><td>Bidders Conference #B: <em>ONLINE</em></td></tr>
+          <tr><td class="date">August 3, 2026</td><td>Bidders Conference #C: <em>IN PERSON, San Mateo</em></td></tr>
+          <tr><td class="date">August 4, 2026</td><td>Bidders Conference #D: <em>IN PERSON, Sacramento</em></td></tr>
+          <tr class="bold"><td class="date">August 18, 2026</td><td>DEADLINE: Letter of Intent Submission</td></tr>
+          <tr class="deadline"><td class="date">September 18, 2026</td><td>DEADLINE: Proposal Submission</td></tr>
+          <tr><td class="date">November 13, 2026</td><td>Posting of Winning Bidders</td></tr>
+          <tr><td class="date">January 1, 2025</td><td>Contract Start Date, Work Commences</td></tr>
+        </table>
+
+        <p class="contact">
+          <strong>Questions about this RFP should be directed to:</strong><br />
+          Kristin Johnson, NorCal SBDC Executive Director<br />
+          707-496-7079 or <a href="mailto:partnerships@norcalsbdc.org">partnerships@norcalsbdc.org</a>
+        </p>
+      </section>
+
+      <!-- Column 2: RFP 02 -->
+      <section class="col">
+        <h2 class="col-heading">REQUEST FOR PROPOSALS (RFP)</h2>
+        <p class="col-number">NO. 2026-SBDC-02</p>
+        <p class="col-desc">
+          RFP #2 is for organizations that are interested in hosting an SBDC
+          <u>Neighborhood Branch location</u> focused on a specific city/county in
+          Northern California.
+        </p>
+
+        <a class="doc-link" href="#">Link to full RFP document #2</a>
+        <a class="apply-btn apply-red" href="#">Apply Here</a>
+
+        <p class="dates-label">IMPORTANT DATES:</p>
+        <table class="dates">
+          <tr><td class="date">July 17, 2026</td><td>RFP Issuance Date</td></tr>
+          <tr><td class="date">July 23, 2026</td><td>Bidders Conference #A: <em>ONLINE</em></td></tr>
+          <tr><td class="date">July 24, 2026</td><td>Bidders Conference #B: <em>ONLINE</em></td></tr>
+          <tr><td class="date">August 3, 2026</td><td>Bidders Conference #C: <em>IN PERSON, San Mateo</em></td></tr>
+          <tr><td class="date">August 4, 2026</td><td>Bidders Conference #D: <em>IN PERSON, Sacramento</em></td></tr>
+          <tr class="bold"><td class="date">August 18, 2026</td><td>DEADLINE: Letter of Intent Submission</td></tr>
+          <tr class="deadline"><td class="date">September 18, 2026</td><td>DEADLINE: Proposal Submission</td></tr>
+          <tr><td class="date">November 13, 2026</td><td>Posting of Winning Bidders</td></tr>
+          <tr><td class="date">January 1, 2025</td><td>Contract Start Date, Work Commences</td></tr>
+        </table>
+
+        <p class="contact">
+          <strong>Questions about this RFP should be directed to:</strong><br />
+          Kristin Johnson, NorCal SBDC Executive Director<br />
+          707-496-7079 or <a href="mailto:partnerships@norcalsbdc.org">partnerships@norcalsbdc.org</a>
+        </p>
+      </section>
+
+      <!-- Column 3: RFQ 03 -->
+      <section class="col">
+        <h2 class="col-heading">REQUEST FOR QUALIFICATIONS (RFQ)</h2>
+        <p class="col-number">NO. 2026-SBDC-03</p>
+        <p class="col-desc">
+          RFQ #3 is specifically for individual business consultants interested in
+          doing <u>contract advising and/or training</u> work for Norcal SBDC.
+        </p>
+
+        <a class="doc-link" href="#">Link to full RFQ document #3</a>
+        <a class="apply-btn apply-lightblue" href="#">Apply Here</a>
+
+        <p class="dates-label">IMPORTANT DATES:</p>
+        <table class="dates">
+          <tr><td class="date">July 17, 2026</td><td>RFP Issuance Date</td></tr>
+          <tr><td class="date">July 23, 2026</td><td>Bidders Conference #A: <em>ONLINE</em></td></tr>
+          <tr><td class="date">July 24, 2026</td><td>Bidders Conference #B: <em>ONLINE</em></td></tr>
+          <tr><td class="date">August 3, 2026</td><td>Bidders Conference #C: <em>IN PERSON, San Mateo</em></td></tr>
+          <tr><td class="date">August 4, 2026</td><td>Bidders Conference #D: <em>IN PERSON, Sacramento</em></td></tr>
+          <tr class="bold"><td class="date">August 18, 2026</td><td>DEADLINE: Letter of Intent Submission</td></tr>
+          <tr class="deadline"><td class="date">September 18, 2026</td><td>DEADLINE: Proposal Submission</td></tr>
+          <tr><td class="date">November 13, 2026</td><td>Posting of Winning Bidders</td></tr>
+          <tr><td class="date">January 1, 2025</td><td>Contract Start Date, Work Commences</td></tr>
+        </table>
+
+        <p class="contact">
+          <strong>Questions about this RFQ should be directed to:</strong><br />
+          Kristin Johnson, NorCal SBDC Executive Director<br />
+          707-496-7079 or <a href="mailto:partnerships@norcalsbdc.org">partnerships@norcalsbdc.org</a>
+        </p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
