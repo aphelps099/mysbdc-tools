@@ -1,0 +1,19 @@
+{
+  "name": "videos",
+  "private": true,
+  "scripts": {
+    "assets": "bash copy-assets.sh",
+    "studio": "remotion studio",
+    "render": "remotion render"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.484",
+    "@remotion/fonts": "^4.0.484",
+    "@remotion/zod-types": "^4.0.484",
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.484",
+    "zod": "^4.4.3"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+out/
+# copied from ../public by copy-assets.sh
+public/fonts/
+public/sbdc-white-2026.png
