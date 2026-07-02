@@ -2,20 +2,20 @@
   "eyebrow": "Free webinar",
   "hook": "Is your business ready for funding?",
   "title": "Capital Readiness: What Lenders Look For",
-  "date": "Thu, July 24",
-  "time": "12:00–1:00 PM PT",
+  "date": "Thursday, July 24, 2026",
+  "time": "12:00 PM - 1:00 PM PT",
   "location": "Live on Zoom",
   "speakers": [{"name": "Jane Rivera", "role": "SBDC Capital Advisor"}],
   "bullets": [
     "The 5 numbers every lender checks first",
     "How to package an SBA loan application",
-    "Red flags that stall funding — and fixes"
+    "Red flags that stall funding and how to fix them"
   ],
   "cta": "Register free",
   "url": "norcalsbdc.org/events",
-  "accent": "#8FC5D9",
+  "accent": "#1D5AA7",
   "theme": "navy",
-  "motion": "classic",
+  "motion": "energetic",
   "image": "",
   "logo": ""
 }

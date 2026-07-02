@@ -1,84 +1,94 @@
 ---
 name: linkedin-webinar-teaser
-description: Produce branded NorCal SBDC teaser videos for webinars and workshops, sized for LinkedIn and other social feeds. Use when asked to promote an event with video — "teaser for our webinar", "promo video for the workshop", "LinkedIn video for this event", "social video for our training". Renders 15-second MP4s from a ready-made Remotion template; each new event only needs new props (no new code).
+description: Produce branded NorCal SBDC teaser videos for webinars and workshops, sized for LinkedIn and other social feeds. Use when asked to promote an event with video — "teaser for our webinar", "promo video for the workshop", "LinkedIn video for this event" — and ESPECIALLY when the user pastes a "render request" or props JSON from the Event Teaser Builder. Renders 15-second MP4s from a ready-made Remotion template; each new event only needs new props (no new code).
 user_invocable: true
 ---
 
 # LinkedIn Webinar/Workshop Teaser
 
 Renders a 15-second, on-brand teaser MP4 from the parameterized `WebinarTeaser`
-Remotion composition in `videos/`. Four scenes: hook question → title + date/time
-chips + speaker → "you'll walk away with" bullets → logo + register CTA, with an
-accent progress bar throughout. Everything is text-driven, so it reads perfectly
-with LinkedIn's muted autoplay. For general Remotion guidance (or edits to the
-template itself), see the **remotion-video** skill.
+Remotion composition in `videos/`. Four scenes: hook question (optional photo
+background) → title + date/time chips + speaker → "you'll walk away with"
+bullets → logo + register CTA, with an accent progress bar throughout. All
+text-driven, so it reads perfectly with LinkedIn's muted autoplay. For general
+Remotion guidance (or template edits), see the **remotion-video** skill.
 
-## Step 1: Gather event details
+## Two entry points
 
-Collect from the user's message, a pasted flyer/description, or an event page.
-Ask only for what's missing:
+**A. Builder handoff (preferred).** Staff use the self-serve builder at
+`public/brand/video/teaser-builder.html` (served at `/brand/video/teaser-builder.html`)
+to paste event info, proof the script, pick theme/accent/motion/format, and
+click "Copy render request". If the user pastes that request (composition id +
+props JSON), the copy is already proofed: save the JSON to
+`videos/props/<slug>.json` **verbatim**, then jump to *Verify & render*. Only
+flag genuine problems (e.g. a bullet that will clip).
 
-- **Title** — exact event name
-- **Date / time / location** — e.g. "Thu, July 24" / "12:00–1:00 PM PT" / "Live on Zoom"
+**B. From a description.** If the user just describes the event (or pastes a
+flyer/URL), gather what's missing and write the copy yourself:
+
+- **Title, date, time, location** — e.g. "Thu, July 24" / "12:00–1:00 PM PT" / "Live on Zoom"
 - **Speakers** — 0–2, name + role
-- **2–4 takeaway bullets** — what attendees will learn
+- **2–4 takeaway bullets** — concrete outcomes, ≤ ~50 chars each
 - **Registration URL** — short display form, e.g. `norcalsbdc.org/events`
+- **Hook** — write it: pain-point question or bold promise, ≤ ~45 chars
+- Brand terms: "no-fee advising", "entrepreneurs", "expert advisors", "NorCal SBDC"
 
-Then write the **hook** yourself (see copy rules) and confirm details with the
-user only if something looks ambiguous.
+## Props reference (schema in `videos/src/WebinarTeaser.tsx`)
 
-## Step 2: Write the copy (brand voice)
+Besides the text fields above:
 
-- **Hook**: a pain-point question or bold promise, ≤ ~45 characters.
-  Good: "Is your business ready for funding?" / "Your first hire, done right".
-  It renders in all-caps display type — keep it punchy.
-- **Bullets**: concrete outcomes, ≤ ~50 characters each, 3 is ideal.
-  Lead with specifics ("The 5 numbers lenders check first"), not vague themes.
-- **Eyebrow**: "Free webinar" / "Free workshop" / "Live training".
-- **CTA**: "Register free" (default). URL in short display form.
-- Brand terminology: "no-fee advising" (not "free consulting"), "entrepreneurs"
-  (not "clients"), "expert advisors" (not "counselors"), "NorCal SBDC".
-- **Accent color**: Pool `#8FC5D9` (default), Brick `#a82039` for urgency
-  ("last chance to register"), Royal `#1D5AA7` as an alternative. Chip/button
-  text contrast adapts automatically.
+| Prop | Values | Notes |
+|---|---|---|
+| `theme` | `navy` (default) / `cream` | navy = dark + white logo; cream = light + color logo |
+| `accent` | hex | Pool `#8FC5D9` default, Brick `#a82039` urgency, Royal `#1D5AA7` |
+| `motion` | `classic` / `energetic` / `bold` | spring feel + stagger speed |
+| `image` | URL, data URI, or filename in `videos/public/`, `''` = none | photo behind the hook scene (navy scrim added) |
+| `logo` | usually `''` | override the theme logo |
 
-## Step 3: Set up and fill props
+Copy the shape of `videos/props/example-webinar.json` — all keys required.
+
+## Setup
 
 ```bash
 cd videos
 [ -d node_modules ] || npm install
-npm run assets   # copies brand fonts + logo from ../public (idempotent)
+npm run assets   # fonts + logos into videos/public/ (idempotent)
 ```
 
-Save the event's props as `videos/props/<event-slug>.json` — copy the shape of
-`videos/props/example-webinar.json` (all fields required; `speakers` may be `[]`).
+**Logos:** the legacy marks (`americas-sbdc-norcal-white-180h.png` / `-400w.png`)
+are downloaded from norcalsbdc.org by `copy-assets.sh`. In network-restricted
+sessions the download fails — the script prefers committed copies at
+`public/brand/logos-legacy/` if present. If neither exists, tell the user renders
+need those two files and ask them to commit them there once.
 
-## Step 4: Verify with stills, then render
+**Fonts:** Proxima Nova / Proxima Sera load from Adobe Fonts kit `pkl5rjs`
+(domain-restricted). Where the kit refuses (sandboxes; domains not on the kit's
+allowlist), the render falls back to the bundled GT America/Tobias files — still
+on-brand, never a failed render.
 
-In remote/Claude Code sessions, set the browser flag first (local machines don't
-need it — Remotion downloads its own headless Chrome):
+## Verify & render
+
+Browser flag for remote/Claude Code sessions (local machines don't need it):
 
 ```bash
 BF="--browser-executable=$(ls -d /opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell | head -1)"
 ```
 
-Spot-check one still per scene and view the images before committing to a full render:
+Spot-check one still per scene and **view the images**:
 
 ```bash
 for f in 40 150 280 400; do
-  npx remotion still TeaserSquare out/check-$f.png --frame=$f --props=props/<slug>.json $BF
+  npx remotion still <CompId> out/check-$f.png --frame=$f --props=props/<slug>.json $BF
 done
 ```
 
-Check: nothing clipped or overflowing, chips fit on ≤ 2 lines, speaker line fits.
-The template auto-shrinks long hooks/titles, but if a title needs > 4 lines,
-tighten the copy instead. Then render:
+Check: nothing clipped, chips fit ≤ 2 lines, photo scrim keeps hook readable,
+cream theme text is navy. Long hooks/titles auto-shrink, but if a title needs
+> 4 lines, tighten the copy. Then render:
 
 ```bash
-npx remotion render TeaserSquare out/<slug>-square.mp4 --props=props/<slug>.json $BF
+npx remotion render <CompId> out/<slug>.mp4 --props=props/<slug>.json $BF
 ```
-
-### Formats
 
 | Composition | Size | Use for |
 |---|---|---|
@@ -86,31 +96,23 @@ npx remotion render TeaserSquare out/<slug>-square.mp4 --props=props/<slug>.json
 | `TeaserVertical` | 1080×1350 (4:5) | LinkedIn/IG feed, takes more screen space |
 | `TeaserWide` | 1920×1080 | YouTube, event pages, email embeds |
 
-Default to **TeaserSquare** for LinkedIn unless asked otherwise; render extra
-formats on request — same props file, different composition id.
+Builder requests name the composition; otherwise default to `TeaserSquare`.
 
-## Step 5: Deliver
+## Deliver
 
-Send the MP4(s) to the user, plus a thumbnail still (frame 150 shows title +
-details — also useful as the event graphic). Offer to draft the accompanying
-LinkedIn post: 2–3 short lines, hook first, date/time + registration link,
-end with 3–5 hashtags (e.g. #SmallBusiness #NorCalSBDC + topic tags).
+Send the MP4(s) plus a thumbnail still (frame 150 doubles as the event
+graphic). Offer to draft the LinkedIn post: 2–3 short lines, hook first,
+date/time + registration link, 3–5 hashtags (#SmallBusiness #NorCalSBDC +
+topic). Post natively — uploaded video far outperforms links in the feed.
+Videos autoplay muted; if music is requested anyway, generate a 15 s track with
+the **elevenlabs-music** skill, drop it in `videos/public/`, and add
+`<Audio src={staticFile('track.mp3')} volume={0.4} />` to the template root.
 
-## LinkedIn video notes
+## Customizing
 
-- MP4/H.264 (Remotion's default codec) uploads directly; 15 s is the sweet spot
-  for feed teasers.
-- Videos autoplay **muted** — this template needs no soundtrack. If the user
-  wants music anyway, generate a 15 s track with the **elevenlabs-music** skill,
-  drop it in `videos/public/`, and add `<Audio src={staticFile('track.mp3')} volume={0.4} />`
-  inside the template's root `AbsoluteFill`.
-- Post natively (upload the file) rather than linking to YouTube — native video
-  gets far better reach in the feed.
-
-## Customizing the template
-
-The template lives at `videos/src/WebinarTeaser.tsx`; brand palette + fonts in
-`videos/src/brand.ts`. Scene timing is set by `HOOK_END` / `TITLE_END` /
-`LEARN_END` constants (450 frames total @ 30 fps — change the `durationInFrames`
-in `videos/src/Root.tsx` alongside them). Preview interactively with
-`npm run studio` on a local machine.
+Template: `videos/src/WebinarTeaser.tsx` · palette/fonts/motion presets:
+`videos/src/brand.ts` · scene timing: `HOOK_END`/`TITLE_END`/`LEARN_END`
+constants (450 frames @ 30 fps; also update `durationInFrames` in
+`videos/src/Root.tsx`) · builder UI: `public/brand/video/teaser-builder.html`
+(its `/api/event-fetch` helper lives at `src/app/api/event-fetch/route.ts`).
+Keep builder motion/format constants in sync with `brand.ts` when editing either.

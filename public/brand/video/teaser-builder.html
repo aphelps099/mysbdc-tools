@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Teaser Builder — NorCal SBDC</title>
+<link rel="stylesheet" href="https://use.typekit.net/pkl5rjs.css">
+<style>
+  /* Local GT fallbacks (served from ../new-fonts/ in this repo) */
+  @font-face { font-family: 'GT America'; src: url('../new-fonts/GT-America/GT-America-Standard-Regular.otf'); font-weight: 400; }
+  @font-face { font-family: 'GT America'; src: url('../new-fonts/GT-America/GT-America-Standard-Medium.otf'); font-weight: 500; }
+  @font-face { font-family: 'GT America'; src: url('../new-fonts/GT-America/GT-America-Standard-Bold.otf'); font-weight: 700; }
+  @font-face { font-family: 'GT America Expanded'; src: url('../new-fonts/GT-America/GT-America-Expanded-Black.otf'); font-weight: 900; }
+  @font-face { font-family: 'GT America Mono'; src: url('../new-fonts/GT-America/GT-America-Mono-Regular.otf'); font-weight: 400; }
+  @font-face { font-family: 'Tobias'; src: url('../new-fonts/Tobias/Tobias-Medium.otf'); font-weight: 500; }
+
+  :root {
+    --navy: #0f1c2e;
+    --royal: #1D5AA7;
+    --pool: #8FC5D9;
+    --cream: #f0efeb;
+    --brick: #a82039;
+    --sans: 'proxima-nova', 'GT America', 'Helvetica Neue', Arial, sans-serif;
+    --serif: 'proxima-sera', 'Tobias', Georgia, serif;
+    --display: 'proxima-nova', 'GT America Expanded', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'GT America Mono', ui-monospace, 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--navy); font-family: var(--sans); font-size: 15px; line-height: 1.45; }
+
+  header { background: var(--navy); color: var(--cream); padding: 22px 28px; display: flex; align-items: center; gap: 18px; }
+  header img { height: 44px; }
+  header .ht h1 { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; letter-spacing: 0.04em; }
+  header .ht p { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+
+  .wrap { display: grid; grid-template-columns: 290px 1fr 460px; gap: 20px; padding: 20px 28px 120px; max-width: 1560px; margin: 0 auto; align-items: start; }
+  @media (max-width: 1180px) { .wrap { grid-template-columns: 1fr 1fr; } .col-style { grid-column: 1 / -1; } }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; } }
+
+  .card { background: #fff; border: 1px solid #ddd9d0; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  .card h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.12em; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .n { background: var(--navy); color: var(--cream); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .card .hint { font-size: 12.5px; color: #6b6f76; margin-bottom: 12px; }
+
+  label { display: block; font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: #6b6f76; margin: 12px 0 4px; }
+  input[type=text], textarea, input[type=url] {
+    width: 100%; padding: 9px 11px; border: 1px solid #ccc7bd; border-radius: 8px;
+    font-family: var(--sans); font-size: 14px; color: var(--navy); background: #fdfdfc;
+  }
+  input:focus, textarea:focus { outline: 2px solid var(--royal); outline-offset: -1px; }
+  textarea { resize: vertical; }
+  .counter { font-family: var(--mono); font-size: 10px; color: #9a9e a4; color: #9a9ea4; text-align: right; margin-top: 2px; }
+  .counter.over { color: var(--brick); font-weight: 700; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 10px 18px;
+    font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12.5px;
+    cursor: pointer; background: var(--royal); color: #fff; }
+  .btn:hover { filter: brightness(1.1); }
+  .btn.ghost { background: transparent; color: var(--royal); border: 1.5px solid var(--royal); }
+  .btn.big { font-size: 14px; padding: 14px 26px; background: var(--navy); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  .msg { font-size: 12.5px; margin-top: 8px; padding: 8px 10px; border-radius: 8px; display: none; }
+  .msg.ok { display: block; background: #e7f0e9; color: #1e5c31; }
+  .msg.err { display: block; background: #f7e8ea; color: var(--brick); }
+
+  .bullet-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .bullet-row input { flex: 1; }
+  .bullet-row button { border: 0; background: #eee9df; color: var(--navy); border-radius: 6px; width: 30px; height: 34px; cursor: pointer; font-size: 15px; }
+
+  .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt { border: 1.5px solid #ccc7bd; border-radius: 10px; padding: 8px 12px; cursor: pointer; background: #fdfdfc; font-size: 13px; }
+  .opt small { display: block; color: #6b6f76; font-size: 11px; }
+  .opt.sel { border-color: var(--royal); background: #eaf1f9; box-shadow: 0 0 0 1px var(--royal); }
+  .swatch { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1.5px #ccc7bd; }
+  .swatch.sel { box-shadow: 0 0 0 3px var(--royal); }
+
+  /* ── Preview stage ── */
+  .stagebox { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .stage { position: relative; overflow: hidden; background: var(--navy); width: 420px; border-radius: 6px; box-shadow: 0 18px 40px -18px rgba(15,28,46,0.45); }
+  .stage .scene { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--s) * 90px); opacity: 0; pointer-events: none; }
+  .stage .scene.center { align-items: center; text-align: center; }
+  .stage .scene [data-anim] { opacity: 0; transform: translateY(calc(var(--s) * var(--rise) * 1px)); }
+  .stage .scene.on { opacity: 1; }
+  .stage .scene.on [data-anim] { opacity: 1; transform: none; transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .stage .scene.off { opacity: 0; transition: opacity 0.35s ease; }
+  .slide-x [data-anim] { transform: translateX(calc(var(--s) * var(--rise) * 1.4px)) !important; }
+  .stage .scene.on.slide-x [data-anim] { transform: none !important; }
+
+  .pv-eyebrow { font-family: var(--mono); letter-spacing: 0.35em; text-transform: uppercase; font-size: calc(var(--s) * 30px); margin-bottom: calc(var(--s) * 36px); }
+  .pv-hook { font-family: var(--display); font-weight: 800; text-transform: uppercase; line-height: 1.08; }
+  .pv-title { font-family: var(--serif); font-weight: 600; line-height: 1.12; margin-bottom: calc(var(--s) * 50px); }
+  .pv-chips { display: flex; flex-wrap: wrap; gap: calc(var(--s) * 20px); margin-bottom: calc(var(--s) * 44px); }
+  .pv-chip { font-family: var(--mono); font-size: calc(var(--s) * 30px); border-radius: 999px; padding: calc(var(--s) * 14px) calc(var(--s) * 28px); }
+  .pv-speaker { font-size: calc(var(--s) * 34px); }
+  .pv-bullet { display: flex; align-items: center; gap: calc(var(--s) * 30px); margin-bottom: calc(var(--s) * 38px); }
+  .pv-bullet .bar { width: calc(var(--s) * 14px); height: calc(var(--s) * 60px); border-radius: calc(var(--s) * 7px); flex-shrink: 0; }
+  .pv-bullet .tx { font-weight: 500; font-size: calc(var(--s) * 44px); line-height: 1.25; }
+  .pv-logo { height: calc(var(--s) * 200px); margin-bottom: calc(var(--s) * 60px); object-fit: contain; }
+  .pv-cta { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: calc(var(--s) * 64px); border-radius: 999px; padding: calc(var(--s) * 30px) calc(var(--s) * 70px); margin-bottom: calc(var(--s) * 44px); }
+  .pv-url { font-family: var(--mono); font-size: calc(var(--s) * 32px); opacity: 0.85; }
+  .pv-progress { position: absolute; bottom: 0; left: 0; height: calc(var(--s) * 10px); width: 0; }
+  .pv-photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .pv-scrim { position: absolute; inset: 0; }
+  .deco { position: absolute; border-radius: 50%; border: calc(var(--s) * 3px) solid transparent; }
+
+  .pv-controls { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #ccc7bd; cursor: pointer; }
+  .dot.on { background: var(--royal); }
+  .pv-controls button { border: 0; background: var(--navy); color: var(--cream); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-family: var(--mono); font-size: 11px; }
+
+  /* ── Export bar ── */
+  .exportbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--navy); padding: 14px 28px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap; box-shadow: 0 -8px 30px rgba(15,28,46,0.3); z-index: 50; }
+  .exportbar .note { color: var(--cream); opacity: 0.8; font-size: 13px; flex: 1; min-width: 240px; }
+  .exportbar .btn { background: var(--pool); color: var(--navy); }
+  .exportbar .btn.ghost { background: transparent; color: var(--pool); border-color: var(--pool); }
+  .thumb { max-width: 120px; max-height: 68px; border-radius: 6px; border: 1px solid #ccc7bd; display: none; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-white-180h.png" alt="NorCal SBDC" onerror="this.style.display='none'">
+  <div class="ht">
+    <h1>Event Teaser Builder</h1>
+    <p>Paste event info → proof the script → pick a style → hand off for a 15-second LinkedIn video.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ── STEP 1: EVENT INFO ── -->
+  <div class="col-input">
+    <div class="card">
+      <h2><span class="n">1</span> Event info</h2>
+      <p class="hint">Paste the event page URL, or copy-paste the page text. Auto-fill takes a best guess — you review everything in step 2.</p>
+
+      <label>Event page URL</label>
+      <div class="row">
+        <input type="url" id="url" placeholder="https://norcalsbdc.org/events/…">
+      </div>
+      <div style="margin-top:8px"><button class="btn" id="fetchBtn">Fetch &amp; auto-fill</button></div>
+      <div class="msg" id="fetchMsg"></div>
+
+      <label style="margin-top:16px">…or paste event text</label>
+      <textarea id="dump" rows="9" placeholder="Open the event page, select all (Ctrl/Cmd-A), copy, paste here."></textarea>
+      <div style="margin-top:8px"><button class="btn ghost" id="parseBtn">Auto-fill from text</button></div>
+      <div class="msg" id="parseMsg"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: SCRIPT ── -->
+  <div class="col-script">
+    <div class="card">
+      <h2><span class="n">2</span> Script — every word appears in the video</h2>
+      <p class="hint">This is the exact on-screen text. Edit until it reads well; the preview updates live.</p>
+
+      <label>Eyebrow (small label above the hook)</label>
+      <input type="text" id="eyebrow" value="Free webinar">
+
+      <label>Hook — short, punchy question or promise</label>
+      <input type="text" id="hook" placeholder="Is your business ready for funding?">
+      <div class="counter" id="hookCount">0 / 45</div>
+
+      <label>Event title</label>
+      <input type="text" id="title">
+      <div class="counter" id="titleCount">0 / 60</div>
+
+      <div class="row">
+        <div><label>Date</label><input type="text" id="date" placeholder="Thu, July 24"></div>
+        <div><label>Time</label><input type="text" id="time" placeholder="12:00–1:00 PM PT"></div>
+        <div><label>Location</label><input type="text" id="location" placeholder="Live on Zoom"></div>
+      </div>
+
+      <div class="row">
+        <div><label>Speaker name (optional)</label><input type="text" id="sp1name"></div>
+        <div><label>Speaker role</label><input type="text" id="sp1role" placeholder="SBDC Expert Advisor"></div>
+      </div>
+      <div class="row">
+        <div><label>Second speaker (optional)</label><input type="text" id="sp2name"></div>
+        <div><label>Role</label><input type="text" id="sp2role"></div>
+      </div>
+
+      <label>“You’ll walk away with” — 2–4 concrete takeaways</label>
+      <div id="bullets"></div>
+      <button class="btn ghost" id="addBullet" style="padding:6px 14px;font-size:11px">+ Add takeaway</button>
+
+      <div class="row" style="margin-top:4px">
+        <div><label>Call to action</label><input type="text" id="cta" value="Register free"></div>
+        <div><label>Link shown on screen</label><input type="text" id="linkText" value="norcalsbdc.org/events"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: STYLE + PREVIEW ── -->
+  <div class="col-style">
+    <div class="card">
+      <h2><span class="n">3</span> Style</h2>
+
+      <label>Theme</label>
+      <div class="opts" id="themeOpts">
+        <div class="opt sel" data-theme="navy">Navy<small>white logo, dark</small></div>
+        <div class="opt" data-theme="cream">Cream<small>color logo, light</small></div>
+      </div>
+
+      <label>Accent color</label>
+      <div class="opts">
+        <div class="swatch sel" data-accent="#8FC5D9" style="background:#8FC5D9" title="Pool"></div>
+        <div class="swatch" data-accent="#1D5AA7" style="background:#1D5AA7" title="Royal"></div>
+        <div class="swatch" data-accent="#a82039" style="background:#a82039" title="Brick"></div>
+      </div>
+
+      <label>Motion (animation feel)</label>
+      <div class="opts" id="motionOpts">
+        <div class="opt sel" data-motion="classic">Classic<small>smooth, professional</small></div>
+        <div class="opt" data-motion="energetic">Energetic<small>springy, lively</small></div>
+        <div class="opt" data-motion="bold">Bold<small>fast, punchy</small></div>
+      </div>
+
+      <label>Format</label>
+      <div class="opts" id="formatOpts">
+        <div class="opt sel" data-format="TeaserSquare">Square 1:1<small>LinkedIn feed</small></div>
+        <div class="opt" data-format="TeaserVertical">Vertical 4:5<small>more feed space</small></div>
+        <div class="opt" data-format="TeaserWide">Wide 16:9<small>YouTube, web</small></div>
+      </div>
+
+      <label>Photo for the opening scene (optional)</label>
+      <input type="text" id="imageUrl" placeholder="Paste an image URL…">
+      <div class="row" style="margin-top:6px">
+        <input type="file" id="imageFile" accept="image/*" style="font-size:12px">
+        <button class="btn ghost" id="imageClear" style="flex:0;padding:6px 12px;font-size:11px">Clear</button>
+      </div>
+      <img class="thumb" id="imageThumb" alt="">
+      <div class="msg" id="imageMsg"></div>
+    </div>
+
+    <div class="card stagebox">
+      <div class="stage" id="stage"></div>
+      <div class="pv-controls">
+        <button id="playBtn">⏸ pause</button>
+        <span class="dot on" data-scene="0"></span><span class="dot" data-scene="1"></span><span class="dot" data-scene="2"></span><span class="dot" data-scene="3"></span>
+      </div>
+      <p class="hint" style="text-align:center">Approximate preview — the rendered video uses the same script, colors and motion.</p>
+    </div>
+  </div>
+</div>
+
+<div class="exportbar">
+  <span class="note" id="exportNote">When it looks right: copy the render request and paste it to Claude Code (this repo) — you’ll get the MP4 back.</span>
+  <button class="btn big" id="copyPrompt">Copy render request</button>
+  <button class="btn ghost" id="downloadJson">Download props JSON</button>
+</div>
+
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+const COLORS = { navy:'#0f1c2e', royal:'#1D5AA7', pool:'#8FC5D9', cream:'#f0efeb', brick:'#a82039' };
+const LOGO_WHITE = 'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-white-180h.png';
+const LOGO_COLOR = 'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png';
+
+// Mirrors MOTION in videos/src/brand.ts (durations in ms, CSS easings approximating the springs)
+const MOTION = {
+  classic:   { dur: 700, ease: 'cubic-bezier(0.22, 1, 0.36, 1)',    stagger: 300, rise: 40 },
+  energetic: { dur: 800, ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)', stagger: 200, rise: 70 },
+  bold:      { dur: 450, ease: 'cubic-bezier(0.16, 1.3, 0.3, 1)',   stagger: 130, rise: 110 },
+};
+const SCENE_MS = [2670, 4670, 3670, 4000]; // matches frame boundaries 80/220/330/450 @30fps
+const FORMATS = { TeaserSquare: [1080, 1080], TeaserVertical: [1080, 1350], TeaserWide: [1920, 1080] };
+
+const state = {
+  eyebrow: 'Free webinar', hook: '', title: '', date: '', time: '', location: '',
+  sp1name: '', sp1role: '', sp2name: '', sp2role: '',
+  bullets: ['', '', ''],
+  cta: 'Register free', linkText: 'norcalsbdc.org/events',
+  theme: 'navy', accent: COLORS.pool, motion: 'classic', format: 'TeaserSquare', image: '',
+};
+
+// ── State <-> form ─────────────────────────────────────────────────────
+const FIELD_IDS = ['eyebrow','hook','title','date','time','location','sp1name','sp1role','sp2name','sp2role','cta','linkText','imageUrl'];
+
+function bulletRows() {
+  const box = $('bullets');
+  box.innerHTML = '';
+  state.bullets.forEach((b, i) => {
+    const row = document.createElement('div');
+    row.className = 'bullet-row';
+    row.innerHTML = `<input type="text" maxlength="90" value=""><button title="Remove">×</button>`;
+    const inp = row.querySelector('input');
+    inp.value = b;
+    inp.placeholder = 'Concrete outcome, e.g. “The 5 numbers every lender checks first”';
+    inp.addEventListener('input', () => { state.bullets[i] = inp.value; onChange(); });
+    row.querySelector('button').addEventListener('click', () => {
+      if (state.bullets.length > 2) { state.bullets.splice(i, 1); bulletRows(); onChange(); }
+    });
+    box.appendChild(row);
+  });
+  $('addBullet').style.display = state.bullets.length >= 4 ? 'none' : '';
+}
+
+function syncFormToState() {
+  FIELD_IDS.forEach((id) => {
+    if (id === 'imageUrl') return;
+    state[id] = $(id).value;
+  });
+}
+function syncStateToForm() {
+  FIELD_IDS.forEach((id) => { if (id !== 'imageUrl') $(id).value = state[id] ?? ''; });
+  bulletRows();
+  document.querySelectorAll('#themeOpts .opt').forEach((o) => o.classList.toggle('sel', o.dataset.theme === state.theme));
+  document.querySelectorAll('#motionOpts .opt').forEach((o) => o.classList.toggle('sel', o.dataset.motion === state.motion));
+  document.querySelectorAll('#formatOpts .opt').forEach((o) => o.classList.toggle('sel', o.dataset.format === state.format));
+  document.querySelectorAll('.swatch').forEach((o) => o.classList.toggle('sel', o.dataset.accent.toLowerCase() === state.accent.toLowerCase()));
+}
+
+// ── Counters ───────────────────────────────────────────────────────────
+function counters() {
+  const c1 = $('hookCount'), c2 = $('titleCount');
+  c1.textContent = `${state.hook.length} / 45`; c1.classList.toggle('over', state.hook.length > 45);
+  c2.textContent = `${state.title.length} / 60`; c2.classList.toggle('over', state.title.length > 60);
+}
+
+// ── Auto-fill parser ───────────────────────────────────────────────────
+const MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December';
+const DAYS = 'Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday';
+
+function parseEventText(text, pageTitle) {
+  const found = [];
+  const lines = text.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+
+  // Title
+  let title = (pageTitle || '').replace(/\s*[-|–].*(SBDC|NorCal|Events?).*$/i, '').trim();
+  if (!title) {
+    title = (lines.find((l) => l.length >= 10 && l.length <= 90 && !/register|sign ?up|http/i.test(l)) || '');
+  }
+  if (title) { state.title = title; found.push('title'); }
+
+  // Date
+  const dm = text.match(new RegExp(`\\b(?:(${DAYS})[a-z]*,?\\s+)?(${MONTHS})[a-z]*\\.?\\s+(\\d{1,2})(?:st|nd|rd|th)?(?:,?\\s+(\\d{4}))?`, 'i'))
+    || text.match(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/);
+  if (dm) { state.date = dm[0].replace(/\s+/g, ' ').trim(); found.push('date'); }
+
+  // Time
+  const tm = text.match(/\b\d{1,2}(:\d{2})?\s*(a\.?m\.?|p\.?m\.?)\s*(?:[-–—]|to)\s*\d{1,2}(:\d{2})?\s*(a\.?m\.?|p\.?m\.?)(\s*\(?(PT|PST|PDT|Pacific)\)?)?/i)
+    || text.match(/\b\d{1,2}(:\d{2})?\s*(a\.?m\.?|p\.?m\.?)(\s*\(?(PT|PST|PDT|Pacific)\)?)?/i);
+  if (tm) { state.time = tm[0].replace(/\s+/g, ' ').trim(); found.push('time'); }
+
+  // Location
+  if (/zoom/i.test(text)) { state.location = 'Live on Zoom'; found.push('location'); }
+  else if (/\b(online|virtual|webinar)\b/i.test(text)) { state.location = 'Online'; found.push('location'); }
+  else if (/\bin[- ]person\b/i.test(text)) { state.location = 'In person'; found.push('location'); }
+
+  // Eyebrow
+  if (/workshop/i.test(text)) state.eyebrow = 'Free workshop';
+  else if (/training/i.test(text)) state.eyebrow = 'Live training';
+  else state.eyebrow = 'Free webinar';
+
+  // Speaker
+  const sm = text.match(/(?:presented by|hosted by|featuring|speaker:?|with)\s+([A-Z][a-zà-ÿ]+(?:\s+[A-Z][a-zà-ÿ.'-]+){1,2})\s*[,–-]?\s*([A-Z][^.,\n]{3,50})?/);
+  if (sm) { state.sp1name = sm[1].trim(); if (sm[2]) state.sp1role = sm[2].trim(); found.push('speaker'); }
+
+  // Bullets: prefer marked list lines, ideally near learn/cover/walk-away
+  const bulletLines = lines
+    .filter((l) => /^[•·▪‣*–—-]\s*\S/.test(l))
+    .map((l) => l.replace(/^[•·▪‣*–—-]\s*/, '').trim())
+    .filter((l) => l.length >= 8 && l.length <= 90);
+  if (bulletLines.length >= 2) {
+    state.bullets = bulletLines.slice(0, 4);
+    found.push(`${state.bullets.length} takeaways`);
+  }
+
+  return found;
+}
+
+$('parseBtn').addEventListener('click', () => {
+  const text = $('dump').value.trim();
+  const msg = $('parseMsg');
+  if (!text) { msg.className = 'msg err'; msg.textContent = 'Paste some event text first.'; return; }
+  const found = parseEventText(text, '');
+  syncStateToForm();
+  msg.className = 'msg ok';
+  msg.textContent = found.length
+    ? `Auto-filled: ${found.join(', ')}. Now proof the script in step 2 (and write a hook!).`
+    : 'Could not detect details automatically — fill in step 2 by hand.';
+  onChange();
+});
+
+$('fetchBtn').addEventListener('click', async () => {
+  const url = $('url').value.trim();
+  const msg = $('fetchMsg');
+  const btn = $('fetchBtn');
+  if (!url) { msg.className = 'msg err'; msg.textContent = 'Enter a URL first.'; return; }
+  btn.disabled = true;
+  msg.className = 'msg ok'; msg.textContent = 'Fetching…';
+  try {
+    const res = await fetch(`/api/event-fetch?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    $('dump').value = data.text;
+    const found = parseEventText(data.text, data.title);
+    syncStateToForm();
+    msg.textContent = `Fetched. Auto-filled: ${found.join(', ') || 'nothing — edit step 2 by hand'}.`;
+    onChange();
+  } catch (e) {
+    msg.className = 'msg err';
+    msg.textContent = `Couldn’t fetch (${e.message}). Open the page, select all, copy, and paste it below instead.`;
+  } finally { btn.disabled = false; }
+});
+
+// ── Style pickers ──────────────────────────────────────────────────────
+function pickHandler(boxId, key) {
+  document.querySelectorAll(`#${boxId} .opt`).forEach((o) => o.addEventListener('click', () => {
+    state[key] = o.dataset[key === 'linkText' ? 'link' : key === 'format' ? 'format' : key];
+    syncStateToForm(); onChange();
+  }));
+}
+pickHandler('themeOpts', 'theme');
+pickHandler('motionOpts', 'motion');
+pickHandler('formatOpts', 'format');
+document.querySelectorAll('.swatch').forEach((o) => o.addEventListener('click', () => {
+  state.accent = o.dataset.accent; syncStateToForm(); onChange();
+}));
+
+// ── Image ──────────────────────────────────────────────────────────────
+function setImage(v, note) {
+  state.image = v;
+  const t = $('imageThumb');
+  if (v) { t.src = v; t.style.display = 'block'; } else { t.style.display = 'none'; }
+  const m = $('imageMsg');
+  if (note) { m.className = 'msg ok'; m.textContent = note; } else { m.className = 'msg'; }
+  onChange();
+}
+$('imageUrl').addEventListener('change', () => setImage($('imageUrl').value.trim(), ''));
+$('imageFile').addEventListener('change', () => {
+  const f = $('imageFile').files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const kb = Math.round(reader.result.length / 1365);
+    setImage(reader.result, kb > 900
+      ? `Embedded (${kb} KB). Large photos make the handoff heavy — a URL is lighter if you have one.`
+      : `Embedded (${kb} KB).`);
+  };
+  reader.readAsDataURL(f);
+});
+$('imageClear').addEventListener('click', () => { $('imageUrl').value = ''; $('imageFile').value = ''; setImage('', ''); });
+
+// ── Live preview ───────────────────────────────────────────────────────
+let sceneIdx = 0, sceneTimer = null, playing = true, progressStart = 0, rafId = 0;
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+function yiq(hex) { const m = hex.replace('#',''); if (m.length!==6) return 0;
+  const [r,g,b] = [0,2,4].map((i)=>parseInt(m.slice(i,i+2),16)); return (r*299+g*587+b*114)/1000; }
+const contrastOn = (hex) => yiq(hex) < 140 ? COLORS.cream : COLORS.navy;
+const textAccent = () => state.theme === 'cream' && yiq(state.accent) > 150 ? COLORS.royal : state.accent;
+const fit = (text, base, comfortable) => base * Math.sqrt(Math.min(1, comfortable / Math.max(text.length, 1)));
+
+function buildStage() {
+  const stage = $('stage');
+  const [W, H] = FORMATS[state.format];
+  const stageW = state.format === 'TeaserWide' ? 440 : 420;
+  const stageH = stageW * H / W;
+  const s = Math.min(stageW, stageH) / 1080;
+  const m = MOTION[state.motion];
+  const themeBg = state.theme === 'navy' ? COLORS.navy : COLORS.cream;
+  const themeText = state.theme === 'navy' ? COLORS.cream : COLORS.navy;
+  const decor = state.theme === 'navy' ? [COLORS.pool, COLORS.brick] : [COLORS.royal, COLORS.brick];
+  const logo = state.theme === 'navy' ? LOGO_WHITE : LOGO_COLOR;
+  const ta = textAccent();
+  const chipText = contrastOn(state.accent);
+
+  stage.style.width = stageW + 'px';
+  stage.style.height = stageH + 'px';
+  stage.style.background = themeBg;
+  stage.style.setProperty('--s', s);
+  stage.style.setProperty('--dur', m.dur + 'ms');
+  stage.style.setProperty('--ease', m.ease);
+  stage.style.setProperty('--rise', m.rise);
+
+  const hookColor = state.image ? COLORS.cream : themeText;
+  const hookEyebrow = state.image ? state.accent : ta;
+  const speakers = [
+    state.sp1name && `<div class="pv-speaker" data-anim style="color:${themeText};transition-delay:${m.stagger}ms"><b>with ${esc(state.sp1name)}</b><span style="opacity:.7"> · ${esc(state.sp1role)}</span></div>`,
+    state.sp2name && `<div class="pv-speaker" data-anim style="color:${themeText};transition-delay:${m.stagger*1.4}ms"><b>with ${esc(state.sp2name)}</b><span style="opacity:.7"> · ${esc(state.sp2role)}</span></div>`,
+  ].filter(Boolean).join('');
+  const chips = [state.date, state.time, state.location].filter(Boolean).map((c, i) =>
+    `<span class="pv-chip" data-anim style="background:${state.accent};color:${chipText};transition-delay:${i * m.stagger * 0.6}ms">${esc(c)}</span>`).join('');
+  const bullets = state.bullets.filter(Boolean).map((b, i) =>
+    `<div class="pv-bullet" data-anim style="transition-delay:${i * m.stagger}ms"><span class="bar" style="background:${ta}"></span><span class="tx" style="color:${themeText}">${esc(b)}</span></div>`).join('');
+
+  stage.innerHTML = `
+    <div class="deco" style="width:calc(var(--s)*900px);height:calc(var(--s)*900px);border-color:${decor[0]};opacity:.14;top:calc(var(--s)*-300px);right:calc(var(--s)*-350px)"></div>
+    <div class="deco" style="width:calc(var(--s)*500px);height:calc(var(--s)*500px);border-color:${decor[1]};opacity:.18;bottom:calc(var(--s)*-220px);left:calc(var(--s)*-180px)"></div>
+    <div class="scene" data-s="0">
+      ${state.image ? `<div class="pv-photo" style="background-image:url('${state.image.replace(/'/g, "%27")}')"></div><div class="pv-scrim" style="background:linear-gradient(180deg,${COLORS.navy}b8,${COLORS.navy}f0)"></div>` : ''}
+      <div style="position:relative">
+        <div class="pv-eyebrow" data-anim style="color:${hookEyebrow}">${esc(state.eyebrow)}</div>
+        <div class="pv-hook" data-anim style="color:${hookColor};font-size:calc(var(--s)*${fit(state.hook || ' ', 92, 42)}px);transition-delay:${m.stagger * 0.4}ms">${esc(state.hook || 'Write a hook in step 2 →')}</div>
+      </div>
+    </div>
+    <div class="scene" data-s="1">
+      <div class="pv-title" data-anim style="color:${themeText};font-size:calc(var(--s)*${fit(state.title || ' ', 84, 48)}px)">${esc(state.title || 'Event title')}</div>
+      <div class="pv-chips">${chips}</div>
+      ${speakers}
+    </div>
+    <div class="scene slide-x" data-s="2">
+      <div class="pv-eyebrow" data-anim style="color:${ta}">You’ll walk away with</div>
+      ${bullets}
+    </div>
+    <div class="scene center" data-s="3">
+      <img class="pv-logo" data-anim src="${logo}" onerror="this.style.visibility='hidden'">
+      <div class="pv-cta" data-anim style="background:${state.accent};color:${chipText};transition-delay:${m.stagger * 0.5}ms">${esc(state.cta)}</div>
+      <div class="pv-url" data-anim style="color:${themeText};transition-delay:${m.stagger}ms">${esc(state.linkText)}</div>
+    </div>
+    <div class="pv-progress" style="background:${state.accent}"></div>`;
+  showScene(sceneIdx, true);
+}
+
+function showScene(i, instant) {
+  sceneIdx = i;
+  document.querySelectorAll('#stage .scene').forEach((sc) => {
+    const on = Number(sc.dataset.s) === i;
+    sc.classList.toggle('off', !on && sc.classList.contains('on'));
+    // force reflow so re-entering a scene restarts its child transitions
+    if (on) { sc.classList.remove('on', 'off'); void sc.offsetWidth; sc.classList.add('on'); }
+    else if (instant) { sc.classList.remove('on', 'off'); }
+  });
+  document.querySelectorAll('.dot').forEach((d) => d.classList.toggle('on', Number(d.dataset.scene) === i));
+  scheduleNext();
+}
+
+function scheduleNext() {
+  clearTimeout(sceneTimer);
+  if (!playing) return;
+  sceneTimer = setTimeout(() => showScene((sceneIdx + 1) % 4), SCENE_MS[sceneIdx]);
+  if (sceneIdx === 0) { progressStart = performance.now(); animateProgress(); }
+}
+function animateProgress() {
+  cancelAnimationFrame(rafId);
+  const total = SCENE_MS.reduce((a, b) => a + b, 0);
+  const bar = document.querySelector('.pv-progress');
+  const tick = () => {
+    if (!bar || !playing) return;
+    const elapsed = (performance.now() - progressStart) % total;
+    bar.style.width = (elapsed / total * 100) + '%';
+    rafId = requestAnimationFrame(tick);
+  };
+  tick();
+}
+document.querySelectorAll('.dot').forEach((d) => d.addEventListener('click', () => showScene(Number(d.dataset.scene))));
+$('playBtn').addEventListener('click', () => {
+  playing = !playing;
+  $('playBtn').textContent = playing ? '⏸ pause' : '▶ play';
+  if (playing) scheduleNext(); else clearTimeout(sceneTimer);
+});
+
+// ── Export ─────────────────────────────────────────────────────────────
+function buildProps() {
+  const speakers = [];
+  if (state.sp1name.trim()) speakers.push({ name: state.sp1name.trim(), role: state.sp1role.trim() || 'NorCal SBDC' });
+  if (state.sp2name.trim()) speakers.push({ name: state.sp2name.trim(), role: state.sp2role.trim() || 'NorCal SBDC' });
+  return {
+    eyebrow: state.eyebrow.trim() || 'Free webinar',
+    hook: state.hook.trim(),
+    title: state.title.trim(),
+    date: state.date.trim(),
+    time: state.time.trim(),
+    location: state.location.trim(),
+    speakers,
+    bullets: state.bullets.map((b) => b.trim()).filter(Boolean),
+    cta: state.cta.trim() || 'Register free',
+    url: state.linkText.trim() || 'norcalsbdc.org',
+    accent: state.accent,
+    theme: state.theme,
+    motion: state.motion,
+    image: state.image,
+    logo: '',
+  };
+}
+function validate(p) {
+  const missing = [];
+  if (!p.hook) missing.push('hook');
+  if (!p.title) missing.push('title');
+  if (!p.date) missing.push('date');
+  if (!p.time) missing.push('time');
+  if (p.bullets.length < 2) missing.push('at least 2 takeaways');
+  return missing;
+}
+function slug(t) { return (t || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'event'; }
+
+$('copyPrompt').addEventListener('click', async () => {
+  const p = buildProps();
+  const missing = validate(p);
+  const note = $('exportNote');
+  if (missing.length) { note.textContent = `Still needed before export: ${missing.join(', ')}.`; return; }
+  const prompt = [
+    `Render a webinar teaser video with the linkedin-webinar-teaser skill.`,
+    `Composition: ${state.format}`,
+    `Props (save as videos/props/${slug(p.title)}.json):`,
+    JSON.stringify(p, null, 2),
+  ].join('\n');
+  try {
+    await navigator.clipboard.writeText(prompt);
+    note.textContent = '✓ Copied! Paste into Claude Code (mysbdc-tools repo) — it will render and send back the MP4.';
+  } catch {
+    note.textContent = 'Clipboard blocked — use Download props JSON instead.';
+  }
+});
+
+$('downloadJson').addEventListener('click', () => {
+  const p = buildProps();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' }));
+  a.download = `${slug(p.title)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+// ── Change handling + draft persistence ────────────────────────────────
+let rebuildTimer = null;
+function onChange() {
+  counters();
+  try { localStorage.setItem('teaser-builder-draft', JSON.stringify(state)); } catch {}
+  clearTimeout(rebuildTimer);
+  rebuildTimer = setTimeout(buildStage, 350);
+}
+FIELD_IDS.forEach((id) => { if (id !== 'imageUrl') $(id).addEventListener('input', () => { syncFormToState(); onChange(); }); });
+$('addBullet').addEventListener('click', () => { state.bullets.push(''); bulletRows(); onChange(); });
+
+// Restore draft
+try {
+  const saved = JSON.parse(localStorage.getItem('teaser-builder-draft') || 'null');
+  if (saved && saved.title !== undefined) Object.assign(state, saved);
+} catch {}
+syncStateToForm();
+counters();
+buildStage();
+</script>
+</body>
+</html>
