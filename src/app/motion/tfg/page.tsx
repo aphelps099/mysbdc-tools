@@ -20,7 +20,7 @@ export default function TFGMotionPage() {
         style={{
           height: 48,
           padding: '0 24px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgba(78,255,0,0.12)',
           background: '#141414',
         }}
       >
@@ -35,6 +35,7 @@ export default function TFGMotionPage() {
             ← Back
           </a>
           <div className="w-px h-4" style={{ background: 'rgba(255,255,255,0.1)' }} />
+          <span className="tfg-ring" aria-hidden />
           <span
             className="text-[11px] font-bold tracking-[0.08em] uppercase"
             style={{ fontFamily: "'GT America Extended', sans-serif", color: '#f2f2ef' }}
