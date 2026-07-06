@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════
+   TFG Motion — dark editor chrome for /motion/tfg
+   Scoped overrides on top of motion-studio.css: near-black
+   stage, charcoal panels, off-white text, electric-green
+   accents (Tech Futures Group brand house). Rules that the
+   base sheet hard-codes for a light theme (white text on
+   the accent, dark-on-light borders) are re-declared here
+   under .ms-tfg.
+   ═══════════════════════════════════════════════════════ */
+
+.ms-root.ms-tfg {
+  --ms-sand: #0a0a0a;
+  --ms-cream: #141414;
+  --ms-white: #1d1d1d;
+  --ms-ink: #f2f2ef;
+  --ms-mid: #9aa09b;
+  --ms-muted: #6e7671;
+  --ms-line: rgba(255, 255, 255, 0.09);
+  --ms-royal: #4EFF00;
+  --ms-pool: #4EFF00;
+  --ms-sans: 'GT America Extended', sans-serif;
+}
+
+.ms-tfg .ms-scene-card:hover { border-color: rgba(78, 255, 0, 0.4); }
+
+.ms-tfg .ms-scene-card.is-active {
+  box-shadow: 0 0 0 1px var(--ms-royal), 0 3px 10px rgba(78, 255, 0, 0.14);
+}
+
+.ms-tfg .ms-scene-dot { border-color: rgba(255, 255, 255, 0.18); }
+
+/* Light accent + light "ink": flip button text to near-black */
+.ms-tfg .ms-icon-btn:hover:not(:disabled) { color: #0a0a0a; }
+.ms-tfg .ms-icon-btn.is-danger:hover:not(:disabled) { background: #a82039; color: #fff; }
+
+.ms-tfg .ms-add-btn { border-color: rgba(78, 255, 0, 0.4); }
+.ms-tfg .ms-add-btn:hover { color: #0a0a0a; }
+
+.ms-tfg .ms-btn.is-primary {
+  color: #0a0a0a;
+  box-shadow: 0 2px 8px rgba(78, 255, 0, 0.25);
+}
+
+.ms-tfg .ms-btn.is-primary:hover:not(:disabled) {
+  color: #0a0a0a;
+  box-shadow: 0 4px 14px rgba(78, 255, 0, 0.35);
+}
+
+.ms-tfg .ms-btn.is-toggled { color: #0a0a0a; }
+
+.ms-tfg .ms-tl-scene:hover { background: rgba(78, 255, 0, 0.06); }
+.ms-tfg .ms-tl-scene.is-active { background: rgba(78, 255, 0, 0.1); }
+
+.ms-tfg .ms-seg-btn:hover { border-color: rgba(78, 255, 0, 0.45); }
+.ms-tfg .ms-seg-btn.is-active { color: #0a0a0a; }
+
+.ms-tfg .ms-status.is-ok { color: #4EFF00; }
+.ms-tfg .ms-status.is-err { color: #ff6b81; }
+
+.ms-tfg .ms-file-btn { border-color: rgba(78, 255, 0, 0.5); }
+.ms-tfg .ms-file-btn:hover { color: #0a0a0a; }
+
+.ms-tfg .ms-swatch-custom {
+  background:
+    linear-gradient(var(--ms-white), var(--ms-white)) padding-box,
+    conic-gradient(#4EFF00, #F7F6F2, #48524B, #272727, #4EFF00) border-box;
+}
+
+.ms-tfg .ms-logo-thumb.is-dark-bg { background: #0a0a0a; }
+
+.ms-tfg .ms-stage { box-shadow: 0 10px 36px rgba(0, 0, 0, 0.55); }

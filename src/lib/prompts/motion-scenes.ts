@@ -1,12 +1,13 @@
 /**
  * Motion Scenes — prompt builder.
  * Turns a video script or timestamped transcript into a scene plan
- * for Motion Studio Pro (/motion/pro). The model acts as a motion
- * graphics designer: it storyboards the video beat by beat and
- * returns structured scenes the editor can load directly.
+ * for Motion Studio Pro (/motion/pro) or TFG Motion (/motion/tfg).
+ * The model acts as a motion graphics designer: it storyboards the
+ * video beat by beat and returns structured scenes the editor can
+ * load directly.
  */
 
-import { SBDC_CONTEXT } from './index';
+import { SBDC_CONTEXT, TFG_CONTEXT } from './index';
 import type { ClaudeRequestOptions } from '../claude';
 
 // ── Types ──
@@ -18,8 +19,10 @@ export interface MotionScenesInput {
   notes?: string;
   /** Canvas aspect, e.g. "16:9". Affects pacing/line-length advice only. */
   aspect?: string;
-  /** Program/brand name to reference in copy (defaults to NorCal SBDC). */
+  /** Program/brand name to reference in copy (defaults per brand). */
   brandName?: string;
+  /** Brand voice for the system prompt. Default 'sbdc'. */
+  brand?: 'sbdc' | 'tfg';
   /** Cap on generated scenes. */
   maxScenes?: number;
 }
@@ -59,12 +62,13 @@ export function buildMotionScenesPrompt(
     script,
     notes = '',
     aspect = '16:9',
-    brandName = 'NorCal SBDC',
+    brand = 'sbdc',
+    brandName = brand === 'tfg' ? 'Tech Futures Group' : 'NorCal SBDC',
     maxScenes = 12,
   } = input;
 
   return {
-    system: `${SBDC_CONTEXT}\n\n${DESIGNER_CONTEXT}`,
+    system: `${brand === 'tfg' ? TFG_CONTEXT : SBDC_CONTEXT}\n\n${DESIGNER_CONTEXT}`,
     maxTokens: 4000,
     temperature: 0.6,
     prompt: `Storyboard a motion graphics video from the script below for ${brandName}.
