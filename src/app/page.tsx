@@ -126,6 +126,18 @@ const tools = [
     ),
   },
   {
+    href: '/motion',
+    name: 'Motion Studio',
+    description: 'Animation suite for promo videos — multi-scene text motion, images with overlays, Typekit fonts, and direct MP4 export.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M10 9.5v5l4.5-2.5L10 9.5z" fill="currentColor" stroke="none" />
+        <path d="M2 8h3M2 12h3M2 16h3M19 8h3M19 12h3M19 16h3" strokeWidth="1.2" />
+      </svg>
+    ),
+  },
+  {
     href: '/titles',
     name: 'Title Card Generator',
     description: 'Animated title cards for video — motion graphics-style text you can screen-record.',
