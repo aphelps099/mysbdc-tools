@@ -150,6 +150,17 @@ const tools = [
     ),
   },
   {
+    href: '/motion/tfg',
+    name: 'TFG Motion',
+    description: 'TFG-branded Motion Studio — brand-house schemes, GT America Extended and Tobias, TFG end-card marks, and TFG-voiced AI storyboarding.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M11 8l-3.5 5.25H11L9.5 17.5l5-6.25h-3L13 8h-2z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
     href: '/titles',
     name: 'Title Card Generator',
     description: 'Animated title cards for video — motion graphics-style text you can screen-record.',

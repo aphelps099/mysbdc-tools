@@ -53,6 +53,9 @@ export async function POST(req: NextRequest) {
   if (body.script.length > 40000) {
     return Response.json({ error: 'Script is too long (40k character max)' }, { status: 400 });
   }
+  if (body.brand !== undefined && body.brand !== 'sbdc' && body.brand !== 'tfg') {
+    body.brand = undefined;
+  }
 
   const promptOptions = buildMotionScenesPrompt(body);
   const result = await callClaude<MotionScenesOutput>({
