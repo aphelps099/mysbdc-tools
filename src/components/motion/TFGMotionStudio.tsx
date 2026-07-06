@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import {
-  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, CustomScheme, TextAnimId, AlignId, TransitionId,
-  ASPECTS, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS,
+  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, CustomScheme, TextAnimId, AlignId, TransitionId, BackdropId,
+  ASPECTS, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS, BACKDROPS,
   defaultDoc, makeScene, getAspect, resolveScheme, docDuration, sceneAt,
 } from '@/lib/motion/types';
 import { renderFrame } from '@/lib/motion/render';
@@ -118,6 +118,7 @@ interface GeneratedScene {
   anim?: string;
   align?: string;
   scheme?: string;
+  backdrop?: string;
   serifTitle?: boolean;
   durationMs?: number;
 }
@@ -523,6 +524,7 @@ export default function TFGMotionStudio() {
     if (g.statSuffix !== undefined) overrides.statSuffix = g.statSuffix;
     if (g.anim) overrides.anim = g.anim as TextAnimId;
     if (g.align) overrides.align = g.align as AlignId;
+    if (g.backdrop) overrides.backdrop = g.backdrop as BackdropId;
     if (g.serifTitle !== undefined) overrides.serifTitle = g.serifTitle;
     if (g.durationMs) overrides.duration = g.durationMs;
     // Generated preset ids land on the TFG palette; brand toggle forces one look
@@ -919,6 +921,12 @@ export default function TFGMotionStudio() {
                 </div>
               )}
             </Field>
+
+            {selected.template !== 'image' && (
+              <Field label="Backdrop">
+                <Seg options={BACKDROPS} value={selected.backdrop} onChange={(v) => patchScene(selected.id, { backdrop: v })} small />
+              </Field>
+            )}
 
             <Field label="Alignment">
               <Seg options={ALIGNMENTS} value={selected.align} onChange={(v) => patchScene(selected.id, { align: v })} small />

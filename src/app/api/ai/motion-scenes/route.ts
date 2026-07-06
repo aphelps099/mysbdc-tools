@@ -13,6 +13,7 @@ const TEMPLATES = new Set(['title', 'statement', 'stat', 'list', 'quote', 'image
 const ANIMS = new Set(['rise', 'word-stagger', 'letter-cascade', 'typewriter', 'wipe', 'blur-in', 'scale-in', 'mask-reveal']);
 const SCHEMES = new Set(['navy', 'cream', 'royal', 'dark', 'white']);
 const ALIGNS = new Set(['center', 'lower-left', 'lower-center']);
+const BACKDROPS = new Set(['none', 'grid', 'starburst', 'ring', 'arc']);
 
 /** Drop anything malformed so the editor only ever receives loadable scenes. */
 function sanitize(scenes: GeneratedScene[]): GeneratedScene[] {
@@ -32,6 +33,7 @@ function sanitize(scenes: GeneratedScene[]): GeneratedScene[] {
       anim: typeof s.anim === 'string' && ANIMS.has(s.anim) ? s.anim : undefined,
       align: typeof s.align === 'string' && ALIGNS.has(s.align) ? s.align : undefined,
       scheme: typeof s.scheme === 'string' && SCHEMES.has(s.scheme) ? s.scheme : undefined,
+      backdrop: typeof s.backdrop === 'string' && BACKDROPS.has(s.backdrop) ? s.backdrop : undefined,
       serifTitle: typeof s.serifTitle === 'boolean' ? s.serifTitle : undefined,
       durationMs: typeof s.durationMs === 'number' && Number.isFinite(s.durationMs)
         ? Math.round(Math.min(10000, Math.max(1500, s.durationMs)))

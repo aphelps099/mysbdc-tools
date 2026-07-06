@@ -334,6 +334,107 @@ function drawOverlay(
   ctx.restore();
 }
 
+// ── Scene backdrop graphics ───────────────────────────
+
+function withAlpha(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  if (Number.isNaN(n)) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+
+/**
+ * Optional brand graphic drawn between the background fill and the text
+ * layer, in the scene's scheme colors: graph-paper grid, slow-rotating
+ * starburst rays, arc-swoop ring outlines, or the soft conic gradient
+ * arc. Deterministic in t like everything else here.
+ */
+function drawBackdrop(
+  ctx: CanvasRenderingContext2D,
+  sc: SceneCtx,
+  scene: Scene,
+  scheme: ResolvedScheme,
+  t: number,
+) {
+  if (!scene.backdrop || scene.backdrop === 'none') return;
+  const { W, H, u } = sc;
+  const fadeIn = seg(t, 0, 900);
+  if (fadeIn <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = fadeIn;
+
+  if (scene.backdrop === 'grid') {
+    const step = 84 * u;
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.1);
+    ctx.lineWidth = Math.max(1, u);
+    ctx.beginPath();
+    for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+    ctx.stroke();
+  } else if (scene.backdrop === 'starburst') {
+    // radial rays with a slow drift (the hero-stat starburst)
+    const cx = W / 2;
+    const cy = H / 2;
+    const R = Math.hypot(W, H) * 0.62;
+    const rays = 24;
+    const rot = t * 0.000025 * Math.PI * 2; // ~1.5%/s — gentle drift
+    for (let i = 0; i < rays; i++) {
+      const a = rot + (i / rays) * Math.PI * 2;
+      const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      g.addColorStop(0, withAlpha(scheme.accent, 0.1 + (i % 3) * 0.05));
+      g.addColorStop(1, withAlpha(scheme.accent, 0));
+      ctx.strokeStyle = g;
+      ctx.lineWidth = (i % 4 === 0 ? 2.4 : 1.2) * u;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * 26 * u, cy + Math.sin(a) * 26 * u);
+      ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.stroke();
+    }
+  } else if (scene.backdrop === 'ring') {
+    // arc swoops — two big ring outlines settling in from the lower left
+    const p = seg(t, 0, 1400);
+    const cx = W * 0.12;
+    const cy = H * 1.06;
+    const grow = 0.92 + 0.08 * p;
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.28);
+    ctx.lineWidth = 5 * u;
+    ctx.beginPath();
+    ctx.arc(cx, cy, H * 0.78 * grow, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.12);
+    ctx.lineWidth = 3 * u;
+    ctx.beginPath();
+    ctx.arc(cx, cy, H * 1.02 * grow, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (scene.backdrop === 'arc' && 'createConicGradient' in ctx) {
+    // soft conic gradient band masked to a ring, low in the frame
+    const cx = W * 0.46;
+    const cy = H * 1.4;
+    const outer = H * 1.05;
+    const inner = H * 0.65;
+    const g = (ctx as CanvasRenderingContext2D & {
+      createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
+    }).createConicGradient(Math.PI, cx, cy);
+    g.addColorStop(0, withAlpha(scheme.accent, 0));
+    g.addColorStop(0.05, withAlpha(scheme.accent, 0.03));
+    g.addColorStop(0.12, withAlpha(scheme.accent, 0.07));
+    g.addColorStop(0.2, withAlpha(scheme.accent, 0.11));
+    g.addColorStop(0.27, withAlpha(scheme.accent, 0.13));
+    g.addColorStop(0.34, withAlpha(scheme.accent, 0.09));
+    g.addColorStop(0.42, withAlpha(scheme.accent, 0.04));
+    g.addColorStop(0.5, withAlpha(scheme.accent, 0));
+    g.addColorStop(1, withAlpha(scheme.accent, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(cx, cy, outer, 0, Math.PI * 2);
+    ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
+    ctx.fill('evenodd');
+  }
+
+  ctx.restore();
+}
+
 // ── Film grain ────────────────────────────────────────
 
 let grainTile: HTMLCanvasElement | OffscreenCanvas | null = null;
@@ -416,6 +517,8 @@ function drawScene(
   if (isImage) {
     drawImageCover(ctx, assets[scene.imageId as string].img, W, H, t / scene.duration, scene.kenBurns);
     drawOverlay(ctx, W, H, scene, scheme);
+  } else {
+    drawBackdrop(ctx, sc, scene, scheme, t);
   }
 
   // Foreground (text) — wrapped in exit fade

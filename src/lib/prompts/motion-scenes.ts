@@ -40,6 +40,7 @@ export interface GeneratedScene {
   anim?: string;
   align?: string;
   scheme?: string;
+  backdrop?: string;
   serifTitle?: boolean;
   durationMs?: number;
 }
@@ -87,6 +88,7 @@ ANIMATION PRESETS (field "anim"): "rise", "word-stagger", "letter-cascade", "typ
 OTHER FIELDS:
 - "align": "center", "lower-left", or "lower-center"
 - "scheme": one of "navy", "cream", "royal", "dark", "white" — vary for rhythm, keep it cohesive
+- "backdrop": optional background graphic — "grid" (graph paper), "starburst" (radial rays), "ring" (arc swoops), "arc" (soft gradient arc), or "none". Use on 1–3 scenes for texture (a stat over "starburst", an opener over "arc"); default to "none".
 - "serifTitle": true for elegant/editorial beats, false for punchy ones
 - "durationMs": 2000–8000 per scene. If the transcript has timestamps, align scene durations to the beats they cover so the graphics track the voiceover; otherwise pace by reading time (roughly 1s per 2 words plus 1.5s).
 

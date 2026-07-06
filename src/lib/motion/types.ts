@@ -114,6 +114,17 @@ export const KEN_BURNS = [
 
 export type KenBurnsId = typeof KEN_BURNS[number]['id'];
 
+// ── Scene backdrop graphics (drawn behind the text in scheme colors) ──
+export const BACKDROPS = [
+  { id: 'none',      label: 'None' },
+  { id: 'grid',      label: 'Grid' },
+  { id: 'starburst', label: 'Starburst' },
+  { id: 'ring',      label: 'Ring' },
+  { id: 'arc',       label: 'Arc' },
+] as const;
+
+export type BackdropId = typeof BACKDROPS[number]['id'];
+
 // ── Image overlays for text legibility ──
 export const OVERLAYS = [
   { id: 'none',            label: 'None' },
@@ -147,6 +158,8 @@ export interface Scene {
   /** Transition INTO this scene from the previous one. */
   transition: TransitionId;
   align: AlignId;
+  /** Optional brand graphic drawn behind the text (scheme colors). */
+  backdrop: BackdropId;
   /** Use the serif (heading) font for the main line of this scene. */
   serifTitle: boolean;
 
@@ -208,6 +221,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     anim: 'word-stagger',
     transition: 'fade',
     align: 'center',
+    backdrop: 'none',
     serifTitle: false,
     kicker: '',
     title: '',

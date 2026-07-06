@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import {
-  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, CustomScheme, TextAnimId, SchemeId, AlignId, TransitionId,
-  ASPECTS, SCHEMES, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS,
+  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, CustomScheme, TextAnimId, SchemeId, AlignId, TransitionId, BackdropId,
+  ASPECTS, SCHEMES, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS, BACKDROPS,
   defaultDoc, makeScene, getAspect, resolveScheme, docDuration, sceneAt,
 } from '@/lib/motion/types';
 import { renderFrame } from '@/lib/motion/render';
@@ -47,6 +47,7 @@ interface GeneratedScene {
   anim?: string;
   align?: string;
   scheme?: string;
+  backdrop?: string;
   serifTitle?: boolean;
   durationMs?: number;
 }
@@ -447,6 +448,7 @@ export default function ProMotionStudio() {
     if (g.anim) overrides.anim = g.anim as TextAnimId;
     if (g.align) overrides.align = g.align as AlignId;
     if (g.scheme) overrides.scheme = g.scheme as SchemeId;
+    if (g.backdrop) overrides.backdrop = g.backdrop as BackdropId;
     if (g.serifTitle !== undefined) overrides.serifTitle = g.serifTitle;
     if (g.durationMs) overrides.duration = g.durationMs;
     if (useBrandOnGenerated === 'on') overrides.customScheme = { ...brandColors };
@@ -834,6 +836,12 @@ export default function ProMotionStudio() {
                 </div>
               )}
             </Field>
+
+            {selected.template !== 'image' && (
+              <Field label="Backdrop">
+                <Seg options={BACKDROPS} value={selected.backdrop} onChange={(v) => patchScene(selected.id, { backdrop: v })} small />
+              </Field>
+            )}
 
             <Field label="Alignment">
               <Seg options={ALIGNMENTS} value={selected.align} onChange={(v) => patchScene(selected.id, { align: v })} small />
