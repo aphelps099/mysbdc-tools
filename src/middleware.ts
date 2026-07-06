@@ -38,7 +38,7 @@ async function hmacSha256(secret: string, message: string): Promise<string> {
   return bytesToHex(new Uint8Array(sig));
 }
 
-type SessionScope = 'admin' | 'inject';
+type SessionScope = 'admin' | 'inject' | 'tfg';
 
 /**
  * Verify the signed session token. Returns the session scope, or null when
@@ -66,7 +66,9 @@ async function verifyToken(token: string): Promise<SessionScope | null> {
   if (diff !== 0) return null;
 
   const parts = payload.split(':');
-  return parts.length >= 3 && parts[0] === 'inject' ? 'inject' : 'admin';
+  if (parts.length >= 3 && parts[0] === 'inject') return 'inject';
+  if (parts.length >= 3 && parts[0] === 'tfg') return 'tfg';
+  return 'admin';
 }
 
 /** Paths an inject-scoped session may reach: the inject page + the two APIs its UI calls. */
@@ -82,9 +84,28 @@ function isInjectAllowed(pathname: string): boolean {
   );
 }
 
+/** Paths a tfg-scoped session may reach: TFG Motion + the API its UI calls. */
+const TFG_ALLOWED_PATHS = [
+  '/motion/tfg',
+  '/api/ai/motion-scenes',
+];
+
+function isTfgAllowed(pathname: string): boolean {
+  return TFG_ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
 export async function middleware(req: NextRequest) {
   // Skip auth if APP_PASSWORD is not set (dev mode / not configured)
   if (!process.env.APP_PASSWORD) {
+    return NextResponse.next();
+  }
+
+  const { pathname } = req.nextUrl;
+
+  // The TFG Motion login page is public (its POST goes to /api/auth/*)
+  if (pathname === '/motion/tfg/login') {
     return NextResponse.next();
   }
 
@@ -92,19 +113,31 @@ export async function middleware(req: NextRequest) {
   const scope = token ? await verifyToken(token) : null;
 
   if (!scope) {
-    const loginUrl = new URL('/login', req.url);
-    return NextResponse.redirect(loginUrl);
+    // Direct links to TFG Motion get its own login instead of the tools login
+    const loginPath = pathname.startsWith('/motion/tfg') ? '/motion/tfg/login' : '/login';
+    return NextResponse.redirect(new URL(loginPath, req.url));
   }
 
   // Inject-scoped sessions can reach ONLY the inject tool
-  if (scope === 'inject' && !isInjectAllowed(req.nextUrl.pathname)) {
-    if (req.nextUrl.pathname.startsWith('/api/')) {
+  if (scope === 'inject' && !isInjectAllowed(pathname)) {
+    if (pathname.startsWith('/api/')) {
       return NextResponse.json(
         { error: 'This session is limited to the inject tool' },
         { status: 403 },
       );
     }
     return NextResponse.redirect(new URL('/admin/inject-r4i', req.url));
+  }
+
+  // TFG-scoped sessions can reach ONLY TFG Motion
+  if (scope === 'tfg' && !isTfgAllowed(pathname)) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'This session is limited to TFG Motion' },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL('/motion/tfg', req.url));
   }
 
   return NextResponse.next();
