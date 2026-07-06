@@ -1,15 +1,16 @@
 'use client';
 
-import TitleCard from '@/components/titles/TitleCard';
+import MotionStudio from '@/components/motion/MotionStudio';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 /* ═══════════════════════════════════════════════════════
-   /titles — Animated title card generator
-   Motion graphics-style text animation for video titles.
-   Screen-record the stage for clean title sequences.
+   /motion — Motion Studio
+   Multi-scene animation suite for promo videos:
+   text-based motion graphics, image scenes with overlays,
+   Typekit fonts, and direct MP4 export.
    ═══════════════════════════════════════════════════════ */
 
-export default function TitlesPage() {
+export default function MotionPage() {
   return (
     <ThemeProvider>
       <div className="preview-theme h-dvh flex flex-col" style={{ background: 'var(--p-sand, #f0efeb)' }}>
@@ -39,29 +40,29 @@ export default function TitlesPage() {
               className="text-[11px] font-bold tracking-[0.08em] uppercase"
               style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-ink, #0f1c2e)' }}
             >
-              Title Cards
+              Motion Studio
             </span>
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="/motion"
+              href="/titles"
               className="text-[9px] font-bold tracking-[0.08em] uppercase no-underline"
-              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--royal, #1D5AA7)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
-              Motion Studio (MP4 export) →
+              Title Cards →
             </a>
             <span
               className="text-[9px] font-medium tracking-[0.08em] uppercase"
-              style={{ fontFamily: "'proxima-nova', monospace", color: 'var(--p-muted, #8a8a8a)' }}
+              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
-              motion graphics
+              animation suite · mp4 export
             </span>
           </div>
         </header>
 
-        {/* Main content */}
+        {/* Studio */}
         <main className="flex-1 min-h-0">
-          <TitleCard />
+          <MotionStudio />
         </main>
       </div>
     </ThemeProvider>
