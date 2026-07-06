@@ -502,3 +502,78 @@
 }
 
 .ms-file-btn:hover { background: var(--ms-royal); color: #fff; border-style: solid; }
+
+/* ── Pro studio: custom brand colors ── */
+.ms-swatch-custom {
+  background:
+    linear-gradient(var(--ms-white), var(--ms-white)) padding-box,
+    conic-gradient(#1D5AA7, #8FC5D9, #a82039, #f0c419, #1D5AA7) border-box;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.ms-swatch-custom::after {
+  content: '+';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ms-mid);
+}
+
+.ms-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ms-color-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ms-muted);
+  width: 78px;
+  flex-shrink: 0;
+}
+
+.ms-color-input {
+  width: 34px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--ms-line);
+  border-radius: 6px;
+  background: var(--ms-white);
+  cursor: pointer;
+}
+
+.ms-color-hex {
+  flex: 1;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  text-transform: lowercase;
+}
+
+.ms-logo-thumb {
+  height: 40px;
+  max-width: 130px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--ms-line);
+  padding: 4px 8px;
+}
+
+.ms-logo-thumb.is-dark-bg { background: #0f1c2e; }
+.ms-logo-thumb.is-light-bg { background: #ffffff; }
+
+.ms-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}

@@ -138,6 +138,18 @@ const tools = [
     ),
   },
   {
+    href: '/motion/pro',
+    name: 'Motion Studio Pro',
+    description: 'Program-brandable animation suite — custom colors and logos per SBDC program, plus AI script-to-scenes storyboarding.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M9.5 9v6l5-3-5-3z" fill="currentColor" stroke="none" />
+        <path d="M16.5 7.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6.6-1.4z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
     href: '/titles',
     name: 'Title Card Generator',
     description: 'Animated title cards for video — motion graphics-style text you can screen-record.',
