@@ -1,16 +1,16 @@
 'use client';
 
-import MotionStudio from '@/components/motion/MotionStudio';
+import ProMotionStudio from '@/components/motion/ProMotionStudio';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 /* ═══════════════════════════════════════════════════════
-   /motion — Motion Studio
-   Multi-scene animation suite for promo videos:
-   text-based motion graphics, image scenes with overlays,
-   Typekit fonts, and direct MP4 export.
+   /motion/pro — Motion Studio Pro
+   Program-brandable copy of Motion Studio: custom colors
+   and logo per SBDC program, plus AI script-to-scenes
+   storyboarding. Same engine and MP4 export as /motion.
    ═══════════════════════════════════════════════════════ */
 
-export default function MotionPage() {
+export default function MotionProPage() {
   return (
     <ThemeProvider>
       <div className="preview-theme h-dvh flex flex-col" style={{ background: 'var(--p-sand, #f0efeb)' }}>
@@ -40,36 +40,29 @@ export default function MotionPage() {
               className="text-[11px] font-bold tracking-[0.08em] uppercase"
               style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-ink, #0f1c2e)' }}
             >
-              Motion Studio
+              Motion Studio <span style={{ color: 'var(--royal, #1D5AA7)' }}>Pro</span>
             </span>
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="/motion/pro"
-              className="text-[9px] font-bold tracking-[0.08em] uppercase no-underline"
-              style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--royal, #1D5AA7)' }}
-            >
-              Pro (branding + script AI) →
-            </a>
-            <a
-              href="/titles"
+              href="/motion"
               className="text-[9px] font-bold tracking-[0.08em] uppercase no-underline"
               style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
-              Title Cards →
+              Standard Studio →
             </a>
             <span
               className="text-[9px] font-medium tracking-[0.08em] uppercase"
               style={{ fontFamily: "'proxima-nova', sans-serif", color: 'var(--p-muted, #8a8a8a)' }}
             >
-              animation suite · mp4 export
+              program branding · script to scenes
             </span>
           </div>
         </header>
 
         {/* Studio */}
         <main className="flex-1 min-h-0">
-          <MotionStudio />
+          <ProMotionStudio />
         </main>
       </div>
     </ThemeProvider>

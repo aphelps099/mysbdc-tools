@@ -31,6 +31,41 @@ export function getScheme(id: SchemeId): Scheme {
   return SCHEMES.find((s) => s.id === id) ?? SCHEMES[0];
 }
 
+/**
+ * A program-defined color scheme (Motion Studio Pro). muted/line are
+ * derived from fg so a brand only has to pick three colors.
+ */
+export interface CustomScheme {
+  bg: string;
+  fg: string;
+  accent: string;
+}
+
+export interface ResolvedScheme {
+  bg: string;
+  fg: string;
+  accent: string;
+  muted: string;
+  line: string;
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  if (Number.isNaN(n)) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+
+/** The scheme a scene actually renders with — custom colors win over the preset. */
+export function resolveScheme(scene: Pick<Scene, 'scheme' | 'customScheme'>): ResolvedScheme {
+  if (scene.customScheme) {
+    const { bg, fg, accent } = scene.customScheme;
+    return { bg, fg, accent, muted: hexToRgba(fg, 0.55), line: hexToRgba(fg, 0.16) };
+  }
+  return getScheme(scene.scheme);
+}
+
 // ── Scene templates ──
 export const TEMPLATES = [
   { id: 'title',     label: 'Title',     hint: 'Kicker · title · subtitle' },
@@ -106,6 +141,8 @@ export interface Scene {
   /** Total scene duration in ms (enter + hold + exit). */
   duration: number;
   scheme: SchemeId;
+  /** Program colors (Pro studio) — overrides `scheme` when set. */
+  customScheme?: CustomScheme | null;
   anim: TextAnimId;
   /** Transition INTO this scene from the previous one. */
   transition: TransitionId;
@@ -167,6 +204,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     template,
     duration: 4000,
     scheme: 'navy',
+    customScheme: null,
     anim: 'word-stagger',
     transition: 'fade',
     align: 'center',

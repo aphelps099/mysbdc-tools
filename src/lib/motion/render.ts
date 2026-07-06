@@ -11,7 +11,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import {
-  MotionDoc, Scene, AssetMap, getScheme, getAspect, sceneAt, Scheme,
+  MotionDoc, Scene, AssetMap, resolveScheme, getAspect, sceneAt, ResolvedScheme,
 } from './types';
 import {
   clamp01, seg, easeOutQuint, easeOutExpo, easeOutBack, easeInCubic,
@@ -305,7 +305,7 @@ function drawOverlay(
   ctx: CanvasRenderingContext2D,
   W: number, H: number,
   scene: Scene,
-  scheme: Scheme,
+  scheme: ResolvedScheme,
 ) {
   const op = scene.overlayOpacity;
   if (scene.overlay === 'none' || op <= 0) return;
@@ -407,7 +407,7 @@ function drawScene(
   exitEnabled: boolean,
 ) {
   const { W, H, u, doc, assets } = sc;
-  const scheme = getScheme(scene.scheme);
+  const scheme = resolveScheme(scene);
   const isImage = scene.template === 'image' && scene.imageId && assets[scene.imageId];
 
   // Background
@@ -765,9 +765,15 @@ function drawEndcardScene(
   ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number, p: Palette,
 ) {
   const { u, doc, assets } = sc;
-  const scheme = getScheme(scene.scheme);
+  const scheme = resolveScheme(scene);
   const darkBg = isDark(scheme.bg);
-  const logo = assets[darkBg ? '__logo-white' : '__logo-blue'];
+  // Program logos (Pro studio) win over the built-in SBDC marks;
+  // '-light' is the light-colored mark for dark backgrounds.
+  const logo =
+    (darkBg
+      ? assets['__logo-brand-light'] ?? assets['__logo-brand-dark']
+      : assets['__logo-brand-dark'] ?? assets['__logo-brand-light']) ??
+    assets[darkBg ? '__logo-white' : '__logo-blue'];
 
   const logoH = logo ? 96 * u : 0;
   const kickerPx = 22 * u;
@@ -915,7 +921,7 @@ export function renderFrame(
     ctx.restore();
     ctx.save();
     if (p < 1) {
-      ctx.fillStyle = getScheme(scene.scheme).accent;
+      ctx.fillStyle = resolveScheme(scene).accent;
       ctx.globalAlpha = 0.9 * (1 - Math.abs(p * 2 - 1));
       ctx.fillRect(W * p - 3, 0, 6, H);
     }

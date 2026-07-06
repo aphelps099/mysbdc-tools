@@ -49,3 +49,6 @@ export type { WebpageCopyInput, WebpageCopyOutput } from './webpage-copy';
 
 export { buildEmailTemplatePrompt } from './email-template';
 export type { EmailTemplateInput, EmailTemplateOutput } from './email-template';
+
+export { buildMotionScenesPrompt } from './motion-scenes';
+export type { MotionScenesInput, MotionScenesOutput, GeneratedScene } from './motion-scenes';
