@@ -870,13 +870,18 @@ function drawEndcardScene(
   const { u, doc, assets } = sc;
   const scheme = resolveScheme(scene);
   const darkBg = isDark(scheme.bg);
-  // Program logos (Pro studio) win over the built-in SBDC marks;
+  // Saturated light backgrounds (e.g. TFG electric green) need the
+  // all-black mark — a colored ring would vanish into them.
+  const vividBg = !darkBg && isVivid(scheme.bg);
+  // Program logos (Pro studio) win over the built-in marks;
   // '-light' is the light-colored mark for dark backgrounds.
   const logo =
     (darkBg
       ? assets['__logo-brand-light'] ?? assets['__logo-brand-dark']
       : assets['__logo-brand-dark'] ?? assets['__logo-brand-light']) ??
-    assets[darkBg ? '__logo-white' : '__logo-blue'];
+    (darkBg
+      ? assets['__logo-white']
+      : (vividBg ? assets['__logo-black'] ?? assets['__logo-blue'] : assets['__logo-blue']));
 
   const logoH = logo ? 96 * u : 0;
   const kickerPx = 22 * u;
@@ -951,6 +956,13 @@ function isDark(hex: string): boolean {
   const n = parseInt(hex.slice(1), 16);
   const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
   return 0.2126 * r + 0.7152 * g + 0.0722 * b < 140;
+}
+
+/** Strongly saturated color (channel spread), vs. near-neutral whites/grays. */
+function isVivid(hex: string): boolean {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return Math.max(r, g, b) - Math.min(r, g, b) > 100;
 }
 
 // ── Top-level frame renderer ──────────────────────────

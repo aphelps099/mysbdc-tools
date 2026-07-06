@@ -195,7 +195,8 @@ export default function TFGMotionStudio() {
     (async () => {
       for (const [id, url] of [
         ['__logo-white', '/tfg-lockup-light.png'],  // full lockup, dark backgrounds
-        ['__logo-blue', '/tfg-lockup-dark.png'],    // full lockup, light backgrounds
+        ['__logo-blue', '/tfg-lockup-dark.png'],    // full lockup, light neutral backgrounds
+        ['__logo-black', '/tfg-lockup-black.png'],  // all-black lockup, bright green background
       ] as const) {
         try {
           const img = await loadImage(url);
