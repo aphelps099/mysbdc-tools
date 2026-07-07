@@ -58,17 +58,28 @@ export default function MotionStudio() {
   const [images, setImages] = useState<ImageAsset[]>([]);
 
   useEffect(() => {
-    // Built-in logos for end cards
+    // Official NorCal SBDC marks, served same-origin via /api/brand-asset so
+    // the canvas stays untainted; local PNGs as offline fallback.
     let alive = true;
     (async () => {
-      for (const [id, url] of [
-        ['__logo-white', '/sbdc-white-2026.png'],
-        ['__logo-blue', '/sbdc-blue-2026.png'],
+      const official = 'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos';
+      for (const [id, urls] of [
+        ['__logo-white', [
+          `/api/brand-asset?src=${encodeURIComponent(`${official}/americas-sbdc-norcal-white-180h.png`)}`,
+          '/sbdc-white-2026.png',
+        ]],
+        ['__logo-blue', [
+          `/api/brand-asset?src=${encodeURIComponent(`${official}/americas-sbdc-norcal-400w.png`)}`,
+          '/sbdc-blue-2026.png',
+        ]],
       ] as const) {
-        try {
-          const img = await loadImage(url);
-          if (alive) assetsRef.current[id] = { id, name: url, url, img };
-        } catch { /* logo missing — end card just skips it */ }
+        for (const url of urls) {
+          try {
+            const img = await loadImage(url);
+            if (alive) assetsRef.current[id] = { id, name: url, url, img };
+            break;
+          } catch { /* try the next source */ }
+        }
       }
     })();
     return () => { alive = false; };
