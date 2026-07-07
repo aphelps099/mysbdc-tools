@@ -88,19 +88,30 @@ export async function renderMixdown(
 
   interface ClipSource { buffer: AudioBuffer; startS: number; offsetS: number; durS: number; gain: number }
   const clips: ClipSource[] = [];
+  const addClip = (buffer: AudioBuffer | null, startMs: number, trimMs: number, durMs: number, gain: number) => {
+    if (!buffer || gain <= 0) return;
+    const offsetS = Math.min(trimMs / 1000, Math.max(0, buffer.duration - 0.01));
+    const durS = Math.min(durMs / 1000, buffer.duration - offsetS);
+    if (durS > 0) clips.push({ buffer, startS: startMs / 1000, offsetS, durS, gain });
+  };
+
   let acc = 0;
   for (const scene of doc.scenes) {
-    if (scene.template === 'video' && scene.videoId) {
-      const v = videos[scene.videoId];
-      if (v?.audioBuffer && !scene.videoMuted && scene.videoVolume > 0) {
-        const offsetS = Math.min(scene.videoTrimStart / 1000, Math.max(0, v.audioBuffer.duration - 0.01));
-        const durS = Math.min(scene.duration / 1000, v.audioBuffer.duration - offsetS);
-        if (durS > 0) {
-          clips.push({ buffer: v.audioBuffer, startS: acc / 1000, offsetS, durS, gain: scene.videoVolume });
-        }
-      }
+    if (scene.template === 'video' && scene.videoId && !scene.videoMuted) {
+      addClip(videos[scene.videoId]?.audioBuffer ?? null, acc, scene.videoTrimStart, scene.duration, scene.videoVolume);
+    }
+    // Coach-cam thumbnail audio (any template)
+    if (scene.pipVideoId && !scene.pipMuted) {
+      addClip(videos[scene.pipVideoId]?.audioBuffer ?? null, acc, scene.pipTrimStart, scene.duration, scene.pipVolume);
     }
     acc += scene.duration;
+  }
+
+  // Voiceover — plays once from voStart
+  const vo = doc.voId ? audio[doc.voId] : null;
+  if (vo && doc.voVolume > 0) {
+    const startMs = Math.max(0, Math.min(doc.voStart, totalMs));
+    addClip(vo.buffer, startMs, 0, totalMs - startMs, doc.voVolume);
   }
 
   if (!musicAudible && clips.length === 0) return null;

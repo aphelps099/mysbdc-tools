@@ -120,10 +120,15 @@ async function syncVideosForFrame(doc: MotionDoc, t: number, videos: VideoMap): 
   const jobs: Promise<void>[] = [];
 
   const queue = (scene: Scene | null, sceneLocal: number) => {
-    if (!scene || scene.template !== 'video' || !scene.videoId) return;
-    const v = videos[scene.videoId];
-    if (!v) return;
-    jobs.push(seekVideo(v.video, (scene.videoTrimStart + sceneLocal) / 1000));
+    if (!scene) return;
+    if (scene.template === 'video' && scene.videoId) {
+      const v = videos[scene.videoId];
+      if (v) jobs.push(seekVideo(v.video, (scene.videoTrimStart + sceneLocal) / 1000));
+    }
+    if (scene.pipVideoId) {
+      const pv = videos[scene.pipVideoId];
+      if (pv) jobs.push(seekVideo(pv.video, (scene.pipTrimStart + sceneLocal) / 1000));
+    }
   };
 
   const scene = doc.scenes[index];
