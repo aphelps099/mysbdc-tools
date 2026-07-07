@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+  Synthetic fixture approximating the norcalsbdc.org/events aggregate page.
+  IMPORTANT: this encodes the parser's assumptions, not verified live markup.
+  Validate against production with POST /api/pipeline/scan-events?dryRun=1;
+  if the live page diverges, update this fixture so drift keeps failing tests.
+-->
+<html>
+<body>
+<main id="content">
+  <div class="events-list">
+
+    <article class="event-listing">
+      <div class="event-date"><time datetime="2026-07-21">Jul 21</time></div>
+      <span class="event-category badge">San Mateo SBDC</span>
+      <h3 class="event-title">Start Up Sprint: Stockton</h3>
+      <p class="event-time">9:00 am - 4:00 pm</p>
+      <a class="event-link" href="https://www.sanjoaquinsbdc.org/event/start-up-sprint-stockton/">View Event Details</a>
+    </article>
+
+    <article class="event-listing">
+      <div class="event-date">July 23, 2026</div>
+      <span class="event-category badge">Restaurant Program</span>
+      <h3 class="event-title">Menu Pricing That Protects Your Margins</h3>
+      <p class="event-time">10:00 am - 11:30 am</p>
+      <a class="event-link" href="https://www.norcalsbdc.org/event/menu-pricing-margins/">View Event Details</a>
+    </article>
+
+    <article class="event-listing">
+      <div class="event-date"><time datetime="2026-08-05">Aug 5</time></div>
+      <span class="event-category badge">Sierra SBDC</span>
+      <h3 class="event-title">Construyendo Mi Negocio: Plan de Empresa</h3>
+      <p class="event-time">6:00 pm - 8:00 pm</p>
+      <a class="event-link" href="https://sierrasbdc.com/event/construyendo-mi-negocio-plan/">View Event Details</a>
+    </article>
+
+    <!-- links the parser must IGNORE -->
+    <a href="https://www.norcalsbdc.org/events/page/2/">Next page</a>
+    <a href="https://www.norcalsbdc.org/events/category/webinars/">Webinars</a>
+  </div>
+</main>
+</body>
+</html>

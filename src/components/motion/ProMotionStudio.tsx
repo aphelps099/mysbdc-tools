@@ -97,6 +97,21 @@ function loadVideoElement(url: string): Promise<HTMLVideoElement> {
   });
 }
 
+/**
+ * Deep links (?url=&generate=1) may only auto-storyboard SBDC-family pages —
+ * this keeps the link from being abused to run arbitrary pages through the
+ * AI proxy. Conservative: hostname must end in sbdc.org / sbdc.com.
+ */
+function isAllowedDeepLinkUrl(raw: string): boolean {
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== 'https:' && u.protocol !== 'http:') return false;
+    return /(^|\.)[a-z0-9-]*sbdc\.(org|com)$/i.test(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
 const TEXT_SCALES = [
   { id: '0.3', label: '30%' },
   { id: '0.5', label: '50%' },
@@ -955,9 +970,10 @@ export default function ProMotionStudio() {
     return makeScene(g.template, overrides);
   };
 
-  const handleGenerateScenes = async () => {
-    const fromUrl = aiSource === 'url';
-    if (generating || (fromUrl ? !aiUrl.trim() : !script.trim())) return;
+  const handleGenerateScenes = async (overrideUrl?: string) => {
+    const fromUrl = overrideUrl !== undefined || aiSource === 'url';
+    const urlValue = overrideUrl ?? aiUrl;
+    if (generating || (fromUrl ? !urlValue.trim() : !script.trim())) return;
     setGenerating(true);
     setScriptStatus(null);
     try {
@@ -965,7 +981,7 @@ export default function ProMotionStudio() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...(fromUrl ? { url: aiUrl.trim() } : { script }),
+          ...(fromUrl ? { url: urlValue.trim() } : { script }),
           notes: scriptNotes || undefined,
           aspect: doc.aspect,
           brandName: brandName || undefined,
@@ -991,6 +1007,29 @@ export default function ProMotionStudio() {
       setGenerating(false);
     }
   };
+
+  // ── Phase 0 deep link: /motion/pro?url=<event-url>&generate=1 ──
+  // Auto-runs Storyboard AI as if the user pasted the URL and clicked
+  // generate. Bad/foreign URLs are ignored and the editor loads normally.
+  const generateRef = useRef(handleGenerateScenes);
+  generateRef.current = handleGenerateScenes;
+  const deepLinkRan = useRef(false);
+  useEffect(() => {
+    if (deepLinkRan.current) return;
+    deepLinkRan.current = true;
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('url');
+    if (!url || params.get('generate') !== '1') return;
+    if (!isAllowedDeepLinkUrl(url)) return;
+    setAiSource('url');
+    setAiUrl(url);
+    setScriptMode('replace');
+    setScriptStatus({ ok: true, msg: 'Storyboarding this event from the deep link…' });
+    // Small delay so autosave restore (if any) settles before we replace scenes
+    const t = setTimeout(() => { void generateRef.current(url); }, 400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Export ──
   const [exporting, setExporting] = useState<null | 'mp4' | 'webm' | 'png'>(null);
@@ -1513,7 +1552,7 @@ export default function ProMotionStudio() {
             className="ms-btn is-primary"
             style={{ width: '100%' }}
             disabled={generating || (aiSource === 'url' ? !aiUrl.trim() : !script.trim())}
-            onClick={handleGenerateScenes}
+            onClick={() => handleGenerateScenes()}
           >
             {generating ? (aiSource === 'url' ? 'Reading page…' : 'Storyboarding…') : '✦ Generate scenes'}
           </button>
