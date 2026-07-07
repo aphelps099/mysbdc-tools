@@ -156,6 +156,9 @@ export const config = {
      * - /brand/* static assets
      * - favicon, images, static files
      */
-    '/((?!login|api/auth|api/tfg|api/roadmap|tfg-apply|roadmap-apply|sbdc-day|_next|fonts|brand/assets|brand/social|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
+    // api/pipeline is excluded because cron/workers authenticate with a
+    // service token inside the routes (see src/lib/pipeline/auth.ts) —
+    // the cookie flow can't work for them.
+    '/((?!login|api/auth|api/tfg|api/roadmap|api/pipeline|tfg-apply|roadmap-apply|sbdc-day|_next|fonts|brand/assets|brand/social|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
   ],
 };

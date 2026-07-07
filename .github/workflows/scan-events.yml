@@ -1,0 +1,36 @@
+name: Marketing Engine — hourly event scan
+
+# Hits the production scan route on a schedule. Requires two repo secrets:
+#   PIPELINE_APP_URL        e.g. https://tools.norcalsbdc.org
+#   PIPELINE_SERVICE_TOKEN  must match the Railway env var of the same name
+
+on:
+  schedule:
+    - cron: '7 * * * *' # hourly at :07 (off the hour to dodge top-of-hour load)
+  workflow_dispatch: {}
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Scan events
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.PIPELINE_APP_URL }}" ] || [ -z "${{ secrets.PIPELINE_SERVICE_TOKEN }}" ]; then
+            echo "Secrets not configured — skipping." && exit 0
+          fi
+          curl -sS --fail-with-body --max-time 320 \
+            -X POST "${{ secrets.PIPELINE_APP_URL }}/api/pipeline/scan-events" \
+            -H "Authorization: Bearer ${{ secrets.PIPELINE_SERVICE_TOKEN }}" \
+            | tee scan-result.json
+      - name: Refresh click counts (daily at 07:07 UTC)
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          if [ "$(date -u +%H)" != "07" ]; then
+            echo "Not the daily click-refresh hour — skipping." && exit 0
+          fi
+          curl -sS --fail-with-body --max-time 150 \
+            -X POST "${{ secrets.PIPELINE_APP_URL }}/api/pipeline/refresh-clicks" \
+            -H "Authorization: Bearer ${{ secrets.PIPELINE_SERVICE_TOKEN }}"

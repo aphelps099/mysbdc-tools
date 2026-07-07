@@ -74,4 +74,6 @@ export { buildEmailTemplatePrompt } from './email-template';
 export type { EmailTemplateInput, EmailTemplateOutput } from './email-template';
 
 export { buildMotionScenesPrompt } from './motion-scenes';
+export { buildEventPromoPrompt, sanitizeEventPromo } from './event-promo';
+export type { EventPromoOutput } from './event-promo';
 export type { MotionScenesInput, MotionScenesOutput, GeneratedScene } from './motion-scenes';

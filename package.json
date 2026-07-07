@@ -9,9 +9,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "node .next/standalone/server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "googleapis": "^171.4.0",
     "html2canvas": "^1.4.1",
     "mp4-muxer": "^5.2.2",
@@ -30,6 +32,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.1.0",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.10"
   }
 }

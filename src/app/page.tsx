@@ -161,6 +161,18 @@ const tools = [
     ),
   },
   {
+    href: '/pipeline',
+    name: 'Marketing Engine',
+    description: 'Event promo pipeline — auto-detects new events, creates sbdc.events shortlinks and on-voice copy, and queues Motion Pro videos via the shared Sheet.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 17V7l6 5 6-5v10" />
+        <circle cx="19.5" cy="12" r="2.5" />
+        <path d="M19.5 9.5V7M19.5 17v-2.5" />
+      </svg>
+    ),
+  },
+  {
     href: '/titles',
     name: 'Title Card Generator',
     description: 'Animated title cards for video — motion graphics-style text you can screen-record.',
