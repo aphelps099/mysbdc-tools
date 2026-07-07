@@ -428,7 +428,7 @@ export default function MotionStudio() {
 
         <p className="ms-scenes-title" style={{ marginTop: 10 }}>Add Scene</p>
         <div className="ms-add-grid">
-          {TEMPLATES.map((t) => (
+          {TEMPLATES.filter((t) => t.id !== 'video' && t.id !== 'disclaimer').map((t) => (
             <button key={t.id} className="ms-add-btn" title={t.hint} onClick={() => addScene(t.id)}>
               + {t.label}
             </button>
