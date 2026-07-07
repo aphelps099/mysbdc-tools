@@ -11,7 +11,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import {
-  MotionDoc, Scene, AssetMap, resolveScheme, getAspect, sceneAt, ResolvedScheme,
+  MotionDoc, Scene, AssetMap, VideoMap, resolveScheme, getAspect, sceneAt, ResolvedScheme,
 } from './types';
 import {
   clamp01, seg, easeOutQuint, easeOutExpo, easeOutBack, easeInCubic,
@@ -74,7 +74,7 @@ interface TextBlockOpts {
   maxWidth: number;
   x: number;                // anchor x
   y: number;                // top of block
-  align: 'left' | 'center';
+  align: 'left' | 'center' | 'right';
   anim: Scene['anim'];
   t: number;                // scene-local time
   tStart: number;           // when this block starts animating
@@ -116,7 +116,7 @@ function drawTextBlock(ctx: CanvasRenderingContext2D, o: TextBlockOpts): number 
 
   lines.forEach((line, li) => {
     const baseY = o.y + li * lh + o.px * 0.82; // approx baseline
-    let cx = o.align === 'center' ? o.x - line.width / 2 : o.x;
+    let cx = o.align === 'center' ? o.x - line.width / 2 : o.align === 'right' ? o.x - line.width : o.x;
 
     // Whole-line presets: rise, blur-in, scale-in, wipe, mask-reveal
     if (!perLetter && !perWord) {
@@ -125,7 +125,7 @@ function drawTextBlock(ctx: CanvasRenderingContext2D, o: TextBlockOpts): number 
       if (p <= 0) { unitIndex += line.words.length; return; }
 
       ctx.save();
-      const lineX = o.align === 'center' ? o.x - line.width / 2 : o.x;
+      const lineX = o.align === 'center' ? o.x - line.width / 2 : o.align === 'right' ? o.x - line.width : o.x;
 
       if (o.anim === 'rise') {
         ctx.globalAlpha *= p;
@@ -250,7 +250,7 @@ function drawSpacedText(
   ctx: CanvasRenderingContext2D,
   text: string, font: string, color: string,
   x: number, y: number, spacing: number,
-  align: 'left' | 'center',
+  align: 'left' | 'center' | 'right',
   alpha: number,
 ) {
   ctx.font = font;
@@ -262,7 +262,7 @@ function drawSpacedText(
     return w;
   });
   total -= spacing;
-  let cx = align === 'center' ? x - total / 2 : x;
+  let cx = align === 'center' ? x - total / 2 : align === 'right' ? x - total : x;
   ctx.save();
   ctx.globalAlpha *= alpha;
   ctx.fillStyle = color;
@@ -301,6 +301,28 @@ function drawImageCover(
   ctx.drawImage(img, (W - dw) / 2 - panX, (H - dh) / 2, dw, dh);
 }
 
+/**
+ * Cover-fit the current frame of an uploaded clip. The caller (preview
+ * sync loop or the exporter's frame-exact seeker) is responsible for the
+ * element showing the right frame for time t.
+ */
+function drawVideoCover(
+  ctx: CanvasRenderingContext2D,
+  video: HTMLVideoElement,
+  W: number, H: number,
+) {
+  const iw = video.videoWidth || 1;
+  const ih = video.videoHeight || 1;
+  const s = Math.max(W / iw, H / ih);
+  const dw = iw * s;
+  const dh = ih * s;
+  try {
+    ctx.drawImage(video, (W - dw) / 2, (H - dh) / 2, dw, dh);
+  } catch {
+    // Frame not decodable yet — background fill already covers the canvas
+  }
+}
+
 function drawOverlay(
   ctx: CanvasRenderingContext2D,
   W: number, H: number,
@@ -326,11 +348,118 @@ function drawOverlay(
     g.addColorStop(1, 'rgba(8,14,24,0)');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
+  } else if (scene.overlay === 'gradient-right') {
+    const g = ctx.createLinearGradient(W * 0.15, 0, W, 0);
+    g.addColorStop(0, 'rgba(8,14,24,0)');
+    g.addColorStop(1, `rgba(8,14,24,${op})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
   } else if (scene.overlay === 'brand') {
     ctx.globalAlpha = op;
     ctx.fillStyle = scheme.bg;
     ctx.fillRect(0, 0, W, H);
   }
+  ctx.restore();
+}
+
+// ── Scene backdrop graphics ───────────────────────────
+
+function withAlpha(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  if (Number.isNaN(n)) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+
+/**
+ * Optional brand graphic drawn between the background fill and the text
+ * layer, in the scene's scheme colors: graph-paper grid, slow-rotating
+ * starburst rays, arc-swoop ring outlines, or the soft conic gradient
+ * arc. Deterministic in t like everything else here.
+ */
+function drawBackdrop(
+  ctx: CanvasRenderingContext2D,
+  sc: SceneCtx,
+  scene: Scene,
+  scheme: ResolvedScheme,
+  t: number,
+) {
+  if (!scene.backdrop || scene.backdrop === 'none') return;
+  const { W, H, u } = sc;
+  const fadeIn = seg(t, 0, 900);
+  if (fadeIn <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = fadeIn;
+
+  if (scene.backdrop === 'grid') {
+    const step = 84 * u;
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.1);
+    ctx.lineWidth = Math.max(1, u);
+    ctx.beginPath();
+    for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+    ctx.stroke();
+  } else if (scene.backdrop === 'starburst') {
+    // radial rays with a slow drift (the hero-stat starburst)
+    const cx = W / 2;
+    const cy = H / 2;
+    const R = Math.hypot(W, H) * 0.62;
+    const rays = 24;
+    const rot = t * 0.000025 * Math.PI * 2; // ~1.5%/s — gentle drift
+    for (let i = 0; i < rays; i++) {
+      const a = rot + (i / rays) * Math.PI * 2;
+      const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      g.addColorStop(0, withAlpha(scheme.accent, 0.1 + (i % 3) * 0.05));
+      g.addColorStop(1, withAlpha(scheme.accent, 0));
+      ctx.strokeStyle = g;
+      ctx.lineWidth = (i % 4 === 0 ? 2.4 : 1.2) * u;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * 26 * u, cy + Math.sin(a) * 26 * u);
+      ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.stroke();
+    }
+  } else if (scene.backdrop === 'ring') {
+    // arc swoops — two big ring outlines settling in from the lower left
+    const p = seg(t, 0, 1400);
+    const cx = W * 0.12;
+    const cy = H * 1.06;
+    const grow = 0.92 + 0.08 * p;
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.28);
+    ctx.lineWidth = 5 * u;
+    ctx.beginPath();
+    ctx.arc(cx, cy, H * 0.78 * grow, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = withAlpha(scheme.accent, 0.12);
+    ctx.lineWidth = 3 * u;
+    ctx.beginPath();
+    ctx.arc(cx, cy, H * 1.02 * grow, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (scene.backdrop === 'arc' && 'createConicGradient' in ctx) {
+    // soft conic gradient band masked to a ring, low in the frame
+    const cx = W * 0.46;
+    const cy = H * 1.4;
+    const outer = H * 1.05;
+    const inner = H * 0.65;
+    const g = (ctx as CanvasRenderingContext2D & {
+      createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
+    }).createConicGradient(Math.PI, cx, cy);
+    g.addColorStop(0, withAlpha(scheme.accent, 0));
+    g.addColorStop(0.05, withAlpha(scheme.accent, 0.03));
+    g.addColorStop(0.12, withAlpha(scheme.accent, 0.07));
+    g.addColorStop(0.2, withAlpha(scheme.accent, 0.11));
+    g.addColorStop(0.27, withAlpha(scheme.accent, 0.13));
+    g.addColorStop(0.34, withAlpha(scheme.accent, 0.09));
+    g.addColorStop(0.42, withAlpha(scheme.accent, 0.04));
+    g.addColorStop(0.5, withAlpha(scheme.accent, 0));
+    g.addColorStop(1, withAlpha(scheme.accent, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(cx, cy, outer, 0, Math.PI * 2);
+    ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
+    ctx.fill('evenodd');
+  }
+
   ctx.restore();
 }
 
@@ -383,6 +512,7 @@ interface SceneCtx {
   u: number; // unit scale = min(W,H)/1080
   doc: MotionDoc;
   assets: AssetMap;
+  videos: VideoMap;
 }
 
 function contentFrame(sc: SceneCtx) {
@@ -406,9 +536,10 @@ function drawScene(
   t: number,
   exitEnabled: boolean,
 ) {
-  const { W, H, u, doc, assets } = sc;
+  const { W, H, u, doc, assets, videos } = sc;
   const scheme = resolveScheme(scene);
   const isImage = scene.template === 'image' && scene.imageId && assets[scene.imageId];
+  const isVideo = scene.template === 'video' && scene.videoId && videos[scene.videoId];
 
   // Background
   ctx.fillStyle = scheme.bg;
@@ -416,6 +547,11 @@ function drawScene(
   if (isImage) {
     drawImageCover(ctx, assets[scene.imageId as string].img, W, H, t / scene.duration, scene.kenBurns);
     drawOverlay(ctx, W, H, scene, scheme);
+  } else if (isVideo) {
+    drawVideoCover(ctx, videos[scene.videoId as string].video, W, H);
+    drawOverlay(ctx, W, H, scene, scheme);
+  } else {
+    drawBackdrop(ctx, sc, scene, scheme, t);
   }
 
   // Foreground (text) — wrapped in exit fade
@@ -424,17 +560,27 @@ function drawScene(
   ctx.globalAlpha = 1 - xp;
   ctx.translate(0, -xp * 26 * u);
 
-  const fg = isImage ? '#ffffff' : scheme.fg;
-  const muted = isImage ? 'rgba(255,255,255,0.72)' : scheme.muted;
+  // Video scenes keep the scheme accent (brand color over footage);
+  // image scenes keep their original fixed accent for back-compat.
+  const fg = (isImage || isVideo) ? '#ffffff' : scheme.fg;
+  const muted = (isImage || isVideo) ? 'rgba(255,255,255,0.72)' : scheme.muted;
   const accent = isImage ? '#8FC5D9' : scheme.accent;
   const frame = contentFrame(sc);
-  const anchorX = scene.align === 'lower-left' ? frame.x : W / 2;
-  const align: 'left' | 'center' = scene.align === 'lower-left' ? 'left' : 'center';
+  const anchorX = scene.align === 'lower-left' ? frame.x
+    : scene.align === 'lower-right' ? frame.x + frame.w
+    : W / 2;
+  const align: 'left' | 'center' | 'right' = scene.align === 'lower-left' ? 'left'
+    : scene.align === 'lower-right' ? 'right'
+    : 'center';
 
   switch (scene.template) {
     case 'title':
     case 'image':
+    case 'video':
       drawTitleScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      break;
+    case 'disclaimer':
+      drawDisclaimerScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'statement':
       drawStatementScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
@@ -473,7 +619,7 @@ function drawScene(
 
 interface Palette {
   fg: string; muted: string; accent: string;
-  anchorX: number; align: 'left' | 'center';
+  anchorX: number; align: 'left' | 'center' | 'right';
   frame: { x: number; y: number; w: number; h: number };
 }
 
@@ -527,6 +673,15 @@ function drawTitleScene(
         drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX + lineW + 20 * u, ky, kickerPx * 0.17, 'left', 1);
         ctx.restore();
       }
+    } else if (p.align === 'right') {
+      drawKickerLine(ctx, p.anchorX - lineW, ky - kickerPx * 0.36, lineW, p.accent, t, 0);
+      if (kp > 0) {
+        ctx.save();
+        ctx.globalAlpha *= kp;
+        ctx.translate((1 - kp) * 14 * u, 0);
+        drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX - lineW - 20 * u, ky, kickerPx * 0.17, 'right', 1);
+        ctx.restore();
+      }
     } else if (kp > 0) {
       ctx.save();
       ctx.globalAlpha *= kp;
@@ -555,7 +710,8 @@ function drawTitleScene(
       ctx.globalAlpha *= dp;
       ctx.fillStyle = p.muted;
       const dw = 52 * u * dp;
-      ctx.fillRect(p.align === 'center' ? p.anchorX - dw / 2 : p.anchorX, dy, dw, Math.max(1.5, 2 * u));
+      const dx = p.align === 'center' ? p.anchorX - dw / 2 : p.align === 'right' ? p.anchorX - dw : p.anchorX;
+      ctx.fillRect(dx, dy, dw, Math.max(1.5, 2 * u));
       ctx.restore();
     }
     y += dividerH;
@@ -616,7 +772,8 @@ function drawStatScene(
   ctx.fillStyle = p.fg;
   ctx.textBaseline = 'alphabetic';
   const numW = ctx.measureText(text).width;
-  ctx.fillText(text, p.align === 'center' ? p.anchorX - numW / 2 : p.anchorX, y + numPx * 0.84);
+  const numX = p.align === 'center' ? p.anchorX - numW / 2 : p.align === 'right' ? p.anchorX - numW : p.anchorX;
+  ctx.fillText(text, numX, y + numPx * 0.84);
   ctx.restore();
   y += numH;
 
@@ -629,7 +786,8 @@ function drawStatScene(
       ctx.globalAlpha *= dp;
       ctx.fillStyle = p.accent;
       const dw = 56 * u * dp;
-      ctx.fillRect(p.align === 'center' ? p.anchorX - dw / 2 : p.anchorX, y - gap / 2, dw, Math.max(2, 2.4 * u));
+      const ddx = p.align === 'center' ? p.anchorX - dw / 2 : p.align === 'right' ? p.anchorX - dw : p.anchorX;
+      ctx.fillRect(ddx, y - gap / 2, dw, Math.max(2, 2.4 * u));
       ctx.restore();
     }
     drawTextBlock(ctx, {
@@ -666,6 +824,12 @@ function drawListScene(
         ctx.save();
         ctx.globalAlpha *= kp;
         drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX + lineW + 20 * u, ky, kickerPx * 0.17, 'left', 1);
+        ctx.restore();
+      } else if (p.align === 'right') {
+        drawKickerLine(ctx, p.anchorX - lineW, ky - kickerPx * 0.36, lineW, p.accent, t, 0);
+        ctx.save();
+        ctx.globalAlpha *= kp;
+        drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX - lineW - 20 * u, ky, kickerPx * 0.17, 'right', 1);
         ctx.restore();
       } else {
         ctx.save();
@@ -705,7 +869,8 @@ function drawListScene(
     } else {
       ctx.font = itemFont;
       const itemW = ctx.measureText(item).width;
-      const startX = p.anchorX - (itemW + markerW + 34 * u) / 2;
+      const rowW = itemW + markerW + 34 * u;
+      const startX = p.align === 'right' ? p.anchorX - rowW : p.anchorX - rowW / 2;
       ctx.font = numFont;
       ctx.fillStyle = p.accent;
       ctx.fillText(marker, startX, rowY + itemPx * 0.78);
@@ -754,10 +919,58 @@ function drawQuoteScene(
       const dash = '— ';
       const full = dash + scene.attribution;
       const w = ctx.measureText(full).width;
-      ctx.fillText(full, p.align === 'center' ? p.anchorX - w / 2 : p.anchorX, ay);
+      const ax = p.align === 'center' ? p.anchorX - w / 2 : p.align === 'right' ? p.anchorX - w : p.anchorX;
+      ctx.fillText(full, ax, ay);
       ctx.restore();
     }
   }
+}
+
+// — Disclaimer scene: kicker + fine-print paragraph —
+function drawDisclaimerScene(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number, p: Palette,
+) {
+  const { u, doc } = sc;
+  const kickerPx = 24 * u;
+  const bodyPx = (sc.H > sc.W ? 26 : 28) * u;
+  const bodyFont = fontStr(400, bodyPx, doc.fontBody);
+  const maxW = p.frame.w * (p.align === 'center' ? 0.72 : 0.66);
+  const hasKicker = !!scene.kicker.trim();
+  const kickerH = hasKicker ? kickerPx + 40 * u : 0;
+  const { height: bodyH } = measureBlock(ctx, {
+    text: scene.body, font: bodyFont, px: bodyPx, lineHeight: 1.62, maxWidth: maxW,
+  });
+  const totalH = kickerH + bodyH;
+  let y = stackTop(sc, scene, totalH);
+
+  if (hasKicker) {
+    const kp = seg(t, 60, 480, easeOutQuint);
+    const ky = y + kickerPx * 0.8;
+    const lineW = 46 * u;
+    if (kp > 0) {
+      ctx.save();
+      ctx.globalAlpha *= kp;
+      ctx.translate(0, (1 - kp) * 10 * u);
+      if (p.align === 'left') {
+        drawKickerLine(ctx, p.anchorX, ky - kickerPx * 0.36, lineW, p.accent, t, 0);
+        drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX + lineW + 20 * u, ky, kickerPx * 0.17, 'left', 1);
+      } else if (p.align === 'right') {
+        drawKickerLine(ctx, p.anchorX - lineW, ky - kickerPx * 0.36, lineW, p.accent, t, 0);
+        drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX - lineW - 20 * u, ky, kickerPx * 0.17, 'right', 1);
+      } else {
+        drawSpacedText(ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent, p.anchorX, ky, kickerPx * 0.17, 'center', 1);
+      }
+      ctx.restore();
+    }
+    y += kickerH;
+  }
+
+  drawTextBlock(ctx, {
+    text: scene.body, font: bodyFont, px: bodyPx, lineHeight: 1.62,
+    color: p.muted, maxWidth: maxW, x: p.anchorX, y,
+    align: p.align, anim: scene.anim, t, tStart: hasKicker ? 380 : 100,
+    accent: p.accent,
+  });
 }
 
 // — End card scene —
@@ -767,13 +980,18 @@ function drawEndcardScene(
   const { u, doc, assets } = sc;
   const scheme = resolveScheme(scene);
   const darkBg = isDark(scheme.bg);
-  // Program logos (Pro studio) win over the built-in SBDC marks;
+  // Saturated light backgrounds (e.g. TFG electric green) need the
+  // all-black mark — a colored ring would vanish into them.
+  const vividBg = !darkBg && isVivid(scheme.bg);
+  // Program logos (Pro studio) win over the built-in marks;
   // '-light' is the light-colored mark for dark backgrounds.
   const logo =
     (darkBg
       ? assets['__logo-brand-light'] ?? assets['__logo-brand-dark']
       : assets['__logo-brand-dark'] ?? assets['__logo-brand-light']) ??
-    assets[darkBg ? '__logo-white' : '__logo-blue'];
+    (darkBg
+      ? assets['__logo-white']
+      : (vividBg ? assets['__logo-black'] ?? assets['__logo-blue'] : assets['__logo-blue']));
 
   const logoH = logo ? 96 * u : 0;
   const kickerPx = 22 * u;
@@ -850,6 +1068,13 @@ function isDark(hex: string): boolean {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b < 140;
 }
 
+/** Strongly saturated color (channel spread), vs. near-neutral whites/grays. */
+function isVivid(hex: string): boolean {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return Math.max(r, g, b) - Math.min(r, g, b) > 100;
+}
+
 // ── Top-level frame renderer ──────────────────────────
 
 let transBuffer: HTMLCanvasElement | null = null;
@@ -879,9 +1104,10 @@ export function renderFrame(
   doc: MotionDoc,
   t: number,
   assets: AssetMap,
+  videos: VideoMap = {},
 ): void {
   const { w: W, h: H } = getAspect(doc.aspect);
-  const sc: SceneCtx = { W, H, u: Math.min(W, H) / 1080, doc, assets };
+  const sc: SceneCtx = { W, H, u: Math.min(W, H) / 1080, doc, assets, videos };
 
   if (doc.scenes.length === 0) {
     ctx.fillStyle = '#0f1c2e';

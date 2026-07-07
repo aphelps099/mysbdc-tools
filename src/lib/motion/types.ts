@@ -74,6 +74,8 @@ export const TEMPLATES = [
   { id: 'list',      label: 'Agenda',    hint: 'Staggered list of lines' },
   { id: 'quote',     label: 'Quote',     hint: 'Pull quote + attribution' },
   { id: 'image',     label: 'Image',     hint: 'Photo + text overlay' },
+  { id: 'video',     label: 'Video',     hint: 'Uploaded clip + text overlay' },
+  { id: 'disclaimer',label: 'Disclaimer',hint: 'Fine-print paragraph' },
   { id: 'endcard',   label: 'End Card',  hint: 'Logo · CTA · date' },
 ] as const;
 
@@ -114,12 +116,24 @@ export const KEN_BURNS = [
 
 export type KenBurnsId = typeof KEN_BURNS[number]['id'];
 
+// ── Scene backdrop graphics (drawn behind the text in scheme colors) ──
+export const BACKDROPS = [
+  { id: 'none',      label: 'None' },
+  { id: 'grid',      label: 'Grid' },
+  { id: 'starburst', label: 'Starburst' },
+  { id: 'ring',      label: 'Ring' },
+  { id: 'arc',       label: 'Arc' },
+] as const;
+
+export type BackdropId = typeof BACKDROPS[number]['id'];
+
 // ── Image overlays for text legibility ──
 export const OVERLAYS = [
   { id: 'none',            label: 'None' },
   { id: 'scrim',           label: 'Scrim' },
   { id: 'gradient-bottom', label: 'Grad ↓' },
   { id: 'gradient-left',   label: 'Grad ←' },
+  { id: 'gradient-right',  label: 'Grad →' },
   { id: 'brand',           label: 'Brand' },
 ] as const;
 
@@ -130,6 +144,7 @@ export const ALIGNMENTS = [
   { id: 'center',       label: 'Center' },
   { id: 'lower-left',   label: 'Lower Left' },
   { id: 'lower-center', label: 'Lower Center' },
+  { id: 'lower-right',  label: 'Lower Right' },
 ] as const;
 
 export type AlignId = typeof ALIGNMENTS[number]['id'];
@@ -147,6 +162,8 @@ export interface Scene {
   /** Transition INTO this scene from the previous one. */
   transition: TransitionId;
   align: AlignId;
+  /** Optional brand graphic drawn behind the text (scheme colors). */
+  backdrop: BackdropId;
   /** Use the serif (heading) font for the main line of this scene. */
   serifTitle: boolean;
 
@@ -170,6 +187,15 @@ export interface Scene {
   overlay: OverlayId;
   /** 0–1 overlay strength. */
   overlayOpacity: number;
+
+  // Video template
+  videoId: string | null;
+  /** Offset into the source clip where playback starts (ms). */
+  videoTrimStart: number;
+  /** Drop the clip's own audio from preview + export. */
+  videoMuted: boolean;
+  /** 0–1 gain applied to the clip's own audio. */
+  videoVolume: number;
 }
 
 // ── Document ──
@@ -183,9 +209,17 @@ export interface MotionDoc {
   fontBody: string;
   watermark: string;
   showGrain: boolean;
-  /** Music bed volume 0–1 (Pro studio audio). */
-  musicVolume: number;
-  /** Music gain multiplier while the voiceover plays, 0–1. */
+
+  // Background music (document-wide bed under everything)
+  /** Audio asset id, or null for no music. */
+  audioId: string | null;
+  /** 0–1 music gain. */
+  audioVolume: number;
+  /** Music fade-in length (ms). */
+  audioFadeIn: number;
+  /** Music fade-out length before the end (ms). */
+  audioFadeOut: number;
+  /** Music gain multiplier while a voiceover plays, 0–1 (Pro studio ducking). */
   duckLevel: number;
 }
 
@@ -198,6 +232,36 @@ export interface ImageAsset {
 }
 
 export type AssetMap = Record<string, ImageAsset>;
+
+// ── Uploaded video clips, keyed by videoId ──
+export interface VideoAsset {
+  id: string;
+  name: string;
+  url: string;
+  /** Muted element used by the canvas for pixels; audio mixes separately. */
+  video: HTMLVideoElement;
+  /** Source duration in ms. */
+  duration: number;
+  width: number;
+  height: number;
+  /** Decoded audio track (null when the clip is silent or undecodable). */
+  audioBuffer: AudioBuffer | null;
+}
+
+export type VideoMap = Record<string, VideoAsset>;
+
+// ── Uploaded background audio, keyed by audioId ──
+export interface AudioAsset {
+  id: string;
+  name: string;
+  url: string;
+  /** Decoded PCM used for export mixing. */
+  buffer: AudioBuffer;
+  /** Element used for preview playback. */
+  element: HTMLAudioElement;
+}
+
+export type AudioMap = Record<string, AudioAsset>;
 
 let sceneCounter = 0;
 
@@ -212,6 +276,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     anim: 'word-stagger',
     transition: 'fade',
     align: 'center',
+    backdrop: 'none',
     serifTitle: false,
     kicker: '',
     title: '',
@@ -225,6 +290,10 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     kenBurns: 'zoom-in',
     overlay: 'gradient-bottom',
     overlayOpacity: 0.65,
+    videoId: null,
+    videoTrimStart: 0,
+    videoMuted: false,
+    videoVolume: 1,
   };
 
   const defaults: Partial<Record<TemplateId, Partial<Scene>>> = {
@@ -267,6 +336,22 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
       align: 'lower-left',
       anim: 'rise',
     },
+    video: {
+      kicker: '',
+      title: '',
+      subtitle: '',
+      align: 'lower-left',
+      anim: 'rise',
+      duration: 10000,
+      overlay: 'gradient-bottom',
+      overlayOpacity: 0.55,
+    },
+    disclaimer: {
+      kicker: 'BEFORE YOU BEGIN',
+      body: 'Consult your physician before starting this or any exercise program. By participating you agree that you do so voluntarily and at your own risk.',
+      anim: 'rise',
+      duration: 5000,
+    },
     endcard: {
       title: 'norcalsbdc.org',
       subtitle: 'Funded in part through a cooperative agreement with the U.S. SBA',
@@ -292,7 +377,10 @@ export function defaultDoc(): MotionDoc {
     fontBody: 'proxima-nova',
     watermark: '',
     showGrain: true,
-    musicVolume: 0.8,
+    audioId: null,
+    audioVolume: 0.8,
+    audioFadeIn: 2000,
+    audioFadeOut: 2000,
     duckLevel: 0.3,
   };
 }

@@ -80,14 +80,23 @@ export async function POST(req: NextRequest) {
     injectMatch = a.length === e.length && timingSafeEqual(a, e);
   }
 
+  // Fifth password: TFG Motion → session scoped to ONLY /motion/tfg,
+  // for direct links to the studio without the full tools password.
+  const tfgPassword = process.env.TFG_MOTION_PASSWORD || 'tfgmotion';
+  let tfgMatch = false;
   if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch) {
+    const f = Buffer.from(tfgPassword);
+    tfgMatch = a.length === f.length && timingSafeEqual(a, f);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
   // Create signed session token. The scope is baked into the signed payload
   // so it cannot be altered client-side; middleware restricts inject-scoped
-  // sessions to the inject tool only.
-  const scope = injectMatch ? 'inject' : 'admin';
+  // sessions to the inject tool only, and tfg-scoped sessions to TFG Motion.
+  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : 'admin';
   const nonce = randomBytes(16).toString('hex');
   const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
@@ -98,6 +107,7 @@ export async function POST(req: NextRequest) {
     ...(lenderMatch ? { redirect: '/brand/lender-resources' } : {}),
     ...(milestonesMatch ? { redirect: '/milestones' } : {}),
     ...(injectMatch ? { redirect: '/admin/inject-r4i' } : {}),
+    ...(tfgMatch ? { redirect: '/motion/tfg' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,

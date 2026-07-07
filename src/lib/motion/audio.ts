@@ -1,13 +1,156 @@
 /* ═══════════════════════════════════════════════════════
    Motion Studio — audio engine
-   · Decode uploaded voiceover / music files
-   · Ducking curve: music dips while the VO plays, with
-     300ms ramps. duckGainAt() is a pure function of time,
-     so the SAME curve drives preview volume and the
-     export mixdown.
-   · renderMixdown(): OfflineAudioContext render of
-     music (looped, ducked) + VO → one stereo buffer the
-     exporter encodes into the MP4.
+   · Decode uploaded music files (and the audio track of
+     uploaded video clips) to PCM for export mixing.
+   · Mix the full soundtrack offline: background music with
+     fade-in/out under everything, plus each video scene's
+     own audio placed at its position on the timeline.
+   · musicGainAt() is the single fade curve — the preview
+     volume and the offline mix both use it, so what you
+     hear is what exports.
+   ═══════════════════════════════════════════════════════ */
+
+import { MotionDoc, AudioMap, VideoMap, AudioAsset, docDuration } from './types';
+
+const MIX_SAMPLE_RATE = 48000;
+const MIX_CHANNELS = 2;
+
+let sharedCtx: AudioContext | null = null;
+
+function getAudioContext(): AudioContext {
+  if (!sharedCtx) sharedCtx = new AudioContext({ sampleRate: MIX_SAMPLE_RATE });
+  return sharedCtx;
+}
+
+/** Decode any audio-bearing file (mp3/wav/m4a — or an mp4 video's audio track). */
+export async function decodeAudio(buf: ArrayBuffer): Promise<AudioBuffer> {
+  return getAudioContext().decodeAudioData(buf);
+}
+
+/** Decode a video file's audio track; null when silent or undecodable. */
+export async function tryDecodeVideoAudio(buf: ArrayBuffer): Promise<AudioBuffer | null> {
+  try {
+    return await decodeAudio(buf);
+  } catch {
+    return null;
+  }
+}
+
+/** Build an AudioAsset (decoded PCM + preview element) from an uploaded file. */
+export async function loadAudioAsset(file: File): Promise<AudioAsset> {
+  const arrayBuf = await file.arrayBuffer();
+  const buffer = await decodeAudio(arrayBuf);
+  const url = URL.createObjectURL(file);
+  const element = new Audio(url);
+  element.preload = 'auto';
+  element.loop = true;
+  return {
+    id: `aud-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`,
+    name: file.name,
+    url,
+    buffer,
+    element,
+  };
+}
+
+/**
+ * Music gain at global time t — linear fade-in from 0, hold at
+ * doc.audioVolume, linear fade-out to 0 at the end. Fades are clamped
+ * so they never overlap on very short documents.
+ */
+export function musicGainAt(doc: MotionDoc, tMs: number, totalMs: number): number {
+  const vol = Math.max(0, Math.min(1, doc.audioVolume));
+  if (totalMs <= 0) return 0;
+  const fadeIn = Math.max(0, Math.min(doc.audioFadeIn, totalMs / 2));
+  const fadeOut = Math.max(0, Math.min(doc.audioFadeOut, totalMs / 2));
+  let g = 1;
+  if (fadeIn > 0 && tMs < fadeIn) g = Math.min(g, tMs / fadeIn);
+  if (fadeOut > 0 && tMs > totalMs - fadeOut) g = Math.min(g, (totalMs - tMs) / fadeOut);
+  return Math.max(0, Math.min(1, g)) * vol;
+}
+
+/**
+ * Render the document's full soundtrack to a PCM buffer:
+ * looped background music with the fade envelope, plus every video
+ * scene's own audio at its timeline position. Returns null when the
+ * document has no audible sources (export then skips the audio track).
+ */
+export async function renderMixdown(
+  doc: MotionDoc,
+  audio: AudioMap,
+  videos: VideoMap,
+): Promise<AudioBuffer | null> {
+  const totalMs = docDuration(doc);
+  if (!Number.isFinite(totalMs) || totalMs <= 0) return null;
+
+  const music = doc.audioId ? audio[doc.audioId] : null;
+  const musicAudible = !!music && doc.audioVolume > 0;
+
+  interface ClipSource { buffer: AudioBuffer; startS: number; offsetS: number; durS: number; gain: number }
+  const clips: ClipSource[] = [];
+  let acc = 0;
+  for (const scene of doc.scenes) {
+    if (scene.template === 'video' && scene.videoId) {
+      const v = videos[scene.videoId];
+      if (v?.audioBuffer && !scene.videoMuted && scene.videoVolume > 0) {
+        const offsetS = Math.min(scene.videoTrimStart / 1000, Math.max(0, v.audioBuffer.duration - 0.01));
+        const durS = Math.min(scene.duration / 1000, v.audioBuffer.duration - offsetS);
+        if (durS > 0) {
+          clips.push({ buffer: v.audioBuffer, startS: acc / 1000, offsetS, durS, gain: scene.videoVolume });
+        }
+      }
+    }
+    acc += scene.duration;
+  }
+
+  if (!musicAudible && clips.length === 0) return null;
+
+  const totalS = totalMs / 1000;
+  const octx = new OfflineAudioContext(
+    MIX_CHANNELS,
+    Math.max(1, Math.ceil(totalS * MIX_SAMPLE_RATE)),
+    MIX_SAMPLE_RATE,
+  );
+
+  if (musicAudible && music) {
+    const src = octx.createBufferSource();
+    src.buffer = music.buffer;
+    src.loop = true;
+    const gain = octx.createGain();
+    // Piecewise-linear envelope matching musicGainAt()
+    const fadeIn = Math.max(0, Math.min(doc.audioFadeIn, totalMs / 2)) / 1000;
+    const fadeOut = Math.max(0, Math.min(doc.audioFadeOut, totalMs / 2)) / 1000;
+    const vol = Math.max(0, Math.min(1, doc.audioVolume));
+    gain.gain.setValueAtTime(fadeIn > 0 ? 0 : vol, 0);
+    if (fadeIn > 0) gain.gain.linearRampToValueAtTime(vol, fadeIn);
+    if (fadeOut > 0) {
+      gain.gain.setValueAtTime(vol, Math.max(fadeIn, totalS - fadeOut));
+      gain.gain.linearRampToValueAtTime(0, totalS);
+    }
+    src.connect(gain).connect(octx.destination);
+    src.start(0);
+    src.stop(totalS);
+  }
+
+  for (const clip of clips) {
+    const src = octx.createBufferSource();
+    src.buffer = clip.buffer;
+    const gain = octx.createGain();
+    gain.gain.value = clip.gain;
+    src.connect(gain).connect(octx.destination);
+    src.start(clip.startS, clip.offsetS, clip.durS);
+  }
+
+  return octx.startRendering();
+}
+
+/* ═══════════════════════════════════════════════════════
+   Pro studio additions — voiceover + ducked music bed
+   The Pro editor keeps its VO/music as standalone tracks
+   (not doc assets) and ducks the music while the VO
+   speaks. duckGainAt() is a pure function of time, so the
+   preview volume and renderProMixdown() use the exact
+   same curve.
    ═══════════════════════════════════════════════════════ */
 
 export interface AudioTrack {
@@ -24,19 +167,11 @@ export interface AudioSettings {
 }
 
 export const DUCK_RAMP_MS = 300;
-const MIX_SAMPLE_RATE = 48000;
 
 export async function decodeAudioFile(file: File): Promise<AudioTrack> {
   const arrayBuf = await file.arrayBuffer();
-  type AC = typeof AudioContext;
-  const Ctor: AC = window.AudioContext ?? (window as unknown as { webkitAudioContext: AC }).webkitAudioContext;
-  const ctx = new Ctor();
-  try {
-    const buffer = await ctx.decodeAudioData(arrayBuf);
-    return { name: file.name, url: URL.createObjectURL(file), buffer };
-  } finally {
-    ctx.close();
-  }
+  const buffer = await decodeAudio(arrayBuf);
+  return { name: file.name, url: URL.createObjectURL(file), buffer };
 }
 
 /**
@@ -54,13 +189,11 @@ export function duckGainAt(
 
   if (t < 0) return base;
   if (t < DUCK_RAMP_MS) {
-    // ramp down at VO start (t=0)
     const p = t / DUCK_RAMP_MS;
     return base + (ducked - base) * p;
   }
   if (t < voDurationMs) return ducked;
   if (t < voDurationMs + DUCK_RAMP_MS) {
-    // ramp back up after VO ends
     const p = (t - voDurationMs) / DUCK_RAMP_MS;
     return ducked + (base - ducked) * p;
   }
@@ -68,11 +201,11 @@ export function duckGainAt(
 }
 
 /**
- * Offline-render the full soundtrack for the document:
- * music looped to fit (ducked under the VO) + VO at unity gain.
- * Returns null when there is nothing to mix.
+ * Offline-render the Pro studio soundtrack: music looped to fit
+ * (ducked under the VO) + VO at unity gain. Returns null when there
+ * is nothing to mix. Feed the result to exportMp4's opts.audioBuffer.
  */
-export async function renderMixdown(
+export async function renderProMixdown(
   durationMs: number,
   vo: AudioTrack | null,
   music: AudioTrack | null,
@@ -80,7 +213,7 @@ export async function renderMixdown(
 ): Promise<AudioBuffer | null> {
   if (!vo && !music) return null;
   const lengthFrames = Math.max(1, Math.ceil((durationMs / 1000) * MIX_SAMPLE_RATE));
-  const ctx = new OfflineAudioContext(2, lengthFrames, MIX_SAMPLE_RATE);
+  const ctx = new OfflineAudioContext(MIX_CHANNELS, lengthFrames, MIX_SAMPLE_RATE);
   const durationSec = durationMs / 1000;
   const voDurMs = vo ? vo.buffer.duration * 1000 : null;
 
@@ -90,7 +223,7 @@ export async function renderMixdown(
     src.loop = true;
     const gain = ctx.createGain();
 
-    // Schedule the exact duck curve (piecewise linear, 4 breakpoints)
+    // Schedule the exact duck curve (piecewise linear)
     const g0 = duckGainAt(0, voDurMs, settings);
     gain.gain.setValueAtTime(g0, 0);
     if (voDurMs && voDurMs > 0) {
@@ -127,80 +260,4 @@ export async function renderMixdown(
   }
 
   return ctx.startRendering();
-}
-
-/**
- * Encode a mixdown buffer into the muxer's audio track via WebCodecs.
- * Tries AAC (plays everywhere) then Opus. Returns the codec used.
- * The muxer must have been created with a matching audio config —
- * call pickAudioCodec() first and pass its result to the muxer.
- */
-export async function pickAudioCodec(): Promise<{ codec: string; mux: 'aac' | 'opus' } | null> {
-  if (typeof window === 'undefined' || !('AudioEncoder' in window)) return null;
-  const candidates: { codec: string; mux: 'aac' | 'opus' }[] = [
-    { codec: 'mp4a.40.2', mux: 'aac' },
-    { codec: 'opus', mux: 'opus' },
-  ];
-  for (const c of candidates) {
-    try {
-      const { supported } = await AudioEncoder.isConfigSupported({
-        codec: c.codec,
-        sampleRate: MIX_SAMPLE_RATE,
-        numberOfChannels: 2,
-        bitrate: 128_000,
-      });
-      if (supported) return c;
-    } catch {
-      // try next
-    }
-  }
-  return null;
-}
-
-export async function encodeAudioIntoMuxer(
-  buffer: AudioBuffer,
-  codec: string,
-  addChunk: (chunk: EncodedAudioChunk, meta?: EncodedAudioChunkMetadata) => void,
-  signal?: AbortSignal,
-): Promise<void> {
-  let encodeError: Error | null = null;
-  const encoder = new AudioEncoder({
-    output: (chunk, meta) => addChunk(chunk, meta),
-    error: (e) => { encodeError = e instanceof Error ? e : new Error(String(e)); },
-  });
-  encoder.configure({
-    codec,
-    sampleRate: buffer.sampleRate,
-    numberOfChannels: 2,
-    bitrate: 128_000,
-  });
-
-  const chunkFrames = 4800; // 100ms at 48k
-  const ch0 = buffer.getChannelData(0);
-  const ch1 = buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : ch0;
-
-  try {
-    for (let offset = 0; offset < buffer.length; offset += chunkFrames) {
-      if (signal?.aborted) throw new DOMException('Export cancelled', 'AbortError');
-      if (encodeError) throw encodeError;
-      const frames = Math.min(chunkFrames, buffer.length - offset);
-      const data = new Float32Array(frames * 2);
-      data.set(ch0.subarray(offset, offset + frames), 0);
-      data.set(ch1.subarray(offset, offset + frames), frames);
-      const audioData = new AudioData({
-        format: 'f32-planar',
-        sampleRate: buffer.sampleRate,
-        numberOfFrames: frames,
-        numberOfChannels: 2,
-        timestamp: Math.round((offset / buffer.sampleRate) * 1e6),
-        data,
-      });
-      encoder.encode(audioData);
-      audioData.close();
-    }
-    await encoder.flush();
-    if (encodeError) throw encodeError;
-  } finally {
-    if (encoder.state !== 'closed') encoder.close();
-  }
 }

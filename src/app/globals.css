@@ -159,6 +159,50 @@
   font-display: swap;
 }
 
+/* Michroma — the TFG logo typeface (single weight, OFL licensed) */
+@font-face {
+  font-family: 'Michroma';
+  src: url('/fonts/Michroma-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Futura — the ZEBS Platinum Fitness brand typeface (from the zebs repo).
+   'Futura' resolves Book at text weights and Extra Black at bold weights,
+   so kickers and titles land on the heavy cut without a separate family. */
+@font-face {
+  font-family: 'Futura';
+  src: url('/fonts/Futura-Book.ttf') format('truetype');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura';
+  src: url('/fonts/Futura-XBlk.ttf') format('truetype');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura XBlk';
+  src: url('/fonts/Futura-XBlk.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TROS';
+  src: url('/fonts/TROS-Thin.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* ───────────────────────────────────────────────
    Design Tokens
