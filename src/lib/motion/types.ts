@@ -139,6 +139,23 @@ export const OVERLAYS = [
 
 export type OverlayId = typeof OVERLAYS[number]['id'];
 
+// ── Picture-in-picture (coach cam) positions ──
+export const PIP_POSITIONS = [
+  { id: 'left',   label: 'Left' },
+  { id: 'center', label: 'Center' },
+  { id: 'right',  label: 'Right' },
+] as const;
+
+export type PipPosId = typeof PIP_POSITIONS[number]['id'];
+
+// ── Text scale presets (block size relative to default) ──
+export const TEXT_SCALES = [
+  { id: '0.3', label: '30%' },
+  { id: '0.5', label: '50%' },
+  { id: '0.7', label: '70%' },
+  { id: '1',   label: '100%' },
+] as const;
+
 // ── Alignment ──
 export const ALIGNMENTS = [
   { id: 'center',       label: 'Center' },
@@ -166,6 +183,10 @@ export interface Scene {
   backdrop: BackdropId;
   /** Use the serif (heading) font for the main line of this scene. */
   serifTitle: boolean;
+  /** Text block scale (0.3–1) — smaller text lets the visuals lead. */
+  textScale: number;
+  /** Show the numbered markers on list/agenda scenes. */
+  listMarkers: boolean;
 
   // Text content (used per-template)
   kicker: string;
@@ -196,6 +217,18 @@ export interface Scene {
   videoMuted: boolean;
   /** 0–1 gain applied to the clip's own audio. */
   videoVolume: number;
+
+  // Coach-cam picture-in-picture (any template) — a small clip layered
+  // in the lower third, e.g. Zeb talking over the exercise footage.
+  pipVideoId: string | null;
+  pipPos: PipPosId;
+  /** Thumbnail width as a fraction of the frame width (0.12–0.4). */
+  pipSize: number;
+  /** Offset into the PIP clip where playback starts (ms). */
+  pipTrimStart: number;
+  pipMuted: boolean;
+  /** 0–1 gain applied to the PIP clip's audio. */
+  pipVolume: number;
 }
 
 // ── Document ──
@@ -219,6 +252,13 @@ export interface MotionDoc {
   audioFadeIn: number;
   /** Music fade-out length before the end (ms). */
   audioFadeOut: number;
+
+  // Voiceover (plays once from voStart, mixed over the music bed)
+  voId: string | null;
+  /** 0–1 voiceover gain. */
+  voVolume: number;
+  /** Timeline position where the voiceover begins (ms). */
+  voStart: number;
 }
 
 // ── Loaded image assets, keyed by imageId ──
@@ -276,6 +316,8 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     align: 'center',
     backdrop: 'none',
     serifTitle: false,
+    textScale: 1,
+    listMarkers: true,
     kicker: '',
     title: '',
     subtitle: '',
@@ -292,6 +334,12 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     videoTrimStart: 0,
     videoMuted: false,
     videoVolume: 1,
+    pipVideoId: null,
+    pipPos: 'right',
+    pipSize: 0.24,
+    pipTrimStart: 0,
+    pipMuted: false,
+    pipVolume: 1,
   };
 
   const defaults: Partial<Record<TemplateId, Partial<Scene>>> = {
@@ -379,6 +427,9 @@ export function defaultDoc(): MotionDoc {
     audioVolume: 0.8,
     audioFadeIn: 2000,
     audioFadeOut: 2000,
+    voId: null,
+    voVolume: 1,
+    voStart: 0,
   };
 }
 

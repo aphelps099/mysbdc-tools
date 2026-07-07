@@ -463,6 +463,84 @@ function drawBackdrop(
   ctx.restore();
 }
 
+// ── Coach-cam picture-in-picture ──────────────────────
+
+function roundRectPath(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number, r: number,
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/**
+ * Small clip thumbnail in the lower third (e.g. Zeb talking over the
+ * exercise footage). Rounded, accent-ringed, rises in with the scene.
+ */
+function drawPipOverlay(
+  ctx: CanvasRenderingContext2D,
+  sc: SceneCtx,
+  scene: Scene,
+  t: number,
+) {
+  if (!scene.pipVideoId) return;
+  const asset = sc.videos[scene.pipVideoId];
+  if (!asset) return;
+  const { W, H, u } = sc;
+  const p = seg(t, 150, 500, easeOutQuint);
+  if (p <= 0) return;
+
+  const pad = 110 * u;
+  const w = W * Math.max(0.12, Math.min(0.4, scene.pipSize || 0.24));
+  const vw = asset.video.videoWidth || 16;
+  const vh = asset.video.videoHeight || 9;
+  const h = w * (vh / vw);
+  const x = scene.pipPos === 'left' ? pad
+    : scene.pipPos === 'center' ? (W - w) / 2
+    : W - pad - w;
+  const y = H - pad * 0.75 - h;
+  const r = 20 * u;
+  const scheme = resolveScheme(scene);
+
+  ctx.save();
+  ctx.globalAlpha *= p;
+  ctx.translate(0, (1 - p) * 24 * u);
+
+  // Drop shadow via a backing plate
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 26 * u;
+  ctx.shadowOffsetY = 10 * u;
+  roundRectPath(ctx, x, y, w, h, r);
+  ctx.fillStyle = '#000';
+  ctx.fill();
+  ctx.restore();
+
+  // Clip the video into the rounded rect
+  ctx.save();
+  roundRectPath(ctx, x, y, w, h, r);
+  ctx.clip();
+  try {
+    ctx.drawImage(asset.video, x, y, w, h);
+  } catch {
+    // frame not decodable yet — plate stays
+  }
+  ctx.restore();
+
+  // Accent ring
+  roundRectPath(ctx, x, y, w, h, r);
+  ctx.strokeStyle = scheme.accent;
+  ctx.lineWidth = Math.max(2, 4 * u);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 // ── Film grain ────────────────────────────────────────
 
 let grainTile: HTMLCanvasElement | OffscreenCanvas | null = null;
@@ -573,31 +651,39 @@ function drawScene(
     : scene.align === 'lower-right' ? 'right'
     : 'center';
 
+  // Text scale: shrink the type by scaling the unit the templates size
+  // with, while the palette frame stays at full scale so margins hold.
+  const textScale = Math.max(0.2, Math.min(1.5, scene.textScale || 1));
+  const tsc: SceneCtx = textScale === 1 ? sc : { ...sc, u: u * textScale };
+
   switch (scene.template) {
     case 'title':
     case 'image':
     case 'video':
-      drawTitleScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawTitleScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'disclaimer':
-      drawDisclaimerScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawDisclaimerScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'statement':
-      drawStatementScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawStatementScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'stat':
-      drawStatScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawStatScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'list':
-      drawListScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawListScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'quote':
-      drawQuoteScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawQuoteScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'endcard':
-      drawEndcardScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawEndcardScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
   }
+
+  // Coach-cam thumbnail over any template (full-scale units)
+  drawPipOverlay(ctx, sc, scene, t);
 
   // Watermark (constant, subtle)
   const wm = doc.watermark.trim();
@@ -623,11 +709,14 @@ interface Palette {
   frame: { x: number; y: number; w: number; h: number };
 }
 
-/** Vertical anchor: returns top y for a stack of totalH. */
-function stackTop(sc: SceneCtx, scene: Scene, totalH: number): number {
-  const frame = contentFrame(sc);
-  if (scene.align === 'center') return (sc.H - totalH) / 2;
-  return frame.y + frame.h - totalH; // lower-*
+/**
+ * Vertical anchor: returns top y for a stack of totalH. Uses the palette
+ * frame (computed at full scale) so scaled-down text keeps the same
+ * margins instead of drifting toward the edges.
+ */
+function stackTop(p: Palette, H: number, scene: Scene, totalH: number): number {
+  if (scene.align === 'center') return (H - totalH) / 2;
+  return p.frame.y + p.frame.h - totalH; // lower-*
 }
 
 function headingFamily(sc: SceneCtx, scene: Scene): string {
@@ -657,7 +746,7 @@ function drawTitleScene(
     ? measureBlock(ctx, { text: scene.subtitle, font: fontStr(400, subPx, doc.fontBody), px: subPx, lineHeight: 1.45, maxWidth: maxW * 0.78 }).height + 6 * u
     : 0;
   const totalH = kickerH + titleH + dividerH + subH;
-  let y = stackTop(sc, scene, totalH);
+  let y = stackTop(p, sc.H, scene, totalH);
 
   // Kicker
   if (hasKicker) {
@@ -733,7 +822,7 @@ function drawStatementScene(
   const font = fontStr(scene.serifTitle ? 400 : 300, px, family);
   const maxW = p.frame.w * 0.92;
   const { height } = measureBlock(ctx, { text: scene.title, font, px, lineHeight: 1.12, maxWidth: maxW });
-  const y = stackTop(sc, scene, height);
+  const y = stackTop(p, sc.H, scene, height);
   drawTextBlock(ctx, {
     text: scene.title, font, px, lineHeight: 1.12, color: p.fg,
     maxWidth: maxW, x: p.anchorX, y, align: p.align,
@@ -762,7 +851,7 @@ function drawStatScene(
   const numH = numPx * 1.02;
   const gap = 30 * u;
   const totalH = numH + (labelH ? gap + labelH : 0);
-  let y = stackTop(sc, scene, totalH);
+  let y = stackTop(p, sc.H, scene, totalH);
 
   const fadeP = seg(t, 100, 500, easeOutQuint);
   ctx.save();
@@ -812,7 +901,7 @@ function drawListScene(
   const hasKicker = !!scene.kicker.trim();
   const kickerH = hasKicker ? kickerPx + 44 * u : 0;
   const totalH = kickerH + items.length * rowH - (items.length ? itemPx * 0.55 : 0);
-  let y = stackTop(sc, scene, totalH);
+  let y = stackTop(p, sc.H, scene, totalH);
 
   if (hasKicker) {
     const kp = seg(t, 60, 480, easeOutQuint);
@@ -852,31 +941,37 @@ function drawListScene(
     ctx.globalAlpha *= ip;
     ctx.translate(0, (1 - ip) * 22 * u);
 
-    // Index marker
+    // Index marker (optional — some cards read better without the numbers)
+    const useMarkers = scene.listMarkers !== false;
     const numFont = fontStr(700, 20 * u, doc.fontBody);
     ctx.font = numFont;
     ctx.fillStyle = p.accent;
     const marker = String(i + 1).padStart(2, '0');
-    const markerW = ctx.measureText(marker).width;
+    const markerW = useMarkers ? ctx.measureText(marker).width : 0;
+    const markerGap = useMarkers ? 34 * u : 0;
 
     if (p.align === 'left') {
-      ctx.fillText(marker, p.anchorX, rowY + itemPx * 0.78);
-      // rule under number
-      ctx.fillRect(p.anchorX, rowY + itemPx * 0.98, markerW, Math.max(1.5, 1.8 * u));
+      if (useMarkers) {
+        ctx.fillText(marker, p.anchorX, rowY + itemPx * 0.78);
+        // rule under number
+        ctx.fillRect(p.anchorX, rowY + itemPx * 0.98, markerW, Math.max(1.5, 1.8 * u));
+      }
       ctx.font = itemFont;
       ctx.fillStyle = p.fg;
-      ctx.fillText(item, p.anchorX + markerW + 34 * u, rowY + itemPx * 0.78);
+      ctx.fillText(item, p.anchorX + markerW + markerGap, rowY + itemPx * 0.78);
     } else {
       ctx.font = itemFont;
       const itemW = ctx.measureText(item).width;
-      const rowW = itemW + markerW + 34 * u;
+      const rowW = itemW + markerW + markerGap;
       const startX = p.align === 'right' ? p.anchorX - rowW : p.anchorX - rowW / 2;
-      ctx.font = numFont;
-      ctx.fillStyle = p.accent;
-      ctx.fillText(marker, startX, rowY + itemPx * 0.78);
+      if (useMarkers) {
+        ctx.font = numFont;
+        ctx.fillStyle = p.accent;
+        ctx.fillText(marker, startX, rowY + itemPx * 0.78);
+      }
       ctx.font = itemFont;
       ctx.fillStyle = p.fg;
-      ctx.fillText(item, startX + markerW + 34 * u, rowY + itemPx * 0.78);
+      ctx.fillText(item, startX + markerW + markerGap, rowY + itemPx * 0.78);
     }
     ctx.restore();
   });
@@ -898,7 +993,7 @@ function drawQuoteScene(
   const hasAttr = !!scene.attribution.trim();
   const attrH = hasAttr ? attrPx + 46 * u : 0;
   const totalH = qH + attrH;
-  let y = stackTop(sc, scene, totalH);
+  let y = stackTop(p, sc.H, scene, totalH);
 
   drawTextBlock(ctx, {
     text, font: quoteFont, px: quotePx, lineHeight: 1.28, color: p.fg,
@@ -941,7 +1036,7 @@ function drawDisclaimerScene(
     text: scene.body, font: bodyFont, px: bodyPx, lineHeight: 1.62, maxWidth: maxW,
   });
   const totalH = kickerH + bodyH;
-  let y = stackTop(sc, scene, totalH);
+  let y = stackTop(p, sc.H, scene, totalH);
 
   if (hasKicker) {
     const kp = seg(t, 60, 480, easeOutQuint);
