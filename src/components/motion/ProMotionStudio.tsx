@@ -14,7 +14,7 @@ import {
   FontOption, builtinFonts, loadTypekitKit, registerFontFile, ensureFontsReady, DEFAULT_KIT_ID,
 } from '@/lib/motion/fonts';
 import {
-  AudioTrack, decodeAudioFile, duckGainAt, renderMixdown,
+  AudioTrack, decodeAudioFile, duckGainAt, renderProMixdown,
 } from '@/lib/motion/audio';
 import {
   ProjectFile, serializeProject, parseProject, saveAutosave, loadAutosave, clearAutosave,
@@ -284,7 +284,7 @@ export default function ProMotionStudio() {
 
     if (music && musicTrackRef.current) {
       music.volume = Math.min(1, Math.max(0, duckGainAt(t, voDurMs, {
-        musicVolume: d.musicVolume, duckLevel: d.duckLevel,
+        musicVolume: d.audioVolume, duckLevel: d.duckLevel,
       })));
       const musDur = musicTrackRef.current.buffer.duration;
       const target = (t / 1000) % musDur;
@@ -898,12 +898,12 @@ export default function ProMotionStudio() {
       const onP = (p: { ratio: number }) => setProgress(p.ratio);
       // MP4 gets the soundtrack (VO + ducked music) mixed in; WebM stays silent.
       const soundtrack = kind === 'mp4'
-        ? await renderMixdown(docDuration(doc), voTrack, musicTrack, {
-            musicVolume: doc.musicVolume, duckLevel: doc.duckLevel,
+        ? await renderProMixdown(docDuration(doc), voTrack, musicTrack, {
+            musicVolume: doc.audioVolume, duckLevel: doc.duckLevel,
           })
         : null;
       const blob = kind === 'mp4'
-        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal, soundtrack)
+        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal, { audioBuffer: soundtrack })
         : await exportWebm(doc, assetsRef.current, onP, abortRef.current.signal);
       const base = brandName ? brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'sbdc-motion';
       downloadBlob(blob, `${base}-${doc.aspect.replace(':', 'x')}-${stamp}.${kind}`);
@@ -1411,8 +1411,8 @@ export default function ProMotionStudio() {
           {musicTrack && (
             <Field label="Music volume">
               <Slider
-                value={doc.musicVolume}
-                onChange={(v) => patchDoc({ musicVolume: v })}
+                value={doc.audioVolume}
+                onChange={(v) => patchDoc({ audioVolume: v })}
                 min={0} max={1} step={0.05}
                 format={(v) => `${Math.round(v * 100)}%`}
               />
