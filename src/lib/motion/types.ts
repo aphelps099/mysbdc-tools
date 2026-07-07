@@ -183,6 +183,10 @@ export interface MotionDoc {
   fontBody: string;
   watermark: string;
   showGrain: boolean;
+  /** Music bed volume 0–1 (Pro studio audio). */
+  musicVolume: number;
+  /** Music gain multiplier while the voiceover plays, 0–1. */
+  duckLevel: number;
 }
 
 // ── Loaded image assets, keyed by imageId ──
@@ -288,6 +292,8 @@ export function defaultDoc(): MotionDoc {
     fontBody: 'proxima-nova',
     watermark: '',
     showGrain: true,
+    musicVolume: 0.8,
+    duckLevel: 0.3,
   };
 }
 

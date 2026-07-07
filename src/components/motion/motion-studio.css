@@ -577,3 +577,75 @@
   margin-bottom: 8px;
   flex-wrap: wrap;
 }
+
+/* ── Scene card thumbnails ── */
+.ms-scene-thumb {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--ms-line);
+  background: #000;
+  margin-top: 7px;
+}
+
+.ms-scene-card.is-dragover { border-color: var(--ms-royal); border-style: dashed; }
+.ms-scene-card.is-dragging { opacity: 0.45; }
+
+/* ── Timeline resize handle ── */
+.ms-tl-handle {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  width: 9px;
+  cursor: ew-resize;
+  z-index: 3;
+}
+
+.ms-tl-handle::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  right: 3px;
+  width: 3px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+.ms-tl-scene:hover .ms-tl-handle::after { background: rgba(29, 90, 167, 0.55); }
+
+/* ── Safe-area guides (preview only, never exported) ── */
+.ms-safe-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Audio rows ── */
+.ms-audio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ms-audio-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--ms-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ms-audio-dur {
+  font-size: 9.5px;
+  color: var(--ms-muted);
+  font-variant-numeric: tabular-nums;
+}

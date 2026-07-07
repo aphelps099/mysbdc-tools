@@ -22,6 +22,14 @@ export interface MotionScenesInput {
   brandName?: string;
   /** Cap on generated scenes. */
   maxScenes?: number;
+  /**
+   * 'script' (default): storyboard a script/transcript beat by beat.
+   * 'webpage': `script` is extracted text from a training/event page —
+   * build a short social promo (what/when/why/register).
+   */
+  source?: 'script' | 'webpage';
+  /** The page URL, when source is 'webpage' — used for the end card CTA. */
+  pageUrl?: string;
 }
 
 export interface GeneratedScene {
@@ -61,13 +69,27 @@ export function buildMotionScenesPrompt(
     aspect = '16:9',
     brandName = 'NorCal SBDC',
     maxScenes = 12,
+    source = 'script',
+    pageUrl = '',
   } = input;
+
+  const mission = source === 'webpage'
+    ? `Create a short SOCIAL MEDIA PROMO (6-9 scenes, 20-35 seconds total) for the training/event
+described in the webpage text below, for ${brandName}. Structure it as a promo, not a summary:
+1. Hook — the problem the training solves or its boldest promise (statement or title scene)
+2. What it is — event/training name, format, and date/time if present (title scene; put the
+   date/time in the kicker, e.g. "SEPT 24 · 12PM PT")
+3. What you'll learn — the 2-4 most compelling takeaways (list scene)
+4. Proof — a stat or credibility line if the page offers one (stat scene; skip if none)
+5. Register — end card whose title is the cleanest registration URL${pageUrl ? ` (page URL: ${pageUrl} — shorten to its domain+path, drop tracking params)` : ''} and whose kicker is "REGISTER FREE" or the page's own CTA.
+If it's free, say FREE — that is always a hook for this audience.`
+    : `Storyboard a motion graphics video from the script below for ${brandName}.`;
 
   return {
     system: `${SBDC_CONTEXT}\n\n${DESIGNER_CONTEXT}`,
     maxTokens: 4000,
     temperature: 0.6,
-    prompt: `Storyboard a motion graphics video from the script below for ${brandName}.
+    prompt: `${mission}
 
 SCENE TEMPLATES (choose per beat):
 - "title": kicker (short uppercase label) + title (headline) + subtitle (one supporting line). Use for openers and section intros.
@@ -92,7 +114,7 @@ RULES:
 - Numbers in the script become "stat" scenes.
 - Canvas is ${aspect}.
 ${notes ? `\nCREATIVE DIRECTION FROM THE EDITOR:\n${notes}\n` : ''}
-SCRIPT / TRANSCRIPT:
+${source === 'webpage' ? 'WEBPAGE TEXT (extracted — may contain leftover navigation noise; ignore it):' : 'SCRIPT / TRANSCRIPT:'}
 ${script}
 
 Respond with ONLY valid JSON, no commentary:

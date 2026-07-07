@@ -11,6 +11,7 @@
 import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import { MotionDoc, AssetMap, getAspect, docDuration } from './types';
 import { renderFrame } from './render';
+import { pickAudioCodec, encodeAudioIntoMuxer } from './audio';
 
 export interface ExportProgress {
   frame: number;
@@ -62,13 +63,16 @@ async function pickCodec(
 /**
  * Render the full document to an MP4 blob.
  * Renders every frame offline at full resolution — output is exactly
- * what the preview shows, regardless of machine speed.
+ * what the preview shows, regardless of machine speed. When `soundtrack`
+ * is provided (the mixdown from renderMixdown), it's encoded as the
+ * MP4's audio track (AAC when available, else Opus).
  */
 export async function exportMp4(
   doc: MotionDoc,
   assets: AssetMap,
   onProgress: ProgressFn,
   signal?: AbortSignal,
+  soundtrack?: AudioBuffer | null,
 ): Promise<Blob> {
   const { w: width, h: height } = getAspect(doc.aspect);
   const fps = doc.fps;
@@ -77,6 +81,7 @@ export async function exportMp4(
   const bitrate = Math.round(width * height * fps * 0.14); // ~9 Mbps at 1080p30
 
   const { codec, mux } = await pickCodec(width, height, fps, bitrate);
+  const audioCodec = soundtrack ? await pickAudioCodec() : null;
 
   const canvas = document.createElement('canvas');
   canvas.width = width;
@@ -87,6 +92,9 @@ export async function exportMp4(
   const muxer = new Muxer({
     target,
     video: { codec: mux, width, height },
+    ...(soundtrack && audioCodec
+      ? { audio: { codec: audioCodec.mux, sampleRate: soundtrack.sampleRate, numberOfChannels: 2 } }
+      : {}),
     fastStart: 'in-memory',
   });
 
@@ -127,6 +135,16 @@ export async function exportMp4(
 
     await encoder.flush();
     if (encodeError) throw encodeError;
+
+    if (soundtrack && audioCodec) {
+      await encodeAudioIntoMuxer(
+        soundtrack,
+        audioCodec.codec,
+        (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+        signal,
+      );
+    }
+
     muxer.finalize();
     onProgress({ frame: totalFrames, totalFrames, ratio: 1 });
     return new Blob([target.buffer], { type: 'video/mp4' });
