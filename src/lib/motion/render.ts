@@ -538,17 +538,18 @@ function drawScene(
 ) {
   const { W, H, u, doc, assets, videos } = sc;
   const scheme = resolveScheme(scene);
-  const isImage = scene.template === 'image' && scene.imageId && assets[scene.imageId];
-  const isVideo = scene.template === 'video' && scene.videoId && videos[scene.videoId];
+  // Any scene can carry a media background; the video wins if both are set.
+  const isVideo = !!(scene.videoId && videos[scene.videoId]);
+  const isImage = !isVideo && !!(scene.imageId && assets[scene.imageId]);
 
   // Background
   ctx.fillStyle = scheme.bg;
   ctx.fillRect(0, 0, W, H);
-  if (isImage) {
-    drawImageCover(ctx, assets[scene.imageId as string].img, W, H, t / scene.duration, scene.kenBurns);
-    drawOverlay(ctx, W, H, scene, scheme);
-  } else if (isVideo) {
+  if (isVideo) {
     drawVideoCover(ctx, videos[scene.videoId as string].video, W, H);
+    drawOverlay(ctx, W, H, scene, scheme);
+  } else if (isImage) {
+    drawImageCover(ctx, assets[scene.imageId as string].img, W, H, t / scene.duration, scene.kenBurns);
     drawOverlay(ctx, W, H, scene, scheme);
   } else {
     drawBackdrop(ctx, sc, scene, scheme, t);
@@ -560,12 +561,17 @@ function drawScene(
   ctx.globalAlpha = 1 - xp;
   ctx.translate(0, -xp * 26 * u);
 
-  // Video scenes keep the scheme accent (brand color over footage);
-  // image scenes keep their original fixed accent for back-compat.
+  // Per-scene text scale (long URLs at 50% etc.) — scales type + text
+  // layout only; backgrounds, overlays, and the watermark stay put.
+  const ts = scene.textScale > 0 ? scene.textScale : 1;
+  const tsc: SceneCtx = ts !== 1 ? { ...sc, u: sc.u * ts } : sc;
+
+  // Media scenes get white text (over footage/photo); image template
+  // keeps its original fixed accent for back-compat.
   const fg = (isImage || isVideo) ? '#ffffff' : scheme.fg;
   const muted = (isImage || isVideo) ? 'rgba(255,255,255,0.72)' : scheme.muted;
-  const accent = isImage ? '#8FC5D9' : scheme.accent;
-  const frame = contentFrame(sc);
+  const accent = isImage && scene.template === 'image' ? '#8FC5D9' : scheme.accent;
+  const frame = contentFrame(tsc);
   const anchorX = scene.align === 'lower-left' ? frame.x
     : scene.align === 'lower-right' ? frame.x + frame.w
     : W / 2;
@@ -577,25 +583,25 @@ function drawScene(
     case 'title':
     case 'image':
     case 'video':
-      drawTitleScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawTitleScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'disclaimer':
-      drawDisclaimerScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawDisclaimerScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'statement':
-      drawStatementScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawStatementScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'stat':
-      drawStatScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawStatScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'list':
-      drawListScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawListScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'quote':
-      drawQuoteScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawQuoteScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'endcard':
-      drawEndcardScene(ctx, sc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      drawEndcardScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
   }
 
@@ -607,8 +613,9 @@ function drawScene(
     ctx.font = fontStr(500, 16 * u, doc.fontBody);
     ctx.fillStyle = fg;
     ctx.textBaseline = 'alphabetic';
+    const wmFrame = contentFrame(sc);
     const tw = ctx.measureText(wm.toUpperCase()).width + wm.length * 1.4 * u;
-    drawSpacedText(ctx, wm, fontStr(500, 16 * u, doc.fontBody), fg, W - frame.x - tw, H - 42 * u, 1.4 * u, 'left', 1);
+    drawSpacedText(ctx, wm, fontStr(500, 16 * u, doc.fontBody), fg, W - wmFrame.x - tw, H - 42 * u, 1.4 * u, 'left', 1);
     ctx.restore();
   }
 

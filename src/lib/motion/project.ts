@@ -26,6 +26,8 @@ export interface ProjectFile {
   brandColors: CustomScheme;
   media: {
     images: MediaRef[];
+    /** Background video clips, referenced by filename like images. */
+    videos?: MediaRef[];
     logoLight: string | null; // filenames
     logoDark: string | null;
     voiceover: string | null;
@@ -49,6 +51,7 @@ export function parseProject(json: string): ProjectFile {
   const media = data.media ?? ({} as Partial<ProjectFile['media']>);
   data.media = {
     images: Array.isArray(media.images) ? media.images : [],
+    videos: Array.isArray(media.videos) ? media.videos : [],
     logoLight: media.logoLight ?? null,
     logoDark: media.logoDark ?? null,
     voiceover: media.voiceover ?? null,

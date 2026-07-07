@@ -120,7 +120,8 @@ async function syncVideosForFrame(doc: MotionDoc, t: number, videos: VideoMap): 
   const jobs: Promise<void>[] = [];
 
   const queue = (scene: Scene | null, sceneLocal: number) => {
-    if (!scene || scene.template !== 'video' || !scene.videoId) return;
+    // Any scene may carry a video background, not just the video template
+    if (!scene || !scene.videoId) return;
     const v = videos[scene.videoId];
     if (!v) return;
     jobs.push(seekVideo(v.video, (scene.videoTrimStart + sceneLocal) / 1000));

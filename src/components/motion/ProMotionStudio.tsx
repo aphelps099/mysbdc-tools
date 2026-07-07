@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import {
-  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, CustomScheme, TextAnimId, SchemeId, AlignId, TransitionId, BackdropId,
-  ASPECTS, SCHEMES, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS, BACKDROPS,
+  MotionDoc, Scene, TemplateId, AssetMap, ImageAsset, VideoAsset, VideoMap, CustomScheme, TextAnimId, SchemeId, AlignId, TransitionId,
+  ASPECTS, SCHEMES, TEMPLATES, TEXT_ANIMS, TRANSITIONS, KEN_BURNS, OVERLAYS, ALIGNMENTS,
   defaultDoc, makeScene, getAspect, resolveScheme, docDuration, sceneAt,
 } from '@/lib/motion/types';
 import { renderFrame } from '@/lib/motion/render';
@@ -53,7 +53,6 @@ interface GeneratedScene {
   anim?: string;
   align?: string;
   scheme?: string;
-  backdrop?: string;
   serifTitle?: boolean;
   durationMs?: number;
 }
@@ -66,6 +65,44 @@ function loadImage(url: string): Promise<HTMLImageElement> {
     img.src = url;
   });
 }
+
+function loadVideoElement(url: string): Promise<HTMLVideoElement> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = false;
+    video.onloadedmetadata = async () => {
+      // Screen recordings often report duration = Infinity until the tail
+      // is parsed — seek far past the end to force the real value.
+      if (!Number.isFinite(video.duration)) {
+        await new Promise<void>((res) => {
+          const timer = setTimeout(res, 4000);
+          video.ondurationchange = () => {
+            if (Number.isFinite(video.duration)) {
+              clearTimeout(timer);
+              video.ondurationchange = null;
+              video.currentTime = 0;
+              res();
+            }
+          };
+          video.currentTime = Number.MAX_SAFE_INTEGER;
+        });
+      }
+      resolve(video);
+    };
+    video.onerror = () => reject(new Error('Could not read that video file'));
+    video.src = url;
+  });
+}
+
+const TEXT_SCALES = [
+  { id: '0.3', label: '30%' },
+  { id: '0.5', label: '50%' },
+  { id: '0.7', label: '70%' },
+  { id: '1', label: '100%' },
+] as const;
 
 function fmtTime(ms: number): string {
   const s = Math.max(0, ms) / 1000;
@@ -170,17 +207,29 @@ export default function ProMotionStudio() {
   const [images, setImages] = useState<ImageAsset[]>([]);
 
   useEffect(() => {
-    // Built-in logos as fallback for end cards (brand logos win when uploaded)
+    // Official NorCal SBDC marks, served same-origin via /api/brand-asset so
+    // the canvas stays untainted; local PNGs as offline fallback. Uploaded
+    // program logos (__logo-brand-*) still win over these.
     let alive = true;
     (async () => {
-      for (const [id, url] of [
-        ['__logo-white', '/sbdc-white-2026.png'],
-        ['__logo-blue', '/sbdc-blue-2026.png'],
+      const official = 'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos';
+      for (const [id, urls] of [
+        ['__logo-white', [
+          `/api/brand-asset?src=${encodeURIComponent(`${official}/americas-sbdc-norcal-white-180h.png`)}`,
+          '/sbdc-white-2026.png',
+        ]],
+        ['__logo-blue', [
+          `/api/brand-asset?src=${encodeURIComponent(`${official}/americas-sbdc-norcal-400w.png`)}`,
+          '/sbdc-blue-2026.png',
+        ]],
       ] as const) {
-        try {
-          const img = await loadImage(url);
-          if (alive) assetsRef.current[id] = { id, name: url, url, img };
-        } catch { /* logo missing — end card just skips it */ }
+        for (const url of urls) {
+          try {
+            const img = await loadImage(url);
+            if (alive) assetsRef.current[id] = { id, name: url, url, img };
+            break;
+          } catch { /* try the next source */ }
+        }
       }
     })();
     return () => { alive = false; };
@@ -380,10 +429,11 @@ export default function ProMotionStudio() {
       const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) return;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      renderFrame(ctx, d, playheadRef.current, assetsRef.current);
+      renderFrame(ctx, d, playheadRef.current, assetsRef.current, videosRef.current);
 
-      // Preview soundtrack follows the playhead (same duck curve as export)
+      // Preview soundtrack + background clips follow the playhead
       syncPreviewAudio(playheadRef.current, playingRef.current);
+      syncBgVideosRef.current();
 
       // Imperative UI updates (no React re-render at 60fps)
       if (playheadElRef.current && total > 0) {
@@ -628,7 +678,7 @@ export default function ProMotionStudio() {
         const ctx = c.getContext('2d');
         if (!ctx) continue;
         ctx.setTransform(c.width / W, 0, 0, c.height / H, 0, 0);
-        renderFrame(ctx, d, midT, assetsRef.current);
+        renderFrame(ctx, d, midT, assetsRef.current, videosRef.current);
       }
     }, 350);
     return () => clearTimeout(id);
@@ -653,11 +703,69 @@ export default function ProMotionStudio() {
       };
       assetsRef.current[asset.id] = asset;
       setImages((list) => [...list.filter((i) => i.id !== asset.id), asset]);
-      if (!relinkId && selected) patchScene(selected.id, { imageId: asset.id });
+      if (!relinkId && selected) patchScene(selected.id, { imageId: asset.id, videoId: null });
     } catch {
       URL.revokeObjectURL(url);
     }
   };
+
+  // ── Video backgrounds (muted b-roll behind any scene) ──
+  const videosRef = useRef<VideoMap>({});
+  const [videoList, setVideoList] = useState<VideoAsset[]>([]);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const pendingVideosRef = useRef<Map<string, string>>(new Map());
+
+  const handleVideoFile = async (file: File) => {
+    const url = URL.createObjectURL(file);
+    try {
+      const video = await loadVideoElement(url);
+      const relinkId = pendingVideosRef.current.get(file.name);
+      if (relinkId) pendingVideosRef.current.delete(file.name);
+      const asset: VideoAsset = {
+        id: relinkId ?? `vid-${Date.now().toString(36)}`,
+        name: file.name,
+        url,
+        video,
+        duration: Number.isFinite(video.duration) ? Math.round(video.duration * 1000) : 10000,
+        width: video.videoWidth,
+        height: video.videoHeight,
+        audioBuffer: null, // background clips are silent b-roll; VO/music carry the sound
+      };
+      videosRef.current[asset.id] = asset;
+      setVideoList((list) => [...list.filter((v) => v.id !== asset.id), asset]);
+      if (!relinkId && selected) {
+        patchScene(selected.id, { videoId: asset.id, videoTrimStart: 0, videoMuted: true, imageId: null });
+      }
+    } catch {
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  /** Keep background-video elements tracking the playhead. */
+  const syncBgVideos = useCallback(() => {
+    const d = docRef.current;
+    const { index, local } = sceneAt(d, playheadRef.current);
+    const active = d.scenes[index];
+    for (const id in videosRef.current) {
+      const asset = videosRef.current[id];
+      const v = asset.video;
+      const isActive = !!active && active.videoId === id;
+      if (isActive) {
+        const targetS = ((active.videoTrimStart + local) / 1000) % Math.max(0.05, asset.duration / 1000);
+        if (playingRef.current) {
+          if (v.paused) v.play().catch(() => {});
+          if (Math.abs(v.currentTime - targetS) > 0.3) v.currentTime = targetS;
+        } else {
+          if (!v.paused) v.pause();
+          if (Math.abs(v.currentTime - targetS) > 0.05) v.currentTime = targetS;
+        }
+      } else if (!v.paused) {
+        v.pause();
+      }
+    }
+  }, []);
+  const syncBgVideosRef = useRef(syncBgVideos);
+  syncBgVideosRef.current = syncBgVideos;
 
   // ── Project save / load / autosave ──
   const projectFileRef = useRef<HTMLInputElement>(null);
@@ -676,6 +784,7 @@ export default function ProMotionStudio() {
         images: Object.values(assetsRef.current)
           .filter((a) => a.id.startsWith('img-'))
           .map((a) => ({ id: a.id, name: a.name })),
+        videos: Object.values(videosRef.current).map((v) => ({ id: v.id, name: v.name })),
         logoLight: assetsRef.current['__logo-brand-light']?.name ?? null,
         logoDark: assetsRef.current['__logo-brand-dark']?.name ?? null,
         voiceover: voTrackRef.current?.name ?? null,
@@ -696,8 +805,14 @@ export default function ProMotionStudio() {
         .filter((m) => !assetsRef.current[m.id])
         .map((m) => [m.name, m.id]),
     );
+    pendingVideosRef.current = new Map(
+      (p.media.videos ?? [])
+        .filter((m) => !videosRef.current[m.id])
+        .map((m) => [m.name, m.id]),
+    );
     const missing = [
       ...p.media.images.filter((m) => !assetsRef.current[m.id]).map((m) => m.name),
+      ...(p.media.videos ?? []).filter((m) => !videosRef.current[m.id]).map((m) => m.name),
       ...(p.media.logoLight && !assetsRef.current['__logo-brand-light'] ? [p.media.logoLight] : []),
       ...(p.media.logoDark && !assetsRef.current['__logo-brand-dark'] ? [p.media.logoDark] : []),
       ...(p.media.voiceover && !voTrackRef.current ? [p.media.voiceover] : []),
@@ -750,6 +865,7 @@ export default function ProMotionStudio() {
     setSelectedId(fresh.scenes[0]?.id ?? null);
     playheadRef.current = 0;
     pendingImagesRef.current = new Map();
+    pendingVideosRef.current = new Map();
     setProjectStatus('New project.');
   };
 
@@ -833,7 +949,6 @@ export default function ProMotionStudio() {
     if (g.anim) overrides.anim = g.anim as TextAnimId;
     if (g.align) overrides.align = g.align as AlignId;
     if (g.scheme) overrides.scheme = g.scheme as SchemeId;
-    if (g.backdrop) overrides.backdrop = g.backdrop as BackdropId;
     if (g.serifTitle !== undefined) overrides.serifTitle = g.serifTitle;
     if (g.durationMs) overrides.duration = g.durationMs;
     if (useBrandOnGenerated === 'on') overrides.customScheme = { ...brandColors };
@@ -903,8 +1018,8 @@ export default function ProMotionStudio() {
           })
         : null;
       const blob = kind === 'mp4'
-        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal, { audioBuffer: soundtrack })
-        : await exportWebm(doc, assetsRef.current, onP, abortRef.current.signal);
+        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal, { audioBuffer: soundtrack, videos: videosRef.current })
+        : await exportWebm(doc, assetsRef.current, onP, abortRef.current.signal, { videos: videosRef.current });
       const base = brandName ? brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'sbdc-motion';
       downloadBlob(blob, `${base}-${doc.aspect.replace(':', 'x')}-${stamp}.${kind}`);
       setExportStatus({ ok: true, msg: `${kind.toUpperCase()} exported — check your downloads.` });
@@ -925,7 +1040,7 @@ export default function ProMotionStudio() {
     setExportStatus(null);
     try {
       await ensureFontsReady([doc.fontHeading, doc.fontBody]);
-      const blob = await exportPng(doc, assetsRef.current, playheadRef.current);
+      const blob = await exportPng(doc, assetsRef.current, playheadRef.current, { videos: videosRef.current });
       downloadBlob(blob, `sbdc-frame-${doc.aspect.replace(':', 'x')}.png`);
       setExportStatus({ ok: true, msg: 'PNG frame exported.' });
     } catch (e) {
@@ -1148,48 +1263,83 @@ export default function ProMotionStudio() {
               </Field>
             )}
 
-            {/* Image controls */}
-            {selected.template === 'image' && (
+            {/* Background media — any scene can carry a photo or muted video clip */}
+            <Field label="Background (image / video)">
+              {selected.videoId && videosRef.current[selected.videoId] ? (
+                <div className="ms-audio-row">
+                  <span className="ms-audio-name">🎞 {videosRef.current[selected.videoId].name}</span>
+                  <span className="ms-audio-dur">{(videosRef.current[selected.videoId].duration / 1000).toFixed(1)}s</span>
+                  <button
+                    className="ms-icon-btn is-danger"
+                    style={{ flex: 'none', padding: '4px 10px' }}
+                    onClick={() => patchScene(selected.id, { videoId: null })}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : selected.imageId && assetsRef.current[selected.imageId] ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={assetsRef.current[selected.imageId].url}
+                  alt=""
+                  className="ms-img-thumb"
+                  style={{ marginBottom: 6 }}
+                />
+              ) : null}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                <button className="ms-file-btn" onClick={() => imageInputRef.current?.click()}>
+                  ⬆ Image
+                </button>
+                <button className="ms-file-btn" onClick={() => videoInputRef.current?.click()}>
+                  ⬆ Video
+                </button>
+                {(images.length > 0 || videoList.length > 0) && (
+                  <select
+                    className="ms-input"
+                    style={{ width: 'auto', flex: 1, minWidth: 90 }}
+                    value={selected.videoId ? `v:${selected.videoId}` : selected.imageId ? `i:${selected.imageId}` : ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (!v) patchScene(selected.id, { imageId: null, videoId: null });
+                      else if (v.startsWith('v:')) patchScene(selected.id, { videoId: v.slice(2), videoTrimStart: 0, videoMuted: true, imageId: null });
+                      else patchScene(selected.id, { imageId: v.slice(2), videoId: null });
+                    }}
+                  >
+                    <option value="">— none —</option>
+                    {images.map((im) => (
+                      <option key={im.id} value={`i:${im.id}`}>🖼 {im.name}</option>
+                    ))}
+                    {videoList.map((vd) => (
+                      <option key={vd.id} value={`v:${vd.id}`}>🎞 {vd.name}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ''; }}
+              />
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept="video/*"
+                hidden
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleVideoFile(f); e.target.value = ''; }}
+              />
+              {selected.videoId && (
+                <p className="ms-hint">Background clips are muted b-roll — the voiceover and music carry the sound. Clips loop to fill the scene.</p>
+              )}
+            </Field>
+            {(selected.imageId || selected.videoId) && (
               <>
-                <Field label="Image">
-                  {selected.imageId && assetsRef.current[selected.imageId] && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={assetsRef.current[selected.imageId].url}
-                      alt=""
-                      className="ms-img-thumb"
-                      style={{ marginBottom: 6 }}
-                    />
-                  )}
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    <button className="ms-file-btn" onClick={() => imageInputRef.current?.click()}>
-                      ⬆ Upload image
-                    </button>
-                    {images.length > 0 && (
-                      <select
-                        className="ms-input"
-                        style={{ width: 'auto', flex: 1 }}
-                        value={selected.imageId ?? ''}
-                        onChange={(e) => patchScene(selected.id, { imageId: e.target.value || null })}
-                      >
-                        <option value="">— none —</option>
-                        {images.map((im) => (
-                          <option key={im.id} value={im.id}>{im.name}</option>
-                        ))}
-                      </select>
-                    )}
-                  </div>
-                  <input
-                    ref={imageInputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ''; }}
-                  />
-                </Field>
-                <Field label="Motion">
-                  <Seg options={KEN_BURNS} value={selected.kenBurns} onChange={(v) => patchScene(selected.id, { kenBurns: v })} small />
-                </Field>
+                {selected.imageId && !selected.videoId && (
+                  <Field label="Motion">
+                    <Seg options={KEN_BURNS} value={selected.kenBurns} onChange={(v) => patchScene(selected.id, { kenBurns: v })} small />
+                  </Field>
+                )}
                 <Field label="Overlay">
                   <Seg options={OVERLAYS} value={selected.overlay} onChange={(v) => patchScene(selected.id, { overlay: v })} small />
                 </Field>
@@ -1208,6 +1358,16 @@ export default function ProMotionStudio() {
 
             <Field label="Animation">
               <Seg options={TEXT_ANIMS} value={selected.anim} onChange={(v) => patchScene(selected.id, { anim: v })} small />
+            </Field>
+
+            <Field label="Text size">
+              <Seg
+                options={TEXT_SCALES}
+                value={String(selected.textScale ?? 1) as typeof TEXT_SCALES[number]['id']}
+                onChange={(v) => patchScene(selected.id, { textScale: Number(v) })}
+                small
+              />
+              <p className="ms-hint">Shrinks all text in this scene — long URLs fit at 50%.</p>
             </Field>
 
             <Field label="Heading typeface">
@@ -1267,12 +1427,6 @@ export default function ProMotionStudio() {
                 </div>
               )}
             </Field>
-
-            {selected.template !== 'image' && (
-              <Field label="Backdrop">
-                <Seg options={BACKDROPS} value={selected.backdrop} onChange={(v) => patchScene(selected.id, { backdrop: v })} small />
-              </Field>
-            )}
 
             <Field label="Alignment">
               <Seg options={ALIGNMENTS} value={selected.align} onChange={(v) => patchScene(selected.id, { align: v })} small />

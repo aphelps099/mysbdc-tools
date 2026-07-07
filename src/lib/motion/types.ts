@@ -166,6 +166,8 @@ export interface Scene {
   backdrop: BackdropId;
   /** Use the serif (heading) font for the main line of this scene. */
   serifTitle: boolean;
+  /** Text size multiplier (0.3–1) — shrink long URLs/titles to fit. */
+  textScale: number;
 
   // Text content (used per-template)
   kicker: string;
@@ -278,6 +280,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     align: 'center',
     backdrop: 'none',
     serifTitle: false,
+    textScale: 1,
     kicker: '',
     title: '',
     subtitle: '',
