@@ -219,6 +219,8 @@ export interface MotionDoc {
   audioFadeIn: number;
   /** Music fade-out length before the end (ms). */
   audioFadeOut: number;
+  /** Music gain multiplier while a voiceover plays, 0–1 (Pro studio ducking). */
+  duckLevel: number;
 }
 
 // ── Loaded image assets, keyed by imageId ──
@@ -379,6 +381,7 @@ export function defaultDoc(): MotionDoc {
     audioVolume: 0.8,
     audioFadeIn: 2000,
     audioFadeOut: 2000,
+    duckLevel: 0.3,
   };
 }
 

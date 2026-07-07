@@ -13,6 +13,12 @@ import {
 import {
   FontOption, builtinFonts, loadTypekitKit, registerFontFile, ensureFontsReady, DEFAULT_KIT_ID,
 } from '@/lib/motion/fonts';
+import {
+  AudioTrack, decodeAudioFile, duckGainAt, renderProMixdown,
+} from '@/lib/motion/audio';
+import {
+  ProjectFile, serializeProject, parseProject, saveAutosave, loadAutosave, clearAutosave,
+} from '@/lib/motion/project';
 import { Field, TextInput, TextArea, Seg, Slider, Section } from './controls';
 import './motion-studio.css';
 
@@ -103,6 +109,57 @@ export default function ProMotionStudio() {
   const docRef = useRef(doc);
   docRef.current = doc;
 
+  // ── Undo / redo ──
+  // Rapid edits (slider drags, typing) within 400ms coalesce into one step.
+  const historyRef = useRef<{ past: MotionDoc[]; future: MotionDoc[]; lastPush: number }>(
+    { past: [], future: [], lastPush: 0 },
+  );
+  const [, setHistoryTick] = useState(0);
+
+  const applyDoc = useCallback((updater: (d: MotionDoc) => MotionDoc, coalesce = true) => {
+    setDoc((d) => {
+      const nd = updater(d);
+      if (nd === d) return d;
+      const h = historyRef.current;
+      const now = Date.now();
+      if (!coalesce || now - h.lastPush > 400) {
+        h.past.push(d);
+        if (h.past.length > 100) h.past.shift();
+      }
+      h.lastPush = now;
+      h.future = [];
+      return nd;
+    });
+    setHistoryTick((t) => t + 1);
+  }, []);
+
+  const undo = useCallback(() => {
+    const h = historyRef.current;
+    setDoc((d) => {
+      const prev = h.past.pop();
+      if (!prev) return d;
+      h.future.push(d);
+      return prev;
+    });
+    h.lastPush = 0;
+    setHistoryTick((t) => t + 1);
+  }, []);
+
+  const redo = useCallback(() => {
+    const h = historyRef.current;
+    setDoc((d) => {
+      const next = h.future.pop();
+      if (!next) return d;
+      h.past.push(d);
+      return next;
+    });
+    h.lastPush = 0;
+    setHistoryTick((t) => t + 1);
+  }, []);
+
+  const canUndo = historyRef.current.past.length > 0;
+  const canRedo = historyRef.current.future.length > 0;
+
   const selected = doc.scenes.find((s) => s.id === selectedId) ?? null;
   const selectedIndex = selected ? doc.scenes.indexOf(selected) : -1;
   const totalMs = docDuration(doc);
@@ -163,8 +220,91 @@ export default function ProMotionStudio() {
   };
 
   const clearCustomColors = () => {
-    setDoc((d) => ({ ...d, scenes: d.scenes.map((s) => ({ ...s, customScheme: null })) }));
+    applyDoc((d) => ({ ...d, scenes: d.scenes.map((s) => ({ ...s, customScheme: null })) }), false);
   };
+
+  // ── Audio tracks (voiceover + music bed) ──
+  const [voTrack, setVoTrack] = useState<AudioTrack | null>(null);
+  const [musicTrack, setMusicTrack] = useState<AudioTrack | null>(null);
+  const voTrackRef = useRef<AudioTrack | null>(null);
+  voTrackRef.current = voTrack;
+  const musicTrackRef = useRef<AudioTrack | null>(null);
+  musicTrackRef.current = musicTrack;
+  const voElRef = useRef<HTMLAudioElement | null>(null);
+  const musicElRef = useRef<HTMLAudioElement | null>(null);
+  const voFileRef = useRef<HTMLInputElement>(null);
+  const musicFileRef = useRef<HTMLInputElement>(null);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  const handleAudioFile = async (file: File, kind: 'vo' | 'music') => {
+    setAudioError(null);
+    try {
+      const track = await decodeAudioFile(file);
+      if (kind === 'vo') {
+        voElRef.current?.pause();
+        if (voTrackRef.current) URL.revokeObjectURL(voTrackRef.current.url);
+        const el = new Audio(track.url);
+        el.preload = 'auto';
+        voElRef.current = el;
+        setVoTrack(track);
+      } else {
+        musicElRef.current?.pause();
+        if (musicTrackRef.current) URL.revokeObjectURL(musicTrackRef.current.url);
+        const el = new Audio(track.url);
+        el.preload = 'auto';
+        el.loop = true;
+        musicElRef.current = el;
+        setMusicTrack(track);
+      }
+    } catch {
+      setAudioError(`Couldn't decode ${file.name} — try MP3, WAV, or M4A.`);
+    }
+  };
+
+  const removeAudio = (kind: 'vo' | 'music') => {
+    if (kind === 'vo') {
+      voElRef.current?.pause();
+      voElRef.current = null;
+      if (voTrackRef.current) URL.revokeObjectURL(voTrackRef.current.url);
+      setVoTrack(null);
+    } else {
+      musicElRef.current?.pause();
+      musicElRef.current = null;
+      if (musicTrackRef.current) URL.revokeObjectURL(musicTrackRef.current.url);
+      setMusicTrack(null);
+    }
+  };
+
+  /** Keep preview <audio> elements in lockstep with the playhead + duck curve. */
+  const syncPreviewAudio = useCallback((t: number, isPlaying: boolean) => {
+    const d = docRef.current;
+    const vo = voElRef.current;
+    const voDurMs = voTrackRef.current ? voTrackRef.current.buffer.duration * 1000 : null;
+    const music = musicElRef.current;
+
+    if (music && musicTrackRef.current) {
+      music.volume = Math.min(1, Math.max(0, duckGainAt(t, voDurMs, {
+        musicVolume: d.audioVolume, duckLevel: d.duckLevel,
+      })));
+      const musDur = musicTrackRef.current.buffer.duration;
+      const target = (t / 1000) % musDur;
+      if (Math.abs(music.currentTime - target) > 0.3) music.currentTime = target;
+      if (isPlaying && music.paused) music.play().catch(() => {});
+      else if (!isPlaying && !music.paused) music.pause();
+    }
+
+    if (vo && voDurMs !== null) {
+      const inVo = t < voDurMs;
+      if (inVo) {
+        const target = t / 1000;
+        if (Math.abs(vo.currentTime - target) > 0.3) vo.currentTime = target;
+        if (isPlaying && vo.paused) vo.play().catch(() => {});
+        else if (!isPlaying && !vo.paused) vo.pause();
+      } else if (!vo.paused) {
+        vo.pause();
+      }
+    }
+  }, []);
 
   // ── Fonts ──
   const [fontOptions, setFontOptions] = useState<FontOption[]>(builtinFonts);
@@ -242,6 +382,9 @@ export default function ProMotionStudio() {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       renderFrame(ctx, d, playheadRef.current, assetsRef.current);
 
+      // Preview soundtrack follows the playhead (same duck curve as export)
+      syncPreviewAudio(playheadRef.current, playingRef.current);
+
       // Imperative UI updates (no React re-render at 60fps)
       if (playheadElRef.current && total > 0) {
         playheadElRef.current.style.left = `${(playheadRef.current / total) * 100}%`;
@@ -252,15 +395,55 @@ export default function ProMotionStudio() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [syncPreviewAudio]);
 
-  // Space = play/pause
+  // ── Keyboard editing ──
+  // space play/pause · S split · ⌘Z/⇧⌘Z/⌘Y undo/redo · ←/→ nudge frame
+  // (⇧ = 1s) · Home/End · Delete removes selected scene
+  const keyDepsRef = useRef({ undo, redo, splitAtPlayhead: null as null | (() => void), removeScene: null as null | ((id: string) => void), selectedId });
+  keyDepsRef.current.undo = undo;
+  keyDepsRef.current.redo = redo;
+  keyDepsRef.current.selectedId = selectedId;
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
-      if (e.key === ' ' && tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      const deps = keyDepsRef.current;
+      const frameMs = 1000 / (docRef.current.fps || 30);
+      const total = docDuration(docRef.current);
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) deps.redo(); else deps.undo();
+        return;
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'y') {
+        e.preventDefault();
+        deps.redo();
+        return;
+      }
+      if (e.key === ' ') {
         e.preventDefault();
         setPlaying((p) => !p);
+      } else if (e.key.toLowerCase() === 's' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        deps.splitAtPlayhead?.();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const step = (e.shiftKey ? 1000 : frameMs) * (e.key === 'ArrowLeft' ? -1 : 1);
+        playheadRef.current = Math.min(Math.max(0, playheadRef.current + step), Math.max(0, total - 1));
+        setPlaying(false);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        playheadRef.current = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        playheadRef.current = Math.max(0, total - 1);
+        setPlaying(false);
+      } else if ((e.key === 'Delete' || e.key === 'Backspace') && deps.selectedId) {
+        e.preventDefault();
+        deps.removeScene?.(deps.selectedId);
       }
     };
     window.addEventListener('keydown', handler);
@@ -269,12 +452,12 @@ export default function ProMotionStudio() {
 
   // ── Doc/scene mutation helpers ──
   const patchDoc = useCallback((p: Partial<MotionDoc>) => {
-    setDoc((d) => ({ ...d, ...p }));
-  }, []);
+    applyDoc((d) => ({ ...d, ...p }));
+  }, [applyDoc]);
 
   const patchScene = useCallback((id: string, p: Partial<Scene>) => {
-    setDoc((d) => ({ ...d, scenes: d.scenes.map((s) => (s.id === id ? { ...s, ...p } : s)) }));
-  }, []);
+    applyDoc((d) => ({ ...d, scenes: d.scenes.map((s) => (s.id === id ? { ...s, ...p } : s)) }));
+  }, [applyDoc]);
 
   const sceneStart = useCallback((index: number) => {
     return docRef.current.scenes.slice(0, index).reduce((a, s) => a + s.duration, 0);
@@ -286,17 +469,17 @@ export default function ProMotionStudio() {
 
   const addScene = (template: TemplateId) => {
     const scene = makeScene(template);
-    setDoc((d) => {
+    applyDoc((d) => {
       const i = selectedIndex >= 0 ? selectedIndex + 1 : d.scenes.length;
       const scenes = [...d.scenes];
       scenes.splice(i, 0, scene);
       return { ...d, scenes };
-    });
+    }, false);
     setSelectedId(scene.id);
   };
 
   const duplicateScene = (id: string) => {
-    setDoc((d) => {
+    applyDoc((d) => {
       const i = d.scenes.findIndex((s) => s.id === id);
       if (i < 0) return d;
       const copy = { ...d.scenes[i], id: `${d.scenes[i].id}-copy-${Math.floor(Math.random() * 1e6)}` };
@@ -304,28 +487,71 @@ export default function ProMotionStudio() {
       scenes.splice(i + 1, 0, copy);
       setSelectedId(copy.id);
       return { ...d, scenes };
-    });
+    }, false);
   };
 
-  const removeScene = (id: string) => {
-    setDoc((d) => {
+  const removeScene = useCallback((id: string) => {
+    applyDoc((d) => {
+      if (d.scenes.length <= 1) return d;
       const i = d.scenes.findIndex((s) => s.id === id);
       const scenes = d.scenes.filter((s) => s.id !== id);
-      if (selectedId === id) setSelectedId(scenes[Math.max(0, i - 1)]?.id ?? null);
+      setSelectedId((sel) => (sel === id ? scenes[Math.max(0, i - 1)]?.id ?? null : sel));
       return { ...d, scenes };
-    });
-  };
+    }, false);
+  }, [applyDoc]);
 
   const moveScene = (id: string, dir: -1 | 1) => {
-    setDoc((d) => {
+    applyDoc((d) => {
       const i = d.scenes.findIndex((s) => s.id === id);
       const j = i + dir;
       if (i < 0 || j < 0 || j >= d.scenes.length) return d;
       const scenes = [...d.scenes];
       [scenes[i], scenes[j]] = [scenes[j], scenes[i]];
       return { ...d, scenes };
-    });
+    }, false);
   };
+
+  const reorderScene = (fromId: string, toId: string) => {
+    if (fromId === toId) return;
+    applyDoc((d) => {
+      const from = d.scenes.findIndex((s) => s.id === fromId);
+      const to = d.scenes.findIndex((s) => s.id === toId);
+      if (from < 0 || to < 0) return d;
+      const scenes = [...d.scenes];
+      const [moved] = scenes.splice(from, 1);
+      scenes.splice(to, 0, moved);
+      return { ...d, scenes };
+    }, false);
+  };
+
+  // ── Split at playhead ──
+  const splitAtPlayhead = useCallback(() => {
+    const d = docRef.current;
+    const t = playheadRef.current;
+    const { index, local } = sceneAt(d, t);
+    const s = d.scenes[index];
+    // Refuse hairline slivers near scene edges
+    if (!s || local < 400 || s.duration - local < 400) return;
+    const a = { ...s, duration: Math.round(local) };
+    const b = {
+      ...s,
+      id: `${s.id}-b${Date.now().toString(36)}`,
+      duration: Math.round(s.duration - local),
+      transition: 'cut' as TransitionId,
+    };
+    applyDoc((dd) => {
+      const i = dd.scenes.findIndex((x) => x.id === s.id);
+      if (i < 0) return dd;
+      const scenes = [...dd.scenes];
+      scenes.splice(i, 1, a, b);
+      return { ...dd, scenes };
+    }, false);
+    setSelectedId(b.id);
+  }, [applyDoc]);
+
+  // Late-bind the handlers the keyboard effect uses (defined above it)
+  keyDepsRef.current.splitAtPlayhead = splitAtPlayhead;
+  keyDepsRef.current.removeScene = removeScene;
 
   // ── Timeline scrubbing ──
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -354,20 +580,177 @@ export default function ProMotionStudio() {
     window.addEventListener('pointerup', up);
   };
 
+  // Drag a timeline block's right edge to set that scene's duration
+  const onDurationHandleDown = (e: React.PointerEvent, sceneId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const el = timelineRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const startX = e.clientX;
+    const startTotal = docDuration(docRef.current);
+    const startDur = docRef.current.scenes.find((s) => s.id === sceneId)?.duration ?? 0;
+    const move = (ev: PointerEvent) => {
+      const deltaMs = ((ev.clientX - startX) / rect.width) * startTotal;
+      const next = Math.round(Math.min(15000, Math.max(1000, startDur + deltaMs)) / 50) * 50;
+      applyDoc((d) => ({
+        ...d,
+        scenes: d.scenes.map((s) => (s.id === sceneId ? { ...s, duration: next } : s)),
+      }));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  // ── Scene-card drag reorder ──
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+
+  // ── Safe-area guides (preview only) ──
+  const [safeGuides, setSafeGuides] = useState(false);
+
+  // ── Scene card thumbnails — re-render (debounced) when the doc changes ──
+  const thumbRefs = useRef<Record<string, HTMLCanvasElement | null>>({});
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const d = docRef.current;
+      const { w: W, h: H } = getAspect(d.aspect);
+      let acc = 0;
+      for (const s of d.scenes) {
+        const midT = acc + s.duration * 0.65;
+        acc += s.duration;
+        const c = thumbRefs.current[s.id];
+        if (!c) continue;
+        const ctx = c.getContext('2d');
+        if (!ctx) continue;
+        ctx.setTransform(c.width / W, 0, 0, c.height / H, 0, 0);
+        renderFrame(ctx, d, midT, assetsRef.current);
+      }
+    }, 350);
+    return () => clearTimeout(id);
+  }, [doc, images]);
+
   // ── Image upload ──
   const imageInputRef = useRef<HTMLInputElement>(null);
+  /** Filenames a loaded project referenced but whose binaries are missing: name → original asset id. */
+  const pendingImagesRef = useRef<Map<string, string>>(new Map());
 
   const handleImageFile = async (file: File) => {
     const url = URL.createObjectURL(file);
     try {
       const img = await loadImage(url);
-      const asset: ImageAsset = { id: `img-${Date.now().toString(36)}`, name: file.name, url, img };
+      // Re-uploading a file a saved project referenced relinks it to every
+      // scene that used it (media is saved by filename, not embedded).
+      const relinkId = pendingImagesRef.current.get(file.name);
+      if (relinkId) pendingImagesRef.current.delete(file.name);
+      const asset: ImageAsset = {
+        id: relinkId ?? `img-${Date.now().toString(36)}`,
+        name: file.name, url, img,
+      };
       assetsRef.current[asset.id] = asset;
-      setImages((list) => [...list, asset]);
-      if (selected) patchScene(selected.id, { imageId: asset.id });
+      setImages((list) => [...list.filter((i) => i.id !== asset.id), asset]);
+      if (!relinkId && selected) patchScene(selected.id, { imageId: asset.id });
     } catch {
       URL.revokeObjectURL(url);
     }
+  };
+
+  // ── Project save / load / autosave ──
+  const projectFileRef = useRef<HTMLInputElement>(null);
+  const [projectStatus, setProjectStatus] = useState<string | null>(null);
+  const brandNameRef = useRef(brandName);
+  brandNameRef.current = brandName;
+  const brandColorsRef = useRef(brandColors);
+  brandColorsRef.current = brandColors;
+
+  const buildProject = useCallback((): ProjectFile => {
+    return serializeProject({
+      doc: docRef.current,
+      brandName: brandNameRef.current,
+      brandColors: brandColorsRef.current,
+      media: {
+        images: Object.values(assetsRef.current)
+          .filter((a) => a.id.startsWith('img-'))
+          .map((a) => ({ id: a.id, name: a.name })),
+        logoLight: assetsRef.current['__logo-brand-light']?.name ?? null,
+        logoDark: assetsRef.current['__logo-brand-dark']?.name ?? null,
+        voiceover: voTrackRef.current?.name ?? null,
+        music: musicTrackRef.current?.name ?? null,
+      },
+    });
+  }, []);
+
+  const applyProject = useCallback((p: ProjectFile) => {
+    historyRef.current = { past: [], future: [], lastPush: 0 };
+    setDoc(p.doc);
+    setBrandName(p.brandName ?? '');
+    if (p.brandColors) setBrandColors(p.brandColors);
+    setSelectedId(p.doc.scenes[0]?.id ?? null);
+    playheadRef.current = 0;
+    pendingImagesRef.current = new Map(
+      p.media.images
+        .filter((m) => !assetsRef.current[m.id])
+        .map((m) => [m.name, m.id]),
+    );
+    const missing = [
+      ...p.media.images.filter((m) => !assetsRef.current[m.id]).map((m) => m.name),
+      ...(p.media.logoLight && !assetsRef.current['__logo-brand-light'] ? [p.media.logoLight] : []),
+      ...(p.media.logoDark && !assetsRef.current['__logo-brand-dark'] ? [p.media.logoDark] : []),
+      ...(p.media.voiceover && !voTrackRef.current ? [p.media.voiceover] : []),
+      ...(p.media.music && !musicTrackRef.current ? [p.media.music] : []),
+    ];
+    setProjectStatus(missing.length
+      ? `Project loaded. Re-upload to relink: ${missing.join(', ')}`
+      : 'Project loaded.');
+  }, []);
+
+  // Restore the autosaved project once on mount
+  useEffect(() => {
+    const saved = loadAutosave();
+    if (saved && saved.doc.scenes.length) {
+      applyProject(saved);
+      setProjectStatus((s) => (s ? s.replace('Project loaded', 'Restored autosave') : 'Restored autosave.'));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Autosave (debounced) whenever the document or brand changes
+  useEffect(() => {
+    const id = setTimeout(() => saveAutosave(buildProject()), 800);
+    return () => clearTimeout(id);
+  }, [doc, brandName, brandColors, images, logoLight, logoDark, voTrack, musicTrack, buildProject]);
+
+  const handleSaveProject = () => {
+    const p = buildProject();
+    const base = (brandNameRef.current || 'motion-project').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    downloadBlob(
+      new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' }),
+      `${base}.motion.json`,
+    );
+    setProjectStatus('Project saved as JSON (media referenced by filename, not embedded).');
+  };
+
+  const handleLoadProject = async (file: File) => {
+    try {
+      applyProject(parseProject(await file.text()));
+    } catch (e) {
+      setProjectStatus(e instanceof Error ? e.message : 'Could not read that project file.');
+    }
+  };
+
+  const handleNewProject = () => {
+    clearAutosave();
+    historyRef.current = { past: [], future: [], lastPush: 0 };
+    const fresh = defaultDoc();
+    setDoc(fresh);
+    setSelectedId(fresh.scenes[0]?.id ?? null);
+    playheadRef.current = 0;
+    pendingImagesRef.current = new Map();
+    setProjectStatus('New project.');
   };
 
   // ── Typekit / font uploads ──
@@ -420,7 +803,9 @@ export default function ProMotionStudio() {
     }
   };
 
-  // ── Script → scenes ──
+  // ── Script / URL → scenes ──
+  const [aiSource, setAiSource] = useState<'script' | 'url'>('script');
+  const [aiUrl, setAiUrl] = useState('');
   const [script, setScript] = useState('');
   const [scriptNotes, setScriptNotes] = useState('');
   const [scriptMode, setScriptMode] = useState<'replace' | 'append'>('replace');
@@ -456,7 +841,8 @@ export default function ProMotionStudio() {
   };
 
   const handleGenerateScenes = async () => {
-    if (!script.trim() || generating) return;
+    const fromUrl = aiSource === 'url';
+    if (generating || (fromUrl ? !aiUrl.trim() : !script.trim())) return;
     setGenerating(true);
     setScriptStatus(null);
     try {
@@ -464,7 +850,7 @@ export default function ProMotionStudio() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          script,
+          ...(fromUrl ? { url: aiUrl.trim() } : { script }),
           notes: scriptNotes || undefined,
           aspect: doc.aspect,
           brandName: brandName || undefined,
@@ -475,14 +861,15 @@ export default function ProMotionStudio() {
       const generated: GeneratedScene[] = data.scenes ?? [];
       if (!generated.length) throw new Error('No scenes came back — try a clearer script.');
       const mapped = generated.map(mapGenerated);
-      setDoc((d) => ({
+      applyDoc((d) => ({
         ...d,
         scenes: scriptMode === 'replace' ? mapped : [...d.scenes, ...mapped],
-      }));
+      }), false);
       setSelectedId(mapped[0].id);
       playheadRef.current = scriptMode === 'replace' ? 0 : docDuration(docRef.current);
       setPlaying(true);
-      setScriptStatus({ ok: true, msg: `${mapped.length} scenes ${scriptMode === 'replace' ? 'created' : 'added'} — review and tweak each one.` });
+      const from = data.pageTitle ? ` from “${data.pageTitle}”` : '';
+      setScriptStatus({ ok: true, msg: `${mapped.length} scenes ${scriptMode === 'replace' ? 'created' : 'added'}${from} — review and tweak each one.` });
     } catch (e) {
       setScriptStatus({ ok: false, msg: e instanceof Error ? e.message : 'Generation failed' });
     } finally {
@@ -509,8 +896,14 @@ export default function ProMotionStudio() {
     try {
       await ensureFontsReady([doc.fontHeading, doc.fontBody]);
       const onP = (p: { ratio: number }) => setProgress(p.ratio);
+      // MP4 gets the soundtrack (VO + ducked music) mixed in; WebM stays silent.
+      const soundtrack = kind === 'mp4'
+        ? await renderProMixdown(docDuration(doc), voTrack, musicTrack, {
+            musicVolume: doc.audioVolume, duckLevel: doc.duckLevel,
+          })
+        : null;
       const blob = kind === 'mp4'
-        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal)
+        ? await exportMp4(doc, assetsRef.current, onP, abortRef.current.signal, { audioBuffer: soundtrack })
         : await exportWebm(doc, assetsRef.current, onP, abortRef.current.signal);
       const base = brandName ? brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'sbdc-motion';
       downloadBlob(blob, `${base}-${doc.aspect.replace(':', 'x')}-${stamp}.${kind}`);
@@ -560,12 +953,20 @@ export default function ProMotionStudio() {
         {doc.scenes.map((s, i) => {
           const scheme = resolveScheme(s);
           const active = s.id === selectedId;
+          const thumbW = 188;
+          const thumbH = Math.round(thumbW * (aspect.h / aspect.w));
           return (
             <div
               key={s.id}
               role="button"
               tabIndex={0}
-              className={`ms-scene-card ${active ? 'is-active' : ''}`}
+              className={`ms-scene-card ${active ? 'is-active' : ''} ${dragId === s.id ? 'is-dragging' : ''} ${dragOverId === s.id && dragId !== s.id ? 'is-dragover' : ''}`}
+              draggable
+              onDragStart={(e) => { setDragId(s.id); e.dataTransfer.effectAllowed = 'move'; }}
+              onDragOver={(e) => { e.preventDefault(); setDragOverId(s.id); }}
+              onDragLeave={() => setDragOverId((v) => (v === s.id ? null : v))}
+              onDrop={(e) => { e.preventDefault(); if (dragId) reorderScene(dragId, s.id); setDragId(null); setDragOverId(null); }}
+              onDragEnd={() => { setDragId(null); setDragOverId(null); }}
               onClick={() => { setSelectedId(s.id); seekToScene(i); }}
               onKeyDown={(e) => { if (e.key === 'Enter') { setSelectedId(s.id); seekToScene(i); } }}
             >
@@ -574,6 +975,12 @@ export default function ProMotionStudio() {
                 <span className="ms-scene-kind">{TEMPLATES.find((t) => t.id === s.template)?.label}</span>
                 <span className="ms-scene-dot" style={{ background: scheme.bg }} />
               </div>
+              <canvas
+                className="ms-scene-thumb"
+                width={thumbW}
+                height={Math.min(thumbH, 334)}
+                ref={(el) => { thumbRefs.current[s.id] = el; }}
+              />
               <div className="ms-scene-preview">{sceneLabel(s) || '—'}</div>
               <div className="ms-scene-meta">{(s.duration / 1000).toFixed(1)}s · {TEXT_ANIMS.find((a) => a.id === s.anim)?.label}</div>
 
@@ -604,6 +1011,15 @@ export default function ProMotionStudio() {
         <div className="ms-stage-wrap" ref={wrapRef}>
           <div className="ms-stage" ref={stageRef} style={{ width: stageDims.w, height: stageDims.h }}>
             <canvas ref={canvasRef} />
+            {safeGuides && (
+              <svg className="ms-safe-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+                {/* action safe 90% / title safe 80% — preview only, never exported */}
+                <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.22" strokeDasharray="1.4 1" />
+                <rect x="10" y="10" width="80" height="80" fill="none" stroke="rgba(143,197,217,0.65)" strokeWidth="0.22" />
+                <line x1="50" y1="46" x2="50" y2="54" stroke="rgba(255,255,255,0.45)" strokeWidth="0.22" />
+                <line x1="47" y1="50" x2="53" y2="50" stroke="rgba(255,255,255,0.45)" strokeWidth="0.22" />
+              </svg>
+            )}
           </div>
         </div>
 
@@ -625,6 +1041,16 @@ export default function ProMotionStudio() {
           >
             ↻ Loop
           </button>
+          <button className="ms-btn" onClick={undo} disabled={!canUndo} title="Undo (⌘Z)">↶</button>
+          <button className="ms-btn" onClick={redo} disabled={!canRedo} title="Redo (⇧⌘Z / ⌘Y)">↷</button>
+          <button className="ms-btn" onClick={splitAtPlayhead} title="Split scene at playhead (S)">✂ Split</button>
+          <button
+            className={`ms-btn ${safeGuides ? 'is-toggled' : ''}`}
+            onClick={() => setSafeGuides((g) => !g)}
+            title="Safe-area guides (preview only)"
+          >
+            ⊞ Safe
+          </button>
           <button
             className="ms-btn"
             onClick={() => stageRef.current?.requestFullscreen?.()}
@@ -644,6 +1070,11 @@ export default function ProMotionStudio() {
               style={{ width: `${(s.duration / Math.max(1, totalMs)) * 100}%` }}
             >
               <span className="ms-tl-label">{sceneLabel(s)}</span>
+              <div
+                className="ms-tl-handle"
+                title="Drag to set duration"
+                onPointerDown={(e) => onDurationHandleDown(e, s.id)}
+              />
             </div>
           ))}
           <div className="ms-playhead" ref={playheadElRef} style={{ left: 0 }} />
@@ -855,28 +1286,52 @@ export default function ProMotionStudio() {
           </Section>
         )}
 
-        {/* — Script → Scenes — */}
-        <Section title="Script → Scenes" badge="AI storyboard">
-          <Field label="Script or transcript">
-            <TextArea
-              value={script}
-              onChange={setScript}
-              rows={5}
-              placeholder={'Paste your video script or an SRT transcript with timestamps…\n\nThe AI storyboards it into scenes: key lines become statements, numbers become animated stats, steps become agendas.'}
+        {/* — Storyboard AI: script or URL → scenes — */}
+        <Section title="Storyboard AI" badge="Script or URL → scenes">
+          <Field label="Source">
+            <Seg
+              options={[{ id: 'script', label: 'Script / transcript' }, { id: 'url', label: 'Webpage URL' }] as const}
+              value={aiSource}
+              onChange={setAiSource}
+              small
             />
-            <div style={{ marginTop: 6 }}>
-              <button className="ms-file-btn" onClick={() => scriptFileRef.current?.click()}>
-                ⬆ Upload .txt / .srt / .vtt
-              </button>
-              <input
-                ref={scriptFileRef}
-                type="file"
-                accept=".txt,.srt,.vtt,.md,text/plain"
-                hidden
-                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleScriptFile(f); e.target.value = ''; }}
-              />
-            </div>
           </Field>
+          {aiSource === 'url' ? (
+            <Field label="Training / event page URL">
+              <TextInput
+                value={aiUrl}
+                onChange={setAiUrl}
+                placeholder="https://norcalsbdc.org/events/…"
+                mono
+              />
+              <p className="ms-hint">
+                The page is fetched and distilled into a social promo: hook, what it is,
+                what you&apos;ll learn, then a register end card. Works best on SBDC training
+                and event pages.
+              </p>
+            </Field>
+          ) : (
+            <Field label="Script or transcript">
+              <TextArea
+                value={script}
+                onChange={setScript}
+                rows={5}
+                placeholder={'Paste your video script or an SRT transcript with timestamps…\n\nThe AI storyboards it into scenes: key lines become statements, numbers become animated stats, steps become agendas.'}
+              />
+              <div style={{ marginTop: 6 }}>
+                <button className="ms-file-btn" onClick={() => scriptFileRef.current?.click()}>
+                  ⬆ Upload .txt / .srt / .vtt
+                </button>
+                <input
+                  ref={scriptFileRef}
+                  type="file"
+                  accept=".txt,.srt,.vtt,.md,text/plain"
+                  hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) handleScriptFile(f); e.target.value = ''; }}
+                />
+              </div>
+            </Field>
+          )}
           <Field label="Creative direction (optional)">
             <TextInput
               value={scriptNotes}
@@ -903,10 +1358,10 @@ export default function ProMotionStudio() {
           <button
             className="ms-btn is-primary"
             style={{ width: '100%' }}
-            disabled={generating || !script.trim()}
+            disabled={generating || (aiSource === 'url' ? !aiUrl.trim() : !script.trim())}
             onClick={handleGenerateScenes}
           >
-            {generating ? 'Storyboarding…' : '✦ Generate scenes'}
+            {generating ? (aiSource === 'url' ? 'Reading page…' : 'Storyboarding…') : '✦ Generate scenes'}
           </button>
           {scriptStatus && (
             <p className={`ms-status ${scriptStatus.ok ? 'is-ok' : 'is-err'}`}>{scriptStatus.msg}</p>
@@ -915,6 +1370,75 @@ export default function ProMotionStudio() {
             Timestamped transcripts (SRT) pace scenes to the voiceover beats. On-screen words stay
             minimal — the AI distills, it doesn&apos;t transcribe.
           </p>
+        </Section>
+
+        {/* — Audio: voiceover + music bed with ducking — */}
+        <Section title="Audio" badge="Mixed into MP4">
+          <Field label="Voiceover">
+            {voTrack ? (
+              <div className="ms-audio-row">
+                <span className="ms-audio-name">🎙 {voTrack.name}</span>
+                <span className="ms-audio-dur">{voTrack.buffer.duration.toFixed(1)}s</span>
+                <button className="ms-icon-btn is-danger" style={{ flex: 'none', padding: '4px 10px' }} onClick={() => removeAudio('vo')}>✕</button>
+              </div>
+            ) : (
+              <button className="ms-file-btn" onClick={() => voFileRef.current?.click()}>
+                ⬆ Upload voiceover (MP3 / WAV / M4A)
+              </button>
+            )}
+            <input
+              ref={voFileRef} type="file" accept="audio/*" hidden
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleAudioFile(f, 'vo'); e.target.value = ''; }}
+            />
+          </Field>
+          <Field label="Music bed">
+            {musicTrack ? (
+              <div className="ms-audio-row">
+                <span className="ms-audio-name">♫ {musicTrack.name}</span>
+                <span className="ms-audio-dur">{musicTrack.buffer.duration.toFixed(1)}s · loops</span>
+                <button className="ms-icon-btn is-danger" style={{ flex: 'none', padding: '4px 10px' }} onClick={() => removeAudio('music')}>✕</button>
+              </div>
+            ) : (
+              <button className="ms-file-btn" onClick={() => musicFileRef.current?.click()}>
+                ⬆ Upload music track
+              </button>
+            )}
+            <input
+              ref={musicFileRef} type="file" accept="audio/*" hidden
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleAudioFile(f, 'music'); e.target.value = ''; }}
+            />
+          </Field>
+          {musicTrack && (
+            <Field label="Music volume">
+              <Slider
+                value={doc.audioVolume}
+                onChange={(v) => patchDoc({ audioVolume: v })}
+                min={0} max={1} step={0.05}
+                format={(v) => `${Math.round(v * 100)}%`}
+              />
+            </Field>
+          )}
+          {musicTrack && voTrack && (
+            <Field label="Duck under voiceover">
+              <Slider
+                value={doc.duckLevel}
+                onChange={(v) => patchDoc({ duckLevel: v })}
+                min={0} max={1} step={0.05}
+                format={(v) => `${Math.round(v * 100)}%`}
+              />
+              <p className="ms-hint">
+                Music dips to this level while the VO plays, with 300ms ramps. The same
+                curve drives preview volume and the export mixdown.
+              </p>
+            </Field>
+          )}
+          {audioError && <p className="ms-status is-err">{audioError}</p>}
+          {!voTrack && !musicTrack && (
+            <p className="ms-hint">
+              Add a voiceover and/or a music bed — they play in the preview and get
+              encoded into the exported MP4. Music loops to fit and fades out at the end.
+            </p>
+          )}
         </Section>
 
         {/* — Brand — */}
@@ -1003,6 +1527,31 @@ export default function ProMotionStudio() {
           </Field>
         </Section>
 
+        {/* — Project — */}
+        <Section title="Project" badge="Autosaves locally">
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button className="ms-btn" style={{ flex: 1, padding: '8px 6px' }} onClick={handleSaveProject}>
+              ⬇ Save JSON
+            </button>
+            <button className="ms-btn" style={{ flex: 1, padding: '8px 6px' }} onClick={() => projectFileRef.current?.click()}>
+              ⬆ Load
+            </button>
+            <button className="ms-btn" style={{ flex: 1, padding: '8px 6px' }} onClick={handleNewProject}>
+              ✦ New
+            </button>
+          </div>
+          <input
+            ref={projectFileRef} type="file" accept=".json,application/json" hidden
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleLoadProject(f); e.target.value = ''; }}
+          />
+          {projectStatus && <p className="ms-status is-ok">{projectStatus}</p>}
+          <p className="ms-hint">
+            The document autosaves to this browser as you edit and restores on reload.
+            Media binaries aren&apos;t embedded — projects reference them by filename, and
+            re-uploading a file with the same name relinks it everywhere it was used.
+          </p>
+        </Section>
+
         {/* — Fonts — */}
         <Section title="Fonts" badge="Typekit ready">
           <datalist id="ms-font-list-pro">
@@ -1075,7 +1624,7 @@ export default function ProMotionStudio() {
                 disabled={!mp4Supported || !!exporting}
                 onClick={() => handleExportVideo('mp4')}
               >
-                ⬇ Export MP4
+                ⬇ Export MP4{voTrack || musicTrack ? ' (with audio)' : ''}
               </button>
               {mp4Supported === false && (
                 <p className="ms-hint">
@@ -1083,7 +1632,7 @@ export default function ProMotionStudio() {
                 </p>
               )}
               <button className="ms-btn" disabled={!!exporting} onClick={() => handleExportVideo('webm')}>
-                ⬇ Export WebM
+                ⬇ Export WebM{voTrack || musicTrack ? ' (silent fallback)' : ''}
               </button>
               <button className="ms-btn" disabled={!!exporting} onClick={handleExportPng}>
                 ⬇ PNG of current frame

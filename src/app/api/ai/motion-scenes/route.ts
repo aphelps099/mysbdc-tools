@@ -41,16 +41,92 @@ function sanitize(scenes: GeneratedScene[]): GeneratedScene[] {
     }));
 }
 
+// ── URL mode: fetch a training/event page server-side ──
+
+const BLOCKED_HOSTS = /^(localhost|127\.|0\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|\[::1\])/i;
+
+function extractPageText(html: string): { title: string; text: string } {
+  const title =
+    html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)/i)?.[1] ??
+    html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] ?? '';
+  const description =
+    html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)/i)?.[1] ??
+    html.match(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)/i)?.[1] ?? '';
+
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<(nav|footer|header|aside)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<br\s*\/?>|<\/(p|div|li|h[1-6]|tr|section|article)>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n\s*/g, '\n')
+    .trim();
+
+  return {
+    title: title.trim(),
+    text: [title, description, text].filter(Boolean).join('\n').slice(0, 12000),
+  };
+}
+
+async function fetchPage(rawUrl: string): Promise<{ title: string; text: string; url: string }> {
+  let url: URL;
+  try {
+    url = new URL(rawUrl.trim());
+  } catch {
+    throw new Error('That does not look like a valid URL');
+  }
+  if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+    throw new Error('Only http(s) URLs are supported');
+  }
+  if (BLOCKED_HOSTS.test(url.hostname)) {
+    throw new Error('That host is not allowed');
+  }
+
+  const res = await fetch(url.toString(), {
+    redirect: 'follow',
+    signal: AbortSignal.timeout(12000),
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SBDC-MotionStudio/1.0)' },
+  });
+  if (!res.ok) throw new Error(`The page returned ${res.status}`);
+
+  const html = (await res.text()).slice(0, 1_500_000);
+  const { title, text } = extractPageText(html);
+  if (text.length < 80) throw new Error('Could not extract readable text from that page');
+  return { title, text, url: url.toString() };
+}
+
 export async function POST(req: NextRequest) {
-  let body: MotionScenesInput;
+  let body: MotionScenesInput & { url?: string };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
+  let pageTitle = '';
+  if (body.url && typeof body.url === 'string') {
+    try {
+      const page = await fetchPage(body.url);
+      pageTitle = page.title;
+      body.script = page.text;
+      body.source = 'webpage';
+      body.pageUrl = page.url;
+    } catch (e) {
+      return Response.json(
+        { error: e instanceof Error ? e.message : 'Failed to fetch the page' },
+        { status: 400 },
+      );
+    }
+  }
+
   if (!body.script || typeof body.script !== 'string' || !body.script.trim()) {
-    return Response.json({ error: 'script is required' }, { status: 400 });
+    return Response.json({ error: 'script or url is required' }, { status: 400 });
   }
   if (body.script.length > 40000) {
     return Response.json({ error: 'Script is too long (40k character max)' }, { status: 400 });
@@ -74,5 +150,5 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'The AI returned no usable scenes — try a shorter or clearer script.' }, { status: 500 });
   }
 
-  return Response.json({ scenes });
+  return Response.json({ scenes, pageTitle: pageTitle || undefined });
 }
