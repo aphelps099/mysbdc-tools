@@ -62,6 +62,9 @@ export interface GeocodeCandidate {
   lat: number;
   lon: number;
   source: 'census' | 'maptiler';
+  /* 'relaxed' = matched only after the query was simplified (suite/room code
+     stripped) — treat as approximate and never auto-place without review. */
+  precision?: 'exact' | 'relaxed';
 }
 
 export interface CountyProperties {

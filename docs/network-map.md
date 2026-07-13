@@ -33,23 +33,40 @@ reserved for the phase-2 territory editor).
   San Francisco's degenerate zero-area island ring was pruned — Treasure
   Island addresses need the manual region override.
 
-## Data model & persistence
+## Data model & persistence — one shared live map
 
+- **Everyone sees and edits the same map.** The workspace lives server-side
+  behind `/api/network-map/workspace` (GET/PUT, session-gated). The client
+  auto-saves edits (debounced), refreshes on window focus, and shows a sync
+  status in the topbar ("Saved for everyone" / "Saving…" / offline). Location
+  data is shared; view settings (filters, search, toggles) stay per-browser.
+- Storage: `src/lib/network-map-store.ts` writes `workspace.json` under
+  `NETWORK_MAP_DATA_DIR` (default `/data/network-map` when the Railway volume
+  is mounted, else `<repo>/.data/network-map`, which is ephemeral — **set the
+  env var / mount the volume in production**). Every save keeps a rolling
+  backup (last 20) under `backups/` for recovery.
+- Conflicts: saves carry `baseUpdatedAt`; a stale save gets a 409 and the UI
+  offers "Use their version / Keep my version".
 - Workspace schema is the prototype's v3 (`{version:3, force, locations[],
-  settings, updatedAt}`) under the same localStorage key
-  `norcal-sbdc-network-map-v3`. JSON backups exported from the original
-  prototype HTML import unchanged (fixture-tested in
-  `tests/network-map-data.test.ts`).
-- **Canonical published network**: `public/data/network-map/network.v1.json`.
-  First visit loads it; "Reset to published network" restores it. To publish
-  an update: make edits in the app → Data tab → **Export JSON backup** →
-  copy the exported `locations`/`settings`/`updatedAt` into `network.v1.json`
-  → commit → Railway deploys it to everyone. **The real network seed data is
-  still pending (plan decision D5 — named data owner).**
-- Backup nudges appear when un-exported edits are stale (>7 days) or pile up
-  (≥25); a cross-tab banner appears when another tab writes the workspace.
-- Prototype users migrating: browser storage under `file://` does NOT carry
-  over — in the old HTML file use *Export JSON*, then *Import JSON* here.
+  settings, updatedAt}`); localStorage (same key
+  `norcal-sbdc-network-map-v3`) is the offline cache. JSON backups from the
+  original prototype HTML import unchanged (fixture-tested).
+- First run (no server file yet): the committed seed
+  `public/data/network-map/network.v1.json` is served, then the first save
+  materializes it into the store. **The real network seed data is still
+  pending (plan decision D5).**
+- Prototype users migrating: in the old HTML file use *Export JSON*, then
+  Data tab → Advanced → *Import backup* here (imports affect everyone).
+
+## Exports
+
+- **Print / save as PDF** — browser print dialog with print CSS (chrome
+  hidden, full-page map).
+- **Map image (PNG)** at 2×/4×/6× via html2canvas capture of the live map
+  stage; MapTiler/OSM attribution is kept in the capture (license
+  requirement), transient chrome is excluded.
+- **Backup file (JSON)** — under Data → Advanced; for archives, bulk edits,
+  and prototype migration only. Normal users never need it.
 
 ## MapTiler key runbook
 

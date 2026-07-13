@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { REGIONS } from './regions';
+import { getRegion, REGIONS } from './regions';
 import { detectRegion, finiteNumber } from './logic';
 import type { CountyCollection, GeocodeCandidate, LocationType } from './types';
 
@@ -23,6 +23,9 @@ export interface LocationDraft {
   lon: string;
   notes: string;
   regionHint: string | null;
+  /* true once the user explicitly picked a region — auto-detection then
+     only warns instead of overriding their choice */
+  regionChosen: boolean;
 }
 
 export function emptyDraft(): LocationDraft {
@@ -37,6 +40,7 @@ export function emptyDraft(): LocationDraft {
     lon: '',
     notes: '',
     regionHint: null,
+    regionChosen: false,
   };
 }
 
@@ -79,6 +83,35 @@ export default function LocationEditor({
 
   const set = (patch: Partial<LocationDraft>) => onChange({ ...draft, ...patch });
 
+  /* Any way of getting coordinates — typed, pasted, geocoded, or clicked —
+     should suggest the matching service region. If the user already picked a
+     region themselves, detection only warns instead of overriding. */
+  const applyDetection = (next: LocationDraft): LocationDraft => {
+    const nextLat = finiteNumber(next.lat);
+    const nextLon = finiteNumber(next.lon);
+    if (nextLat == null || nextLon == null) return next;
+    const detected = detectRegion(counties, nextLat, nextLon);
+    if (!detected) return next;
+    if (!next.regionChosen) {
+      return {
+        ...next,
+        regionId: String(detected),
+        regionHint: 'Region suggested from the map position — verify near county lines.',
+      };
+    }
+    if (String(detected) !== next.regionId) {
+      return {
+        ...next,
+        regionHint: `The map position looks like ${getRegion(detected).name} — double-check the service region.`,
+      };
+    }
+    return { ...next, regionHint: null };
+  };
+
+  const setCoordinate = (field: 'lat' | 'lon', value: string) => {
+    onChange(applyDetection({ ...draft, [field]: value }));
+  };
+
   async function findAddress() {
     if (busy) return;
     const address = draft.address.trim();
@@ -90,7 +123,9 @@ export default function LocationEditor({
     setResults([]);
     setStatus({ message: 'Searching Northern California addresses…', tone: '' });
     try {
-      const response = await fetch('/api/geocode?q=' + encodeURIComponent(address));
+      const response = await fetch('/api/geocode?q=' + encodeURIComponent(address), {
+        signal: AbortSignal.timeout(20000),
+      });
       if (!response.ok) throw new Error('lookup failed');
       const data = await response.json();
       const candidates: GeocodeCandidate[] = data.results || [];
@@ -99,6 +134,10 @@ export default function LocationEditor({
           message: 'No Northern California matches found. Add the city and ZIP, or place the pin with a map click.',
           tone: 'error',
         });
+        return;
+      }
+      if (candidates.length === 1 && candidates[0].precision !== 'relaxed') {
+        selectResult(candidates[0]);
         return;
       }
       setResults(candidates);
@@ -115,16 +154,17 @@ export default function LocationEditor({
   }
 
   function selectResult(candidate: GeocodeCandidate) {
-    const detected = detectRegion(counties, candidate.lat, candidate.lon);
-    set({
+    const base: LocationDraft = {
+      ...draft,
       lat: candidate.lat.toFixed(6),
       lon: candidate.lon.toFixed(6),
       address: draft.address.trim() ? draft.address : candidate.label,
-      regionId: detected ? String(detected) : draft.regionId,
-      regionHint: detected
-        ? 'Region suggested from the map position — verify near county lines.'
-        : 'That point is outside the 36-county service area — choose the region manually.',
-    });
+    };
+    const detected = detectRegion(counties, candidate.lat, candidate.lon);
+    const next = detected
+      ? applyDetection(base)
+      : { ...base, regionHint: 'That point is outside the 36-county service area — choose the region manually.' };
+    onChange(next);
     setResults([]);
     setStatus({ message: 'Address matched. Review the pin and save the location.', tone: 'success' });
     onFlyTo(candidate.lat, candidate.lon, 14);
@@ -176,6 +216,8 @@ export default function LocationEditor({
         <input
           type="text"
           value={draft.name}
+          autoComplete="off"
+          autoFocus
           onChange={(event) => set({ name: event.target.value })}
           placeholder="e.g. Butte College SBDC"
           required
@@ -184,7 +226,10 @@ export default function LocationEditor({
 
       <label className="nm-field">
         <span className="nm-label">Service region</span>
-        <select value={draft.regionId} onChange={(event) => set({ regionId: event.target.value, regionHint: null })}>
+        <select
+          value={draft.regionId}
+          onChange={(event) => set({ regionId: event.target.value, regionHint: null, regionChosen: true })}
+        >
           {REGIONS.map((region) => (
             <option key={region.id} value={String(region.id)}>
               {region.id} · {region.name}
@@ -199,19 +244,38 @@ export default function LocationEditor({
         <input
           type="text"
           value={draft.address}
+          autoComplete="off"
           onChange={(event) => set({ address: event.target.value })}
+          onKeyDown={(event) => {
+            // Enter should look the address up, not submit-and-save the form.
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              findAddress();
+            }
+          }}
           placeholder="Street, city, ZIP"
         />
       </label>
 
       <div className="nm-geocode-row">
-        <button type="button" className="nm-btn" onClick={findAddress} disabled={busy}>
+        <button
+          type="button"
+          className={'nm-btn' + (draft.address.trim() && !placed && !pickMode ? ' nm-btn-primary' : '')}
+          onClick={findAddress}
+          disabled={busy}
+        >
           {busy ? 'Searching…' : 'Find address'}
         </button>
         <button type="button" className={'nm-btn' + (pickMode ? ' nm-btn-primary' : '')} onClick={onTogglePick}>
-          {pickMode ? 'Click the map now…' : 'Place with map click'}
+          {pickMode ? 'Done placing' : 'Place with map click'}
         </button>
       </div>
+      {pickMode && (
+        <p className="nm-status success" role="status">
+          Click the map as many times as you need — each click moves the pin. Press &ldquo;Done placing&rdquo; when
+          it looks right.
+        </p>
+      )}
       {status && (
         <p className={'nm-status' + (status.tone ? ' ' + status.tone : '')} role="status">
           {status.message}
@@ -239,7 +303,7 @@ export default function LocationEditor({
             type="text"
             inputMode="decimal"
             value={draft.lat}
-            onChange={(event) => set({ lat: event.target.value })}
+            onChange={(event) => setCoordinate('lat', event.target.value)}
             placeholder="38.5810"
           />
         </label>
@@ -249,7 +313,7 @@ export default function LocationEditor({
             type="text"
             inputMode="decimal"
             value={draft.lon}
-            onChange={(event) => set({ lon: event.target.value })}
+            onChange={(event) => setCoordinate('lon', event.target.value)}
             placeholder="-121.4939"
           />
         </label>
