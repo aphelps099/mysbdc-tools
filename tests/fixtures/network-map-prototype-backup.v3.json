@@ -1,0 +1,51 @@
+{
+  "version": 3,
+  "force": false,
+  "locations": [
+    {
+      "id": "0f5a2f0e-8f2d-4d5f-9c3a-1c2d3e4f5a6b",
+      "type": "host",
+      "name": "Example Territory Host",
+      "regionId": 2,
+      "address": "123 Main St, Chico, CA 95928",
+      "investment": 500000,
+      "lat": 39.728496,
+      "lon": -121.837478,
+      "notes": "Fixture exported from the standalone prototype (exportJson)."
+    },
+    {
+      "id": "loc-legacy-aliases",
+      "type": "Branch",
+      "organization": "Alias Fields Branch",
+      "territory": "Silicon Valley",
+      "address": "456 First St, San Jose, CA 95113",
+      "invest": "75000",
+      "latitude": 37.338207,
+      "lng": -121.88633,
+      "note-unknown-field": "extra fields must be ignored"
+    },
+    {
+      "id": "loc-unplaced",
+      "type": "branch",
+      "name": "Unplaced Branch",
+      "region": "region 5",
+      "address": "",
+      "investment": 0,
+      "lat": null,
+      "lon": null,
+      "notes": "No coordinates yet"
+    }
+  ],
+  "settings": {
+    "theme": "brand",
+    "fillMode": "total",
+    "showHosts": true,
+    "showBranches": false,
+    "showRegionLabels": true,
+    "showCounties": true,
+    "scaleMarkers": true,
+    "regionFilter": "all",
+    "search": "branch"
+  },
+  "updatedAt": "2026-07-01T18:00:00.000Z"
+}

@@ -1,0 +1,952 @@
+/* ═══════════════════════════════════════════════════════
+   Network Map — Editorial appearance (v1's single theme).
+   Layout: full-screen topbar + sidebar + map, ported from
+   the prototype at 980px/560px breakpoints.
+   ═══════════════════════════════════════════════════════ */
+
+.nm-app {
+  --nm-paper: #f7f4ee;
+  --nm-panel: #ffffff;
+  --nm-ink: #1c2430;
+  --nm-muted: #66707d;
+  --nm-border: #e3ddd2;
+  --nm-navy: #1a3fa3;
+  --nm-gold: #b08a3e;
+  --nm-teal: #3b7f96;
+  --nm-danger: #8d2435;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--nm-paper);
+  color: var(--nm-ink);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.nm-app button,
+.nm-app input,
+.nm-app select,
+.nm-app textarea {
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: inherit;
+}
+
+.nm-app :focus-visible {
+  outline: 2px solid var(--nm-navy);
+  outline-offset: 2px;
+}
+
+/* ── Topbar ── */
+.nm-topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 18px;
+  background: var(--nm-panel);
+  border-bottom: 2px solid var(--nm-ink);
+  flex-wrap: wrap;
+}
+
+.nm-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nm-home {
+  font-size: 20px;
+  text-decoration: none;
+  color: var(--nm-ink);
+  padding: 4px 8px;
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.nm-home:hover {
+  background: var(--nm-paper);
+}
+
+.nm-brand h1 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+}
+
+.nm-brand p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-stats {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.nm-stat {
+  min-width: 88px;
+  padding: 6px 12px;
+  border: 1px solid var(--nm-border);
+  border-radius: 10px;
+  background: var(--nm-paper);
+  text-align: center;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-stat strong {
+  display: block;
+  font-size: 16px;
+}
+
+.nm-stat span {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-muted);
+}
+
+/* ── Banners ── */
+.nm-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: #fff4e0;
+  border-bottom: 1px solid #e5cf9f;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.nm-banner-soft {
+  background: #eef4ff;
+  border-bottom-color: #c9d8f5;
+}
+
+/* ── Main layout ── */
+.nm-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.nm-sidebar {
+  width: 380px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  background: var(--nm-panel);
+  border-right: 1px solid var(--nm-border);
+  overflow: hidden;
+}
+
+.nm-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--nm-border);
+}
+
+.nm-tab {
+  flex: 1;
+  padding: 10px 6px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--nm-muted);
+}
+
+.nm-tab.active {
+  color: var(--nm-ink);
+  border-bottom-color: var(--nm-gold);
+}
+
+.nm-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 22px;
+}
+
+.nm-section-title {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-panel > .nm-section-title:first-child {
+  margin-top: 2px;
+}
+
+.nm-help {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+/* ── Buttons ── */
+.nm-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--nm-border);
+  border-radius: 9px;
+  background: var(--nm-panel);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nm-btn:hover:not(:disabled) {
+  border-color: var(--nm-ink);
+}
+
+.nm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nm-btn-primary {
+  background: var(--nm-navy);
+  border-color: var(--nm-navy);
+  color: #fff;
+}
+
+.nm-btn-primary:hover:not(:disabled) {
+  background: #16368c;
+}
+
+.nm-btn-danger {
+  color: var(--nm-danger);
+  border-color: #dcb9bf;
+}
+
+.nm-btn-small {
+  padding: 5px 9px;
+  font-size: 12px;
+}
+
+/* ── Filters + list ── */
+.nm-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nm-search,
+.nm-filters select,
+.nm-field input,
+.nm-field select,
+.nm-field textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--nm-border);
+  border-radius: 9px;
+  background: #fff;
+}
+
+.nm-check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.nm-check-row label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nm-check-row .nm-btn {
+  margin-left: auto;
+}
+
+.nm-result-count {
+  margin: 12px 0 6px;
+  font-size: 12px;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nm-location-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--nm-border);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nm-location-row:hover {
+  border-color: var(--nm-ink);
+}
+
+.nm-location-row.selected {
+  border-color: var(--nm-navy);
+  box-shadow: 0 0 0 1px var(--nm-navy);
+}
+
+.nm-type-symbol {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.nm-type-symbol.host {
+  background: var(--nm-navy);
+  border: 2px solid var(--nm-gold);
+}
+
+.nm-type-symbol.branch {
+  background: var(--nm-teal);
+  border-radius: 50%;
+}
+
+.nm-location-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nm-location-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-location-sub {
+  font-size: 12px;
+  color: var(--nm-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-needs-pin {
+  font-size: 11px;
+  color: var(--nm-danger);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-location-invest {
+  margin-left: auto;
+  font-weight: 700;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+}
+
+.nm-empty {
+  padding: 18px 12px;
+  border: 1px dashed var(--nm-border);
+  border-radius: 10px;
+  color: var(--nm-muted);
+  text-align: center;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+/* ── Regional rollup ── */
+.nm-region-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nm-region-row {
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-region-top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.nm-region-detail {
+  font-size: 11px;
+  color: var(--nm-muted);
+}
+
+.nm-region-track {
+  margin-top: 3px;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--nm-paper);
+  overflow: hidden;
+}
+
+.nm-region-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* ── Editor ── */
+.nm-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nm-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nm-editor-head h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.nm-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-type-toggle {
+  display: flex;
+  gap: 8px;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nm-type-toggle legend {
+  padding: 0;
+}
+
+.nm-type-toggle label {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--nm-border);
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: center;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.nm-type-toggle label.active {
+  border-color: var(--nm-navy);
+  background: #eef2fb;
+  font-weight: 600;
+}
+
+.nm-type-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nm-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--nm-gold);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-geocode-row {
+  display: flex;
+  gap: 8px;
+}
+
+.nm-geocode-row .nm-btn {
+  flex: 1;
+}
+
+.nm-status {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: var(--nm-paper);
+  border: 1px solid var(--nm-border);
+  font-size: 12px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-status.success {
+  background: #eef7ee;
+  border-color: #bcd9bd;
+}
+
+.nm-status.error {
+  background: #fdf0f2;
+  border-color: #e4bfc6;
+  color: var(--nm-danger);
+}
+
+.nm-geocode-results {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nm-geocode-result {
+  padding: 8px 10px;
+  border: 1px solid var(--nm-border);
+  border-radius: 9px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+}
+
+.nm-geocode-result:hover {
+  border-color: var(--nm-navy);
+}
+
+.nm-coord-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.nm-coord-status {
+  margin: 0;
+  font-size: 12px;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-coord-status.good {
+  color: #22733a;
+}
+
+.nm-editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.nm-editor-actions .nm-btn {
+  flex: 1;
+}
+
+/* ── Data panel ── */
+.nm-segmented {
+  display: flex;
+  border: 1px solid var(--nm-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nm-segmented button {
+  flex: 1;
+  padding: 8px 4px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nm-muted);
+}
+
+.nm-segmented button + button {
+  border-left: 1px solid var(--nm-border);
+}
+
+.nm-segmented button.active {
+  background: var(--nm-navy);
+  color: #fff;
+}
+
+.nm-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--nm-border);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.nm-export-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ── Map stage ── */
+.nm-map-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.nm-map-stage,
+.nm-map {
+  position: absolute;
+  inset: 0;
+  background: #e8e2d6;
+}
+
+/* Editorial basemap treatment (ported tile filter). */
+.nm-app[data-theme='brand'] .leaflet-tile-pane {
+  filter: sepia(0.14) saturate(0.82) brightness(1.03) contrast(0.96);
+}
+
+.nm-basemap-notice {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(28, 36, 48, 0.88);
+  color: #fff;
+  font-size: 12px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+}
+
+.nm-map-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 900;
+  display: flex;
+  gap: 6px;
+}
+
+.nm-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nm-muted);
+}
+
+.nm-chip.active {
+  color: var(--nm-ink);
+  border-color: var(--nm-ink);
+}
+
+.nm-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.nm-chip-dot.host {
+  background: var(--nm-navy);
+  border: 1.5px solid var(--nm-gold);
+}
+
+.nm-chip-dot.branch {
+  background: var(--nm-teal);
+  border-radius: 50%;
+}
+
+.nm-legend {
+  position: absolute;
+  bottom: 26px;
+  left: 12px;
+  z-index: 900;
+  width: 230px;
+  padding: 10px 12px;
+  border: 1px solid var(--nm-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-legend-title {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.nm-legend-sub {
+  font-size: 11px;
+  color: var(--nm-muted);
+}
+
+.nm-legend-items {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.nm-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nm-legend-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+}
+
+.nm-legend-swatch.host {
+  background: var(--nm-navy);
+  border: 1.5px solid var(--nm-gold);
+}
+
+.nm-legend-swatch.branch {
+  background: var(--nm-teal);
+  border-radius: 50%;
+}
+
+.nm-legend-gradient {
+  margin-top: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #eef2f8, #1a3fa3);
+}
+
+.nm-legend-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--nm-muted);
+  margin-top: 2px;
+}
+
+.nm-map-empty {
+  position: absolute;
+  inset: 0;
+  z-index: 850;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  text-align: center;
+  background: rgba(247, 244, 238, 0.7);
+  padding: 20px;
+}
+
+.nm-map-empty p {
+  margin: 0;
+  max-width: 360px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 14px;
+}
+
+.nm-maptiler-logo img {
+  display: block;
+}
+
+/* ── Pins, labels, popups (Leaflet-injected DOM) ── */
+.nm-div-icon {
+  background: none;
+  border: none;
+}
+
+.nm-pin {
+  width: var(--pin);
+  height: var(--pin);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: calc(var(--pin) * 0.42);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 6px rgba(14, 26, 43, 0.35);
+}
+
+.nm-pin.host {
+  background: var(--nm-navy, #1a3fa3);
+  border: 2.5px solid #b08a3e;
+  border-radius: 26%;
+  transform: rotate(45deg);
+}
+
+.nm-pin.host span {
+  transform: rotate(-45deg);
+}
+
+.nm-pin.branch {
+  background: #3b7f96;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.nm-region-label {
+  transform: translate(-50%, -50%);
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(28, 36, 48, 0.25);
+  color: #1c2430;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+}
+
+.nm-region-label small {
+  display: block;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #66707d;
+}
+
+.nm-popup-kicker {
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #66707d;
+}
+
+.nm-popup-title {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 2px 0;
+}
+
+.nm-popup-line {
+  font-size: 12px;
+  color: #444c57;
+}
+
+.nm-popup-invest {
+  margin-top: 6px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.nm-popup-actions {
+  margin-top: 8px;
+}
+
+/* ── Toast ── */
+.nm-toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%, 12px);
+  z-index: 1200;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #1c2430;
+  color: #fff;
+  font-size: 13px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nm-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-toast {
+    transition: none;
+  }
+}
+
+/* ── Responsive (prototype breakpoints) ── */
+@media (max-width: 980px) {
+  .nm-main {
+    flex-direction: column-reverse;
+    overflow-y: auto;
+  }
+
+  .nm-sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-top: 1px solid var(--nm-border);
+    flex: none;
+  }
+
+  .nm-panel {
+    max-height: 46vh;
+  }
+
+  .nm-map-wrap {
+    flex: none;
+    height: 68vh;
+    position: relative;
+  }
+}
+
+@media (max-width: 560px) {
+  .nm-topbar {
+    gap: 10px;
+  }
+
+  .nm-stats {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .nm-stat {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nm-legend {
+    display: none;
+  }
+}
+
+/* ── Print: full-page map, no chrome ── */
+@media print {
+  .nm-topbar,
+  .nm-sidebar,
+  .nm-map-toolbar,
+  .nm-toast,
+  .nm-banner,
+  .nm-basemap-notice {
+    display: none !important;
+  }
+
+  .nm-app,
+  .nm-main,
+  .nm-map-wrap {
+    position: static;
+    height: auto;
+  }
+
+  .nm-map-wrap {
+    height: 96vh;
+  }
+}
