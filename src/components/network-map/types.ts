@@ -34,11 +34,29 @@ export interface BuilderSettings {
   search: string;
 }
 
+/* Shared visual design of the map — travels with the workspace so one
+   person can style it and everyone (and every export) sees the same colors. */
+export interface MapStyle {
+  regionColors: Record<string, string>; // region id (as string) -> hex
+  hostColor: string;
+  hostBorder: string;
+  branchColor: string;
+  branchBorder: string;
+  borderColor: string; // interior region-border mesh
+  borderWidth: number;
+  territoryOpacity: number; // 0..1 county fill opacity in territory mode
+  choroplethFrom: string;
+  choroplethTo: string;
+  basemap: string; // MapTiler style id, or 'none' for a color-only map
+  paper: string; // background behind/without the basemap
+}
+
 export interface Workspace {
   version: 3;
   force: boolean;
   locations: NetworkLocation[];
   settings: BuilderSettings;
+  style: MapStyle;
   updatedAt: string;
 }
 

@@ -158,10 +158,16 @@ describe('rendering math', () => {
   });
 
   it('applies the choropleth ramp with sqrt scaling', () => {
-    expect(choroplethColor(0, 100)).toBe('#eef1f4');
-    expect(choroplethColor(50, 0)).toBe('#eef1f4');
+    const zero = mixColor('#eef2f8', '#ffffff', 0.35);
+    expect(choroplethColor(0, 100)).toBe(zero);
+    expect(choroplethColor(50, 0)).toBe(zero);
     expect(choroplethColor(100, 100)).toBe('#1a3fa3'); // 0.18 + 0.82·√1 = 1
     expect(choroplethColor(25, 100)).toBe(mixColor('#eef2f8', '#1a3fa3', 0.18 + 0.82 * 0.5));
+  });
+
+  it('honors custom ramp endpoints', () => {
+    expect(choroplethColor(100, 100, '#000000', '#ffffff')).toBe('#ffffff');
+    expect(choroplethColor(100, 100, '#112233', '#445566')).toBe('#445566');
   });
 
   it('sizes markers by type and scaled investment', () => {

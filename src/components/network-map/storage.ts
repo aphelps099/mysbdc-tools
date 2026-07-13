@@ -72,13 +72,15 @@ export function saveMeta(storage: StorageLike, meta: BackupMeta): void {
    silently discard those edits. */
 export interface SyncMarker {
   serverUpdatedAt: string;
-  lastSyncedLocations: string;
+  /* Opaque JSON snapshot of the shared parts (locations + design) this
+     browser last synced — compared for dirtiness across reloads. */
+  lastSyncedShared: string;
 }
 
 export function loadSyncMarker(storage: StorageLike): SyncMarker | null {
   try {
     const raw = JSON.parse(storage.getItem(SYNC_MARKER_KEY) || 'null');
-    if (raw && typeof raw.serverUpdatedAt === 'string' && typeof raw.lastSyncedLocations === 'string') {
+    if (raw && typeof raw.serverUpdatedAt === 'string' && typeof raw.lastSyncedShared === 'string') {
       return raw;
     }
   } catch {
