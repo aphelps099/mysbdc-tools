@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "force": false,
+  "locations": [],
+  "settings": {},
+  "updatedAt": "2026-07-13T00:00:00.000Z",
+  "_readme": "Published canonical network dataset. Staff see this read-only view by default; the app layers local edits on top. To publish an update: open /network-map, make edits, Data tab → Export JSON backup, then replace this file's version/locations/settings/updatedAt with the exported values and commit. Pending: seed the real host/branch/investment data (plan decision D5)."
+}
