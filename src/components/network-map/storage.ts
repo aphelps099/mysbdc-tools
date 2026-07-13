@@ -80,8 +80,13 @@ export interface SyncMarker {
 export function loadSyncMarker(storage: StorageLike): SyncMarker | null {
   try {
     const raw = JSON.parse(storage.getItem(SYNC_MARKER_KEY) || 'null');
-    if (raw && typeof raw.serverUpdatedAt === 'string' && typeof raw.lastSyncedShared === 'string') {
-      return raw;
+    if (!raw || typeof raw.serverUpdatedAt !== 'string') return null;
+    if (typeof raw.lastSyncedShared === 'string') return raw;
+    // Legacy marker (locations-only snapshot) — carry it forward so an
+    // upgraded client keeps a valid baseline instead of starting from null
+    // (which would read as a spurious conflict on first load after deploy).
+    if (typeof raw.lastSyncedLocations === 'string') {
+      return { serverUpdatedAt: raw.serverUpdatedAt, lastSyncedShared: raw.lastSyncedLocations };
     }
   } catch {
     /* fall through */

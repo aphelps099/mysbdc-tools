@@ -27,7 +27,7 @@ export const DEFAULT_STYLE: MapStyle = {
   branchBorder: '#ffffff',
   borderColor: '#f7f4ee',
   borderWidth: 3,
-  territoryOpacity: 0.62,
+  territoryOpacity: 0.82,
   choroplethFrom: '#eef2f8',
   choroplethTo: '#2b5ea7',
   basemap: 'streets-v2',

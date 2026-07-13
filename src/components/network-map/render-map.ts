@@ -112,11 +112,14 @@ function drawPin(
   ctx.fillStyle = fill;
   ctx.beginPath();
   if (isHost) {
-    // Rounded diamond.
-    ctx.moveTo(0, -r);
-    ctx.lineTo(r, 0);
-    ctx.lineTo(0, r);
-    ctx.lineTo(-r, 0);
+    // Diamond. The on-screen host pin is a `size`-wide square rotated 45°, so
+    // its rendered diagonal is size·√2 — match that here (vertices at ±size/√2)
+    // rather than ±size/2, which would export hosts ~29% too small.
+    const d = size / Math.SQRT2;
+    ctx.moveTo(0, -d);
+    ctx.lineTo(d, 0);
+    ctx.lineTo(0, d);
+    ctx.lineTo(-d, 0);
     ctx.closePath();
   } else {
     ctx.arc(0, 0, r, 0, Math.PI * 2);
@@ -149,8 +152,10 @@ export function drawNetworkMap(ctx: CanvasRenderingContext2D, options: RenderOpt
   const max = Math.max(...values, 0);
 
   // ── County fills ──
-  const territoryOpacity = hasBasemap ? style.territoryOpacity : Math.min(1, style.territoryOpacity + 0.28);
-  const investOpacity = hasBasemap ? 0.68 : 0.9;
+  // Match the on-screen Leaflet layer exactly (WYSIWYG export): territory
+  // mode uses the user's "County color strength"; investment modes use 0.68.
+  const territoryOpacity = style.territoryOpacity;
+  const investOpacity = 0.68;
   for (const feature of counties.features) {
     const region = getRegion(feature.properties.region);
     const fill =
