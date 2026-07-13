@@ -29,7 +29,15 @@
 .nm-app textarea {
   font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
   font-size: 13px;
-  color: inherit;
+}
+
+/* Color is set per-class below. Never put `color` on `.nm-app button` —
+   its (0,1,1) specificity beats single-class rules like .nm-btn-primary
+   and turns white-on-blue buttons into ink-on-blue. */
+.nm-app input,
+.nm-app select,
+.nm-app textarea {
+  color: var(--nm-ink);
 }
 
 .nm-app :focus-visible {
@@ -150,7 +158,7 @@
   border-bottom: 1px solid var(--nm-border);
 }
 
-.nm-tab {
+.nm-app .nm-tab {
   flex: 1;
   padding: 10px 6px;
   background: none;
@@ -161,7 +169,7 @@
   color: var(--nm-muted);
 }
 
-.nm-tab.active {
+.nm-app .nm-tab.active {
   color: var(--nm-ink);
   border-bottom-color: var(--nm-gold);
 }
@@ -193,35 +201,38 @@
 }
 
 /* ── Buttons ── */
-.nm-btn {
+.nm-app .nm-btn {
   padding: 8px 12px;
   border: 1px solid var(--nm-border);
   border-radius: 9px;
   background: var(--nm-panel);
+  color: var(--nm-ink);
   cursor: pointer;
   font-weight: 600;
 }
 
-.nm-btn:hover:not(:disabled) {
+.nm-app .nm-btn:hover:not(:disabled) {
   border-color: var(--nm-ink);
 }
 
-.nm-btn:disabled {
+.nm-app .nm-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.nm-btn-primary {
+.nm-app .nm-btn-primary {
   background: var(--nm-navy);
   border-color: var(--nm-navy);
   color: #fff;
 }
 
-.nm-btn-primary:hover:not(:disabled) {
+.nm-app .nm-btn-primary:hover:not(:disabled) {
   background: #16368c;
+  color: #fff;
 }
 
-.nm-btn-danger {
+.nm-app .nm-btn-danger {
+  background: var(--nm-panel);
   color: var(--nm-danger);
   border-color: #dcb9bf;
 }
@@ -281,7 +292,8 @@
   gap: 6px;
 }
 
-.nm-location-row {
+.nm-app .nm-location-row {
+  color: var(--nm-ink);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -294,11 +306,11 @@
   text-align: left;
 }
 
-.nm-location-row:hover {
+.nm-app .nm-location-row:hover {
   border-color: var(--nm-ink);
 }
 
-.nm-location-row.selected {
+.nm-app .nm-location-row.selected {
   border-color: var(--nm-navy);
   box-shadow: 0 0 0 1px var(--nm-navy);
 }
@@ -513,7 +525,8 @@
   gap: 5px;
 }
 
-.nm-geocode-result {
+.nm-app .nm-geocode-result {
+  color: var(--nm-ink);
   padding: 8px 10px;
   border: 1px solid var(--nm-border);
   border-radius: 9px;
@@ -561,7 +574,7 @@
   overflow: hidden;
 }
 
-.nm-segmented button {
+.nm-app .nm-segmented button {
   flex: 1;
   padding: 8px 4px;
   border: none;
@@ -572,11 +585,11 @@
   color: var(--nm-muted);
 }
 
-.nm-segmented button + button {
+.nm-app .nm-segmented button + button {
   border-left: 1px solid var(--nm-border);
 }
 
-.nm-segmented button.active {
+.nm-app .nm-segmented button.active {
   background: var(--nm-navy);
   color: #fff;
 }
@@ -640,7 +653,7 @@
   gap: 6px;
 }
 
-.nm-chip {
+.nm-app .nm-chip {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -654,7 +667,7 @@
   color: var(--nm-muted);
 }
 
-.nm-chip.active {
+.nm-app .nm-chip.active {
   color: var(--nm-ink);
   border-color: var(--nm-ink);
 }
@@ -912,6 +925,10 @@
     gap: 10px;
   }
 
+  .nm-sync {
+    white-space: normal;
+  }
+
   .nm-stats {
     order: 3;
     width: 100%;
@@ -928,6 +945,63 @@
   }
 }
 
+/* ── Sync status (topbar) ── */
+.nm-sync {
+  font-size: 11px;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  color: var(--nm-muted);
+  white-space: nowrap;
+}
+
+.nm-sync.saved {
+  color: #22733a;
+}
+
+.nm-sync.offline {
+  color: var(--nm-danger);
+}
+
+/* ── Share & export ── */
+.nm-export-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nm-export-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nm-export-row > span {
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.nm-advanced {
+  margin-top: 18px;
+  border: 1px solid var(--nm-border);
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.nm-advanced summary {
+  cursor: pointer;
+  padding: 10px 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-muted);
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+}
+
+.nm-advanced[open] {
+  padding-bottom: 12px;
+}
+
 /* ── Print: full-page map, no chrome ── */
 @media print {
   .nm-topbar,
@@ -935,7 +1009,8 @@
   .nm-map-toolbar,
   .nm-toast,
   .nm-banner,
-  .nm-basemap-notice {
+  .nm-basemap-notice,
+  .leaflet-control-zoom {
     display: none !important;
   }
 

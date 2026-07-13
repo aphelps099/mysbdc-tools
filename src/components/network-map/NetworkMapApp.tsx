@@ -5,6 +5,7 @@ import Link from 'next/link';
 import './network-map.css';
 import MapCanvas, { type MapHandle } from './MapCanvas';
 import LocationEditor, { emptyDraft, type LocationDraft } from './LocationEditor';
+import { exportMapImage } from './export-image';
 import { getRegion, REGIONS } from './regions';
 import {
   DEFAULT_SETTINGS,
@@ -21,9 +22,11 @@ import {
 import {
   loadMeta,
   loadStoredWorkspace,
+  loadSyncMarker,
   saveMeta,
+  saveSyncMarker,
   saveWorkspace,
-  shouldNudgeBackup,
+  SYNC_PULSE_KEY,
   WORKSPACE_STORAGE_KEY,
   type BackupMeta,
 } from './storage';
@@ -32,22 +35,30 @@ import type {
   BuilderSettings,
   CountyCollection,
   FillMode,
+  GeocodeCandidate,
   NetworkLocation,
   Workspace,
 } from './types';
 
 /* ═══════════════════════════════════════════════════════
-   Network Map — map the NorCal SBDC network: territory
-   hosts, neighborhood branches, and investment by region.
-   Ported from the standalone prototype; see
-   docs/region-builder-plan.md and docs/network-map.md.
+   Network Map — one shared live map of the NorCal SBDC
+   network. Edits save automatically to the server
+   (/api/network-map/workspace); every save carries the
+   last-seen server version so nobody can silently overwrite
+   anyone else, and a persisted sync marker lets offline
+   edits survive reloads. localStorage is only a cache.
+   See docs/network-map.md.
    ═══════════════════════════════════════════════════════ */
 
 type Panel = 'network' | 'editor' | 'data';
+type SyncStatus = 'loading' | 'saved' | 'saving' | 'offline' | 'conflict';
 
+const WORKSPACE_API = '/api/network-map/workspace';
 const CANONICAL_URL = '/data/network-map/network.v1.json';
 const COUNTIES_URL = '/data/network-map/counties.v1.geojson';
 const BORDERS_URL = '/data/network-map/region-borders.v1.geojson';
+const SAVE_DEBOUNCE_MS = 1200;
+const OFFLINE_RETRY_MS = 15000;
 
 const FILL_MODES: Array<{ mode: FillMode; label: string }> = [
   { mode: 'territories', label: 'Regions' },
@@ -56,11 +67,25 @@ const FILL_MODES: Array<{ mode: FillMode; label: string }> = [
   { mode: 'branch', label: 'Branch $' },
 ];
 
+const IMAGE_SIZES: Array<{ label: string; scale: number }> = [
+  { label: 'Standard', scale: 2 },
+  { label: 'Large', scale: 4 },
+  { label: 'Poster', scale: 6 },
+];
+
 const LEGEND_COPY: Record<FillMode, [string, string]> = {
   territories: ['Service regions', 'County color identifies one of eight SBDC service regions.'],
   total: ['Total investment', 'Combined host and branch investment by service region.'],
   host: ['Host investment', 'Host investment by service region.'],
   branch: ['Branch investment', 'Neighborhood branch investment by service region.'],
+};
+
+const SYNC_LABELS: Record<SyncStatus, string> = {
+  loading: 'Loading the shared map…',
+  saved: '✓ Saved for everyone',
+  saving: 'Saving…',
+  offline: 'Offline — reconnecting…',
+  conflict: 'Someone else saved changes — choose a version above',
 };
 
 function downloadText(filename: string, text: string, type: string) {
@@ -77,8 +102,8 @@ function downloadText(filename: string, text: string, type: string) {
 
 export default function NetworkMapApp() {
   const [workspace, setWorkspace] = useState<Workspace | null>(() => loadStoredWorkspace(window.localStorage));
+  const [initialMarker] = useState(() => loadSyncMarker(window.localStorage));
   const [meta, setMeta] = useState<BackupMeta>(() => loadMeta(window.localStorage));
-  const [canonical, setCanonical] = useState<Workspace | null>(null);
   const [counties, setCounties] = useState<CountyCollection | null>(null);
   const [borders, setBorders] = useState<BorderCollection | null>(null);
   const [panel, setPanel] = useState<Panel>('network');
@@ -86,75 +111,274 @@ export default function NetworkMapApp() {
   const [draft, setDraft] = useState<LocationDraft>(emptyDraft);
   const [pickMode, setPickMode] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [externalChange, setExternalChange] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>('loading');
+  const [conflict, setConflict] = useState<Workspace | null>(null);
+  const [exportScale, setExportScale] = useState<number | null>(null);
+  const [saveBusy, setSaveBusy] = useState(false);
+
   const mapRef = useRef<MapHandle>(null);
+  const mapWrapRef = useRef<HTMLElement>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const hadStoredRef = useRef(workspace !== null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const workspaceRef = useRef<Workspace | null>(workspace);
+  const serverUpdatedAtRef = useRef<string | null>(initialMarker?.serverUpdatedAt ?? null);
+  const lastSyncedLocationsRef = useRef<string | null>(initialMarker?.lastSyncedLocations ?? null);
+  const syncStatusRef = useRef<SyncStatus>('loading');
+  const inFlightRef = useRef(false);
+  const draftRef = useRef<LocationDraft>(draft);
+  const pickModeRef = useRef(false);
+  const saveTokenRef = useRef(0);
+  workspaceRef.current = workspace;
+  syncStatusRef.current = syncStatus;
+  draftRef.current = draft;
+  pickModeRef.current = pickMode;
 
   const showToast = useCallback((message: string) => {
     setToast(message);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => setToast(null), 2600);
+    toastTimerRef.current = setTimeout(() => setToast(null), 3200);
   }, []);
 
-  /* ── Data + canonical workspace loading ── */
+  /* Record that this browser is in sync with the server — kept in
+     localStorage so a reload can tell clean cache from un-synced edits. */
+  const markSynced = useCallback((serverUpdatedAt: string, locationsJson: string) => {
+    serverUpdatedAtRef.current = serverUpdatedAt;
+    lastSyncedLocationsRef.current = locationsJson;
+    saveSyncMarker(window.localStorage, { serverUpdatedAt, lastSyncedLocations: locationsJson });
+  }, []);
+
+  const isDirty = useCallback(() => {
+    const current = workspaceRef.current;
+    return current !== null && JSON.stringify(current.locations) !== lastSyncedLocationsRef.current;
+  }, []);
+
+  /* Adopt a server workspace. Locations are shared; view settings (filters,
+     search, toggles) stay personal to this browser. */
+  const adoptServerWorkspace = useCallback(
+    (incoming: Workspace) => {
+      markSynced(incoming.updatedAt, JSON.stringify(incoming.locations));
+      setWorkspace((prev) => ({
+        ...incoming,
+        settings: prev?.settings ?? {
+          ...incoming.settings,
+          search: '',
+          regionFilter: 'all',
+          showHosts: true,
+          showBranches: true,
+        },
+      }));
+    },
+    [markSynced],
+  );
+
+  /* ── Save to the server ── */
+  const flushSave = useCallback(
+    async (force = false) => {
+      const current = workspaceRef.current;
+      if (!current || inFlightRef.current) return;
+      const locationsJson = JSON.stringify(current.locations);
+      if (!force && locationsJson === lastSyncedLocationsRef.current) return;
+
+      inFlightRef.current = true;
+      if (syncStatusRef.current !== 'offline') setSyncStatus('saving');
+      try {
+        if (!force && serverUpdatedAtRef.current === null) {
+          // This browser has never synced. Establish a base first — blindly
+          // writing here could overwrite everyone's map with stale data.
+          const probe = await fetch(WORKSPACE_API);
+          if (probe.ok) {
+            const data = await probe.json();
+            const incoming = normalizeState(data.workspace);
+            if (JSON.stringify(incoming.locations) === locationsJson) {
+              markSynced(incoming.updatedAt, locationsJson);
+              setSyncStatus('saved');
+            } else {
+              setConflict(incoming);
+              setSyncStatus('conflict');
+            }
+            return;
+          }
+          if (probe.status !== 404) throw new Error('probe failed');
+          // 404: nothing exists server-side at all — safe to create below.
+        }
+
+        const response = await fetch(WORKSPACE_API, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            workspace: current,
+            baseUpdatedAt: force ? undefined : (serverUpdatedAtRef.current ?? undefined),
+            force: force || undefined,
+          }),
+        });
+        if (response.status === 409) {
+          const data = await response.json();
+          setConflict(normalizeState(data.workspace));
+          setSyncStatus('conflict');
+          return;
+        }
+        if (!response.ok) throw new Error('save failed');
+        const data = await response.json();
+        markSynced(data.workspace?.updatedAt ?? new Date().toISOString(), locationsJson);
+        try {
+          window.localStorage.setItem(SYNC_PULSE_KEY, String(Date.now()));
+        } catch {
+          /* pulse is best-effort */
+        }
+        setConflict(null);
+        // If more edits landed mid-flight, the save effect reschedules.
+        setSyncStatus('saved');
+      } catch {
+        setSyncStatus('offline');
+      } finally {
+        inFlightRef.current = false;
+      }
+    },
+    [markSynced],
+  );
+
+  /* ── Refresh from the server (focus, cross-tab pulse, reconnect) ── */
+  const refreshFromServer = useCallback(async () => {
+    if (inFlightRef.current) return;
+    const status = syncStatusRef.current;
+    if (status === 'loading' || status === 'saving' || status === 'conflict') return;
+    if (isDirty()) {
+      // Un-synced local edits take priority: push them (the server's base
+      // check turns any real clash into the conflict banner).
+      flushSave();
+      return;
+    }
+    if (draftRef.current.id !== '') return; // don't yank an open edit out from under the user
+    try {
+      const response = await fetch(WORKSPACE_API);
+      if (!response.ok) return;
+      const data = await response.json();
+      // Re-check: an edit, save, or conflict may have started during the fetch.
+      if (inFlightRef.current || isDirty() || draftRef.current.id !== '') return;
+      if (syncStatusRef.current === 'saving' || syncStatusRef.current === 'conflict') return;
+      const incoming = normalizeState(data.workspace);
+      if (incoming.updatedAt !== serverUpdatedAtRef.current) {
+        adoptServerWorkspace(incoming);
+        showToast('Map updated with the latest shared changes');
+      }
+      if (syncStatusRef.current === 'offline') setSyncStatus('saved');
+    } catch {
+      /* still offline — keep the current copy */
+    }
+  }, [adoptServerWorkspace, flushSave, isDirty, showToast]);
+
+  /* ── Initial load: geo data + the shared workspace ── */
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const [countiesRes, bordersRes, canonicalRes] = await Promise.all([
-          fetch(COUNTIES_URL),
-          fetch(BORDERS_URL),
-          fetch(CANONICAL_URL),
-        ]);
+        const [countiesRes, bordersRes] = await Promise.all([fetch(COUNTIES_URL), fetch(BORDERS_URL)]);
         if (cancelled) return;
         if (countiesRes.ok) setCounties(await countiesRes.json());
         if (bordersRes.ok) setBorders(await bordersRes.json());
-        if (canonicalRes.ok) setCanonical(normalizeState(await canonicalRes.json()));
       } catch {
         /* county layer failure surfaces via the map's empty state */
+      }
+    })();
+    (async () => {
+      try {
+        const response = await fetch(WORKSPACE_API);
+        if (!response.ok) throw new Error('workspace fetch failed');
+        const data = await response.json();
+        if (cancelled) return;
+        const incoming = normalizeState(data.workspace);
+        const local = workspaceRef.current;
+        const dirty = local !== null && JSON.stringify(local.locations) !== lastSyncedLocationsRef.current;
+        if (!dirty) {
+          adoptServerWorkspace(incoming);
+          setSyncStatus('saved');
+        } else if (incoming.updatedAt === serverUpdatedAtRef.current) {
+          // Offline edits from a previous session, server unchanged since —
+          // keep them; the save effect pushes them up.
+          setSyncStatus('saving');
+        } else {
+          // Both sides moved: let the user arbitrate.
+          setConflict(incoming);
+          setSyncStatus('conflict');
+        }
+      } catch {
+        if (cancelled) return;
+        setSyncStatus('offline');
+        if (!workspaceRef.current) {
+          try {
+            const seedRes = await fetch(CANONICAL_URL);
+            if (seedRes.ok && !cancelled && !workspaceRef.current) {
+              setWorkspace(normalizeState(await seedRes.json()));
+            }
+          } catch {
+            if (!workspaceRef.current) setWorkspace(normalizeState({}));
+          }
+        }
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [adoptServerWorkspace]);
 
-  // First visit (no local workspace): adopt the published canonical network.
+  /* ── Cache locally + schedule server saves ── */
   useEffect(() => {
-    if (!hadStoredRef.current && workspace === null && canonical) {
-      setWorkspace(structuredClone(canonical));
+    if (!workspace) return;
+    saveWorkspace(window.localStorage, workspace);
+    if (syncStatus === 'loading' || syncStatus === 'conflict') return;
+    const dirty = JSON.stringify(workspace.locations) !== lastSyncedLocationsRef.current;
+    if (!dirty) {
+      // Edits reverted to the synced snapshot inside the debounce window.
+      if (syncStatus === 'saving' && !inFlightRef.current) setSyncStatus('saved');
+      return;
     }
-  }, [canonical, workspace]);
-
-  /* ── Persistence ── */
-  useEffect(() => {
-    if (workspace) saveWorkspace(window.localStorage, workspace);
-  }, [workspace]);
+    if (syncStatus === 'saved') setSyncStatus('saving');
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => flushSave(), syncStatus === 'offline' ? OFFLINE_RETRY_MS : SAVE_DEBOUNCE_MS);
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [workspace, syncStatus, flushSave]);
 
   useEffect(() => {
     saveMeta(window.localStorage, meta);
   }, [meta]);
 
-  // Cross-tab guard: another tab wrote this workspace.
   useEffect(() => {
-    const onStorage = (event: StorageEvent) => {
-      if (event.key === WORKSPACE_STORAGE_KEY && event.newValue !== null) setExternalChange(true);
+    const onFocus = () => refreshFromServer();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') refreshFromServer();
     };
+    const onStorage = (event: StorageEvent) => {
+      if ((event.key === SYNC_PULSE_KEY || event.key === WORKSPACE_STORAGE_KEY) && event.newValue !== null) {
+        refreshFromServer();
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || !pickModeRef.current) return;
+      setPickMode(false);
+      showToast('Done placing pins');
+    };
+    window.addEventListener('focus', onFocus);
+    window.addEventListener('online', onFocus);
+    document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('online', onFocus);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [refreshFromServer, showToast]);
 
   const settings = workspace?.settings ?? DEFAULT_SETTINGS;
   const locations = useMemo(() => workspace?.locations ?? [], [workspace]);
 
   const updateSettings = useCallback((patch: Partial<BuilderSettings>) => {
-    setWorkspace((prev) =>
-      prev
-        ? { ...prev, settings: { ...prev.settings, ...patch }, updatedAt: new Date().toISOString() }
-        : prev,
-    );
+    setWorkspace((prev) => (prev ? { ...prev, settings: { ...prev.settings, ...patch } } : prev));
   }, []);
 
   const mutateLocations = useCallback((updater: (previous: NetworkLocation[]) => NetworkLocation[]) => {
@@ -196,15 +420,22 @@ export default function NetworkMapApp() {
     if (panel !== 'editor' || lat == null || lon == null) return null;
     return { type: draft.type, lat, lon, investment: Math.max(0, finiteNumber(draft.investment) || 0) };
   }, [draft, panel]);
-  const nudgeBackup = workspace !== null && shouldNudgeBackup(meta, locations.length);
+  const hasUnsyncedEdits = useMemo(
+    () => workspace !== null && JSON.stringify(workspace.locations) !== lastSyncedLocationsRef.current,
+    // syncStatus is a dependency because the refs update on sync transitions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [workspace, syncStatus],
+  );
 
   /* ── Panel / editor flows ── */
   const openPanel = useCallback((next: Panel) => {
     setPanel(next);
+    if (next !== 'editor') setPickMode(false);
     mapRef.current?.invalidateSize();
   }, []);
 
   const startAdd = useCallback(() => {
+    saveTokenRef.current += 1;
     setDraft(emptyDraft());
     setPickMode(false);
     openPanel('editor');
@@ -214,6 +445,7 @@ export default function NetworkMapApp() {
     (id: string) => {
       const location = locations.find((item) => item.id === id);
       if (!location) return;
+      saveTokenRef.current += 1;
       setSelectedId(id);
       setDraft({
         id: location.id,
@@ -226,6 +458,7 @@ export default function NetworkMapApp() {
         lon: hasCoordinates(location) ? String(location.lon) : '',
         notes: location.notes,
         regionHint: null,
+        regionChosen: true,
       });
       setPickMode(false);
       openPanel('editor');
@@ -233,21 +466,59 @@ export default function NetworkMapApp() {
     [locations, openPanel],
   );
 
-  const saveDraft = useCallback(() => {
+  const saveDraft = useCallback(async () => {
     const name = draft.name.trim();
     if (!name) {
       showToast('Add an organization or location name');
       return;
     }
+    if (saveBusy) return;
+
+    let lat = finiteNumber(draft.lat);
+    let lon = finiteNumber(draft.lon);
+    let regionId = Number(draft.regionId) || 1;
+    let autoPlaced = false;
+
+    // Bulletproofing: an address without a pin gets located automatically
+    // when the lookup finds exactly one confident match.
+    if ((lat == null || lon == null) && draft.address.trim()) {
+      const token = ++saveTokenRef.current;
+      setSaveBusy(true);
+      showToast('Finding the address…');
+      try {
+        const response = await fetch('/api/geocode?q=' + encodeURIComponent(draft.address.trim()), {
+          signal: AbortSignal.timeout(20000),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const candidates: GeocodeCandidate[] = data.results || [];
+          if (candidates.length === 1 && candidates[0].precision !== 'relaxed') {
+            lat = candidates[0].lat;
+            lon = candidates[0].lon;
+            if (!draft.regionChosen) {
+              const detected = detectRegion(counties, lat, lon);
+              if (detected) regionId = detected;
+            }
+            autoPlaced = true;
+          }
+        }
+      } catch {
+        /* lookup unavailable — save unplaced below */
+      }
+      setSaveBusy(false);
+      // The user cancelled or switched locations while we were looking up.
+      if (saveTokenRef.current !== token) return;
+    }
+
     const location: NetworkLocation = {
       id: draft.id || makeId(),
       type: draft.type,
       name,
-      regionId: Number(draft.regionId) || 1,
+      regionId,
       address: draft.address.trim(),
       investment: Math.max(0, finiteNumber(draft.investment) || 0),
-      lat: finiteNumber(draft.lat),
-      lon: finiteNumber(draft.lon),
+      lat,
+      lon,
       notes: draft.notes.trim(),
     };
     const editing = draft.id !== '';
@@ -266,14 +537,21 @@ export default function NetworkMapApp() {
     openPanel('network');
     if (hasCoordinates(location)) {
       mapRef.current?.flyToLocation(location.lat!, location.lon!, 10, location.id);
+      showToast(
+        autoPlaced
+          ? `Added ${location.name} — pin placed from the address. Double-check it on the map.`
+          : (editing ? 'Updated ' : 'Added ') + location.name,
+      );
+    } else {
+      showToast(`Saved ${location.name} — use Find address or a map click to place its pin.`);
     }
-    showToast((editing ? 'Updated ' : 'Added ') + location.name);
-  }, [draft, mutateLocations, openPanel, showToast]);
+  }, [counties, draft, mutateLocations, openPanel, saveBusy, showToast]);
 
   const deleteDraft = useCallback(() => {
     const location = locations.find((item) => item.id === draft.id);
     if (!location) return;
-    if (!window.confirm(`Delete "${location.name}"?`)) return;
+    if (!window.confirm(`Delete "${location.name}" from the shared map?`)) return;
+    saveTokenRef.current += 1;
     mutateLocations((previous) => previous.filter((item) => item.id !== location.id));
     setSelectedId(null);
     setDraft(emptyDraft());
@@ -291,7 +569,7 @@ export default function NetworkMapApp() {
         mapRef.current?.flyToLocation(location.lat!, location.lon!, 11, id);
       } else {
         openEditor(id);
-        showToast('Add coordinates or use address lookup to place this location');
+        showToast('Use Find address or a map click to place this location');
       }
     },
     [locations, openEditor, showToast],
@@ -300,17 +578,22 @@ export default function NetworkMapApp() {
   const handleMapPick = useCallback(
     (lat: number, lon: number) => {
       const detected = detectRegion(counties, lat, lon);
-      setDraft((previous) => ({
-        ...previous,
-        lat: lat.toFixed(6),
-        lon: lon.toFixed(6),
-        regionId: detected ? String(detected) : previous.regionId,
-        regionHint: detected
-          ? 'Region suggested from the map position — verify near county lines.'
-          : 'That point is outside the 36-county service area — choose the region manually.',
-      }));
-      setPickMode(false);
-      showToast('Pin placed. Add or confirm the street address, then save.');
+      setDraft((previous) => {
+        const next = { ...previous, lat: lat.toFixed(6), lon: lon.toFixed(6) };
+        if (!detected) {
+          next.regionHint = 'That point is outside the 36-county service area — choose the region manually.';
+        } else if (!previous.regionChosen) {
+          next.regionId = String(detected);
+          next.regionHint = 'Region suggested from the map position — verify near county lines.';
+        } else if (String(detected) !== previous.regionId) {
+          next.regionHint = `The map position looks like ${getRegion(detected).name} — double-check the service region.`;
+        } else {
+          next.regionHint = null;
+        }
+        return next;
+      });
+      // Pick mode stays on: keep clicking until the pin is right.
+      showToast('Pin placed — click again to adjust, or press Done placing');
     },
     [counties, showToast],
   );
@@ -324,13 +607,31 @@ export default function NetworkMapApp() {
     [updateSettings, openPanel, showToast],
   );
 
-  /* ── Import / export / workspace actions ── */
+  /* ── Exports / import / workspace actions ── */
   const exportJson = useCallback(() => {
     if (!workspace) return;
     downloadText('norcal-sbdc-network-backup.json', JSON.stringify(workspace, null, 2), 'application/json');
     setMeta((prev) => ({ ...prev, lastExportAt: new Date().toISOString(), editsSinceExport: 0 }));
-    showToast('JSON backup downloaded');
+    showToast('Backup file downloaded');
   }, [workspace, showToast]);
+
+  const exportImage = useCallback(
+    async (scale: number) => {
+      const element = mapWrapRef.current;
+      if (!element || exportScale !== null) return;
+      setExportScale(scale);
+      showToast('Rendering the map image…');
+      try {
+        await exportMapImage(element, scale);
+        showToast('Map image downloaded');
+      } catch {
+        showToast('Could not render the map image in this browser — try Print / save as PDF.');
+      } finally {
+        setExportScale(null);
+      }
+    },
+    [exportScale, showToast],
+  );
 
   const importFile = useCallback(
     async (file: File) => {
@@ -344,14 +645,13 @@ export default function NetworkMapApp() {
         } else if (data && Array.isArray(data.locations)) {
           importedState = normalizeState(data);
         } else {
-          throw new Error('JSON does not contain a locations array');
+          throw new Error('not a backup');
         }
         const replace = window.confirm(
-          'Replace existing locations?\n\nChoose OK to replace, or Cancel to append the imported records.',
+          'Replace the locations everyone sees with this file?\n\nChoose OK to replace, or Cancel to add the imported records alongside the current ones.',
         );
         setWorkspace((prev) => {
           const base = prev ?? normalizeState({});
-          if (importedState && replace) return importedState;
           const items = importedState ? importedState.locations : importedLocations!;
           return {
             ...base,
@@ -361,29 +661,25 @@ export default function NetworkMapApp() {
         });
         setMeta((prev) => ({ ...prev, editsSinceExport: prev.editsSinceExport + 1 }));
         openPanel('network');
-        showToast('Import complete');
-      } catch (error) {
-        showToast('Import failed: ' + (error instanceof Error ? error.message : 'unreadable file'));
+        showToast('Import complete — saving for everyone');
+      } catch {
+        showToast("Import failed — that file doesn't look like a map backup.");
       }
     },
     [openPanel, showToast],
   );
 
-  const resetToPublished = useCallback(() => {
-    if (!canonical) return;
-    if (!window.confirm('Replace your local workspace with the published network? Local edits will be lost.')) return;
-    setWorkspace(structuredClone(canonical));
-    setSelectedId(null);
-    showToast('Loaded the published network');
-  }, [canonical, showToast]);
-
   const clearWorkspace = useCallback(() => {
     if (!locations.length) return;
-    if (!window.confirm('Clear all host and branch location data? Export a JSON backup first if you may need it later.'))
+    if (
+      !window.confirm(
+        'Remove ALL locations from the shared map? Everyone will see an empty map. (The server keeps recent backups.)',
+      )
+    )
       return;
     mutateLocations(() => []);
     setSelectedId(null);
-    showToast('Location data cleared');
+    showToast('All locations removed');
   }, [locations.length, mutateLocations, showToast]);
 
   const clearFilters = useCallback(() => {
@@ -401,6 +697,9 @@ export default function NetworkMapApp() {
           <div>
             <h1>Network Map</h1>
             <p>NorCal SBDC hosts, branches &amp; investment</p>
+            <p className={'nm-sync ' + (syncStatus === 'saved' ? 'saved' : syncStatus === 'offline' ? 'offline' : '')}>
+              {SYNC_LABELS[syncStatus]}
+            </p>
           </div>
         </div>
         <div className="nm-stats" aria-label="Network totals">
@@ -430,42 +729,38 @@ export default function NetworkMapApp() {
         </div>
       </header>
 
-      {externalChange && (
+      {conflict && (
         <div className="nm-banner" role="alert">
-          <span>This workspace was changed in another tab.</span>
+          <span>Someone else saved changes to the shared map while you were editing.</span>
+          <button
+            type="button"
+            className="nm-btn nm-btn-small nm-btn-primary"
+            onClick={() => {
+              adoptServerWorkspace(conflict);
+              setConflict(null);
+              setSyncStatus('saved');
+              showToast('Loaded the latest shared map');
+            }}
+          >
+            Use their version
+          </button>
           <button
             type="button"
             className="nm-btn nm-btn-small"
             onClick={() => {
-              const latest = loadStoredWorkspace(window.localStorage);
-              if (latest) setWorkspace(latest);
-              setExternalChange(false);
+              setConflict(null);
+              flushSave(true);
             }}
           >
-            Load latest
-          </button>
-          <button type="button" className="nm-btn nm-btn-small" onClick={() => setExternalChange(false)}>
-            Keep mine
+            Keep my version
           </button>
         </div>
       )}
-      {nudgeBackup && !externalChange && (
+      {syncStatus === 'offline' && hasUnsyncedEdits && !conflict && (
         <div className="nm-banner nm-banner-soft" role="status">
-          <span>You have unsaved-to-file edits — browser storage is the only copy.</span>
+          <span>You&rsquo;re offline — recent edits live only in this browser until the connection comes back.</span>
           <button type="button" className="nm-btn nm-btn-small nm-btn-primary" onClick={exportJson}>
-            Download JSON backup
-          </button>
-          <button
-            type="button"
-            className="nm-btn nm-btn-small"
-            onClick={() =>
-              setMeta((prev) => ({
-                ...prev,
-                nudgeSnoozedUntil: new Date(Date.now() + 7 * 86400000).toISOString(),
-              }))
-            }
-          >
-            Remind me later
+            Download backup file
           </button>
         </div>
       )}
@@ -568,7 +863,9 @@ export default function NetworkMapApp() {
                           {region.name}
                           {location.address ? ' · ' + location.address : ''}
                         </span>
-                        {!hasCoordinates(location) && <span className="nm-needs-pin">Needs map position</span>}
+                        {!hasCoordinates(location) && (
+                          <span className="nm-needs-pin">No map pin yet — open to place it</span>
+                        )}
                       </span>
                       <span className="nm-location-invest">{formatMoney(location.investment, true)}</span>
                     </button>
@@ -611,16 +908,14 @@ export default function NetworkMapApp() {
                 onChange={setDraft}
                 onSave={saveDraft}
                 onCancel={() => {
+                  saveTokenRef.current += 1;
                   setDraft(emptyDraft());
                   setPickMode(false);
                   openPanel('network');
                 }}
                 onDelete={deleteDraft}
                 onTogglePick={() => {
-                  setPickMode((previous) => {
-                    if (!previous) showToast('Click the map to place this location');
-                    return !previous;
-                  });
+                  setPickMode((previous) => !previous);
                 }}
                 onFlyTo={(lat, lon, zoom) => mapRef.current?.flyToLocation(lat, lon, zoom)}
               />
@@ -671,21 +966,50 @@ export default function NetworkMapApp() {
                 />
               </label>
 
-              <h3 className="nm-section-title">Workspace</h3>
-              <div className="nm-export-grid">
-                <button type="button" className="nm-btn" onClick={exportJson}>
-                  Export JSON backup
+              <h3 className="nm-section-title">Share &amp; export</h3>
+              <div className="nm-export-stack">
+                <button type="button" className="nm-btn" onClick={() => window.print()}>
+                  Print / save as PDF
                 </button>
-                <button type="button" className="nm-btn" onClick={() => importInputRef.current?.click()}>
-                  Import JSON
-                </button>
-                <button type="button" className="nm-btn" onClick={resetToPublished} disabled={!canonical}>
-                  Reset to published network
-                </button>
-                <button type="button" className="nm-btn nm-btn-danger" onClick={clearWorkspace}>
-                  Clear workspace
-                </button>
+                <div className="nm-export-row">
+                  <span>Map image (PNG)</span>
+                  {IMAGE_SIZES.map(({ label, scale }) => (
+                    <button
+                      key={scale}
+                      type="button"
+                      className="nm-btn nm-btn-small"
+                      disabled={exportScale !== null}
+                      title={`${label} resolution (${scale}× the on-screen size)`}
+                      onClick={() => exportImage(scale)}
+                    >
+                      {exportScale === scale ? 'Rendering…' : label}
+                    </button>
+                  ))}
+                </div>
+                <p className="nm-help">
+                  Prints and images capture the map exactly as shown — set the county fill, filters, and zoom
+                  first.
+                </p>
               </div>
+
+              <details className="nm-advanced">
+                <summary>Advanced — backup &amp; restore</summary>
+                <div className="nm-export-grid">
+                  <button type="button" className="nm-btn" onClick={exportJson}>
+                    Download backup file
+                  </button>
+                  <button type="button" className="nm-btn" onClick={() => importInputRef.current?.click()}>
+                    Import backup
+                  </button>
+                  <button type="button" className="nm-btn nm-btn-danger" onClick={clearWorkspace}>
+                    Clear all locations
+                  </button>
+                </div>
+                <p className="nm-help">
+                  The map saves automatically for everyone — backup files are only for archives, bulk edits, or
+                  moving data in from the old prototype.
+                </p>
+              </details>
               <input
                 ref={importInputRef}
                 type="file"
@@ -697,10 +1021,6 @@ export default function NetworkMapApp() {
                   event.target.value = '';
                 }}
               />
-              <p className="nm-help">
-                Your workspace lives in this browser. Export a JSON backup to share it or move it to another
-                machine — including backups made with the original prototype file, which import here unchanged.
-              </p>
 
               <h3 className="nm-section-title">Data health</h3>
               <p className={'nm-status' + (health.clean && locations.length ? ' success' : '')}>
@@ -720,7 +1040,7 @@ export default function NetworkMapApp() {
           )}
         </aside>
 
-        <section className="nm-map-wrap">
+        <section className="nm-map-wrap" ref={mapWrapRef}>
           <MapCanvas
             ref={mapRef}
             counties={counties}
@@ -779,11 +1099,10 @@ export default function NetworkMapApp() {
             )}
           </div>
 
-          {locations.length === 0 && workspace !== null && (
+          {locations.length === 0 && workspace !== null && syncStatus !== 'loading' && (
             <div className="nm-map-empty">
               <p>
-                <strong>The map is empty.</strong> Add the first territory host, or import a JSON backup from the
-                Data tab.
+                <strong>The map is empty.</strong> Add the first territory host to get started.
               </p>
               <button type="button" className="nm-btn nm-btn-primary" onClick={startAdd}>
                 Add the first location

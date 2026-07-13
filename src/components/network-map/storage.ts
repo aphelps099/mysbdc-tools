@@ -12,6 +12,8 @@ import type { Workspace } from './types';
 
 export const WORKSPACE_STORAGE_KEY = 'norcal-sbdc-network-map-v3';
 export const META_STORAGE_KEY = 'norcal-sbdc-network-map-meta';
+export const SYNC_MARKER_KEY = 'norcal-sbdc-network-map-sync';
+export const SYNC_PULSE_KEY = 'norcal-sbdc-network-map-pulse';
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -59,6 +61,35 @@ export function loadMeta(storage: StorageLike): BackupMeta {
 export function saveMeta(storage: StorageLike, meta: BackupMeta): void {
   try {
     storage.setItem(META_STORAGE_KEY, JSON.stringify(meta));
+  } catch {
+    /* non-critical */
+  }
+}
+
+/* Persisted record of what this browser last synced with the server. Lets a
+   reload distinguish "clean cache" from "offline edits that were never
+   saved for everyone" — without it, adopting the server copy on load would
+   silently discard those edits. */
+export interface SyncMarker {
+  serverUpdatedAt: string;
+  lastSyncedLocations: string;
+}
+
+export function loadSyncMarker(storage: StorageLike): SyncMarker | null {
+  try {
+    const raw = JSON.parse(storage.getItem(SYNC_MARKER_KEY) || 'null');
+    if (raw && typeof raw.serverUpdatedAt === 'string' && typeof raw.lastSyncedLocations === 'string') {
+      return raw;
+    }
+  } catch {
+    /* fall through */
+  }
+  return null;
+}
+
+export function saveSyncMarker(storage: StorageLike, marker: SyncMarker): void {
+  try {
+    storage.setItem(SYNC_MARKER_KEY, JSON.stringify(marker));
   } catch {
     /* non-critical */
   }
