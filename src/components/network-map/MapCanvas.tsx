@@ -4,6 +4,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { getRegion, REGIONS } from './regions';
+import { resolveRegionColor } from './style';
+import { drawNetworkMap } from './render-map';
 import {
   choroplethColor,
   filteredLocations,
@@ -13,19 +15,22 @@ import {
   metricForRegion,
   regionStats,
 } from './logic';
-import type { BorderCollection, BuilderSettings, CountyCollection, NetworkLocation } from './types';
+import type { BorderCollection, BuilderSettings, CountyCollection, MapStyle, NetworkLocation } from './types';
 
 /* ═══════════════════════════════════════════════════════
    MapCanvas — imperative Leaflet layer for Network Map.
    Ported from the prototype's renderBaseMap / renderMarkers /
    renderRegionLabels; React owns the surrounding UI, this
-   component owns the Leaflet object graph.
+   component owns the Leaflet object graph. Colors come from
+   the shared MapStyle, and renderToCanvas produces exports
+   natively (so color coding is always captured).
    ═══════════════════════════════════════════════════════ */
 
 export interface MapHandle {
   flyToLocation(lat: number, lon: number, minZoom: number, openPopupId?: string): void;
   fitNetwork(): void;
   invalidateSize(): void;
+  renderToCanvas(scale: number, includeBasemap: boolean): HTMLCanvasElement | null;
 }
 
 export interface DraftPreview {
@@ -40,6 +45,7 @@ interface MapCanvasProps {
   borders: BorderCollection | null;
   locations: NetworkLocation[];
   settings: BuilderSettings;
+  style: MapStyle;
   preview: DraftPreview | null;
   pickMode: boolean;
   onCountyClick(regionId: number): void;
@@ -59,16 +65,23 @@ function escapeHtml(value: unknown): string {
     .replace(/'/g, '&#039;');
 }
 
-function markerIcon(location: NetworkLocation, maxInvestment: number, scaleMarkers: boolean): L.DivIcon {
+function markerIcon(location: NetworkLocation, maxInvestment: number, scaleMarkers: boolean, style: MapStyle): L.DivIcon {
   const size = markerSize(location, maxInvestment, scaleMarkers);
-  const label = location.type === 'host' ? 'H' : 'B';
+  const isHost = location.type === 'host';
+  const label = isHost ? 'H' : 'B';
+  const bg = isHost ? style.hostColor : style.branchColor;
+  const bd = isHost ? style.hostBorder : style.branchBorder;
   return L.divIcon({
     className: 'nm-div-icon',
-    html: `<div class="nm-pin ${location.type}" style="--pin:${size}px"><span>${label}</span></div>`,
+    html: `<div class="nm-pin ${location.type}" style="--pin:${size}px;--pin-bg:${bg};--pin-bd:${bd}"><span>${label}</span></div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -size / 2],
   });
+}
+
+function tileUrl(basemap: string): string {
+  return `https://api.maptiler.com/maps/${basemap}/256/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
 }
 
 function popupHtml(location: NetworkLocation): string {
@@ -94,7 +107,9 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
   const markerIndexRef = useRef<Map<string, L.Marker>>(new Map());
   const countyBoundsRef = useRef<L.LatLngBounds | null>(null);
   const didInitialFitRef = useRef(false);
-  const [basemapDown, setBasemapDown] = useState(!MAPTILER_KEY);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const logoControlRef = useRef<L.Control | null>(null);
+  const [basemapDown, setBasemapDown] = useState(false);
 
   // Latest props for stable Leaflet event handlers.
   const propsRef = useRef(props);
@@ -114,39 +129,6 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
     map.setView([39.3, -121.9], 6); // provisional; replaced by county-bounds fit
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.control.scale({ position: 'bottomright', imperial: true, metric: false }).addTo(map);
-
-    if (MAPTILER_KEY) {
-      let tileErrors = 0;
-      const tiles = L.tileLayer(
-        `https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
-        {
-          maxZoom: 18,
-          crossOrigin: true,
-          attribution:
-            '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noreferrer">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>',
-        },
-      );
-      tiles.on('tileerror', () => {
-        tileErrors += 1;
-        if (tileErrors >= 4) setBasemapDown(true);
-      });
-      tiles.on('tileload', () => {
-        tileErrors = 0;
-        setBasemapDown(false);
-      });
-      tiles.addTo(map);
-
-      // MapTiler logo — required on the free tier.
-      const LogoControl = L.Control.extend({
-        onAdd() {
-          const node = L.DomUtil.create('div', 'nm-maptiler-logo');
-          node.innerHTML =
-            '<a href="https://www.maptiler.com" target="_blank" rel="noreferrer"><img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" width="80" height="24"></a>';
-          return node;
-        },
-      });
-      new LogoControl({ position: 'bottomleft' }).addTo(map);
-    }
 
     markerLayerRef.current = L.layerGroup().addTo(map);
     labelLayerRef.current = L.layerGroup().addTo(map);
@@ -174,9 +156,66 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
       container.removeEventListener('click', onContainerClick);
       map.remove();
       mapRef.current = null;
+      tileLayerRef.current = null;
+      logoControlRef.current = null;
       didInitialFitRef.current = false;
     };
   }, []);
+
+  /* ── Basemap: swap the tile layer when the chosen style changes ── */
+  useEffect(() => {
+    const map = mapRef.current;
+    const container = containerRef.current;
+    if (!map || !container) return;
+    container.style.background = props.style.paper;
+
+    if (tileLayerRef.current) {
+      map.removeLayer(tileLayerRef.current);
+      tileLayerRef.current = null;
+    }
+
+    const none = props.style.basemap === 'none' || !MAPTILER_KEY;
+    setBasemapDown(none && !MAPTILER_KEY);
+
+    if (!none) {
+      let tileErrors = 0;
+      const tiles = L.tileLayer(tileUrl(props.style.basemap), {
+        maxZoom: 18,
+        crossOrigin: true,
+        attribution:
+          '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noreferrer">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>',
+      });
+      tiles.on('tileerror', () => {
+        tileErrors += 1;
+        if (tileErrors >= 4) setBasemapDown(true);
+      });
+      tiles.on('tileload', () => {
+        tileErrors = 0;
+        setBasemapDown(false);
+      });
+      tiles.addTo(map);
+      tiles.bringToBack();
+      tileLayerRef.current = tiles;
+    }
+
+    // MapTiler logo — required whenever a MapTiler basemap is shown.
+    if (!logoControlRef.current && !none) {
+      const LogoControl = L.Control.extend({
+        onAdd() {
+          const node = L.DomUtil.create('div', 'nm-maptiler-logo');
+          node.innerHTML =
+            '<a href="https://www.maptiler.com" target="_blank" rel="noreferrer"><img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" width="80" height="24"></a>';
+          return node;
+        },
+      });
+      const control = new LogoControl({ position: 'bottomleft' });
+      control.addTo(map);
+      logoControlRef.current = control;
+    } else if (logoControlRef.current && none) {
+      map.removeControl(logoControlRef.current);
+      logoControlRef.current = null;
+    }
+  }, [props.style.basemap, props.style.paper]);
 
   /* ── County choropleth + region borders + labels ── */
   useEffect(() => {
@@ -192,16 +231,19 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
     const values = REGIONS.map((region) => metricForRegion(stats, fillMode, region.id));
     const max = Math.max(...values, 0);
 
+    const style = props.style;
     const countyStyle = (feature?: GeoJSON.Feature): L.PathOptions => {
       const region = getRegion((feature?.properties as { region: number }).region);
       const fillColor =
-        fillMode === 'territories' ? region.color : choroplethColor(metricForRegion(stats, fillMode, region.id), max);
+        fillMode === 'territories'
+          ? resolveRegionColor(style, region.id)
+          : choroplethColor(metricForRegion(stats, fillMode, region.id), max, style.choroplethFrom, style.choroplethTo);
       return {
         color: showCounties ? 'rgba(255,255,255,.82)' : fillColor,
         weight: showCounties ? 0.75 : 0,
         opacity: 1,
         fillColor,
-        fillOpacity: fillMode === 'territories' ? 0.52 : 0.68,
+        fillOpacity: fillMode === 'territories' ? style.territoryOpacity : 0.68,
       };
     };
 
@@ -232,10 +274,11 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
 
     if (props.borders) {
       borderLayerRef.current = L.geoJSON(props.borders, {
-        style: { color: '#ffffff', weight: 2.6, opacity: 0.96, fill: false, interactive: false },
+        style: { color: style.borderColor, weight: style.borderWidth, opacity: 0.96, fill: false, interactive: false },
       }).addTo(map);
     }
     countyLayer.bringToBack();
+    if (tileLayerRef.current) tileLayerRef.current.bringToBack();
 
     if (!countyBoundsRef.current) countyBoundsRef.current = countyLayer.getBounds();
     if (!didInitialFitRef.current) {
@@ -262,7 +305,7 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
         }).addTo(labelLayer);
       });
     }
-  }, [props.counties, props.borders, props.locations, props.settings]);
+  }, [props.counties, props.borders, props.locations, props.settings, props.style]);
 
   /* ── Location markers ── */
   useEffect(() => {
@@ -276,7 +319,7 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
     const maxInvestment = Math.max(...placed.map((location) => location.investment || 0), 0);
     placed.forEach((location) => {
       const marker = L.marker([location.lat!, location.lon!], {
-        icon: markerIcon(location, maxInvestment, props.settings.scaleMarkers),
+        icon: markerIcon(location, maxInvestment, props.settings.scaleMarkers, props.style),
         keyboard: true,
         title: location.name,
         alt: location.name,
@@ -286,7 +329,7 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
       marker.addTo(markerLayer);
       markerIndexRef.current.set(location.id, marker);
     });
-  }, [props.locations, props.settings]);
+  }, [props.locations, props.settings, props.style]);
 
   /* ── Draft preview marker ── */
   useEffect(() => {
@@ -310,11 +353,11 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
       notes: '',
     };
     previewMarkerRef.current = L.marker([lat, lon], {
-      icon: markerIcon(previewLocation, investment || 0, false),
+      icon: markerIcon(previewLocation, investment || 0, false, props.style),
       zIndexOffset: 1000,
       interactive: false,
     }).addTo(map);
-  }, [props.preview]);
+  }, [props.preview, props.style]);
 
   /* ── Pick-mode cursor ── */
   useEffect(() => {
@@ -346,12 +389,63 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
     invalidateSize() {
       setTimeout(() => mapRef.current?.invalidateSize(), 30);
     },
+    renderToCanvas(scale, includeBasemap) {
+      const map = mapRef.current;
+      const { counties } = propsRef.current;
+      if (!map || !counties) return null;
+      const size = map.getSize();
+      const width = size.x;
+      const height = size.y;
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(width * scale);
+      canvas.height = Math.round(height * scale);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+      ctx.scale(scale, scale);
+
+      const style = propsRef.current.style;
+      ctx.fillStyle = style.paper;
+      ctx.fillRect(0, 0, width, height);
+
+      const wantBasemap = includeBasemap && style.basemap !== 'none' && !!MAPTILER_KEY;
+      if (wantBasemap) {
+        const container = map.getContainer();
+        const mapRect = container.getBoundingClientRect();
+        container.querySelectorAll('.leaflet-tile-pane img').forEach((node) => {
+          const img = node as HTMLImageElement;
+          if (!img.complete || !img.naturalWidth || img.style.opacity === '0') return;
+          const rect = img.getBoundingClientRect();
+          try {
+            ctx.drawImage(img, rect.left - mapRect.left, rect.top - mapRect.top, rect.width, rect.height);
+          } catch {
+            /* skip a tile that fails to draw */
+          }
+        });
+      }
+
+      drawNetworkMap(ctx, {
+        width,
+        height,
+        project: (lng, lat) => {
+          const point = map.latLngToContainerPoint([lat, lng]);
+          return { x: point.x, y: point.y };
+        },
+        counties,
+        borders: propsRef.current.borders,
+        locations: propsRef.current.locations,
+        settings: propsRef.current.settings,
+        style,
+        title: 'NorCal SBDC Network',
+        hasBasemap: wantBasemap,
+      });
+      return canvas;
+    },
   }));
 
   return (
     <div className="nm-map-stage">
       <div ref={containerRef} className="nm-map" role="application" aria-label="NorCal SBDC network map" />
-      {basemapDown && (
+      {basemapDown && props.style.basemap !== 'none' && (
         <div className="nm-basemap-notice" role="status">
           {MAPTILER_KEY
             ? 'Basemap tiles are unavailable — region data still works.'

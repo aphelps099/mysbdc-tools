@@ -58,13 +58,37 @@ reserved for the phase-2 territory editor).
 - Prototype users migrating: in the old HTML file use *Export JSON*, then
   Data tab → Advanced → *Import backup* here (imports affect everyone).
 
+## Design (shared)
+
+The **Design tab** customizes the map's look for everyone: the eight region
+colors, host/branch pin fill + border, region-border color/width, county
+color strength (territory fill opacity), the investment heat ramp
+(low → high), the basemap style, and the empty background color. The design
+is a `MapStyle` stored in the workspace (`src/components/network-map/style.ts`,
+`normalizeStyle` clamps/validates every field), so it travels with the shared
+live map — one person styles it and everyone, plus every export, sees it.
+View settings (filters, search, layer toggles) stay per-browser; the shared
+snapshot that syncs and drives conflict detection is `{locations, style}`
+(`sharedSnapshot` in NetworkMapApp).
+
+Basemaps: MapTiler styles (Streets, Minimal, Light gray, Terrain, Satellite)
+or **None** for a clean color-only map. Switching basemap swaps the tile
+layer; the MapTiler logo shows only while a MapTiler basemap is active.
+
 ## Exports
 
+- **Map image (PNG)** at Standard/Large/Poster (2×/4×/6×) — rendered
+  **natively** from the data + style by `render-map.ts` (drawNetworkMap) via
+  `MapCanvas.renderToCanvas`, NOT by screenshotting Leaflet. This is the fix
+  for "exports lost the color coding": html2canvas could not reliably capture
+  Leaflet's SVG region fills once real tiles loaded, so we draw the counties,
+  borders, labels, pins, legend, title, and attribution ourselves — color
+  coding is always present. A "Include the street basemap" toggle (Data tab)
+  composites the live tiles behind the color layers; if a tile lacks CORS and
+  taints the canvas, the export automatically falls back to the clean
+  color-only version.
 - **Print / save as PDF** — browser print dialog with print CSS (chrome
   hidden, full-page map).
-- **Map image (PNG)** at 2×/4×/6× via html2canvas capture of the live map
-  stage; MapTiler/OSM attribution is kept in the capture (license
-  requirement), transient chrome is excluded.
 - **Backup file (JSON)** — under Data → Advanced; for archives, bulk edits,
   and prototype migration only. Normal users never need it.
 

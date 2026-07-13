@@ -1,5 +1,6 @@
 import type { Geometry, Position } from 'geojson';
 import { REGIONS, getRegion } from './regions';
+import { normalizeStyle } from './style';
 import type {
   BuilderSettings,
   CountyCollection,
@@ -83,6 +84,7 @@ export function normalizeState(source: unknown): Workspace {
     force: false,
     locations,
     settings: { ...DEFAULT_SETTINGS, ...(raw.settings && typeof raw.settings === 'object' ? raw.settings : {}) },
+    style: normalizeStyle(raw.style),
     updatedAt: typeof raw.updatedAt === 'string' ? raw.updatedAt : new Date().toISOString(),
   };
 }
@@ -162,10 +164,11 @@ export function mixColor(from: string, to: string, amount: number): string {
   return '#' + part(a.r, b.r) + part(a.g, b.g) + part(a.b, b.b);
 }
 
-/* Choropleth ramp: mix('#eef2f8','#1a3fa3', 0.18 + 0.82·√(value/max));
-   zero/no-data counties render '#eef1f4'. */
-export function choroplethColor(value: number, max: number): string {
-  return value > 0 && max > 0 ? mixColor('#eef2f8', '#1a3fa3', 0.18 + 0.82 * Math.sqrt(value / max)) : '#eef1f4';
+/* Choropleth ramp: mix(from, to, 0.18 + 0.82·√(value/max)); zero/no-data
+   counties render a desaturated tint of `from`. Endpoints are style-driven
+   (defaults reproduce the original Editorial ramp). */
+export function choroplethColor(value: number, max: number, from = '#eef2f8', to = '#1a3fa3'): string {
+  return value > 0 && max > 0 ? mixColor(from, to, 0.18 + 0.82 * Math.sqrt(value / max)) : mixColor(from, '#ffffff', 0.35);
 }
 
 /* Host pins 30px base ("H"), branches 20px ("B"); investment scaling adds

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import './network-map.css';
 import MapCanvas, { type MapHandle } from './MapCanvas';
 import LocationEditor, { emptyDraft, type LocationDraft } from './LocationEditor';
-import { exportMapImage } from './export-image';
+import DesignPanel from './DesignPanel';
+import { downloadCanvasPng } from './export-image';
+import { DEFAULT_STYLE } from './style';
 import { getRegion, REGIONS } from './regions';
 import {
   DEFAULT_SETTINGS,
@@ -36,9 +38,16 @@ import type {
   CountyCollection,
   FillMode,
   GeocodeCandidate,
+  MapStyle,
   NetworkLocation,
   Workspace,
 } from './types';
+
+/* JSON of the shared parts (locations + design) — what auto-saves and what
+   drives dirty/conflict detection. View settings stay personal per browser. */
+function sharedSnapshot(workspace: Workspace): string {
+  return JSON.stringify({ locations: workspace.locations, style: workspace.style });
+}
 
 /* ═══════════════════════════════════════════════════════
    Network Map — one shared live map of the NorCal SBDC
@@ -50,7 +59,7 @@ import type {
    See docs/network-map.md.
    ═══════════════════════════════════════════════════════ */
 
-type Panel = 'network' | 'editor' | 'data';
+type Panel = 'network' | 'editor' | 'design' | 'data';
 type SyncStatus = 'loading' | 'saved' | 'saving' | 'offline' | 'conflict';
 
 const WORKSPACE_API = '/api/network-map/workspace';
@@ -114,6 +123,7 @@ export default function NetworkMapApp() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('loading');
   const [conflict, setConflict] = useState<Workspace | null>(null);
   const [exportScale, setExportScale] = useState<number | null>(null);
+  const [exportStreets, setExportStreets] = useState(false);
   const [saveBusy, setSaveBusy] = useState(false);
 
   const mapRef = useRef<MapHandle>(null);
@@ -123,7 +133,7 @@ export default function NetworkMapApp() {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const workspaceRef = useRef<Workspace | null>(workspace);
   const serverUpdatedAtRef = useRef<string | null>(initialMarker?.serverUpdatedAt ?? null);
-  const lastSyncedLocationsRef = useRef<string | null>(initialMarker?.lastSyncedLocations ?? null);
+  const lastSyncedSharedRef = useRef<string | null>(initialMarker?.lastSyncedShared ?? null);
   const syncStatusRef = useRef<SyncStatus>('loading');
   const inFlightRef = useRef(false);
   const draftRef = useRef<LocationDraft>(draft);
@@ -142,22 +152,22 @@ export default function NetworkMapApp() {
 
   /* Record that this browser is in sync with the server — kept in
      localStorage so a reload can tell clean cache from un-synced edits. */
-  const markSynced = useCallback((serverUpdatedAt: string, locationsJson: string) => {
+  const markSynced = useCallback((serverUpdatedAt: string, snapshot: string) => {
     serverUpdatedAtRef.current = serverUpdatedAt;
-    lastSyncedLocationsRef.current = locationsJson;
-    saveSyncMarker(window.localStorage, { serverUpdatedAt, lastSyncedLocations: locationsJson });
+    lastSyncedSharedRef.current = snapshot;
+    saveSyncMarker(window.localStorage, { serverUpdatedAt, lastSyncedShared: snapshot });
   }, []);
 
   const isDirty = useCallback(() => {
     const current = workspaceRef.current;
-    return current !== null && JSON.stringify(current.locations) !== lastSyncedLocationsRef.current;
+    return current !== null && sharedSnapshot(current) !== lastSyncedSharedRef.current;
   }, []);
 
-  /* Adopt a server workspace. Locations are shared; view settings (filters,
-     search, toggles) stay personal to this browser. */
+  /* Adopt a server workspace. Locations AND design are shared; view settings
+     (filters, search, toggles) stay personal to this browser. */
   const adoptServerWorkspace = useCallback(
     (incoming: Workspace) => {
-      markSynced(incoming.updatedAt, JSON.stringify(incoming.locations));
+      markSynced(incoming.updatedAt, sharedSnapshot(incoming));
       setWorkspace((prev) => ({
         ...incoming,
         settings: prev?.settings ?? {
@@ -177,8 +187,8 @@ export default function NetworkMapApp() {
     async (force = false) => {
       const current = workspaceRef.current;
       if (!current || inFlightRef.current) return;
-      const locationsJson = JSON.stringify(current.locations);
-      if (!force && locationsJson === lastSyncedLocationsRef.current) return;
+      const snapshot = sharedSnapshot(current);
+      if (!force && snapshot === lastSyncedSharedRef.current) return;
 
       inFlightRef.current = true;
       if (syncStatusRef.current !== 'offline') setSyncStatus('saving');
@@ -190,8 +200,8 @@ export default function NetworkMapApp() {
           if (probe.ok) {
             const data = await probe.json();
             const incoming = normalizeState(data.workspace);
-            if (JSON.stringify(incoming.locations) === locationsJson) {
-              markSynced(incoming.updatedAt, locationsJson);
+            if (sharedSnapshot(incoming) === snapshot) {
+              markSynced(incoming.updatedAt, snapshot);
               setSyncStatus('saved');
             } else {
               setConflict(incoming);
@@ -220,7 +230,7 @@ export default function NetworkMapApp() {
         }
         if (!response.ok) throw new Error('save failed');
         const data = await response.json();
-        markSynced(data.workspace?.updatedAt ?? new Date().toISOString(), locationsJson);
+        markSynced(data.workspace?.updatedAt ?? new Date().toISOString(), snapshot);
         try {
           window.localStorage.setItem(SYNC_PULSE_KEY, String(Date.now()));
         } catch {
@@ -289,7 +299,7 @@ export default function NetworkMapApp() {
         if (cancelled) return;
         const incoming = normalizeState(data.workspace);
         const local = workspaceRef.current;
-        const dirty = local !== null && JSON.stringify(local.locations) !== lastSyncedLocationsRef.current;
+        const dirty = local !== null && sharedSnapshot(local) !== lastSyncedSharedRef.current;
         if (!dirty) {
           adoptServerWorkspace(incoming);
           setSyncStatus('saved');
@@ -327,7 +337,7 @@ export default function NetworkMapApp() {
     if (!workspace) return;
     saveWorkspace(window.localStorage, workspace);
     if (syncStatus === 'loading' || syncStatus === 'conflict') return;
-    const dirty = JSON.stringify(workspace.locations) !== lastSyncedLocationsRef.current;
+    const dirty = sharedSnapshot(workspace) !== lastSyncedSharedRef.current;
     if (!dirty) {
       // Edits reverted to the synced snapshot inside the debounce window.
       if (syncStatus === 'saving' && !inFlightRef.current) setSyncStatus('saved');
@@ -375,11 +385,24 @@ export default function NetworkMapApp() {
   }, [refreshFromServer, showToast]);
 
   const settings = workspace?.settings ?? DEFAULT_SETTINGS;
+  const style = workspace?.style ?? DEFAULT_STYLE;
   const locations = useMemo(() => workspace?.locations ?? [], [workspace]);
 
   const updateSettings = useCallback((patch: Partial<BuilderSettings>) => {
     setWorkspace((prev) => (prev ? { ...prev, settings: { ...prev.settings, ...patch } } : prev));
   }, []);
+
+  // Design is shared, so a style change bumps updatedAt and auto-saves.
+  const mutateStyle = useCallback((patch: Partial<MapStyle>) => {
+    setWorkspace((prev) =>
+      prev ? { ...prev, style: { ...prev.style, ...patch }, updatedAt: new Date().toISOString() } : prev,
+    );
+  }, []);
+
+  const resetStyle = useCallback(() => {
+    setWorkspace((prev) => (prev ? { ...prev, style: { ...DEFAULT_STYLE }, updatedAt: new Date().toISOString() } : prev));
+    showToast('Design reset to defaults');
+  }, [showToast]);
 
   const mutateLocations = useCallback((updater: (previous: NetworkLocation[]) => NetworkLocation[]) => {
     setWorkspace((prev) =>
@@ -421,7 +444,7 @@ export default function NetworkMapApp() {
     return { type: draft.type, lat, lon, investment: Math.max(0, finiteNumber(draft.investment) || 0) };
   }, [draft, panel]);
   const hasUnsyncedEdits = useMemo(
-    () => workspace !== null && JSON.stringify(workspace.locations) !== lastSyncedLocationsRef.current,
+    () => workspace !== null && sharedSnapshot(workspace) !== lastSyncedSharedRef.current,
     // syncStatus is a dependency because the refs update on sync transitions
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [workspace, syncStatus],
@@ -617,20 +640,32 @@ export default function NetworkMapApp() {
 
   const exportImage = useCallback(
     async (scale: number) => {
-      const element = mapWrapRef.current;
-      if (!element || exportScale !== null) return;
+      if (exportScale !== null) return;
       setExportScale(scale);
       showToast('Rendering the map image…');
       try {
-        await exportMapImage(element, scale);
+        // Native render from data + style — color coding is always captured.
+        let canvas = mapRef.current?.renderToCanvas(scale, exportStreets) ?? null;
+        if (!canvas) throw new Error('render failed');
+        try {
+          await downloadCanvasPng(canvas, scale);
+        } catch {
+          // A cross-origin basemap tile tainted the canvas: re-render the
+          // clean color version (no streets) so the download still works.
+          canvas = mapRef.current?.renderToCanvas(scale, false) ?? null;
+          if (!canvas) throw new Error('render failed');
+          await downloadCanvasPng(canvas, scale);
+          showToast('Map image downloaded (color version — street basemap could not be included)');
+          return;
+        }
         showToast('Map image downloaded');
       } catch {
-        showToast('Could not render the map image in this browser — try Print / save as PDF.');
+        showToast('Could not render the map image — try Print / save as PDF.');
       } finally {
         setExportScale(null);
       }
     },
-    [exportScale, showToast],
+    [exportScale, exportStreets, showToast],
   );
 
   const importFile = useCallback(
@@ -772,6 +807,7 @@ export default function NetworkMapApp() {
               [
                 ['network', 'Network'],
                 ['editor', draft.id ? 'Edit' : 'Add'],
+                ['design', 'Design'],
                 ['data', 'Data'],
               ] as Array<[Panel, string]>
             ).map(([key, label]) => (
@@ -922,6 +958,12 @@ export default function NetworkMapApp() {
             </div>
           )}
 
+          {panel === 'design' && (
+            <div className="nm-panel" role="tabpanel">
+              <DesignPanel style={style} onChange={mutateStyle} onReset={resetStyle} />
+            </div>
+          )}
+
           {panel === 'data' && (
             <div className="nm-panel" role="tabpanel">
               <h3 className="nm-section-title">County fill</h3>
@@ -986,9 +1028,17 @@ export default function NetworkMapApp() {
                     </button>
                   ))}
                 </div>
+                <label className="nm-check-row" style={{ marginTop: 2 }}>
+                  <input
+                    type="checkbox"
+                    checked={exportStreets}
+                    onChange={(event) => setExportStreets(event.target.checked)}
+                  />
+                  Include the street basemap in image exports
+                </label>
                 <p className="nm-help">
-                  Prints and images capture the map exactly as shown — set the county fill, filters, and zoom
-                  first.
+                  Images are drawn from your data, so the region and pin colors always come through. Set the county
+                  fill, filters, and zoom first — the export matches what you see.
                 </p>
               </div>
 
@@ -1047,6 +1097,7 @@ export default function NetworkMapApp() {
             borders={borders}
             locations={locations}
             settings={settings}
+            style={style}
             preview={preview}
             pickMode={pickMode}
             onCountyClick={handleCountyClick}
