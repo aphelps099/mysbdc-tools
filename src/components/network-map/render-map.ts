@@ -165,7 +165,7 @@ export function drawNetworkMap(ctx: CanvasRenderingContext2D, options: RenderOpt
     ctx.globalAlpha = 1;
     if (showCounties) {
       ctx.lineWidth = 0.75;
-      ctx.strokeStyle = 'rgba(255,255,255,0.82)';
+      ctx.strokeStyle = 'rgba(247,244,238,0.9)';
       ctx.stroke();
     }
   }

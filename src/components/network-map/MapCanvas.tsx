@@ -239,7 +239,7 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
           ? resolveRegionColor(style, region.id)
           : choroplethColor(metricForRegion(stats, fillMode, region.id), max, style.choroplethFrom, style.choroplethTo);
       return {
-        color: showCounties ? 'rgba(255,255,255,.82)' : fillColor,
+        color: showCounties ? 'rgba(247,244,238,.9)' : fillColor,
         weight: showCounties ? 0.75 : 0,
         opacity: 1,
         fillColor,
