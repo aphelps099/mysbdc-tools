@@ -328,12 +328,12 @@
 }
 
 .nm-type-symbol.host {
-  background: var(--nm-navy);
-  border: 2px solid var(--nm-gold);
+  background: var(--nm-host, var(--nm-navy));
+  border: 2px solid var(--nm-host-bd, var(--nm-gold));
 }
 
 .nm-type-symbol.branch {
-  background: var(--nm-teal);
+  background: var(--nm-branch, var(--nm-teal));
   border-radius: 50%;
 }
 
@@ -679,12 +679,12 @@
 }
 
 .nm-chip-dot.host {
-  background: var(--nm-navy);
-  border: 1.5px solid var(--nm-gold);
+  background: var(--nm-host, var(--nm-navy));
+  border: 1.5px solid var(--nm-host-bd, var(--nm-gold));
 }
 
 .nm-chip-dot.branch {
-  background: var(--nm-teal);
+  background: var(--nm-branch, var(--nm-teal));
   border-radius: 50%;
 }
 
@@ -731,12 +731,12 @@
 }
 
 .nm-legend-swatch.host {
-  background: var(--nm-navy);
-  border: 1.5px solid var(--nm-gold);
+  background: var(--nm-host, var(--nm-navy));
+  border: 1.5px solid var(--nm-host-bd, var(--nm-gold));
 }
 
 .nm-legend-swatch.branch {
-  background: var(--nm-teal);
+  background: var(--nm-branch, var(--nm-teal));
   border-radius: 50%;
 }
 
@@ -744,7 +744,7 @@
   margin-top: 8px;
   height: 8px;
   border-radius: 4px;
-  background: linear-gradient(90deg, #eef2f8, #1a3fa3);
+  background: linear-gradient(90deg, var(--nm-ramp-from, #eef2f8), var(--nm-ramp-to, #1a3fa3));
 }
 
 .nm-legend-range {

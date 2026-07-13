@@ -239,7 +239,7 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
           ? resolveRegionColor(style, region.id)
           : choroplethColor(metricForRegion(stats, fillMode, region.id), max, style.choroplethFrom, style.choroplethTo);
       return {
-        color: showCounties ? 'rgba(255,255,255,.82)' : fillColor,
+        color: showCounties ? 'rgba(247,244,238,.9)' : fillColor,
         weight: showCounties ? 0.75 : 0,
         opacity: 1,
         fillColor,
@@ -413,14 +413,20 @@ const MapCanvas = forwardRef<MapHandle, MapCanvasProps>(function MapCanvas(props
         const mapRect = container.getBoundingClientRect();
         container.querySelectorAll('.leaflet-tile-pane img').forEach((node) => {
           const img = node as HTMLImageElement;
-          if (!img.complete || !img.naturalWidth || img.style.opacity === '0') return;
+          // Honor Leaflet's per-tile fade opacity so a mid-fade capture (e.g.
+          // right after a basemap switch) matches the screen instead of
+          // compositing half-faded tiles fully opaque or dropping opacity-0 ones.
+          const opacity = img.style.opacity === '' ? 1 : parseFloat(img.style.opacity);
+          if (!img.complete || !img.naturalWidth || !(opacity > 0)) return;
           const rect = img.getBoundingClientRect();
           try {
+            ctx.globalAlpha = opacity;
             ctx.drawImage(img, rect.left - mapRect.left, rect.top - mapRect.top, rect.width, rect.height);
           } catch {
             /* skip a tile that fails to draw */
           }
         });
+        ctx.globalAlpha = 1;
       }
 
       drawNetworkMap(ctx, {

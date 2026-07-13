@@ -53,6 +53,34 @@ describe('style normalization', () => {
     expect(resolveRegionColor(DEFAULT_STYLE, 3)).toBe(DEFAULT_STYLE.regionColors['3']);
     expect(isValidHex(resolveRegionColor(DEFAULT_STYLE, 99))).toBe(true);
   });
+
+  it('upgrades a map still on the old default palette, but keeps deliberate colors', () => {
+    // A workspace saved under the previous defaults: every region color is a
+    // legacy default except region 2, which someone deliberately set to red.
+    const legacy = {
+      regionColors: {
+        '1': '#1A3FA3',
+        '2': '#ff0000',
+        '3': '#0B5E50',
+        '4': '#B08A3E',
+        '5': '#6D6EB4',
+        '6': '#3B7F96',
+        '7': '#D26A4A',
+        '8': '#667F3D',
+      },
+      hostColor: '#1a3fa3',
+      borderColor: '#ffffff',
+      paper: '#e8e2d6',
+    };
+    const style = normalizeStyle(legacy);
+    // Untouched legacy fields upgrade to the new palette…
+    expect(style.regionColors['1']).toBe(DEFAULT_STYLE.regionColors['1']);
+    expect(style.hostColor).toBe(DEFAULT_STYLE.hostColor);
+    expect(style.borderColor).toBe(DEFAULT_STYLE.borderColor);
+    expect(style.paper).toBe(DEFAULT_STYLE.paper);
+    // …but a deliberately chosen color is preserved.
+    expect(style.regionColors['2']).toBe('#ff0000');
+  });
 });
 
 describe('workspace carries style', () => {

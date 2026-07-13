@@ -38,7 +38,7 @@ async function hmacSha256(secret: string, message: string): Promise<string> {
   return bytesToHex(new Uint8Array(sig));
 }
 
-type SessionScope = 'admin' | 'inject' | 'tfg';
+type SessionScope = 'admin' | 'inject' | 'tfg' | 'map';
 
 /**
  * Verify the signed session token. Returns the session scope, or null when
@@ -68,6 +68,7 @@ async function verifyToken(token: string): Promise<SessionScope | null> {
   const parts = payload.split(':');
   if (parts.length >= 3 && parts[0] === 'inject') return 'inject';
   if (parts.length >= 3 && parts[0] === 'tfg') return 'tfg';
+  if (parts.length >= 3 && parts[0] === 'map') return 'map';
   return 'admin';
 }
 
@@ -96,6 +97,23 @@ function isTfgAllowed(pathname: string): boolean {
   );
 }
 
+/** Paths a map-scoped session may reach: the map page, the APIs its UI calls,
+ *  and the static county/region data it loads. */
+const MAP_ALLOWED_PATHS = [
+  '/network-map',
+  '/api/network-map',
+  '/api/geocode',
+  '/data/network-map',
+];
+
+function isMapAllowed(pathname: string): boolean {
+  return MAP_ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+const MAP_LOGIN_PATH = '/network-map/login';
+
 export async function middleware(req: NextRequest) {
   // Skip auth if APP_PASSWORD is not set (dev mode / not configured)
   if (!process.env.APP_PASSWORD) {
@@ -104,8 +122,8 @@ export async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  // The TFG Motion login page is public (its POST goes to /api/auth/*)
-  if (pathname === '/motion/tfg/login') {
+  // Public login pages (their POSTs go to /api/auth/*)
+  if (pathname === '/motion/tfg/login' || pathname === MAP_LOGIN_PATH) {
     return NextResponse.next();
   }
 
@@ -113,8 +131,17 @@ export async function middleware(req: NextRequest) {
   const scope = token ? await verifyToken(token) : null;
 
   if (!scope) {
-    // Direct links to TFG Motion get its own login instead of the tools login
-    const loginPath = pathname.startsWith('/motion/tfg') ? '/motion/tfg/login' : '/login';
+    // Send visitors to the login that matches where they were headed: the
+    // Network Map has its own gate (map-only password), TFG Motion has its
+    // own, everything else uses the main tools login.
+    const loginPath = isMapAllowed(pathname)
+      ? MAP_LOGIN_PATH
+      : pathname.startsWith('/motion/tfg')
+        ? '/motion/tfg/login'
+        : '/login';
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
     return NextResponse.redirect(new URL(loginPath, req.url));
   }
 
@@ -138,6 +165,17 @@ export async function middleware(req: NextRequest) {
       );
     }
     return NextResponse.redirect(new URL('/motion/tfg', req.url));
+  }
+
+  // Map-scoped sessions can reach ONLY the Network Map — never the tools index
+  if (scope === 'map' && !isMapAllowed(pathname)) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'This session is limited to the Network Map' },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL('/network-map', req.url));
   }
 
   return NextResponse.next();

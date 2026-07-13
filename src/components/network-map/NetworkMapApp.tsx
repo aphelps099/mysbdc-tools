@@ -49,6 +49,22 @@ function sharedSnapshot(workspace: Workspace): string {
   return JSON.stringify({ locations: workspace.locations, style: workspace.style });
 }
 
+/* Re-derive a persisted baseline snapshot through the CURRENT normalization
+   so it is comparable to today's sharedSnapshot. Without this, a normalization
+   change between deploys (a renamed field, a palette migration) makes an
+   unchanged cache look dirty and can surface a false "someone else edited"
+   conflict. Handles the legacy locations-only array form too. */
+function rebaseSnapshot(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    const source = Array.isArray(parsed) ? { locations: parsed } : parsed;
+    return sharedSnapshot(normalizeState(source));
+  } catch {
+    return null;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    Network Map — one shared live map of the NorCal SBDC
    network. Edits save automatically to the server
@@ -133,7 +149,7 @@ export default function NetworkMapApp() {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const workspaceRef = useRef<Workspace | null>(workspace);
   const serverUpdatedAtRef = useRef<string | null>(initialMarker?.serverUpdatedAt ?? null);
-  const lastSyncedSharedRef = useRef<string | null>(initialMarker?.lastSyncedShared ?? null);
+  const lastSyncedSharedRef = useRef<string | null>(rebaseSnapshot(initialMarker?.lastSyncedShared));
   const syncStatusRef = useRef<SyncStatus>('loading');
   const inFlightRef = useRef(false);
   const draftRef = useRef<LocationDraft>(draft);
@@ -691,6 +707,9 @@ export default function NetworkMapApp() {
           return {
             ...base,
             locations: replace ? items : [...base.locations, ...items],
+            // A full-workspace backup carries the shared design too — restore
+            // it when replacing so an imported map looks the way it was saved.
+            style: replace && importedState ? importedState.style : base.style,
             updatedAt: new Date().toISOString(),
           };
         });
@@ -723,7 +742,22 @@ export default function NetworkMapApp() {
 
   /* ── Render ── */
   return (
-    <div className="nm-app" data-theme="brand">
+    <div
+      className="nm-app"
+      data-theme="brand"
+      style={
+        {
+          // Drive the sidebar legend, chips, and list badges from the shared
+          // design so recoloring pins/ramp updates them too.
+          '--nm-host': style.hostColor,
+          '--nm-host-bd': style.hostBorder,
+          '--nm-branch': style.branchColor,
+          '--nm-branch-bd': style.branchBorder,
+          '--nm-ramp-from': style.choroplethFrom,
+          '--nm-ramp-to': style.choroplethTo,
+        } as React.CSSProperties
+      }
+    >
       <header className="nm-topbar">
         <div className="nm-brand">
           <Link href="/" className="nm-home" aria-label="Back to the toolbox">

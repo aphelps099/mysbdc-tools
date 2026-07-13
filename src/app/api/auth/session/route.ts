@@ -89,14 +89,24 @@ export async function POST(req: NextRequest) {
     tfgMatch = a.length === f.length && timingSafeEqual(a, f);
   }
 
+  // Sixth password: Network Map → session scoped to ONLY /network-map,
+  // so the map can be shared without exposing the rest of the toolbox.
+  const mapPassword = process.env.MAP_PASSWORD || 'sbdc2027';
+  let mapMatch = false;
   if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch) {
+    const g = Buffer.from(mapPassword);
+    mapMatch = a.length === g.length && timingSafeEqual(a, g);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch && !mapMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
   // Create signed session token. The scope is baked into the signed payload
   // so it cannot be altered client-side; middleware restricts inject-scoped
-  // sessions to the inject tool only, and tfg-scoped sessions to TFG Motion.
-  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : 'admin';
+  // sessions to the inject tool, tfg-scoped to TFG Motion, and map-scoped to
+  // the Network Map.
+  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : mapMatch ? 'map' : 'admin';
   const nonce = randomBytes(16).toString('hex');
   const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
@@ -108,6 +118,7 @@ export async function POST(req: NextRequest) {
     ...(milestonesMatch ? { redirect: '/milestones' } : {}),
     ...(injectMatch ? { redirect: '/admin/inject-r4i' } : {}),
     ...(tfgMatch ? { redirect: '/motion/tfg' } : {}),
+    ...(mapMatch ? { redirect: '/network-map' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
