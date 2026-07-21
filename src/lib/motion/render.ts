@@ -1018,32 +1018,14 @@ function drawListScene(
     ctx.save();
     ctx.globalAlpha *= ip;
     ctx.translate(0, (1 - ip) * 22 * u);
-
-    // Index marker
-    const numFont = fontStr(700, 20 * u, doc.fontBody);
-    ctx.font = numFont;
-    ctx.fillStyle = p.accent;
-    const marker = String(i + 1).padStart(2, '0');
-    const markerW = ctx.measureText(marker).width;
-
+    ctx.font = itemFont;
+    ctx.fillStyle = p.fg;
     if (p.align === 'left') {
-      ctx.fillText(marker, p.anchorX, rowY + itemPx * 0.78);
-      // rule under number
-      ctx.fillRect(p.anchorX, rowY + itemPx * 0.98, markerW, Math.max(1.5, 1.8 * u));
-      ctx.font = itemFont;
-      ctx.fillStyle = p.fg;
-      ctx.fillText(item, p.anchorX + markerW + 34 * u, rowY + itemPx * 0.78);
+      ctx.fillText(item, p.anchorX, rowY + itemPx * 0.78);
     } else {
-      ctx.font = itemFont;
       const itemW = ctx.measureText(item).width;
-      const rowW = itemW + markerW + 34 * u;
-      const startX = p.align === 'right' ? p.anchorX - rowW : p.anchorX - rowW / 2;
-      ctx.font = numFont;
-      ctx.fillStyle = p.accent;
-      ctx.fillText(marker, startX, rowY + itemPx * 0.78);
-      ctx.font = itemFont;
-      ctx.fillStyle = p.fg;
-      ctx.fillText(item, startX + markerW + 34 * u, rowY + itemPx * 0.78);
+      const startX = p.align === 'right' ? p.anchorX - itemW : p.anchorX - itemW / 2;
+      ctx.fillText(item, startX, rowY + itemPx * 0.78);
     }
     ctx.restore();
   });
