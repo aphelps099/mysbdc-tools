@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tfg-motion-studio": {
+      "command": "node",
+      "args": ["mcp/motion-studio/dist/server.mjs"]
+    }
+  }
+}
