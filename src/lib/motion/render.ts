@@ -1279,9 +1279,10 @@ function drawEndcardScene(
     const gap = 26 * u;
     const words = logoText.split(/\s+/).filter(Boolean);
     const lineH = logoH / Math.max(words.length, 1);
-    const wordPx = lineH * 0.62;
-    const wordFont = fontStr(700, wordPx, doc.fontBody);
-    const spacing = wordPx * 0.18;
+    const wordPx = lineH * 0.58;
+    // Michroma is the actual TFG logo typeface (single 400 weight, wide)
+    const wordFont = fontStr(400, wordPx, 'Michroma');
+    const spacing = wordPx * 0.12;
     ctx.font = wordFont;
     const spacedW = (s: string) => {
       let tot = 0;

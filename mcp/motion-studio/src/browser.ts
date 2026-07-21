@@ -126,7 +126,9 @@ export class RenderBackend {
       (arg: { spec: unknown; fonts: string[] }) => (window as never as {
         __motion: { prepare(s: unknown, f: string[]): Promise<string | null> };
       }).__motion.prepare(arg.spec, arg.fonts),
-      { spec: assets as unknown, fonts: [project.doc.fontHeading, project.doc.fontBody] },
+      // Michroma is the TFG logo typeface — always warmed so the
+      // endcard's animated lockup measures with the real font.
+      { spec: assets as unknown, fonts: [project.doc.fontHeading, project.doc.fontBody, 'Michroma'] },
     );
     if (err) {
       await page.close();
