@@ -859,7 +859,9 @@ function drawScene(
   // keeps its original fixed accent for back-compat.
   const fg = (isImage || isVideo) ? '#ffffff' : scheme.fg;
   const muted = (isImage || isVideo) ? 'rgba(255,255,255,0.72)' : scheme.muted;
-  const accent = isImage && scene.template === 'image' ? '#8FC5D9' : scheme.accent;
+  // Legacy fixed accent only for scheme-less image scenes (old SBDC
+  // projects); branded scenes keep their own accent over photos.
+  const accent = isImage && scene.template === 'image' && !scene.customScheme ? '#8FC5D9' : scheme.accent;
   const frame = contentFrame(tsc);
   const anchorX = scene.align === 'lower-left' ? frame.x
     : scene.align === 'lower-right' ? frame.x + frame.w

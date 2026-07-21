@@ -8,6 +8,18 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const mode = process.argv[2] || 'preview'; // preview | export
 const only = process.argv[3] ? Number(process.argv[3]) : null; // optional 1-based session filter
 
+import { existsSync } from 'node:fs';
+
+// Speaker headshots (the B&W portraits from techfuturesgroup.org/brand).
+// Drop the jpegs into mcp/motion-studio/assets/ and every speaker card
+// upgrades to a photo card automatically; missing files fall back to the
+// typographic star card.
+const PHOTOS = {
+  'Steve Plume': 'assets/tfg-steve.jpeg',
+  'Paul Bozzo': 'assets/tfg-paulbozzo.jpeg',
+  'Charles Eason': 'assets/tfg-chuck.jpeg',
+};
+
 const SESSIONS = [
   {
     slug: 's1-customer-discovery', n: 1, date: 'SEP 2',
@@ -46,11 +58,26 @@ const SESSIONS = [
   },
 ];
 
+/** Photo speaker card when the primary speaker's headshot exists on disk. */
+const speakerScene = (s) => {
+  const primary = s.speaker.split(' & ')[0];
+  const photo = PHOTOS[primary];
+  if (photo && existsSync(join(root, photo))) {
+    return {
+      template: 'image', imageId: `headshot-${s.n}`, kenBurns: 'zoom-in',
+      overlay: 'gradient-bottom', overlayOpacity: 0.7, align: 'lower-left',
+      kicker: s.speakerKicker, title: s.speaker, subtitle: 'Tech Futures Group',
+      anim: 'rise', transition: 'fade', duration: 3000,
+    };
+  }
+  return { template: 'title', tfgScheme: 'dark', backdrop: 'star', kicker: s.speakerKicker, title: s.speaker, subtitle: 'Tech Futures Group', anim: 'word-stagger', transition: 'fade', duration: 3000 };
+};
+
 const scenesFor = (s) => [
   { template: 'statement', tfgScheme: 'dark', title: s.hook, serifTitle: true, anim: 'mask-reveal', transition: 'cut', duration: 2800 },
   { template: 'title', tfgScheme: 'dark', backdrop: 'hero', kicker: `CATALYZING GROWTH · SESSION ${s.n} OF 5`, title: s.title, subtitle: `Wednesday ${s.date} · 12:00–1:00 PM PT\nVirtual · Free`, anim: 'rise', transition: 'fade', textScale: 0.9, duration: 4000 },
   { template: 'list', tfgScheme: 'charcoal', backdrop: 'grid', weird: true, kicker: 'WHAT YOU WILL WALK AWAY WITH', body: s.takeaways, align: 'lower-left', anim: 'rise', transition: 'fade', duration: 4400 },
-  { template: 'title', tfgScheme: 'dark', backdrop: 'star', kicker: s.speakerKicker, title: s.speaker, subtitle: 'Tech Futures Group', anim: 'word-stagger', transition: 'fade', duration: 3000 },
+  speakerScene(s),
   { template: 'endcard', tfgScheme: 'dark', kicker: 'REGISTER FREE', title: 'techfuturesgroup.org', subtitle: `Catalyzing Growth · ${s.date} · 12 PM PT`, transition: 'fade', duration: 3600 },
 ];
 
@@ -72,6 +99,11 @@ for (const s of SESSIONS) {
   const scenes = scenesFor(s);
   try { await call('motion_create_project', { name, aspect: '4:5', scenes }); }
   catch { await call('motion_set_scenes', { name, scenes }); }
+  const primary = s.speaker.split(' & ')[0];
+  const photo = PHOTOS[primary];
+  if (photo && existsSync(join(root, photo))) {
+    await call('motion_add_asset', { name, id: `headshot-${s.n}`, kind: 'image', path: join(root, photo) });
+  }
   if (mode === 'preview') {
     const r = await call('motion_preview', { name });
     const info = JSON.parse(r.content.filter((c) => c.type === 'text').map((c) => c.text).join(''));
