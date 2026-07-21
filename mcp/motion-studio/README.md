@@ -13,10 +13,19 @@ TFG lockups, so previews and exports are pixel-identical to
 ## Setup (one time)
 
 ```bash
+npm install            # repo root first — the bundle needs mp4-muxer
 cd mcp/motion-studio
 npm install
 npm run build
 ```
+
+Order matters: the build bundles the repo's real export engine
+(`src/lib/motion/export.ts`), which resolves `mp4-muxer` from the root
+`package.json`, so the root install must run before `npm run build`.
+
+In Claude Code on the web this happens automatically — the repo's
+SessionStart hook (`.claude/hooks/session-start.sh`) installs both
+packages and builds the server when a fresh container starts.
 
 The repo's `.mcp.json` already registers the server, so Claude Code picks
 it up automatically when you open this repo. Requirements:
