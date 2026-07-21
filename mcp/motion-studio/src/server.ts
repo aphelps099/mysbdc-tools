@@ -37,7 +37,10 @@ const animEnum = z.enum([
 ]);
 const transitionEnum = z.enum(['cut', 'fade', 'wipe', 'slide']);
 const alignEnum = z.enum(['center', 'lower-left', 'lower-center', 'lower-right']);
-const backdropEnum = z.enum(['none', 'grid', 'starburst', 'ring', 'arc']);
+const backdropEnum = z.enum([
+  'none', 'grid', 'starburst', 'ring', 'arc',
+  'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
+]);
 const kenBurnsEnum = z.enum(['none', 'zoom-in', 'zoom-out', 'pan-left', 'pan-right']);
 const overlayEnum = z.enum(['none', 'scrim', 'gradient-bottom', 'gradient-left', 'gradient-right', 'brand']);
 const aspectEnum = z.enum(['16:9', '1:1', '9:16', '4:5']);
@@ -52,6 +55,7 @@ const sceneFields = {
   transition: transitionEnum.optional().describe('Transition INTO this scene'),
   align: alignEnum.optional(),
   backdrop: backdropEnum.optional().describe('Brand graphic behind text (non-media scenes)'),
+  weird: z.boolean().optional().describe('Pattern-Studio weird mode: denser/faster backdrop with wobble; auto-picks a pattern if backdrop unset'),
   serifTitle: z.boolean().optional().describe('Tobias serif for the main line'),
   textScale: z.number().min(0.3).max(1).optional().describe('Shrink long titles/URLs to fit'),
   kicker: z.string().max(80).optional().describe('Small caps label above the title'),

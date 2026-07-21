@@ -35,7 +35,8 @@ Everything renders exactly the same in preview and export.
 - anim (text entrance): "rise", "word-stagger", "letter-cascade", "typewriter", "wipe", "blur-in", "scale-in", "mask-reveal".
 - transition (INTO the scene): "cut", "fade", "wipe", "slide". "fade" default; "cut" for hard beats.
 - align: "center", "lower-left", "lower-center", "lower-right". Lists/images often read best lower-left.
-- backdrop (behind text, scheme colors, only when no image/video): "none", "grid", "starburst" (hero stat), "ring", "arc".
+- backdrop (behind text, scheme colors, only when no image/video): "none", "grid", "starburst" (hero stat), "ring", "arc" — plus the Pattern Studio set: "spirograph" (orbiting rings), "escher" (rotating triangle lattice), "dot-wave" (breathing dot field), "wave-field" (drifting sine lines), "growth-bars" (up-and-right bar chart), "rounds" (concentric ripples), "tfg-type" (drifting TFG wordmark rows).
+- weird: true — Pattern Studio "weird" mode: roughly doubles backdrop opacity, triples its motion, adds a slow wobble, and auto-picks a pattern when backdrop is unset. Use on 1–3 punch scenes for rhythm; a whole video of weird slides loses the punch.
 - serifTitle: true → Tobias serif for the main line (statements/quotes); false → GT America Extended.
 - textScale: 0.3–1 — shrink long URLs/titles to fit.
 - Image scenes: kenBurns "zoom-in"|"zoom-out"|"pan-left"|"pan-right"|"none"; overlay "scrim"|"gradient-bottom"|"gradient-left"|"gradient-right"|"brand" + overlayOpacity 0–1 (~0.55–0.7) for text legibility.
