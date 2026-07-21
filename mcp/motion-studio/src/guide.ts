@@ -16,7 +16,9 @@ Everything renders exactly the same in preview and export.
 
 ## Aspects
 "16:9" 1920×1080 (YouTube/slides) · "9:16" 1080×1920 (Reels/Stories/TikTok)
-· "1:1" 1080×1080 (feed) · "4:5" 1080×1350 (IG feed).
+· "1:1" 1080×1080 (feed) · "4:5" 1080×1350 (IG/LinkedIn feed).
+LinkedIn: feed video reads best at 4:5 (1:1 also safe); 9:16 gets
+cropped in-feed — reserve it for other platforms' Stories/Reels.
 
 ## Scene templates and the fields each uses
 - "title" — kicker (small caps label), title (headline), subtitle.
@@ -27,7 +29,7 @@ Everything renders exactly the same in preview and export.
 - "image" — full-bleed photo (imageId of a registered asset) with text overlay: kicker/title/subtitle + kenBurns + overlay.
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print.
-- "endcard" — closing card: TFG logo renders automatically; title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
+- "endcard" — closing card: animated TFG lockup by default (the green ring strokes itself closed, then "TECH FUTURES GROUP" rises in — override the words with logoText, or set logoText "" for the static raster logo); title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
 
 ## Common scene fields
 - duration (ms): 2500–5000 typical. statement ~2500–3000, title ~3500–4000, list 4500–5500, stat ~3500, quote ~4500–5000, endcard ~3500.
@@ -35,7 +37,7 @@ Everything renders exactly the same in preview and export.
 - anim (text entrance): "rise", "word-stagger", "letter-cascade", "typewriter", "wipe", "blur-in", "scale-in", "mask-reveal".
 - transition (INTO the scene): "cut", "fade", "wipe", "slide". "fade" default; "cut" for hard beats.
 - align: "center", "lower-left", "lower-center", "lower-right". Lists/images often read best lower-left.
-- backdrop (behind text, scheme colors, only when no image/video): "none", "grid", "starburst" (hero stat), "ring", "arc" — plus the Pattern Studio set: "spirograph" (orbiting rings), "escher" (rotating triangle lattice), "dot-wave" (breathing dot field), "wave-field" (drifting sine lines), "growth-bars" (up-and-right bar chart), "rounds" (concentric ripples), "tfg-type" (drifting TFG wordmark rows).
+- backdrop (behind text, scheme colors, only when no image/video): "none", "grid", "starburst" (hero stat), "ring", "arc" — the website-hero set: "hero-ring" (the techfuturesgroup.org thick sage gradient ring, sweeps in on scene start — dark schemes), "star" (fine 24-ray starburst, slow rotation — subtle, great behind stats), "hero" (faint grid + gradient ring: the site hero look) — split compositions: "split-left" / "split-right" / "split-bottom" (hard accent-color block wipes in and holds ~45% of the frame; pair with align lower-right / lower-left so text sits on the base half; weird mode slashes the edge diagonal) — plus the Pattern Studio set: "spirograph" (orbiting rings), "escher" (rotating triangle lattice), "dot-wave" (breathing dot field), "wave-field" (drifting sine lines), "growth-bars" (up-and-right bar chart), "rounds" (concentric ripples), "tfg-type" (drifting TFG wordmark rows).
 - weird: true — Pattern Studio "weird" mode: roughly doubles backdrop opacity, triples its motion, adds a slow wobble, and auto-picks a pattern when backdrop is unset. Use on 1–3 punch scenes for rhythm; a whole video of weird slides loses the punch.
 - serifTitle: true → Tobias serif for the main line (statements/quotes); false → GT America Extended.
 - textScale: 0.3–1 — shrink long URLs/titles to fit.

@@ -124,6 +124,12 @@ export const BACKDROPS = [
   { id: 'starburst',   label: 'Starburst' },
   { id: 'ring',        label: 'Ring' },
   { id: 'arc',         label: 'Arc' },
+  { id: 'hero-ring',   label: 'Hero Ring' },
+  { id: 'star',        label: 'Star' },
+  { id: 'hero',        label: 'Hero' },
+  { id: 'split-left',  label: 'Split ←' },
+  { id: 'split-right', label: 'Split →' },
+  { id: 'split-bottom', label: 'Split ↓' },
   { id: 'spirograph',  label: 'Spirograph' },
   { id: 'escher',      label: 'Escher' },
   { id: 'dot-wave',    label: 'Dot Wave' },
@@ -191,6 +197,13 @@ export interface Scene {
   body: string;
   /** Quote attribution / stat label. */
   attribution: string;
+
+  /**
+   * Endcard: when set (e.g. "TECH FUTURES GROUP"), the endcard draws an
+   * animated vector lockup — accent ring strokes itself closed, then the
+   * words fade up as stacked lines — instead of the raster logo image.
+   */
+  logoText: string;
 
   // Stat template
   statPrefix: string;
@@ -301,6 +314,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     subtitle: '',
     body: '',
     attribution: '',
+    logoText: '',
     statPrefix: '$',
     statValue: 0,
     statSuffix: '',

@@ -423,7 +423,9 @@ function drawBackdrop(
 
   if (backdrop === 'grid') {
     const step = 84 * u;
-    ctx.strokeStyle = withAlpha(scheme.accent, A(0.1));
+    // Kept quiet on purpose — even in weird mode the grid should read
+    // as paper texture, not a feature.
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.055));
     ctx.lineWidth = Math.max(1, u);
     ctx.beginPath();
     for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
@@ -487,6 +489,133 @@ function drawBackdrop(
     ctx.arc(cx, cy, outer, 0, Math.PI * 2);
     ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
     ctx.fill('evenodd');
+  } else if (backdrop === 'hero-ring' || backdrop === 'star' || backdrop === 'hero') {
+    // ── Ported from the techfuturesgroup.org hero ──
+    // "hero-ring": the thick sage conic-gradient ring band, sweeping in
+    // on scene start the way the site loads. "star": the fine 24-line
+    // starburst, slowly rotating (the site rotates it on scroll).
+    // "hero": faint site grid + star + ring — the full hero treatment.
+    if (backdrop === 'hero') {
+      // 60px site grid at whisper opacity
+      const step = 60 * u;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.03));
+      ctx.lineWidth = Math.max(1, u * 0.8);
+      ctx.beginPath();
+      for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+    }
+    // 'hero' used to layer the star too — star + ring together read as
+    // too busy, so the composite is grid + ring only for now.
+    if (backdrop === 'star') {
+      // 24 hairline rays, green fading to transparent, gentle spin
+      const cx = W / 2;
+      const cy = H / 2;
+      const len = Math.min(W, H) * 0.42;
+      const rot = t * 0.00006 * spd * Math.PI * 2;
+      ctx.lineWidth = Math.max(1, 1.1 * u);
+      for (let i = 0; i < 24; i++) {
+        const a = rot + (i / 24) * Math.PI * 2;
+        const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(a) * len, cy + Math.sin(a) * len);
+        g.addColorStop(0, withAlpha(scheme.accent, A(0.3)));
+        g.addColorStop(1, withAlpha(scheme.accent, 0));
+        ctx.strokeStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len);
+        ctx.stroke();
+      }
+    }
+    if (backdrop === 'hero-ring' || backdrop === 'hero') {
+      // Conic sage band, CSS: from 210deg, visible 10°–170°, masked to a
+      // thick ring low in the frame. Sweep extent grows in over ~1.6s.
+      const m = Math.max(W, H);
+      const R = m * 0.425;
+      const cx = W * 0.45;
+      const cy = H - R * 0.08;
+      const mid = R * 0.79;
+      const band = R * 0.42;
+      if ('createConicGradient' in ctx) {
+        // Conic stops → [deg, r, g, b, alpha], from 210° (0° = up).
+        // Palette matched to the live techfuturesgroup.org hero: black
+        // through slate blue into a soft lavender-purple, grained below.
+        const stops: Array<[number, number, number, number, number]> = [
+          [0, 30, 36, 56, 0], [22, 40, 50, 78, 0.35], [55, 78, 88, 118, 0.6],
+          [92, 150, 143, 165, 0.82], [125, 118, 100, 132, 0.55],
+          [155, 66, 54, 82, 0.28], [178, 40, 34, 56, 0],
+        ];
+        const startRad = ((210 - 90) * Math.PI) / 180;
+        const g = (ctx as CanvasRenderingContext2D & {
+          createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
+        }).createConicGradient(startRad, cx, cy);
+        for (const [deg, r, gr, b, al] of stops) {
+          g.addColorStop(deg / 360, `rgba(${r},${gr},${b},${A(al)})`);
+        }
+        g.addColorStop(1, 'rgba(30,36,56,0)');
+        // Load-in: a pie-wedge clip grows from 0° to the full sweep.
+        const lp = seg(t, 0, 1600, easeOutQuint);
+        if (lp > 0) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, R * 1.25, startRad, startRad + (178 * lp * Math.PI) / 180);
+          ctx.closePath();
+          ctx.clip();
+          ctx.beginPath();
+          ctx.arc(cx, cy, mid + band / 2, 0, Math.PI * 2);
+          ctx.arc(cx, cy, mid - band / 2, 0, Math.PI * 2, true);
+          ctx.fillStyle = g;
+          ctx.fill('evenodd');
+          // Heavy grain inside the band, like the site hero.
+          const pat = ctx.createPattern(getGrainTile() as CanvasImageSource, 'repeat');
+          if (pat) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, mid + band / 2, 0, Math.PI * 2);
+            ctx.arc(cx, cy, mid - band / 2, 0, Math.PI * 2, true);
+            ctx.clip('evenodd');
+            ctx.globalAlpha *= 0.09;
+            ctx.globalCompositeOperation = 'overlay';
+            ctx.fillStyle = pat;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+          }
+          ctx.restore();
+        }
+      }
+    }
+  } else if (backdrop === 'split-left' || backdrop === 'split-right' || backdrop === 'split-bottom') {
+    // Split composition (brand graphic element): a hard accent-color
+    // block wipes in over ~700ms and holds half the frame. Pair with
+    // align lower-left/lower-right so text sits on the base half.
+    // Weird mode slashes the dividing edge into a diagonal.
+    const wp = seg(t, 0, 700, easeOutQuint);
+    if (wp > 0) {
+      const skew = weird ? 0.11 : 0;
+      ctx.fillStyle = scheme.accent;
+      ctx.beginPath();
+      if (backdrop === 'split-left') {
+        const bw = W * 0.45 * wp;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(bw + skew * H * 0.5, 0);
+        ctx.lineTo(bw - skew * H * 0.5, H);
+        ctx.lineTo(0, H);
+      } else if (backdrop === 'split-right') {
+        const bw = W * 0.45 * wp;
+        ctx.moveTo(W, 0);
+        ctx.lineTo(W - bw - skew * H * 0.5, 0);
+        ctx.lineTo(W - bw + skew * H * 0.5, H);
+        ctx.lineTo(W, H);
+      } else {
+        const bh = H * 0.42 * wp;
+        ctx.moveTo(0, H);
+        ctx.lineTo(0, H - bh + skew * W * 0.4);
+        ctx.lineTo(W, H - bh - skew * W * 0.4);
+        ctx.lineTo(W, H);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
   } else if (backdrop === 'spirograph') {
     // Offset rings orbiting the center (Pattern Studio: spirograph)
     const cx = W / 2;
@@ -730,7 +859,9 @@ function drawScene(
   // keeps its original fixed accent for back-compat.
   const fg = (isImage || isVideo) ? '#ffffff' : scheme.fg;
   const muted = (isImage || isVideo) ? 'rgba(255,255,255,0.72)' : scheme.muted;
-  const accent = isImage && scene.template === 'image' ? '#8FC5D9' : scheme.accent;
+  // Legacy fixed accent only for scheme-less image scenes (old SBDC
+  // projects); branded scenes keep their own accent over photos.
+  const accent = isImage && scene.template === 'image' && !scene.customScheme ? '#8FC5D9' : scheme.accent;
   const frame = contentFrame(tsc);
   const anchorX = scene.align === 'lower-left' ? frame.x
     : scene.align === 'lower-right' ? frame.x + frame.w
@@ -1018,32 +1149,14 @@ function drawListScene(
     ctx.save();
     ctx.globalAlpha *= ip;
     ctx.translate(0, (1 - ip) * 22 * u);
-
-    // Index marker
-    const numFont = fontStr(700, 20 * u, doc.fontBody);
-    ctx.font = numFont;
-    ctx.fillStyle = p.accent;
-    const marker = String(i + 1).padStart(2, '0');
-    const markerW = ctx.measureText(marker).width;
-
+    ctx.font = itemFont;
+    ctx.fillStyle = p.fg;
     if (p.align === 'left') {
-      ctx.fillText(marker, p.anchorX, rowY + itemPx * 0.78);
-      // rule under number
-      ctx.fillRect(p.anchorX, rowY + itemPx * 0.98, markerW, Math.max(1.5, 1.8 * u));
-      ctx.font = itemFont;
-      ctx.fillStyle = p.fg;
-      ctx.fillText(item, p.anchorX + markerW + 34 * u, rowY + itemPx * 0.78);
+      ctx.fillText(item, p.anchorX, rowY + itemPx * 0.78);
     } else {
-      ctx.font = itemFont;
       const itemW = ctx.measureText(item).width;
-      const rowW = itemW + markerW + 34 * u;
-      const startX = p.align === 'right' ? p.anchorX - rowW : p.anchorX - rowW / 2;
-      ctx.font = numFont;
-      ctx.fillStyle = p.accent;
-      ctx.fillText(marker, startX, rowY + itemPx * 0.78);
-      ctx.font = itemFont;
-      ctx.fillStyle = p.fg;
-      ctx.fillText(item, startX + markerW + 34 * u, rowY + itemPx * 0.78);
+      const startX = p.align === 'right' ? p.anchorX - itemW : p.anchorX - itemW / 2;
+      ctx.fillText(item, startX, rowY + itemPx * 0.78);
     }
     ctx.restore();
   });
@@ -1160,7 +1273,9 @@ function drawEndcardScene(
       ? assets['__logo-white']
       : (vividBg ? assets['__logo-black'] ?? assets['__logo-blue'] : assets['__logo-blue']));
 
-  const logoH = logo ? 96 * u : 0;
+  const logoText = (scene.logoText ?? '').trim();
+  const hasLogo = !!logo || !!logoText;
+  const logoH = hasLogo ? 96 * u : 0;
   const kickerPx = 22 * u;
   const titlePx = 64 * u;
   const subPx = 22 * u;
@@ -1168,7 +1283,7 @@ function drawEndcardScene(
   const hasSub = !!scene.subtitle.trim();
 
   const parts = [
-    logo ? logoH + 56 * u : 0,
+    hasLogo ? logoH + 56 * u : 0,
     hasKicker ? kickerPx + 30 * u : 0,
     titlePx * 1.1,
     hasSub ? subPx * 1.5 + 40 * u : 0,
@@ -1176,8 +1291,54 @@ function drawEndcardScene(
   const totalH = parts.reduce((a, b) => a + b, 0);
   let y = (sc.H - totalH) / 2;
 
-  // Logo
-  if (logo) {
+  // Animated vector lockup — accent ring draws itself closed (stroke
+  // proportions from the brand SVG: width ≈ 24.5% of radius), then the
+  // words rise in as stacked spaced-caps lines.
+  if (logoText) {
+    const ringR = logoH / 2;
+    const strokeW = logoH * 0.16;
+    const midR = ringR - strokeW / 2;
+    const gap = 26 * u;
+    const words = logoText.split(/\s+/).filter(Boolean);
+    const lineH = logoH / Math.max(words.length, 1);
+    const wordPx = lineH * 0.48;
+    // Michroma is the actual TFG logo typeface (single 400 weight, wide);
+    // the real lockup tracks the caps wide and airy.
+    const wordFont = fontStr(400, wordPx, 'Michroma');
+    const spacing = wordPx * 0.32;
+    ctx.font = wordFont;
+    const spacedW = (s: string) => {
+      let tot = 0;
+      for (const c of [...s.toUpperCase()]) tot += ctx.measureText(c).width + spacing;
+      return tot - spacing;
+    };
+    const textW = Math.max(...words.map(spacedW));
+    const startX = sc.W / 2 - (logoH + gap + textW) / 2;
+    const cy = y + ringR;
+
+    const rp = seg(t, 80, 1100, easeOutQuint);
+    if (rp > 0) {
+      ctx.save();
+      ctx.strokeStyle = p.accent;
+      ctx.lineWidth = strokeW;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(startX + ringR, cy, midR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * rp);
+      ctx.stroke();
+      ctx.restore();
+    }
+    words.forEach((wd, i) => {
+      const wp = seg(t, 650 + i * 150, 500, easeOutQuint);
+      if (wp <= 0) return;
+      ctx.save();
+      ctx.globalAlpha *= wp;
+      ctx.translate(0, (1 - wp) * 8 * u);
+      const ly = cy + (i - (words.length - 1) / 2) * lineH + wordPx * 0.35;
+      drawSpacedText(ctx, wd, wordFont, p.fg, startX + logoH + gap, ly, spacing, 'left', 1);
+      ctx.restore();
+    });
+    y += parts[0];
+  } else if (logo) {
     const lp = seg(t, 80, 700, easeOutQuint);
     if (lp > 0) {
       const iw = logo.img.naturalWidth || 1;

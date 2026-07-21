@@ -15,6 +15,8 @@ const SCHEMES = new Set(['navy', 'cream', 'royal', 'dark', 'white']);
 const ALIGNS = new Set(['center', 'lower-left', 'lower-center']);
 const BACKDROPS = new Set([
   'none', 'grid', 'starburst', 'ring', 'arc',
+  'hero-ring', 'star', 'hero',
+  'split-left', 'split-right', 'split-bottom',
   'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
 ]);
 

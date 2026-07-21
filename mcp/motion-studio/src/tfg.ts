@@ -54,6 +54,7 @@ const TFG_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
     title: 'techfuturesgroup.org',
     subtitle: 'A specialty program of the NorCal SBDC network',
     kicker: 'BOOK A SESSION',
+    logoText: 'TECH FUTURES GROUP',
   },
 };
 
