@@ -40,26 +40,28 @@ function layoutLines(
 ): Line[] {
   ctx.font = font;
   const spaceW = ctx.measureText(' ').width;
-  const words = text.split(/\s+/).filter(Boolean).map((w) => ({
-    text: w,
-    width: ctx.measureText(w).width,
-  }));
-
   const lines: Line[] = [];
-  let cur: Word[] = [];
-  let curW = 0;
-  for (const w of words) {
-    const next = curW === 0 ? w.width : curW + spaceW + w.width;
-    if (next > maxWidth && cur.length > 0) {
-      lines.push({ words: cur, width: curW });
-      cur = [w];
-      curW = w.width;
-    } else {
-      cur = [...cur, w];
-      curW = next;
+  // Explicit \n forces a line break; each segment wraps independently.
+  for (const segment of text.split('\n')) {
+    const words = segment.split(/\s+/).filter(Boolean).map((w) => ({
+      text: w,
+      width: ctx.measureText(w).width,
+    }));
+    let cur: Word[] = [];
+    let curW = 0;
+    for (const w of words) {
+      const next = curW === 0 ? w.width : curW + spaceW + w.width;
+      if (next > maxWidth && cur.length > 0) {
+        lines.push({ words: cur, width: curW });
+        cur = [w];
+        curW = w.width;
+      } else {
+        cur = [...cur, w];
+        curW = next;
+      }
     }
+    if (cur.length) lines.push({ words: cur, width: curW });
   }
-  if (cur.length) lines.push({ words: cur, width: curW });
   return lines;
 }
 

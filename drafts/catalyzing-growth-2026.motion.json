@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrv7wfmf-1",
+        "id": "scene-mrv83baf-1",
         "template": "statement",
         "duration": 3000,
         "scheme": "navy",
@@ -38,7 +38,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-2",
+        "id": "scene-mrv83baf-2",
         "template": "statement",
         "duration": 2200,
         "scheme": "navy",
@@ -71,7 +71,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-3",
+        "id": "scene-mrv83baf-3",
         "template": "title",
         "duration": 3800,
         "scheme": "navy",
@@ -104,7 +104,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-4",
+        "id": "scene-mrv83baf-4",
         "template": "list",
         "duration": 5000,
         "scheme": "navy",
@@ -137,7 +137,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-5",
+        "id": "scene-mrv83baf-5",
         "template": "list",
         "duration": 5600,
         "scheme": "navy",
@@ -170,9 +170,9 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-6",
+        "id": "scene-mrv83baf-6",
         "template": "title",
-        "duration": 3800,
+        "duration": 4200,
         "scheme": "navy",
         "customScheme": {
           "bg": "#F7F6F2",
@@ -187,7 +187,7 @@
         "textScale": 0.72,
         "kicker": "EVERY SESSION",
         "title": "Expert talk. Special guest. Live AMA.",
-        "subtitle": "12:00–1:00 PM PT · Virtual · Free",
+        "subtitle": "12:00–1:00 PM PT · Virtual · Free\nRegister at techfuturesgroup.org",
         "body": "",
         "attribution": "",
         "statPrefix": "$",
@@ -203,7 +203,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-7",
+        "id": "scene-mrv83baf-7",
         "template": "stat",
         "duration": 3400,
         "scheme": "navy",
@@ -236,7 +236,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv7wfmg-8",
+        "id": "scene-mrv83baf-8",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -281,5 +281,5 @@
   },
   "assets": [],
   "created": "2026-07-21T22:20:14.677Z",
-  "updated": "2026-07-21T22:20:55.192Z"
+  "updated": "2026-07-21T22:26:16.168Z"
 }
