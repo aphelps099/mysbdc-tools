@@ -374,11 +374,20 @@ function withAlpha(hex: string, alpha: number): string {
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
+/** Weird-mode auto-pick pool: patterns strong enough to carry a scene. */
+const WEIRD_POOL = [
+  'spirograph', 'escher', 'dot-wave', 'wave-field', 'rounds', 'tfg-type',
+] as const;
+
 /**
  * Optional brand graphic drawn between the background fill and the text
- * layer, in the scene's scheme colors: graph-paper grid, slow-rotating
- * starburst rays, arc-swoop ring outlines, or the soft conic gradient
- * arc. Deterministic in t like everything else here.
+ * layer, in the scene's scheme colors. The first four are the original
+ * house backdrops; the rest are ported from the TFG brand Pattern
+ * Studio. Deterministic in t like everything else here.
+ *
+ * `scene.weird` boosts opacity + motion, adds a slow wobble, and — when
+ * the scene has no backdrop set — auto-picks a pattern from WEIRD_POOL
+ * (stable per scene, keyed off the scene id).
  */
 function drawBackdrop(
   ctx: CanvasRenderingContext2D,
@@ -387,32 +396,50 @@ function drawBackdrop(
   scheme: ResolvedScheme,
   t: number,
 ) {
-  if (!scene.backdrop || scene.backdrop === 'none') return;
+  const weird = !!scene.weird;
+  let backdrop: string = scene.backdrop ?? 'none';
+  if (backdrop === 'none') {
+    if (!weird) return;
+    let h = 0;
+    for (let i = 0; i < scene.id.length; i++) h = (h * 31 + scene.id.charCodeAt(i)) >>> 0;
+    backdrop = WEIRD_POOL[h % WEIRD_POOL.length];
+  }
   const { W, H, u } = sc;
   const fadeIn = seg(t, 0, 900);
   if (fadeIn <= 0) return;
+  /** Opacity curve — weird mode roughly doubles every pattern alpha. */
+  const A = (a: number) => Math.min(0.85, a * (weird ? 2.2 : 1));
+  /** Animation speed multiplier. */
+  const spd = weird ? 3 : 1;
   ctx.save();
   ctx.globalAlpha = fadeIn;
+  if (weird) {
+    // Slow drunken wobble around center; slight overscale hides corners.
+    ctx.translate(W / 2, H / 2);
+    ctx.rotate(Math.sin(t * 0.0004) * 0.03);
+    ctx.scale(1.08, 1.08);
+    ctx.translate(-W / 2, -H / 2);
+  }
 
-  if (scene.backdrop === 'grid') {
+  if (backdrop === 'grid') {
     const step = 84 * u;
-    ctx.strokeStyle = withAlpha(scheme.accent, 0.1);
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.1));
     ctx.lineWidth = Math.max(1, u);
     ctx.beginPath();
     for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
     for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
     ctx.stroke();
-  } else if (scene.backdrop === 'starburst') {
+  } else if (backdrop === 'starburst') {
     // radial rays with a slow drift (the hero-stat starburst)
     const cx = W / 2;
     const cy = H / 2;
     const R = Math.hypot(W, H) * 0.62;
     const rays = 24;
-    const rot = t * 0.000025 * Math.PI * 2; // ~1.5%/s — gentle drift
+    const rot = t * 0.000025 * spd * Math.PI * 2; // ~1.5%/s — gentle drift
     for (let i = 0; i < rays; i++) {
       const a = rot + (i / rays) * Math.PI * 2;
       const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(a) * R, cy + Math.sin(a) * R);
-      g.addColorStop(0, withAlpha(scheme.accent, 0.1 + (i % 3) * 0.05));
+      g.addColorStop(0, withAlpha(scheme.accent, A(0.1 + (i % 3) * 0.05)));
       g.addColorStop(1, withAlpha(scheme.accent, 0));
       ctx.strokeStyle = g;
       ctx.lineWidth = (i % 4 === 0 ? 2.4 : 1.2) * u;
@@ -421,23 +448,23 @@ function drawBackdrop(
       ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
       ctx.stroke();
     }
-  } else if (scene.backdrop === 'ring') {
+  } else if (backdrop === 'ring') {
     // arc swoops — two big ring outlines settling in from the lower left
     const p = seg(t, 0, 1400);
     const cx = W * 0.12;
     const cy = H * 1.06;
     const grow = 0.92 + 0.08 * p;
-    ctx.strokeStyle = withAlpha(scheme.accent, 0.28);
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.28));
     ctx.lineWidth = 5 * u;
     ctx.beginPath();
     ctx.arc(cx, cy, H * 0.78 * grow, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.strokeStyle = withAlpha(scheme.accent, 0.12);
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.12));
     ctx.lineWidth = 3 * u;
     ctx.beginPath();
     ctx.arc(cx, cy, H * 1.02 * grow, 0, Math.PI * 2);
     ctx.stroke();
-  } else if (scene.backdrop === 'arc' && 'createConicGradient' in ctx) {
+  } else if (backdrop === 'arc' && 'createConicGradient' in ctx) {
     // soft conic gradient band masked to a ring, low in the frame
     const cx = W * 0.46;
     const cy = H * 1.4;
@@ -460,6 +487,137 @@ function drawBackdrop(
     ctx.arc(cx, cy, outer, 0, Math.PI * 2);
     ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
     ctx.fill('evenodd');
+  } else if (backdrop === 'spirograph') {
+    // Offset rings orbiting the center (Pattern Studio: spirograph)
+    const cx = W / 2;
+    const cy = H / 2;
+    const m = Math.min(W, H);
+    const rings = 12;
+    ctx.lineWidth = Math.max(1, u);
+    for (let i = 0; i < rings; i++) {
+      const a = (i / rings) * Math.PI * 2 + t * 0.0001 * spd;
+      const ox = cx + Math.cos(a) * m * 0.2;
+      const oy = cy + Math.sin(a) * m * 0.2;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.1));
+      ctx.beginPath(); ctx.arc(ox, oy, m * 0.3, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.06));
+      ctx.beginPath(); ctx.arc(ox, oy, m * 0.225, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.24));
+    ctx.lineWidth = 2 * u;
+    ctx.beginPath(); ctx.arc(cx, cy, m * 0.15, 0, Math.PI * 2); ctx.stroke();
+  } else if (backdrop === 'escher') {
+    // Rotating triangle lattice (Pattern Studio: escher-impossible)
+    const tri = 92 * u;
+    const step = tri * 1.7;
+    ctx.lineWidth = 1.5 * u;
+    ctx.strokeStyle = scheme.accent;
+    for (let x = step / 2; x < W + step; x += step) {
+      for (let y = step / 2; y < H + step; y += step) {
+        ctx.save();
+        ctx.globalAlpha *= A(0.09 + 0.05 * Math.sin((x + y) * 0.004 / u));
+        ctx.translate(x, y);
+        ctx.rotate(t * 0.0001 * spd + x * 0.001 / u);
+        ctx.beginPath();
+        for (let i = 0; i <= 3; i++) {
+          const a = (i / 3) * Math.PI * 2 - Math.PI / 2;
+          const px = Math.cos(a) * tri * 0.5;
+          const py = Math.sin(a) * tri * 0.5;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const a1 = (i / 3) * Math.PI * 2 - Math.PI / 2;
+          const a2 = ((i + 1) / 3) * Math.PI * 2 - Math.PI / 2;
+          ctx.moveTo(Math.cos(a1) * tri * 0.5, Math.sin(a1) * tri * 0.5);
+          ctx.lineTo(Math.cos(a2) * tri * 0.3, Math.sin(a2) * tri * 0.3);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  } else if (backdrop === 'dot-wave') {
+    // Breathing dot field (Pattern Studio: dot-wave)
+    const spacing = 62 * u;
+    const dot = 3.4 * u;
+    ctx.fillStyle = scheme.accent;
+    for (let x = spacing / 2; x < W; x += spacing) {
+      for (let y = spacing / 2; y < H; y += spacing) {
+        const w = Math.sin((x * 0.011) / u + t * 0.001 * spd) * Math.cos((y * 0.011) / u);
+        ctx.globalAlpha = fadeIn * A(0.05 + Math.abs(w) * 0.2);
+        ctx.beginPath();
+        ctx.arc(x, y, dot * (1 + w * 0.55), 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = fadeIn;
+  } else if (backdrop === 'wave-field') {
+    // Stacked drifting sine lines (Pattern Studio: wave-field)
+    const waves = 11;
+    ctx.strokeStyle = scheme.accent;
+    for (let w = 0; w < waves; w++) {
+      ctx.lineWidth = (1 + (w % 3)) * u;
+      ctx.globalAlpha = fadeIn * A(0.05 + (w / waves) * 0.14);
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 6 * u) {
+        const y = H / 2
+          + Math.sin((x * 0.02) / u + w * 0.5 + t * 0.001 * spd) * (44 - w * 3) * u
+          + (w - (waves - 1) / 2) * 42 * u;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = fadeIn;
+  } else if (backdrop === 'growth-bars') {
+    // Up-and-to-the-right bar chart (Pattern Studio: growth-bars)
+    const count = 14;
+    const bw = (W * 0.84) / count;
+    const sx = W * 0.08;
+    const baseY = H * 0.96;
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.05));
+    ctx.lineWidth = Math.max(1, u);
+    for (let i = 0; i <= 5; i++) {
+      const y = baseY - (i / 5) * H * 0.6;
+      ctx.beginPath(); ctx.moveTo(sx, y); ctx.lineTo(W * 0.92, y); ctx.stroke();
+    }
+    for (let i = 0; i < count; i++) {
+      const p = i / (count - 1);
+      const h = Math.pow(p, 1.5) * H * 0.52 + Math.sin(t * 0.001 * spd + i * 0.3) * 9 * u + 14 * u;
+      const x = sx + i * bw;
+      ctx.fillStyle = withAlpha(scheme.accent, A(0.08 + p * 0.2));
+      ctx.fillRect(x + bw * 0.2, baseY - h, bw * 0.6, h);
+      ctx.fillStyle = withAlpha(scheme.accent, A(0.45));
+      ctx.fillRect(x + bw * 0.2, baseY - h - 2 * u, bw * 0.6, 2 * u);
+    }
+  } else if (backdrop === 'rounds') {
+    // Concentric funding-round ripples (Pattern Studio: funding-rounds)
+    const cx = W / 2;
+    const cy = H / 2;
+    const m = Math.min(W, H);
+    const rounds = 7;
+    ctx.lineWidth = 2 * u;
+    for (let i = 0; i < rounds; i++) {
+      const r = (i + 1) * m * 0.13 + Math.sin(t * 0.001 * spd + i) * 6 * u;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.2 * (1 - i / rounds)));
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    }
+  } else if (backdrop === 'tfg-type') {
+    // Drifting rows of repeated TFG wordmark (Pattern Studio: text-cascade)
+    const rows = 8;
+    const rowH = H / rows;
+    ctx.fillStyle = scheme.accent;
+    for (let r = 0; r < rows; r++) {
+      const px = (26 + r * 14) * u;
+      ctx.font = `700 ${px}px ${sc.doc.fontBody}, sans-serif`;
+      const word = 'TFG ';
+      const tw = Math.max(1, ctx.measureText(word).width);
+      const drift = ((t * 0.03 * spd * (r % 2 === 0 ? 1 : -1)) % tw + tw) % tw;
+      ctx.globalAlpha = fadeIn * A(0.045 + r * 0.012);
+      const y = rowH * r + rowH * 0.68;
+      for (let x = -drift - tw; x < W + tw; x += tw) ctx.fillText(word, x, y);
+    }
+    ctx.globalAlpha = fadeIn;
   }
 
   ctx.restore();

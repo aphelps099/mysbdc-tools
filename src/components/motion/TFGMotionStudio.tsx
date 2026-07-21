@@ -32,6 +32,11 @@ const SERIF_OPTS = [
   { id: 'serif', label: 'Serif' },
 ] as const;
 
+const WEIRD_OPTS = [
+  { id: 'classic', label: 'Classic' },
+  { id: 'weird', label: 'Weird' },
+] as const;
+
 // TFG brand-house schemes (accents kept AA-readable on light backgrounds)
 const TFG_SCHEMES: { id: string; label: string; bg: string; fg: string; accent: string }[] = [
   { id: 'dark',     label: 'Dark',     bg: '#0a0a0a', fg: '#ffffff', accent: '#4EFF00' },
@@ -924,9 +929,19 @@ export default function TFGMotionStudio() {
             </Field>
 
             {selected.template !== 'image' && (
-              <Field label="Backdrop">
-                <Seg options={BACKDROPS} value={selected.backdrop} onChange={(v) => patchScene(selected.id, { backdrop: v })} small />
-              </Field>
+              <>
+                <Field label="Backdrop">
+                  <Seg options={BACKDROPS} value={selected.backdrop} onChange={(v) => patchScene(selected.id, { backdrop: v })} small />
+                </Field>
+                <Field label="Backdrop style">
+                  <Seg
+                    options={WEIRD_OPTS}
+                    value={selected.weird ? 'weird' : 'classic'}
+                    onChange={(v) => patchScene(selected.id, { weird: v === 'weird' })}
+                    small
+                  />
+                </Field>
+              </>
             )}
 
             <Field label="Alignment">

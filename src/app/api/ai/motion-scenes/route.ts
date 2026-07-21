@@ -13,7 +13,10 @@ const TEMPLATES = new Set(['title', 'statement', 'stat', 'list', 'quote', 'image
 const ANIMS = new Set(['rise', 'word-stagger', 'letter-cascade', 'typewriter', 'wipe', 'blur-in', 'scale-in', 'mask-reveal']);
 const SCHEMES = new Set(['navy', 'cream', 'royal', 'dark', 'white']);
 const ALIGNS = new Set(['center', 'lower-left', 'lower-center']);
-const BACKDROPS = new Set(['none', 'grid', 'starburst', 'ring', 'arc']);
+const BACKDROPS = new Set([
+  'none', 'grid', 'starburst', 'ring', 'arc',
+  'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
+]);
 
 /** Drop anything malformed so the editor only ever receives loadable scenes. */
 function sanitize(scenes: GeneratedScene[]): GeneratedScene[] {

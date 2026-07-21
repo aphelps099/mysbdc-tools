@@ -117,12 +117,20 @@ export const KEN_BURNS = [
 export type KenBurnsId = typeof KEN_BURNS[number]['id'];
 
 // ── Scene backdrop graphics (drawn behind the text in scheme colors) ──
+// The second block is ported from the TFG brand Pattern Studio.
 export const BACKDROPS = [
-  { id: 'none',      label: 'None' },
-  { id: 'grid',      label: 'Grid' },
-  { id: 'starburst', label: 'Starburst' },
-  { id: 'ring',      label: 'Ring' },
-  { id: 'arc',       label: 'Arc' },
+  { id: 'none',        label: 'None' },
+  { id: 'grid',        label: 'Grid' },
+  { id: 'starburst',   label: 'Starburst' },
+  { id: 'ring',        label: 'Ring' },
+  { id: 'arc',         label: 'Arc' },
+  { id: 'spirograph',  label: 'Spirograph' },
+  { id: 'escher',      label: 'Escher' },
+  { id: 'dot-wave',    label: 'Dot Wave' },
+  { id: 'wave-field',  label: 'Wave Field' },
+  { id: 'growth-bars', label: 'Growth Bars' },
+  { id: 'rounds',      label: 'Rounds' },
+  { id: 'tfg-type',    label: 'Type Cascade' },
 ] as const;
 
 export type BackdropId = typeof BACKDROPS[number]['id'];
@@ -164,6 +172,12 @@ export interface Scene {
   align: AlignId;
   /** Optional brand graphic drawn behind the text (scheme colors). */
   backdrop: BackdropId;
+  /**
+   * Pattern-Studio "weird" mode: cranks backdrop density, opacity, and
+   * motion, adds a slow wobble, and auto-picks a pattern when the scene
+   * has no backdrop set. Best on one or two punch scenes, not every slide.
+   */
+  weird: boolean;
   /** Use the serif (heading) font for the main line of this scene. */
   serifTitle: boolean;
   /** Text size multiplier (0.3–1) — shrink long URLs/titles to fit. */
@@ -279,6 +293,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     transition: 'fade',
     align: 'center',
     backdrop: 'none',
+    weird: false,
     serifTitle: false,
     textScale: 1,
     kicker: '',
