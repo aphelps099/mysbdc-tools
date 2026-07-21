@@ -40,6 +40,7 @@ const alignEnum = z.enum(['center', 'lower-left', 'lower-center', 'lower-right']
 const backdropEnum = z.enum([
   'none', 'grid', 'starburst', 'ring', 'arc',
   'hero-ring', 'star', 'hero',
+  'split-left', 'split-right', 'split-bottom',
   'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
 ]);
 const kenBurnsEnum = z.enum(['none', 'zoom-in', 'zoom-out', 'pan-left', 'pan-right']);

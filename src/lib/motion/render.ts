@@ -564,6 +564,38 @@ function drawBackdrop(
         }
       }
     }
+  } else if (backdrop === 'split-left' || backdrop === 'split-right' || backdrop === 'split-bottom') {
+    // Split composition (brand graphic element): a hard accent-color
+    // block wipes in over ~700ms and holds half the frame. Pair with
+    // align lower-left/lower-right so text sits on the base half.
+    // Weird mode slashes the dividing edge into a diagonal.
+    const wp = seg(t, 0, 700, easeOutQuint);
+    if (wp > 0) {
+      const skew = weird ? 0.11 : 0;
+      ctx.fillStyle = scheme.accent;
+      ctx.beginPath();
+      if (backdrop === 'split-left') {
+        const bw = W * 0.45 * wp;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(bw + skew * H * 0.5, 0);
+        ctx.lineTo(bw - skew * H * 0.5, H);
+        ctx.lineTo(0, H);
+      } else if (backdrop === 'split-right') {
+        const bw = W * 0.45 * wp;
+        ctx.moveTo(W, 0);
+        ctx.lineTo(W - bw - skew * H * 0.5, 0);
+        ctx.lineTo(W - bw + skew * H * 0.5, H);
+        ctx.lineTo(W, H);
+      } else {
+        const bh = H * 0.42 * wp;
+        ctx.moveTo(0, H);
+        ctx.lineTo(0, H - bh + skew * W * 0.4);
+        ctx.lineTo(W, H - bh - skew * W * 0.4);
+        ctx.lineTo(W, H);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
   } else if (backdrop === 'spirograph') {
     // Offset rings orbiting the center (Pattern Studio: spirograph)
     const cx = W / 2;
