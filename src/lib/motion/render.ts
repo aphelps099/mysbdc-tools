@@ -487,6 +487,83 @@ function drawBackdrop(
     ctx.arc(cx, cy, outer, 0, Math.PI * 2);
     ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
     ctx.fill('evenodd');
+  } else if (backdrop === 'hero-ring' || backdrop === 'star' || backdrop === 'hero') {
+    // ── Ported from the techfuturesgroup.org hero ──
+    // "hero-ring": the thick sage conic-gradient ring band, sweeping in
+    // on scene start the way the site loads. "star": the fine 24-line
+    // starburst, slowly rotating (the site rotates it on scroll).
+    // "hero": faint site grid + star + ring — the full hero treatment.
+    if (backdrop === 'hero') {
+      // 60px site grid at whisper opacity
+      const step = 60 * u;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.03));
+      ctx.lineWidth = Math.max(1, u * 0.8);
+      ctx.beginPath();
+      for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+    }
+    if (backdrop === 'star' || backdrop === 'hero') {
+      // 24 hairline rays, green fading to transparent, gentle spin
+      const cx = W / 2;
+      const cy = backdrop === 'hero' ? H * 0.38 : H / 2;
+      const len = Math.min(W, H) * (backdrop === 'hero' ? 0.34 : 0.42);
+      const rot = t * 0.00006 * spd * Math.PI * 2;
+      ctx.lineWidth = Math.max(1, 1.1 * u);
+      for (let i = 0; i < 24; i++) {
+        const a = rot + (i / 24) * Math.PI * 2;
+        const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(a) * len, cy + Math.sin(a) * len);
+        g.addColorStop(0, withAlpha(scheme.accent, A(0.3)));
+        g.addColorStop(1, withAlpha(scheme.accent, 0));
+        ctx.strokeStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len);
+        ctx.stroke();
+      }
+    }
+    if (backdrop === 'hero-ring' || backdrop === 'hero') {
+      // Conic sage band, CSS: from 210deg, visible 10°–170°, masked to a
+      // thick ring low in the frame. Sweep extent grows in over ~1.6s.
+      const m = Math.max(W, H);
+      const R = m * 0.425;
+      const cx = W * 0.45;
+      const cy = H - R * 0.08;
+      const mid = R * 0.79;
+      const band = R * 0.42;
+      if ('createConicGradient' in ctx) {
+        // CSS conic stops → [deg, r, g, b, alpha], from 210° (0° = up)
+        const stops: Array<[number, number, number, number, number]> = [
+          [0, 50, 70, 65, 0], [10, 50, 70, 65, 0.2], [35, 55, 80, 72, 0.5],
+          [60, 60, 90, 80, 0.7], [85, 65, 95, 85, 0.8], [110, 60, 90, 80, 0.6],
+          [140, 50, 75, 68, 0.4], [170, 50, 75, 68, 0],
+        ];
+        const startRad = ((210 - 90) * Math.PI) / 180;
+        const g = (ctx as CanvasRenderingContext2D & {
+          createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
+        }).createConicGradient(startRad, cx, cy);
+        for (const [deg, r, gr, b, al] of stops) {
+          g.addColorStop(deg / 360, `rgba(${r},${gr},${b},${A(al)})`);
+        }
+        g.addColorStop(1, 'rgba(50,75,68,0)');
+        // Load-in: a pie-wedge clip grows from 0° to the full 170° sweep.
+        const lp = seg(t, 0, 1600, easeOutQuint);
+        if (lp > 0) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, R * 1.25, startRad, startRad + (170 * lp * Math.PI) / 180);
+          ctx.closePath();
+          ctx.clip();
+          ctx.beginPath();
+          ctx.arc(cx, cy, mid + band / 2, 0, Math.PI * 2);
+          ctx.arc(cx, cy, mid - band / 2, 0, Math.PI * 2, true);
+          ctx.fillStyle = g;
+          ctx.fill('evenodd');
+          ctx.restore();
+        }
+      }
+    }
   } else if (backdrop === 'spirograph') {
     // Offset rings orbiting the center (Pattern Studio: spirograph)
     const cx = W / 2;
