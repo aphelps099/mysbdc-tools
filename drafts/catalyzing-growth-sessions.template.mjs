@@ -14,10 +14,14 @@ import { existsSync } from 'node:fs';
 // Drop the jpegs into mcp/motion-studio/assets/ and every speaker card
 // upgrades to a photo card automatically; missing files fall back to the
 // typographic star card.
+// B&W versions (out/bw-*) match the team page treatment; generate with:
+//   ffmpeg -i assets/tfg-X.jpeg -vf "hue=s=0,eq=contrast=1.05" out/bw-tfg-X.jpeg
+// Falls back to the color originals in assets/ if the B&W copies are absent.
+const pick = (bw, orig) => existsSync(join(root, bw)) ? bw : orig;
 const PHOTOS = {
-  'Steve Plume': 'assets/tfg-steve.jpeg',
-  'Paul Bozzo': 'assets/tfg-paulbozzo.jpeg',
-  'Charles Eason': 'assets/tfg-chuck.jpeg',
+  'Steve Plume': pick('out/bw-tfg-steve.jpeg', 'assets/tfg-steve.jpeg'),
+  'Paul Bozzo': pick('out/bw-tfg-paulbozzo.jpeg', 'assets/tfg-paulbozzo.jpeg'),
+  'Charles Eason': pick('out/bw-tfg-chuck.jpeg', 'assets/tfg-chuck.jpeg'),
 };
 
 const SESSIONS = [

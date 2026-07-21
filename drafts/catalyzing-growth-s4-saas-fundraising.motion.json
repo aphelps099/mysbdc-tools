@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrva6hli-16",
+        "id": "scene-mrvbcwtj-16",
         "template": "statement",
         "duration": 2800,
         "scheme": "navy",
@@ -40,7 +40,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6hli-17",
+        "id": "scene-mrvbcwtj-17",
         "template": "title",
         "duration": 4000,
         "scheme": "navy",
@@ -75,7 +75,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6hli-18",
+        "id": "scene-mrvbcwtj-18",
         "template": "list",
         "duration": 4400,
         "scheme": "navy",
@@ -110,8 +110,8 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6hli-19",
-        "template": "title",
+        "id": "scene-mrvbcwtj-19",
+        "template": "image",
         "duration": 3000,
         "scheme": "navy",
         "customScheme": {
@@ -119,10 +119,10 @@
           "fg": "#ffffff",
           "accent": "#4EFF00"
         },
-        "anim": "word-stagger",
+        "anim": "rise",
         "transition": "fade",
-        "align": "center",
-        "backdrop": "star",
+        "align": "lower-left",
+        "backdrop": "none",
         "weird": false,
         "serifTitle": false,
         "textScale": 1,
@@ -135,17 +135,17 @@
         "statPrefix": "$",
         "statValue": 0,
         "statSuffix": "",
-        "imageId": null,
+        "imageId": "headshot-4",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
-        "overlayOpacity": 0.65,
+        "overlayOpacity": 0.7,
         "videoId": null,
         "videoTrimStart": 0,
         "videoMuted": false,
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6hli-20",
+        "id": "scene-mrvbcwtj-20",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -190,7 +190,14 @@
     "audioFadeOut": 2000,
     "duckLevel": 0.3
   },
-  "assets": [],
+  "assets": [
+    {
+      "id": "headshot-4",
+      "kind": "image",
+      "path": "/home/user/mysbdc-tools/mcp/motion-studio/out/bw-tfg-paulbozzo.jpeg",
+      "name": "bw-tfg-paulbozzo.jpeg"
+    }
+  ],
   "created": "2026-07-21T23:10:36.195Z",
-  "updated": "2026-07-21T23:24:43.542Z"
+  "updated": "2026-07-21T23:57:42.824Z"
 }
