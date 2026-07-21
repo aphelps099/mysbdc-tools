@@ -16,7 +16,9 @@ Everything renders exactly the same in preview and export.
 
 ## Aspects
 "16:9" 1920×1080 (YouTube/slides) · "9:16" 1080×1920 (Reels/Stories/TikTok)
-· "1:1" 1080×1080 (feed) · "4:5" 1080×1350 (IG feed).
+· "1:1" 1080×1080 (feed) · "4:5" 1080×1350 (IG/LinkedIn feed).
+LinkedIn: feed video reads best at 4:5 (1:1 also safe); 9:16 gets
+cropped in-feed — reserve it for other platforms' Stories/Reels.
 
 ## Scene templates and the fields each uses
 - "title" — kicker (small caps label), title (headline), subtitle.
@@ -27,7 +29,7 @@ Everything renders exactly the same in preview and export.
 - "image" — full-bleed photo (imageId of a registered asset) with text overlay: kicker/title/subtitle + kenBurns + overlay.
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print.
-- "endcard" — closing card: TFG logo renders automatically; title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
+- "endcard" — closing card: animated TFG lockup by default (the green ring strokes itself closed, then "TECH FUTURES GROUP" rises in — override the words with logoText, or set logoText "" for the static raster logo); title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
 
 ## Common scene fields
 - duration (ms): 2500–5000 typical. statement ~2500–3000, title ~3500–4000, list 4500–5500, stat ~3500, quote ~4500–5000, endcard ~3500.

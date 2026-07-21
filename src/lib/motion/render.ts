@@ -1251,7 +1251,9 @@ function drawEndcardScene(
       ? assets['__logo-white']
       : (vividBg ? assets['__logo-black'] ?? assets['__logo-blue'] : assets['__logo-blue']));
 
-  const logoH = logo ? 96 * u : 0;
+  const logoText = (scene.logoText ?? '').trim();
+  const hasLogo = !!logo || !!logoText;
+  const logoH = hasLogo ? 96 * u : 0;
   const kickerPx = 22 * u;
   const titlePx = 64 * u;
   const subPx = 22 * u;
@@ -1259,7 +1261,7 @@ function drawEndcardScene(
   const hasSub = !!scene.subtitle.trim();
 
   const parts = [
-    logo ? logoH + 56 * u : 0,
+    hasLogo ? logoH + 56 * u : 0,
     hasKicker ? kickerPx + 30 * u : 0,
     titlePx * 1.1,
     hasSub ? subPx * 1.5 + 40 * u : 0,
@@ -1267,8 +1269,52 @@ function drawEndcardScene(
   const totalH = parts.reduce((a, b) => a + b, 0);
   let y = (sc.H - totalH) / 2;
 
-  // Logo
-  if (logo) {
+  // Animated vector lockup — accent ring draws itself closed (stroke
+  // proportions from the brand SVG: width ≈ 24.5% of radius), then the
+  // words rise in as stacked spaced-caps lines.
+  if (logoText) {
+    const ringR = logoH / 2;
+    const strokeW = logoH * 0.1225;
+    const midR = ringR - strokeW / 2;
+    const gap = 26 * u;
+    const words = logoText.split(/\s+/).filter(Boolean);
+    const lineH = logoH / Math.max(words.length, 1);
+    const wordPx = lineH * 0.62;
+    const wordFont = fontStr(700, wordPx, doc.fontBody);
+    const spacing = wordPx * 0.18;
+    ctx.font = wordFont;
+    const spacedW = (s: string) => {
+      let tot = 0;
+      for (const c of [...s.toUpperCase()]) tot += ctx.measureText(c).width + spacing;
+      return tot - spacing;
+    };
+    const textW = Math.max(...words.map(spacedW));
+    const startX = sc.W / 2 - (logoH + gap + textW) / 2;
+    const cy = y + ringR;
+
+    const rp = seg(t, 80, 1100, easeOutQuint);
+    if (rp > 0) {
+      ctx.save();
+      ctx.strokeStyle = p.accent;
+      ctx.lineWidth = strokeW;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(startX + ringR, cy, midR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * rp);
+      ctx.stroke();
+      ctx.restore();
+    }
+    words.forEach((wd, i) => {
+      const wp = seg(t, 650 + i * 150, 500, easeOutQuint);
+      if (wp <= 0) return;
+      ctx.save();
+      ctx.globalAlpha *= wp;
+      ctx.translate(0, (1 - wp) * 8 * u);
+      const ly = cy + (i - (words.length - 1) / 2) * lineH + wordPx * 0.35;
+      drawSpacedText(ctx, wd, wordFont, p.fg, startX + logoH + gap, ly, spacing, 'left', 1);
+      ctx.restore();
+    });
+    y += parts[0];
+  } else if (logo) {
     const lp = seg(t, 80, 700, easeOutQuint);
     if (lp > 0) {
       const iw = logo.img.naturalWidth || 1;

@@ -1,11 +1,11 @@
 {
-  "name": "catalyzing-growth-2026",
+  "name": "catalyzing-growth-2026-linkedin",
   "doc": {
-    "aspect": "9:16",
+    "aspect": "4:5",
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrv9c3lj-1",
+        "id": "scene-mrv9d73v-1",
         "template": "statement",
         "duration": 3000,
         "scheme": "navy",
@@ -40,7 +40,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-2",
+        "id": "scene-mrv9d73v-2",
         "template": "statement",
         "duration": 2200,
         "scheme": "navy",
@@ -75,7 +75,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-3",
+        "id": "scene-mrv9d73v-3",
         "template": "title",
         "duration": 3800,
         "scheme": "navy",
@@ -110,7 +110,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-4",
+        "id": "scene-mrv9d73v-4",
         "template": "list",
         "duration": 5000,
         "scheme": "navy",
@@ -145,7 +145,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-5",
+        "id": "scene-mrv9d73v-5",
         "template": "list",
         "duration": 5600,
         "scheme": "navy",
@@ -180,7 +180,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-6",
+        "id": "scene-mrv9d73v-6",
         "template": "title",
         "duration": 4200,
         "scheme": "navy",
@@ -215,7 +215,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-7",
+        "id": "scene-mrv9d73v-7",
         "template": "stat",
         "duration": 3400,
         "scheme": "navy",
@@ -250,7 +250,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9c3lj-8",
+        "id": "scene-mrv9d73v-8",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -296,6 +296,6 @@
     "duckLevel": 0.3
   },
   "assets": [],
-  "created": "2026-07-21T22:20:14.677Z",
-  "updated": "2026-07-21T23:01:05.719Z"
+  "created": "2026-07-21T23:01:11.313Z",
+  "updated": "2026-07-21T23:01:56.923Z"
 }

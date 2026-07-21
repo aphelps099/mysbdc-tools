@@ -65,6 +65,7 @@ const sceneFields = {
   subtitle: z.string().max(220).optional(),
   body: z.string().max(600).optional().describe('List lines (newline separated) / fine print'),
   attribution: z.string().max(140).optional().describe('Quote attribution / stat label'),
+  logoText: z.string().max(40).optional().describe('Endcard: animated vector lockup words (ring draws in, words rise). TFG default "TECH FUTURES GROUP"; pass "" for the static raster logo'),
   statPrefix: z.string().max(8).optional(),
   statValue: z.number().optional(),
   statSuffix: z.string().max(8).optional(),

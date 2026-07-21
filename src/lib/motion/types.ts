@@ -198,6 +198,13 @@ export interface Scene {
   /** Quote attribution / stat label. */
   attribution: string;
 
+  /**
+   * Endcard: when set (e.g. "TECH FUTURES GROUP"), the endcard draws an
+   * animated vector lockup — accent ring strokes itself closed, then the
+   * words fade up as stacked lines — instead of the raster logo image.
+   */
+  logoText: string;
+
   // Stat template
   statPrefix: string;
   statValue: number;
@@ -307,6 +314,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     subtitle: '',
     body: '',
     attribution: '',
+    logoText: '',
     statPrefix: '$',
     statValue: 0,
     statSuffix: '',
