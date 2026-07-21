@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrv9jsql-1",
+        "id": "scene-mrva3x4g-1",
         "template": "statement",
         "duration": 3000,
         "scheme": "navy",
@@ -40,7 +40,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-2",
+        "id": "scene-mrva3x4g-2",
         "template": "statement",
         "duration": 2200,
         "scheme": "navy",
@@ -75,7 +75,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-3",
+        "id": "scene-mrva3x4h-3",
         "template": "title",
         "duration": 3800,
         "scheme": "navy",
@@ -110,7 +110,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-4",
+        "id": "scene-mrva3x4h-4",
         "template": "list",
         "duration": 5000,
         "scheme": "navy",
@@ -122,8 +122,8 @@
         "anim": "rise",
         "transition": "fade",
         "align": "lower-left",
-        "backdrop": "grid",
-        "weird": true,
+        "backdrop": "none",
+        "weird": false,
         "serifTitle": false,
         "textScale": 1,
         "kicker": "FOR PRE-SEED + SEED FOUNDERS",
@@ -145,7 +145,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-5",
+        "id": "scene-mrva3x4h-5",
         "template": "list",
         "duration": 5600,
         "scheme": "navy",
@@ -180,7 +180,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-6",
+        "id": "scene-mrva3x4h-6",
         "template": "title",
         "duration": 4200,
         "scheme": "navy",
@@ -215,7 +215,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-7",
+        "id": "scene-mrva3x4h-7",
         "template": "stat",
         "duration": 3400,
         "scheme": "navy",
@@ -250,7 +250,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9jsql-8",
+        "id": "scene-mrva3x4h-8",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -297,5 +297,5 @@
   },
   "assets": [],
   "created": "2026-07-21T22:20:14.677Z",
-  "updated": "2026-07-21T23:07:04.893Z"
+  "updated": "2026-07-21T23:22:43.697Z"
 }

@@ -423,7 +423,9 @@ function drawBackdrop(
 
   if (backdrop === 'grid') {
     const step = 84 * u;
-    ctx.strokeStyle = withAlpha(scheme.accent, A(0.1));
+    // Kept quiet on purpose — even in weird mode the grid should read
+    // as paper texture, not a feature.
+    ctx.strokeStyle = withAlpha(scheme.accent, A(0.055));
     ctx.lineWidth = Math.max(1, u);
     ctx.beginPath();
     for (let x = (W % step) / 2; x <= W; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
@@ -503,11 +505,13 @@ function drawBackdrop(
       for (let y = (H % step) / 2; y <= H; y += step) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
       ctx.stroke();
     }
-    if (backdrop === 'star' || backdrop === 'hero') {
+    // 'hero' used to layer the star too — star + ring together read as
+    // too busy, so the composite is grid + ring only for now.
+    if (backdrop === 'star') {
       // 24 hairline rays, green fading to transparent, gentle spin
       const cx = W / 2;
-      const cy = backdrop === 'hero' ? H * 0.38 : H / 2;
-      const len = Math.min(W, H) * (backdrop === 'hero' ? 0.34 : 0.42);
+      const cy = H / 2;
+      const len = Math.min(W, H) * 0.42;
       const rot = t * 0.00006 * spd * Math.PI * 2;
       ctx.lineWidth = Math.max(1, 1.1 * u);
       for (let i = 0; i < 24; i++) {
@@ -532,11 +536,13 @@ function drawBackdrop(
       const mid = R * 0.79;
       const band = R * 0.42;
       if ('createConicGradient' in ctx) {
-        // CSS conic stops → [deg, r, g, b, alpha], from 210° (0° = up)
+        // Conic stops → [deg, r, g, b, alpha], from 210° (0° = up).
+        // Palette matched to the live techfuturesgroup.org hero: black
+        // through slate blue into a soft lavender-purple, grained below.
         const stops: Array<[number, number, number, number, number]> = [
-          [0, 50, 70, 65, 0], [10, 50, 70, 65, 0.2], [35, 55, 80, 72, 0.5],
-          [60, 60, 90, 80, 0.7], [85, 65, 95, 85, 0.8], [110, 60, 90, 80, 0.6],
-          [140, 50, 75, 68, 0.4], [170, 50, 75, 68, 0],
+          [0, 30, 36, 56, 0], [22, 40, 50, 78, 0.35], [55, 78, 88, 118, 0.6],
+          [92, 150, 143, 165, 0.82], [125, 118, 100, 132, 0.55],
+          [155, 66, 54, 82, 0.28], [178, 40, 34, 56, 0],
         ];
         const startRad = ((210 - 90) * Math.PI) / 180;
         const g = (ctx as CanvasRenderingContext2D & {
@@ -545,14 +551,14 @@ function drawBackdrop(
         for (const [deg, r, gr, b, al] of stops) {
           g.addColorStop(deg / 360, `rgba(${r},${gr},${b},${A(al)})`);
         }
-        g.addColorStop(1, 'rgba(50,75,68,0)');
-        // Load-in: a pie-wedge clip grows from 0° to the full 170° sweep.
+        g.addColorStop(1, 'rgba(30,36,56,0)');
+        // Load-in: a pie-wedge clip grows from 0° to the full sweep.
         const lp = seg(t, 0, 1600, easeOutQuint);
         if (lp > 0) {
           ctx.save();
           ctx.beginPath();
           ctx.moveTo(cx, cy);
-          ctx.arc(cx, cy, R * 1.25, startRad, startRad + (170 * lp * Math.PI) / 180);
+          ctx.arc(cx, cy, R * 1.25, startRad, startRad + (178 * lp * Math.PI) / 180);
           ctx.closePath();
           ctx.clip();
           ctx.beginPath();
@@ -560,6 +566,20 @@ function drawBackdrop(
           ctx.arc(cx, cy, mid - band / 2, 0, Math.PI * 2, true);
           ctx.fillStyle = g;
           ctx.fill('evenodd');
+          // Heavy grain inside the band, like the site hero.
+          const pat = ctx.createPattern(getGrainTile() as CanvasImageSource, 'repeat');
+          if (pat) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, mid + band / 2, 0, Math.PI * 2);
+            ctx.arc(cx, cy, mid - band / 2, 0, Math.PI * 2, true);
+            ctx.clip('evenodd');
+            ctx.globalAlpha *= 0.09;
+            ctx.globalCompositeOperation = 'overlay';
+            ctx.fillStyle = pat;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+          }
           ctx.restore();
         }
       }
@@ -1274,15 +1294,16 @@ function drawEndcardScene(
   // words rise in as stacked spaced-caps lines.
   if (logoText) {
     const ringR = logoH / 2;
-    const strokeW = logoH * 0.1225;
+    const strokeW = logoH * 0.16;
     const midR = ringR - strokeW / 2;
     const gap = 26 * u;
     const words = logoText.split(/\s+/).filter(Boolean);
     const lineH = logoH / Math.max(words.length, 1);
-    const wordPx = lineH * 0.58;
-    // Michroma is the actual TFG logo typeface (single 400 weight, wide)
+    const wordPx = lineH * 0.48;
+    // Michroma is the actual TFG logo typeface (single 400 weight, wide);
+    // the real lockup tracks the caps wide and airy.
     const wordFont = fontStr(400, wordPx, 'Michroma');
-    const spacing = wordPx * 0.12;
+    const spacing = wordPx * 0.32;
     ctx.font = wordFont;
     const spacedW = (s: string) => {
       let tot = 0;

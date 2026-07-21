@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrv9pf1j-11",
+        "id": "scene-mrva67ph-11",
         "template": "statement",
         "duration": 2800,
         "scheme": "navy",
@@ -40,7 +40,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9pf1k-12",
+        "id": "scene-mrva67ph-12",
         "template": "title",
         "duration": 4000,
         "scheme": "navy",
@@ -75,7 +75,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9pf1k-13",
+        "id": "scene-mrva67ph-13",
         "template": "list",
         "duration": 4400,
         "scheme": "navy",
@@ -110,7 +110,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9pf1k-14",
+        "id": "scene-mrva67ph-14",
         "template": "title",
         "duration": 3000,
         "scheme": "navy",
@@ -145,7 +145,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrv9pf1k-15",
+        "id": "scene-mrva67ph-15",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -192,5 +192,5 @@
   },
   "assets": [],
   "created": "2026-07-21T23:10:35.459Z",
-  "updated": "2026-07-21T23:11:27.080Z"
+  "updated": "2026-07-21T23:24:30.725Z"
 }
