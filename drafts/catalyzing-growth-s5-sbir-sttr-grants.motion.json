@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrva6raj-21",
+        "id": "scene-mrvblia8-21",
         "template": "statement",
         "duration": 2800,
         "scheme": "navy",
@@ -31,6 +31,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -40,7 +41,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6raj-22",
+        "id": "scene-mrvblia8-22",
         "template": "title",
         "duration": 4000,
         "scheme": "navy",
@@ -66,6 +67,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -75,7 +77,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6raj-23",
+        "id": "scene-mrvblia8-23",
         "template": "list",
         "duration": 4400,
         "scheme": "navy",
@@ -101,6 +103,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -110,8 +113,8 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6raj-24",
-        "template": "title",
+        "id": "scene-mrvblia8-24",
+        "template": "image",
         "duration": 3000,
         "scheme": "navy",
         "customScheme": {
@@ -119,10 +122,10 @@
           "fg": "#ffffff",
           "accent": "#4EFF00"
         },
-        "anim": "word-stagger",
+        "anim": "rise",
         "transition": "fade",
-        "align": "center",
-        "backdrop": "star",
+        "align": "lower-left",
+        "backdrop": "none",
         "weird": false,
         "serifTitle": false,
         "textScale": 1,
@@ -135,7 +138,8 @@
         "statPrefix": "$",
         "statValue": 0,
         "statSuffix": "",
-        "imageId": null,
+        "imageId": "headshot-5",
+        "imageLayout": "card",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -145,7 +149,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrva6raj-25",
+        "id": "scene-mrvblia8-25",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -171,6 +175,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -190,7 +195,14 @@
     "audioFadeOut": 2000,
     "duckLevel": 0.3
   },
-  "assets": [],
+  "assets": [
+    {
+      "id": "headshot-5",
+      "kind": "image",
+      "path": "/home/user/mysbdc-tools/mcp/motion-studio/out/bw-tfg-chuck.jpeg",
+      "name": "bw-tfg-chuck.jpeg"
+    }
+  ],
   "created": "2026-07-21T23:10:36.917Z",
-  "updated": "2026-07-21T23:24:56.108Z"
+  "updated": "2026-07-22T00:04:23.889Z"
 }

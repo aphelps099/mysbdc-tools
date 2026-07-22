@@ -26,7 +26,7 @@ cropped in-feed — reserve it for other platforms' Stories/Reels.
 - "stat" — animated count-up number: statPrefix ("$"), statValue (70), statSuffix ("M+"), attribution (label under the number).
 - "list" — kicker + body (newline-separated lines, 3–4 max, each ≤ 6 words). Staggered agenda reveal.
 - "quote" — title (the quote, no quotation marks — they're added), attribution ("Name — Role"). serifTitle:true looks best.
-- "image" — full-bleed photo (imageId of a registered asset) with text overlay: kicker/title/subtitle + kenBurns + overlay.
+- "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay for text legibility; "card" places the photo in an inset portrait frame on the scheme background with text below — the presenter-card look (pair with align lower-left).
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print.
 - "endcard" — closing card: animated TFG lockup by default (the green ring strokes itself closed, then "TECH FUTURES GROUP" rises in — override the words with logoText, or set logoText "" for the static raster logo); title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
