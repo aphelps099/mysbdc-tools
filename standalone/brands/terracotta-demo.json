@@ -1,0 +1,12 @@
+{
+  "name": "terracotta-demo",
+  "label": "Terracotta (demo exploration)",
+  "headingFont": "Playfair Display",
+  "bodyFont": "Work Sans",
+  "dark":  { "bg": "#2a1c15", "fg": "#f7f0e6", "accent": "#d98e62" },
+  "light": { "bg": "#f7f0e6", "fg": "#2a1c15", "accent": "#a85a32" },
+  "rule": "#c96f45",
+  "logoLight": "",
+  "logoDark": "",
+  "eventUrlExample": "yoursbdc.org/events"
+}

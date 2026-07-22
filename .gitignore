@@ -38,3 +38,5 @@ next-env.d.ts
 .data
 standalone/dist/
 standalone/node_modules/
+standalone/ds-out/
+standalone/ds-site/

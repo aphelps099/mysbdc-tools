@@ -497,7 +497,7 @@ $('#exportMp4').addEventListener('click', async () => {
     const audioBuffer = doc.audioId ? await renderMixdown(doc, audioMap, {}) : null;
     const blob = await exportMp4(
       doc, assets,
-      (f) => progress(true, 'Exporting…', f),
+      (p) => progress(true, 'Exporting…', p.ratio),
       undefined,
       { videos: {}, audioBuffer },
     );

@@ -25,10 +25,26 @@ const html = readFileSync(join(here, 'src/index.html'), 'utf8')
   .replace('<!--APP_JS-->', () => `<script>\n${js}\n</script>`);
 writeFileSync(join(here, 'dist/promo-studio.html'), html);
 copyFileSync(join(here, 'README.md'), join(here, 'dist/README.md'));
+copyFileSync(join(here, 'EVENT-PROMO-SYSTEM.md'), join(here, 'dist/EVENT-PROMO-SYSTEM.md'));
+
+// Headless card-renderer harness (render-cards.mjs drives it).
+const cards = await build({
+  entryPoints: [join(here, 'src/render-cards.ts')],
+  bundle: true,
+  write: false,
+  platform: 'browser',
+  format: 'iife',
+  target: 'chrome110',
+  minify: true,
+});
+writeFileSync(
+  join(here, 'dist/render-harness.html'),
+  `<!DOCTYPE html><meta charset="utf-8"><title>card renderer</title><script>\n${cards.outputFiles[0].text}\n</script>`,
+);
 
 try {
-  execSync('zip -j -q dist/promo-studio.zip dist/promo-studio.html dist/README.md', { cwd: here });
-  console.log('build ok: dist/promo-studio.html + dist/promo-studio.zip');
+  execSync('zip -j -q dist/promo-studio.zip dist/promo-studio.html dist/README.md dist/EVENT-PROMO-SYSTEM.md', { cwd: here });
+  console.log('build ok: dist/promo-studio.html + dist/render-harness.html + dist/promo-studio.zip');
 } catch {
   console.log('build ok: dist/promo-studio.html (zip tool not found — zip skipped)');
 }
