@@ -1530,6 +1530,27 @@ const ED = {
   hairLight: 'rgba(15,28,45,0.16)',     // #0f1c2d29
 };
 
+/** Brand-aware editorial tones. SBDC preset scenes keep the exact ED
+    constants; scenes with a customScheme derive the same roles from
+    their own colors so NorCal navy/pool never leak into another
+    brand's cards (standalone Promo Studio explorations). */
+function edTones(scene: Scene, scheme: ReturnType<typeof resolveScheme>) {
+  if (!scene.customScheme) {
+    return {
+      ink: ED.navy, inkMuted: ED.slateLight, inkSoft: ED.slate,
+      accent: ED.pool, accentInk: ED.cobalt,
+      band: ED.navy, bandFg: ED.paper, bandMuted: ED.pool,
+      tile: ED.poolPale, lightOnDark: ED.paper,
+    };
+  }
+  return {
+    ink: scheme.fg, inkMuted: withAlpha(scheme.fg, 0.55), inkSoft: withAlpha(scheme.fg, 0.8),
+    accent: scheme.accent, accentInk: scheme.accent,
+    band: scheme.fg, bandFg: scheme.bg, bandMuted: withAlpha(scheme.bg, 0.72),
+    tile: withAlpha(scheme.fg, 0.08), lightOnDark: scheme.fg,
+  };
+}
+
 const MONTH_FULL: Record<string, string> = {
   JAN: 'January', FEB: 'February', MAR: 'March', APR: 'April', MAY: 'May',
   JUN: 'June', JUL: 'July', AUG: 'August', SEP: 'September', SEPT: 'September',
@@ -1710,6 +1731,7 @@ function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scen
   const scheme = resolveScheme(scene);
   const dark = isDark(scheme.bg);
   const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
+  const tones = edTones(scene, scheme);
   const day = String(Math.round(scene.statValue));
   const mon = scene.statSuffix.trim().toUpperCase();
   const [kl, kr] = scene.kicker.split('|').map((s) => s.trim());
@@ -1749,9 +1771,9 @@ function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scen
     y += titleH + 30 * u;
     drawTextBlock(ctx, {
       text: scene.subtitle, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35,
-      color: ED.pool, maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 620, accent: scheme.accent,
+      color: tones.accent, maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 620, accent: scheme.accent,
     });
-    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 64 * u, t, tStart: 750 });
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 64 * u, t, tStart: 750, urlColor: tones.lightOnDark });
   } else if (dark) {
     // ── 1a DAY SHEET — NAVY ──
     edKicker(ctx, sc, kl ?? scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
@@ -1781,29 +1803,29 @@ function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scen
     const dayPx = 470 * u;
     const rowTop = T + 22 * u + 40 * u;
     const baseline = rowTop + dayPx * 0.82;
-    edDay(ctx, sc, day, dayPx, ED.navy, L, baseline, t, 150);
+    edDay(ctx, sc, day, dayPx, tones.ink, L, baseline, t, 150);
     const dayW = edSeraWidth(ctx, sc, day, dayPx);
     const monTc = mon.charAt(0) + mon.slice(1).toLowerCase();
-    edEnter(ctx, sc, t, 300, () => { edSera(ctx, sc, monTc, 84 * u, ED.navy, L + dayW + 40 * u, baseline); });
+    edEnter(ctx, sc, t, 300, () => { edSera(ctx, sc, monTc, 84 * u, tones.ink, L + dayW + 40 * u, baseline); });
     edRule(ctx, sc, scene, L, bandTop - 90 * u - 8 * u, t, 450);
     // navy band
     edEnter(ctx, sc, t, 500, () => {
-      ctx.fillStyle = ED.navy;
+      ctx.fillStyle = tones.band;
       ctx.fillRect(0, bandTop, W, bandH + 30 * u);
       let y = bandTop + 64 * u + 70 * u * 0.8;
-      edSera(ctx, sc, scene.title, 70 * u, ED.paper, L, y);
+      edSera(ctx, sc, scene.title, 70 * u, tones.bandFg, L, y);
       y += 22 * u + 28 * u;
-      edNova(ctx, sc, scene.subtitle, 650, 28 * u, ED.pool, L, y);
+      edNova(ctx, sc, scene.subtitle, 650, 28 * u, tones.bandMuted, L, y);
     });
   } else {
     // ── 1b DAY SHEET — PAPER ──
     const bandH = 110 * u;
     edEnter(ctx, sc, t, 40, () => {
-      ctx.fillStyle = ED.navy;
+      ctx.fillStyle = tones.band;
       ctx.fillRect(0, -30 * u, W, bandH + 30 * u);
       const by = 44 * u + 22 * u * 0.8;
-      drawSpacedText(ctx, MONTH_FULL[mon] ?? mon, fontStr(800, 22 * u, sc.doc.fontBody), ED.paper, L, by, 22 * u * 0.13, 'left', 1);
-      if (wd) drawSpacedText(ctx, wd, fontStr(800, 22 * u, sc.doc.fontBody), ED.pool, R, by, 22 * u * 0.13, 'right', 1);
+      drawSpacedText(ctx, MONTH_FULL[mon] ?? mon, fontStr(800, 22 * u, sc.doc.fontBody), tones.bandFg, L, by, 22 * u * 0.13, 'left', 1);
+      if (wd) drawSpacedText(ctx, wd, fontStr(800, 22 * u, sc.doc.fontBody), tones.bandMuted, R, by, 22 * u * 0.13, 'right', 1);
     });
     const meta = stripWeekday(scene.subtitle);
     const titleH = 72 * u * 0.96 + 24 * u + 28 * u * 1.2;
@@ -1812,13 +1834,13 @@ function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scen
     const dayPx = 600 * u;
     const groupH = dayPx * 0.8 + 48 * u + 8 * u;
     const groupTop = bandH + (bottomTop - bandH - groupH) / 2;
-    edDay(ctx, sc, day, dayPx, ED.navy, W / 2, groupTop + dayPx * 0.78, t, 150, 'center');
+    edDay(ctx, sc, day, dayPx, tones.ink, W / 2, groupTop + dayPx * 0.78, t, 150, 'center');
     edRule(ctx, sc, scene, W / 2, groupTop + dayPx * 0.8 + 48 * u, t, 450, 'center');
     edEnter(ctx, sc, t, 550, () => {
       let y = bottomTop + 72 * u * 0.8;
-      edSera(ctx, sc, scene.title, 72 * u, ED.navy, W / 2, y, 'center');
+      edSera(ctx, sc, scene.title, 72 * u, tones.ink, W / 2, y, 'center');
       y += 24 * u + 28 * u;
-      edNova(ctx, sc, meta, 650, 28 * u, ED.slateLight, W / 2, y, 'center');
+      edNova(ctx, sc, meta, 650, 28 * u, tones.inkMuted, W / 2, y, 'center');
     });
   }
 }
@@ -1830,6 +1852,7 @@ function drawEdTitle(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, 
   const dark = isDark(scheme.bg);
   const [kl, kr] = scene.kicker.split('|').map((s) => s.trim());
 
+  const tones = edTones(scene, scheme);
   if (dark && scene.backdrop === 'dot-grid') {
     // ── 2c TITLE — DOT GRID CORNER ── (dot patch drawn by the backdrop)
     const L = 90 * u, R = W - 90 * u, B = H - 90 * u;
@@ -1866,13 +1889,13 @@ function drawEdTitle(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, 
     });
     y += titleH + 36 * u;
     if (hasSub) edEnter(ctx, sc, t, 620, () => edNova(ctx, sc, scene.subtitle, 650, 34 * u, scheme.accent, L, y + 34 * u * 0.8));
-    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 60 * u, t, tStart: 750 });
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 60 * u, t, tStart: 750, urlColor: tones.lightOnDark });
   } else {
     // ── 2b TITLE — CREAM CENTERED ──
     const T = 100 * u, B = H - 100 * u;
     edEnter(ctx, sc, t, 40, () => edDrawLogo(ctx, sc, false, W / 2, T, 74 * u, 'center'));
     if (scene.attribution.trim()) {
-      edKicker(ctx, sc, scene.attribution, 22 * u, withAlpha(ED.navy, 0.5), W / 2, B - 4 * u, 'center', t, 900);
+      edKicker(ctx, sc, scene.attribution, 22 * u, withAlpha(tones.ink, 0.5), W / 2, B - 4 * u, 'center', t, 900);
     }
     const maxW = Math.min(820 * u, W - 200 * u);
     const titleFont = fontStr(400, 120 * u, sc.doc.fontHeading);
@@ -1884,14 +1907,14 @@ function drawEdTitle(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, 
     edKicker(ctx, sc, scene.kicker.replace('|', ' · '), 22 * u, scheme.accent, W / 2, y + 18 * u, 'center', t, 150);
     y += 22 * u + 44 * u;
     drawTextBlock(ctx, {
-      text: scene.title, font: titleFont, px: 120 * u, lineHeight: 0.93, color: ED.navy,
+      text: scene.title, font: titleFont, px: 120 * u, lineHeight: 0.93, color: tones.ink,
       maxWidth: maxW, x: W / 2, y, align: 'center', anim: 'rise', t, tStart: 300,
       accent: scheme.accent, tracking: -0.05 * 120 * u,
     });
     y += titleH + 48 * u;
     edRule(ctx, sc, scene, W / 2, y, t, 620, 'center');
     y += 8 * u + 40 * u;
-    if (hasSub) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, scene.subtitle, 650, 32 * u, ED.slateLight, W / 2, y + 32 * u * 0.8, 'center'));
+    if (hasSub) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, scene.subtitle, 650, 32 * u, tones.inkMuted, W / 2, y + 32 * u * 0.8, 'center'));
   }
 }
 
@@ -1914,6 +1937,7 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
   const { W, H, u } = sc;
   const scheme = resolveScheme(scene);
   const dark = isDark(scheme.bg);
+  const tones = edTones(scene, scheme);
   const rows = parseAgendaRows(scene.body);
   if (rows.length === 0) return;
   const n = rows.length;
@@ -1937,7 +1961,7 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
         if (row.day) {
           edSera(ctx, sc, row.day, 96 * f * u, scheme.fg, L, base);
           const dw = edSeraWidth(ctx, sc, row.day, 96 * f * u);
-          edSera(ctx, sc, (row.mon ?? '').charAt(0) + (row.mon ?? '').slice(1).toLowerCase(), 34 * f * u, ED.pool, L + dw + 14 * f * u, base);
+          edSera(ctx, sc, (row.mon ?? '').charAt(0) + (row.mon ?? '').slice(1).toLowerCase(), 34 * f * u, tones.accent, L + dw + 14 * f * u, base);
           tx = L + Math.max(170 * f * u, dw + 80 * f * u) + 56 * f * u - 56 * f * u + 56 * f * u;
           tx = L + 170 * f * u + 56 * f * u;
         }
@@ -1949,13 +1973,13 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
         ctx.fillRect(L, areaTop + slot * (i + 1), R - L, Math.max(1, u));
       }
     });
-    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 56 * u, t, tStart: 600 + n * 120, padTop: 38 * u });
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 56 * u, t, tStart: 600 + n * 120, padTop: 38 * u, urlColor: tones.lightOnDark });
   } else if (isWarmLight(scheme.bg)) {
     // ── 3b AGENDA — CREAM NUMBERED ──
     const titleFont = fontStr(400, 96 * u, sc.doc.fontHeading);
     const { height: headH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 96 * u, lineHeight: 0.93, maxWidth: R - L, tracking: -0.05 * 96 * u });
     drawTextBlock(ctx, {
-      text: scene.title, font: titleFont, px: 96 * u, lineHeight: 0.93, color: ED.navy,
+      text: scene.title, font: titleFont, px: 96 * u, lineHeight: 0.93, color: tones.ink,
       maxWidth: R - L, x: L, y: T, align: 'left', anim: 'rise', t, tStart: 80,
       accent: scheme.accent, tracking: -0.05 * 96 * u,
     });
@@ -1967,8 +1991,8 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
       edEnter(ctx, sc, t, 420 + i * 120, () => {
         const top = areaTop + slot * i + slot / 2 - (22 * f * u + 14 * f * u + 56 * f * u) / 2;
         const kLine = [row.mon && row.day ? `${row.mon} ${row.day}` : '', row.meta ?? ''].filter(Boolean).join(' · ');
-        if (kLine) drawSpacedText(ctx, kLine, fontStr(800, 22 * f * u, sc.doc.fontBody), ED.cobalt, L, top + 18 * f * u, 22 * f * u * 0.13, 'left', 1);
-        edSera(ctx, sc, row.title, 56 * f * u, ED.navy, L, top + 22 * f * u + 14 * f * u + 56 * f * u * 0.82);
+        if (kLine) drawSpacedText(ctx, kLine, fontStr(800, 22 * f * u, sc.doc.fontBody), tones.accentInk, L, top + 18 * f * u, 22 * f * u * 0.13, 'left', 1);
+        edSera(ctx, sc, row.title, 56 * f * u, tones.ink, L, top + 22 * f * u + 14 * f * u + 56 * f * u * 0.82);
       });
     });
     // footer line: left note + right url
@@ -1976,17 +2000,17 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
     ctx.fillRect(L, footTop, R - L, Math.max(1, u));
     edEnter(ctx, sc, t, 500 + n * 120, () => {
       const by = footTop + 36 * u + 28 * u * 0.8;
-      if (scene.subtitle.trim()) edNova(ctx, sc, scene.subtitle, 650, 28 * u, ED.slateLight, L, by);
-      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, ED.navy, R, by, 'right');
+      if (scene.subtitle.trim()) edNova(ctx, sc, scene.subtitle, 650, 28 * u, tones.inkMuted, L, by);
+      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, tones.ink, R, by, 'right');
     });
   } else {
     // ── 3c AGENDA — NAVY HEADER + SHEET ──
     const headH = 70 * u + 22 * u + 26 * u + 88 * u * 0.93 + 70 * u;
     edEnter(ctx, sc, t, 40, () => {
-      ctx.fillStyle = ED.navy;
+      ctx.fillStyle = tones.band;
       ctx.fillRect(0, -30 * u, W, headH + 30 * u);
-      drawSpacedText(ctx, (kl ?? scene.kicker), fontStr(800, 22 * u, sc.doc.fontBody), ED.pool, L, 70 * u + 18 * u, 22 * u * 0.13, 'left', 1);
-      edSera(ctx, sc, scene.title, 88 * u, ED.paper, L, 70 * u + 22 * u + 26 * u + 88 * u * 0.8);
+      drawSpacedText(ctx, (kl ?? scene.kicker), fontStr(800, 22 * u, sc.doc.fontBody), tones.bandMuted, L, 70 * u + 18 * u, 22 * u * 0.13, 'left', 1);
+      edSera(ctx, sc, scene.title, 88 * u, tones.bandFg, L, 70 * u + 22 * u + 26 * u + 88 * u * 0.8);
     });
     const footH = 4 * u + 34 * u + 56 * u + 46 * u;
     const footTop = H - footH;
@@ -1998,13 +2022,13 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
         const cy = areaTop + slot * i + slot / 2;
         ctx.beginPath();
         ctx.roundRect(L, cy - tile / 2, tile, tile, 5 * u);
-        ctx.fillStyle = ED.poolPale;
+        ctx.fillStyle = tones.tile;
         ctx.fill();
-        if (row.mon) drawSpacedText(ctx, row.mon, fontStr(800, 18 * f * u, sc.doc.fontBody), ED.cobalt, L + tile / 2, cy - tile / 2 + 34 * f * u, 18 * f * u * 0.13, 'center', 1);
-        if (row.day) edSera(ctx, sc, row.day, 76 * f * u, ED.navy, L + tile / 2, cy + tile / 2 - 26 * f * u, 'center');
+        if (row.mon) drawSpacedText(ctx, row.mon, fontStr(800, 18 * f * u, sc.doc.fontBody), tones.accentInk, L + tile / 2, cy - tile / 2 + 34 * f * u, 18 * f * u * 0.13, 'center', 1);
+        if (row.day) edSera(ctx, sc, row.day, 76 * f * u, tones.ink, L + tile / 2, cy + tile / 2 - 26 * f * u, 'center');
         const tx = L + tile + 48 * f * u;
-        edSera(ctx, sc, row.title, 50 * f * u, ED.navy, tx, cy + (row.meta ? -4 * f * u : 16 * f * u));
-        if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, ED.slateLight, tx, cy + 12 * f * u + 26 * f * u);
+        edSera(ctx, sc, row.title, 50 * f * u, tones.ink, tx, cy + (row.meta ? -4 * f * u : 16 * f * u));
+        if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, tones.inkMuted, tx, cy + 12 * f * u + 26 * f * u);
       });
     });
     // berry footer rule + logo + url
@@ -2013,7 +2037,7 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
       ctx.fillRect(0, footTop, W, 4 * u);
       const cy = footTop + 4 * u + 34 * u + 28 * u;
       edDrawLogo(ctx, sc, false, L, cy - 28 * u, 56 * u);
-      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, ED.navy, R, cy + 10 * u, 'right');
+      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, tones.ink, R, cy + 10 * u, 'right');
     });
   }
 }
@@ -2024,6 +2048,7 @@ function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene
   const scheme = resolveScheme(scene);
   const dark = isDark(scheme.bg);
 
+  const tones = edTones(scene, scheme);
   if (dark && isBlueVivid(scheme.bg)) {
     // ── 4b END CARD — COBALT ──
     const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
@@ -2034,15 +2059,15 @@ function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene
     const urlH = scene.attribution.trim() ? 48 * u + 40 * u * 1.2 + 8 * u + 4 * u : 0;
     let y = footTop - 70 * u - (titleH + urlH);
     drawTextBlock(ctx, {
-      text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, color: ED.paper,
+      text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, color: tones.lightOnDark,
       maxWidth: R - L, x: L, y, align: 'left', anim: 'rise', t, tStart: 200,
       accent: scheme.accent, tracking: -0.05 * 150 * u,
     });
     y += titleH + 48 * u;
     if (scene.attribution.trim()) {
       edEnter(ctx, sc, t, 550, () => {
-        const w = edNova(ctx, sc, scene.attribution, 700, 40 * u, ED.paper, L, y + 40 * u * 0.8);
-        ctx.fillStyle = ED.pool;
+        const w = edNova(ctx, sc, scene.attribution, 700, 40 * u, tones.lightOnDark, L, y + 40 * u * 0.8);
+        ctx.fillStyle = tones.accent;
         ctx.fillRect(L, y + 40 * u * 0.8 + 16 * u, w, 4 * u);
       });
     }
@@ -2074,7 +2099,7 @@ function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene
     // ── 4c END CARD — CREAM TAGLINE ──
     const L = 100 * u, R = W - 100 * u, T = 100 * u, B = H - 100 * u;
     edEnter(ctx, sc, t, 40, () => edDrawLogo(ctx, sc, false, L, T, 70 * u));
-    edEnter(ctx, sc, t, 900, () => edNova(ctx, sc, scene.subtitle, 500, 20 * u, ED.slateLight, L, B - 2 * u));
+    edEnter(ctx, sc, t, 900, () => edNova(ctx, sc, scene.subtitle, 500, 20 * u, tones.inkMuted, L, B - 2 * u));
     const titleFont = fontStr(400, 140 * u, sc.doc.fontHeading);
     const { lines, height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 140 * u, lineHeight: 0.93, maxWidth: R - L, tracking: -0.05 * 140 * u });
     const tagline = scene.attribution.trim();
@@ -2092,7 +2117,7 @@ function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene
         const baseY = y + li * 140 * u * 0.93 + 140 * u * 0.82;
         line.words.forEach((wd, wi) => {
           const isLast = li === lines.length - 1 && wi === line.words.length - 1;
-          ctx.fillStyle = isLast ? ED.cobalt : ED.navy;
+          ctx.fillStyle = isLast ? tones.accentInk : tones.ink;
           ctx.fillText(wd.text, x, baseY);
           x += wd.width + spaceW;
         });
@@ -2102,7 +2127,7 @@ function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene
     y += titleH + 56 * u;
     edRule(ctx, sc, scene, L, y, t, 600);
     y += 8 * u + 44 * u;
-    if (tagline) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, tagline, 650, 32 * u, ED.slate, L, y + 32 * u * 0.8));
+    if (tagline) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, tagline, 650, 32 * u, tones.inkSoft, L, y + 32 * u * 0.8));
   }
 }
 

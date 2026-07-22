@@ -36,3 +36,7 @@ next-env.d.ts
 # export artifacts
 /milestones-export
 .data
+standalone/dist/
+standalone/node_modules/
+standalone/ds-out/
+standalone/ds-site/
