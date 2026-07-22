@@ -197,6 +197,8 @@ export const config = {
     // api/pipeline is excluded because cron/workers authenticate with a
     // service token inside the routes (see src/lib/pipeline/auth.ts) —
     // the cookie flow can't work for them.
-    '/((?!login|api/auth|api/tfg|api/roadmap|api/pipeline|tfg-apply|roadmap-apply|sbdc-day|_next|fonts|brand/assets|brand/social|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
+    // previews/* — public video-preview pages shared with the marketing
+    // team by link (see public/previews/); no login, but noindex'd.
+    '/((?!login|api/auth|api/tfg|api/roadmap|api/pipeline|tfg-apply|roadmap-apply|sbdc-day|previews|_next|fonts|brand/assets|brand/social|favicon\\.ico|.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp).*)',
   ],
 };
