@@ -30,7 +30,7 @@ const server = new McpServer({
 // ── Zod pieces ────────────────────────────────────────
 
 const templateEnum = z.enum([
-  'title', 'statement', 'stat', 'list', 'quote', 'image', 'video', 'disclaimer', 'endcard',
+  'title', 'statement', 'stat', 'list', 'quote', 'image', 'video', 'disclaimer', 'calendar', 'endcard',
 ]);
 const animEnum = z.enum([
   'rise', 'word-stagger', 'letter-cascade', 'typewriter', 'wipe', 'blur-in', 'scale-in', 'mask-reveal',

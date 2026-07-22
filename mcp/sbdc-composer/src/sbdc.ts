@@ -72,6 +72,11 @@ const SBDC_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
     kicker: 'ABOUT THE SBDC',
     body: 'Funded in part through a cooperative agreement with the U.S. Small Business Administration. All services are provided at no cost.',
   },
+  calendar: {
+    kicker: 'FREE TRAINING',
+    subtitle: 'Tuesday · 10:00 AM–12:00 PM · Online',
+    accentRule: SBDC_TOKENS.berry, // the design-system red rule
+  },
   // Endcard shows the OFFICIAL raster lockup (white on dark schemes,
   // color on light) — logoText stays empty; the mark is never drawn.
   endcard: {

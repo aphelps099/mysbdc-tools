@@ -38,6 +38,39 @@ const mock = createServer((req, res) => {
 await new Promise((r) => mock.listen(0, '127.0.0.1', r));
 const mockUrl = `http://127.0.0.1:${mock.address().port}`;
 
+// ── Mock WordPress events calendar (listing + JSON-LD detail pages) ──
+const isoIn = (days) => new Date(Date.now() + days * 86400_000).toISOString().slice(0, 10);
+const EVENTS = [
+  { slug: 'past-workshop', title: 'Past Workshop', date: isoIn(-7) },        // filtered out
+  { slug: 'cash-flow-basics-for-owners', title: 'Cash Flow Basics for Owners', date: isoIn(14) },
+  { slug: 'marketing-bootcamp-stockton', title: 'Marketing Bootcamp Stockton', date: isoIn(7) },
+];
+const detailHtml = (e) => `<html><head><script type="application/ld+json">
+${JSON.stringify({ '@type': 'Event', name: e.title, description: 'A free training from NorCal SBDC.',
+    startDate: `${e.date}T10:00:00-07:00`, endDate: `${e.date}T12:00:00-07:00`,
+    eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode' })}
+</script></head><body><h1>${e.title}</h1></body></html>`;
+const calendar = createServer((req, res) => {
+  const path = req.url ?? '/';
+  if (path === '/events/' || path === '/events') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(`<html><body>${EVENTS.map((e) =>
+      `<article><h3>${e.title}</h3><span class="badge">San Joaquin Delta SBDC</span>
+       <a href="/event/${e.slug}">View Event Details</a></article>`).join('')}</body></html>`);
+    return;
+  }
+  const m = path.match(/^\/event\/([^/]+)\/?$/);
+  const ev = m && EVENTS.find((e) => e.slug === m[1]);
+  if (ev) {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(detailHtml(ev));
+  } else {
+    res.writeHead(404); res.end();
+  }
+});
+await new Promise((r) => calendar.listen(0, '127.0.0.1', r));
+const calendarUrl = `http://127.0.0.1:${calendar.address().port}/events/`;
+
 // Synthesize a 5s stereo 440Hz WAV to exercise the music-mix path.
 function makeWav(path) {
   const sr = 48000, secs = 5, ch = 2;
@@ -68,6 +101,7 @@ await client.connect(new StdioClientTransport({
     ...process.env,
     REBRANDLY_API_KEY: 'smoke-test-key',
     REBRANDLY_API_URL: mockUrl,
+    SBDC_EVENTS_URL: calendarUrl,
   },
 }));
 
@@ -82,45 +116,57 @@ const call = async (name, args) => {
 
 const LONG_URL = 'https://norcalsbdc.zoom.us/webinar/register/WN_abc123XYZsomething-very-long';
 
+// ── Calendar: next trainings from the mocked WordPress events page ──
+const upcoming = JSON.parse((await call('events_upcoming', { limit: 5 })).content[0].text);
+console.log('events_upcoming:', upcoming.events.map((e) => `${e.startDate} ${e.title}`).join(' | '));
+if (upcoming.events.length !== 2) throw new Error(`expected 2 upcoming events, got ${upcoming.events.length}`);
+if (upcoming.events[0].title !== 'Marketing Bootcamp Stockton') throw new Error('events not sorted soonest-first');
+const sugg = upcoming.events[0].suggestedScene;
+if (sugg.template !== 'calendar' || !sugg.statValue || sugg.statSuffix.length !== 3) {
+  throw new Error(`bad suggestedScene: ${JSON.stringify(sugg)}`);
+}
+if (sugg.accentRule !== '#c23c3c') throw new Error('calendar rule should preset to berry');
+if (!/Online/.test(sugg.subtitle)) throw new Error(`format missing from subtitle: ${sugg.subtitle}`);
+
 await call('motion_create_project', {
   name: NAME,
   aspect: '9:16',
   scenes: [
     { template: 'statement', title: 'Your business plan starts here.', serifTitle: true, anim: 'mask-reveal', duration: 2600, cornerMark: true },
     { template: 'title', sbdcScheme: 'paper', kicker: 'STOCKTON · JUL 7', title: 'Marketing bootcamp', subtitle: `Register at ${LONG_URL}`, duration: 3400, backdrop: 'dot-grid' },
-    { template: 'stat', sbdcScheme: 'cobalt', statPrefix: '$', statValue: 474, statSuffix: 'M', attribution: 'in capital accessed by NorCal small businesses', duration: 3200 },
+    sugg, // the save-the-date card straight from the calendar
     { template: 'endcard', duration: 3000, backdrop: 'dot-grid' },
   ],
 });
-console.log('project created');
+console.log('project created (with calendar scene)');
 
 // ── Shortlink layer against the mock ──
 const map = await call('shortlink_map', { name: NAME });
 const report = JSON.parse(map.content[0].text);
 console.log('shortlink_map:', JSON.stringify(report.rewrites));
-if (report.rewrites.length !== 1) throw new Error('expected exactly one rewrite');
-const rw = report.rewrites[0];
-if (!/^sbdc\.events\//.test(rw.after)) throw new Error(`display form wrong: ${rw.after}`);
-if (rw.before !== LONG_URL) throw new Error('rewrote the wrong URL');
+if (report.rewrites.length !== 2) throw new Error('expected two rewrites (title subtitle + calendar attribution)');
+if (!report.rewrites.every((r) => /^sbdc\.events\//.test(r.after))) throw new Error('display form wrong');
 
 // Idempotent: second run finds nothing new and mints no new links.
 const map2 = await call('shortlink_map', { name: NAME });
 const report2 = JSON.parse(map2.content[0].text);
 if (report2.rewrites.length !== 0) throw new Error('second map should rewrite nothing');
-if (linkCount !== 1) throw new Error(`expected 1 link minted, got ${linkCount}`);
+if (linkCount !== 2) throw new Error(`expected 2 links minted, got ${linkCount}`);
 
 // Cache hit through shortlink_create for the same URL.
 const created = await call('shortlink_create', { name: NAME, url: LONG_URL, title: 'Marketing bootcamp' });
 const link = JSON.parse(created.content[0].text);
 if (!link.cached) throw new Error('expected cached=true for an already-mapped URL');
-if (linkCount !== 1) throw new Error('shortlink_create minted a duplicate');
+if (linkCount !== 2) throw new Error('shortlink_create minted a duplicate');
 
-// Scene text actually rewritten.
+// Scene text actually rewritten — the title subtitle and the calendar card.
 const proj = JSON.parse((await call('motion_get_project', { name: NAME })).content[0].text);
 const sub = proj.doc.scenes[1].subtitle;
 if (sub.includes('zoom.us')) throw new Error(`scene text still has the long URL: ${sub}`);
 if (!sub.includes('sbdc.events/')) throw new Error(`scene text missing the shortlink: ${sub}`);
-console.log('shortlink cache + rewrite OK:', sub);
+const calAttr = proj.doc.scenes[2].attribution;
+if (!calAttr.startsWith('sbdc.events/')) throw new Error(`calendar attribution not rewritten: ${calAttr}`);
+console.log('shortlink cache + rewrite OK:', sub, '|', calAttr);
 
 await call('motion_add_asset', { name: NAME, id: 'bed', kind: 'music', path: wav });
 console.log('music registered');
@@ -141,4 +187,5 @@ if (!hasAudio) throw new Error('expected an audio track (music bed was registere
 
 await client.close();
 mock.close();
+calendar.close();
 console.log('SMOKE OK');

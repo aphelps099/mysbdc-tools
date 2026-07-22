@@ -22,6 +22,7 @@ import {
 import {
   ensureShortlink, mapShortlinks, getClicks, hasApiKey, NO_KEY_WARNING,
 } from './rebrandly.js';
+import { upcomingEvents } from './events.js';
 import { RenderBackend, docTimes } from './browser.js';
 import { normalizeToH264 } from './transcode.js';
 
@@ -35,7 +36,7 @@ const server = new McpServer({
 // ── Zod pieces ────────────────────────────────────────
 
 const templateEnum = z.enum([
-  'title', 'statement', 'stat', 'list', 'quote', 'image', 'video', 'disclaimer', 'endcard',
+  'title', 'statement', 'stat', 'list', 'quote', 'image', 'video', 'disclaimer', 'calendar', 'endcard',
 ]);
 const animEnum = z.enum([
   'rise', 'word-stagger', 'letter-cascade', 'typewriter', 'wipe', 'blur-in', 'scale-in', 'mask-reveal',
@@ -68,8 +69,9 @@ const sceneFields = {
   body: z.string().max(600).optional().describe('List lines (newline separated) / fine print'),
   attribution: z.string().max(140).optional().describe('Quote attribution / stat label'),
   statPrefix: z.string().max(8).optional(),
-  statValue: z.number().optional(),
-  statSuffix: z.string().max(8).optional(),
+  statValue: z.number().optional().describe('Stat: the count-up number · calendar: the day of the month on the date tile'),
+  statSuffix: z.string().max(8).optional().describe('Stat: unit suffix ("M") · calendar: short month label on the tile ("AUG")'),
+  accentRule: z.string().max(9).optional().describe('Calendar: hex color of the short rule under the title (defaults to SBDC berry #c23c3c)'),
   imageId: z.string().nullable().optional().describe('Registered image asset id (image scenes)'),
   imageLayout: z.enum(['full', 'card']).optional().describe('"full" = photo fills the frame; "card" = inset portrait frame on the scheme background with text below (presenter cards)'),
   kenBurns: kenBurnsEnum.optional(),
@@ -289,6 +291,30 @@ server.registerTool(
     if (kind === 'music') p.doc.audioId = id;
     saveProject(p);
     return ok({ registered: { id, kind, path: abs }, assets: p.assets.map((a) => ({ id: a.id, kind: a.kind, name: a.name })) });
+  },
+);
+
+// ── Event calendar (norcalsbdc.org/events) ────────────
+
+server.registerTool(
+  'events_upcoming',
+  {
+    description:
+      'Fetch the next upcoming trainings from the norcalsbdc.org WordPress event calendar, soonest first. Each event includes display fields (day, month label, weekday, time) and a ready-to-use suggestedScene for the "calendar" save-the-date template — pass those straight to motion_set_scenes (plus an endcard), then run shortlink_map so each card\'s registration URL becomes an sbdc.events link.',
+    inputSchema: {
+      limit: z.number().int().min(1).max(12).optional().describe('How many upcoming events to return (default 5)'),
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async ({ limit }) => {
+    try {
+      return ok(await upcomingEvents(limit ?? 5));
+    } catch (e) {
+      return fail(
+        `Calendar fetch failed: ${e instanceof Error ? e.message : e}. ` +
+        'The norcalsbdc.org events page must be reachable from this machine — retry, or author the calendar scenes manually (see motion_guide).',
+      );
+    }
   },
 );
 

@@ -18,6 +18,19 @@ settings. Everything renders exactly the same in preview and export.
 4. motion_preview — look at the PNG frames; iterate with motion_update_scene.
 5. motion_export — produce the H.264 MP4.
 
+## Chat with the calendar — the next-N-trainings video
+events_upcoming { limit: 5 } reads the live norcalsbdc.org events calendar
+and returns the next trainings, soonest first, each with a ready-made
+suggestedScene for the "calendar" save-the-date template (day/month on the
+tile, title, weekday · time · format line, registration URL in attribution,
+berry rule preset). The whole flow:
+1. events_upcoming { limit: 5 }
+2. motion_create_project (aspect "4:5" for feed, "9:16" for Stories)
+3. motion_set_scenes — a title scene ("UPCOMING TRAININGS"), then the five
+   suggestedScenes as-is (tweak titles that run long), then an endcard.
+4. shortlink_map — turns each card's registration URL into sbdc.events/slug.
+5. motion_preview → motion_export.
+
 ## Aspects
 "16:9" 1920×1080 (YouTube/slides) · "9:16" 1080×1920 (Reels/Stories/TikTok)
 · "1:1" 1080×1080 (feed) · "4:5" 1080×1350 (IG/LinkedIn feed).
@@ -50,6 +63,13 @@ waves, stars, or textures, ever:
 - "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay; "card" places the photo in an inset portrait frame on the scheme background with text below — the presenter-card look (pair with align lower-left).
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print (the SBA cooperative-agreement line).
+- "calendar" — the save-the-date card: a flat date tile (near-square
+  corners) with statSuffix as the small month label ("AUG") over
+  statValue as the big day-of-month number, beside kicker (center name or
+  "FREE TRAINING"), title (event title), a short thick berry rule, and
+  subtitle (weekday · time · format). attribution renders a smaller muted
+  line under the time — put the registration URL there and let
+  shortlink_map shorten it. One scene per training; 3–4s each.
 - "endcard" — closing card: the OFFICIAL NorCal SBDC lockup (white on
   dark schemes, color on light — automatic); title = URL/CTA
   ("norcalsbdc.org" or an sbdc.events link), kicker = small CTA
@@ -63,6 +83,9 @@ waves, stars, or textures, ever:
 - align: "center", "lower-left", "lower-center", "lower-right". SBDC leans left-aligned — lists/images read best lower-left; center only single-statement scenes.
 - backdrop: "none" (the norm) or "dot-grid" (see Graphics above).
 - cornerMark: true — the official America's SBDC star sign-off (see Graphics above).
+- accentRule (calendar only): hex color of the rule under the title —
+  preset to the design-system berry #c23c3c; leave it alone. Berry stays
+  a rule color, never a background.
 - serifTitle: true → proxima-sera for the main line (statements/quotes);
   false → proxima-nova. The serif is the display voice — use it on the hook
   and the quote, not everywhere.

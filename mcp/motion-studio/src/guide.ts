@@ -29,6 +29,7 @@ cropped in-feed — reserve it for other platforms' Stories/Reels.
 - "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay for text legibility; "card" places the photo in an inset portrait frame on the scheme background with text below — the presenter-card look (pair with align lower-left).
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print.
+- "calendar" — save-the-date card: date tile (statValue = day of month, statSuffix = short month label like "AUG") beside kicker/title/subtitle (time line); the short rule under the title uses the scheme accent.
 - "endcard" — closing card: animated TFG lockup by default (the green ring strokes itself closed, then "TECH FUTURES GROUP" rises in — override the words with logoText, or set logoText "" for the static raster logo); title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
 
 ## Common scene fields

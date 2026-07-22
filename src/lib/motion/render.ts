@@ -962,6 +962,9 @@ function drawScene(
     case 'quote':
       drawQuoteScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
+    case 'calendar':
+      drawCalendarScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      break;
     case 'endcard':
       drawEndcardScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
@@ -1346,6 +1349,145 @@ function drawDisclaimerScene(
     align: p.align, anim: scene.anim, t, tStart: hasKicker ? 380 : 100,
     accent: p.accent,
   });
+}
+
+// — Calendar / save-the-date scene —
+// A flat date tile (near-square corners, short month label over a big
+// day-of-month number) beside the event title and time; a short thick
+// rule sits under the title. Field mapping: statValue = day number,
+// statSuffix = month label, kicker = small caps label, title = event
+// title, subtitle = time line, attribution = optional link/location
+// line. The rule color comes from scene.accentRule (SBDC berry) and
+// falls back to the scheme accent.
+function drawCalendarScene(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number, p: Palette,
+) {
+  const { u, doc } = sc;
+  const scheme = resolveScheme(scene);
+  const isVertical = sc.H > sc.W;
+  const frame = p.frame;
+
+  // Date tile
+  const tileW = (isVertical ? 320 : 290) * u;
+  const tileH = (isVertical ? 330 : 310) * u;
+  const radius = 6 * u; // near-square corners per the design system
+  const monthPx = 26 * u;
+  const dayPx = 158 * u;
+
+  // Text column (beside the tile; below it on vertical canvases)
+  const kickerPx = 22 * u;
+  const titlePx = (isVertical ? 56 : 64) * u;
+  const subPx = 30 * u;
+  const family = headingFamily(sc, scene);
+  const titleFont = fontStr(scene.serifTitle ? 400 : 300, titlePx, family);
+  const gap = 70 * u;
+  const textX = isVertical ? frame.x : frame.x + tileW + gap;
+  const maxW = isVertical ? frame.w : frame.w - tileW - gap;
+
+  const hasKicker = !!scene.kicker.trim();
+  const hasSub = !!scene.subtitle.trim();
+  const hasAttr = !!scene.attribution.trim();
+  const kickerH = hasKicker ? kickerPx + 30 * u : 0;
+  const { height: titleH } = measureBlock(ctx, {
+    text: scene.title, font: titleFont, px: titlePx, lineHeight: 1.14, maxWidth: maxW,
+  });
+  const ruleH = 46 * u;
+  const subH = hasSub ? subPx * 1.55 : 0;
+  const attrH = hasAttr ? subPx * 1.5 : 0;
+  const textH = kickerH + titleH + ruleH + subH + attrH;
+
+  const stackGap = 60 * u;
+  const totalH = isVertical ? tileH + stackGap + textH : Math.max(tileH, textH);
+  const topY = stackTop(sc, scene, totalH);
+
+  // Tile
+  const tp = seg(t, 60, 600, easeOutQuint);
+  if (tp > 0) {
+    ctx.save();
+    ctx.globalAlpha *= tp;
+    ctx.translate(0, (1 - tp) * 24 * u);
+    const tx = frame.x;
+    const ty = topY;
+    ctx.beginPath();
+    // roundRect is everywhere the engine runs (Chrome 99+, the export
+    // harness targets chrome110).
+    ctx.roundRect(tx, ty, tileW, tileH, radius);
+    // Flat panel: a soft fg lift with a hairline edge — no shadows.
+    ctx.fillStyle = withAlpha(scheme.fg, 0.055);
+    ctx.fill();
+    ctx.strokeStyle = scheme.line;
+    ctx.lineWidth = Math.max(1, u);
+    ctx.stroke();
+
+    // Month label, small caps in accent
+    const month = scene.statSuffix.trim().toUpperCase();
+    if (month) {
+      drawSpacedText(
+        ctx, month, fontStr(700, monthPx, doc.fontBody), p.accent,
+        tx + tileW / 2, ty + 66 * u, monthPx * 0.2, 'center', 1,
+      );
+    }
+    // Big day number
+    const day = String(Math.round(scene.statValue));
+    ctx.font = fontStr(300, dayPx, doc.fontBody);
+    ctx.fillStyle = p.fg;
+    ctx.textBaseline = 'alphabetic';
+    const dw = ctx.measureText(day).width;
+    ctx.fillText(day, tx + (tileW - dw) / 2, ty + tileH * 0.58 + dayPx * 0.36);
+    ctx.restore();
+  }
+
+  // Text column — vertically centered against the tile in row layout
+  let y = isVertical
+    ? topY + tileH + stackGap
+    : topY + Math.max(0, (tileH - textH) / 2);
+
+  if (hasKicker) {
+    const kp = seg(t, 350, 480, easeOutQuint);
+    if (kp > 0) {
+      ctx.save();
+      ctx.globalAlpha *= kp;
+      ctx.translate(0, (1 - kp) * 10 * u);
+      drawSpacedText(
+        ctx, scene.kicker, fontStr(700, kickerPx, doc.fontBody), p.accent,
+        textX, y + kickerPx * 0.8, kickerPx * 0.17, 'left', 1,
+      );
+      ctx.restore();
+    }
+    y += kickerH;
+  }
+
+  drawTextBlock(ctx, {
+    text: scene.title, font: titleFont, px: titlePx, lineHeight: 1.14,
+    color: p.fg, maxWidth: maxW, x: textX, y,
+    align: 'left', anim: scene.anim, t, tStart: 480, accent: p.accent,
+  });
+  y += titleH;
+
+  // Short thick rule under the title (design system: 4–5px, ~56–72px)
+  const rp = seg(t, 820, 450, easeOutQuint);
+  if (rp > 0) {
+    ctx.fillStyle = scene.accentRule?.trim() || p.accent;
+    ctx.fillRect(textX, y + 18 * u, 64 * u * rp, Math.max(4, 4.5 * u));
+  }
+  y += ruleH;
+
+  if (hasSub) {
+    drawTextBlock(ctx, {
+      text: scene.subtitle, font: fontStr(600, subPx, doc.fontBody), px: subPx,
+      lineHeight: 1.4, color: p.fg, maxWidth: maxW, x: textX, y,
+      align: 'left', anim: 'rise', t, tStart: 950, accent: p.accent,
+    });
+    y += subH;
+  }
+
+  if (hasAttr) {
+    drawTextBlock(ctx, {
+      text: scene.attribution, font: fontStr(400, subPx * 0.86, doc.fontBody), px: subPx * 0.86,
+      lineHeight: 1.4, color: p.muted, maxWidth: maxW, x: textX, y,
+      align: 'left', anim: 'rise', t, tStart: 1100, accent: p.accent,
+    });
+  }
 }
 
 // — End card scene —

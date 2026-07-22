@@ -76,6 +76,7 @@ export const TEMPLATES = [
   { id: 'image',     label: 'Image',     hint: 'Photo + text overlay' },
   { id: 'video',     label: 'Video',     hint: 'Uploaded clip + text overlay' },
   { id: 'disclaimer',label: 'Disclaimer',hint: 'Fine-print paragraph' },
+  { id: 'calendar',  label: 'Save the Date', hint: 'Date tile · title · time' },
   { id: 'endcard',   label: 'End Card',  hint: 'Logo · CTA · date' },
 ] as const;
 
@@ -216,10 +217,19 @@ export interface Scene {
    */
   cornerMark?: boolean;
 
-  // Stat template
+  // Stat template. The calendar template reuses the pair: statValue is
+  // the day of the month on the date tile, statSuffix the short month
+  // label above it ("AUG").
   statPrefix: string;
   statValue: number;
   statSuffix: string;
+
+  /**
+   * Calendar template: color of the short thick rule under the title
+   * (hex). Falls back to the scheme accent when unset — SBDC sets its
+   * design-system berry here.
+   */
+  accentRule?: string;
 
   // Image template
   imageId: string | null;
@@ -395,6 +405,15 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
       duration: 10000,
       overlay: 'gradient-bottom',
       overlayOpacity: 0.55,
+    },
+    calendar: {
+      kicker: 'FREE TRAINING',
+      title: 'Grow Your Business with AI',
+      subtitle: 'Tuesday · 10:00 AM–12:00 PM · Online',
+      statValue: 24,
+      statSuffix: 'SEPT',
+      anim: 'rise',
+      duration: 3500,
     },
     disclaimer: {
       kicker: 'BEFORE YOU BEGIN',
