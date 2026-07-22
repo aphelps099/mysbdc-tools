@@ -131,7 +131,14 @@ right-hand label after "|" ("THIS MONTH | FREE TRAININGS").
 - shortlink_create { name, url, title, slug? } — mint (or fetch the cached)
   link for one URL when you want the slug on a specific card yourself.
 - shortlink_clicks { name } — click counts for the project's links.
+- Slashtags are COMPACT by design: auto-slugs cap at ~22 chars on a word
+  boundary ("stockton-probiz", not "stockton-probiz-procurement-summit") —
+  the link is display typography on the card, so shorter is better. Pass an
+  explicit slug to shortlink_create when you want a specific short form.
 - Links are cached per project by long URL — re-running never mints duplicates.
+  Promoting the same event in a NEW project? Copy its cache entry from the
+  old project's projects/<name>.json into the new one before shortlink_map —
+  otherwise the taken slashtag gets a "-2" suffix duplicate.
 - No REBRANDLY_API_KEY in the environment? Everything still works: the tools
   return a warning and leave text unchanged, so previews/exports never block.
 

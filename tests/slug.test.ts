@@ -17,15 +17,15 @@ describe('slashtagFromTitle', () => {
     expect(slashtagFromTitle('Cannabis Tax Workshop')).toBe('cannabis-tax-workshop');
   });
   it('strips Spanish accents and punctuation', () => {
-    expect(slashtagFromTitle('Cómo Financiar Su Negocio: Guía Práctica')).toBe('como-financiar-su-negocio-guia-practica');
+    expect(slashtagFromTitle('Cómo Financiar Su Negocio: Guía Práctica')).toBe('como-financiar');
   });
   it('trims stop words but never to nothing', () => {
-    expect(slashtagFromTitle('An Introduction to QuickBooks for Your Business')).toBe('introduction-quickbooks-business');
+    expect(slashtagFromTitle('An Introduction to QuickBooks for Your Business')).toBe('introduction-quickbooks');
     expect(slashtagFromTitle('The And Of')).not.toBe('');
   });
-  it('caps length on a word boundary (~40 chars)', () => {
+  it('caps length on a word boundary (~22 chars, compact for video cards)', () => {
     const tag = slashtagFromTitle('A Very Long Workshop Title About Marketing Strategy And Social Media For Restaurants');
-    expect(tag.length).toBeLessThanOrEqual(40);
+    expect(tag.length).toBeLessThanOrEqual(26);
     expect(tag.endsWith('-')).toBe(false);
   });
   it('handles collision suffixes', () => {

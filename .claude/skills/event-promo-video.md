@@ -135,6 +135,16 @@ scenes only.
 - **shortlink_map before preview, always** (SBDC). Cards must show
   `sbdc.events/slug`, no scheme, never a raw Neoserra/Localist/WordPress
   URL. Links are cached per project — re-running never mints duplicates.
+- **Slashtags are compact.** Auto-slugs cap at ~22 chars on a word
+  boundary (`stockton-probiz`, not `stockton-probiz-procurement-summit`)
+  — the link is display typography. If a minted slug still reads long,
+  re-mint with an explicit short `slug` via `shortlink_create`.
+- **Same event, new project → seed the cache first.** The shortlink
+  cache is per project; a fresh project re-minting the same URL collides
+  with the taken slashtag and produces an ugly `-2` duplicate. Copy the
+  event's entry from the old project's `projects/<name>.json`
+  `shortlinks` map into the new project file before running
+  `shortlink_map` (the map then reports `reusedCache: true`).
 - **Verify the links you mint.** Fetch each `sbdc.events/...`, follow the
   redirect, confirm the destination page title matches the event (event
   sites reuse stale slugs — the Localist URL text proves nothing).
