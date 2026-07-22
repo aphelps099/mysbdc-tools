@@ -130,13 +130,27 @@ export class RenderBackend {
   private async ensureBrowser(): Promise<Browser> {
     if (this.browser?.isConnected()) return this.browser;
     const executablePath = this.resolveChromium();
+    // Managed environments (Claude Code on the web) route all egress
+    // through an HTTPS_PROXY that re-terminates TLS; Chromium ignores
+    // proxy env vars, so without this the Typekit kit and any remote
+    // brand asset get ERR_CONNECTION_RESET and renders fall back to
+    // stand-in fonts. The proxy's CA is already in the NSS store, but
+    // its TLS interception can't handle Chromium's TLS 1.3 ClientHello
+    // (connection reset regardless of cert trust), so cap the
+    // browser-to-proxy hop at TLS 1.2 — certificate verification stays
+    // on, and the proxy negotiates its own TLS to the origin.
+    const proxyServer = process.env.HTTPS_PROXY || process.env.https_proxy;
     this.browser = await chromium.launch({
       executablePath,
+      proxy: proxyServer
+        ? { server: proxyServer, bypass: '127.0.0.1,localhost' }
+        : undefined,
       args: [
         '--no-sandbox',
         '--disable-dev-shm-usage',
         '--autoplay-policy=no-user-gesture-required',
         '--enable-unsafe-swiftshader',
+        ...(proxyServer ? ['--ssl-version-max=tls1.2'] : []),
       ],
     });
     return this.browser;
