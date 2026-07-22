@@ -1,0 +1,9 @@
+{
+  "name": "promo-studio-standalone",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-file browser video editor for event promos — bundles the repo's motion engine into promo-studio.html for distribution to other SBDC networks.",
+  "scripts": { "build": "node build.mjs" },
+  "devDependencies": { "esbuild": "^0.24.0", "typescript": "^5.7.0" }
+}
