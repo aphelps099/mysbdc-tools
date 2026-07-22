@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Promo Studio — a 35-minute walkthrough</title>
+<link rel="stylesheet" href="https://use.typekit.net/pkl5rjs.css">
+<style>
+  :root { --navy:#0f1c2d; --paper:#fdfdfd; --cream:#f5f1e8; --pool:#8fc5d9; --cobalt:#1b5faf; --berry:#c23c3c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body { background:var(--navy); color:var(--paper); font-family:"proxima-nova",Arial,sans-serif; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center; padding:7vh 9vw; max-width:1280px; margin:0 auto; }
+  .slide.active { display:flex; }
+  .kicker { font-size:clamp(12px,1.3vw,15px); letter-spacing:.2em; font-weight:800; color:var(--pool); text-transform:uppercase; margin-bottom:20px; }
+  h1 { font-family:"proxima-sera",Georgia,serif; font-weight:400; font-size:clamp(32px,5vw,66px); line-height:1.04; letter-spacing:-.02em; min-height:1.1em; }
+  h1 .caret { display:inline-block; width:.06em; height:.9em; background:var(--berry); vertical-align:-.08em; margin-left:.06em; animation:blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .rule { width:72px; height:6px; background:var(--berry); margin:26px 0; }
+  p.big { font-size:clamp(17px,1.9vw,23px); line-height:1.5; color:var(--pool); max-width:58ch; }
+
+  /* mask-in reveal */
+  .reveal { opacity:0; }
+  .active .reveal { animation:maskup .7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes maskup { from { opacity:0; transform:translateY(26px); clip-path:inset(0 0 100% 0); } to { opacity:1; transform:none; clip-path:inset(0 0 -10% 0); } }
+
+  ul.plain { list-style:none; margin-top:4px; }
+  ul.plain li { font-size:clamp(16px,1.85vw,22px); line-height:1.5; margin-bottom:16px; padding-left:32px; position:relative; }
+  ul.plain li::before { content:""; position:absolute; left:0; top:.55em; width:16px; height:4px; background:var(--berry); }
+  ul.plain b { color:var(--paper); }
+  ul.plain span { color:var(--pool); }
+
+  .cols { display:flex; gap:5vw; align-items:center; }
+  .cols > .txt { flex:1.15; min-width:0; }
+  .cols > .pix { flex:1; min-width:0; display:flex; gap:14px; }
+  .pix img { width:100%; border-radius:6px; box-shadow:0 10px 34px rgba(0,0,0,.45); display:block; }
+  .pix .half { flex:1; }
+  .pix figcaption { font-size:12px; color:rgba(253,253,253,.5); margin-top:8px; }
+
+  .projects { display:grid; grid-template-columns:1fr 1fr; gap:16px 22px; margin-top:6px; }
+  .proj { display:flex; gap:14px; align-items:center; }
+  .proj img { width:150px; border-radius:5px; box-shadow:0 6px 22px rgba(0,0,0,.45); flex:0 0 auto; }
+  .proj .t { font-size:clamp(14px,1.55vw,18px); line-height:1.4; min-width:0; }
+  .proj .t b { display:block; font-size:clamp(15px,1.7vw,20px); }
+  .proj .t span { color:var(--pool); }
+
+  .steps { margin-top:4px; }
+  .step { display:flex; gap:24px; margin-bottom:20px; align-items:flex-start; }
+  .step .n {
+    font-family:"proxima-sera",Georgia,serif; font-size:clamp(30px,3.6vw,46px); color:var(--navy);
+    background:var(--pool); border-radius:50%; width:1.55em; height:1.55em; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .step .t { font-size:clamp(15px,1.75vw,21px); line-height:1.45; padding-top:.35em; }
+  .step .t b { display:block; font-size:clamp(18px,2.1vw,26px); margin-bottom:2px; }
+  .step .t span { color:var(--pool); }
+  .link-card { margin-top:14px; background:var(--cream); color:var(--navy); border-radius:6px; padding:14px 20px; font-size:clamp(14px,1.65vw,20px); font-weight:700; width:fit-content; }
+  .link-card small { display:block; font-weight:400; font-size:.72em; color:#4a5666; margin-top:2px; }
+
+  .contact { font-size:clamp(20px,2.6vw,32px); line-height:1.9; }
+  .contact a { color:var(--paper); text-decoration:none; border-bottom:3px solid var(--berry); }
+  .contact .lbl { color:var(--pool); font-size:.62em; text-transform:uppercase; letter-spacing:.18em; font-weight:800; display:block; line-height:1.2; margin-top:26px; }
+
+  .nav { position:fixed; bottom:26px; left:0; right:0; display:flex; justify-content:center; gap:10px; }
+  .nav .dot { width:9px; height:9px; border-radius:50%; background:rgba(253,253,253,.25); cursor:pointer; }
+  .nav .dot.on { background:var(--pool); }
+  .hintnav { position:fixed; bottom:22px; right:28px; color:rgba(253,253,253,.4); font-size:13px; }
+  .foot { position:fixed; bottom:22px; left:28px; color:rgba(253,253,253,.4); font-size:13px; }
+</style>
+</head>
+<body>
+
+<!-- 1 · TITLE — minimal -->
+<section class="slide active">
+  <div class="kicker reveal">America's SBDC · Live walkthrough · ~35 min</div>
+  <h1 data-type="Promo Studio."></h1>
+  <div class="rule reveal" style="animation-delay:.9s"></div>
+  <p class="big reveal" style="animation-delay:1.1s">Event videos, made by anyone. Customized by Claude.</p>
+</section>
+
+<!-- 2 · BIO -->
+<section class="slide">
+  <div class="kicker reveal">Your guide today</div>
+  <h1 data-type="Aaron Phelps"></h1>
+  <p class="big reveal" style="animation-delay:.7s">Marketing Director, Northern California SBDC ·
+    <a href="https://www.linkedin.com/in/aaroncphelps/" style="color:var(--pool)">linkedin.com/in/aaroncphelps</a></p>
+  <div class="rule reveal" style="animation-delay:.8s"></div>
+  <div class="projects">
+    <div class="proj reveal" style="animation-delay:.9s"><img src="{{IMG_SBDCAI}}" alt="SBDC.AI">
+      <div class="t"><b>SBDC.AI</b><span>AI built for advisors — the work around them gets smarter.</span></div></div>
+    <div class="proj reveal" style="animation-delay:1.05s"><img src="{{IMG_BRAND}}" alt="brand.norcalsbdc.org">
+      <div class="t"><b>brand.norcalsbdc.org</b><span>The NorCal network brand system, online.</span></div></div>
+    <div class="proj reveal" style="animation-delay:1.2s"><img src="{{IMG_TFG}}" alt="TFG Motion Studio">
+      <div class="t"><b>tools.norcalsbdc.org/motion/tfg</b><span>Motion studio for our Tech Futures Group program.</span></div></div>
+    <div class="proj reveal" style="animation-delay:1.35s"><img src="{{IMG_STOCKTON}}" alt="Stockton preview page">
+      <div class="t"><b>…/previews/stockton-probiz.html</b><span>Today's example — a real event promo, start to finish.</span></div></div>
+  </div>
+</section>
+
+<!-- 3 · WHY VIDEO -->
+<section class="slide">
+  <div class="kicker reveal">Why video · why now</div>
+  <h1 data-type="Three reasons"></h1>
+  <div class="rule reveal" style="animation-delay:.7s"></div>
+  <ul class="plain">
+    <li class="reveal" style="animation-delay:.8s"><b>Events are perishable.</b> <span>A promo that ships late fills zero seats — and every center runs dozens of trainings a year.</span></li>
+    <li class="reveal" style="animation-delay:1s"><b>Design capacity is scarce.</b> <span>Most centers have no designer; DIY templates drift off-brand and eat advisor hours.</span></li>
+    <li class="reveal" style="animation-delay:1.2s"><b>Video wins the feed.</b> <span>The platforms our clients actually use reward motion — exactly what's hardest to make.</span></li>
+  </ul>
+</section>
+
+<!-- 4 · SOLUTION -->
+<section class="slide">
+  <div class="cols">
+    <div class="txt">
+      <div class="kicker reveal">The solution</div>
+      <h1 data-type="One tool. One system. Claude."></h1>
+      <div class="rule reveal" style="animation-delay:1s"></div>
+      <ul class="plain">
+        <li class="reveal" style="animation-delay:1.1s"><b>Promo Studio.</b> <span>A single HTML file — open in Chrome, type your event, export MP4 + graphics. Nothing to install, nothing uploaded.</span></li>
+        <li class="reveal" style="animation-delay:1.3s"><b>A real design system.</b> <span>Layouts that make every center's post look designed.</span></li>
+        <li class="reveal" style="animation-delay:1.5s"><b>Claude tailors it.</b> <span>Same card, two brands — one small file of tokens apart.</span></li>
+      </ul>
+    </div>
+    <div class="pix">
+      <figure class="half reveal" style="animation-delay:1.2s"><img src="{{IMG_CARD_NORCAL}}" alt="NorCal card"><figcaption>NorCal SBDC</figcaption></figure>
+      <figure class="half reveal" style="animation-delay:1.4s"><img src="{{IMG_CARD_TERRA}}" alt="Terracotta card"><figcaption>Demo network — same system, their tokens</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · THE PLAN 1-2-3 -->
+<section class="slide">
+  <div class="kicker reveal">The plan</div>
+  <h1 data-type="1 · 2 · 3"></h1>
+  <div class="rule reveal" style="animation-delay:.6s"></div>
+  <div class="steps">
+    <div class="step reveal" style="animation-delay:.7s"><div class="n">1</div><div class="t"><b>Download it &amp; make a video</b>
+      <span>Grab the ZIP, open Promo Studio, build a real event promo in minutes.</span></div></div>
+    <div class="step reveal" style="animation-delay:.95s"><div class="n">2</div><div class="t"><b>Customize in Claude Design</b>
+      <span>Load the included design-system MD and watch Claude explore your network's identity.</span></div></div>
+    <div class="step reveal" style="animation-delay:1.2s"><div class="n">3</div><div class="t"><b>Handoff — make it yours</b>
+      <span>Take Claude's brand handoff to Cowork, or type it straight into the tool. Leave with it working.</span></div></div>
+  </div>
+  <div class="link-card reveal" style="animation-delay:1.45s">tools.norcalsbdc.org/previews/promo-studio.html
+    <small>everything from today: the ZIP, the guide, and the quick start</small></div>
+</section>
+
+<!-- 6 · CONNECT -->
+<section class="slide">
+  <div class="kicker reveal">Let's keep going</div>
+  <h1 data-type="Connect with me"></h1>
+  <div class="rule reveal" style="animation-delay:.8s"></div>
+  <div class="contact">
+    <span class="lbl reveal" style="animation-delay:.9s">Email</span>
+    <a class="reveal" style="animation-delay:1s" href="mailto:phelps@norcalsbdc.org">phelps@norcalsbdc.org</a>
+    <span class="lbl reveal" style="animation-delay:1.1s">LinkedIn</span>
+    <a class="reveal" style="animation-delay:1.2s" href="https://www.linkedin.com/in/aaroncphelps/">linkedin.com/in/aaroncphelps</a>
+  </div>
+</section>
+
+<div class="nav" id="nav"></div>
+<div class="foot">Aaron Phelps · NorCal SBDC</div>
+<div class="hintnav">→ / click to advance</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const nav = document.getElementById('nav');
+  let i = 0, typeTimer = null;
+
+  slides.forEach((_, k) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (k === 0 ? ' on' : '');
+    d.addEventListener('click', (e) => { e.stopPropagation(); go(k); });
+    nav.appendChild(d);
+  });
+  const dots = [...nav.children];
+
+  function typewrite(slide) {
+    clearInterval(typeTimer);
+    const h = slide.querySelector('h1[data-type]');
+    if (!h) return;
+    const text = h.dataset.type;
+    h.innerHTML = '<span class="caret"></span>';
+    let n = 0;
+    typeTimer = setInterval(() => {
+      n++;
+      h.innerHTML = text.slice(0, n).replace(/</g, '&lt;') + '<span class="caret"></span>';
+      if (n >= text.length) {
+        clearInterval(typeTimer);
+        setTimeout(() => { const c = h.querySelector('.caret'); if (c) c.remove(); }, 1600);
+      }
+    }, 42);
+  }
+
+  function go(k) {
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    slides.forEach((s, n) => {
+      const on = n === i;
+      if (on && !s.classList.contains('active')) {
+        // restart reveal animations
+        s.querySelectorAll('.reveal').forEach((el) => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+        typewrite(s);
+      }
+      s.classList.toggle('active', on);
+    });
+    dots.forEach((d, n) => d.classList.toggle('on', n === i));
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') go(i + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(i - 1);
+  });
+  document.body.addEventListener('click', (e) => { if (e.target.tagName !== 'A') go(i + 1); });
+  typewrite(slides[0]);
+</script>
+</body>
+</html>
