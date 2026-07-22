@@ -29,6 +29,19 @@ export interface SuggestedCalendarScene {
   attribution: string;
   accentRule: string;
   duration: number;
+  /** 'lower-left' → the 1d editorial-columns card (shows the link footer). */
+  align: 'lower-left';
+}
+
+/** One list scene covering all returned events (the 3a/3b/3c agenda). */
+export interface SuggestedAgendaScene {
+  template: 'list';
+  kicker: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  attribution: string;
+  duration: number;
 }
 
 export interface UpcomingEvent extends NormalizedEvent {
@@ -61,15 +74,37 @@ function decorate(e: NormalizedEvent): UpcomingEvent {
       template: 'calendar',
       statValue: day,
       statSuffix: monthShort,
-      kicker: (e.center || 'NorCal SBDC').toUpperCase(),
+      kicker: `${(e.center || 'NorCal SBDC').toUpperCase()} · FREE TRAINING`,
       title: e.title,
       subtitle,
       // The long registration URL — shortlink_map rewrites it to the
-      // sbdc.events display form before preview.
+      // sbdc.events display form before preview (1d footer).
       attribution: e.detailUrl,
       accentRule: SBDC_TOKENS.berry,
       duration: 3500,
+      align: 'lower-left',
     },
+  };
+}
+
+/** The one-scene agenda for a set of events ("this month's trainings"). */
+function agendaSceneFor(events: UpcomingEvent[]): SuggestedAgendaScene {
+  const allOnline = events.every((e) => e.format === 'webinar');
+  return {
+    template: 'list',
+    kicker: 'THIS MONTH | FREE TRAININGS',
+    title: 'Upcoming free trainings',
+    subtitle: allOnline ? 'All online · No fee' : 'Free · Register early',
+    body: events
+      .map((e) => {
+        const monTc = e.monthShort.charAt(0) + e.monthShort.slice(1).toLowerCase();
+        const meta = [e.weekday.slice(0, 3), e.startTime, e.format === 'webinar' ? 'Online' : 'In person']
+          .filter(Boolean).join(' · ');
+        return `${e.day} ${monTc} | ${e.title} | ${meta}`;
+      })
+      .join('\n'),
+    attribution: 'norcalsbdc.org/events',
+    duration: 5000,
   };
 }
 
@@ -80,6 +115,7 @@ function decorate(e: NormalizedEvent): UpcomingEvent {
  */
 export async function upcomingEvents(limit = 5): Promise<{
   events: UpcomingEvent[];
+  agendaScene: SuggestedAgendaScene | null;
   scanned: number;
   warnings: string[];
 }> {
@@ -101,8 +137,10 @@ export async function upcomingEvents(limit = 5): Promise<{
         a.startDate.localeCompare(b.startDate) ||
         (a.startTime ?? '').localeCompare(b.startTime ?? ''),
     );
+  const events = upcoming.slice(0, limit).map(decorate);
   return {
-    events: upcoming.slice(0, limit).map(decorate),
+    events,
+    agendaScene: events.length ? agendaSceneFor(events) : null,
     scanned: all.length,
     warnings,
   };

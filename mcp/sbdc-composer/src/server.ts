@@ -253,6 +253,8 @@ server.registerTool(
         aspect: aspectEnum.optional(),
         fps: z.number().int().min(24).max(60).optional(),
         watermark: z.string().max(60).optional().describe('Subtle corner text, "" to remove'),
+        sceneStyle: z.enum(['classic', 'editorial']).optional()
+          .describe('"editorial" (default here) = the SBDC event-card design system for title/agenda/calendar/endcard scenes; "classic" = the original renderers'),
         showGrain: z.boolean().optional(),
         fontHeading: z.string().optional(),
         fontBody: z.string().optional(),
@@ -300,7 +302,7 @@ server.registerTool(
   'events_upcoming',
   {
     description:
-      'Fetch the next upcoming trainings from the norcalsbdc.org WordPress event calendar, soonest first. Each event includes display fields (day, month label, weekday, time) and a ready-to-use suggestedScene for the "calendar" save-the-date template — pass those straight to motion_set_scenes (plus an endcard), then run shortlink_map so each card\'s registration URL becomes an sbdc.events link.',
+      'Fetch the next upcoming trainings from the norcalsbdc.org WordPress event calendar, soonest first. Each event includes display fields (day, month label, weekday, time) and a ready-to-use suggestedScene for the "calendar" save-the-date card; the response also carries one agendaScene covering all returned events. Pass those straight to motion_set_scenes (plus a title card and an endcard), then run shortlink_map so each card\'s registration URL becomes an sbdc.events link.',
     inputSchema: {
       limit: z.number().int().min(1).max(12).optional().describe('How many upcoming events to return (default 5)'),
     },

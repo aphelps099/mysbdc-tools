@@ -16,6 +16,10 @@ export const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 export const easeInCubic = (t: number) => t * t * t;
 
+/** Slide-up "settle": approximates cubic-bezier(.2,.75,.25,1) — a clean
+    decelerate with no overshoot (the SBDC design-system entrance). */
+export const easeSettle = (t: number) => 1 - Math.pow(1 - clamp01(t), 2.6);
+
 export const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 

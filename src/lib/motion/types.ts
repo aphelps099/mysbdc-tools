@@ -258,6 +258,14 @@ export interface Scene {
 export interface MotionDoc {
   aspect: AspectId;
   fps: number;
+  /**
+   * How title / agenda / calendar / endcard scenes render:
+   * 'classic' (default, the original renderers — TFG and legacy docs)
+   * or 'editorial' — the NorCal SBDC event-card design system (day
+   * sheets, hairline footers, berry rules). Media-backed scenes always
+   * use the classic path.
+   */
+  sceneStyle?: 'classic' | 'editorial';
   scenes: Scene[];
   /** CSS font-family for big display text. */
   fontHeading: string;

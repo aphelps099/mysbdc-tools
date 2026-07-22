@@ -20,14 +20,15 @@ settings. Everything renders exactly the same in preview and export.
 
 ## Chat with the calendar — the next-N-trainings video
 events_upcoming { limit: 5 } reads the live norcalsbdc.org events calendar
-and returns the next trainings, soonest first, each with a ready-made
-suggestedScene for the "calendar" save-the-date template (day/month on the
-tile, title, weekday · time · format line, registration URL in attribution,
-berry rule preset). The whole flow:
+and returns the next trainings, soonest first — each with a ready-made
+suggestedScene (the 1d save-the-date card, registration URL in the
+footer), plus one agendaScene covering the whole set. The whole flow:
 1. events_upcoming { limit: 5 }
 2. motion_create_project (aspect "4:5" for feed, "9:16" for Stories)
-3. motion_set_scenes — a title scene ("UPCOMING TRAININGS"), then the five
-   suggestedScenes as-is (tweak titles that run long), then an endcard.
+3. motion_set_scenes — a title scene, then either the five
+   suggestedScenes (one card per training) or the single agendaScene
+   (or both: agenda as the overview, cards for the top 2–3), then an
+   endcard. Vary schemes for rhythm: navy → paper → navy.
 4. shortlink_map — turns each card's registration URL into sbdc.events/slug.
 5. motion_preview → motion_export.
 
@@ -55,25 +56,44 @@ waves, stars, or textures, ever:
    navy. This is the ONLY backdrop; everything else stays "none".
 
 ## Scene templates and the fields each uses
-- "title" — kicker (small caps label, e.g. "STOCKTON · JUL 7"), title (headline), subtitle.
-- "statement" — title only: one big line. Great opener. Pairs well with serifTitle:true + anim "mask-reveal".
-- "stat" — animated count-up number: statPrefix ("$"), statValue (474), statSuffix ("M"), attribution (label under the number).
-- "list" — kicker + body (newline-separated lines, 3–4 max, each ≤ 6 words). Staggered agenda reveal.
-- "quote" — title (the quote, no quotation marks — they're added), attribution ("Name — Role"). serifTitle:true looks best.
-- "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay; "card" places the photo in an inset portrait frame on the scheme background with text below — the presenter-card look (pair with align lower-left).
+Docs here default to sceneStyle "editorial" — the SBDC event-card design
+system. Title / agenda / calendar / endcard scenes render the handoff's
+card designs; the SCHEME picks the variant. Kickers may carry a
+right-hand label after "|" ("THIS MONTH | FREE TRAININGS").
+
+- "title" — variants: navy → 2a editorial (kicker pair top, berry rule +
+  big serif title + subtitle low, logo/url footer — attribution is the
+  footer url) · navy + backdrop "dot-grid" → 2c (dot patch corner, big
+  title, rule + subtitle row, no footer) · cream/paper → 2b centered
+  (logo top, kicker/title/rule/subtitle centered, attribution as the
+  small caps bottom label).
+- "calendar" — the save-the-date card, one scene per training:
+  statValue = day-of-month, statSuffix = month ("AUG"), kicker = center
+  name, title = event title, subtitle = "Tuesday · 10:00 AM–12:00 PM ·
+  Online". Variants: navy → 1a day sheet (huge day number) · navy +
+  align "lower-left" → 1d editorial columns (shows attribution as the
+  footer url — the default from events_upcoming; put the registration
+  URL there and let shortlink_map shorten it) · paper → 1b day sheet
+  with navy header band · cream → 1c split with navy band.
+- "list" (agenda) — the next-N-trainings card, N ≤ 5. body lines are
+  structured: "12 AUG | Marketing bootcamp | Tue · 10:00 AM · Online".
+  title = header ("Upcoming free trainings"), subtitle = footer-left
+  note ("All online · No fee"), attribution = footer url. Variants:
+  navy → 3a list · cream → 3b numbered · paper → 3c navy header + sheet
+  with pool-pale date tiles. events_upcoming returns a ready agendaScene.
+- "endcard" — variants: navy → 4a centered (official lockup top, kicker
+  CTA, title = the big url line, attribution = tagline "Confidential
+  business advising. No fee.", subtitle = SBA fine print) · cobalt → 4b
+  (title = big CTA line "Register today", attribution = underlined url,
+  subtitle = SBA note footer) · cream/paper → 4c tagline (title = the
+  big line, last word set in cobalt; attribution = "Register today ·
+  norcalsbdc.org/events"). Always end with one.
+- "statement" — title only: one big line. Great opener. Pairs well with serifTitle:true + anim "mask-reveal". (Classic renderer.)
+- "stat" — animated count-up number: statPrefix ("$"), statValue (474), statSuffix ("M"), attribution (label under the number). (Classic renderer.)
+- "quote" — title (the quote, no quotation marks — they're added), attribution ("Name — Role"). serifTitle:true looks best. (Classic renderer.)
+- "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay; "card" places the photo in an inset portrait frame on the scheme background with text below (pair with align lower-left). Photo scenes always render classic.
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print (the SBA cooperative-agreement line).
-- "calendar" — the save-the-date card: a flat date tile (near-square
-  corners) with statSuffix as the small month label ("AUG") over
-  statValue as the big day-of-month number, beside kicker (center name or
-  "FREE TRAINING"), title (event title), a short thick berry rule, and
-  subtitle (weekday · time · format). attribution renders a smaller muted
-  line under the time — put the registration URL there and let
-  shortlink_map shorten it. One scene per training; 3–4s each.
-- "endcard" — closing card: the OFFICIAL NorCal SBDC lockup (white on
-  dark schemes, color on light — automatic); title = URL/CTA
-  ("norcalsbdc.org" or an sbdc.events link), kicker = small CTA
-  ("REGISTER TODAY"), subtitle = SBA fine print. Always end with one.
 
 ## Common scene fields
 - duration (ms): 2500–5000 typical. statement ~2500–3000, title ~3500–4000, list 4500–5500, stat ~3500, quote ~4500–5000, endcard ~3500.

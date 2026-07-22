@@ -40,9 +40,10 @@ export const SBDC_NAVY: CustomScheme = {
     sentence case (caps only in kickers), no exclamation marks. */
 const SBDC_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
   title: {
-    kicker: 'FREE WEBINAR',
+    kicker: 'STOCKTON · JUL 7 | FREE TRAINING',
     title: 'Turn your idea into a business',
-    subtitle: 'A free hands-on webinar from NorCal SBDC',
+    subtitle: 'In just 2 weeks',
+    attribution: 'norcalsbdc.org',
   },
   statement: {
     title: 'Free expert advising. Real results.',
@@ -54,9 +55,13 @@ const SBDC_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
     statSuffix: 'M',
     attribution: 'in capital accessed by NorCal small businesses',
   },
+  // Agenda rows: "DAY MON | title | meta" per line (editorial cards).
   list: {
-    kicker: 'WHAT YOU WILL LEARN',
-    body: 'Practical tools you can use the same day\nMarketing that actually converts\nFunding options and how to qualify',
+    kicker: 'THIS MONTH | FREE TRAININGS',
+    title: 'Upcoming free trainings',
+    subtitle: 'All online · No fee',
+    body: '12 AUG | Marketing bootcamp | Tue · 10:00 AM · Online\n21 AUG | QuickBooks for beginners | Fri · 9:00 AM · Online\n3 SEP | Cash flow basics for owners | Thu · 12:00 PM · Online',
+    attribution: 'norcalsbdc.org/events',
   },
   quote: {
     title: 'The SBDC helped us go from an idea to a thriving storefront.',
@@ -80,9 +85,10 @@ const SBDC_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
   // Endcard shows the OFFICIAL raster lockup (white on dark schemes,
   // color on light) — logoText stays empty; the mark is never drawn.
   endcard: {
-    title: 'norcalsbdc.org',
+    title: 'norcalsbdc.org/events',
     subtitle: 'Funded in part through a cooperative agreement with the U.S. SBA',
     kicker: 'REGISTER TODAY',
+    attribution: 'Confidential business advising. No fee.',
   },
 };
 
@@ -107,6 +113,7 @@ export function sbdcScene(input: SceneInput): Scene {
   }
   return makeScene(template, {
     customScheme: { ...SBDC_NAVY },
+    accentRule: SBDC_TOKENS.berry, // every editorial rule is berry
     ...(SBDC_SCENE_DEFAULTS[template] ?? {}),
     ...overrides,
   });
@@ -126,12 +133,15 @@ export function patchScene(scene: Scene, patch: Partial<SceneInput>): Scene {
   return next;
 }
 
-/** SBDC-branded starting document (proxima-sera + proxima-nova). */
+/** SBDC-branded starting document: proxima-sera + proxima-nova, the
+    editorial event-card design system, and no film grain (flat color). */
 export function sbdcDefaultDoc(): MotionDoc {
   return {
     ...defaultDoc(),
     scenes: [],
     fontHeading: 'proxima-sera',
     fontBody: 'proxima-nova',
+    sceneStyle: 'editorial',
+    showGrain: false,
   };
 }

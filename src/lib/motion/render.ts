@@ -15,7 +15,7 @@ import {
 } from './types';
 import {
   clamp01, seg, easeOutQuint, easeOutExpo, easeOutBack, easeInCubic,
-  easeInOutCubic, hashRandom,
+  easeInOutCubic, easeSettle, hashRandom,
 } from './easings';
 
 const TRANS_MS = 600;   // transition into a scene
@@ -25,6 +25,12 @@ const EXIT_MS = 450;    // content exit before a hard cut / loop end
 
 function fontStr(weight: number, px: number, family: string, italic = false): string {
   return `${italic ? 'italic ' : ''}${weight} ${px}px "${family}", sans-serif`;
+}
+
+/** Set canvas letter-spacing (px). Chromium-only API, present everywhere
+    the engine runs; measureText respects it, so wrapping stays correct. */
+function setTracking(ctx: CanvasRenderingContext2D, px: number): void {
+  (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = `${px}px`;
 }
 
 // ── Word/line layout ──────────────────────────────────
@@ -83,14 +89,18 @@ interface TextBlockOpts {
   accent: string;           // accent color (typewriter caret, wipe edge)
   /** Unit stagger override (ms). */
   stagger?: number;
+  /** Letter-spacing in px (display serif tracks -0.05em). */
+  tracking?: number;
 }
 
 /** Measure block height without drawing. */
 function measureBlock(
   ctx: CanvasRenderingContext2D,
-  o: Pick<TextBlockOpts, 'text' | 'font' | 'px' | 'lineHeight' | 'maxWidth'>,
+  o: Pick<TextBlockOpts, 'text' | 'font' | 'px' | 'lineHeight' | 'maxWidth' | 'tracking'>,
 ): { lines: Line[]; height: number } {
+  if (o.tracking) setTracking(ctx, o.tracking);
   const lines = layoutLines(ctx, o.text, o.font, o.maxWidth);
+  if (o.tracking) setTracking(ctx, 0);
   return { lines, height: lines.length * o.px * o.lineHeight };
 }
 
@@ -100,7 +110,10 @@ function measureBlock(
  * fully-visible layout once complete, so presets are hot-swappable.
  */
 function drawTextBlock(ctx: CanvasRenderingContext2D, o: TextBlockOpts): number {
-  const { lines, height } = measureBlock(ctx, o);
+  // Tracking stays active through layout AND drawing so wrap points and
+  // glyph positions agree; reset before returning.
+  if (o.tracking) setTracking(ctx, o.tracking);
+  const { lines, height } = measureBlock(ctx, { ...o, tracking: undefined });
   ctx.font = o.font;
   ctx.textBaseline = 'alphabetic';
   const spaceW = ctx.measureText(' ').width;
@@ -232,6 +245,7 @@ function drawTextBlock(ctx: CanvasRenderingContext2D, o: TextBlockOpts): number 
     }
   }
 
+  if (o.tracking) setTracking(ctx, 0);
   return height;
 }
 
@@ -790,27 +804,22 @@ function drawBackdrop(
     }
     ctx.globalAlpha = fadeIn;
   } else if (backdrop === 'dot-grid') {
-    // The SBDC website's halftone motif, literal: small circular dots on
-    // a regular grid, anchored to the top-right corner and fading toward
-    // the center. Low contrast — a soft fg lift on dark schemes, accent
-    // tint on light ones. Static by design; text never sits over it.
-    const step = 34 * u;
-    const dotR = 3.1 * u;
-    const spanX = W * 0.34;
-    const spanY = H * 0.5;
-    const darkBg = isDark(scheme.bg);
-    ctx.fillStyle = darkBg ? scheme.fg : scheme.accent;
-    for (let x = W - step / 2; x > W - spanX; x -= step) {
-      for (let y = step / 2; y < spanY; y += step) {
-        const fade = (1 - (W - x) / spanX) * (1 - (y / spanY) * 0.7);
-        if (fade <= 0.05) continue;
-        ctx.globalAlpha = fadeIn * A((darkBg ? 0.09 : 0.2) * fade);
+    // The SBDC website's halftone motif, verbatim from the event-card
+    // handoff: radial-gradient(accent@30% 5px, transparent 5px) on a
+    // 44px grid offset 22px, as a static 520×520 patch in the top-right
+    // corner. Never behind text.
+    const step = 44 * u;
+    const dotR = 5 * u;
+    const span = 520 * u;
+    ctx.fillStyle = withAlpha(scheme.accent, 0.3);
+    ctx.globalAlpha = fadeIn;
+    for (let x = W - span + 22 * u; x < W + dotR; x += step) {
+      for (let y = 22 * u; y < span; y += step) {
         ctx.beginPath();
         ctx.arc(x, y, dotR, 0, Math.PI * 2);
         ctx.fill();
       }
     }
-    ctx.globalAlpha = fadeIn;
   }
 
   ctx.restore();
@@ -941,11 +950,16 @@ function drawScene(
     : scene.align === 'lower-right' ? 'right'
     : 'center';
 
+  // Editorial event-card designs replace title/agenda/calendar/endcard
+  // when the doc opts in; media-backed scenes keep the classic path.
+  const editorial = doc.sceneStyle === 'editorial' && !isVideo && !isImage;
+
   switch (scene.template) {
     case 'title':
     case 'image':
     case 'video':
-      drawTitleScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      if (editorial && scene.template === 'title') drawEdTitle(ctx, tsc, scene, t);
+      else drawTitleScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'disclaimer':
       drawDisclaimerScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
@@ -957,16 +971,19 @@ function drawScene(
       drawStatScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'list':
-      drawListScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      if (editorial) drawEdAgenda(ctx, tsc, scene, t);
+      else drawListScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'quote':
       drawQuoteScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'calendar':
-      drawCalendarScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      if (editorial) drawEdCalendar(ctx, tsc, scene, t);
+      else drawCalendarScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
     case 'endcard':
-      drawEndcardScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
+      if (editorial) drawEdEndcard(ctx, tsc, scene, t);
+      else drawEndcardScene(ctx, tsc, scene, t, { fg, muted, accent, anchorX, align, frame });
       break;
   }
 
@@ -1487,6 +1504,605 @@ function drawCalendarScene(
       lineHeight: 1.4, color: p.muted, maxWidth: maxW, x: textX, y,
       align: 'left', anim: 'rise', t, tStart: 1100, accent: p.accent,
     });
+  }
+}
+
+/* ═══ Editorial event cards (doc.sceneStyle === 'editorial') ═══════
+   Pixel-exact port of the NorCal SBDC event-card handoff (canvas-HTML
+   reference at 1080×1080). All dimensions are reference-px × u, copied
+   verbatim — do not round or "improve". The palette is the design
+   system's own; the scene's scheme + layout controls pick the VARIANT:
+   · calendar: navy → 1a day sheet · navy + lower-left/right → 1d
+     editorial columns · paper → 1b paper day sheet · cream → 1c split
+   · title: navy → 2a editorial · navy + dot-grid → 2c · light → 2b
+   · list (agenda): navy → 3a list · cream → 3b numbered · paper → 3c
+     navy header + sheet with pool-pale date tiles
+   · endcard: navy → 4a centered · cobalt → 4b · light → 4c tagline
+   Kickers may carry a right-hand label after "|" ("THIS MONTH | FREE
+   TRAININGS"). Agenda body lines: "12 AUG | Title | Tue · 10:00 AM ·
+   Online". Media-backed scenes always use the classic renderers. */
+
+const ED = {
+  navy: '#0f1c2d', cobalt: '#1b5faf', pool: '#8fc5d9', poolPale: '#dcecf2',
+  paper: '#fdfdfd', cream: '#f5f1e8', slate: '#2c3240', slateLight: '#687080',
+  berry: '#c23c3c',
+  hairDark: 'rgba(255,255,255,0.18)',   // #ffffff2e
+  hairLight: 'rgba(15,28,45,0.16)',     // #0f1c2d29
+};
+
+const MONTH_FULL: Record<string, string> = {
+  JAN: 'January', FEB: 'February', MAR: 'March', APR: 'April', MAY: 'May',
+  JUN: 'June', JUL: 'July', AUG: 'August', SEP: 'September', SEPT: 'September',
+  OCT: 'October', NOV: 'November', DEC: 'December',
+};
+
+/** Cream vs paper: the warm tint picks the cream variants. */
+function isWarmLight(hex: string): boolean {
+  const n = parseInt(hex.slice(1), 16);
+  return ((n >> 16) & 255) - (n & 255) > 6;
+}
+
+/** Cobalt vs navy among dark backgrounds. */
+function isBlueVivid(hex: string): boolean {
+  const n = parseInt(hex.slice(1), 16);
+  return (n & 255) - ((n >> 16) & 255) > 80;
+}
+
+function edRuleColor(scene: Scene): string {
+  return scene.accentRule?.trim() || ED.berry;
+}
+
+function weekdayOf(text: string): string | null {
+  const m = text.trim().match(/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i);
+  return m ? m[1] : null;
+}
+
+/** Time line without its leading weekday ("Tuesday · 10:00 …" → "10:00 …"). */
+function stripWeekday(text: string): string {
+  return text.replace(/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\s*·\s*/i, '');
+}
+
+/** Kicker with slide-up settle. Style: nova 800, caps, .13em tracking. */
+function edKicker(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, text: string, px: number,
+  color: string, x: number, y: number, align: 'left' | 'center' | 'right',
+  t: number, tStart: number,
+) {
+  if (!text) return;
+  const p = seg(t, tStart, 600, easeSettle);
+  if (p <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= p;
+  ctx.translate(0, (1 - p) * 16 * sc.u);
+  drawSpacedText(ctx, text, fontStr(800, px, sc.doc.fontBody), color, x, y, px * 0.13, align, 1);
+  ctx.restore();
+}
+
+/** One line of display serif (weight 400, -.05em). Returns width drawn. */
+function edSera(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, text: string, px: number,
+  color: string, x: number, baselineY: number, align: 'left' | 'center' | 'right' = 'left',
+): number {
+  ctx.font = fontStr(400, px, sc.doc.fontHeading);
+  setTracking(ctx, -0.05 * px);
+  const w = ctx.measureText(text).width;
+  const dx = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  ctx.fillStyle = color;
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, dx, baselineY);
+  setTracking(ctx, 0);
+  return w;
+}
+
+function edSeraWidth(ctx: CanvasRenderingContext2D, sc: SceneCtx, text: string, px: number): number {
+  ctx.font = fontStr(400, px, sc.doc.fontHeading);
+  setTracking(ctx, -0.05 * px);
+  const w = ctx.measureText(text).width;
+  setTracking(ctx, 0);
+  return w;
+}
+
+/** The big day number: settle-in with the allowed 1.04→1.0 scale. */
+function edDay(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, day: string, px: number,
+  color: string, x: number, baselineY: number, t: number, tStart: number,
+  align: 'left' | 'center' | 'right' = 'left',
+) {
+  const p = seg(t, tStart, 700, easeSettle);
+  if (p <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= p;
+  const s = 1.04 - 0.04 * p;
+  ctx.translate(x, baselineY);
+  ctx.scale(s, s);
+  edSera(ctx, sc, day, px, color, 0, 0, align);
+  ctx.restore();
+}
+
+/** The berry rule: 120×8, grows in. */
+function edRule(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
+  x: number, y: number, t: number, tStart: number, align: 'left' | 'center' = 'left',
+) {
+  const p = seg(t, tStart, 500, easeSettle);
+  if (p <= 0) return;
+  const w = 120 * sc.u * p;
+  ctx.fillStyle = edRuleColor(scene);
+  ctx.fillRect(align === 'center' ? x - w / 2 : x, y, w, 8 * sc.u);
+}
+
+/** Nova text line. Returns width. */
+function edNova(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, text: string, weight: number,
+  px: number, color: string, x: number, baselineY: number,
+  align: 'left' | 'center' | 'right' = 'left',
+): number {
+  ctx.font = fontStr(weight, px, sc.doc.fontBody);
+  const w = ctx.measureText(text).width;
+  const dx = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  ctx.fillStyle = color;
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, dx, baselineY);
+  return w;
+}
+
+function edLogoAsset(sc: SceneCtx, dark: boolean) {
+  return dark
+    ? sc.assets['__logo-brand-light'] ?? sc.assets['__logo-white']
+    : sc.assets['__logo-brand-dark'] ?? sc.assets['__logo-blue'];
+}
+
+function edDrawLogo(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, dark: boolean,
+  x: number, y: number, h: number, align: 'left' | 'center' = 'left',
+): void {
+  const logo = edLogoAsset(sc, dark);
+  if (!logo) return;
+  const iw = logo.img.naturalWidth || 1;
+  const ih = logo.img.naturalHeight || 1;
+  const w = (h / ih) * iw;
+  ctx.drawImage(logo.img, align === 'center' ? x - w / 2 : x, y, w, h);
+}
+
+/** Footer: hairline, logo left, url right. Returns the hairline y. */
+function edFooter(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, o: {
+    top: number; left: number; right: number; dark: boolean;
+    url: string; logoH: number; t: number; tStart: number;
+    hairColor?: string; hairH?: number; padTop?: number;
+    urlPx?: number; urlColor?: string;
+  },
+) {
+  const { u } = sc;
+  const p = seg(o.t, o.tStart, 600, easeSettle);
+  if (p <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= p;
+  ctx.fillStyle = o.hairColor ?? (o.dark ? ED.hairDark : ED.hairLight);
+  ctx.fillRect(o.left, o.top, o.right - o.left, o.hairH ?? Math.max(1, u));
+  const pad = o.padTop ?? 40 * u;
+  const cy = o.top + pad + o.logoH / 2;
+  edDrawLogo(ctx, sc, o.dark, o.left, cy - o.logoH / 2, o.logoH);
+  if (o.url) {
+    edNova(ctx, sc, o.url, 700, (o.urlPx ?? 26) * u,
+      o.urlColor ?? (o.dark ? ED.paper : ED.navy), o.right, cy + 9 * u, 'right');
+  }
+  ctx.restore();
+}
+
+/** Rise+settle wrapper for a block draw. */
+function edEnter(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, t: number, tStart: number,
+  draw: () => void,
+) {
+  const p = seg(t, tStart, 600, easeSettle);
+  if (p <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= p;
+  ctx.translate(0, (1 - p) * 22 * sc.u);
+  draw();
+  ctx.restore();
+}
+
+// — SAVE THE DATE (calendar template, editorial) —
+function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number) {
+  const { W, H, u } = sc;
+  const scheme = resolveScheme(scene);
+  const dark = isDark(scheme.bg);
+  const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
+  const day = String(Math.round(scene.statValue));
+  const mon = scene.statSuffix.trim().toUpperCase();
+  const [kl, kr] = scene.kicker.split('|').map((s) => s.trim());
+  const wd = weekdayOf(scene.subtitle);
+
+  if (dark && (scene.align === 'lower-left' || scene.align === 'lower-right')) {
+    // ── 1d EDITORIAL COLUMNS — NAVY ──
+    edKicker(ctx, sc, scene.kicker.replace('|', ' · '), 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    const footTop = B - (Math.max(1, u) + 40 * u + 64 * u);
+    const colTop = T + 22 * u + 70 * u;
+    const colBottom = footTop - 64 * u;
+    const dayPx = 340 * u;
+    const colW = Math.max(edSeraWidth(ctx, sc, day, dayPx), 150 * u);
+    edEnter(ctx, sc, t, 150, () => {
+      drawSpacedText(ctx, mon, fontStr(800, 22 * u, sc.doc.fontBody), scheme.fg, L, colTop + 18 * u, 22 * u * 0.13, 'left', 1);
+      edDay(ctx, sc, day, dayPx, scheme.fg, L, colTop + 18 * u + 28 * u + dayPx * 0.82, t, 150);
+    });
+    // column hairline
+    const hx = L + colW + 70 * u;
+    ctx.fillStyle = ED.hairDark;
+    ctx.fillRect(hx, colTop, Math.max(1, u), colBottom - colTop);
+    // right column, bottom-aligned
+    const tx = hx + 70 * u;
+    const maxW = R - tx;
+    const titleFont = fontStr(400, 88 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 88 * u, lineHeight: 0.94, maxWidth: maxW, tracking: -0.05 * 88 * u });
+    const { height: metaH } = measureBlock(ctx, { text: scene.subtitle, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35, maxWidth: maxW });
+    const blockH = 8 * u + 40 * u + titleH + 30 * u + metaH;
+    let y = colBottom - 12 * u - blockH;
+    edRule(ctx, sc, scene, tx, y, t, 350);
+    y += 8 * u + 40 * u;
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 88 * u, lineHeight: 0.94, color: scheme.fg,
+      maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 420,
+      accent: scheme.accent, tracking: -0.05 * 88 * u,
+    });
+    y += titleH + 30 * u;
+    drawTextBlock(ctx, {
+      text: scene.subtitle, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35,
+      color: ED.pool, maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 620, accent: scheme.accent,
+    });
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 64 * u, t, tStart: 750 });
+  } else if (dark) {
+    // ── 1a DAY SHEET — NAVY ──
+    edKicker(ctx, sc, kl ?? scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    const right = kr || (wd ? `${mon} · ${wd.slice(0, 3)}` : mon);
+    edKicker(ctx, sc, right, 22 * u, withAlpha(scheme.fg, 0.4), R, T + 18 * u, 'right', t, 60);
+    const dayPx = 560 * u;
+    const dayTop = T + 22 * u + 64 * u;
+    edDay(ctx, sc, day, dayPx, scheme.fg, L, dayTop + dayPx * 0.8, t, 150);
+    edRule(ctx, sc, scene, L, dayTop + dayPx * 0.82 + 56 * u, t, 400);
+    // bottom block
+    const meta = stripWeekday(scene.subtitle);
+    const titleFont = fontStr(400, 76 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 76 * u, lineHeight: 0.96, maxWidth: R - L, tracking: -0.05 * 76 * u });
+    let y = B - (titleH + 26 * u + 30 * u * 1.2);
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 76 * u, lineHeight: 0.96, color: scheme.fg,
+      maxWidth: R - L, x: L, y, align: 'left', anim: 'rise', t, tStart: 500,
+      accent: scheme.accent, tracking: -0.05 * 76 * u,
+    });
+    y += titleH + 26 * u;
+    edEnter(ctx, sc, t, 680, () => edNova(ctx, sc, meta, 650, 30 * u, scheme.accent, L, y + 30 * u * 0.8));
+  } else if (isWarmLight(scheme.bg)) {
+    // ── 1c SPLIT — CREAM + NAVY BAND ──
+    const bandH = 64 * u + 70 * u * 0.96 + 22 * u + 34 * u + 80 * u;
+    const bandTop = H - bandH;
+    edKicker(ctx, sc, kl ?? scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    const dayPx = 470 * u;
+    const rowTop = T + 22 * u + 40 * u;
+    const baseline = rowTop + dayPx * 0.82;
+    edDay(ctx, sc, day, dayPx, ED.navy, L, baseline, t, 150);
+    const dayW = edSeraWidth(ctx, sc, day, dayPx);
+    const monTc = mon.charAt(0) + mon.slice(1).toLowerCase();
+    edEnter(ctx, sc, t, 300, () => { edSera(ctx, sc, monTc, 84 * u, ED.navy, L + dayW + 40 * u, baseline); });
+    edRule(ctx, sc, scene, L, bandTop - 90 * u - 8 * u, t, 450);
+    // navy band
+    edEnter(ctx, sc, t, 500, () => {
+      ctx.fillStyle = ED.navy;
+      ctx.fillRect(0, bandTop, W, bandH + 30 * u);
+      let y = bandTop + 64 * u + 70 * u * 0.8;
+      edSera(ctx, sc, scene.title, 70 * u, ED.paper, L, y);
+      y += 22 * u + 28 * u;
+      edNova(ctx, sc, scene.subtitle, 650, 28 * u, ED.pool, L, y);
+    });
+  } else {
+    // ── 1b DAY SHEET — PAPER ──
+    const bandH = 110 * u;
+    edEnter(ctx, sc, t, 40, () => {
+      ctx.fillStyle = ED.navy;
+      ctx.fillRect(0, -30 * u, W, bandH + 30 * u);
+      const by = 44 * u + 22 * u * 0.8;
+      drawSpacedText(ctx, MONTH_FULL[mon] ?? mon, fontStr(800, 22 * u, sc.doc.fontBody), ED.paper, L, by, 22 * u * 0.13, 'left', 1);
+      if (wd) drawSpacedText(ctx, wd, fontStr(800, 22 * u, sc.doc.fontBody), ED.pool, R, by, 22 * u * 0.13, 'right', 1);
+    });
+    const meta = stripWeekday(scene.subtitle);
+    const titleH = 72 * u * 0.96 + 24 * u + 28 * u * 1.2;
+    const bottomTop = B - titleH;
+    // centered day + rule between band and bottom block
+    const dayPx = 600 * u;
+    const groupH = dayPx * 0.8 + 48 * u + 8 * u;
+    const groupTop = bandH + (bottomTop - bandH - groupH) / 2;
+    edDay(ctx, sc, day, dayPx, ED.navy, W / 2, groupTop + dayPx * 0.78, t, 150, 'center');
+    edRule(ctx, sc, scene, W / 2, groupTop + dayPx * 0.8 + 48 * u, t, 450, 'center');
+    edEnter(ctx, sc, t, 550, () => {
+      let y = bottomTop + 72 * u * 0.8;
+      edSera(ctx, sc, scene.title, 72 * u, ED.navy, W / 2, y, 'center');
+      y += 24 * u + 28 * u;
+      edNova(ctx, sc, meta, 650, 28 * u, ED.slateLight, W / 2, y, 'center');
+    });
+  }
+}
+
+// — TITLE (editorial) —
+function drawEdTitle(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number) {
+  const { W, H, u } = sc;
+  const scheme = resolveScheme(scene);
+  const dark = isDark(scheme.bg);
+  const [kl, kr] = scene.kicker.split('|').map((s) => s.trim());
+
+  if (dark && scene.backdrop === 'dot-grid') {
+    // ── 2c TITLE — DOT GRID CORNER ── (dot patch drawn by the backdrop)
+    const L = 90 * u, R = W - 90 * u, B = H - 90 * u;
+    edKicker(ctx, sc, scene.kicker.replace('|', ' · '), 22 * u, scheme.accent, L, 90 * u + 18 * u, 'left', t, 60);
+    const titleFont = fontStr(400, 150 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, maxWidth: R - L, tracking: -0.05 * 150 * u });
+    const rowH = Math.max(8 * u, 32 * u * 1.1);
+    let y = B - (titleH + 52 * u + rowH);
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, color: scheme.fg,
+      maxWidth: R - L, x: L, y, align: 'left', anim: 'rise', t, tStart: 260,
+      accent: scheme.accent, tracking: -0.05 * 150 * u,
+    });
+    y += titleH + 52 * u;
+    edRule(ctx, sc, scene, L, y + rowH / 2 - 4 * u, t, 620);
+    edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, scene.subtitle, 650, 32 * u, scheme.accent, L + 120 * u + 36 * u, y + rowH / 2 + 11 * u));
+  } else if (dark) {
+    // ── 2a TITLE — NAVY EDITORIAL ──
+    const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
+    edKicker(ctx, sc, kl ?? scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    if (kr) edKicker(ctx, sc, kr, 22 * u, withAlpha(scheme.fg, 0.4), R, T + 18 * u, 'right', t, 60);
+    const footTop = B - (Math.max(1, u) + 40 * u + 60 * u);
+    const titleFont = fontStr(400, 130 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 130 * u, lineHeight: 0.93, maxWidth: R - L, tracking: -0.05 * 130 * u });
+    const hasSub = !!scene.subtitle.trim();
+    const subH = hasSub ? 36 * u + 34 * u * 1.2 : 0;
+    let y = footTop - 72 * u - (8 * u + 48 * u + titleH + subH);
+    edRule(ctx, sc, scene, L, y, t, 200);
+    y += 8 * u + 48 * u;
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 130 * u, lineHeight: 0.93, color: scheme.fg,
+      maxWidth: R - L, x: L, y, align: 'left', anim: 'rise', t, tStart: 320,
+      accent: scheme.accent, tracking: -0.05 * 130 * u,
+    });
+    y += titleH + 36 * u;
+    if (hasSub) edEnter(ctx, sc, t, 620, () => edNova(ctx, sc, scene.subtitle, 650, 34 * u, scheme.accent, L, y + 34 * u * 0.8));
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 60 * u, t, tStart: 750 });
+  } else {
+    // ── 2b TITLE — CREAM CENTERED ──
+    const T = 100 * u, B = H - 100 * u;
+    edEnter(ctx, sc, t, 40, () => edDrawLogo(ctx, sc, false, W / 2, T, 74 * u, 'center'));
+    if (scene.attribution.trim()) {
+      edKicker(ctx, sc, scene.attribution, 22 * u, withAlpha(ED.navy, 0.5), W / 2, B - 4 * u, 'center', t, 900);
+    }
+    const maxW = Math.min(820 * u, W - 200 * u);
+    const titleFont = fontStr(400, 120 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 120 * u, lineHeight: 0.93, maxWidth: maxW, tracking: -0.05 * 120 * u });
+    const hasSub = !!scene.subtitle.trim();
+    const groupH = 22 * u + 44 * u + titleH + 48 * u + 8 * u + (hasSub ? 40 * u + 32 * u : 0);
+    const areaTop = T + 74 * u;
+    let y = areaTop + (B - 40 * u - areaTop - groupH) / 2;
+    edKicker(ctx, sc, scene.kicker.replace('|', ' · '), 22 * u, scheme.accent, W / 2, y + 18 * u, 'center', t, 150);
+    y += 22 * u + 44 * u;
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 120 * u, lineHeight: 0.93, color: ED.navy,
+      maxWidth: maxW, x: W / 2, y, align: 'center', anim: 'rise', t, tStart: 300,
+      accent: scheme.accent, tracking: -0.05 * 120 * u,
+    });
+    y += titleH + 48 * u;
+    edRule(ctx, sc, scene, W / 2, y, t, 620, 'center');
+    y += 8 * u + 40 * u;
+    if (hasSub) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, scene.subtitle, 650, 32 * u, ED.slateLight, W / 2, y + 32 * u * 0.8, 'center'));
+  }
+}
+
+// — AGENDA (list template, editorial) —
+interface AgendaRow { day?: string; mon?: string; title: string; meta?: string }
+
+function parseAgendaRows(body: string): AgendaRow[] {
+  return body.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 5).map((line) => {
+    const parts = line.split('|').map((p) => p.trim());
+    if (parts.length >= 2) {
+      const m = parts[0].match(/^(\d{1,2})\s+([A-Za-z]+)$/);
+      if (m) return { day: m[1], mon: m[2].toUpperCase(), title: parts[1], meta: parts[2] };
+      return { title: parts[0], meta: parts[1] };
+    }
+    return { title: line };
+  });
+}
+
+function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number) {
+  const { W, H, u } = sc;
+  const scheme = resolveScheme(scene);
+  const dark = isDark(scheme.bg);
+  const rows = parseAgendaRows(scene.body);
+  if (rows.length === 0) return;
+  const n = rows.length;
+  const f = Math.min(1, 3.2 / n) * Math.min(1, (H / W) * 1.35); // fit 4–5 rows / squat aspects
+  const [kl, kr] = scene.kicker.split('|').map((s) => s.trim());
+  const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
+
+  if (dark) {
+    // ── 3a AGENDA — NAVY LIST ──
+    edKicker(ctx, sc, kl ?? scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    if (kr) edKicker(ctx, sc, kr, 22 * u, withAlpha(scheme.fg, 0.4), R, T + 18 * u, 'right', t, 60);
+    edRule(ctx, sc, scene, L, T + 22 * u + 36 * u, t, 200);
+    const footTop = B - (Math.max(1, u) + 38 * u + 56 * u);
+    const areaTop = T + 22 * u + 36 * u + 8 * u + 10 * u;
+    const areaBottom = footTop - 44 * u;
+    const slot = (areaBottom - areaTop) / n;
+    rows.forEach((row, i) => {
+      const base = areaTop + slot * i + slot / 2 + 96 * f * u * 0.3;
+      edEnter(ctx, sc, t, 350 + i * 120, () => {
+        let tx = L;
+        if (row.day) {
+          edSera(ctx, sc, row.day, 96 * f * u, scheme.fg, L, base);
+          const dw = edSeraWidth(ctx, sc, row.day, 96 * f * u);
+          edSera(ctx, sc, (row.mon ?? '').charAt(0) + (row.mon ?? '').slice(1).toLowerCase(), 34 * f * u, ED.pool, L + dw + 14 * f * u, base);
+          tx = L + Math.max(170 * f * u, dw + 80 * f * u) + 56 * f * u - 56 * f * u + 56 * f * u;
+          tx = L + 170 * f * u + 56 * f * u;
+        }
+        edSera(ctx, sc, row.title, 52 * f * u, scheme.fg, tx, base - (row.meta ? 20 * f * u : 0));
+        if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, scheme.accent, tx, base + 26 * f * u);
+      });
+      if (i < n - 1) {
+        ctx.fillStyle = ED.hairDark;
+        ctx.fillRect(L, areaTop + slot * (i + 1), R - L, Math.max(1, u));
+      }
+    });
+    edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 56 * u, t, tStart: 600 + n * 120, padTop: 38 * u });
+  } else if (isWarmLight(scheme.bg)) {
+    // ── 3b AGENDA — CREAM NUMBERED ──
+    const titleFont = fontStr(400, 96 * u, sc.doc.fontHeading);
+    const { height: headH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 96 * u, lineHeight: 0.93, maxWidth: R - L, tracking: -0.05 * 96 * u });
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 96 * u, lineHeight: 0.93, color: ED.navy,
+      maxWidth: R - L, x: L, y: T, align: 'left', anim: 'rise', t, tStart: 80,
+      accent: scheme.accent, tracking: -0.05 * 96 * u,
+    });
+    edRule(ctx, sc, scene, L, T + headH + 40 * u, t, 300);
+    const footTop = B - (Math.max(1, u) + 36 * u + 28 * u * 1.1);
+    const areaTop = T + headH + 40 * u + 8 * u + 16 * u;
+    const slot = (footTop - areaTop) / n;
+    rows.forEach((row, i) => {
+      edEnter(ctx, sc, t, 420 + i * 120, () => {
+        const top = areaTop + slot * i + slot / 2 - (22 * f * u + 14 * f * u + 56 * f * u) / 2;
+        const kLine = [row.mon && row.day ? `${row.mon} ${row.day}` : '', row.meta ?? ''].filter(Boolean).join(' · ');
+        if (kLine) drawSpacedText(ctx, kLine, fontStr(800, 22 * f * u, sc.doc.fontBody), ED.cobalt, L, top + 18 * f * u, 22 * f * u * 0.13, 'left', 1);
+        edSera(ctx, sc, row.title, 56 * f * u, ED.navy, L, top + 22 * f * u + 14 * f * u + 56 * f * u * 0.82);
+      });
+    });
+    // footer line: left note + right url
+    ctx.fillStyle = ED.hairLight;
+    ctx.fillRect(L, footTop, R - L, Math.max(1, u));
+    edEnter(ctx, sc, t, 500 + n * 120, () => {
+      const by = footTop + 36 * u + 28 * u * 0.8;
+      if (scene.subtitle.trim()) edNova(ctx, sc, scene.subtitle, 650, 28 * u, ED.slateLight, L, by);
+      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, ED.navy, R, by, 'right');
+    });
+  } else {
+    // ── 3c AGENDA — NAVY HEADER + SHEET ──
+    const headH = 70 * u + 22 * u + 26 * u + 88 * u * 0.93 + 70 * u;
+    edEnter(ctx, sc, t, 40, () => {
+      ctx.fillStyle = ED.navy;
+      ctx.fillRect(0, -30 * u, W, headH + 30 * u);
+      drawSpacedText(ctx, (kl ?? scene.kicker), fontStr(800, 22 * u, sc.doc.fontBody), ED.pool, L, 70 * u + 18 * u, 22 * u * 0.13, 'left', 1);
+      edSera(ctx, sc, scene.title, 88 * u, ED.paper, L, 70 * u + 22 * u + 26 * u + 88 * u * 0.8);
+    });
+    const footH = 4 * u + 34 * u + 56 * u + 46 * u;
+    const footTop = H - footH;
+    const areaTop = headH + 20 * u;
+    const slot = (footTop - 20 * u - areaTop) / n;
+    const tile = 150 * f * u;
+    rows.forEach((row, i) => {
+      edEnter(ctx, sc, t, 380 + i * 120, () => {
+        const cy = areaTop + slot * i + slot / 2;
+        ctx.beginPath();
+        ctx.roundRect(L, cy - tile / 2, tile, tile, 5 * u);
+        ctx.fillStyle = ED.poolPale;
+        ctx.fill();
+        if (row.mon) drawSpacedText(ctx, row.mon, fontStr(800, 18 * f * u, sc.doc.fontBody), ED.cobalt, L + tile / 2, cy - tile / 2 + 34 * f * u, 18 * f * u * 0.13, 'center', 1);
+        if (row.day) edSera(ctx, sc, row.day, 76 * f * u, ED.navy, L + tile / 2, cy + tile / 2 - 26 * f * u, 'center');
+        const tx = L + tile + 48 * f * u;
+        edSera(ctx, sc, row.title, 50 * f * u, ED.navy, tx, cy + (row.meta ? -4 * f * u : 16 * f * u));
+        if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, ED.slateLight, tx, cy + 12 * f * u + 26 * f * u);
+      });
+    });
+    // berry footer rule + logo + url
+    edEnter(ctx, sc, t, 550 + n * 120, () => {
+      ctx.fillStyle = edRuleColor(scene);
+      ctx.fillRect(0, footTop, W, 4 * u);
+      const cy = footTop + 4 * u + 34 * u + 28 * u;
+      edDrawLogo(ctx, sc, false, L, cy - 28 * u, 56 * u);
+      if (scene.attribution.trim()) edNova(ctx, sc, scene.attribution, 700, 28 * u, ED.navy, R, cy + 10 * u, 'right');
+    });
+  }
+}
+
+// — END CARD (editorial) —
+function drawEdEndcard(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number) {
+  const { W, H, u } = sc;
+  const scheme = resolveScheme(scene);
+  const dark = isDark(scheme.bg);
+
+  if (dark && isBlueVivid(scheme.bg)) {
+    // ── 4b END CARD — COBALT ──
+    const L = 90 * u, R = W - 90 * u, T = 90 * u, B = H - 90 * u;
+    edKicker(ctx, sc, scene.kicker, 22 * u, scheme.accent, L, T + 18 * u, 'left', t, 60);
+    const footTop = B - (Math.max(1, u) + 38 * u + 58 * u);
+    const titleFont = fontStr(400, 150 * u, sc.doc.fontHeading);
+    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, maxWidth: R - L, tracking: -0.05 * 150 * u });
+    const urlH = scene.attribution.trim() ? 48 * u + 40 * u * 1.2 + 8 * u + 4 * u : 0;
+    let y = footTop - 70 * u - (titleH + urlH);
+    drawTextBlock(ctx, {
+      text: scene.title, font: titleFont, px: 150 * u, lineHeight: 0.9, color: ED.paper,
+      maxWidth: R - L, x: L, y, align: 'left', anim: 'rise', t, tStart: 200,
+      accent: scheme.accent, tracking: -0.05 * 150 * u,
+    });
+    y += titleH + 48 * u;
+    if (scene.attribution.trim()) {
+      edEnter(ctx, sc, t, 550, () => {
+        const w = edNova(ctx, sc, scene.attribution, 700, 40 * u, ED.paper, L, y + 40 * u * 0.8);
+        ctx.fillStyle = ED.pool;
+        ctx.fillRect(L, y + 40 * u * 0.8 + 16 * u, w, 4 * u);
+      });
+    }
+    edFooter(ctx, sc, {
+      top: footTop, left: L, right: R, dark: true, url: '', logoH: 58 * u, t, tStart: 700,
+      hairColor: 'rgba(255,255,255,0.25)', padTop: 38 * u,
+    });
+    edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, scene.subtitle, 500, 19 * u, 'rgba(255,255,255,0.7)', R, footTop + 38 * u + 34 * u, 'right'));
+  } else if (dark) {
+    // ── 4a END CARD — NAVY CENTERED ──
+    const T = 100 * u, B = H - 100 * u;
+    edEnter(ctx, sc, t, 40, () => edDrawLogo(ctx, sc, true, W / 2, T, 76 * u, 'center'));
+    edEnter(ctx, sc, t, 900, () => edNova(ctx, sc, scene.subtitle, 500, 20 * u, withAlpha(scheme.fg, 0.5), W / 2, B - 2 * u, 'center'));
+    // centered group: kicker · big url · rule · tagline
+    let px = 118 * u;
+    const wUrl = edSeraWidth(ctx, sc, scene.title, px);
+    if (wUrl > W - 200 * u) px *= (W - 200 * u) / wUrl;
+    const tagline = scene.attribution.trim();
+    const groupH = 22 * u + 40 * u + px * 0.93 + 52 * u + 8 * u + (tagline ? 40 * u + 30 * u : 0);
+    let y = T + 76 * u + (B - 30 * u - (T + 76 * u) - groupH) / 2;
+    edKicker(ctx, sc, scene.kicker, 22 * u, scheme.accent, W / 2, y + 18 * u, 'center', t, 150);
+    y += 22 * u + 40 * u;
+    edEnter(ctx, sc, t, 300, () => edSera(ctx, sc, scene.title, px, scheme.fg, W / 2, y + px * 0.8, 'center'));
+    y += px * 0.93 + 52 * u;
+    edRule(ctx, sc, scene, W / 2, y, t, 600, 'center');
+    y += 8 * u + 40 * u;
+    if (tagline) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, tagline, 650, 30 * u, scheme.accent, W / 2, y + 30 * u * 0.8, 'center'));
+  } else {
+    // ── 4c END CARD — CREAM TAGLINE ──
+    const L = 100 * u, R = W - 100 * u, T = 100 * u, B = H - 100 * u;
+    edEnter(ctx, sc, t, 40, () => edDrawLogo(ctx, sc, false, L, T, 70 * u));
+    edEnter(ctx, sc, t, 900, () => edNova(ctx, sc, scene.subtitle, 500, 20 * u, ED.slateLight, L, B - 2 * u));
+    const titleFont = fontStr(400, 140 * u, sc.doc.fontHeading);
+    const { lines, height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 140 * u, lineHeight: 0.93, maxWidth: R - L, tracking: -0.05 * 140 * u });
+    const tagline = scene.attribution.trim();
+    const groupH = titleH + 56 * u + 8 * u + (tagline ? 44 * u + 32 * u : 0);
+    const areaTop = T + 70 * u;
+    let y = areaTop + (B - 30 * u - areaTop - groupH) / 2;
+    // Title with the final word in cobalt (the "better." treatment)
+    edEnter(ctx, sc, t, 250, () => {
+      ctx.font = titleFont;
+      setTracking(ctx, -0.05 * 140 * u);
+      const spaceW = ctx.measureText(' ').width;
+      ctx.textBaseline = 'alphabetic';
+      lines.forEach((line, li) => {
+        let x = L;
+        const baseY = y + li * 140 * u * 0.93 + 140 * u * 0.82;
+        line.words.forEach((wd, wi) => {
+          const isLast = li === lines.length - 1 && wi === line.words.length - 1;
+          ctx.fillStyle = isLast ? ED.cobalt : ED.navy;
+          ctx.fillText(wd.text, x, baseY);
+          x += wd.width + spaceW;
+        });
+      });
+      setTracking(ctx, 0);
+    });
+    y += titleH + 56 * u;
+    edRule(ctx, sc, scene, L, y, t, 600);
+    y += 8 * u + 44 * u;
+    if (tagline) edEnter(ctx, sc, t, 700, () => edNova(ctx, sc, tagline, 650, 32 * u, ED.slate, L, y + 32 * u * 0.8));
   }
 }
 
