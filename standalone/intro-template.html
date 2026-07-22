@@ -39,7 +39,9 @@
   .pix figcaption { font-size:12px; color:rgba(253,253,253,.5); margin-top:8px; }
 
   .projects { display:grid; grid-template-columns:1fr 1fr; gap:16px 22px; margin-top:6px; }
-  .proj { display:flex; gap:14px; align-items:center; }
+  .proj { display:flex; gap:14px; align-items:center; text-decoration:none; color:inherit; border-radius:8px; padding:6px; margin:-6px; }
+  .proj:hover { background:rgba(143,197,217,.08); }
+  .proj:hover .t b { color:var(--pool); }
   .proj img { width:150px; border-radius:5px; box-shadow:0 6px 22px rgba(0,0,0,.45); flex:0 0 auto; }
   .proj .t { font-size:clamp(14px,1.55vw,18px); line-height:1.4; min-width:0; }
   .proj .t b { display:block; font-size:clamp(15px,1.7vw,20px); }
@@ -58,6 +60,8 @@
   .link-card { margin-top:14px; background:var(--cream); color:var(--navy); border-radius:6px; padding:14px 20px; font-size:clamp(14px,1.65vw,20px); font-weight:700; width:fit-content; }
   .link-card small { display:block; font-weight:400; font-size:.72em; color:#4a5666; margin-top:2px; }
 
+  ul.roomy li { font-size:clamp(20px,2.5vw,30px); margin-bottom:30px; padding-left:38px; }
+  ul.roomy li::before { width:20px; top:.6em; }
   .contact { font-size:clamp(20px,2.6vw,32px); line-height:1.9; }
   .contact a { color:var(--paper); text-decoration:none; border-bottom:3px solid var(--berry); }
   .contact .lbl { color:var(--pool); font-size:.62em; text-transform:uppercase; letter-spacing:.18em; font-weight:800; display:block; line-height:1.2; margin-top:26px; }
@@ -87,14 +91,14 @@
     <a href="https://www.linkedin.com/in/aaroncphelps/" style="color:var(--pool)">linkedin.com/in/aaroncphelps</a></p>
   <div class="rule reveal" style="animation-delay:.8s"></div>
   <div class="projects">
-    <div class="proj reveal" style="animation-delay:.9s"><img src="{{IMG_SBDCAI}}" alt="SBDC.AI">
-      <div class="t"><b>SBDC.AI</b><span>AI built for advisors — the work around them gets smarter.</span></div></div>
-    <div class="proj reveal" style="animation-delay:1.05s"><img src="{{IMG_BRAND}}" alt="brand.norcalsbdc.org">
-      <div class="t"><b>brand.norcalsbdc.org</b><span>The NorCal network brand system, online.</span></div></div>
-    <div class="proj reveal" style="animation-delay:1.2s"><img src="{{IMG_TFG}}" alt="TFG Motion Studio">
-      <div class="t"><b>tools.norcalsbdc.org/motion/tfg</b><span>Motion studio for our Tech Futures Group program.</span></div></div>
-    <div class="proj reveal" style="animation-delay:1.35s"><img src="{{IMG_STOCKTON}}" alt="Stockton preview page">
-      <div class="t"><b>…/previews/stockton-probiz.html</b><span>Today's example — a real event promo, start to finish.</span></div></div>
+    <a class="proj reveal" style="animation-delay:.9s" href="https://sbdc.ai" target="_blank" rel="noopener"><img src="{{IMG_SBDCAI}}" alt="SBDC.AI">
+      <div class="t"><b>SBDC.AI</b><span>AI built for advisors.</span></div></a>
+    <a class="proj reveal" style="animation-delay:1.05s" href="https://brand.norcalsbdc.org" target="_blank" rel="noopener"><img src="{{IMG_BRAND}}" alt="brand.norcalsbdc.org">
+      <div class="t"><b>brand.norcalsbdc.org</b><span>Our network brand system.</span></div></a>
+    <a class="proj reveal" style="animation-delay:1.2s" href="https://tools.norcalsbdc.org/motion/tfg" target="_blank" rel="noopener"><img src="{{IMG_TFG}}" alt="TFG Motion Studio">
+      <div class="t"><b>…/motion/tfg</b><span>TFG motion studio.</span></div></a>
+    <a class="proj reveal" style="animation-delay:1.35s" href="https://tools.norcalsbdc.org/previews/stockton-probiz.html" target="_blank" rel="noopener"><img src="{{IMG_STOCKTON}}" alt="Stockton preview page">
+      <div class="t"><b>…/previews/stockton-probiz</b><span>Today's example.</span></div></a>
   </div>
 </section>
 
@@ -103,10 +107,10 @@
   <div class="kicker reveal">Why video · why now</div>
   <h1 data-type="Three reasons"></h1>
   <div class="rule reveal" style="animation-delay:.7s"></div>
-  <ul class="plain">
-    <li class="reveal" style="animation-delay:.8s"><b>Events are perishable.</b> <span>A promo that ships late fills zero seats — and every center runs dozens of trainings a year.</span></li>
-    <li class="reveal" style="animation-delay:1s"><b>Design capacity is scarce.</b> <span>Most centers have no designer; DIY templates drift off-brand and eat advisor hours.</span></li>
-    <li class="reveal" style="animation-delay:1.2s"><b>Video wins the feed.</b> <span>The platforms our clients actually use reward motion — exactly what's hardest to make.</span></li>
+  <ul class="plain roomy">
+    <li class="reveal" style="animation-delay:.8s"><b>Events are perishable.</b> <span>Late promos fill zero seats.</span></li>
+    <li class="reveal" style="animation-delay:1s"><b>Design capacity is scarce.</b> <span>Most centers have none.</span></li>
+    <li class="reveal" style="animation-delay:1.2s"><b>Video wins the feed.</b> <span>And it's the hardest to make.</span></li>
   </ul>
 </section>
 
@@ -118,9 +122,9 @@
       <h1 data-type="One tool. One system. Claude."></h1>
       <div class="rule reveal" style="animation-delay:1s"></div>
       <ul class="plain">
-        <li class="reveal" style="animation-delay:1.1s"><b>Promo Studio.</b> <span>A single HTML file — open in Chrome, type your event, export MP4 + graphics. Nothing to install, nothing uploaded.</span></li>
-        <li class="reveal" style="animation-delay:1.3s"><b>A real design system.</b> <span>Layouts that make every center's post look designed.</span></li>
-        <li class="reveal" style="animation-delay:1.5s"><b>Claude tailors it.</b> <span>Same card, two brands — one small file of tokens apart.</span></li>
+        <li class="reveal" style="animation-delay:1.1s"><b>Promo Studio.</b> <span>One file. Open in Chrome. Export video + graphics.</span></li>
+        <li class="reveal" style="animation-delay:1.3s"><b>A real design system.</b> <span>Every post looks designed.</span></li>
+        <li class="reveal" style="animation-delay:1.5s"><b>Claude tailors it.</b> <span>Same card, two brands →</span></li>
       </ul>
     </div>
     <div class="pix">
@@ -138,8 +142,7 @@
       <h1 data-type="What we're building today"></h1>
       <div class="rule reveal" style="animation-delay:1.2s"></div>
       <p class="big reveal" style="animation-delay:1.3s">A real promo for a real event —
-      built with the same tool you're downloading, published with its own
-      preview page, download button, and ready-to-paste social copy.</p>
+      made with the tool you're about to download.</p>
       <a class="link-card reveal" style="animation-delay:1.5s;display:block;text-decoration:none;color:var(--navy)"
          href="https://tools.norcalsbdc.org/previews/stockton-probiz.html" target="_blank" rel="noopener">
         tools.norcalsbdc.org/previews/stockton-probiz.html
@@ -161,12 +164,12 @@
   <h1 data-type="1 · 2 · 3"></h1>
   <div class="rule reveal" style="animation-delay:.6s"></div>
   <div class="steps">
-    <div class="step reveal" style="animation-delay:.7s"><div class="n">1</div><div class="t"><b>Download it &amp; make a video</b>
-      <span>Grab the ZIP, open Promo Studio, build a real event promo in minutes.</span></div></div>
+    <div class="step reveal" style="animation-delay:.7s"><div class="n">1</div><div class="t"><b>Download &amp; make a video</b>
+      <span>ZIP → Chrome → a real promo in minutes.</span></div></div>
     <div class="step reveal" style="animation-delay:.95s"><div class="n">2</div><div class="t"><b>Customize in Claude Design</b>
-      <span>Load the included design-system MD and watch Claude explore your network's identity.</span></div></div>
+      <span>Claude explores your network's identity.</span></div></div>
     <div class="step reveal" style="animation-delay:1.2s"><div class="n">3</div><div class="t"><b>Handoff — make it yours</b>
-      <span>Take Claude's brand handoff to Cowork, or type it straight into the tool. Leave with it working.</span></div></div>
+      <span>Cowork applies it. You leave with it working.</span></div></div>
   </div>
   <div class="link-card reveal" style="animation-delay:1.45s">tools.norcalsbdc.org/previews/promo-studio.html
     <small>everything from today: the ZIP, the guide, and the quick start</small></div>
@@ -238,7 +241,7 @@
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') go(i + 1);
     if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(i - 1);
   });
-  document.body.addEventListener('click', (e) => { if (e.target.tagName !== 'A') go(i + 1); });
+  document.body.addEventListener('click', (e) => { if (!e.target.closest('a, video')) go(i + 1); });
   // Data-URI video → blob URL (Chrome won't stream huge data: URIs directly)
   const dv = document.getElementById('demoVideo');
   if (dv && dv.getAttribute('src')?.startsWith('data:')) {
