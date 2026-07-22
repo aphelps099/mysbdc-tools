@@ -3,6 +3,10 @@
     "tfg-motion-studio": {
       "command": "node",
       "args": ["mcp/motion-studio/dist/server.mjs"]
+    },
+    "sbdc-motion-composer": {
+      "command": "node",
+      "args": ["mcp/sbdc-composer/dist/server.mjs"]
     }
   }
 }

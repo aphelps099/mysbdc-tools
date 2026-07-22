@@ -14,8 +14,12 @@ cd "${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
 # from the root dependencies.
 npm install
 
-# Build the TFG Motion Studio MCP server so its tools are ready as soon
-# as the session starts (dist/ is gitignored).
+# Build the motion MCP servers so their tools are ready as soon as the
+# session starts (dist/ is gitignored).
 cd mcp/motion-studio
+npm install
+npm run build
+
+cd ../sbdc-composer
 npm install
 npm run build

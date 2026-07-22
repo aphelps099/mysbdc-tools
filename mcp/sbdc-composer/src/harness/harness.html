@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SBDC Motion Composer — headless render harness</title>
+<style>
+/* Offline stand-ins declared FIRST so the Typekit rules below override
+   them whenever the kit loads. proxima font FILES are not shipped —
+   Adobe's EULA allows kit delivery only — so with no network the
+   renderer falls back to the closest system faces (documented in the
+   authoring guide). */
+@font-face {
+  font-family: 'proxima-nova';
+  src: local('Arial'), local('Liberation Sans'), local('Helvetica'), local('DejaVu Sans');
+  font-weight: 100 900;
+}
+@font-face {
+  font-family: 'proxima-sera';
+  src: local('Georgia'), local('Liberation Serif'), local('Times New Roman'), local('DejaVu Serif');
+  font-weight: 100 900;
+}
+</style>
+<!-- Adobe Typekit kit pkl5rjs (proxima-nova / proxima-sera) — the same kit
+     tools.norcalsbdc.org loads. Loaded AFTER the fallbacks so it wins. -->
+<link rel="stylesheet" href="https://use.typekit.net/pkl5rjs.css" onerror="this.remove()">
+</head>
+<body>
+<script src="/harness.js"></script>
+</body>
+</html>

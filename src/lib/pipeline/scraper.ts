@@ -225,6 +225,8 @@ export interface ScraperOptions {
   /** Overall time box (ms) for the whole scan. */
   timeBoxMs?: number;
   log?: (msg: string) => void;
+  /** Override the aggregate listing URL (tests point this at a mock). */
+  aggregateUrl?: string;
 }
 
 export class NorcalAggregateEventSource implements EventSource {
@@ -233,6 +235,7 @@ export class NorcalAggregateEventSource implements EventSource {
   private detailDelayMs: number;
   private timeBoxMs: number;
   private log: (msg: string) => void;
+  private aggregateUrl: string;
 
   constructor(opts: ScraperOptions = {}) {
     this.fetchImpl = opts.fetchImpl ?? fetch;
@@ -240,6 +243,7 @@ export class NorcalAggregateEventSource implements EventSource {
     this.detailDelayMs = opts.detailDelayMs ?? 500;
     this.timeBoxMs = opts.timeBoxMs ?? 240_000;
     this.log = opts.log ?? (() => {});
+    this.aggregateUrl = opts.aggregateUrl ?? AGGREGATE_URL;
   }
 
   private async get(url: string): Promise<string> {
@@ -256,7 +260,7 @@ export class NorcalAggregateEventSource implements EventSource {
     const all: ListingHit[] = [];
     const seen = new Set<string>();
     for (let page = 1; page <= this.maxPages; page++) {
-      const url = page === 1 ? AGGREGATE_URL : `${AGGREGATE_URL}page/${page}/`;
+      const url = page === 1 ? this.aggregateUrl : `${this.aggregateUrl}page/${page}/`;
       let html: string;
       try {
         html = await this.get(url);

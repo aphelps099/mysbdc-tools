@@ -1,9 +1,11 @@
 /* ═══════════════════════════════════════════════════════
-   TFG Motion Studio MCP server (stdio).
-   Author, preview, and export TFG brand videos from an
-   MCP client (e.g. Claude Code) — no browser UI, no login.
-   Rendering runs the repo's real engine in headless
-   Chromium, so exports match the web studio exactly.
+   SBDC Motion Composer MCP server (stdio).
+   Author, preview, and export NorCal SBDC training/event
+   videos from an MCP client (e.g. Claude Code) — no
+   browser UI, no login. Rendering runs the repo's real
+   engine in headless Chromium, so exports match the web
+   studio exactly. A Rebrandly layer turns long
+   registration URLs into sbdc.events shortlinks.
    ═══════════════════════════════════════════════════════ */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -13,17 +15,21 @@ import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join, resolve, basename } from 'node:path';
 import { docDuration } from '../../../src/lib/motion/types';
 import { GUIDE } from './guide.js';
-import { tfgScene, patchScene, tfgDefaultDoc, TFG_SCHEMES, SceneInput } from './tfg.js';
+import { sbdcScene, patchScene, sbdcDefaultDoc, SceneInput } from './sbdc.js';
 import {
   listProjects, loadProject, saveProject, projectExists, Project, OUT_DIR, AssetKind,
 } from './projects.js';
+import {
+  ensureShortlink, mapShortlinks, getClicks, hasApiKey, NO_KEY_WARNING,
+} from './rebrandly.js';
+import { upcomingEvents } from './events.js';
 import { RenderBackend, docTimes } from './browser.js';
 import { normalizeToH264 } from './transcode.js';
 
 const backend = new RenderBackend();
 
 const server = new McpServer({
-  name: 'tfg-motion-studio',
+  name: 'sbdc-motion-composer',
   version: '0.1.0',
 });
 
@@ -37,38 +43,35 @@ const animEnum = z.enum([
 ]);
 const transitionEnum = z.enum(['cut', 'fade', 'wipe', 'slide']);
 const alignEnum = z.enum(['center', 'lower-left', 'lower-center', 'lower-right']);
-const backdropEnum = z.enum([
-  'none', 'grid', 'starburst', 'ring', 'arc',
-  'hero-ring', 'star', 'hero',
-  'split-left', 'split-right', 'split-bottom',
-  'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
-]);
+// SBDC scenes are flat color by design — the only approved pattern is
+// the website's dot-grid halftone motif.
+const backdropEnum = z.enum(['none', 'dot-grid']);
 const kenBurnsEnum = z.enum(['none', 'zoom-in', 'zoom-out', 'pan-left', 'pan-right']);
 const overlayEnum = z.enum(['none', 'scrim', 'gradient-bottom', 'gradient-left', 'gradient-right', 'brand']);
 const aspectEnum = z.enum(['16:9', '1:1', '9:16', '4:5']);
-const tfgSchemeEnum = z.enum(['dark', 'charcoal', 'green', 'cream', 'white']);
+const sbdcSchemeEnum = z.enum(['navy', 'paper', 'cream', 'cobalt', 'pool']);
 
 const sceneFields = {
   duration: z.number().min(1000).max(20000).optional().describe('Scene length in ms (2500–5000 typical)'),
-  tfgScheme: tfgSchemeEnum.optional().describe('TFG color scheme (default "dark")'),
+  sbdcScheme: sbdcSchemeEnum.optional().describe('SBDC color scheme (default "navy")'),
   customScheme: z.object({ bg: z.string(), fg: z.string(), accent: z.string() }).nullable().optional()
-    .describe('Explicit hex colors — overrides tfgScheme'),
-  anim: animEnum.optional().describe('Text entrance animation'),
+    .describe('Explicit hex colors — overrides sbdcScheme'),
+  anim: animEnum.optional().describe('Text entrance animation (SBDC favors "rise"/"mask-reveal")'),
   transition: transitionEnum.optional().describe('Transition INTO this scene'),
   align: alignEnum.optional(),
-  backdrop: backdropEnum.optional().describe('Brand graphic behind text (non-media scenes)'),
-  weird: z.boolean().optional().describe('Pattern-Studio weird mode: denser/faster backdrop with wobble; auto-picks a pattern if backdrop unset'),
-  serifTitle: z.boolean().optional().describe('Tobias serif for the main line'),
+  backdrop: backdropEnum.optional().describe('"none" (flat color, the default and the norm) or "dot-grid" (the website\'s halftone dot motif, corner-anchored, never behind text)'),
+  cornerMark: z.boolean().optional().describe('Small static official America\'s SBDC star sign-off in the upper-right — dark/photo scenes only (the white mark is skipped on light schemes)'),
+  serifTitle: z.boolean().optional().describe('proxima-sera serif for the main line'),
   textScale: z.number().min(0.3).max(1).optional().describe('Shrink long titles/URLs to fit'),
-  kicker: z.string().max(80).optional().describe('Small caps label above the title'),
+  kicker: z.string().max(80).optional().describe('Small caps label above the title ("STOCKTON · JUL 7")'),
   title: z.string().max(220).optional(),
   subtitle: z.string().max(220).optional(),
   body: z.string().max(600).optional().describe('List lines (newline separated) / fine print'),
   attribution: z.string().max(140).optional().describe('Quote attribution / stat label'),
-  logoText: z.string().max(40).optional().describe('Endcard: animated vector lockup words (ring draws in, words rise). TFG default "TECH FUTURES GROUP"; pass "" for the static raster logo'),
   statPrefix: z.string().max(8).optional(),
-  statValue: z.number().optional(),
-  statSuffix: z.string().max(8).optional(),
+  statValue: z.number().optional().describe('Stat: the count-up number · calendar: the day of the month on the date tile'),
+  statSuffix: z.string().max(8).optional().describe('Stat: unit suffix ("M") · calendar: short month label on the tile ("AUG")'),
+  accentRule: z.string().max(9).optional().describe('Calendar: hex color of the short rule under the title (defaults to SBDC berry #c23c3c)'),
   imageId: z.string().nullable().optional().describe('Registered image asset id (image scenes)'),
   imageLayout: z.enum(['full', 'card']).optional().describe('"full" = photo fills the frame; "card" = inset portrait frame on the scheme background with text below (presenter cards)'),
   kenBurns: kenBurnsEnum.optional(),
@@ -104,6 +107,7 @@ function summarize(p: Project) {
     fonts: { heading: p.doc.fontHeading, body: p.doc.fontBody },
     music: p.doc.audioId ? { assetId: p.doc.audioId, volume: p.doc.audioVolume } : null,
     assets: p.assets.map((a) => ({ id: a.id, kind: a.kind, name: a.name })),
+    shortlinks: Object.entries(p.shortlinks ?? {}).map(([url, l]) => ({ url, display: l.display })),
     scenes: p.doc.scenes.map((s, i) => ({
       index: i,
       template: s.template,
@@ -129,13 +133,30 @@ function checkAssetRefs(p: Project): string[] {
   return warnings;
 }
 
+/** Long raw URLs that survived to render time — nudge toward shortlink_map. */
+function checkRawUrls(p: Project): string[] {
+  const warnings: string[] = [];
+  p.doc.scenes.forEach((s, i) => {
+    for (const field of ['title', 'subtitle', 'body', 'attribution'] as const) {
+      const text = s[field];
+      if (typeof text !== 'string') continue;
+      for (const m of text.match(/https?:\/\/[^\s"'<>()\[\]]+/g) ?? []) {
+        if (m.length > 30) {
+          warnings.push(`Scene ${i} ${field} still shows a raw URL (${m.slice(0, 48)}…) — run shortlink_map before exporting.`);
+        }
+      }
+    }
+  });
+  return warnings;
+}
+
 // ── Tools ─────────────────────────────────────────────
 
 server.registerTool(
   'motion_guide',
   {
     description:
-      'Read this FIRST. The authoring guide for TFG Motion Studio videos: workflow, scene templates and their fields, TFG brand schemes/voice, pacing recipes.',
+      'Read this FIRST. The authoring guide for SBDC Motion Composer videos: workflow, scene templates and their fields, SBDC brand schemes/voice, the SBDC backdrop set, shortlink rules, pacing recipes.',
     annotations: { readOnlyHint: true },
   },
   async () => ({ content: [{ type: 'text', text: GUIDE }] }),
@@ -145,20 +166,20 @@ server.registerTool(
   'motion_create_project',
   {
     description:
-      'Create a new TFG motion project (Tobias + GT America Extended, TFG dark scheme). Optionally pass the full storyboard as scenes[]. Fails if the name is taken — pick a new name or use motion_set_scenes to rework an existing project.',
+      'Create a new SBDC motion project (proxima-sera + proxima-nova, SBDC navy scheme). Optionally pass the full storyboard as scenes[]. Fails if the name is taken — pick a new name or use motion_set_scenes to rework an existing project.',
     inputSchema: {
-      name: z.string().describe('Project id, e.g. "demo-day-reel" (letters/digits/dashes)'),
-      aspect: aspectEnum.optional().describe('Canvas preset — default "16:9". Use "9:16" for Reels/Stories.'),
+      name: z.string().describe('Project id, e.g. "marketing-bootcamp-promo" (letters/digits/dashes)'),
+      aspect: aspectEnum.optional().describe('Canvas preset — default "16:9". Use "4:5" for LinkedIn/IG feed.'),
       scenes: z.array(sceneInputSchema).max(24).optional().describe('Initial storyboard (see motion_guide)'),
     },
   },
   async ({ name, aspect, scenes }) => {
     if (projectExists(name)) return fail(`Project "${name}" already exists — choose another name, or edit it with motion_set_scenes / motion_update_scene.`);
-    const doc = tfgDefaultDoc();
+    const doc = sbdcDefaultDoc();
     if (aspect) doc.aspect = aspect;
-    doc.scenes = (scenes ?? []).map((s) => tfgScene(s as SceneInput));
+    doc.scenes = (scenes ?? []).map((s) => sbdcScene(s as SceneInput));
     const project: Project = {
-      name, doc, assets: [], created: new Date().toISOString(), updated: new Date().toISOString(),
+      name, doc, assets: [], shortlinks: {}, created: new Date().toISOString(), updated: new Date().toISOString(),
     };
     saveProject(project);
     return ok({ created: true, ...summarize(project), warnings: checkAssetRefs(project) });
@@ -174,7 +195,7 @@ server.registerTool(
 server.registerTool(
   'motion_get_project',
   {
-    description: 'Full state of a project: doc settings, assets, and every scene with all fields.',
+    description: 'Full state of a project: doc settings, assets, shortlinks, and every scene with all fields.',
     inputSchema: { name: z.string() },
     annotations: { readOnlyHint: true },
   },
@@ -195,9 +216,9 @@ server.registerTool(
   },
   async ({ name, scenes }) => {
     const p = loadProject(name);
-    p.doc.scenes = scenes.map((s) => tfgScene(s as SceneInput));
+    p.doc.scenes = scenes.map((s) => sbdcScene(s as SceneInput));
     saveProject(p);
-    return ok({ ...summarize(p), warnings: checkAssetRefs(p) });
+    return ok({ ...summarize(p), warnings: [...checkAssetRefs(p), ...checkRawUrls(p)] });
   },
 );
 
@@ -273,6 +294,104 @@ server.registerTool(
   },
 );
 
+// ── Event calendar (norcalsbdc.org/events) ────────────
+
+server.registerTool(
+  'events_upcoming',
+  {
+    description:
+      'Fetch the next upcoming trainings from the norcalsbdc.org WordPress event calendar, soonest first. Each event includes display fields (day, month label, weekday, time) and a ready-to-use suggestedScene for the "calendar" save-the-date template — pass those straight to motion_set_scenes (plus an endcard), then run shortlink_map so each card\'s registration URL becomes an sbdc.events link.',
+    inputSchema: {
+      limit: z.number().int().min(1).max(12).optional().describe('How many upcoming events to return (default 5)'),
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async ({ limit }) => {
+    try {
+      return ok(await upcomingEvents(limit ?? 5));
+    } catch (e) {
+      return fail(
+        `Calendar fetch failed: ${e instanceof Error ? e.message : e}. ` +
+        'The norcalsbdc.org events page must be reachable from this machine — retry, or author the calendar scenes manually (see motion_guide).',
+      );
+    }
+  },
+);
+
+// ── Shortlink tools (Rebrandly / sbdc.events) ─────────
+
+server.registerTool(
+  'shortlink_create',
+  {
+    description:
+      'Create an sbdc.events shortlink for one long URL (registration pages, Zoom links). Cached per project by URL — calling again returns the same link, never a duplicate. Requires REBRANDLY_API_KEY.',
+    inputSchema: {
+      name: z.string().describe('Project the link belongs to (cache scope)'),
+      url: z.string().url().describe('The long destination URL'),
+      title: z.string().max(120).describe('Event/link title — the slashtag is slugified from it'),
+      slug: z.string().max(40).optional().describe('Explicit slashtag override (slugified; collisions get -2/-3 suffixes)'),
+    },
+  },
+  async ({ name, url, title, slug }) => {
+    const p = loadProject(name);
+    if (!hasApiKey()) return fail(NO_KEY_WARNING);
+    try {
+      const { link, cached } = await ensureShortlink(p, url, title, slug);
+      saveProject(p);
+      return ok({ shortlink: link.shortlink, slashtag: link.slashtag, id: link.id, display: link.display, cached });
+    } catch (e) {
+      return fail(`Shortlink failed: ${e instanceof Error ? e.message : e}`);
+    }
+  },
+);
+
+server.registerTool(
+  'shortlink_map',
+  {
+    description:
+      'Scan every scene\'s title/subtitle/body/attribution for long http(s) URLs, create or reuse sbdc.events shortlinks, and rewrite the text in place to "sbdc.events/slug". Run this before the first preview of any storyboard that carries a registration URL. Without REBRANDLY_API_KEY it returns the text unchanged with a warning (previews still work).',
+    inputSchema: { name: z.string() },
+  },
+  async ({ name }) => {
+    const p = loadProject(name);
+    const { rewrites, warnings } = await mapShortlinks(p);
+    saveProject(p);
+    return ok({
+      rewrites: rewrites.map((r) => ({
+        scene: r.sceneIndex, field: r.field, before: r.url, after: r.display, reusedCache: r.cached,
+      })),
+      unchanged: rewrites.length === 0,
+      warnings,
+    });
+  },
+);
+
+server.registerTool(
+  'shortlink_clicks',
+  {
+    description: 'Click counts for the project\'s cached sbdc.events links (quick performance check). Requires REBRANDLY_API_KEY.',
+    inputSchema: { name: z.string() },
+    annotations: { readOnlyHint: true },
+  },
+  async ({ name }) => {
+    const p = loadProject(name);
+    const links = Object.entries(p.shortlinks ?? {});
+    if (links.length === 0) return ok({ links: [], note: 'No shortlinks cached for this project yet.' });
+    if (!hasApiKey()) return fail(NO_KEY_WARNING);
+    const out = [];
+    for (const [url, l] of links) {
+      try {
+        out.push({ display: l.display, destination: url, clicks: await getClicks(l.id) });
+      } catch (e) {
+        out.push({ display: l.display, destination: url, error: e instanceof Error ? e.message : String(e) });
+      }
+    }
+    return ok({ links: out });
+  },
+);
+
+// ── Render tools ──────────────────────────────────────
+
 server.registerTool(
   'motion_preview',
   {
@@ -304,7 +423,7 @@ server.registerTool(
     });
     content.unshift({
       type: 'text',
-      text: JSON.stringify({ frames: jobs.map((j, i) => ({ ...j, file: files[i] })), warnings: checkAssetRefs(p) }, null, 2),
+      text: JSON.stringify({ frames: jobs.map((j, i) => ({ ...j, file: files[i] })), warnings: [...checkAssetRefs(p), ...checkRawUrls(p)] }, null, 2),
     });
     return { content };
   },
@@ -329,7 +448,7 @@ server.registerTool(
     mkdirSync(OUT_DIR, { recursive: true });
     const file = join(OUT_DIR, filename?.replace(/[^\w.-]/g, '_') || `${p.name}.mp4`);
     writeFileSync(file, norm.bytes);
-    const warnings = checkAssetRefs(p);
+    const warnings = [...checkAssetRefs(p), ...checkRawUrls(p)];
     if (norm.warning) warnings.push(norm.warning);
     return ok({
       file,
@@ -349,7 +468,7 @@ server.registerTool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('tfg-motion-studio MCP server running (stdio)');
+  console.error('sbdc-motion-composer MCP server running (stdio)');
 }
 
 process.on('SIGINT', async () => { await backend.close(); process.exit(0); });

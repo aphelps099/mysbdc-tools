@@ -29,6 +29,7 @@ cropped in-feed — reserve it for other platforms' Stories/Reels.
 - "image" — photo scene (imageId of a registered asset), kicker/title/subtitle + kenBurns. imageLayout "full" (default) covers the frame with an overlay for text legibility; "card" places the photo in an inset portrait frame on the scheme background with text below — the presenter-card look (pair with align lower-left).
 - "video" — uploaded clip background (videoId), text overlay optional.
 - "disclaimer" — kicker + body fine print.
+- "calendar" — save-the-date card: date tile (statValue = day of month, statSuffix = short month label like "AUG") beside kicker/title/subtitle (time line); the short rule under the title uses the scheme accent.
 - "endcard" — closing card: animated TFG lockup by default (the green ring strokes itself closed, then "TECH FUTURES GROUP" rises in — override the words with logoText, or set logoText "" for the static raster logo); title = URL/CTA ("techfuturesgroup.org"), kicker = small CTA ("BOOK A SESSION"), subtitle = fine print. Always end with one.
 
 ## Common scene fields
@@ -38,6 +39,7 @@ cropped in-feed — reserve it for other platforms' Stories/Reels.
 - transition (INTO the scene): "cut", "fade", "wipe", "slide". "fade" default; "cut" for hard beats.
 - align: "center", "lower-left", "lower-center", "lower-right". Lists/images often read best lower-left.
 - backdrop (behind text, scheme colors, only when no image/video): "none", "grid", "starburst" (hero stat), "ring", "arc" — the website-hero set: "hero-ring" (the techfuturesgroup.org thick sage gradient ring, sweeps in on scene start — dark schemes), "star" (fine 24-ray starburst, slow rotation — subtle, great behind stats), "hero" (faint grid + gradient ring: the site hero look) — split compositions: "split-left" / "split-right" / "split-bottom" (hard accent-color block wipes in and holds ~45% of the frame; pair with align lower-right / lower-left so text sits on the base half; weird mode slashes the edge diagonal) — plus the Pattern Studio set: "spirograph" (orbiting rings), "escher" (rotating triangle lattice), "dot-wave" (breathing dot field), "wave-field" (drifting sine lines), "growth-bars" (up-and-right bar chart), "rounds" (concentric ripples), "tfg-type" (drifting TFG wordmark rows).
+  Brand ownership: the ids above are the TFG set. The engine's "dot-grid" (the SBDC website's halftone motif) belongs to the SBDC Motion Composer — don't use it in TFG videos.
 - weird: true — Pattern Studio "weird" mode: roughly doubles backdrop opacity, triples its motion, adds a slow wobble, and auto-picks a pattern when backdrop is unset. Use on 1–3 punch scenes for rhythm; a whole video of weird slides loses the punch.
 - serifTitle: true → Tobias serif for the main line (statements/quotes); false → GT America Extended.
 - textScale: 0.3–1 — shrink long URLs/titles to fit.
