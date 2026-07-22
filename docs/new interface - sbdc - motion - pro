@@ -1,0 +1,70 @@
+# Motion Studio Pro — design-theme update instructions
+
+Paste this whole file into a new chat/session working on the `mysbdc-tools` repo
+(https://github.com/aphelps099/mysbdc-tools), the codebase behind
+https://tools.norcalsbdc.org/motion/pro.
+
+---
+
+## Task
+
+Update the Motion Studio Pro slide/scene theme so every rendered scene (title, statement, agenda, etc.) adopts the NorCal SBDC design system below. Change the **rendered output** (scene canvas, exported video frames) first; restyle the studio UI chrome only if time allows — the deliverable is the slides.
+
+Ground truth is the "FAV NorCal SBDC Design System" project. If it is bound/attached, read its `readme.md` and `tokens/` for full detail; otherwise the values below are copied verbatim from it and are sufficient.
+
+## Fonts
+
+Load Adobe Typekit kit once per page:
+`<link rel="stylesheet" href="https://use.typekit.net/pkl5rjs.css">`
+
+- Display/serif: `"proxima-sera", Georgia, serif` — weight 400 only, letter-spacing `-.05em`, line-height `.93` (as tight as `.82` for hero-scale).
+- Everything else: `"proxima-nova", Arial, sans-serif` — mid weights 650/700/800.
+- Kickers/labels ("STOCKTON · JUL 7"): proxima-nova, ~11px equivalent, weight 800, uppercase, letter-spacing `.13em`.
+- Do NOT self-host the font files (Adobe EULA); the kit link is the only legal delivery.
+- The existing Sans/Serif heading toggle maps to nova/sera respectively.
+
+## Color tokens (use as CSS custom properties)
+
+```css
+--navy:#0f1c2d; --navy-soft:#253247; --cobalt:#1b5faf; --cobalt-dark:#144b8c;
+--pool:#8fc5d9; --pool-pale:#dcecf2; --paper:#fdfdfd; --cream:#f5f1e8;
+--slate:#2c3240; --slate-light:#687080; --berry:#c23c3c; --evergreen:#00675c;
+--line:#0f1c2d29; --sky-tint:#b9e5f5;
+```
+
+Scene color schemes (replace the current swatch list):
+1. **Navy** — bg `--navy`, text `#fdfdfd`, kicker `--pool`.
+2. **Paper** — bg `--paper`, text `--navy`, kicker `--cobalt`.
+3. **Cream** — bg `--cream`, text `--navy`, kicker `--cobalt`.
+4. **Cobalt** — bg `--cobalt`, text `#fdfdfd`, kicker `--pool-pale`.
+5. **Pool pale** — bg `--pool-pale`, text `--navy`, kicker `--cobalt`.
+
+Berry `#c23c3c` is an **accent only** — never a background or button fill. Use it as a short thick rule (4–5px, ~56–72px wide) under titles or above kickers. Drop any pure-red or off-palette schemes.
+
+## Photo treatment
+
+- Background images/video: `filter:saturate(.86) contrast(1.03)`; grayscale is an acceptable variant for portraits.
+- Overlay/protection: navy gradients, not black — e.g. bottom scrim `linear-gradient(180deg, transparent 35%, rgba(15,28,45,.82))`; full scrim `rgba(15,28,45, strength)`. Wire the existing Overlay Strength slider to the navy alpha.
+- "Brand" overlay option = flat navy at ~60% + pool kicker text.
+
+## Spatial rules
+
+- Nearly square corners: scene canvas and any chips/buttons 4–6px radius max. No pills.
+- Generous margins: keep text inside an inner safe area of ~8% per side; lower-third layouts sit on a left-aligned column, not edge-to-edge.
+- Text blocks: kicker (small caps, tracked) → optional 4px berry rule → serif or sans display line → subtitle in nova 650. Left-align by default; center only for single-statement scenes.
+- Hairline dividers where needed: `1px solid #0f1c2d29`. No drop shadows on text panels; use flat navy fills instead.
+
+## Motion
+
+- Restrained: entrances use `cubic-bezier(.2,.75,.25,1)` slide-up + settle; photo/mask reveals via clip-path; NO bounces, no springs. Keep existing animation names (Rise, Typewriter, Mask Reveal…) but retime to this easing.
+- UI-level transitions .18s.
+
+## Tone (default copy in templates/placeholders)
+
+Plain, direct, second-person, no emoji, no exclamation marks. Sentence case for titles ("Turn your idea into a business"), ALL-CAPS only for kickers.
+
+## Don'ts
+
+- No icons/emoji anywhere in scenes — the brand has no icon set; use typographic labels and numbers.
+- No gradients except navy photo scrims.
+- No rounded pills, no colored left-border cards, no black overlays.
