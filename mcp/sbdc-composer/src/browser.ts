@@ -6,7 +6,7 @@
      the browser studio. */
 
 import { createServer, Server, IncomingMessage, ServerResponse } from 'node:http';
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, normalize, extname } from 'node:path';
 import { AddressInfo } from 'node:net';
 import { chromium, Browser, Page } from 'playwright-core';
@@ -40,6 +40,20 @@ function serveUnder(res: ServerResponse, root: string, rel: string): void {
   send(res, file);
 }
 
+/** Official brand assets, served same-origin so the canvas stays
+    untainted (same reason the Pro studio proxies via /api/brand-asset).
+    A vendored copy in public/brand/assets/ wins; otherwise the file is
+    fetched once from the official URL and cached (gitignored). These are
+    the ONLY approved marks — never drawn or approximated in code. */
+const BRAND_REMOTE: Record<string, string> = {
+  'americas-sbdc-star.png':
+    'https://americassbdc.org/wp-content/uploads/2018/01/bg-star.png',
+  'americas-sbdc-norcal-white-180h.png':
+    'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-white-180h.png',
+  'americas-sbdc-norcal-400w.png':
+    'https://www.norcalsbdc.org/wp-content/themes/norcal-sbdc/assets/img/logos/americas-sbdc-norcal-400w.png',
+};
+
 export class RenderBackend {
   private server: Server | null = null;
   private browser: Browser | null = null;
@@ -54,6 +68,8 @@ export class RenderBackend {
       const path = decodeURIComponent(url.pathname);
       if (path === '/harness.html' || path === '/harness.js') {
         send(res, join(PKG_ROOT, 'dist', path.slice(1)));
+      } else if (path.startsWith('/brand/')) {
+        void this.serveBrand(res, path.slice('/brand/'.length));
       } else if (path.startsWith('/public/')) {
         serveUnder(res, join(REPO_ROOT, 'public'), path.slice('/public/'.length));
       } else if (path.startsWith('/asset/')) {
@@ -67,6 +83,27 @@ export class RenderBackend {
     });
     await new Promise<void>((resolve) => this.server!.listen(0, '127.0.0.1', resolve));
     this.port = (this.server.address() as AddressInfo).port;
+  }
+
+  private async serveBrand(res: ServerResponse, name: string): Promise<void> {
+    const remote = BRAND_REMOTE[name];
+    if (!remote) { res.writeHead(404); res.end(); return; }
+    const vendored = join(REPO_ROOT, 'public', 'brand', 'assets', name);
+    if (existsSync(vendored)) { send(res, vendored); return; }
+    const cached = join(PKG_ROOT, 'assets-cache', name);
+    if (!existsSync(cached)) {
+      try {
+        const r = await fetch(remote, { signal: AbortSignal.timeout(10_000) });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        mkdirSync(join(PKG_ROOT, 'assets-cache'), { recursive: true });
+        writeFileSync(cached, Buffer.from(await r.arrayBuffer()));
+      } catch {
+        // Offline / blocked network: the harness skips the mark, scenes
+        // still render (same as a missing logo in the web studio).
+        res.writeHead(404); res.end(); return;
+      }
+    }
+    send(res, cached);
   }
 
   private resolveChromium(): string | undefined {

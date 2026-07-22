@@ -117,9 +117,9 @@ export const KEN_BURNS = [
 export type KenBurnsId = typeof KEN_BURNS[number]['id'];
 
 // ── Scene backdrop graphics (drawn behind the text in scheme colors) ──
-// The second block is ported from the TFG brand Pattern Studio; the
-// third is the SBDC "atlas & almanac" family. Brand ownership lives in
-// each MCP server's guide — the engine renders all of them anywhere.
+// The second block is ported from the TFG brand Pattern Studio.
+// "dot-grid" is the SBDC website's halftone motif (its only approved
+// pattern) — brand ownership lives in each MCP server's guide.
 export const BACKDROPS = [
   { id: 'none',        label: 'None' },
   { id: 'grid',        label: 'Grid' },
@@ -139,12 +139,7 @@ export const BACKDROPS = [
   { id: 'growth-bars', label: 'Growth Bars' },
   { id: 'rounds',      label: 'Rounds' },
   { id: 'tfg-type',    label: 'Type Cascade' },
-  { id: 'star-field',  label: 'Star Field' },
-  { id: 'contour',     label: 'Contour' },
-  { id: 'halftone',    label: 'Halftone' },
-  { id: 'blueprint',   label: 'Blueprint' },
-  { id: 'ribbon',      label: 'Ribbon' },
-  { id: 'atlas-arc',   label: 'Atlas Arc' },
+  { id: 'dot-grid',    label: 'Dot Grid' },
 ] as const;
 
 export type BackdropId = typeof BACKDROPS[number]['id'];
@@ -208,16 +203,18 @@ export interface Scene {
 
   /**
    * Endcard: when set (e.g. "TECH FUTURES GROUP"), the endcard draws an
-   * animated vector lockup — the mark strokes itself in, then the words
-   * fade up as stacked lines — instead of the raster logo image.
+   * animated vector lockup — accent ring strokes itself closed, then the
+   * words fade up as stacked lines — instead of the raster logo image.
    */
   logoText: string;
   /**
-   * Which vector mark anchors the animated lockup: 'ring' (the TFG
-   * accent ring, default) or 'star' (the SBDC four-point star). Unset
-   * behaves as 'ring' so older saved projects render unchanged.
+   * Small static brand sign-off in the upper-right corner, drawn from a
+   * registered `__corner-mark-light` / `__corner-mark-dark` asset (an
+   * OFFICIAL raster mark — the engine never draws an approximation).
+   * Picks the light asset on dark/media backgrounds, dark on light; the
+   * scene simply skips the mark when no matching asset is registered.
    */
-  logoMark?: 'ring' | 'star';
+  cornerMark?: boolean;
 
   // Stat template
   statPrefix: string;

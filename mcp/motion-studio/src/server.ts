@@ -42,8 +42,6 @@ const backdropEnum = z.enum([
   'hero-ring', 'star', 'hero',
   'split-left', 'split-right', 'split-bottom',
   'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
-  // SBDC-owned set — renderable here, but reserved for SBDC videos (see guide)
-  'star-field', 'contour', 'halftone', 'blueprint', 'ribbon', 'atlas-arc',
 ]);
 const kenBurnsEnum = z.enum(['none', 'zoom-in', 'zoom-out', 'pan-left', 'pan-right']);
 const overlayEnum = z.enum(['none', 'scrim', 'gradient-bottom', 'gradient-left', 'gradient-right', 'brand']);

@@ -72,12 +72,12 @@ const SBDC_SCENE_DEFAULTS: Partial<Record<TemplateId, Partial<Scene>>> = {
     kicker: 'ABOUT THE SBDC',
     body: 'Funded in part through a cooperative agreement with the U.S. Small Business Administration. All services are provided at no cost.',
   },
+  // Endcard shows the OFFICIAL raster lockup (white on dark schemes,
+  // color on light) — logoText stays empty; the mark is never drawn.
   endcard: {
     title: 'norcalsbdc.org',
     subtitle: 'Funded in part through a cooperative agreement with the U.S. SBA',
     kicker: 'REGISTER TODAY',
-    logoText: 'NORCAL SBDC',
-    logoMark: 'star',
   },
 };
 

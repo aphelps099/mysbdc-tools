@@ -16,10 +16,14 @@ What's SBDC-specific here:
 - **Brand layer** (`src/sbdc.ts`) — the five design-system schemes
   (Navy / Paper / Cream / Cobalt / Pool Pale from the FAV NorCal SBDC
   token set), SBDC scene copy defaults, proxima-sera/proxima-nova.
-- **Graphic set** — the engine's SBDC "atlas & almanac" backdrops
-  (`star-field`, `contour`, `halftone`, `blueprint`, `ribbon`,
-  `atlas-arc`) plus the animated four-point-star endcard lockup
-  (`logoMark: "star"`).
+- **Graphics** — flat color by design, with exactly four approved
+  elements: the official America's SBDC star (scene `cornerMark`, small
+  static sign-off), the official white and color NorCal SBDC lockups
+  (endcards pick by scheme), and the `dot-grid` backdrop (the website's
+  halftone motif). Official marks are served from
+  `public/brand/assets/` when vendored there, otherwise fetched once
+  from the official URLs and cached — never drawn or approximated in
+  code.
 - **Shortlinks** (`src/rebrandly.ts`) — wraps the Marketing Engine's
   production Rebrandly client. `shortlink_map` scans storyboard text and
   rewrites long registration URLs to `sbdc.events/slug` before preview;

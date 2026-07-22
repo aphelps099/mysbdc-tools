@@ -86,10 +86,10 @@ await call('motion_create_project', {
   name: NAME,
   aspect: '9:16',
   scenes: [
-    { template: 'statement', title: 'Your business plan starts here.', serifTitle: true, anim: 'mask-reveal', duration: 2600, backdrop: 'atlas-arc' },
-    { template: 'title', sbdcScheme: 'paper', kicker: 'STOCKTON · JUL 7', title: 'Marketing bootcamp', subtitle: `Register at ${LONG_URL}`, duration: 3400, backdrop: 'halftone' },
-    { template: 'stat', sbdcScheme: 'cobalt', backdrop: 'star-field', statPrefix: '$', statValue: 474, statSuffix: 'M', attribution: 'in capital accessed by NorCal small businesses', duration: 3200 },
-    { template: 'endcard', duration: 3000, backdrop: 'star-field' },
+    { template: 'statement', title: 'Your business plan starts here.', serifTitle: true, anim: 'mask-reveal', duration: 2600, cornerMark: true },
+    { template: 'title', sbdcScheme: 'paper', kicker: 'STOCKTON · JUL 7', title: 'Marketing bootcamp', subtitle: `Register at ${LONG_URL}`, duration: 3400, backdrop: 'dot-grid' },
+    { template: 'stat', sbdcScheme: 'cobalt', statPrefix: '$', statValue: 474, statSuffix: 'M', attribution: 'in capital accessed by NorCal small businesses', duration: 3200 },
+    { template: 'endcard', duration: 3000, backdrop: 'dot-grid' },
   ],
 });
 console.log('project created');

@@ -17,12 +17,19 @@ interface AssetSpec {
   name: string;
 }
 
-/** Official NorCal SBDC lockups. The endcard renderer prefers the
-    __logo-brand-* ids: light mark on dark schemes, dark on light —
-    same selection logic as the Pro studio. */
-const SBDC_LOGOS: [string, string][] = [
-  ['__logo-brand-light', '/public/sbdc-white-2026.png'], // white lockup, dark backgrounds
-  ['__logo-brand-dark', '/public/sbdc-blue-2026.png'],   // blue lockup, light backgrounds
+/** Official brand marks ONLY — never drawn or approximated. Each id
+    maps to a fallback chain: the /brand/ route serves the official file
+    (vendored or fetched+cached), with repo-local lockups as offline
+    stand-ins. The endcard picks __logo-brand-light on dark schemes and
+    -dark on light ones (same selection logic as the Pro studio); the
+    star renders only via scene cornerMark, small and static. */
+const SBDC_MARKS: [string, string[]][] = [
+  ['__logo-brand-light', ['/brand/americas-sbdc-norcal-white-180h.png', '/public/sbdc-white-2026.png']],
+  ['__logo-brand-dark', ['/brand/americas-sbdc-norcal-400w.png', '/public/sbdc-blue-2026.png']],
+  // America's SBDC star (white) — corner sign-off on dark/photo scenes.
+  // No local fallback: if the official asset is unreachable the mark is
+  // simply skipped rather than approximated.
+  ['__corner-mark-light', ['/brand/americas-sbdc-star.png']],
 ];
 
 const state = {
@@ -58,12 +65,15 @@ async function prepare(specs: AssetSpec[], fonts: string[]): Promise<string | nu
     state.videos = {};
     state.audio = {};
 
-    // Built-in SBDC end-card lockups (missing files just skip the logo,
-    // matching the web studio's behavior).
-    for (const [id, url] of SBDC_LOGOS) {
-      try {
-        state.assets[id] = await loadImage(id, url, id);
-      } catch { /* end card renders without a logo */ }
+    // Built-in SBDC brand marks (a fully missing chain just skips that
+    // mark, matching the web studio's behavior).
+    for (const [id, urls] of SBDC_MARKS) {
+      for (const url of urls) {
+        try {
+          state.assets[id] = await loadImage(id, url, id);
+          break;
+        } catch { /* try the next fallback */ }
+      }
     }
 
     for (const a of specs) {

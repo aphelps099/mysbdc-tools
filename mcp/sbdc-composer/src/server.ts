@@ -42,13 +42,9 @@ const animEnum = z.enum([
 ]);
 const transitionEnum = z.enum(['cut', 'fade', 'wipe', 'slide']);
 const alignEnum = z.enum(['center', 'lower-left', 'lower-center', 'lower-right']);
-const backdropEnum = z.enum([
-  'none', 'grid', 'starburst', 'ring', 'arc',
-  'hero-ring', 'star', 'hero',
-  'split-left', 'split-right', 'split-bottom',
-  'spirograph', 'escher', 'dot-wave', 'wave-field', 'growth-bars', 'rounds', 'tfg-type',
-  'star-field', 'contour', 'halftone', 'blueprint', 'ribbon', 'atlas-arc',
-]);
+// SBDC scenes are flat color by design — the only approved pattern is
+// the website's dot-grid halftone motif.
+const backdropEnum = z.enum(['none', 'dot-grid']);
 const kenBurnsEnum = z.enum(['none', 'zoom-in', 'zoom-out', 'pan-left', 'pan-right']);
 const overlayEnum = z.enum(['none', 'scrim', 'gradient-bottom', 'gradient-left', 'gradient-right', 'brand']);
 const aspectEnum = z.enum(['16:9', '1:1', '9:16', '4:5']);
@@ -62,8 +58,8 @@ const sceneFields = {
   anim: animEnum.optional().describe('Text entrance animation (SBDC favors "rise"/"mask-reveal")'),
   transition: transitionEnum.optional().describe('Transition INTO this scene'),
   align: alignEnum.optional(),
-  backdrop: backdropEnum.optional().describe('Brand graphic behind text (non-media scenes) — SBDC set: star-field, contour, halftone, blueprint, ribbon, atlas-arc'),
-  weird: z.boolean().optional().describe('Expressive mode: denser/faster backdrop with wobble. 1–2 punch scenes max'),
+  backdrop: backdropEnum.optional().describe('"none" (flat color, the default and the norm) or "dot-grid" (the website\'s halftone dot motif, corner-anchored, never behind text)'),
+  cornerMark: z.boolean().optional().describe('Small static official America\'s SBDC star sign-off in the upper-right — dark/photo scenes only (the white mark is skipped on light schemes)'),
   serifTitle: z.boolean().optional().describe('proxima-sera serif for the main line'),
   textScale: z.number().min(0.3).max(1).optional().describe('Shrink long titles/URLs to fit'),
   kicker: z.string().max(80).optional().describe('Small caps label above the title ("STOCKTON · JUL 7")'),
@@ -71,8 +67,6 @@ const sceneFields = {
   subtitle: z.string().max(220).optional(),
   body: z.string().max(600).optional().describe('List lines (newline separated) / fine print'),
   attribution: z.string().max(140).optional().describe('Quote attribution / stat label'),
-  logoText: z.string().max(40).optional().describe('Endcard: animated vector lockup words (the SBDC star traces in, words rise). Default "NORCAL SBDC"; pass "" for the static raster logo'),
-  logoMark: z.enum(['ring', 'star']).optional().describe('Endcard lockup mark — "star" (SBDC, default here) or "ring" (TFG)'),
   statPrefix: z.string().max(8).optional(),
   statValue: z.number().optional(),
   statSuffix: z.string().max(8).optional(),
