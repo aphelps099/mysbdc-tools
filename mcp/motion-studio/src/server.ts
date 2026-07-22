@@ -70,6 +70,7 @@ const sceneFields = {
   statValue: z.number().optional(),
   statSuffix: z.string().max(8).optional(),
   imageId: z.string().nullable().optional().describe('Registered image asset id (image scenes)'),
+  imageLayout: z.enum(['full', 'card']).optional().describe('"full" = photo fills the frame; "card" = inset portrait frame on the scheme background with text below (presenter cards)'),
   kenBurns: kenBurnsEnum.optional(),
   overlay: overlayEnum.optional(),
   overlayOpacity: z.number().min(0).max(1).optional(),

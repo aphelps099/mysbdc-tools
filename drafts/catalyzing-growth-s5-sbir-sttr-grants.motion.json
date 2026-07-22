@@ -5,7 +5,7 @@
     "fps": 30,
     "scenes": [
       {
-        "id": "scene-mrvbd82n-21",
+        "id": "scene-mrvblia8-21",
         "template": "statement",
         "duration": 2800,
         "scheme": "navy",
@@ -31,6 +31,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -40,7 +41,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrvbd82n-22",
+        "id": "scene-mrvblia8-22",
         "template": "title",
         "duration": 4000,
         "scheme": "navy",
@@ -66,6 +67,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -75,7 +77,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrvbd82n-23",
+        "id": "scene-mrvblia8-23",
         "template": "list",
         "duration": 4400,
         "scheme": "navy",
@@ -101,6 +103,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -110,7 +113,7 @@
         "videoVolume": 1
       },
       {
-        "id": "scene-mrvbd82n-24",
+        "id": "scene-mrvblia8-24",
         "template": "image",
         "duration": 3000,
         "scheme": "navy",
@@ -136,16 +139,17 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": "headshot-5",
+        "imageLayout": "card",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
-        "overlayOpacity": 0.7,
+        "overlayOpacity": 0.65,
         "videoId": null,
         "videoTrimStart": 0,
         "videoMuted": false,
         "videoVolume": 1
       },
       {
-        "id": "scene-mrvbd82n-25",
+        "id": "scene-mrvblia8-25",
         "template": "endcard",
         "duration": 3600,
         "scheme": "navy",
@@ -171,6 +175,7 @@
         "statValue": 0,
         "statSuffix": "",
         "imageId": null,
+        "imageLayout": "full",
         "kenBurns": "zoom-in",
         "overlay": "gradient-bottom",
         "overlayOpacity": 0.65,
@@ -199,5 +204,5 @@
     }
   ],
   "created": "2026-07-21T23:10:36.917Z",
-  "updated": "2026-07-21T23:57:57.409Z"
+  "updated": "2026-07-22T00:04:23.889Z"
 }

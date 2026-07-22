@@ -68,8 +68,8 @@ const speakerScene = (s) => {
   const photo = PHOTOS[primary];
   if (photo && existsSync(join(root, photo))) {
     return {
-      template: 'image', imageId: `headshot-${s.n}`, kenBurns: 'zoom-in',
-      overlay: 'gradient-bottom', overlayOpacity: 0.7, align: 'lower-left',
+      template: 'image', imageId: `headshot-${s.n}`, imageLayout: 'card',
+      tfgScheme: 'dark', kenBurns: 'zoom-in', align: 'lower-left',
       kicker: s.speakerKicker, title: s.speaker, subtitle: 'Tech Futures Group',
       anim: 'rise', transition: 'fade', duration: 3000,
     };

@@ -304,6 +304,46 @@ function drawImageCover(
 }
 
 /**
+ * The 'card' image layout: an inset portrait frame in the upper-left of
+ * the content area (roughly the top 55% of the frame), photo cover-fit
+ * inside with a gentle Ken Burns, rising in on scene start. Text renders
+ * below it via the normal template path in scheme colors.
+ */
+function drawFramedImage(
+  ctx: CanvasRenderingContext2D,
+  sc: SceneCtx,
+  scene: Scene,
+  t: number,
+) {
+  const a = scene.imageId ? sc.assets[scene.imageId] : undefined;
+  if (!a) return;
+  const { W, H, u } = sc;
+  const frame = contentFrame(sc);
+  const fh = H * 0.55;
+  const fw = Math.min(fh * 0.8, frame.w * 0.85);
+  const fx = frame.x;
+  const fy = H * 0.14;
+  const p = seg(t, 100, 700, easeOutQuint);
+  if (p <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= p;
+  ctx.translate(0, (1 - p) * 26 * u);
+  ctx.beginPath();
+  ctx.rect(fx, fy, fw, fh);
+  ctx.clip();
+  const img = a.img;
+  const iw = img.naturalWidth || 1;
+  const ih = img.naturalHeight || 1;
+  const kb = easeInOutCubic(clamp01(t / Math.max(scene.duration, 1)));
+  const zoom = scene.kenBurns === 'none' ? 1 : 1.03 + 0.06 * kb;
+  const s = Math.max(fw / iw, fh / ih) * zoom;
+  const dw = iw * s;
+  const dh = ih * s;
+  ctx.drawImage(img, fx + (fw - dw) / 2, fy + (fh - dh) / 2, dw, dh);
+  ctx.restore();
+}
+
+/**
  * Cover-fit the current frame of an uploaded clip. The caller (preview
  * sync loop or the exporter's frame-exact seeker) is responsible for the
  * element showing the right frame for time t.
@@ -831,12 +871,18 @@ function drawScene(
   const isVideo = !!(scene.videoId && videos[scene.videoId]);
   const isImage = !isVideo && !!(scene.imageId && assets[scene.imageId]);
 
+  const isCardImage = isImage && scene.imageLayout === 'card';
+
   // Background
   ctx.fillStyle = scheme.bg;
   ctx.fillRect(0, 0, W, H);
   if (isVideo) {
     drawVideoCover(ctx, videos[scene.videoId as string].video, W, H);
     drawOverlay(ctx, W, H, scene, scheme);
+  } else if (isCardImage) {
+    // Editorial card: scheme bg (+ backdrop) with an inset portrait frame.
+    drawBackdrop(ctx, sc, scene, scheme, t);
+    drawFramedImage(ctx, sc, scene, t);
   } else if (isImage) {
     drawImageCover(ctx, assets[scene.imageId as string].img, W, H, t / scene.duration, scene.kenBurns);
     drawOverlay(ctx, W, H, scene, scheme);
@@ -855,13 +901,14 @@ function drawScene(
   const ts = scene.textScale > 0 ? scene.textScale : 1;
   const tsc: SceneCtx = ts !== 1 ? { ...sc, u: sc.u * ts } : sc;
 
-  // Media scenes get white text (over footage/photo); image template
-  // keeps its original fixed accent for back-compat.
-  const fg = (isImage || isVideo) ? '#ffffff' : scheme.fg;
-  const muted = (isImage || isVideo) ? 'rgba(255,255,255,0.72)' : scheme.muted;
+  // Full-bleed media scenes get white text (over footage/photo); card
+  // image scenes keep scheme colors since text sits on the background.
+  const overMedia = isVideo || (isImage && !isCardImage);
+  const fg = overMedia ? '#ffffff' : scheme.fg;
+  const muted = overMedia ? 'rgba(255,255,255,0.72)' : scheme.muted;
   // Legacy fixed accent only for scheme-less image scenes (old SBDC
   // projects); branded scenes keep their own accent over photos.
-  const accent = isImage && scene.template === 'image' && !scene.customScheme ? '#8FC5D9' : scheme.accent;
+  const accent = overMedia && scene.template === 'image' && !scene.customScheme ? '#8FC5D9' : scheme.accent;
   const frame = contentFrame(tsc);
   const anchorX = scene.align === 'lower-left' ? frame.x
     : scene.align === 'lower-right' ? frame.x + frame.w

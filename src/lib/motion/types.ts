@@ -212,6 +212,12 @@ export interface Scene {
 
   // Image template
   imageId: string | null;
+  /**
+   * 'full' = photo fills the frame (cover). 'card' = scheme background
+   * with the photo in an inset portrait frame and the text below it —
+   * the editorial presenter-card look.
+   */
+  imageLayout: 'full' | 'card';
   kenBurns: KenBurnsId;
   overlay: OverlayId;
   /** 0–1 overlay strength. */
@@ -319,6 +325,7 @@ export function makeScene(template: TemplateId, overrides: Partial<Scene> = {}):
     statValue: 0,
     statSuffix: '',
     imageId: null,
+    imageLayout: 'full',
     kenBurns: 'zoom-in',
     overlay: 'gradient-bottom',
     overlayOpacity: 0.65,
