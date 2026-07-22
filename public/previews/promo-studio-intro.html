@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Promo Studio — a 35-minute walkthrough</title>
+<link rel="stylesheet" href="https://use.typekit.net/pkl5rjs.css">
+<style>
+  :root { --navy:#0f1c2d; --paper:#fdfdfd; --cream:#f5f1e8; --pool:#8fc5d9; --cobalt:#1b5faf; --berry:#c23c3c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body { background:var(--navy); color:var(--paper); font-family:"proxima-nova",Arial,sans-serif; overflow:hidden; }
+  .slide {
+    position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+    padding:8vh 10vw; max-width:1200px; margin:0 auto;
+  }
+  .slide.active { display:flex; }
+  .kicker { font-size:clamp(12px,1.4vw,15px); letter-spacing:.2em; font-weight:800; color:var(--pool); text-transform:uppercase; margin-bottom:22px; }
+  h1 { font-family:"proxima-sera",Georgia,serif; font-weight:400; font-size:clamp(34px,5.6vw,72px); line-height:1.02; letter-spacing:-.02em; }
+  .rule { width:72px; height:6px; background:var(--berry); margin:30px 0; }
+  p.big { font-size:clamp(17px,2vw,24px); line-height:1.5; color:var(--pool); max-width:60ch; }
+  ul.plain { list-style:none; margin-top:8px; }
+  ul.plain li { font-size:clamp(17px,2vw,24px); line-height:1.5; margin-bottom:18px; padding-left:34px; position:relative; }
+  ul.plain li::before { content:""; position:absolute; left:0; top:.55em; width:16px; height:4px; background:var(--berry); }
+  ul.plain b { color:var(--paper); }
+  ul.plain span { color:var(--pool); }
+  .steps { counter-reset:s; margin-top:6px; }
+  .step { display:flex; gap:22px; margin-bottom:26px; align-items:baseline; }
+  .step .n { font-family:"proxima-sera",Georgia,serif; font-size:clamp(28px,3.4vw,44px); color:var(--pool); min-width:1.2em; }
+  .step .t { font-size:clamp(17px,2vw,24px); line-height:1.45; }
+  .step .t b { display:block; font-size:clamp(19px,2.3vw,28px); margin-bottom:2px; }
+  .step .t span { color:var(--pool); }
+  .link-card { margin-top:26px; background:var(--cream); color:var(--navy); border-radius:6px; padding:18px 24px; font-size:clamp(16px,1.9vw,22px); font-weight:700; width:fit-content; }
+  .link-card small { display:block; font-weight:400; font-size:.72em; color:#4a5666; margin-top:2px; }
+  .nav { position:fixed; bottom:26px; left:0; right:0; display:flex; justify-content:center; gap:10px; }
+  .nav .dot { width:9px; height:9px; border-radius:50%; background:rgba(253,253,253,.25); cursor:pointer; }
+  .nav .dot.on { background:var(--pool); }
+  .hintnav { position:fixed; bottom:22px; right:28px; color:rgba(253,253,253,.4); font-size:13px; }
+  .foot { position:fixed; bottom:22px; left:28px; color:rgba(253,253,253,.4); font-size:13px; }
+  .dense h1 { font-size:clamp(28px,3.8vw,52px); }
+  .dense .rule { margin:18px 0; }
+  .dense .step { margin-bottom:16px; }
+  .dense .step .t { font-size:clamp(15px,1.7vw,20px); }
+  .dense .step .t b { font-size:clamp(17px,2vw,24px); }
+  .dense .link-card { margin-top:16px; padding:14px 20px; font-size:clamp(14px,1.7vw,20px); }
+</style>
+</head>
+<body>
+
+<section class="slide active">
+  <div class="kicker">America's SBDC · Live demo · ~35 minutes</div>
+  <h1>Every event, promoted like you have a design team</h1>
+  <div class="rule"></div>
+  <p class="big">A free video + graphics tool for SBDC networks — and a live
+  walkthrough of how Claude customizes it to <em>your</em> brand, while you watch.</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">The problem — and why now</div>
+  <h1>Great trainings, invisible promotion</h1>
+  <div class="rule"></div>
+  <ul class="plain">
+    <li><b>Events are perishable.</b> <span>A promo that ships late fills zero seats — and every center runs dozens of trainings a year.</span></li>
+    <li><b>Design capacity is scarce.</b> <span>Most centers have no designer; DIY templates drift off-brand and eat advisor hours.</span></li>
+    <li><b>Video wins the feed.</b> <span>The platforms our clients actually use reward motion — and that's exactly what's hardest to make.</span></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="kicker">The solution</div>
+  <h1>One small tool, one design system, and Claude</h1>
+  <div class="rule"></div>
+  <ul class="plain">
+    <li><b>Promo Studio.</b> <span>A single HTML file — open it in Chrome, type your event, export an MP4 and matching graphics. No accounts, no installs, nothing uploaded.</span></li>
+    <li><b>A real design system.</b> <span>Save-the-date, agenda, and end-card layouts that make every center's post look designed — with your fonts, colors, and logo.</span></li>
+    <li><b>Claude does the tailoring.</b> <span>You describe your brand; Claude explores identities and hands the winning one straight into the tool.</span></li>
+  </ul>
+</section>
+
+<section class="slide dense">
+  <div class="kicker">Today's walkthrough · 3 steps</div>
+  <h1>What we'll do in the next 35 minutes</h1>
+  <div class="rule"></div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="t"><b>Download it &amp; make a video</b>
+      <span>Grab the ZIP, open Promo Studio, and build a real event promo in minutes.</span></div></div>
+    <div class="step"><div class="n">2</div><div class="t"><b>Customize in Claude Design</b>
+      <span>Load the included design-system guide (an MD file) and watch Claude explore versions of it in a network's own brand.</span></div></div>
+    <div class="step"><div class="n">3</div><div class="t"><b>The handoff — make it yours</b>
+      <span>Take Claude's brand handoff to Cowork (or type it straight into the tool) and leave with a video maker wearing your identity.</span></div></div>
+  </div>
+  <div class="link-card">tools.norcalsbdc.org/previews/promo-studio.html
+    <small>← everything from today: the ZIP, the guide, and the quick start</small></div>
+</section>
+
+<div class="nav" id="nav"></div>
+<div class="foot">NorCal SBDC · Promo Studio</div>
+<div class="hintnav">→ / click to advance</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const nav = document.getElementById('nav');
+  let i = 0;
+  slides.forEach((_, k) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (k === 0 ? ' on' : '');
+    d.addEventListener('click', (e) => { e.stopPropagation(); go(k); });
+    nav.appendChild(d);
+  });
+  const dots = [...nav.children];
+  function go(k) {
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    slides.forEach((s, n) => s.classList.toggle('active', n === i));
+    dots.forEach((d, n) => d.classList.toggle('on', n === i));
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') go(i + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(i - 1);
+  });
+  document.body.addEventListener('click', () => go(i + 1));
+</script>
+</body>
+</html>
