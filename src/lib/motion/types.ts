@@ -117,7 +117,9 @@ export const KEN_BURNS = [
 export type KenBurnsId = typeof KEN_BURNS[number]['id'];
 
 // ── Scene backdrop graphics (drawn behind the text in scheme colors) ──
-// The second block is ported from the TFG brand Pattern Studio.
+// The second block is ported from the TFG brand Pattern Studio; the
+// third is the SBDC "atlas & almanac" family. Brand ownership lives in
+// each MCP server's guide — the engine renders all of them anywhere.
 export const BACKDROPS = [
   { id: 'none',        label: 'None' },
   { id: 'grid',        label: 'Grid' },
@@ -137,6 +139,12 @@ export const BACKDROPS = [
   { id: 'growth-bars', label: 'Growth Bars' },
   { id: 'rounds',      label: 'Rounds' },
   { id: 'tfg-type',    label: 'Type Cascade' },
+  { id: 'star-field',  label: 'Star Field' },
+  { id: 'contour',     label: 'Contour' },
+  { id: 'halftone',    label: 'Halftone' },
+  { id: 'blueprint',   label: 'Blueprint' },
+  { id: 'ribbon',      label: 'Ribbon' },
+  { id: 'atlas-arc',   label: 'Atlas Arc' },
 ] as const;
 
 export type BackdropId = typeof BACKDROPS[number]['id'];
@@ -200,10 +208,16 @@ export interface Scene {
 
   /**
    * Endcard: when set (e.g. "TECH FUTURES GROUP"), the endcard draws an
-   * animated vector lockup — accent ring strokes itself closed, then the
-   * words fade up as stacked lines — instead of the raster logo image.
+   * animated vector lockup — the mark strokes itself in, then the words
+   * fade up as stacked lines — instead of the raster logo image.
    */
   logoText: string;
+  /**
+   * Which vector mark anchors the animated lockup: 'ring' (the TFG
+   * accent ring, default) or 'star' (the SBDC four-point star). Unset
+   * behaves as 'ring' so older saved projects render unchanged.
+   */
+  logoMark?: 'ring' | 'star';
 
   // Stat template
   statPrefix: string;

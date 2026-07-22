@@ -414,10 +414,49 @@ function withAlpha(hex: string, alpha: number): string {
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
-/** Weird-mode auto-pick pool: patterns strong enough to carry a scene. */
+/** Weird-mode auto-pick pool: patterns strong enough to carry a scene.
+    Kept frozen — appending would re-key the stable per-scene picks in
+    existing projects. */
 const WEIRD_POOL = [
   'spirograph', 'escher', 'dot-wave', 'wave-field', 'rounds', 'tfg-type',
 ] as const;
+
+/**
+ * The NorCal SBDC four-point star (geometry eyeballed from
+ * public/brand/assets/starblue@4x.png): an asymmetric sparkle — long
+ * top and bottom points, shorter sides, a slight tilt. Returns the
+ * polygon vertices so callers can fill, stroke, or dash-animate it.
+ */
+function sbdcStarPoints(
+  cx: number, cy: number, r: number, rot: number,
+): { x: number; y: number }[] {
+  const arms = [1, 0.68, 0.94, 0.72]; // top, right, bottom, left
+  const inner = 0.21;
+  const pts: { x: number; y: number }[] = [];
+  for (let i = 0; i < 4; i++) {
+    const aOuter = rot - Math.PI / 2 + (i * Math.PI) / 2;
+    const aInner = aOuter + Math.PI / 4;
+    pts.push({ x: cx + Math.cos(aOuter) * r * arms[i], y: cy + Math.sin(aOuter) * r * arms[i] });
+    pts.push({ x: cx + Math.cos(aInner) * r * inner, y: cy + Math.sin(aInner) * r * inner });
+  }
+  return pts;
+}
+
+function traceStar(ctx: CanvasRenderingContext2D, pts: { x: number; y: number }[]): void {
+  ctx.beginPath();
+  pts.forEach((pt, i) => (i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y)));
+  ctx.closePath();
+}
+
+function starPerimeter(pts: { x: number; y: number }[]): number {
+  let len = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i];
+    const b = pts[(i + 1) % pts.length];
+    len += Math.hypot(b.x - a.x, b.y - a.y);
+  }
+  return len;
+}
 
 /**
  * Optional brand graphic drawn between the background fill and the text
@@ -787,6 +826,173 @@ function drawBackdrop(
       for (let x = -drift - tw; x < W + tw; x += tw) ctx.fillText(word, x, y);
     }
     ctx.globalAlpha = fadeIn;
+  } else if (backdrop === 'star-field') {
+    // ── SBDC "atlas & almanac" set ──
+    // Scattered SBDC four-point stars at varied scale/alpha with a slow
+    // parallax drift — the brand mark as a night-sky field. Positions
+    // hash off the star index, never Math.random().
+    const count = weird ? 42 : 26;
+    const margin = 60 * u;
+    const spanW = W + margin * 2;
+    const spanH = H + margin * 2;
+    for (let i = 0; i < count; i++) {
+      const depth = 0.35 + hashRandom(i * 7 + 3) * 0.65; // parallax layer
+      const r = (8 + hashRandom(i * 7 + 1) * 16) * u * depth;
+      const drift = t * 0.004 * spd * depth;
+      const x = ((hashRandom(i * 7) * spanW + drift * 0.4) % spanW + spanW) % spanW - margin;
+      const y = ((hashRandom(i * 7 + 2) * spanH - drift * 0.14) % spanH + spanH) % spanH - margin;
+      const rot = hashRandom(i * 7 + 4) * Math.PI + Math.sin(t * 0.0002 * spd + i) * 0.08;
+      ctx.fillStyle = withAlpha(scheme.accent, A((0.05 + hashRandom(i * 7 + 5) * 0.16) * depth));
+      traceStar(ctx, sbdcStarPoints(x, y, r, rot));
+      ctx.fill();
+    }
+  } else if (backdrop === 'contour') {
+    // Topographic contour lines: nested wobbly rings around an
+    // off-center "peak", hairline weight, slow phase drift.
+    const ccx = W * 0.72;
+    const ccy = H * 0.3;
+    const rings = weird ? 18 : 13;
+    const maxR = Math.hypot(W, H) * 0.75;
+    ctx.lineWidth = Math.max(1, u);
+    for (let i = 1; i <= rings; i++) {
+      const base = (i / rings) * maxR;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.05 + 0.06 * (1 - i / rings)));
+      ctx.beginPath();
+      for (let a = 0; a <= Math.PI * 2 + 0.045; a += 0.045) {
+        const wob =
+          Math.sin(a * 3 + i * 1.7 + t * 0.00018 * spd) * base * 0.06 +
+          Math.sin(a * 7 + i * 0.9 - t * 0.00011 * spd) * base * 0.03;
+        const rr = base + wob;
+        const x = ccx + Math.cos(a) * rr;
+        const y = ccy + Math.sin(a) * rr * 0.94;
+        if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+  } else if (backdrop === 'halftone') {
+    // Newspaper halftone: a dot gradient rising from the lower-left
+    // corner, breathing slowly. Editorial texture — pairs with light
+    // schemes especially.
+    const spacing = 36 * u;
+    const reach = Math.hypot(W, H) * (weird ? 0.85 : 0.62);
+    ctx.fillStyle = scheme.accent;
+    for (let x = spacing / 2; x < W; x += spacing) {
+      for (let y = spacing / 2; y < H; y += spacing) {
+        const d = Math.hypot(x, H - y);
+        const fall = Math.max(0, 1 - d / reach);
+        if (fall <= 0.02) continue;
+        const breath = 1 + 0.12 * Math.sin(t * 0.0008 * spd + (d * 0.004) / u);
+        const rr = spacing * 0.42 * Math.pow(fall, 1.6) * breath;
+        if (rr < 0.4) continue;
+        ctx.globalAlpha = fadeIn * A(0.1 + fall * 0.12);
+        ctx.beginPath();
+        ctx.arc(x, y, rr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = fadeIn;
+  } else if (backdrop === 'blueprint') {
+    // Drafting-table sheet: fine grid with a heavier rule every fifth
+    // line, dashed construction circles, and crosshair ticks — the
+    // "business plan" energy. All positions hashed, dashes crawl slowly.
+    const step = 46 * u;
+    ctx.lineWidth = Math.max(1, u * 0.8);
+    for (let pass = 0; pass < 2; pass++) {
+      ctx.strokeStyle = withAlpha(scheme.accent, A(pass === 0 ? 0.045 : 0.085));
+      const stride = pass === 0 ? step : step * 5;
+      ctx.beginPath();
+      for (let x = (W % stride) / 2; x <= W; x += stride) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (let y = (H % stride) / 2; y <= H; y += stride) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+    }
+    for (let i = 0; i < 3; i++) {
+      const cx2 = W * (0.15 + hashRandom(i * 5 + 1) * 0.7);
+      const cy2 = H * (0.15 + hashRandom(i * 5 + 2) * 0.7);
+      const r2 = Math.min(W, H) * (0.12 + hashRandom(i * 5 + 3) * 0.22);
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.14));
+      ctx.lineWidth = Math.max(1, u);
+      ctx.setLineDash([10 * u, 8 * u]);
+      ctx.lineDashOffset = -t * 0.01 * spd * (i % 2 === 0 ? 1 : -1);
+      ctx.beginPath(); ctx.arc(cx2, cy2, r2, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx2, cy2, r2 * 0.62, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      // center crosshair
+      const tick = 12 * u;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.2));
+      ctx.beginPath();
+      ctx.moveTo(cx2 - tick, cy2); ctx.lineTo(cx2 + tick, cy2);
+      ctx.moveTo(cx2, cy2 - tick); ctx.lineTo(cx2, cy2 + tick);
+      ctx.stroke();
+    }
+  } else if (backdrop === 'ribbon') {
+    // Wide flowing bands in accent at low alpha — the motion analog of
+    // the NorCal coastline. Good hero-card energy.
+    const bands = weird ? 4 : 3;
+    ctx.lineCap = 'round';
+    for (let b = 0; b < bands; b++) {
+      const yc = H * (0.26 + 0.24 * b) + Math.sin(t * 0.0002 * spd + b * 2.1) * 12 * u;
+      const amp = H * (0.07 + hashRandom(b * 11 + 2) * 0.05);
+      const width = (54 + b * 26) * u;
+      ctx.lineWidth = width;
+      ctx.strokeStyle = withAlpha(scheme.accent, A(0.055 + b * 0.02));
+      ctx.beginPath();
+      for (let x = -width; x <= W + width; x += 8 * u) {
+        const ph = (x * 0.0035) / u + b * 1.9 + t * 0.00035 * spd;
+        const y = yc + Math.sin(ph) * amp + Math.sin(ph * 0.37 + b) * amp * 0.5;
+        if (x <= -width + 4 * u) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.lineCap = 'butt';
+  } else if (backdrop === 'atlas-arc' && 'createConicGradient' in ctx) {
+    // Direct sibling of the TFG hero-ring: the same conic band masked to
+    // a thick ring low in the frame, with the same wedge sweep-in — but
+    // colored from the scene's accent so it stays scheme-aware.
+    const m = Math.max(W, H);
+    const R = m * 0.425;
+    const acx = W * 0.45;
+    const acy = H - R * 0.08;
+    const mid = R * 0.79;
+    const band = R * 0.42;
+    const stops: Array<[number, number]> = [
+      [0, 0], [22, 0.2], [55, 0.36], [92, 0.5], [125, 0.32], [155, 0.16], [178, 0],
+    ];
+    const startRad = ((210 - 90) * Math.PI) / 180;
+    const g = (ctx as CanvasRenderingContext2D & {
+      createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
+    }).createConicGradient(startRad, acx, acy);
+    for (const [deg, al] of stops) g.addColorStop(deg / 360, withAlpha(scheme.accent, A(al)));
+    g.addColorStop(1, withAlpha(scheme.accent, 0));
+    const lp = seg(t, 0, 1600, easeOutQuint);
+    if (lp > 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(acx, acy);
+      ctx.arc(acx, acy, R * 1.25, startRad, startRad + (178 * lp * Math.PI) / 180);
+      ctx.closePath();
+      ctx.clip();
+      ctx.beginPath();
+      ctx.arc(acx, acy, mid + band / 2, 0, Math.PI * 2);
+      ctx.arc(acx, acy, mid - band / 2, 0, Math.PI * 2, true);
+      ctx.fillStyle = g;
+      ctx.fill('evenodd');
+      // Grain inside the band, like the hero-ring it descends from.
+      const pat = ctx.createPattern(getGrainTile() as CanvasImageSource, 'repeat');
+      if (pat) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(acx, acy, mid + band / 2, 0, Math.PI * 2);
+        ctx.arc(acx, acy, mid - band / 2, 0, Math.PI * 2, true);
+        ctx.clip('evenodd');
+        ctx.globalAlpha *= 0.09;
+        ctx.globalCompositeOperation = 'overlay';
+        ctx.fillStyle = pat;
+        ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
   }
 
   ctx.restore();
@@ -1338,10 +1544,12 @@ function drawEndcardScene(
   const totalH = parts.reduce((a, b) => a + b, 0);
   let y = (sc.H - totalH) / 2;
 
-  // Animated vector lockup — accent ring draws itself closed (stroke
-  // proportions from the brand SVG: width ≈ 24.5% of radius), then the
-  // words rise in as stacked spaced-caps lines.
+  // Animated vector lockup — the mark strokes itself in, then the words
+  // rise as stacked spaced-caps lines. Mark choice is per scene:
+  // 'ring' (TFG, stroke ≈ 24.5% of radius per the brand SVG) or 'star'
+  // (the SBDC four-point star, dash-traced around its outline).
   if (logoText) {
+    const starMark = scene.logoMark === 'star';
     const ringR = logoH / 2;
     const strokeW = logoH * 0.16;
     const midR = ringR - strokeW / 2;
@@ -1350,8 +1558,10 @@ function drawEndcardScene(
     const lineH = logoH / Math.max(words.length, 1);
     const wordPx = lineH * 0.48;
     // Michroma is the actual TFG logo typeface (single 400 weight, wide);
-    // the real lockup tracks the caps wide and airy.
-    const wordFont = fontStr(400, wordPx, 'Michroma');
+    // the SBDC lockup sets the doc's body face bold instead.
+    const wordFont = starMark
+      ? fontStr(700, wordPx, doc.fontBody)
+      : fontStr(400, wordPx, 'Michroma');
     const spacing = wordPx * 0.32;
     ctx.font = wordFont;
     const spacedW = (s: string) => {
@@ -1367,11 +1577,22 @@ function drawEndcardScene(
     if (rp > 0) {
       ctx.save();
       ctx.strokeStyle = p.accent;
-      ctx.lineWidth = strokeW;
       ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.arc(startX + ringR, cy, midR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * rp);
-      ctx.stroke();
+      if (starMark) {
+        const pts = sbdcStarPoints(startX + ringR, cy, ringR * 1.12, -0.12);
+        const perim = starPerimeter(pts);
+        ctx.lineWidth = logoH * 0.09;
+        ctx.lineJoin = 'round';
+        ctx.setLineDash([perim * rp, perim]);
+        traceStar(ctx, pts);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        ctx.lineWidth = strokeW;
+        ctx.beginPath();
+        ctx.arc(startX + ringR, cy, midR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * rp);
+        ctx.stroke();
+      }
       ctx.restore();
     }
     words.forEach((wd, i) => {

@@ -1,0 +1,21 @@
+{
+  "name": "sbdc-motion-composer-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for the SBDC Motion Composer — author, preview, and export NorCal SBDC training/event videos from Claude Code, with sbdc.events shortlinks on the cards.",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node dist/server.mjs"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "playwright-core": "^1.49.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}

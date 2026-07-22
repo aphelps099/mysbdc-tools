@@ -8,7 +8,8 @@
 
 import { slashtagFromTitle, slashtagWithSuffix, withUtm } from './slug';
 
-const API = 'https://api.rebrandly.com/v1';
+// Overridable so tests can point at a local mock instead of the network.
+const API = process.env.REBRANDLY_API_URL || 'https://api.rebrandly.com/v1';
 const MAX_SLASHTAG_ATTEMPTS = 5;
 const MAX_429_RETRIES = 3;
 
