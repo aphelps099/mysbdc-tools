@@ -1919,7 +1919,7 @@ function drawEdTitle(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, 
 }
 
 // — AGENDA (list template, editorial) —
-interface AgendaRow { day?: string; mon?: string; title: string; meta?: string }
+interface AgendaRow { day?: string; mon?: string; time?: string; ampm?: string; title: string; meta?: string }
 
 function parseAgendaRows(body: string): AgendaRow[] {
   return body.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 5).map((line) => {
@@ -1927,6 +1927,9 @@ function parseAgendaRows(body: string): AgendaRow[] {
     if (parts.length >= 2) {
       const m = parts[0].match(/^(\d{1,2})\s+([A-Za-z]+)$/);
       if (m) return { day: m[1], mon: m[2].toUpperCase(), title: parts[1], meta: parts[2] };
+      // "9:00 AM | Registration" — a single-event day agenda row
+      const tm = parts[0].match(/^(\d{1,2}(?::\d{2})?)\s*(AM|PM)$/i);
+      if (tm) return { time: tm[1], ampm: tm[2].toUpperCase(), title: parts[1], meta: parts[2] };
       return { title: parts[0], meta: parts[1] };
     }
     return { title: line };
@@ -1954,6 +1957,15 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
     const areaTop = T + 22 * u + 36 * u + 8 * u + 10 * u;
     const areaBottom = footTop - 44 * u;
     const slot = (areaBottom - areaTop) / n;
+    // Day-agenda rows ("9:00 AM | …") set a shared two-column grid: the
+    // widest time cluster fixes the description column for every row.
+    let timeCol = 0;
+    for (const r of rows) {
+      if (!r.time) continue;
+      const w = edSeraWidth(ctx, sc, r.time, 76 * f * u) + 12 * f * u
+        + edSeraWidth(ctx, sc, r.ampm ?? '', 30 * f * u);
+      timeCol = Math.max(timeCol, L + w + 64 * f * u);
+    }
     rows.forEach((row, i) => {
       const base = areaTop + slot * i + slot / 2 + 96 * f * u * 0.3;
       edEnter(ctx, sc, t, 350 + i * 120, () => {
@@ -1964,6 +1976,17 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
           edSera(ctx, sc, (row.mon ?? '').charAt(0) + (row.mon ?? '').slice(1).toLowerCase(), 34 * f * u, tones.accent, L + dw + 14 * f * u, base);
           tx = L + Math.max(170 * f * u, dw + 80 * f * u) + 56 * f * u - 56 * f * u + 56 * f * u;
           tx = L + 170 * f * u + 56 * f * u;
+        }
+        if (row.time) {
+          // Big serif time left, AM/PM small in accent — the description
+          // sits in its own right column, vertically centered.
+          edSera(ctx, sc, row.time, 76 * f * u, scheme.fg, L, base);
+          const tw = edSeraWidth(ctx, sc, row.time, 76 * f * u);
+          edSera(ctx, sc, row.ampm ?? '', 30 * f * u, tones.accent, L + tw + 12 * f * u, base);
+          tx = timeCol;
+          edSera(ctx, sc, row.title, 44 * f * u, scheme.fg, tx, base - (row.meta ? 18 * f * u : 0));
+          if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, scheme.accent, tx, base + 26 * f * u);
+          return;
         }
         edSera(ctx, sc, row.title, 52 * f * u, scheme.fg, tx, base - (row.meta ? 20 * f * u : 0));
         if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, scheme.accent, tx, base + 26 * f * u);
@@ -1990,7 +2013,10 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
     rows.forEach((row, i) => {
       edEnter(ctx, sc, t, 420 + i * 120, () => {
         const top = areaTop + slot * i + slot / 2 - (22 * f * u + 14 * f * u + 56 * f * u) / 2;
-        const kLine = [row.mon && row.day ? `${row.mon} ${row.day}` : '', row.meta ?? ''].filter(Boolean).join(' · ');
+        const kLine = [
+          row.mon && row.day ? `${row.mon} ${row.day}` : row.time ? `${row.time} ${row.ampm}` : '',
+          row.meta ?? '',
+        ].filter(Boolean).join(' · ');
         if (kLine) drawSpacedText(ctx, kLine, fontStr(800, 22 * f * u, sc.doc.fontBody), tones.accentInk, L, top + 18 * f * u, 22 * f * u * 0.13, 'left', 1);
         edSera(ctx, sc, row.title, 56 * f * u, tones.ink, L, top + 22 * f * u + 14 * f * u + 56 * f * u * 0.82);
       });
@@ -2026,6 +2052,9 @@ function drawEdAgenda(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene,
         ctx.fill();
         if (row.mon) drawSpacedText(ctx, row.mon, fontStr(800, 18 * f * u, sc.doc.fontBody), tones.accentInk, L + tile / 2, cy - tile / 2 + 34 * f * u, 18 * f * u * 0.13, 'center', 1);
         if (row.day) edSera(ctx, sc, row.day, 76 * f * u, tones.ink, L + tile / 2, cy + tile / 2 - 26 * f * u, 'center');
+        // Day-agenda tile: AM/PM label up top, the time as the big figure.
+        if (row.ampm) drawSpacedText(ctx, row.ampm, fontStr(800, 18 * f * u, sc.doc.fontBody), tones.accentInk, L + tile / 2, cy - tile / 2 + 34 * f * u, 18 * f * u * 0.13, 'center', 1);
+        if (row.time) edSera(ctx, sc, row.time, 54 * f * u, tones.ink, L + tile / 2, cy + tile / 2 - 34 * f * u, 'center');
         const tx = L + tile + 48 * f * u;
         edSera(ctx, sc, row.title, 50 * f * u, tones.ink, tx, cy + (row.meta ? -4 * f * u : 16 * f * u));
         if (row.meta) edNova(ctx, sc, row.meta, 650, 26 * f * u, tones.inkMuted, tx, cy + 12 * f * u + 26 * f * u);

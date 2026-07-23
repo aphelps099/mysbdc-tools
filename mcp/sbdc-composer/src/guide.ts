@@ -77,6 +77,9 @@ right-hand label after "|" ("THIS MONTH | FREE TRAININGS").
   with navy header band · cream → 1c split with navy band.
 - "list" (agenda) — the next-N-trainings card, N ≤ 5. body lines are
   structured: "12 AUG | Marketing bootcamp | Tue · 10:00 AM · Online".
+  Single-event DAY agendas use time-first lines — "9:00 AM | Registration
+  and breakfast" — which render as a two-column schedule: big serif time
+  in the left column, description in the right (AM/PM small in accent).
   title = header ("Upcoming free trainings"), subtitle = footer-left
   note ("All online · No fee"), attribution = footer url. Variants:
   navy → 3a list · cream → 3b numbered · paper → 3c navy header + sheet
@@ -131,10 +134,13 @@ right-hand label after "|" ("THIS MONTH | FREE TRAININGS").
 - shortlink_create { name, url, title, slug? } — mint (or fetch the cached)
   link for one URL when you want the slug on a specific card yourself.
 - shortlink_clicks { name } — click counts for the project's links.
-- Slashtags are COMPACT by design: auto-slugs cap at ~22 chars on a word
-  boundary ("stockton-probiz", not "stockton-probiz-procurement-summit") —
-  the link is display typography on the card, so shorter is better. Pass an
-  explicit slug to shortlink_create when you want a specific short form.
+- Slashtags are COMPACT: the tail after "sbdc.events/" is HARD-CAPPED at 20
+  chars ("stockton-probiz", never "stockton-probiz-procurement-summit") —
+  the mapper enforces it, preferring the URL's own slug only when it fits
+  and otherwise compressing the title on a word boundary. The link is
+  display typography on the card, so shorter is better. Pass an explicit
+  slug to shortlink_create when you want a specific short form; keep those
+  ≤20 chars too.
 - Links are cached per project by long URL — re-running never mints duplicates.
   Promoting the same event in a NEW project? Copy its cache entry from the
   old project's projects/<name>.json into the new one before shortlink_map —

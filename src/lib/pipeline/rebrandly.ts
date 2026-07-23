@@ -54,9 +54,11 @@ export async function createShortlink(event: {
   title: string;
   slug: string;
   detailUrl: string;
+  /** Explicit slashtag base — skips title derivation (collision suffixes still apply). */
+  slashtag?: string;
 }): Promise<Shortlink> {
   const destination = withUtm(event.detailUrl, event.slug);
-  const base = slashtagFromTitle(event.title);
+  const base = event.slashtag || slashtagFromTitle(event.title);
 
   let lastError = 'unknown';
   for (let attempt = 1; attempt <= MAX_SLASHTAG_ATTEMPTS; attempt++) {

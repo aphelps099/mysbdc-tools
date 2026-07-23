@@ -30,6 +30,21 @@ export const NO_KEY_WARNING =
   'REBRANDLY_API_KEY is not set — shortlinks were not created and URLs were left unchanged. ' +
   'Previews and exports still work; set the key to mint sbdc.events links.';
 
+/** Slugs are read aloud and typed from video cards — hard cap on length. */
+export const MAX_SLUG_LENGTH = 20;
+
+/**
+ * Pick the compact slug for a card: the URL's own path segment when it is
+ * already short (it's the canonical event slug), otherwise a title-derived
+ * slashtag squeezed under MAX_SLUG_LENGTH. slashtagFromTitle's hard bound
+ * is maxLen + 4, so pass maxLen - 4 to guarantee the cap.
+ */
+export function compactSlug(url: string, title: string): string {
+  const fromUrl = slugFromUrl(url);
+  if (fromUrl && fromUrl.length <= MAX_SLUG_LENGTH) return fromUrl;
+  return slashtagFromTitle(title, MAX_SLUG_LENGTH - 4);
+}
+
 /**
  * Create (or reuse from the project cache) a shortlink for a long URL.
  * The caller is responsible for saving the project afterwards.
@@ -44,12 +59,15 @@ export async function ensureShortlink(
   const existing = project.shortlinks[url];
   if (existing) return { link: existing, cached: true };
 
+  // Caller-chosen slug wins; otherwise the compact form. Cards read the
+  // tail aloud, so it never exceeds MAX_SLUG_LENGTH (collision suffixes
+  // aside).
+  const tag = slug || compactSlug(url, title);
   const sl = await createShortlink({
-    // The shared client derives the slashtag from `title` — pass the
-    // explicit slug through it when the caller chose one.
-    title: slug || title,
-    slug: slugFromUrl(url) || slashtagFromTitle(title),
+    title,
+    slug: tag,
     detailUrl: url,
+    slashtag: tag,
   });
   const link: CachedShortlink = {
     ...sl,
