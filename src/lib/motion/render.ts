@@ -1725,6 +1725,31 @@ function edEnter(
   ctx.restore();
 }
 
+/** Re-wrap a "A · B · C" meta line on its separators: segments pack
+    greedily into lines that fit maxW, so no wrapped line ever opens with
+    a dangling "·". Falls back to the plain text when nothing fits. */
+function packDotLines(
+  ctx: CanvasRenderingContext2D, sc: SceneCtx, text: string,
+  weight: number, px: number, maxW: number,
+): string {
+  const segs = text.split('·').map((s) => s.trim()).filter(Boolean);
+  if (segs.length < 2) return text;
+  ctx.font = fontStr(weight, px, sc.doc.fontBody);
+  const lines: string[] = [];
+  let line = '';
+  for (const seg of segs) {
+    const joined = line ? `${line} · ${seg}` : seg;
+    if (line && ctx.measureText(joined).width > maxW) {
+      lines.push(line);
+      line = seg;
+    } else {
+      line = joined;
+    }
+  }
+  if (line) lines.push(line);
+  return lines.join('\n');
+}
+
 // — SAVE THE DATE (calendar template, editorial) —
 function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scene, t: number) {
   const { W, H, u } = sc;
@@ -1753,24 +1778,35 @@ function drawEdCalendar(ctx: CanvasRenderingContext2D, sc: SceneCtx, scene: Scen
     const hx = L + colW + 70 * u;
     ctx.fillStyle = ED.hairDark;
     ctx.fillRect(hx, colTop, Math.max(1, u), colBottom - colTop);
-    // right column, bottom-aligned
+    // right column, bottom-aligned. The column is narrow — auto-fit the
+    // title from 88px down until it holds ≤3 lines and the block clears
+    // the column top (scene.textScale still applies on top).
     const tx = hx + 70 * u;
     const maxW = R - tx;
-    const titleFont = fontStr(400, 88 * u, sc.doc.fontHeading);
-    const { height: titleH } = measureBlock(ctx, { text: scene.title, font: titleFont, px: 88 * u, lineHeight: 0.94, maxWidth: maxW, tracking: -0.05 * 88 * u });
-    const { height: metaH } = measureBlock(ctx, { text: scene.subtitle, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35, maxWidth: maxW });
+    const meta = packDotLines(ctx, sc, scene.subtitle, 650, 30 * u, maxW);
+    const { height: metaH } = measureBlock(ctx, { text: meta, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35, maxWidth: maxW });
+    let titlePx = 88 * u * (scene.textScale || 1);
+    let titleH = 0;
+    for (;;) {
+      titleH = measureBlock(ctx, { text: scene.title, font: fontStr(400, titlePx, sc.doc.fontHeading), px: titlePx, lineHeight: 0.94, maxWidth: maxW, tracking: -0.05 * titlePx }).height;
+      const lines = Math.max(1, Math.round(titleH / (titlePx * 0.94)));
+      const fits = lines <= 3 && 8 * u + 40 * u + titleH + 30 * u + metaH <= colBottom - colTop - 12 * u;
+      if (fits || titlePx <= 54 * u) break;
+      titlePx -= 2 * u;
+    }
+    const titleFont = fontStr(400, titlePx, sc.doc.fontHeading);
     const blockH = 8 * u + 40 * u + titleH + 30 * u + metaH;
     let y = colBottom - 12 * u - blockH;
     edRule(ctx, sc, scene, tx, y, t, 350);
     y += 8 * u + 40 * u;
     drawTextBlock(ctx, {
-      text: scene.title, font: titleFont, px: 88 * u, lineHeight: 0.94, color: scheme.fg,
+      text: scene.title, font: titleFont, px: titlePx, lineHeight: 0.94, color: scheme.fg,
       maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 420,
-      accent: scheme.accent, tracking: -0.05 * 88 * u,
+      accent: scheme.accent, tracking: -0.05 * titlePx,
     });
     y += titleH + 30 * u;
     drawTextBlock(ctx, {
-      text: scene.subtitle, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35,
+      text: meta, font: fontStr(650, 30 * u, sc.doc.fontBody), px: 30 * u, lineHeight: 1.35,
       color: tones.accent, maxWidth: maxW, x: tx, y, align: 'left', anim: 'rise', t, tStart: 620, accent: scheme.accent,
     });
     edFooter(ctx, sc, { top: footTop, left: L, right: R, dark: true, url: scene.attribution.trim(), logoH: 64 * u, t, tStart: 750, urlColor: tones.lightOnDark });
