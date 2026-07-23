@@ -1,6 +1,6 @@
 ---
 name: event-promo-video
-description: Build a finished promo MP4 for events using the motion MCP servers — an SBDC "next 3 trainings" series reel or single-event save-the-date (sbdc-motion-composer), or a TFG series/single-event ad (tfg-motion-studio). Use when the user asks for an event video, promo video, save-the-date, "set of 3" events reel, training calendar video, or an MP4 promoting SBDC or TFG events/workshops.
+description: Build a finished promo MP4 for events using the motion MCP servers — primarily TFG series/single-event ads (tfg-motion-studio), plus the SBDC recipes shared with the training-video skill. Use when the user asks for a TFG event video, workshop ad, or an MP4 promoting TFG events/workshops. For SBDC training/event promos prefer the training-video skill (it carries the current SBDC operating procedure).
 user_invocable: true
 ---
 
@@ -135,8 +135,8 @@ scenes only.
 - **shortlink_map before preview, always** (SBDC). Cards must show
   `sbdc.events/slug`, no scheme, never a raw Neoserra/Localist/WordPress
   URL. Links are cached per project — re-running never mints duplicates.
-- **Slashtags are compact.** Auto-slugs cap at ~22 chars on a word
-  boundary (`stockton-probiz`, not `stockton-probiz-procurement-summit`)
+- **Slashtags are compact.** The tail after `sbdc.events/` is hard-capped
+  at 20 chars (`stockton-probiz`, not `stockton-probiz-procurement-summit`)
   — the link is display typography. If a minted slug still reads long,
   re-mint with an explicit short `slug` via `shortlink_create`.
 - **Same event, new project → seed the cache first.** The shortlink

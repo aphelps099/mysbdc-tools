@@ -11,13 +11,13 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { join, resolve, basename } from 'node:path';
 import { docDuration } from '../../../src/lib/motion/types';
 import { GUIDE } from './guide.js';
 import { sbdcScene, patchScene, sbdcDefaultDoc, SceneInput } from './sbdc.js';
 import {
-  listProjects, loadProject, saveProject, projectExists, Project, OUT_DIR, AssetKind,
+  listProjects, loadProject, saveProject, projectExists, Project, OUT_DIR, REPO_ROOT, AssetKind,
 } from './projects.js';
 import {
   ensureShortlink, mapShortlinks, getClicks, hasApiKey, NO_KEY_WARNING,
@@ -25,6 +25,25 @@ import {
 import { upcomingEvents } from './events.js';
 import { RenderBackend, docTimes } from './browser.js';
 import { normalizeToH264 } from './transcode.js';
+
+/* Desktop MCP clients (Claude Cowork / the Claude Code app) launch this
+   server outside a login shell, so shell-profile exports never arrive.
+   Fill missing REBRANDLY_* vars from the repo's .env.local / .env — the
+   same files the Next.js app already reads — before any tool runs. */
+function loadDotEnvFallback(): void {
+  const wanted = ['REBRANDLY_API_KEY', 'REBRANDLY_DOMAIN'];
+  if (wanted.every((k) => process.env[k])) return;
+  for (const file of ['.env.local', '.env']) {
+    const path = join(REPO_ROOT, file);
+    if (!existsSync(path)) continue;
+    for (const line of readFileSync(path, 'utf8').split('\n')) {
+      const m = line.match(/^\s*(?:export\s+)?([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+      if (!m || !wanted.includes(m[1]) || process.env[m[1]]) continue;
+      process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+    }
+  }
+}
+loadDotEnvFallback();
 
 const backend = new RenderBackend();
 
