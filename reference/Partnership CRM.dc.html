@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fav-norcal-sbdc-design-system-979e6eb6-b3d1-48a1-881d-d0810bec8357/tokens/colors.css">
+<link rel="stylesheet" href="_ds/fav-norcal-sbdc-design-system-979e6eb6-b3d1-48a1-881d-d0810bec8357/tokens/typography.css">
+<link rel="stylesheet" href="_ds/fav-norcal-sbdc-design-system-979e6eb6-b3d1-48a1-881d-d0810bec8357/tokens/effects.css">
+<link rel="stylesheet" href="_ds/fav-norcal-sbdc-design-system-979e6eb6-b3d1-48a1-881d-d0810bec8357/styles.css">
+<script src="_ds/fav-norcal-sbdc-design-system-979e6eb6-b3d1-48a1-881d-d0810bec8357/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--navy); font-family: var(--nova); -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: var(--cobalt); text-decoration: none; border-bottom: 1px solid #1b5faf5c; font-weight: 700; }
+  a:hover { color: var(--cobalt-dark); border-bottom-color: var(--cobalt-dark); }
+  input, select, textarea, button { font-family: var(--nova); }
+  ::placeholder { color: var(--slate-light); }
+  @keyframes dcScrim { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes dcRise { from { opacity: 0; transform: translateY(20px) scale(.99) } to { opacity: 1; transform: none } }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--paper)">
+
+  <header style="position:sticky;top:0;z-index:40;background:var(--navy);color:var(--white);display:flex;align-items:center;gap:34px;padding:0 34px;height:74px;box-shadow:0 12px 40px #0e1a2b1f">
+    <div style="display:flex;flex-direction:column;line-height:1;flex:none">
+      <span style="font-family:var(--sera);font-size:20px;letter-spacing:-.035em">NorCal <span style="font-weight:700">SBDC</span></span>
+      <span style="margin-top:5px;padding-top:5px;border-top:1px solid #ffffff33;font-size:8.5px;font-weight:800;letter-spacing:.19em;color:var(--pool)">PARTNERSHIP CRM</span>
+    </div>
+    <nav style="display:flex;gap:4px;align-self:stretch;align-items:stretch">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <sc-if value="{{ sampleBanner }}" hint-placeholder-val="{{ true }}">
+      <span style="font-size:9.5px;font-weight:800;letter-spacing:.17em;color:var(--pool);border:1px solid #8fc5d959;padding:6px 11px;border-radius:3px">SAMPLE DATA</span>
+    </sc-if>
+    <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="pool" small="{{ true }}" onClick="{{ openAdd }}" hint-size="auto,43px">Add partner</x-import>
+  </header>
+
+  <main style="max-width:1400px;margin:0 auto;padding:0 34px 90px">
+
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;padding:52px 0 26px;border-bottom:3px solid var(--navy)">
+          <div>
+            <p style="display:flex;align-items:center;gap:12px;margin:0 0 18px;font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--navy)">
+              <span style="width:33px;height:3px;background:var(--berry)"></span>NorCal SBDC Network
+            </p>
+            <h1 style="margin:0;font-family:var(--sera);font-weight:400;font-size:clamp(46px,4.6vw,66px);letter-spacing:-.05em;line-height:.93">Partnerships</h1>
+            <p style="margin:14px 0 0;font-size:15px;color:var(--slate)">{{ partnerCount }} partner organizations · Updated Jul 27, 2026</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;padding-bottom:4px">
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="primary" onClick="{{ openAdd }}" hint-size="auto,50px">Add partner</x-import>
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="secondary" arrow="{{ true }}" onClick="{{ goPipeline }}" hint-size="auto,50px">View pipeline</x-import>
+          </div>
+        </div>
+
+        <div style="margin-top:34px;border:1px solid var(--line);border-top:5px solid var(--berry);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)">
+          <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+            <div style="background:var(--white);padding:26px 26px 28px">
+              <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">{{ m.label }}</div>
+              <div style="margin-top:14px;font-family:var(--sera);font-weight:400;font-size:58px;line-height:.9;letter-spacing:-.05em">{{ m.value }}</div>
+              <div style="margin-top:12px;font-size:13px;color:{{ m.subColor }}">{{ m.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:26px;border:1px solid var(--line);display:grid;grid-template-columns:1.1fr 1fr;gap:1px;background:var(--line)">
+
+          <div style="background:var(--white);padding:26px 28px 30px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+              <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase">Needs attention</div>
+              <div style="font-size:12px;color:var(--slate-light)">Overdue and stalling</div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ attention }}" as="a" hint-placeholder-count="4">
+                <div onClick="{{ a.open }}" style="{{ a.rowStyle }}">
+                  <span style="{{ a.dotStyle }}"></span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:14px;font-weight:700">{{ a.name }}</div>
+                    <div style="font-size:12.5px;color:var(--slate-light);margin-top:2px">{{ a.detail }}</div>
+                  </div>
+                  <span style="{{ a.tagStyle }}">{{ a.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:var(--white);padding:26px 28px 30px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+              <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase">Pipeline stages</div>
+              <div style="font-size:12px;color:var(--slate-light)">All partners</div>
+            </div>
+            <div style="padding-top:6px">
+              <sc-for list="{{ stageBars }}" as="s" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:120px 1fr 28px;align-items:center;gap:14px;padding:7px 0">
+                  <div style="font-size:12.5px;color:var(--slate);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.label }}</div>
+                  <div style="height:14px;border-left:2px solid var(--line);position:relative">
+                    <div style="{{ s.barStyle }}"></div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums">{{ s.n }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:var(--white);padding:26px 28px 30px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+              <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase">Top referral sources</div>
+              <div style="font-size:12px;color:var(--slate-light)">Jan–Jul 2026</div>
+            </div>
+            <div style="padding-top:6px">
+              <sc-for list="{{ referralBars }}" as="r" hint-placeholder-count="6">
+                <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:190px 1fr 28px;align-items:center;gap:14px;padding:7px 0;cursor:pointer">
+                  <div style="font-size:12.5px;color:var(--slate);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.label }}</div>
+                  <div style="height:14px;border-left:2px solid var(--line);position:relative">
+                    <div style="{{ r.barStyle }}"></div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums">{{ r.n }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:var(--white);padding:26px 28px 30px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+              <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase">Partners by type</div>
+              <div style="font-size:12px;color:var(--slate-light)">Excludes dormant</div>
+            </div>
+            <div style="padding-top:6px">
+              <sc-for list="{{ typeBars }}" as="t" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:150px 1fr 28px;align-items:center;gap:14px;padding:11px 0">
+                  <div style="font-size:12.5px;color:var(--slate);text-align:right">{{ t.label }}</div>
+                  <div style="height:14px;border-left:2px solid var(--line);position:relative">
+                    <div style="{{ t.barStyle }}"></div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums">{{ t.n }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPipeline }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:34px 0 20px">
+          <p style="display:flex;align-items:center;gap:12px;margin:0 22px 0 0;font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase">
+            <span style="width:33px;height:3px;background:var(--berry)"></span>Pipeline
+          </p>
+          <select value="{{ pipeType }}" onChange="{{ setPipeType }}" style="{{ inputStyle }}">
+            <option value="">All types</option>
+            <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="3">
+              <option value="{{ o.value }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+          <select value="{{ pipeOwner }}" onChange="{{ setPipeOwner }}" style="{{ inputStyle }}">
+            <option value="">All owners</option>
+            <sc-for list="{{ owners }}" as="o" hint-placeholder-count="5">
+              <option value="{{ o }}">{{ o }}</option>
+            </sc-for>
+          </select>
+          <span style="margin-left:auto;font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">{{ pipeCount }}</span>
+        </div>
+        <div style="border:1px solid var(--line);border-top:5px solid var(--berry);display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:1px;background:var(--line);overflow-x:auto">
+          <sc-for list="{{ board }}" as="col" hint-placeholder-count="6">
+            <div style="background:var(--white);padding:16px 14px 20px;min-height:220px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line)">
+                <span style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase">{{ col.name }}</span>
+                <span style="font-size:11px;font-weight:800;color:var(--slate-light);font-variant-numeric:tabular-nums">{{ col.count }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ col.cards }}" as="c" hint-placeholder-count="2">
+                  <div onClick="{{ c.open }}" style="{{ c.style }}" style-hover="border-color:#0f1c2d5c">
+                    <div style="font-size:13.5px;font-weight:700;line-height:1.3">{{ c.name }}</div>
+                    <div style="font-size:11.5px;color:var(--slate-light);margin-top:5px">{{ c.meta }}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+                      <span style="{{ c.dueStyle }}">{{ c.due }}</span>
+                      <span style="width:22px;height:22px;border-radius:50%;background:var(--pool-pale);color:var(--navy);display:inline-grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.04em">{{ c.initials }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPartners }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:34px 0 20px">
+          <input type="search" value="{{ q }}" onChange="{{ setQ }}" placeholder="Search partners, contacts, cities" style="{{ searchStyle }}">
+          <select value="{{ fType }}" onChange="{{ setFType }}" style="{{ inputStyle }}">
+            <option value="">All types</option>
+            <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="3">
+              <option value="{{ o.value }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+          <select value="{{ fStage }}" onChange="{{ setFStage }}" style="{{ inputStyle }}">
+            <option value="">All stages</option>
+            <sc-for list="{{ stages }}" as="s" hint-placeholder-count="6">
+              <option value="{{ s }}">{{ s }}</option>
+            </sc-for>
+          </select>
+          <select value="{{ fOwner }}" onChange="{{ setFOwner }}" style="{{ inputStyle }}">
+            <option value="">All owners</option>
+            <sc-for list="{{ owners }}" as="o" hint-placeholder-count="5">
+              <option value="{{ o }}">{{ o }}</option>
+            </sc-for>
+          </select>
+          <span style="margin-left:auto;font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">{{ tblCount }}</span>
+        </div>
+        <div style="border:1px solid var(--line);background:var(--white);overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;min-width:1000px">
+            <thead>
+              <tr>
+                <sc-for list="{{ columns }}" as="c" hint-placeholder-count="8">
+                  <th onClick="{{ c.sort }}" style="{{ c.style }}">{{ c.label }}{{ c.arrow }}</th>
+                </sc-for>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+                <tr onClick="{{ r.open }}" style="cursor:pointer;border-bottom:1px solid var(--line)" style-hover="background:#dcecf24d">
+                  <td style="{{ tdStyle }}">
+                    <div style="display:flex;align-items:stretch;gap:12px">
+                      <span style="{{ r.chipStyle }}"></span>
+                      <div>
+                        <div style="font-weight:700;font-size:13.5px">{{ r.name }}</div>
+                        <div style="font-size:12px;color:var(--slate-light);margin-top:2px">{{ r.sub }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="{{ tdStyle }}"><span style="{{ r.typeChipStyle }}">{{ r.typeShort }}</span></td>
+                  <td style="{{ tdStyle }}"><span style="{{ r.stageChipStyle }}">{{ r.stage }}</span></td>
+                  <td style="{{ tdStyle }}">
+                    <div style="font-size:13.5px">{{ r.contact }}</div>
+                    <div style="font-size:12px;color:var(--slate-light);margin-top:2px">{{ r.contactTitle }}</div>
+                  </td>
+                  <td style="{{ tdStyle }}">{{ r.owner }}</td>
+                  <td style="{{ tdNumStyle }}">{{ r.referrals }}</td>
+                  <td style="{{ tdNumStyle }}">{{ r.lastContact }}</td>
+                  <td style="{{ r.dueCellStyle }}">{{ r.nextFollowUp }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+          <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:44px;text-align:center;font-size:13px;color:var(--slate-light)">No partners match these filters.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isActivity }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:34px 0 20px">
+          <p style="display:flex;align-items:center;gap:12px;margin:0 22px 0 0;font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase">
+            <span style="width:33px;height:3px;background:var(--berry)"></span>Activity log
+          </p>
+          <select value="{{ actType }}" onChange="{{ setActType }}" style="{{ inputStyle }}">
+            <option value="">All activity types</option>
+            <sc-for list="{{ actTypes }}" as="a" hint-placeholder-count="6">
+              <option value="{{ a }}">{{ a }}</option>
+            </sc-for>
+          </select>
+          <span style="margin-left:auto;font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">{{ actCount }}</span>
+        </div>
+        <div style="border:1px solid var(--line);border-top:5px solid var(--berry);background:var(--white);padding:8px 30px 22px">
+          <sc-for list="{{ feed }}" as="f" hint-placeholder-count="8">
+            <div onClick="{{ f.open }}" style="display:grid;grid-template-columns:92px 108px 1fr;gap:20px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line);cursor:pointer">
+              <div style="font-size:12.5px;color:var(--slate-light);font-variant-numeric:tabular-nums">{{ f.date }}</div>
+              <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--cobalt)">{{ f.type }}</div>
+              <div>
+                <div style="font-size:13.5px;font-weight:700">{{ f.partner }}</div>
+                <div style="font-size:13px;color:var(--slate);margin-top:3px;text-wrap:pretty">{{ f.note }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ scrimClose }}" style="position:fixed;inset:0;z-index:100;background:#0f1c2d8c;backdrop-filter:blur(7px);display:flex;align-items:flex-start;justify-content:center;padding:56px 20px;overflow-y:auto;animation:dcScrim .18s ease">
+      <div onClick="{{ stop }}" style="width:100%;max-width:720px;background:var(--white);border-radius:10px;box-shadow:0 42px 85px #0e1a2b4d,0 12px 28px #0e1a2b1a;overflow:hidden;animation:dcRise .3s cubic-bezier(.2,.75,.25,1)">
+        <div style="padding:30px 34px 24px;border-top:5px solid var(--berry);display:flex;align-items:flex-start;gap:20px">
+          <div style="flex:1;min-width:0">
+            <p style="display:flex;align-items:center;gap:12px;margin:0 0 14px;font-size:10px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--slate-light)">{{ detail.typeLabel }}</p>
+            <h2 style="margin:0;font-family:var(--sera);font-weight:400;font-size:34px;line-height:1.02;letter-spacing:-.04em;text-wrap:pretty">{{ detail.name }}</h2>
+            <p style="margin:12px 0 0;font-size:13.5px;color:var(--slate)">{{ detail.sub }}</p>
+          </div>
+          <button onClick="{{ closeModal }}" style="flex:none;width:36px;height:36px;border:1px solid var(--line);background:var(--white);border-radius:4px;color:var(--slate);font-size:15px;cursor:pointer;line-height:1" style-hover="background:var(--pool-pale);border-color:var(--pool)">✕</button>
+        </div>
+
+        <div style="padding:0 34px 8px">
+          <div style="border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)">
+            <sc-for list="{{ detail.fields }}" as="f" hint-placeholder-count="6">
+              <div style="background:var(--white);padding:16px 0 16px 0">
+                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">{{ f.label }}</div>
+                <div style="{{ f.valueStyle }}">{{ f.value }}</div>
+                <div style="font-size:12.5px;color:var(--slate-light);margin-top:2px">{{ f.hint }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 0 4px;border-top:1px solid var(--line)">
+            <label style="display:block">
+              <span style="display:block;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light);margin-bottom:7px">Stage</span>
+              <select value="{{ dStage }}" onChange="{{ setDStage }}" style="{{ fullInputStyle }}">
+                <sc-for list="{{ stages }}" as="s" hint-placeholder-count="6">
+                  <option value="{{ s }}">{{ s }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block">
+              <span style="display:block;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light);margin-bottom:7px">Owner</span>
+              <select value="{{ dOwner }}" onChange="{{ setDOwner }}" style="{{ fullInputStyle }}">
+                <sc-for list="{{ owners }}" as="o" hint-placeholder-count="5">
+                  <option value="{{ o }}">{{ o }}</option>
+                </sc-for>
+              </select>
+            </label>
+          </div>
+
+          <div style="padding:22px 0 0">
+            <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light)">Notes</div>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:var(--slate);text-wrap:pretty">{{ detail.notes }}</p>
+          </div>
+
+          <div style="padding:26px 0 6px">
+            <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-light);padding-bottom:10px;border-bottom:1px solid var(--line)">{{ detail.historyLabel }}</div>
+            <sc-for list="{{ detail.activities }}" as="a" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:88px 1fr;gap:18px;padding:13px 0;border-bottom:1px solid var(--line)">
+                <div style="font-size:12.5px;color:var(--slate-light);font-variant-numeric:tabular-nums">{{ a.date }}</div>
+                <div style="font-size:13.5px;color:var(--slate);text-wrap:pretty"><span style="font-weight:800;color:var(--navy);font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-right:9px">{{ a.type }}</span>{{ a.note }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:10px;padding:18px 34px;background:var(--white);border-top:1px solid var(--line)">
+          <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="secondary" small="{{ true }}" onClick="{{ openLogFromDetail }}" hint-size="auto,43px">Log activity</x-import>
+          <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="primary" small="{{ true }}" onClick="{{ saveDetail }}" hint-size="auto,43px">Save changes</x-import>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showAdd }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ scrimClose }}" style="position:fixed;inset:0;z-index:100;background:#0f1c2d8c;backdrop-filter:blur(7px);display:flex;align-items:flex-start;justify-content:center;padding:56px 20px;overflow-y:auto;animation:dcScrim .18s ease">
+      <div onClick="{{ stop }}" style="width:100%;max-width:680px;background:var(--white);border-radius:10px;box-shadow:0 42px 85px #0e1a2b4d,0 12px 28px #0e1a2b1a;overflow:hidden;animation:dcRise .3s cubic-bezier(.2,.75,.25,1)">
+        <form onSubmit="{{ submitAdd }}">
+          <div style="padding:30px 34px 24px;border-top:5px solid var(--berry);display:flex;align-items:flex-start;gap:20px">
+            <div style="flex:1">
+              <p style="margin:0 0 14px;font-size:10px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--slate-light)">New partnership</p>
+              <h2 style="margin:0;font-family:var(--sera);font-weight:400;font-size:34px;line-height:1.02;letter-spacing:-.04em">Add partner</h2>
+            </div>
+            <button type="button" onClick="{{ closeModal }}" style="flex:none;width:36px;height:36px;border:1px solid var(--line);background:var(--white);border-radius:4px;color:var(--slate);font-size:15px;cursor:pointer;line-height:1" style-hover="background:var(--pool-pale);border-color:var(--pool)">✕</button>
+          </div>
+          <div style="padding:4px 34px 28px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+            <label style="display:block;grid-column:1 / -1">
+              <span style="{{ labelStyle }}">Organization name</span>
+              <input required name="name" placeholder="e.g., Redwood Coast Community Bank" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Type</span>
+              <select name="type" style="{{ fullInputStyle }}">
+                <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="3">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Category</span>
+              <input name="subtype" placeholder="Bank, Chamber, EDC" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">City</span>
+              <input name="city" placeholder="Eureka" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Service center</span>
+              <input name="center" placeholder="North Coast SBDC" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Stage</span>
+              <select name="stage" style="{{ fullInputStyle }}">
+                <sc-for list="{{ stages }}" as="s" hint-placeholder-count="6">
+                  <option value="{{ s }}">{{ s }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Owner</span>
+              <select name="owner" style="{{ fullInputStyle }}">
+                <sc-for list="{{ owners }}" as="o" hint-placeholder-count="5">
+                  <option value="{{ o }}">{{ o }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Contact name</span>
+              <input name="contact" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Contact title</span>
+              <input name="contactTitle" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Email</span>
+              <input name="email" type="email" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Phone</span>
+              <input name="phone" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Next follow-up</span>
+              <input name="nextFollowUp" type="date" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block;grid-column:1 / -1">
+              <span style="{{ labelStyle }}">Notes</span>
+              <textarea name="notes" style="{{ textareaStyle }}"></textarea>
+            </label>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;padding:18px 34px;background:var(--white);border-top:1px solid var(--line)">
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="secondary" small="{{ true }}" type="button" onClick="{{ closeModal }}" hint-size="auto,43px">Cancel</x-import>
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="primary" small="{{ true }}" type="submit" hint-size="auto,43px">Add partner</x-import>
+          </div>
+        </form>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showLog }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ scrimClose }}" style="position:fixed;inset:0;z-index:100;background:#0f1c2d8c;backdrop-filter:blur(7px);display:flex;align-items:flex-start;justify-content:center;padding:56px 20px;overflow-y:auto;animation:dcScrim .18s ease">
+      <div onClick="{{ stop }}" style="width:100%;max-width:580px;background:var(--white);border-radius:10px;box-shadow:0 42px 85px #0e1a2b4d,0 12px 28px #0e1a2b1a;overflow:hidden;animation:dcRise .3s cubic-bezier(.2,.75,.25,1)">
+        <form onSubmit="{{ submitLog }}">
+          <div style="padding:30px 34px 24px;border-top:5px solid var(--berry);display:flex;align-items:flex-start;gap:20px">
+            <div style="flex:1;min-width:0">
+              <p style="margin:0 0 14px;font-size:10px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--slate-light)">{{ logPartner }}</p>
+              <h2 style="margin:0;font-family:var(--sera);font-weight:400;font-size:34px;line-height:1.02;letter-spacing:-.04em">Log activity</h2>
+            </div>
+            <button type="button" onClick="{{ closeModal }}" style="flex:none;width:36px;height:36px;border:1px solid var(--line);background:var(--white);border-radius:4px;color:var(--slate);font-size:15px;cursor:pointer;line-height:1" style-hover="background:var(--pool-pale);border-color:var(--pool)">✕</button>
+          </div>
+          <div style="padding:4px 34px 28px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Type</span>
+              <select name="type" style="{{ fullInputStyle }}">
+                <sc-for list="{{ actTypes }}" as="a" hint-placeholder-count="6">
+                  <option value="{{ a }}">{{ a }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Date</span>
+              <input name="date" type="date" required default-value="{{ today }}" style="{{ fullInputStyle }}">
+            </label>
+            <label style="display:block;grid-column:1 / -1">
+              <span style="{{ labelStyle }}">What happened</span>
+              <textarea name="note" required placeholder="Summary of the conversation" style="{{ textareaStyle }}"></textarea>
+            </label>
+            <label style="display:block">
+              <span style="{{ labelStyle }}">Next follow-up</span>
+              <input name="nextFollowUp" type="date" style="{{ fullInputStyle }}">
+            </label>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;padding:18px 34px;background:var(--white);border-top:1px solid var(--line)">
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="secondary" small="{{ true }}" type="button" onClick="{{ closeModal }}" hint-size="auto,43px">Cancel</x-import>
+            <x-import component-from-global-scope="NorCalSBDCDesignSystem_979e6e.Button" variant="primary" small="{{ true }}" type="submit" hint-size="auto,43px">Save activity</x-import>
+          </div>
+        </form>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:200;background:var(--navy);color:var(--white);font-size:13px;font-weight:700;letter-spacing:.01em;padding:14px 24px;border-radius:4px;box-shadow:0 18px 40px #0e1a2b52;animation:dcRise .28s cubic-bezier(.2,.75,.25,1)">{{ toast }}</div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Dashboard&quot;,&quot;Pipeline&quot;,&quot;Partners&quot;,&quot;Activity&quot;],&quot;default&quot;:&quot;Dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Comfortable&quot;,&quot;Compact&quot;],&quot;default&quot;:&quot;Comfortable&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;sampleBanner&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  TODAY = "2026-07-27";
+  TYPES = {
+    Referral: { label: "Referral partner", short: "Referral", color: "#1b5faf" },
+    Funding: { label: "Funding & host", short: "Funding", color: "#00675c" },
+    Community: { label: "Community & events", short: "Community", color: "#253247" }
+  };
+  STAGES = ["Prospect", "Outreach", "In Discussion", "MOU / Agreement", "Active", "Dormant"];
+  STAGE_COLORS = ["#dcecf2", "#b9d9e6", "#8fc5d9", "#4f8fc4", "#1b5faf", "#d8d8d8"];
+  OWNERS = ["Aaron", "Gustavo", "Scott", "Preet", "Eric"];
+  ACT_TYPES = ["Meeting", "Call", "Email", "Event", "Referral", "Agreement"];
+  TABS = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "pipeline", label: "Pipeline" },
+    { id: "partners", label: "Partners" },
+    { id: "activity", label: "Activity" }
+  ];
+  COLUMNS = [
+    { key: "name", label: "Organization" },
+    { key: "type", label: "Type" },
+    { key: "stage", label: "Stage" },
+    { key: "contact", label: "Primary contact" },
+    { key: "owner", label: "Owner" },
+    { key: "referrals", label: "Referrals YTD" },
+    { key: "lastContact", label: "Last contact" },
+    { key: "nextFollowUp", label: "Next follow-up" }
+  ];
+
+  seed = [
+    { id:1, name:"Redwood Coast Community Bank", type:"Referral", subtype:"Community bank", city:"Eureka", center:"North Coast SBDC",
+      contact:"Dana Whitfield", contactTitle:"VP, Small Business Lending", email:"dwhitfield@rccb.example.com", phone:"(707) 555-0142",
+      stage:"Active", owner:"Aaron", referrals:14, lastContact:"2026-07-21", nextFollowUp:"2026-08-18",
+      notes:"Strongest bank referral source on the coast. Refers declined loan applicants for packaging help. Quarterly lunch-and-learn cadence.",
+      activities:[
+        { date:"2026-07-21", type:"Meeting", note:"Quarterly check-in with lending team. Two new loan officers onboarded to referral process." },
+        { date:"2026-06-10", type:"Referral", note:"Referred 3 declined applicants for loan packaging assistance." },
+        { date:"2026-04-02", type:"Event", note:"Co-hosted 'Access to Capital' workshop in Eureka — 41 attendees." } ] },
+    { id:2, name:"Six Rivers Federal Credit Union", type:"Referral", subtype:"Credit union", city:"Arcata", center:"North Coast SBDC",
+      contact:"Marcus Bell", contactTitle:"Business Services Manager", email:"mbell@sixriversfcu.example.com", phone:"(707) 555-0179",
+      stage:"Active", owner:"Aaron", referrals:9, lastContact:"2026-07-08", nextFollowUp:"2026-08-05",
+      notes:"Referral agreement in place since 2024. Sends microloan candidates; we send deposit-ready graduates back.",
+      activities:[
+        { date:"2026-07-08", type:"Call", note:"Discussed co-branding a fall microloan readiness series." },
+        { date:"2026-05-27", type:"Referral", note:"2 microloan candidates referred for business plan review." } ] },
+    { id:3, name:"Shasta Cascade Economic Development District", type:"Referral", subtype:"EDC", city:"Redding", center:"Shasta-Cascade SBDC",
+      contact:"Lena Ortiz", contactTitle:"Program Director", email:"lortiz@scedd.example.org", phone:"(530) 555-0113",
+      stage:"Active", owner:"Scott", referrals:11, lastContact:"2026-07-15", nextFollowUp:"2026-07-24",
+      notes:"Cross-referral MOU. They route CDBG business-assistance inquiries to us; we flag infrastructure-scale projects to them.",
+      activities:[
+        { date:"2026-07-15", type:"Meeting", note:"Joint review of rural manufacturing pipeline. Follow-up owed on shared intake form." },
+        { date:"2026-06-03", type:"Referral", note:"4 CDBG inquiries routed to Shasta-Cascade advisors." } ] },
+    { id:4, name:"Golden Valley Community Loan Fund", type:"Referral", subtype:"CDFI", city:"Chico", center:"Butte College SBDC",
+      contact:"Sam Nakagawa", contactTitle:"Lending Director", email:"snakagawa@gvclf.example.org", phone:"(530) 555-0167",
+      stage:"In Discussion", owner:"Gustavo", referrals:3, lastContact:"2026-07-02", nextFollowUp:"2026-07-22",
+      notes:"Negotiating formal referral agreement. They want a warm-handoff SLA (48h response). Draft shared 6/20.",
+      activities:[
+        { date:"2026-07-02", type:"Email", note:"Sent revised referral agreement draft with 48-hour response commitment." },
+        { date:"2026-06-20", type:"Meeting", note:"Reviewed handoff workflow; they asked for named advisor per referral." } ] },
+    { id:5, name:"Chico Chamber of Commerce", type:"Community", subtype:"Chamber", city:"Chico", center:"Butte College SBDC",
+      contact:"Rita Alvarez", contactTitle:"Membership Director", email:"ralvarez@chicochamber.example.com", phone:"(530) 555-0121",
+      stage:"Active", owner:"Gustavo", referrals:6, lastContact:"2026-07-17", nextFollowUp:"2026-09-01",
+      notes:"Monthly 'Office Hours' table at chamber mixers. Chamber promotes our workshops to ~900 members.",
+      activities:[
+        { date:"2026-07-17", type:"Event", note:"Office-hours table at July mixer — 12 conversations, 4 intake forms." },
+        { date:"2026-06-19", type:"Event", note:"June mixer table — 9 conversations." } ] },
+    { id:8, name:"Humboldt Makers Alliance", type:"Community", subtype:"Trade association", city:"Eureka", center:"North Coast SBDC",
+      contact:"Theo Marsh", contactTitle:"President", email:"tmarsh@humboldtmakers.example.org", phone:"(707) 555-0135",
+      stage:"Active", owner:"Aaron", referrals:5, lastContact:"2026-07-19", nextFollowUp:"2026-08-14",
+      notes:"Co-host quarterly 'Maker to Market' workshop series. Alliance handles venue + promotion; we provide curriculum.",
+      activities:[
+        { date:"2026-07-19", type:"Event", note:"Maker to Market Q3 session — pricing & wholesale. 28 attendees, 6 new clients." },
+        { date:"2026-05-14", type:"Meeting", note:"Planned Q3–Q4 workshop calendar." } ] },
+    { id:9, name:"SBA Sacramento District Office", type:"Funding", subtype:"Federal partner", city:"Sacramento", center:"Lead Center",
+      contact:"Janelle Brooks", contactTitle:"Economic Development Specialist", email:"jbrooks@sba.example.gov", phone:"(916) 555-0102",
+      stage:"Active", owner:"Eric", referrals:8, lastContact:"2026-07-14", nextFollowUp:"2026-08-03",
+      notes:"Core program funder. Monthly milestone reporting; co-marketing on lender match events. FY27 option year paperwork due September.",
+      activities:[
+        { date:"2026-07-14", type:"Meeting", note:"Monthly program review. Flagged Q3 capital-infusion milestone tracking ahead of goal." },
+        { date:"2026-06-16", type:"Email", note:"Submitted June performance report." },
+        { date:"2026-05-08", type:"Event", note:"Joint lender match event in Sacramento — 60+ small businesses." } ] },
+    { id:10, name:"CA GO-Biz — Small Business Unit", type:"Funding", subtype:"State partner", city:"Sacramento", center:"Lead Center",
+      contact:"Victor Han", contactTitle:"Program Analyst", email:"vhan@gobiz.example.gov", phone:"(916) 555-0148",
+      stage:"Active", owner:"Preet", referrals:4, lastContact:"2026-06-30", nextFollowUp:"2026-07-25",
+      notes:"State match funding + technical assistance grant. Quarterly invoicing; site visit expected in Q4.",
+      activities:[
+        { date:"2026-06-30", type:"Email", note:"Q2 invoice and narrative submitted." },
+        { date:"2026-04-22", type:"Meeting", note:"Mid-year check-in; discussed expanding rural outreach deliverable." } ] },
+    { id:11, name:"Butte College Foundation", type:"Funding", subtype:"Host institution", city:"Oroville", center:"Butte College SBDC",
+      contact:"Elaine Foster", contactTitle:"Grants Officer", email:"efoster@buttefdn.example.edu", phone:"(530) 555-0173",
+      stage:"MOU / Agreement", owner:"Gustavo", referrals:0, lastContact:"2026-07-11", nextFollowUp:"2026-07-30",
+      notes:"Renewing host agreement + in-kind space commitment for FY27. Legal review on indemnification clause in progress.",
+      activities:[
+        { date:"2026-07-11", type:"Agreement", note:"FY27 host MOU draft returned from their counsel with one redline." },
+        { date:"2026-06-05", type:"Meeting", note:"Agreed on in-kind valuation methodology for match reporting." } ] },
+    { id:14, name:"Valley Oak Bank", type:"Referral", subtype:"Community bank", city:"Woodland", center:"Capital Region SBDC",
+      contact:"Sofia Reyes", contactTitle:"SBA Lending Officer", email:"sreyes@valleyoak.example.com", phone:"(530) 555-0151",
+      stage:"MOU / Agreement", owner:"Preet", referrals:2, lastContact:"2026-07-16", nextFollowUp:"2026-08-01",
+      notes:"Referral agreement at signature stage. They project 15–20 referrals/yr once loan officers are trained.",
+      activities:[
+        { date:"2026-07-16", type:"Agreement", note:"Final referral agreement sent for signature." },
+        { date:"2026-06-25", type:"Meeting", note:"Walked their lending team through our intake and reporting loop." } ] },
+    { id:15, name:"Redding Startup Week", type:"Community", subtype:"Event partner", city:"Redding", center:"Shasta-Cascade SBDC",
+      contact:"Jess Kimura", contactTitle:"Lead Organizer", email:"jkimura@reddingstartupweek.example.com", phone:"(530) 555-0198",
+      stage:"Active", owner:"Scott", referrals:7, lastContact:"2026-07-09", nextFollowUp:"2026-08-20",
+      notes:"Anchor programming partner for October Startup Week. We run the pitch clinic track; strong client acquisition channel.",
+      activities:[
+        { date:"2026-07-09", type:"Meeting", note:"Confirmed 3 SBDC sessions for October + pitch clinic mentor slots." },
+        { date:"2026-05-30", type:"Email", note:"Sponsorship-in-kind letter delivered for their program guide." } ] },
+    { id:16, name:"Pacific Gateway Ports Alliance", type:"Community", subtype:"Trade group", city:"Crescent City", center:"North Coast SBDC",
+      contact:"Owen Tate", contactTitle:"Coordinator", email:"otate@pgpalliance.example.org", phone:"(707) 555-0163",
+      stage:"Dormant", owner:"Aaron", referrals:0, lastContact:"2026-02-12", nextFollowUp:"2026-09-15",
+      notes:"Partnership paused after their coordinator transition. Revisit in September when new staff lands.",
+      activities:[
+        { date:"2026-02-12", type:"Email", note:"Outgoing coordinator confirmed pause; new hire expected late summer." } ] },
+    { id:17, name:"Mendocino Wine & Ag Collective", type:"Community", subtype:"Industry association", city:"Ukiah", center:"Mendocino-Lake SBDC",
+      contact:"Camille Fournier", contactTitle:"Director of Member Services", email:"cfournier@mendowineag.example.org", phone:"(707) 555-0117",
+      stage:"In Discussion", owner:"Preet", referrals:1, lastContact:"2026-07-13", nextFollowUp:"2026-08-06",
+      notes:"Designing a tasting-room profitability cohort (6 sessions). They bring members; we bring advisors + curriculum.",
+      activities:[
+        { date:"2026-07-13", type:"Meeting", note:"Cohort outline approved by their board committee. Pricing model TBD." } ] },
+    { id:18, name:"Northern Rivers Tribal Business Fund", type:"Funding", subtype:"CDFI / grantor", city:"Hoopa", center:"North Coast SBDC",
+      contact:"Lisa Redhawk", contactTitle:"Fund Administrator", email:"lredhawk@nrtbf.example.org", phone:"(530) 555-0140",
+      stage:"Prospect", owner:"Eric", referrals:0, lastContact:"2026-07-01", nextFollowUp:"2026-07-29",
+      notes:"Exploring co-funded advising for tribal member-owned businesses. They may fund a dedicated advisor day monthly.",
+      activities:[
+        { date:"2026-07-01", type:"Call", note:"Intro call. Requested proposal for monthly advising day + reporting template." } ] }
+  ];
+
+  state = {
+    view: null, partners: this.seed, nextId: 19,
+    q: "", fType: "", fStage: "", fOwner: "", pipeType: "", pipeOwner: "", actType: "",
+    sortKey: "name", sortDir: 1,
+    modal: null, currentId: null, dStage: "", dOwner: "", toast: ""
+  };
+
+  componentDidMount() {
+    this._esc = e => { if (e.key === "Escape") this.setState({ modal: null }); };
+    document.addEventListener("keydown", this._esc);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this._esc);
+    clearTimeout(this._t);
+  }
+
+  fmt(d) {
+    if (!d) return "—";
+    const [y, m, day] = d.split("-").map(Number);
+    return new Date(y, m - 1, day).toLocaleDateString("en-US", { month: "short", day: "numeric", year: y === 2026 ? undefined : "numeric" });
+  }
+  overdue(p) { return p.nextFollowUp && p.nextFollowUp < this.TODAY && p.stage !== "Dormant"; }
+  daysAgo(d) { return Math.round((new Date(this.TODAY) - new Date(d)) / 86400000); }
+  initials(n) {
+    const parts = String(n).trim().split(/\s+/);
+    return (parts.length > 1 ? parts.map(w => w[0]).join("") : String(n).slice(0, 2)).slice(0, 2).toUpperCase();
+  }
+  toast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: "" }), 2600);
+  }
+  open(id) {
+    const p = this.state.partners.find(x => x.id === id);
+    if (p) this.setState({ modal: "detail", currentId: id, dStage: p.stage, dOwner: p.owner });
+  }
+
+  renderVals() {
+    const S = this.state, P = S.partners, T = this.TYPES;
+    const compact = (this.props.density ?? "Comfortable") === "Compact";
+    const view = S.view || (this.props.defaultView ?? "Dashboard").toLowerCase();
+    const pad = compact ? "9px 14px" : "15px 16px";
+
+    const inputStyle = { font: "inherit", fontSize: 13.5, fontWeight: 600, color: "var(--navy)", background: "var(--white)", border: "1px solid var(--line)", borderRadius: 4, padding: "11px 13px", cursor: "pointer", minHeight: 43 };
+    const searchStyle = { ...inputStyle, cursor: "text", fontWeight: 500, minWidth: 300 };
+    const fullInputStyle = { ...inputStyle, width: "100%", cursor: "auto", fontWeight: 500 };
+    const labelStyle = { display: "block", fontSize: 10, fontWeight: 800, letterSpacing: ".13em", textTransform: "uppercase", color: "var(--slate-light)", marginBottom: 7 };
+    const textareaStyle = { ...fullInputStyle, minHeight: 78, resize: "vertical", lineHeight: 1.5 };
+    const tdStyle = { padding: pad, fontSize: 13.5, verticalAlign: "middle" };
+    const tdNumStyle = { ...tdStyle, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" };
+    const chipBase = { display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 700, borderRadius: 3, padding: "4px 10px", whiteSpace: "nowrap" };
+
+    const active = P.filter(p => p.stage === "Active");
+    const inPipe = P.filter(p => !["Active", "Dormant"].includes(p.stage));
+    const mous = P.filter(p => p.stage === "MOU / Agreement");
+    const refs = P.reduce((s, p) => s + (p.referrals || 0), 0);
+    const overdue = P.filter(p => this.overdue(p));
+
+    const byType = Object.keys(T).map(t => ({ t, n: P.filter(p => p.type === t && p.stage !== "Dormant").length }));
+    const maxT = Math.max(...byType.map(d => d.n), 1);
+    const byStage = this.STAGES.map((s, i) => ({ s, i, n: P.filter(p => p.stage === s).length }));
+    const maxS = Math.max(...byStage.map(d => d.n), 1);
+    const top = P.filter(p => p.referrals > 0).sort((a, b) => b.referrals - a.referrals).slice(0, 6);
+    const maxR = Math.max(...top.map(p => p.referrals), 1);
+    const bar = (pct, color) => ({ position: "absolute", left: 0, top: 0, bottom: 0, width: pct + "%", minWidth: 2, background: color, borderRadius: "0 2px 2px 0", transition: "width .35s cubic-bezier(.2,.75,.25,1)" });
+
+    const attention = P.filter(p => p.stage !== "Dormant").map(p => {
+      if (this.overdue(p)) return { p, kind: "overdue", txt: "Follow-up was due " + this.fmt(p.nextFollowUp) };
+      if (this.daysAgo(p.lastContact) > 45) return { p, kind: "stale", txt: "No contact in " + this.daysAgo(p.lastContact) + " days" };
+      return null;
+    }).filter(Boolean).sort((a, b) => (a.kind === "overdue" ? 0 : 1) - (b.kind === "overdue" ? 0 : 1));
+
+    // partners table
+    const q = S.q.trim().toLowerCase();
+    let rows = P.filter(p =>
+      (!S.fType || p.type === S.fType) && (!S.fStage || p.stage === S.fStage) && (!S.fOwner || p.owner === S.fOwner) &&
+      (!q || [p.name, p.contact, p.city, p.subtype, p.center].join(" ").toLowerCase().includes(q)));
+    const val = p => {
+      switch (S.sortKey) {
+        case "referrals": return p.referrals || 0;
+        case "stage": return this.STAGES.indexOf(p.stage);
+        case "type": return p.type;
+        case "lastContact": return p.lastContact || "";
+        case "nextFollowUp": return p.nextFollowUp || "";
+        case "contact": return p.contact || "";
+        case "owner": return p.owner || "";
+        default: return p.name.toLowerCase();
+      }
+    };
+    rows = rows.slice().sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * S.sortDir);
+
+    const pipeRows = P.filter(p => (!S.pipeType || p.type === S.pipeType) && (!S.pipeOwner || p.owner === S.pipeOwner));
+    const feed = P.flatMap(p => p.activities.map(a => ({ ...a, p })))
+      .filter(a => !S.actType || a.type === S.actType)
+      .sort((a, b) => b.date.localeCompare(a.date));
+
+    const d = P.find(p => p.id === S.currentId);
+    const detail = d ? {
+      name: d.name, typeLabel: T[d.type].label, sub: d.subtype + " · " + d.city + " · " + d.center,
+      notes: d.notes, historyLabel: "Activity history (" + d.activities.length + ")",
+      fields: [
+        { label: "Primary contact", value: d.contact, hint: d.contactTitle, valueStyle: { fontSize: 15, fontWeight: 700, marginTop: 7 } },
+        { label: "Reach", value: d.email, hint: d.phone, valueStyle: { fontSize: 14, fontWeight: 700, marginTop: 7, color: "var(--cobalt)", overflowWrap: "anywhere" } },
+        { label: "Referrals YTD", value: String(d.referrals || 0), hint: "Clients sent to SBDC", valueStyle: { fontFamily: "var(--sera)", fontSize: 30, letterSpacing: "-.04em", marginTop: 4, lineHeight: 1 } },
+        { label: "Last contact", value: this.fmt(d.lastContact), hint: this.daysAgo(d.lastContact) + " days ago", valueStyle: { fontSize: 15, fontWeight: 700, marginTop: 7 } },
+        { label: "Next follow-up", value: this.fmt(d.nextFollowUp), hint: this.overdue(d) ? "Overdue" : "On schedule", valueStyle: { fontSize: 15, fontWeight: 700, marginTop: 7, color: this.overdue(d) ? "var(--berry)" : "var(--navy)" } },
+        { label: "Service center", value: d.center, hint: d.city, valueStyle: { fontSize: 15, fontWeight: 700, marginTop: 7 } }
+      ].map(f => ({ ...f, valueStyle: { ...f.valueStyle, paddingRight: 24 } })),
+      activities: d.activities.slice().sort((a, b) => b.date.localeCompare(a.date)).map(a => ({ date: this.fmt(a.date), type: a.type, note: a.note }))
+    } : { fields: [], activities: [] };
+
+    return {
+      today: this.TODAY,
+      sampleBanner: this.props.sampleBanner ?? true,
+      isDash: view === "dashboard", isPipeline: view === "pipeline", isPartners: view === "partners", isActivity: view === "activity",
+      inputStyle, searchStyle, fullInputStyle, labelStyle, textareaStyle, tdStyle, tdNumStyle,
+      stages: this.STAGES, owners: this.OWNERS, actTypes: this.ACT_TYPES,
+      typeOptions: Object.keys(T).map(k => ({ value: k, label: T[k].label })),
+      partnerCount: P.length,
+      q: S.q, fType: S.fType, fStage: S.fStage, fOwner: S.fOwner, pipeType: S.pipeType, pipeOwner: S.pipeOwner, actType: S.actType,
+      dStage: S.dStage, dOwner: S.dOwner, toast: S.toast,
+
+      tabs: this.TABS.map(t => ({
+        label: t.label,
+        go: () => this.setState({ view: t.id }),
+        style: {
+          font: "inherit", fontSize: 11, fontWeight: 800, letterSpacing: ".13em", textTransform: "uppercase",
+          background: "none", border: "none", cursor: "pointer", padding: "0 4px", alignSelf: "stretch",
+          color: view === t.id ? "var(--white)" : "#ffffffa8",
+          borderBottom: view === t.id ? "2px solid var(--pool)" : "2px solid transparent",
+          margin: "0 10px", transition: "color .18s,border-color .18s"
+        }
+      })),
+
+      metrics: [
+        { label: "Active partnerships", value: String(active.length), sub: "▲ 2 vs. last quarter", subColor: "var(--evergreen)" },
+        { label: "In pipeline", value: String(inPipe.length), sub: mous.length + " at agreement stage", subColor: "var(--slate-light)" },
+        { label: "Client referrals YTD", value: String(refs), sub: "▲ 18% vs. same period 2025", subColor: "var(--evergreen)" },
+        { label: "Overdue follow-ups", value: String(overdue.length), sub: overdue.length ? "Needs attention" : "All caught up", subColor: overdue.length ? "var(--berry)" : "var(--slate-light)" }
+      ],
+
+      typeBars: byType.map(x => ({ label: T[x.t].label, n: x.n, barStyle: bar((x.n / maxT) * 100, T[x.t].color) })),
+      stageBars: byStage.map(x => ({ label: x.s, n: x.n, barStyle: bar((x.n / maxS) * 100, this.STAGE_COLORS[x.i]) })),
+      referralBars: top.map(p => ({ label: p.name, n: p.referrals, barStyle: bar((p.referrals / maxR) * 100, "#1b5faf"), open: () => this.open(p.id) })),
+
+      attention: attention.map(a => ({
+        name: a.p.name, detail: a.txt + " · " + a.p.owner, tag: a.kind === "overdue" ? "Overdue" : "Going stale",
+        open: () => this.open(a.p.id),
+        rowStyle: { display: "flex", alignItems: "center", gap: 14, padding: compact ? "10px 0" : "14px 0", borderBottom: "1px solid var(--line)", cursor: "pointer" },
+        dotStyle: { width: 9, height: 9, borderRadius: "50%", flex: "none", background: a.kind === "overdue" ? "var(--berry)" : "var(--pool)" },
+        tagStyle: { ...chipBase, fontSize: 10, letterSpacing: ".13em", textTransform: "uppercase", fontWeight: 800, color: a.kind === "overdue" ? "var(--berry)" : "var(--slate)", background: a.kind === "overdue" ? "#c23c3c14" : "var(--pool-pale)" }
+      })),
+
+      pipeCount: pipeRows.length + " of " + P.length + " partners",
+      board: this.STAGES.map(s => {
+        const cards = pipeRows.filter(p => p.stage === s);
+        return {
+          name: s, count: cards.length,
+          cards: cards.map(p => ({
+            name: p.name, meta: p.subtype + " · " + p.city, initials: this.initials(p.owner),
+            due: p.nextFollowUp ? this.fmt(p.nextFollowUp) : "—",
+            open: () => this.open(p.id),
+            style: { background: "var(--paper)", border: "1px solid var(--line)", borderLeft: "3px solid " + T[p.type].color, borderRadius: 3, padding: compact ? "9px 11px" : "13px 14px", cursor: "pointer", transition: "border-color .18s,transform .18s" },
+            dueStyle: { fontSize: 11.5, fontWeight: 700, color: this.overdue(p) ? "var(--berry)" : "var(--slate-light)" }
+          }))
+        };
+      }),
+
+      tblCount: rows.length + " of " + P.length + " partners",
+      noRows: rows.length === 0,
+      columns: this.COLUMNS.map(c => ({
+        label: c.label,
+        arrow: S.sortKey === c.key ? (S.sortDir === 1 ? "  ↑" : "  ↓") : "",
+        sort: () => this.setState(st => st.sortKey === c.key ? { sortDir: st.sortDir * -1 } : { sortKey: c.key, sortDir: 1 }),
+        style: { textAlign: "left", fontSize: 10, fontWeight: 800, letterSpacing: ".13em", textTransform: "uppercase", color: S.sortKey === c.key ? "var(--navy)" : "var(--slate-light)", padding: "14px 16px", borderBottom: "2px solid var(--navy)", cursor: "pointer", userSelect: "none", whiteSpace: "nowrap" }
+      })),
+      rows: rows.map(p => ({
+        name: p.name, sub: p.subtype + " · " + p.city, typeShort: T[p.type].short, stage: p.stage,
+        contact: p.contact, contactTitle: p.contactTitle, owner: p.owner, referrals: p.referrals || 0,
+        lastContact: this.fmt(p.lastContact), nextFollowUp: this.fmt(p.nextFollowUp),
+        open: () => this.open(p.id),
+        chipStyle: { width: 3, alignSelf: "stretch", minHeight: 30, background: T[p.type].color, flex: "none" },
+        typeChipStyle: { ...chipBase, color: T[p.type].color, background: T[p.type].color + "14" },
+        stageChipStyle: { ...chipBase, color: "var(--navy)", background: "var(--pool-pale)" },
+        dueCellStyle: { ...tdNumStyle, color: this.overdue(p) ? "var(--berry)" : "var(--navy)", fontWeight: this.overdue(p) ? 700 : 400 }
+      })),
+
+      actCount: feed.length + " logged activities",
+      feed: feed.map(a => ({ date: this.fmt(a.date), type: a.type, partner: a.p.name, note: a.note, open: () => this.open(a.p.id) })),
+
+      showDetail: S.modal === "detail", showAdd: S.modal === "add", showLog: S.modal === "log",
+      logPartner: d ? d.name : "",
+      detail,
+
+      stop: e => e.stopPropagation(),
+      scrimClose: () => this.setState({ modal: null }),
+      closeModal: () => this.setState({ modal: null }),
+      openAdd: () => this.setState({ modal: "add" }),
+      goPipeline: () => this.setState({ view: "pipeline" }),
+      setQ: e => this.setState({ q: e.target.value }),
+      setFType: e => this.setState({ fType: e.target.value }),
+      setFStage: e => this.setState({ fStage: e.target.value }),
+      setFOwner: e => this.setState({ fOwner: e.target.value }),
+      setPipeType: e => this.setState({ pipeType: e.target.value }),
+      setPipeOwner: e => this.setState({ pipeOwner: e.target.value }),
+      setActType: e => this.setState({ actType: e.target.value }),
+      setDStage: e => this.setState({ dStage: e.target.value }),
+      setDOwner: e => this.setState({ dOwner: e.target.value }),
+
+      saveDetail: () => {
+        const p = P.find(x => x.id === S.currentId);
+        if (!p) return;
+        p.stage = S.dStage; p.owner = S.dOwner;
+        this.setState({ modal: null });
+        this.toast("Saved " + p.name);
+      },
+      openLogFromDetail: () => this.setState({ modal: "log" }),
+      submitLog: e => {
+        e.preventDefault();
+        const f = e.target, p = P.find(x => x.id === S.currentId);
+        if (!p) return;
+        p.activities.push({ date: f.date.value, type: f.type.value, note: f.note.value.trim() });
+        if (f.date.value > (p.lastContact || "")) p.lastContact = f.date.value;
+        if (f.nextFollowUp.value) p.nextFollowUp = f.nextFollowUp.value;
+        this.setState({ modal: null });
+        this.toast("Activity logged for " + p.name);
+      },
+      submitAdd: e => {
+        e.preventDefault();
+        const f = e.target;
+        const rec = {
+          id: S.nextId, name: f.name.value.trim(), type: f.type.value,
+          subtype: f.subtype.value.trim() || "Organization", city: f.city.value.trim() || "—",
+          center: f.center.value.trim() || "Lead Center", contact: f.contact.value.trim() || "—",
+          contactTitle: f.contactTitle.value.trim() || "", email: f.email.value.trim() || "",
+          phone: f.phone.value.trim() || "", stage: f.stage.value, owner: f.owner.value,
+          referrals: 0, lastContact: this.TODAY, nextFollowUp: f.nextFollowUp.value || "",
+          notes: f.notes.value.trim() || "",
+          activities: [{ date: this.TODAY, type: "Email", note: "Partner added to CRM." }]
+        };
+        this.setState({ partners: [...P, rec], nextId: S.nextId + 1, modal: null });
+        this.toast("Added " + rec.name);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

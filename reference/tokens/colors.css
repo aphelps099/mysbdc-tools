@@ -1,0 +1,11 @@
+/* NorCal SBDC color tokens — copied verbatim from production CSS (index-CEbdd4VX.css :root) */
+:root{
+--navy:#0f1c2d;--navy-soft:#253247;--cobalt:#1b5faf;--cobalt-dark:#144b8c;--pool:#8fc5d9;--pool-pale:#dcecf2;--paper:#fdfdfd;--paper-deep:#efefef;--white:#fdfdfd;--slate:#2c3240;--slate-light:#687080;--berry:#c23c3c;--evergreen:#00675c;--silver:#d8d8d8;--line:#0f1c2d29;
+/* additional literals observed in production CSS */
+--footer-ink:#091321;--app-nav:#16253a;--cream:#f5f1e8;--email-desk:#e9e6df;--sky-tint:#b9e5f5;--stage-tint:#eef5f7;--app-surface:#f8fafc;
+/* semantic aliases (derived) */
+--surface-page:var(--paper);--surface-card:var(--white);--surface-dark:var(--navy);--surface-tint:var(--pool-pale);
+--text-body:var(--navy);--text-muted:var(--slate);--text-faint:var(--slate-light);--text-on-dark:var(--white);
+--accent-primary:var(--cobalt);--accent-primary-hover:var(--cobalt-dark);--accent-soft:var(--pool);--accent-rule:var(--berry);
+--border-hairline:var(--line);
+}

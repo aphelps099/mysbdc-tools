@@ -1,0 +1,20 @@
+/* NorCal SBDC type tokens. proxima-sera and proxima-nova are licensed Adobe Typekit
+   families served remotely by https://use.typekit.net/pkl5rjs.css (imported from styles.css;
+   verified live — both families are in that kit). Adobe's EULA prohibits self-hosting the
+   binaries, so no local font files ship with this system; offline fallback is Georgia/Arial. */
+:root{
+--sera:"proxima-sera",Georgia,"Times New Roman",serif; /* @kind font */
+--nova:"proxima-nova",Arial,Helvetica,sans-serif; /* @kind font */
+/* semantic aliases */
+--font-display:var(--sera);--font-body:var(--nova);
+/* display scale (from production clamp() maxima at 1400px shell) */
+--display-hero:clamp(60px,5.8vw,88px); /* @kind font */
+--display-section:clamp(46px,4.6vw,66px); /* @kind font */
+--display-stat:clamp(55px,5.2vw,83px); /* @kind font */
+--display-question:clamp(52px,5.15vw,76px); /* @kind font */
+--tracking-display:-.05em;--leading-display:.93;
+/* body + labels */
+--text-base:16px;--text-lede:19px;--lede-leading:1.48;
+--label-size:11px;--label-tracking:.13em;--label-weight:800;
+}
+body{background:var(--paper);color:var(--navy);font-family:var(--nova);-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5}

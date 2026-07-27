@@ -1,0 +1,12 @@
+/* NorCal SBDC borders, radii, shadows — exact values lifted from production CSS */
+:root{
+/* radii: the brand is nearly square. Buttons 4px, small chips 2-3px, app windows/cards 5-10px. */
+--radius-button:4px;--radius-chip:3px;--radius-card:5px;--radius-window:10px;
+/* rules: thick accent rules are a core motif */
+--rule-accent:5px solid var(--berry);--rule-heading:3px solid var(--navy);--rule-hairline:1px solid var(--line);
+/* shadows */
+--shadow-window:0 42px 85px #0e1a2b33,0 12px 28px #0e1a2b1a;--shadow-float:0 18px 40px #0e1a2b29;--shadow-photo:0 35px 75px #0e1a2b2e;--shadow-header:0 12px 40px #0e1a2b0f;
+/* focus */
+--focus-ring:3px solid var(--pool);
+}
+:focus-visible{outline:var(--focus-ring);outline-offset:4px}
