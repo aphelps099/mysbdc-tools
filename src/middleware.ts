@@ -38,7 +38,7 @@ async function hmacSha256(secret: string, message: string): Promise<string> {
   return bytesToHex(new Uint8Array(sig));
 }
 
-type SessionScope = 'admin' | 'inject' | 'tfg' | 'map';
+type SessionScope = 'admin' | 'inject' | 'tfg' | 'map' | 'crm';
 
 /**
  * Verify the signed session token. Returns the session scope, or null when
@@ -69,6 +69,7 @@ async function verifyToken(token: string): Promise<SessionScope | null> {
   if (parts.length >= 3 && parts[0] === 'inject') return 'inject';
   if (parts.length >= 3 && parts[0] === 'tfg') return 'tfg';
   if (parts.length >= 3 && parts[0] === 'map') return 'map';
+  if (parts.length >= 3 && parts[0] === 'crm') return 'crm';
   return 'admin';
 }
 
@@ -114,6 +115,20 @@ function isMapAllowed(pathname: string): boolean {
 
 const MAP_LOGIN_PATH = '/network-map/login';
 
+/** Paths a crm-scoped session may reach: the Partnership CRM + its API. */
+const CRM_ALLOWED_PATHS = [
+  '/partnerships',
+  '/api/partnerships',
+];
+
+function isCrmAllowed(pathname: string): boolean {
+  return CRM_ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+const CRM_LOGIN_PATH = '/partnerships/login';
+
 export async function middleware(req: NextRequest) {
   // Skip auth if APP_PASSWORD is not set (dev mode / not configured)
   if (!process.env.APP_PASSWORD) {
@@ -123,7 +138,11 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Public login pages (their POSTs go to /api/auth/*)
-  if (pathname === '/motion/tfg/login' || pathname === MAP_LOGIN_PATH) {
+  if (
+    pathname === '/motion/tfg/login' ||
+    pathname === MAP_LOGIN_PATH ||
+    pathname === CRM_LOGIN_PATH
+  ) {
     return NextResponse.next();
   }
 
@@ -136,9 +155,11 @@ export async function middleware(req: NextRequest) {
     // own, everything else uses the main tools login.
     const loginPath = isMapAllowed(pathname)
       ? MAP_LOGIN_PATH
-      : pathname.startsWith('/motion/tfg')
-        ? '/motion/tfg/login'
-        : '/login';
+      : isCrmAllowed(pathname)
+        ? CRM_LOGIN_PATH
+        : pathname.startsWith('/motion/tfg')
+          ? '/motion/tfg/login'
+          : '/login';
     if (pathname.startsWith('/api/')) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -165,6 +186,17 @@ export async function middleware(req: NextRequest) {
       );
     }
     return NextResponse.redirect(new URL('/motion/tfg', req.url));
+  }
+
+  // CRM-scoped sessions can reach ONLY the Partnership CRM — never the tools index
+  if (scope === 'crm' && !isCrmAllowed(pathname)) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'This session is limited to the Partnership CRM' },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL('/partnerships', req.url));
   }
 
   // Map-scoped sessions can reach ONLY the Network Map — never the tools index
