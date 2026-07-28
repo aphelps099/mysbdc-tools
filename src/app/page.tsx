@@ -205,6 +205,19 @@ const tools = [
     ),
   },
   {
+    href: '/partnerships',
+    name: 'Partnership CRM',
+    description: 'Track partner organizations through a relationship pipeline — owners, stages, client referrals, and follow-ups.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="5.5" r="2.5" />
+        <circle cx="5" cy="18" r="2.5" />
+        <circle cx="19" cy="18" r="2.5" />
+        <path d="M10.2 7.2 6.3 15.8M13.8 7.2l3.9 8.6M7.5 18h9" />
+      </svg>
+    ),
+  },
+  {
     href: '/brand',
     name: 'Brand House',
     description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',

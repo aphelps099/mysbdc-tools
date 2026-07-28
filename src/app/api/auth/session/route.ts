@@ -98,7 +98,16 @@ export async function POST(req: NextRequest) {
     mapMatch = a.length === g.length && timingSafeEqual(a, g);
   }
 
+  // Seventh password: Partnership CRM → session scoped to ONLY /partnerships,
+  // so the CRM can be shared as a direct link without exposing the toolbox.
+  const crmPassword = process.env.CRM_PASSWORD || 'SBDCCRM';
+  let crmMatch = false;
   if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch && !mapMatch) {
+    const h = Buffer.from(crmPassword);
+    crmMatch = a.length === h.length && timingSafeEqual(a, h);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch && !mapMatch && !crmMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
@@ -106,7 +115,7 @@ export async function POST(req: NextRequest) {
   // so it cannot be altered client-side; middleware restricts inject-scoped
   // sessions to the inject tool, tfg-scoped to TFG Motion, and map-scoped to
   // the Network Map.
-  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : mapMatch ? 'map' : 'admin';
+  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : mapMatch ? 'map' : crmMatch ? 'crm' : 'admin';
   const nonce = randomBytes(16).toString('hex');
   const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
@@ -119,6 +128,7 @@ export async function POST(req: NextRequest) {
     ...(injectMatch ? { redirect: '/admin/inject-r4i' } : {}),
     ...(tfgMatch ? { redirect: '/motion/tfg' } : {}),
     ...(mapMatch ? { redirect: '/network-map' } : {}),
+    ...(crmMatch ? { redirect: '/partnerships' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
