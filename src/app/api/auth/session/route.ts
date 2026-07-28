@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, randomBytes, timingSafeEqual } from 'crypto';
+import { appendEvent, resolveDataDir } from '@/lib/analytics-store';
 
 /* ═══════════════════════════════════════════════════════
    POST /api/auth/session — Validate password, set cookie
@@ -119,6 +120,19 @@ export async function POST(req: NextRequest) {
   const nonce = randomBytes(16).toString('hex');
   const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
+
+  // Usage analytics: record every successful login with its scope.
+  // Best-effort — a broken analytics disk must never block sign-in.
+  try {
+    appendEvent(resolveDataDir(), {
+      ts: new Date().toISOString(),
+      event: 'login',
+      scope,
+      ua: (req.headers.get('user-agent') || '').slice(0, 140) || undefined,
+    });
+  } catch (err) {
+    console.error('[analytics] login event failed:', err);
+  }
 
   const res = NextResponse.json({
     ok: true,

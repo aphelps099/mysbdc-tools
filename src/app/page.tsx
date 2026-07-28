@@ -218,6 +218,17 @@ const tools = [
     ),
   },
   {
+    href: '/admin/analytics',
+    name: 'Usage Analytics',
+    description: 'See who is logging in and clicking around — logins by scope, daily activity, and a live event feed.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 3v18h18" />
+        <path d="M7 15v3M12 10v8M17 6v12" />
+      </svg>
+    ),
+  },
+  {
     href: '/brand',
     name: 'Brand House',
     description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',

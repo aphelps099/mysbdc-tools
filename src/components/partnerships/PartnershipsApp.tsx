@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { nextPartnerId, todayISO } from './logic';
 import { SEED_PARTNERS } from './seed';
 import { TABS, type ModalId, type Partner, type SortKey, type ViewId } from './types';
+import { track } from './track';
 import { Btn } from './ui';
 import { DashboardView } from './views/DashboardView';
 import { PipelineBoard } from './views/PipelineBoard';
@@ -63,7 +64,9 @@ export function PartnershipsApp() {
   const today = todayISO();
 
   useEffect(() => {
-    setView(initialView());
+    const v = initialView();
+    setView(v);
+    track('app_open', { view: v });
     let cancelled = false;
     fetch('/api/partnerships')
       .then((res) => (res.ok ? res.json() : null))
@@ -104,6 +107,11 @@ export function PartnershipsApp() {
     [showToast],
   );
 
+  const switchView = useCallback((v: ViewId) => {
+    setView(v);
+    track('view', { view: v });
+  }, []);
+
   const openPartner = useCallback(
     (id: number) => {
       const p = partners.find((x) => x.id === id);
@@ -112,6 +120,7 @@ export function PartnershipsApp() {
       setDStage(p.stage);
       setDOwner(p.owner);
       setModal('detail');
+      track('partner_open', { id: p.id, name: p.name });
     },
     [partners],
   );
@@ -128,6 +137,7 @@ export function PartnershipsApp() {
     persist(next);
     setModal(null);
     showToast(`Saved ${current.name}`);
+    track('partner_save', { id: current.id, name: current.name });
   };
 
   const submitLog = (values: LogActivityValues) => {
@@ -148,6 +158,7 @@ export function PartnershipsApp() {
     persist(next);
     setModal(null);
     showToast(`Activity logged for ${current.name}`);
+    track('activity_log', { id: current.id, name: current.name, type: values.type });
   };
 
   const submitAdd = (values: AddPartnerValues) => {
@@ -173,6 +184,7 @@ export function PartnershipsApp() {
     persist([...partners, rec]);
     setModal(null);
     showToast(`Added ${rec.name}`);
+    track('partner_add', { id: rec.id, name: rec.name });
   };
 
   return (
@@ -191,7 +203,7 @@ export function PartnershipsApp() {
               key={t.id}
               className={`pcrm-tab${view === t.id ? ' is-active' : ''}`}
               aria-current={view === t.id ? 'page' : undefined}
-              onClick={() => setView(t.id)}
+              onClick={() => switchView(t.id)}
             >
               {t.label}
             </button>
@@ -211,7 +223,7 @@ export function PartnershipsApp() {
             today={today}
             onOpenPartner={openPartner}
             onAdd={() => setModal('add')}
-            onGoPipeline={() => setView('pipeline')}
+            onGoPipeline={() => switchView('pipeline')}
           />
         )}
         {view === 'pipeline' && (

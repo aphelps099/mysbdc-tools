@@ -115,10 +115,12 @@ function isMapAllowed(pathname: string): boolean {
 
 const MAP_LOGIN_PATH = '/network-map/login';
 
-/** Paths a crm-scoped session may reach: the Partnership CRM + its API. */
+/** Paths a crm-scoped session may reach: the Partnership CRM + its API
+ *  (+ the usage-event beacon; the analytics summary stays admin-only). */
 const CRM_ALLOWED_PATHS = [
   '/partnerships',
   '/api/partnerships',
+  '/api/analytics/track',
 ];
 
 function isCrmAllowed(pathname: string): boolean {
