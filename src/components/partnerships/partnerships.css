@@ -100,6 +100,19 @@
 .pcrm-btn:hover {
   transform: translateY(-2px);
 }
+/* mailto buttons are anchors — undo the .pcrm a link treatment */
+.pcrm a.pcrm-btn {
+  text-decoration: none;
+  border-bottom: none;
+}
+.pcrm a.pcrm-btn--secondary {
+  color: var(--navy);
+  border: 1px solid #0e1a2b5c;
+}
+.pcrm a.pcrm-btn--secondary:hover {
+  color: var(--navy);
+  border-color: var(--navy);
+}
 .pcrm-btn--sm {
   height: 43px;
   padding: 0 18px;

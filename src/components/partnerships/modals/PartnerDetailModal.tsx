@@ -1,6 +1,8 @@
 'use client';
 
+import { buildFollowUpMailto } from '../followup';
 import { daysAgo, fmt, isOverdue } from '../logic';
+import { track } from '../track';
 import { OWNERS, STAGES, TYPES, type Partner } from '../types';
 import { Btn, CloseButton, ModalScrim } from '../ui';
 
@@ -139,6 +141,15 @@ export function PartnerDetailModal({
       </div>
 
       <div className="pcrm-modal-foot pcrm-modal-foot--sticky">
+        {partner.email && (
+          <a
+            className="pcrm-btn pcrm-btn--secondary pcrm-btn--sm"
+            href={buildFollowUpMailto(partner, today)}
+            onClick={() => track('followup_draft', { id: partner.id, name: partner.name })}
+          >
+            Draft follow-up
+          </a>
+        )}
         <Btn variant="secondary" small onClick={onLogActivity}>
           Log activity
         </Btn>
