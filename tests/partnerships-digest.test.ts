@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildFollowUpEmail, buildFollowUpMailto } from '@/components/partnerships/followup';
-import { SEED_PARTNERS } from '@/components/partnerships/seed';
+import { FIXTURE_PARTNERS } from './fixtures/partners';
 import { buildDigestHtml, buildDigestText } from '@/lib/emails/partnerships-digest';
 import { addDays, computeDigest, digestSubject } from '@/lib/partnerships-digest';
 
@@ -16,7 +16,7 @@ describe('addDays', () => {
 });
 
 describe('computeDigest (seed data)', () => {
-  const d = computeDigest(SEED_PARTNERS, TODAY);
+  const d = computeDigest(FIXTURE_PARTNERS, TODAY);
 
   it('matches the CRM dashboard: 3 overdue, 0 stale', () => {
     expect(d.overdue.map((a) => a.partner.id).sort((a, b) => a - b)).toEqual([3, 4, 10]);
@@ -33,7 +33,7 @@ describe('computeDigest (seed data)', () => {
   });
 
   it('keeps a dormant partner’s scheduled revisit when inside the window', () => {
-    const nearRevisit = SEED_PARTNERS.map((p) =>
+    const nearRevisit = FIXTURE_PARTNERS.map((p) =>
       p.id === 16 ? { ...p, nextFollowUp: '2026-07-31' } : p,
     );
     const digest = computeDigest(nearRevisit, TODAY);
@@ -50,7 +50,7 @@ describe('computeDigest (seed data)', () => {
   });
 
   it('goes quiet when nothing is actionable', () => {
-    const calm = SEED_PARTNERS.map((p) => ({ ...p, nextFollowUp: '', lastContact: TODAY }));
+    const calm = FIXTURE_PARTNERS.map((p) => ({ ...p, nextFollowUp: '', lastContact: TODAY }));
     const digest = computeDigest(calm, TODAY);
     expect(digest.hasActionable).toBe(false);
     expect(digestSubject(digest)).toBe('Partnership CRM weekly digest');
@@ -58,7 +58,7 @@ describe('computeDigest (seed data)', () => {
 });
 
 describe('digest email rendering', () => {
-  const d = computeDigest(SEED_PARTNERS, TODAY);
+  const d = computeDigest(FIXTURE_PARTNERS, TODAY);
 
   it('renders every actionable partner and escapes HTML', () => {
     const html = buildDigestHtml(d);
@@ -81,7 +81,7 @@ describe('digest email rendering', () => {
 
 describe('follow-up drafts', () => {
   it('references the most recent activity in plain language', () => {
-    const redwood = SEED_PARTNERS.find((p) => p.id === 1)!;
+    const redwood = FIXTURE_PARTNERS.find((p) => p.id === 1)!;
     const { subject, body } = buildFollowUpEmail(redwood, TODAY);
     expect(subject).toBe('Following up — NorCal SBDC & Redwood Coast Community Bank');
     expect(body).toContain('Hi Dana,');
@@ -91,14 +91,14 @@ describe('follow-up drafts', () => {
   });
 
   it('falls back gracefully with no contact name or activities', () => {
-    const bare = { ...SEED_PARTNERS[0], contact: '—', activities: [] };
+    const bare = { ...FIXTURE_PARTNERS[0], contact: '—', activities: [] };
     const { body } = buildFollowUpEmail(bare, TODAY);
     expect(body.startsWith('Hi,')).toBe(true);
     expect(body).toContain('Wanted to check in');
   });
 
   it('builds an encoded mailto link', () => {
-    const redwood = SEED_PARTNERS.find((p) => p.id === 1)!;
+    const redwood = FIXTURE_PARTNERS.find((p) => p.id === 1)!;
     const href = buildFollowUpMailto(redwood, TODAY);
     expect(href.startsWith('mailto:dwhitfield@rccb.example.com?subject=')).toBe(true);
     expect(href).toContain(encodeURIComponent('Following up — NorCal SBDC & Redwood Coast Community Bank'));

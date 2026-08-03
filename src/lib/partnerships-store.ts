@@ -73,6 +73,17 @@ export function writePartners(dir: string, partners: Partner[]): void {
   renameSync(tmp, file);
 }
 
+/** Remove the stored collection (a backup is kept), reverting reads to the seed. */
+export function deleteStoredPartners(dir: string): void {
+  const file = path.join(dir, PARTNERS_FILE);
+  if (!existsSync(file)) return;
+  mkdirSync(path.join(dir, BACKUP_DIR), { recursive: true });
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  writeFileSync(path.join(dir, BACKUP_DIR, `partners-${stamp}.json`), readFileSync(file));
+  pruneBackups(dir);
+  unlinkSync(file);
+}
+
 function pruneBackups(dir: string): void {
   try {
     const backupDir = path.join(dir, BACKUP_DIR);

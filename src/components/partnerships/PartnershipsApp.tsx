@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { nextPartnerId, todayISO } from './logic';
+import { nextPartnerId, normalizeUrl, todayISO } from './logic';
 import { SEED_PARTNERS } from './seed';
 import { TABS, type ModalId, type Partner, type SortKey, type ViewId } from './types';
 import { track } from './track';
@@ -173,6 +173,7 @@ export function PartnershipsApp() {
       contactTitle: values.contactTitle,
       email: values.email,
       phone: values.phone,
+      linkedin: normalizeUrl(values.linkedin),
       stage: values.stage as Partner['stage'],
       owner: values.owner,
       referrals: 0,

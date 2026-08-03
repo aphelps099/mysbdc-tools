@@ -39,6 +39,7 @@ export type Partner = {
   contactTitle: string;
   email: string;
   phone: string;
+  linkedin?: string; // profile/company URL, optional
   stage: Stage;
   owner: string;
   referrals: number; // client referrals YTD
