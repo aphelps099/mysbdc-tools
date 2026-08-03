@@ -1,0 +1,29 @@
+name: Partnership CRM — weekly follow-up digest
+
+# Emails the team who is overdue, going stale, and due this week.
+# Reuses the Marketing Engine's repo secrets:
+#   PIPELINE_APP_URL        e.g. https://tools.norcalsbdc.org
+#   PIPELINE_SERVICE_TOKEN  must match the Railway env var of the same name
+# Recipients come from the PARTNERSHIPS_DIGEST_TO env var on Railway.
+
+on:
+  schedule:
+    - cron: '0 15 * * 1' # Mondays 15:00 UTC = 8:00 AM PDT (7:00 AM in winter)
+  workflow_dispatch: {}
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send weekly digest
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.PIPELINE_APP_URL }}" ] || [ -z "${{ secrets.PIPELINE_SERVICE_TOKEN }}" ]; then
+            echo "Secrets not configured — skipping." && exit 0
+          fi
+          curl -sS --fail-with-body --max-time 120 \
+            -X POST "${{ secrets.PIPELINE_APP_URL }}/api/partnerships/digest" \
+            -H "Authorization: Bearer ${{ secrets.PIPELINE_SERVICE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{}'

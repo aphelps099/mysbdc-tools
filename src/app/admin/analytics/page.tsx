@@ -30,6 +30,8 @@ const EVENT_LABELS: Record<string, string> = {
   partner_add: 'Partners added',
   partner_save: 'Partners saved',
   activity_log: 'Activities logged',
+  followup_draft: 'Follow-up drafts',
+  digest_sent: 'Digests sent',
 };
 
 const label = (event: string) => EVENT_LABELS[event] || event;

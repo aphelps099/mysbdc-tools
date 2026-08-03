@@ -27,6 +27,7 @@ const ALLOWED_EVENTS = new Set([
   'partner_add',
   'partner_save',
   'activity_log',
+  'followup_draft',
 ]);
 
 const MAX_META_KEYS = 8;
