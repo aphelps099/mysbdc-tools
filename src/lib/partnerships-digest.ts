@@ -32,7 +32,8 @@ export function addDays(date: string, days: number): string {
   return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
 }
 
-export function computeDigest(partners: Partner[], today: string): DigestData {
+export function computeDigest(allPartners: Partner[], today: string): DigestData {
+  const partners = allPartners.filter((p) => !p.archived);
   const attention = attentionItems(partners, today);
   const overdue = attention.filter((a) => a.kind === 'overdue');
   const stale = attention.filter((a) => a.kind === 'stale');

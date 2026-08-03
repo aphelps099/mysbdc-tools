@@ -1,15 +1,17 @@
 'use client';
 
-import { OWNERS, STAGES, TYPES, type PartnerType } from '../types';
+import { OWNERS, STAGES, TYPES, type Partner, type PartnerType } from '../types';
 import { Btn, CloseButton, ModalScrim } from '../ui';
 
 /* ═══════════════════════════════════════════════════════
-   Add partner modal (max-width 680). Uncontrolled 2-col
-   form; submit defaults per handoff (subtype
-   "Organization", city "—", center "Lead Center", …).
+   Partner form modal (max-width 680) — one form for both
+   "Add partner" and "Edit partner" (pass `partner` to
+   prefill). Uncontrolled 2-col form; the app applies
+   add-mode defaults on submit (subtype "Organization",
+   city "—", center "Lead Center", …).
    ═══════════════════════════════════════════════════════ */
 
-export type AddPartnerValues = {
+export type PartnerFormValues = {
   name: string;
   type: string;
   subtype: string;
@@ -22,15 +24,21 @@ export type AddPartnerValues = {
   email: string;
   phone: string;
   linkedin: string;
+  contact2: string;
+  contact2Title: string;
+  email2: string;
+  phone2: string;
   nextFollowUp: string;
   notes: string;
 };
 
-export function AddPartnerModal({
+export function PartnerFormModal({
+  partner,
   onSubmit,
   onClose,
 }: {
-  onSubmit: (values: AddPartnerValues) => void;
+  partner?: Partner; // present = edit mode
+  onSubmit: (values: PartnerFormValues) => void;
   onClose: () => void;
 }) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,18 +58,28 @@ export function AddPartnerModal({
       email: get('email'),
       phone: get('phone'),
       linkedin: get('linkedin'),
+      contact2: get('contact2'),
+      contact2Title: get('contact2Title'),
+      email2: get('email2'),
+      phone2: get('phone2'),
       nextFollowUp: get('nextFollowUp'),
       notes: get('notes'),
     });
   };
 
+  const editing = Boolean(partner);
+
   return (
-    <ModalScrim label="Add partner" widthClass="pcrm-modal--add" onClose={onClose}>
+    <ModalScrim
+      label={editing ? `Edit ${partner!.name}` : 'Add partner'}
+      widthClass="pcrm-modal--add"
+      onClose={onClose}
+    >
       <form onSubmit={handleSubmit}>
         <div className="pcrm-modal-head">
           <div className="pcrm-modal-head-main">
-            <p className="pcrm-modal-eyebrow">New partnership</p>
-            <h2 className="pcrm-modal-title">Add partner</h2>
+            <p className="pcrm-modal-eyebrow">{editing ? partner!.name : 'New partnership'}</p>
+            <h2 className="pcrm-modal-title">{editing ? 'Edit partner' : 'Add partner'}</h2>
           </div>
           <CloseButton onClose={onClose} />
         </div>
@@ -71,13 +89,14 @@ export function AddPartnerModal({
             <input
               required
               name="name"
+              defaultValue={partner?.name}
               placeholder="e.g., Redwood Coast Community Bank"
               className="pcrm-input pcrm-input--full"
             />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Type</span>
-            <select name="type" className="pcrm-input pcrm-input--full">
+            <select name="type" defaultValue={partner?.type} className="pcrm-input pcrm-input--full">
               {(Object.keys(TYPES) as PartnerType[]).map((t) => (
                 <option value={t} key={t}>
                   {TYPES[t].label}
@@ -87,19 +106,29 @@ export function AddPartnerModal({
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Category</span>
-            <input name="subtype" placeholder="Bank, Chamber, EDC" className="pcrm-input pcrm-input--full" />
+            <input
+              name="subtype"
+              defaultValue={partner?.subtype}
+              placeholder="Bank, Chamber, EDC"
+              className="pcrm-input pcrm-input--full"
+            />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">City</span>
-            <input name="city" placeholder="Eureka" className="pcrm-input pcrm-input--full" />
+            <input name="city" defaultValue={partner?.city} placeholder="Eureka" className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Service center</span>
-            <input name="center" placeholder="North Coast SBDC" className="pcrm-input pcrm-input--full" />
+            <input
+              name="center"
+              defaultValue={partner?.center}
+              placeholder="North Coast SBDC"
+              className="pcrm-input pcrm-input--full"
+            />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Stage</span>
-            <select name="stage" className="pcrm-input pcrm-input--full">
+            <select name="stage" defaultValue={partner?.stage} className="pcrm-input pcrm-input--full">
               {STAGES.map((s) => (
                 <option value={s} key={s}>
                   {s}
@@ -109,7 +138,7 @@ export function AddPartnerModal({
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Owner</span>
-            <select name="owner" className="pcrm-input pcrm-input--full">
+            <select name="owner" defaultValue={partner?.owner} className="pcrm-input pcrm-input--full">
               {OWNERS.map((o) => (
                 <option value={o} key={o}>
                   {o}
@@ -119,31 +148,61 @@ export function AddPartnerModal({
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Contact name</span>
-            <input name="contact" className="pcrm-input pcrm-input--full" />
+            <input name="contact" defaultValue={partner?.contact} className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Contact title</span>
-            <input name="contactTitle" className="pcrm-input pcrm-input--full" />
+            <input name="contactTitle" defaultValue={partner?.contactTitle} className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Email</span>
-            <input name="email" type="email" className="pcrm-input pcrm-input--full" />
+            <input name="email" type="email" defaultValue={partner?.email} className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Phone</span>
-            <input name="phone" className="pcrm-input pcrm-input--full" />
+            <input name="phone" defaultValue={partner?.phone} className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">LinkedIn</span>
-            <input name="linkedin" placeholder="linkedin.com/company/…" className="pcrm-input pcrm-input--full" />
+            <input
+              name="linkedin"
+              defaultValue={partner?.linkedin}
+              placeholder="linkedin.com/company/…"
+              className="pcrm-input pcrm-input--full"
+            />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Next follow-up</span>
-            <input name="nextFollowUp" type="date" className="pcrm-input pcrm-input--full" />
+            <input
+              name="nextFollowUp"
+              type="date"
+              defaultValue={partner?.nextFollowUp}
+              className="pcrm-input pcrm-input--full"
+            />
+          </label>
+          <label className="pcrm-form-field">
+            <span className="pcrm-label">Secondary contact</span>
+            <input name="contact2" defaultValue={partner?.contact2} className="pcrm-input pcrm-input--full" />
+          </label>
+          <label className="pcrm-form-field">
+            <span className="pcrm-label">Secondary title</span>
+            <input name="contact2Title" defaultValue={partner?.contact2Title} className="pcrm-input pcrm-input--full" />
+          </label>
+          <label className="pcrm-form-field">
+            <span className="pcrm-label">Secondary email</span>
+            <input name="email2" type="email" defaultValue={partner?.email2} className="pcrm-input pcrm-input--full" />
+          </label>
+          <label className="pcrm-form-field">
+            <span className="pcrm-label">Secondary phone</span>
+            <input name="phone2" defaultValue={partner?.phone2} className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field pcrm-form-field--full">
             <span className="pcrm-label">Notes</span>
-            <textarea name="notes" className="pcrm-input pcrm-input--full pcrm-textarea" />
+            <textarea
+              name="notes"
+              defaultValue={partner?.notes}
+              className="pcrm-input pcrm-input--full pcrm-textarea"
+            />
           </label>
         </div>
         <div className="pcrm-modal-foot">
@@ -151,7 +210,7 @@ export function AddPartnerModal({
             Cancel
           </Btn>
           <Btn variant="primary" small type="submit">
-            Add partner
+            {editing ? 'Save changes' : 'Add partner'}
           </Btn>
         </div>
       </form>

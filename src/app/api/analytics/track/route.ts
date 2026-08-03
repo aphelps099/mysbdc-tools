@@ -30,6 +30,9 @@ const ALLOWED_EVENTS = new Set([
   'followup_draft',
   'calendar_add',
   'csv_export',
+  'partner_edit',
+  'partner_archive',
+  'partner_delete',
 ]);
 
 const MAX_META_KEYS = 8;

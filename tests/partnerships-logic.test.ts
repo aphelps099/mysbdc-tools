@@ -4,6 +4,7 @@ import {
   attentionItems,
   computeMetrics,
   daysAgo,
+  daysAgoLabel,
   filterPartners,
   fmt,
   initials,
@@ -34,6 +35,12 @@ describe('date helpers', () => {
   it('computes whole days between dates', () => {
     expect(daysAgo('2026-07-21', TODAY)).toBe(6);
     expect(daysAgo('2026-02-12', TODAY)).toBe(165);
+  });
+
+  it('labels day counts in words, never "0 days ago"', () => {
+    expect(daysAgoLabel(TODAY, TODAY)).toBe('Today');
+    expect(daysAgoLabel('2026-07-26', TODAY)).toBe('Yesterday');
+    expect(daysAgoLabel('2026-07-21', TODAY)).toBe('6 days ago');
   });
 });
 
@@ -120,6 +127,18 @@ describe('table filtering and sorting', () => {
     expect(sorted[sorted.length - 1].stage).toBe('Dormant');
   });
 
+  it('hides archived partners unless the Archived filter is chosen', () => {
+    const withArchived = FIXTURE_PARTNERS.map((p) =>
+      p.id === 1 ? { ...p, archived: true } : p,
+    );
+    const none = { q: '', fType: '', fStage: '', fOwner: '' };
+    expect(filterPartners(withArchived, none)).toHaveLength(13);
+    const archived = filterPartners(withArchived, { ...none, fStage: 'Archived' });
+    expect(archived.map((p) => p.id)).toEqual([1]);
+    // other filters still apply within the archived view
+    expect(filterPartners(withArchived, { ...none, fStage: 'Archived', fOwner: 'Scott' })).toHaveLength(0);
+  });
+
   it('flips with sortDir and sorts referrals numerically', () => {
     const desc = sortPartners(FIXTURE_PARTNERS, 'referrals', -1);
     expect(desc[0].referrals).toBe(14);
@@ -161,7 +180,8 @@ describe('partnersToCsv', () => {
     const csv = partnersToCsv(FIXTURE_PARTNERS.slice(0, 1));
     const [header, row] = csv.split('\n');
     expect(header.startsWith('Organization,Type,Category,City')).toBe(true);
-    expect(header.split(',')).toHaveLength(16);
+    expect(header.split(',')).toHaveLength(20);
+    expect(header).toContain('Secondary contact');
     expect(row).toContain('Redwood Coast Community Bank');
     expect(row).toContain('2026-07-21'); // lastContact stays ISO
     // the contact title contains a comma — must be quoted, not split

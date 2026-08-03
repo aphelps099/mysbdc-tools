@@ -40,6 +40,11 @@ export type Partner = {
   email: string;
   phone: string;
   linkedin?: string; // profile/company URL, optional
+  contact2?: string; // secondary contact, all optional
+  contact2Title?: string;
+  email2?: string;
+  phone2?: string;
+  archived?: boolean; // hidden from all views/metrics/digest; restorable
   stage: Stage;
   owner: string;
   referrals: number; // client referrals YTD
@@ -108,4 +113,4 @@ export const TABS: { id: ViewId; label: string }[] = [
   { id: 'activity', label: 'Activity' },
 ];
 
-export type ModalId = null | 'detail' | 'add' | 'log';
+export type ModalId = null | 'detail' | 'add' | 'edit' | 'log';
