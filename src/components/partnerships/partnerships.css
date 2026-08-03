@@ -265,11 +265,7 @@
   align-items: flex-end;
   gap: 40px;
   flex-wrap: wrap;
-  padding: 52px 0 26px;
-  border-bottom: 3px solid var(--navy);
-}
-.pcrm-hero .pcrm-eyebrow {
-  margin-bottom: 18px;
+  padding: 52px 0 10px;
 }
 .pcrm-hero-title {
   margin: 0;
@@ -279,16 +275,34 @@
   letter-spacing: -0.05em;
   line-height: 0.93;
 }
-.pcrm-hero-sub {
-  margin: 14px 0 0;
-  font-size: 15px;
-  color: var(--slate);
-}
 .pcrm-hero-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   padding-bottom: 4px;
+}
+/* square add button: a plus in a cobalt-bordered square, radius matches buttons */
+.pcrm-plus-btn {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  background: var(--white);
+  border: 1px solid var(--cobalt);
+  border-radius: 4px;
+  color: var(--cobalt);
+  font-family: var(--nova);
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+.pcrm-plus-btn:hover {
+  background: var(--cobalt);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 /* ── Metric strip ── */
