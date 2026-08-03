@@ -23,8 +23,11 @@ import { loadPartners, resolveDataDir } from '@/lib/partnerships-store';
    Skips sending when there is nothing actionable (no
    overdue, no stale, nothing due in 7 days).
 
-   Env: RESEND_API_KEY, RESEND_FROM_SBDC (the SBDC-branded
-        sender, same as the roadmap emails),
+   Env: RESEND_API_KEY,
+        RESEND_FROM_NORCAL (preferred sender, e.g.
+        "NorCal SBDC <partnerships@norcalsbdc.org>" once
+        norcalsbdc.org is verified in Resend; falls back
+        to RESEND_FROM_SBDC),
         PARTNERSHIPS_DIGEST_TO (comma-separated, defaults
         to phelps@norcalsbdc.org).
    ═══════════════════════════════════════════════════════ */
@@ -121,9 +124,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // RESEND_FROM is the TFG-branded sender in this repo; the digest sends
-  // from the SBDC-branded address like the roadmap emails do.
-  const from = process.env.RESEND_FROM_SBDC
+  // Sender preference: the NorCal-branded address once norcalsbdc.org is
+  // verified in Resend, then the shared SBDC sender. RESEND_FROM is the
+  // TFG-branded sender in this repo — never use it here.
+  const from = process.env.RESEND_FROM_NORCAL
+    || process.env.RESEND_FROM_SBDC
     || 'California SBDC <noreply@californiasbdc.org>';
 
   const to = recipients();
