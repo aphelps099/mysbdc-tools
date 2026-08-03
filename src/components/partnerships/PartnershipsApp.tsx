@@ -239,6 +239,14 @@ export function PartnershipsApp() {
     track('partner_archive', { id: current.id, name: current.name, archived: String(archived) });
   };
 
+  const moveStage = (id: number, stage: Partner['stage']) => {
+    const p = partners.find((x) => x.id === id);
+    if (!p || p.stage === stage) return;
+    persist(partners.map((x) => (x.id === id ? { ...x, stage } : x)));
+    showToast(`Moved ${p.name} to ${stage}`);
+    track('stage_move', { id, name: p.name, from: p.stage, to: stage });
+  };
+
   const deletePartner = () => {
     if (!current) return;
     if (!window.confirm(`Delete ${current.name} permanently? This can't be undone.`)) return;
@@ -296,6 +304,7 @@ export function PartnershipsApp() {
             onPipeType={setPipeType}
             onPipeOwner={setPipeOwner}
             onOpenPartner={openPartner}
+            onMoveStage={moveStage}
           />
         )}
         {view === 'partners' && (

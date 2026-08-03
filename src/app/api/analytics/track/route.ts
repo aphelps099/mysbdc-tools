@@ -33,6 +33,7 @@ const ALLOWED_EVENTS = new Set([
   'partner_edit',
   'partner_archive',
   'partner_delete',
+  'stage_move',
 ]);
 
 const MAX_META_KEYS = 8;
