@@ -1,3 +1,4 @@
+import { buildCalendarUrl } from '@/components/partnerships/calendar';
 import { fmt, fmtLong } from '@/components/partnerships/logic';
 import { TYPES } from '@/components/partnerships/types';
 import type { DigestData } from '@/lib/partnerships-digest';
@@ -89,7 +90,8 @@ export function buildDigestHtml(d: DigestData): string {
         row(
           p.name,
           `${TYPES[p.type].short} · ${p.owner}${dormant}`,
-          `<span style="font-family:${SANS};font-size:13px;font-weight:bold;color:${NAVY};">${esc(fmt(item.date, d.today))}</span>`,
+          `<span style="font-family:${SANS};font-size:13px;font-weight:bold;color:${NAVY};">${esc(fmt(item.date, d.today))}</span><br>
+           <a href="${esc(buildCalendarUrl(p, item.date))}" target="_blank" style="font-family:${SANS};font-size:11px;font-weight:bold;color:${COBALT};text-decoration:none;">Add to calendar</a>`,
         ),
       );
     }

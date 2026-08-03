@@ -10,6 +10,7 @@ import {
   isOverdue,
   nextPartnerId,
   normalizeUrl,
+  partnersToCsv,
   referralBars,
   sortPartners,
   stageBars,
@@ -152,6 +153,21 @@ describe('normalizeUrl', () => {
     expect(normalizeUrl('https://linkedin.com/company/x')).toBe('https://linkedin.com/company/x');
     expect(normalizeUrl('http://example.com')).toBe('http://example.com');
     expect(normalizeUrl('  ')).toBe('');
+  });
+});
+
+describe('partnersToCsv', () => {
+  it('quotes fields containing commas/quotes/newlines and keeps ISO dates', () => {
+    const csv = partnersToCsv(FIXTURE_PARTNERS.slice(0, 1));
+    const [header, row] = csv.split('\n');
+    expect(header.startsWith('Organization,Type,Category,City')).toBe(true);
+    expect(header.split(',')).toHaveLength(16);
+    expect(row).toContain('Redwood Coast Community Bank');
+    expect(row).toContain('2026-07-21'); // lastContact stays ISO
+    // the contact title contains a comma — must be quoted, not split
+    expect(row).toContain('"VP, Small Business Lending"');
+    const quoted = partnersToCsv([{ ...FIXTURE_PARTNERS[0], name: 'Say "hi", ok' }]);
+    expect(quoted.split('\n')[1].startsWith('"Say ""hi"", ok"')).toBe(true);
   });
 });
 

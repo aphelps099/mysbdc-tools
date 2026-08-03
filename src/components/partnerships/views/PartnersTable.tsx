@@ -1,6 +1,7 @@
 'use client';
 
-import { filterPartners, fmt, isOverdue, sortPartners } from '../logic';
+import { filterPartners, fmt, isOverdue, partnersToCsv, sortPartners, todayISO } from '../logic';
+import { track } from '../track';
 import {
   COLUMNS,
   OWNERS,
@@ -50,6 +51,17 @@ export function PartnersTable({
   onOpenPartner: (id: number) => void;
 }) {
   const rows = sortPartners(filterPartners(partners, { q, fType, fStage, fOwner }), sortKey, sortDir);
+
+  const exportCsv = () => {
+    const blob = new Blob([partnersToCsv(rows)], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `partners-${todayISO()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    track('csv_export', { rows: rows.length });
+  };
 
   return (
     <div>
@@ -104,6 +116,9 @@ export function PartnersTable({
         <span className="pcrm-count">
           {rows.length} of {partners.length} partners
         </span>
+        <button type="button" className="pcrm-btn pcrm-btn--secondary pcrm-btn--sm" onClick={exportCsv}>
+          Export CSV
+        </button>
       </div>
 
       <div className="pcrm-tablewrap">

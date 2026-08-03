@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { buildCalendarUrl } from '@/components/partnerships/calendar';
 import { buildFollowUpEmail, buildFollowUpMailto } from '@/components/partnerships/followup';
 import { FIXTURE_PARTNERS } from './fixtures/partners';
 import { buildDigestHtml, buildDigestText } from '@/lib/emails/partnerships-digest';
@@ -76,6 +77,33 @@ describe('digest email rendering', () => {
     expect(text).toContain('OVERDUE FOLLOW-UPS (3)');
     expect(text).toContain('DUE THIS WEEK (4)');
     expect(text).toContain('Shasta Cascade Economic Development District');
+  });
+});
+
+describe('calendar links', () => {
+  it('builds an all-day Google Calendar template event', () => {
+    const redwood = FIXTURE_PARTNERS.find((p) => p.id === 1)!;
+    const url = new URL(buildCalendarUrl(redwood, '2026-08-18'));
+    expect(url.origin + url.pathname).toBe('https://calendar.google.com/calendar/render');
+    expect(url.searchParams.get('action')).toBe('TEMPLATE');
+    expect(url.searchParams.get('text')).toBe('Follow up — Redwood Coast Community Bank');
+    expect(url.searchParams.get('dates')).toBe('20260818/20260819'); // end is exclusive
+    expect(url.searchParams.get('details')).toContain('Dana Whitfield');
+    expect(url.searchParams.get('details')).toContain('tools.norcalsbdc.org/partnerships');
+  });
+
+  it('rolls the end date across month boundaries', () => {
+    const p = FIXTURE_PARTNERS[0];
+    expect(new URL(buildCalendarUrl(p, '2026-08-31')).searchParams.get('dates')).toBe(
+      '20260831/20260901',
+    );
+  });
+
+  it('appears in the digest email for due-soon rows', () => {
+    const d = computeDigest(FIXTURE_PARTNERS, TODAY);
+    const html = buildDigestHtml(d);
+    expect(html).toContain('calendar.google.com/calendar/render');
+    expect(html.match(/Add to calendar/g)?.length).toBe(d.dueSoon.length);
   });
 });
 
