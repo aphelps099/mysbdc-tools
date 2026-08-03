@@ -31,6 +31,8 @@ const EVENT_LABELS: Record<string, string> = {
   partner_save: 'Partners saved',
   activity_log: 'Activities logged',
   followup_draft: 'Follow-up drafts',
+  calendar_add: 'Calendar adds',
+  csv_export: 'CSV exports',
   digest_sent: 'Digests sent',
 };
 

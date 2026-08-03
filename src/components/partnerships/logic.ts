@@ -181,6 +181,27 @@ export function nextPartnerId(partners: Partner[]): number {
   return partners.reduce((m, p) => Math.max(m, p.id), 0) + 1;
 }
 
+/** Spreadsheet-ready CSV of the partner table (dates stay ISO for sorting). */
+export function partnersToCsv(rows: Partner[]): string {
+  const esc = (v: string | number | undefined) => {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const header = [
+    'Organization', 'Type', 'Category', 'City', 'Service center', 'Stage',
+    'Primary contact', 'Contact title', 'Email', 'Phone', 'LinkedIn',
+    'Owner', 'Referrals YTD', 'Last contact', 'Next follow-up', 'Notes',
+  ];
+  const lines = rows.map((p) =>
+    [
+      p.name, p.type, p.subtype, p.city, p.center, p.stage,
+      p.contact, p.contactTitle, p.email, p.phone, p.linkedin ?? '',
+      p.owner, p.referrals || 0, p.lastContact, p.nextFollowUp, p.notes,
+    ].map(esc).join(','),
+  );
+  return [header.join(','), ...lines].join('\n');
+}
+
 /** "linkedin.com/company/x" → "https://linkedin.com/company/x"; '' stays ''. */
 export function normalizeUrl(value: string): string {
   const t = value.trim();

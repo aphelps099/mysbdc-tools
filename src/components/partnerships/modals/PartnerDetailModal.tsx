@@ -1,5 +1,6 @@
 'use client';
 
+import { buildCalendarUrl } from '../calendar';
 import { buildFollowUpMailto } from '../followup';
 import { daysAgo, fmt, isOverdue } from '../logic';
 import { track } from '../track';
@@ -72,7 +73,24 @@ export function PartnerDetailModal({
     {
       label: 'Next follow-up',
       value: fmt(partner.nextFollowUp, today),
-      hint: overdue ? 'Overdue' : 'On schedule',
+      hint: (
+        <>
+          {overdue ? 'Overdue' : 'On schedule'}
+          {partner.nextFollowUp && (
+            <>
+              {' · '}
+              <a
+                href={buildCalendarUrl(partner, partner.nextFollowUp)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track('calendar_add', { id: partner.id, name: partner.name })}
+              >
+                Add to calendar
+              </a>
+            </>
+          )}
+        </>
+      ),
       valueClass: overdue ? 'pcrm-field-value--overdue' : undefined,
     },
     { label: 'Service center', value: partner.center, hint: partner.city },
