@@ -99,6 +99,7 @@ export function PartnersTable({
               {s}
             </option>
           ))}
+          <option value="Archived">Archived</option>
         </select>
         <select
           className="pcrm-input"

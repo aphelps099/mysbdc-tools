@@ -2,7 +2,7 @@
 
 import { buildCalendarUrl } from '../calendar';
 import { buildFollowUpMailto } from '../followup';
-import { daysAgo, fmt, isOverdue } from '../logic';
+import { daysAgoLabel, fmt, isOverdue } from '../logic';
 import { track } from '../track';
 import { OWNERS, STAGES, TYPES, type Partner } from '../types';
 import { Btn, CloseButton, ModalScrim } from '../ui';
@@ -10,7 +10,9 @@ import { Btn, CloseButton, ModalScrim } from '../ui';
 /* ═══════════════════════════════════════════════════════
    Partner detail modal (max-width 720). Field grid, then
    editable Stage/Owner drafts (committed on "Save
-   changes"), notes, and activity history.
+   changes"), notes, and activity history. Footer: archive/
+   restore/delete on the left, actions on the right; "Edit
+   partner" opens the full form.
    ═══════════════════════════════════════════════════════ */
 
 export function PartnerDetailModal({
@@ -22,6 +24,10 @@ export function PartnerDetailModal({
   onDOwner,
   onSave,
   onLogActivity,
+  onEdit,
+  onArchive,
+  onRestore,
+  onDelete,
   onClose,
 }: {
   partner: Partner;
@@ -32,6 +38,10 @@ export function PartnerDetailModal({
   onDOwner: (v: string) => void;
   onSave: () => void;
   onLogActivity: () => void;
+  onEdit: () => void;
+  onArchive: () => void;
+  onRestore: () => void;
+  onDelete: () => void;
   onClose: () => void;
 }) {
   const overdue = isOverdue(partner, today);
@@ -39,7 +49,13 @@ export function PartnerDetailModal({
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  const fields: { label: string; value: React.ReactNode; hint: React.ReactNode; valueClass?: string }[] = [
+  const fields: {
+    label: string;
+    value: React.ReactNode;
+    hint: React.ReactNode;
+    valueClass?: string;
+    wide?: boolean;
+  }[] = [
     { label: 'Primary contact', value: partner.contact, hint: partner.contactTitle },
     {
       label: 'Reach',
@@ -68,7 +84,7 @@ export function PartnerDetailModal({
     {
       label: 'Last contact',
       value: fmt(partner.lastContact, today),
-      hint: `${daysAgo(partner.lastContact, today)} days ago`,
+      hint: daysAgoLabel(partner.lastContact, today),
     },
     {
       label: 'Next follow-up',
@@ -96,11 +112,33 @@ export function PartnerDetailModal({
     { label: 'Service center', value: partner.center, hint: partner.city },
   ];
 
+  if (partner.contact2) {
+    fields.push({
+      label: 'Secondary contact',
+      value: partner.contact2,
+      hint: (
+        <>
+          {[partner.contact2Title, partner.phone2].filter(Boolean).join(' · ')}
+          {partner.email2 && (
+            <>
+              {(partner.contact2Title || partner.phone2) ? ' · ' : ''}
+              <a href={`mailto:${partner.email2}`}>{partner.email2}</a>
+            </>
+          )}
+        </>
+      ),
+      wide: true,
+    });
+  }
+
   return (
     <ModalScrim label={partner.name} onClose={onClose}>
       <div className="pcrm-modal-head">
         <div className="pcrm-modal-head-main">
-          <p className="pcrm-modal-eyebrow">{TYPES[partner.type].label}</p>
+          <p className="pcrm-modal-eyebrow">
+            {TYPES[partner.type].label}
+            {partner.archived ? ' · Archived' : ''}
+          </p>
           <h2 className="pcrm-modal-title">{partner.name}</h2>
           <p className="pcrm-modal-sub">
             {partner.subtype} · {partner.city} · {partner.center}
@@ -112,7 +150,7 @@ export function PartnerDetailModal({
       <div className="pcrm-detail-body">
         <div className="pcrm-fieldgrid">
           {fields.map((f) => (
-            <div className="pcrm-field" key={f.label}>
+            <div className={`pcrm-field${f.wide ? ' pcrm-field--wide' : ''}`} key={f.label}>
               <div className="pcrm-field-label">{f.label}</div>
               <div className={`pcrm-field-value ${f.valueClass ?? ''}`.trim()}>{f.value}</div>
               <div className="pcrm-field-hint">{f.hint}</div>
@@ -170,22 +208,43 @@ export function PartnerDetailModal({
         </div>
       </div>
 
-      <div className="pcrm-modal-foot pcrm-modal-foot--sticky">
-        {partner.email && (
-          <a
-            className="pcrm-btn pcrm-btn--secondary pcrm-btn--sm"
-            href={buildFollowUpMailto(partner, today)}
-            onClick={() => track('followup_draft', { id: partner.id, name: partner.name })}
-          >
-            Draft follow-up
-          </a>
-        )}
-        <Btn variant="secondary" small onClick={onLogActivity}>
-          Log activity
-        </Btn>
-        <Btn variant="primary" small onClick={onSave}>
-          Save changes
-        </Btn>
+      <div className="pcrm-modal-foot pcrm-modal-foot--sticky pcrm-modal-foot--split">
+        <div className="pcrm-foot-group">
+          {partner.archived ? (
+            <>
+              <button type="button" className="pcrm-quiet-btn" onClick={onRestore}>
+                Restore
+              </button>
+              <button type="button" className="pcrm-quiet-btn pcrm-quiet-btn--danger" onClick={onDelete}>
+                Delete
+              </button>
+            </>
+          ) : (
+            <button type="button" className="pcrm-quiet-btn" onClick={onArchive}>
+              Archive
+            </button>
+          )}
+        </div>
+        <div className="pcrm-foot-group">
+          <Btn variant="secondary" small onClick={onEdit}>
+            Edit partner
+          </Btn>
+          {partner.email && (
+            <a
+              className="pcrm-btn pcrm-btn--secondary pcrm-btn--sm"
+              href={buildFollowUpMailto(partner, today)}
+              onClick={() => track('followup_draft', { id: partner.id, name: partner.name })}
+            >
+              Draft follow-up
+            </a>
+          )}
+          <Btn variant="secondary" small onClick={onLogActivity}>
+            Log activity
+          </Btn>
+          <Btn variant="primary" small onClick={onSave}>
+            Save changes
+          </Btn>
+        </div>
       </div>
     </ModalScrim>
   );

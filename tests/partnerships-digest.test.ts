@@ -50,6 +50,16 @@ describe('computeDigest (seed data)', () => {
     expect(digestSubject(d)).toBe('Partnership follow-ups: 3 overdue · 4 due this week');
   });
 
+  it('excludes archived partners entirely', () => {
+    // Shasta Cascade (id 3) is overdue; archiving it must drop it
+    const withArchived = FIXTURE_PARTNERS.map((p) =>
+      p.id === 3 ? { ...p, archived: true } : p,
+    );
+    const digest = computeDigest(withArchived, TODAY);
+    expect(digest.overdue.map((a) => a.partner.id).sort((a, b) => a - b)).toEqual([4, 10]);
+    expect(digest.recentActivity.every((f) => f.partner.id !== 3)).toBe(true);
+  });
+
   it('goes quiet when nothing is actionable', () => {
     const calm = FIXTURE_PARTNERS.map((p) => ({ ...p, nextFollowUp: '', lastContact: TODAY }));
     const digest = computeDigest(calm, TODAY);

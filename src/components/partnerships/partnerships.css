@@ -860,6 +860,34 @@
   position: sticky;
   bottom: 0;
 }
+.pcrm-modal-foot--split {
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pcrm-foot-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pcrm-quiet-btn {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  font-family: var(--nova);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--slate-light);
+  cursor: pointer;
+  transition: color 0.18s;
+}
+.pcrm-quiet-btn:hover {
+  color: var(--navy);
+}
+.pcrm-quiet-btn--danger:hover {
+  color: var(--berry);
+}
 
 /* detail modal body */
 .pcrm-detail-body {
@@ -874,7 +902,14 @@
 }
 .pcrm-field {
   background: var(--white);
-  padding: 16px 0;
+  padding: 16px 24px 16px 0;
+}
+/* right-column cells breathe off the divider (wide cells span both) */
+.pcrm-field:nth-child(even):not(.pcrm-field--wide) {
+  padding-left: 24px;
+}
+.pcrm-field--wide {
+  grid-column: 1 / -1;
 }
 .pcrm-field-label {
   font-size: 10px;
@@ -887,7 +922,6 @@
   font-size: 15px;
   font-weight: 700;
   margin-top: 7px;
-  padding-right: 24px;
 }
 .pcrm-field-value--reach {
   font-size: 14px;

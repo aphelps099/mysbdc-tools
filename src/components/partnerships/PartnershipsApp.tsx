@@ -10,9 +10,9 @@ import { DashboardView } from './views/DashboardView';
 import { PipelineBoard } from './views/PipelineBoard';
 import { PartnersTable } from './views/PartnersTable';
 import { ActivityLog } from './views/ActivityLog';
-import { AddPartnerModal, type AddPartnerValues } from './modals/AddPartnerModal';
 import { LogActivityModal, type LogActivityValues } from './modals/LogActivityModal';
 import { PartnerDetailModal } from './modals/PartnerDetailModal';
+import { PartnerFormModal, type PartnerFormValues } from './modals/PartnerFormModal';
 import './partnerships.css';
 
 /* ═══════════════════════════════════════════════════════
@@ -129,6 +129,10 @@ export function PartnershipsApp() {
 
   const current = currentId === null ? null : (partners.find((p) => p.id === currentId) ?? null);
 
+  // Archived partners appear only in the Partners table (via its Archived
+  // filter) — never in metrics, the board, or the activity feed.
+  const activePartners = partners.filter((p) => !p.archived);
+
   const saveDetail = () => {
     if (!current) return;
     const next = partners.map((p) =>
@@ -161,7 +165,7 @@ export function PartnershipsApp() {
     track('activity_log', { id: current.id, name: current.name, type: values.type });
   };
 
-  const submitAdd = (values: AddPartnerValues) => {
+  const submitAdd = (values: PartnerFormValues) => {
     const rec: Partner = {
       id: nextPartnerId(partners),
       name: values.name,
@@ -174,6 +178,10 @@ export function PartnershipsApp() {
       email: values.email,
       phone: values.phone,
       linkedin: normalizeUrl(values.linkedin),
+      contact2: values.contact2,
+      contact2Title: values.contact2Title,
+      email2: values.email2,
+      phone2: values.phone2,
       stage: values.stage as Partner['stage'],
       owner: values.owner,
       referrals: 0,
@@ -186,6 +194,58 @@ export function PartnershipsApp() {
     setModal(null);
     showToast(`Added ${rec.name}`);
     track('partner_add', { id: rec.id, name: rec.name });
+  };
+
+  const submitEdit = (values: PartnerFormValues) => {
+    if (!current) return;
+    const next = partners.map((p) =>
+      p.id === current.id
+        ? {
+            ...p,
+            name: values.name,
+            type: values.type as Partner['type'],
+            subtype: values.subtype,
+            city: values.city,
+            center: values.center,
+            stage: values.stage as Partner['stage'],
+            owner: values.owner,
+            contact: values.contact,
+            contactTitle: values.contactTitle,
+            email: values.email,
+            phone: values.phone,
+            linkedin: normalizeUrl(values.linkedin),
+            contact2: values.contact2,
+            contact2Title: values.contact2Title,
+            email2: values.email2,
+            phone2: values.phone2,
+            nextFollowUp: values.nextFollowUp,
+            notes: values.notes,
+          }
+        : p,
+    );
+    persist(next);
+    setDStage(values.stage);
+    setDOwner(values.owner);
+    setModal('detail');
+    showToast(`Saved ${values.name}`);
+    track('partner_edit', { id: current.id, name: values.name });
+  };
+
+  const setArchived = (archived: boolean) => {
+    if (!current) return;
+    persist(partners.map((p) => (p.id === current.id ? { ...p, archived } : p)));
+    setModal(null);
+    showToast(`${archived ? 'Archived' : 'Restored'} ${current.name}`);
+    track('partner_archive', { id: current.id, name: current.name, archived: String(archived) });
+  };
+
+  const deletePartner = () => {
+    if (!current) return;
+    if (!window.confirm(`Delete ${current.name} permanently? This can't be undone.`)) return;
+    persist(partners.filter((p) => p.id !== current.id));
+    setModal(null);
+    showToast(`Deleted ${current.name}`);
+    track('partner_delete', { id: current.id, name: current.name });
   };
 
   return (
@@ -220,7 +280,7 @@ export function PartnershipsApp() {
       <main className="pcrm-main">
         {view === 'dashboard' && (
           <DashboardView
-            partners={partners}
+            partners={activePartners}
             today={today}
             onOpenPartner={openPartner}
             onAdd={() => setModal('add')}
@@ -229,7 +289,7 @@ export function PartnershipsApp() {
         )}
         {view === 'pipeline' && (
           <PipelineBoard
-            partners={partners}
+            partners={activePartners}
             today={today}
             pipeType={pipeType}
             pipeOwner={pipeOwner}
@@ -264,7 +324,7 @@ export function PartnershipsApp() {
         )}
         {view === 'activity' && (
           <ActivityLog
-            partners={partners}
+            partners={activePartners}
             today={today}
             actType={actType}
             onActType={setActType}
@@ -283,10 +343,17 @@ export function PartnershipsApp() {
           onDOwner={setDOwner}
           onSave={saveDetail}
           onLogActivity={() => setModal('log')}
+          onEdit={() => setModal('edit')}
+          onArchive={() => setArchived(true)}
+          onRestore={() => setArchived(false)}
+          onDelete={deletePartner}
           onClose={closeModal}
         />
       )}
-      {modal === 'add' && <AddPartnerModal onSubmit={submitAdd} onClose={closeModal} />}
+      {modal === 'add' && <PartnerFormModal onSubmit={submitAdd} onClose={closeModal} />}
+      {modal === 'edit' && current && (
+        <PartnerFormModal partner={current} onSubmit={submitEdit} onClose={() => setModal('detail')} />
+      )}
       {modal === 'log' && current && (
         <LogActivityModal
           partnerName={current.name}
