@@ -3,7 +3,6 @@
 import {
   attentionItems,
   computeMetrics,
-  fmtLong,
   referralBars,
   stageBars,
   typeBars,
@@ -93,20 +92,17 @@ export function DashboardView({
   return (
     <div>
       <div className="pcrm-hero">
-        <div>
-          <p className="pcrm-eyebrow">
-            <span className="pcrm-eyebrow-bar" />
-            NorCal SBDC Network
-          </p>
-          <h1 className="pcrm-hero-title">Partnerships</h1>
-          <p className="pcrm-hero-sub">
-            {partners.length} partner organizations · Updated {fmtLong(today)}
-          </p>
-        </div>
+        <h1 className="pcrm-hero-title">Partners CRM</h1>
         <div className="pcrm-hero-actions">
-          <Btn variant="primary" onClick={onAdd}>
-            Add partner
-          </Btn>
+          <button
+            type="button"
+            className="pcrm-plus-btn"
+            onClick={onAdd}
+            aria-label="Add partner"
+            title="Add partner"
+          >
+            +
+          </button>
           <Btn variant="secondary" arrow onClick={onGoPipeline}>
             View pipeline
           </Btn>
