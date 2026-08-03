@@ -580,6 +580,17 @@
 .pcrm-card:hover {
   border-color: #0f1c2d5c;
 }
+.pcrm-card[draggable='true'] {
+  cursor: grab;
+}
+.pcrm-card.is-dragging {
+  opacity: 0.45;
+}
+.pcrm-col.is-dropover {
+  background: #dcecf24d;
+  outline: 2px solid var(--pool);
+  outline-offset: -2px;
+}
 .pcrm-card-name {
   font-size: 13.5px;
   font-weight: 700;
@@ -797,6 +808,9 @@
 }
 .pcrm-modal--log {
   max-width: 580px;
+}
+.pcrm-modal--confirm {
+  max-width: 460px;
 }
 .pcrm-modal-head {
   padding: 30px 34px 24px;

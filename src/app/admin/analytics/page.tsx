@@ -32,6 +32,7 @@ const EVENT_LABELS: Record<string, string> = {
   partner_edit: 'Partners edited',
   partner_archive: 'Archives/restores',
   partner_delete: 'Partners deleted',
+  stage_move: 'Pipeline moves',
   activity_log: 'Activities logged',
   followup_draft: 'Follow-up drafts',
   calendar_add: 'Calendar adds',
