@@ -180,3 +180,10 @@ export function activityFeed(partners: Partner[], actType: string): FeedItem[] {
 export function nextPartnerId(partners: Partner[]): number {
   return partners.reduce((m, p) => Math.max(m, p.id), 0) + 1;
 }
+
+/** "linkedin.com/company/x" → "https://linkedin.com/company/x"; '' stays ''. */
+export function normalizeUrl(value: string): string {
+  const t = value.trim();
+  if (!t) return '';
+  return /^https?:\/\//i.test(t) ? t : `https://${t}`;
+}

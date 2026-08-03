@@ -142,25 +142,11 @@
   background: #fff;
 }
 
-/* CSS arrow (no icon set): stem + rotated caret */
+/* Typographic arrow (no icon set — same family as ↑ ↓ ▾) */
 .pcrm-btn-arrow {
-  position: relative;
-  width: 15px;
-  height: 2px;
-  background: currentColor;
+  font-size: 17px;
+  line-height: 1;
   flex: none;
-}
-.pcrm-btn-arrow::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  transform: translateY(-50%) rotate(45deg);
-  transform-origin: 75% 25%;
 }
 
 /* ── Header ── */

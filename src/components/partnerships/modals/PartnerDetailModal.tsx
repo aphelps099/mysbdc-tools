@@ -38,12 +38,24 @@ export function PartnerDetailModal({
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  const fields: { label: string; value: React.ReactNode; hint: string; valueClass?: string }[] = [
+  const fields: { label: string; value: React.ReactNode; hint: React.ReactNode; valueClass?: string }[] = [
     { label: 'Primary contact', value: partner.contact, hint: partner.contactTitle },
     {
       label: 'Reach',
       value: <a href={`mailto:${partner.email}`}>{partner.email}</a>,
-      hint: partner.phone,
+      hint: (
+        <>
+          {partner.phone}
+          {partner.linkedin && (
+            <>
+              {partner.phone ? ' · ' : ''}
+              <a href={partner.linkedin} target="_blank" rel="noopener noreferrer">
+                LinkedIn
+              </a>
+            </>
+          )}
+        </>
+      ),
       valueClass: 'pcrm-field-value--reach',
     },
     {

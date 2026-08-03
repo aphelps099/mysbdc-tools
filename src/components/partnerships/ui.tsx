@@ -32,7 +32,11 @@ export function Btn({
       className={`pcrm-btn pcrm-btn--${variant}${small ? ' pcrm-btn--sm' : ''}`}
     >
       {children}
-      {arrow && <span className="pcrm-btn-arrow" aria-hidden="true" />}
+      {arrow && (
+        <span className="pcrm-btn-arrow" aria-hidden="true">
+          →
+        </span>
+      )}
     </button>
   );
 }

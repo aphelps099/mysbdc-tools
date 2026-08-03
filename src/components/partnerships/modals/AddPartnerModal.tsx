@@ -21,6 +21,7 @@ export type AddPartnerValues = {
   contactTitle: string;
   email: string;
   phone: string;
+  linkedin: string;
   nextFollowUp: string;
   notes: string;
 };
@@ -48,6 +49,7 @@ export function AddPartnerModal({
       contactTitle: get('contactTitle'),
       email: get('email'),
       phone: get('phone'),
+      linkedin: get('linkedin'),
       nextFollowUp: get('nextFollowUp'),
       notes: get('notes'),
     });
@@ -130,6 +132,10 @@ export function AddPartnerModal({
           <label className="pcrm-form-field">
             <span className="pcrm-label">Phone</span>
             <input name="phone" className="pcrm-input pcrm-input--full" />
+          </label>
+          <label className="pcrm-form-field">
+            <span className="pcrm-label">LinkedIn</span>
+            <input name="linkedin" placeholder="linkedin.com/company/…" className="pcrm-input pcrm-input--full" />
           </label>
           <label className="pcrm-form-field">
             <span className="pcrm-label">Next follow-up</span>
