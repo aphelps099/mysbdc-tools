@@ -92,6 +92,22 @@ is available.
 
 ---
 
+**Neoserra read-endpoint map (verified live, Aug 6 2026):**
+
+| Endpoint | Result |
+|---|---|
+| `GET /api/v1/contacts?email=` | ✅ works — bare rows (indivId, first, last, fkey) |
+| `GET /api/v1/contacts/{id}` | ✅ works — full contact record, **no client links** |
+| `GET /api/v1/relationships/{contactId}` | ✅ works — yields linked client IDs |
+| `GET /api/v1/clients/{id}` | ✅ works — full client record (incl. ftEmps/ptEmps baseline) |
+| `GET /api/v1/milestones?clientId=` / `?clients=` | ❌ hangs silently (classic Neoserra malformed-query behavior) |
+| `GET /api/v1/clients/{id}/milestones` | ❌ 500 "Unrecognied link type" |
+| `GET /api/v1/milestones/{id}` | ❌ 404 (object-get by milestone ID only, not by client) |
+
+Net: contact→relationship→client chain is fully readable; **milestone records are
+not queryable by client with this key**, so delivered-vs-missing verdicts require the
+API Audit Trail (or a milestone read grant from Neoserra support).
+
 ## 2. Core idea: reconcile three independent evidence streams
 
 Every submission leaves (or should leave) a trace in three places we can read **without any
