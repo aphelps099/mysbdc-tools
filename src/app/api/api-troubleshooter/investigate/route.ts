@@ -28,6 +28,7 @@ import type { GfFindings } from '@/lib/api-troubleshooter/gravity-forms';
 import type { InvestigateResponse, NeoserraFindings } from '@/lib/api-troubleshooter/types';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let body: {

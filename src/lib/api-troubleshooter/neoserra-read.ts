@@ -11,7 +11,9 @@
 import { neoserraUrl, neoserraKey } from '@/lib/neoserra';
 import type { ProbeAttempt, ProbeResult } from './types';
 
-const TIMEOUT_MS = 15_000;
+// Short leash: Neoserra can hang silently, and a lookup fans out over many
+// candidate paths — long timeouts stack up and 502 the whole request.
+const TIMEOUT_MS = 8_000;
 
 export function neoserraConfigured(): boolean {
   return Boolean(neoserraUrl() && neoserraKey());
@@ -70,21 +72,19 @@ function hasRecords(body: unknown): boolean {
   return false;
 }
 
-/** Try candidate paths in order; first response with records wins. */
+/** Try candidate paths concurrently; earliest-listed path with records wins.
+ *  Parallel keeps wall time at one timeout even when several paths hang. */
 async function probe(paths: string[]): Promise<ProbeResult> {
-  const attempts: ProbeAttempt[] = [];
-  let emptyOk: unknown = undefined;
-  for (const path of paths) {
-    const res = await neoGet(path);
-    attempts.push({ path: res.path, status: res.status, note: res.note });
-    if (res.status === 200) {
-      if (hasRecords(res.body)) return { found: true, data: res.body, attempts };
-      // A valid-but-empty answer is meaningful ("endpoint works, no records"),
-      // but keep probing in case another path shape returns data.
-      if (emptyOk === undefined) emptyOk = res.body;
+  const results = await Promise.all(paths.map((p) => neoGet(p)));
+  const attempts: ProbeAttempt[] = results.map((r) => ({ path: r.path, status: r.status, note: r.note }));
+  for (const res of results) {
+    if (res.status === 200 && hasRecords(res.body)) {
+      return { found: true, data: res.body, attempts };
     }
   }
-  return { found: false, data: emptyOk === undefined ? null : (emptyOk as object), attempts };
+  // A valid-but-empty answer is meaningful ("endpoint works, no records").
+  const emptyOk = results.find((r) => r.status === 200);
+  return { found: false, data: emptyOk ? (emptyOk.body as object) : null, attempts };
 }
 
 /** Did any probe path answer 200 (even with no records)? */
@@ -192,11 +192,10 @@ export async function probeClientsForContact(
     `/api/v1/contacts/${id}/clients`,
     `/api/v1/contacts/${id}`,
   ];
-  const attempts: ProbeAttempt[] = [];
+  const results = await Promise.all(paths.map((p) => neoGet(p)));
+  const attempts: ProbeAttempt[] = results.map((r) => ({ path: r.path, status: r.status, note: r.note }));
   let lastData: unknown = null;
-  for (const path of paths) {
-    const res = await neoGet(path);
-    attempts.push({ path: res.path, status: res.status, note: res.note });
+  for (const res of results) {
     if (res.status === 200 && hasRecords(res.body)) {
       const clientIds = extractClientIds(res.body);
       if (clientIds.length) return { found: true, data: res.body, attempts, clientIds };
