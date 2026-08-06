@@ -14,6 +14,7 @@ const KNOWN_LABELS = [
   'Contact Email',
   'Contact First Name',
   'Select Business',
+  'Neoserra Client ID', // same field's label in the GF entry detail view
   'Select all that apply',
   'Initial Full-Time Staff',
   'Total Full-Time Employees',
@@ -100,7 +101,7 @@ export function parseNotification(raw: string): ParsedSubmission {
     contactId: get('Contact ID'),
     contactEmail: get('Contact Email'),
     firstName: get('Contact First Name'),
-    businessId: get('Select Business'),
+    businessId: get('Select Business') ?? get('Neoserra Client ID'),
     milestoneTypes,
     fields,
     signature: get('Signature'),

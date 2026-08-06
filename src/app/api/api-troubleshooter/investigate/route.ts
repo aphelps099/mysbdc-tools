@@ -21,6 +21,8 @@ import {
   extractClientIds,
 } from '@/lib/api-troubleshooter/neoserra-read';
 import { diagnoseSubmission, diagnoseLookup } from '@/lib/api-troubleshooter/diagnose';
+import { fetchStep2Entries, gfConfigured } from '@/lib/api-troubleshooter/gravity-forms';
+import type { GfFindings } from '@/lib/api-troubleshooter/gravity-forms';
 import type { InvestigateResponse, NeoserraFindings } from '@/lib/api-troubleshooter/types';
 
 export const dynamic = 'force-dynamic';
@@ -51,22 +53,31 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
     const parsed = parseNotification(body.notificationText);
 
-    if (configured) {
-      if (parsed.businessId) {
-        [neo.client, neo.milestones] = await Promise.all([
-          probeClientById(parsed.businessId),
-          probeMilestonesForClient(parsed.businessId),
-        ]);
-      }
-      if (parsed.contactEmail) {
-        neo.contact = await probeContactByEmail(parsed.contactEmail);
-      }
+    let wordpress: GfFindings | null = null;
+    const tasks: Promise<void>[] = [];
+    if (configured && parsed.businessId) {
+      tasks.push(probeClientById(parsed.businessId).then((r) => void (neo.client = r)));
+      tasks.push(probeMilestonesForClient(parsed.businessId).then((r) => void (neo.milestones = r)));
     }
+    if (configured && parsed.contactEmail) {
+      tasks.push(probeContactByEmail(parsed.contactEmail).then((r) => void (neo.contact = r)));
+    }
+    if (gfConfigured() && (parsed.businessId || parsed.contactEmail)) {
+      tasks.push(
+        fetchStep2Entries({
+          businessId: parsed.businessId ?? undefined,
+          email: parsed.businessId ? undefined : parsed.contactEmail ?? undefined,
+          pageSize: 5,
+        }).then((r) => void (wordpress = r)),
+      );
+    }
+    await Promise.all(tasks);
 
     const response: InvestigateResponse = {
       parsed,
       neoserra: neo,
-      diagnosis: diagnoseSubmission(parsed, neo),
+      wordpress,
+      diagnosis: diagnoseSubmission(parsed, neo, wordpress ?? undefined),
     };
     return NextResponse.json(response);
   }
@@ -82,30 +93,36 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
+  let wordpress: GfFindings | null = null;
+  const tasks: Promise<void>[] = [];
   if (configured) {
-    const tasks: Promise<void>[] = [];
     if (email) tasks.push(probeContactByEmail(email).then((r) => void (neo.contact = r)));
     if (contactId) tasks.push(probeContactById(contactId).then((r) => void (neo.contact = r)));
     if (businessId) {
       tasks.push(probeClientById(businessId).then((r) => void (neo.client = r)));
       tasks.push(probeMilestonesForClient(businessId).then((r) => void (neo.milestones = r)));
     }
-    await Promise.all(tasks);
+  }
+  if (gfConfigured() && (email || businessId)) {
+    tasks.push(
+      fetchStep2Entries({ email, businessId, pageSize: 10 }).then((r) => void (wordpress = r)),
+    );
+  }
+  await Promise.all(tasks);
 
-    // Chain: an email/contact lookup that found a contact but was given no
-    // business ID continues to that contact's linked client(s) + milestones.
-    if (!businessId && neo.contact?.found) {
-      const clientIds = extractClientIds(neo.contact.data);
-      neo.linkedClientIds = clientIds;
-      for (const id of clientIds.slice(0, 3)) {
-        const milestones = await probeMilestonesForClient(id);
-        if (!neo.milestones || (!neo.milestones.found && milestones.found)) {
-          neo.milestones = milestones;
-        }
-        if (milestones.found) {
-          neo.client = await probeClientById(id);
-          break;
-        }
+  // Chain: an email/contact lookup that found a contact but was given no
+  // business ID continues to that contact's linked client(s) + milestones.
+  if (configured && !businessId && neo.contact?.found) {
+    const clientIds = extractClientIds(neo.contact.data);
+    neo.linkedClientIds = clientIds;
+    for (const id of clientIds.slice(0, 3)) {
+      const milestones = await probeMilestonesForClient(id);
+      if (!neo.milestones || (!neo.milestones.found && milestones.found)) {
+        neo.milestones = milestones;
+      }
+      if (milestones.found) {
+        neo.client = await probeClientById(id);
+        break;
       }
     }
   }
@@ -113,7 +130,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const response: InvestigateResponse = {
     parsed: null,
     neoserra: neo,
-    diagnosis: diagnoseLookup({ email, businessId, contactId }, neo),
+    wordpress,
+    diagnosis: diagnoseLookup({ email, businessId, contactId }, neo, wordpress ?? undefined),
   };
   return NextResponse.json(response);
 }

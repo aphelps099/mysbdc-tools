@@ -9,6 +9,7 @@
 
 import { NextResponse } from 'next/server';
 import { neoserraConfigured } from '@/lib/api-troubleshooter/neoserra-read';
+import { fetchStep2Entries, gfConfigured } from '@/lib/api-troubleshooter/gravity-forms';
 import { fetchMilestoneLog } from '@/lib/neoserra';
 
 export const dynamic = 'force-dynamic';
@@ -16,6 +17,11 @@ export const dynamic = 'force-dynamic';
 export async function GET(): Promise<NextResponse> {
   const health: {
     neoserraConfigured: boolean;
+    gravityForms: {
+      configured: boolean;
+      totalEntries: number | null;
+      lastEntry: string | null;
+    };
     backendLog: {
       available: boolean;
       days: number;
@@ -25,11 +31,17 @@ export async function GET(): Promise<NextResponse> {
     };
   } = {
     neoserraConfigured: neoserraConfigured(),
+    gravityForms: { configured: gfConfigured(), totalEntries: null, lastEntry: null },
     backendLog: { available: false, days: 7, submissions: 0, withErrors: 0, lastSubmission: null },
   };
 
-  try {
-    const entries = await fetchMilestoneLog(7);
+  const [logResult, gfResult] = await Promise.allSettled([
+    fetchMilestoneLog(7),
+    health.gravityForms.configured ? fetchStep2Entries({ pageSize: 1 }) : Promise.resolve(null),
+  ]);
+
+  if (logResult.status === 'fulfilled') {
+    const entries = logResult.value;
     health.backendLog = {
       available: true,
       days: 7,
@@ -37,8 +49,10 @@ export async function GET(): Promise<NextResponse> {
       withErrors: entries.filter((e) => e.errors && e.errors.length > 0).length,
       lastSubmission: entries[0]?.timestamp ?? null,
     };
-  } catch {
-    // Backend unreachable — report honestly rather than failing the page.
+  }
+  if (gfResult.status === 'fulfilled' && gfResult.value) {
+    health.gravityForms.totalEntries = gfResult.value.totalCount;
+    health.gravityForms.lastEntry = gfResult.value.entries[0]?.dateCreated ?? null;
   }
 
   return NextResponse.json(health);

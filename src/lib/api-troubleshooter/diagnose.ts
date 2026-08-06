@@ -15,6 +15,24 @@ import type {
   VerdictStatus,
 } from './types';
 import { endpointReadable } from './neoserra-read';
+import type { GfFindings } from './gravity-forms';
+
+/** One plain-English sentence describing what the GF entries ledger shows. */
+function gfSentence(wp: GfFindings | undefined, label: string): string {
+  if (!wp?.configured) return '';
+  if (!wp.entries.length) {
+    return `The WordPress form log shows NO Step 2 submissions matching ${label}.`;
+  }
+  const n = wp.entries.length;
+  const latest = wp.entries[0];
+  const dups = wp.entries.filter((e) => e.likelyDuplicate).length;
+  return (
+    `The WordPress form log confirms ${n === 1 ? 'a submission' : `${n} submissions`} for ${label}` +
+    ` (latest: entry ${latest.entryId}, ${latest.dateCreated})` +
+    (dups ? ` — including what looks like a double submission (${dups} entries seconds/minutes apart)` : '') +
+    '.'
+  );
+}
 
 const AUDIT_TRAIL_HINT =
   'System Administration → API Audit Trail in Neoserra shows every payload the API received and whether it was processed — it is the ground truth for whether the write arrived.';
@@ -61,9 +79,10 @@ function draft(subject: string, paragraphs: string[], link: string): EmailDraft 
 }
 
 /** Build the diagnosis for the paste-a-notification flow. */
-export function diagnoseSubmission(p: ParsedSubmission, neo: NeoserraFindings): Diagnosis {
+export function diagnoseSubmission(p: ParsedSubmission, neo: NeoserraFindings, wp?: GfFindings): Diagnosis {
   const who = [p.firstName, p.signature].filter(Boolean)[0] || p.contactEmail || 'The client';
   const biz = p.businessId ?? 'unknown';
+  const gfNote = gfSentence(wp, `business ${biz}`);
   const link = toolLink({ businessId: p.businessId, email: p.contactEmail });
   const neoClient = clientLink(p.businessId);
   const dataBlock = `Their submission (no need to ask the client to resubmit — we have their complete answers):\n${submissionSummary(p)}`;
@@ -124,6 +143,7 @@ export function diagnoseSubmission(p: ParsedSubmission, neo: NeoserraFindings): 
     headline: string,
     text: { whatHappened: string; likelyIssue: string; fix: string },
   ): Diagnosis {
+    if (gfNote) text = { ...text, whatHappened: `${text.whatHappened} ${gfNote}` };
     const subject = `Milestone submission for business ${biz}${p.signature ? ` (${p.signature})` : ''} — status and next step`;
     return {
       status,
@@ -149,6 +169,7 @@ export function diagnoseSubmission(p: ParsedSubmission, neo: NeoserraFindings): 
 export function diagnoseLookup(
   query: { email?: string; businessId?: string; contactId?: string },
   neo: NeoserraFindings,
+  wp?: GfFindings,
 ): Diagnosis {
   const label = query.email || `business ${query.businessId}` || `contact ${query.contactId}`;
   const link = toolLink({ businessId: query.businessId ?? null, email: query.email ?? null });
@@ -193,6 +214,8 @@ export function diagnoseLookup(
 
   const linkedIds = neo.linkedClientIds ?? [];
   const parts: string[] = [];
+  const gfNote = gfSentence(wp, label);
+  if (gfNote) parts.push(gfNote);
   if (query.email) parts.push(contactFound ? `Contact found for ${query.email}.` : `Contact lookup was inconclusive (endpoint ${neo.contact ? summarizeResult(neo.contact.attempts.map((a) => a.status)) : 'not tried'}).`);
   if (query.businessId) parts.push(clientFound ? `Client ${query.businessId} exists in Neoserra.` : `Client ${query.businessId} was not readable.`);
   if (!query.businessId && contactFound) {
@@ -228,7 +251,11 @@ export function diagnoseLookup(
     likelyIssue: milestonesFound
       ? 'No issue detected at the Neoserra end. If an advisor can’t see the milestone, check the approval queue, the center assignment, or their notification email (spam filtering).'
       : milestonesReadable
-        ? 'If this client says they submitted the form, the record never made it to Neoserra — paste their notification email into this tool for a full trace, or check the API Audit Trail near the submission time.'
+        ? wp?.entries.length
+          ? 'The form definitely captured a submission (it’s in the WordPress log above) but Neoserra has no matching record — the handoff between the website and Neoserra failed for this one. Check the API Audit Trail near the submission time.'
+          : wp?.configured
+            ? 'No form submission was found in WordPress either — this client likely never completed the form, or submitted under a different email. Ask which email they used, or send them the form link.'
+            : 'If this client says they submitted the form, the record never made it to Neoserra — paste their notification email into this tool for a full trace, or check the API Audit Trail near the submission time.'
         : `The lookup side works (that’s what the milestone form needs), but this API key can’t read milestone records back, so delivery can’t be confirmed from here. ${AUDIT_TRAIL_HINT}`,
     fix: clientLinks
       ? `Open the client record${linkedIds.length > 1 ? 's' : ''}: ${clientLinks} — check the milestone list and the approval queue there. To trace a specific submission, paste its notification email into this tool.`

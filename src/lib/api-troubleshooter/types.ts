@@ -80,5 +80,7 @@ export interface Diagnosis {
 export interface InvestigateResponse {
   parsed: ParsedSubmission | null;
   neoserra: NeoserraFindings;
+  /** Gravity Forms entries ledger (read-only) — null when not configured. */
+  wordpress?: import('./gravity-forms').GfFindings | null;
   diagnosis: Diagnosis;
 }

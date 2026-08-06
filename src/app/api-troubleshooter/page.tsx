@@ -51,6 +51,22 @@ interface Diagnosis {
   fix: string;
   emailDraft: { subject: string; body: string };
 }
+interface GfEntrySummary {
+  entryId: string;
+  dateCreated: string;
+  contactId: string | null;
+  contactEmail: string | null;
+  businessId: string | null;
+  milestoneTypes: string[];
+  fields: { label: string; value: string }[];
+  likelyDuplicate: boolean;
+}
+interface GfFindings {
+  configured: boolean;
+  attempts: ProbeAttempt[];
+  entries: GfEntrySummary[];
+  totalCount: number | null;
+}
 interface InvestigateResponse {
   parsed: ParsedSubmission | null;
   neoserra: {
@@ -60,10 +76,12 @@ interface InvestigateResponse {
     milestones: ProbeResult | null;
     linkedClientIds?: string[];
   };
+  wordpress?: GfFindings | null;
   diagnosis: Diagnosis;
 }
 interface Health {
   neoserraConfigured: boolean;
+  gravityForms: { configured: boolean; totalEntries: number | null; lastEntry: string | null };
   backendLog: { available: boolean; days: number; submissions: number; withErrors: number; lastSubmission: string | null };
 }
 
@@ -240,8 +258,10 @@ export default function ApiTroubleshooterPage() {
                 ? `Wizard path: ${health.backendLog.submissions} submissions / last ${health.backendLog.days}d${health.backendLog.withErrors ? ` (${health.backendLog.withErrors} with errors)` : ''}`
                 : 'Wizard-path log unavailable'}
             </span>
-            <span style={{ color: c.textMuted }}>
-              WordPress-path submissions: paste the notification email below to trace one
+            <span style={{ color: health.gravityForms.configured ? c.green : c.textMuted }}>
+              {health.gravityForms.configured
+                ? `● WordPress form log connected (read-only)${health.gravityForms.totalEntries != null ? ` — ${health.gravityForms.totalEntries.toLocaleString()} entries` : ''}${health.gravityForms.lastEntry ? `, latest ${health.gravityForms.lastEntry}` : ''}`
+                : '○ WordPress form log not connected — paste a notification email to trace WP-path submissions'}
             </span>
           </div>
         )}
@@ -373,6 +393,47 @@ export default function ApiTroubleshooterPage() {
               </div>
             </div>
 
+            {/* WordPress form entries */}
+            {result.wordpress?.configured && result.wordpress.entries.length > 0 && (
+              <div style={{ ...card }}>
+                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
+                  WordPress form submissions ({result.wordpress.entries.length}
+                  {result.wordpress.totalCount != null && result.wordpress.totalCount > result.wordpress.entries.length
+                    ? ` of ${result.wordpress.totalCount}`
+                    : ''})
+                </div>
+                <table style={{ width: '100%', fontSize: 13.5, borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${c.rule}`, textAlign: 'left', color: c.textMuted }}>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Entry</th>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Email</th>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Business</th>
+                      <th style={{ padding: '4px 0 6px 0', fontWeight: 500 }}>Milestones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.wordpress.entries.map((e) => (
+                      <tr key={e.entryId} style={{ borderBottom: `1px solid ${c.rule}`, color: c.textSecondary }}>
+                        <td style={{ padding: '7px 10px 7px 0', whiteSpace: 'nowrap' }}>
+                          {e.entryId} {e.likelyDuplicate && <span title="Same client within 10 minutes">🔁</span>}
+                        </td>
+                        <td style={{ padding: '7px 10px 7px 0', whiteSpace: 'nowrap' }}>{e.dateCreated}</td>
+                        <td style={{ padding: '7px 10px 7px 0', overflowWrap: 'anywhere' }}>{e.contactEmail ?? '—'}</td>
+                        <td style={{ padding: '7px 10px 7px 0' }}>{e.businessId ?? '—'}</td>
+                        <td style={{ padding: '7px 0' }}>{e.milestoneTypes.join(', ') || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {result.wordpress.entries.some((e) => e.likelyDuplicate) && (
+                  <div style={{ fontSize: 12.5, color: c.amber, marginTop: 8 }}>
+                    🔁 = likely double submission (same client within 10 minutes) — check Neoserra for duplicate records.
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Parsed submission */}
             {result.parsed && (
               <div style={{ ...card }}>
@@ -440,6 +501,16 @@ export default function ApiTroubleshooterPage() {
                         )}
                       </div>
                     ) : null,
+                  )}
+                  {result.wordpress?.attempts && result.wordpress.attempts.length > 0 && (
+                    <div style={{ marginBottom: 10 }}>
+                      <div style={{ color: c.white, marginBottom: 4 }}>WordPress (Gravity Forms):</div>
+                      {result.wordpress.attempts.map((a, i) => (
+                        <div key={i} style={{ color: c.textMuted, overflowWrap: 'anywhere' }}>
+                          GET {a.path} → {a.status} ({a.note})
+                        </div>
+                      ))}
+                    </div>
                   )}
                   {result.neoserra.linkedClientIds && (
                     <div style={{ color: c.textMuted, marginBottom: 8 }}>
