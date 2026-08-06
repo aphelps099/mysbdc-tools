@@ -20,12 +20,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Neoserra credentials not configured' }, { status: 503 });
   }
 
-  let body: { path?: string };
+  let body: { path?: string; timeoutMs?: number };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
+
+  const timeoutMs = Math.min(Math.max(Number(body.timeoutMs) || 8_000, 1_000), 25_000);
 
   const path = (body.path || '').trim();
   if (!path.startsWith('/api/v1/') || path.includes('..') || /\s/.test(path)) {
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const res = await rawNeoserraGet(path);
+  const res = await rawNeoserraGet(path, timeoutMs);
   const raw = JSON.stringify(res.body ?? null);
   return NextResponse.json({
     path: res.path,

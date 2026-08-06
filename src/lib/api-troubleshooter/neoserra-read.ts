@@ -25,13 +25,13 @@ export function neoserraConfigured(): boolean {
 const CACHE_TTL_MS = 10 * 60_000;
 const readCache = new Map<string, { at: number; res: ProbeAttempt & { body: unknown } }>();
 
-async function neoGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
+async function neoGet(path: string, timeoutMs = TIMEOUT_MS): Promise<ProbeAttempt & { body: unknown }> {
   const cached = readCache.get(path);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
     return { ...cached.res, note: `${cached.res.note} (cached)` };
   }
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(`${neoserraUrl()}${path}`, {
       method: 'GET', // read-only by design — never change this
@@ -67,7 +67,7 @@ async function neoGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
       path,
       status: isTimeout ? 'timeout' : 'network-error',
       note: isTimeout
-        ? `No response after ${TIMEOUT_MS / 1000}s (Neoserra can hang silently on some requests)`
+        ? `No response after ${timeoutMs / 1000}s (Neoserra can hang silently on some requests)`
         : 'Could not reach Neoserra',
       body: null,
     };
@@ -277,6 +277,6 @@ export async function probeMilestonesForClient(clientId: string): Promise<ProbeR
  * /api/v1/* path and report status + body. Same hard constraint as
  * everything else in this file — GET only.
  */
-export async function rawNeoserraGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
-  return neoGet(path);
+export async function rawNeoserraGet(path: string, timeoutMs?: number): Promise<ProbeAttempt & { body: unknown }> {
+  return neoGet(path, timeoutMs);
 }
