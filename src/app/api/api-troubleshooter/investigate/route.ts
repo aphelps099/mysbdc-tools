@@ -18,6 +18,7 @@ import {
   probeContactById,
   probeClientById,
   probeMilestonesForClient,
+  extractClientIds,
 } from '@/lib/api-troubleshooter/neoserra-read';
 import { diagnoseSubmission, diagnoseLookup } from '@/lib/api-troubleshooter/diagnose';
 import type { InvestigateResponse, NeoserraFindings } from '@/lib/api-troubleshooter/types';
@@ -90,6 +91,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       tasks.push(probeMilestonesForClient(businessId).then((r) => void (neo.milestones = r)));
     }
     await Promise.all(tasks);
+
+    // Chain: an email/contact lookup that found a contact but was given no
+    // business ID continues to that contact's linked client(s) + milestones.
+    if (!businessId && neo.contact?.found) {
+      const clientIds = extractClientIds(neo.contact.data);
+      neo.linkedClientIds = clientIds;
+      for (const id of clientIds.slice(0, 3)) {
+        const milestones = await probeMilestonesForClient(id);
+        if (!neo.milestones || (!neo.milestones.found && milestones.found)) {
+          neo.milestones = milestones;
+        }
+        if (milestones.found) {
+          neo.client = await probeClientById(id);
+          break;
+        }
+      }
+    }
   }
 
   const response: InvestigateResponse = {

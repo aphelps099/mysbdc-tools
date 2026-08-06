@@ -53,7 +53,13 @@ interface Diagnosis {
 }
 interface InvestigateResponse {
   parsed: ParsedSubmission | null;
-  neoserra: { configured: boolean; contact: ProbeResult | null; client: ProbeResult | null; milestones: ProbeResult | null };
+  neoserra: {
+    configured: boolean;
+    contact: ProbeResult | null;
+    client: ProbeResult | null;
+    milestones: ProbeResult | null;
+    linkedClientIds?: string[];
+  };
   diagnosis: Diagnosis;
 }
 interface Health {
@@ -410,12 +416,36 @@ export default function ApiTroubleshooterPage() {
                           {label}: {probe.found ? 'records found' : 'no records'}
                         </div>
                         {probe.attempts.map((a, i) => (
-                          <div key={i} style={{ color: c.textMuted }}>
+                          <div key={i} style={{ color: c.textMuted, overflowWrap: 'anywhere' }}>
                             GET {a.path} → {a.status} ({a.note})
                           </div>
                         ))}
+                        {probe.data != null && (
+                          <pre
+                            style={{
+                              background: 'rgba(0,0,0,0.3)',
+                              border: `1px solid ${c.rule}`,
+                              borderRadius: 6,
+                              padding: 10,
+                              marginTop: 6,
+                              maxHeight: 220,
+                              overflow: 'auto',
+                              color: c.textSecondary,
+                              fontSize: 11.5,
+                              whiteSpace: 'pre-wrap',
+                            }}
+                          >
+                            {JSON.stringify(probe.data, null, 2).slice(0, 4000)}
+                          </pre>
+                        )}
                       </div>
                     ) : null,
+                  )}
+                  {result.neoserra.linkedClientIds && (
+                    <div style={{ color: c.textMuted, marginBottom: 8 }}>
+                      Linked client IDs extracted from contact record:{' '}
+                      {result.neoserra.linkedClientIds.length ? result.neoserra.linkedClientIds.join(', ') : 'none identified'}
+                    </div>
                   )}
                   <div style={{ color: c.textMuted, marginTop: 6 }}>
                     All requests are GET (read-only). Ground truth for writes: Neoserra → System Administration → API Audit Trail.

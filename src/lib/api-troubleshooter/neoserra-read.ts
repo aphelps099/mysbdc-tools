@@ -27,16 +27,20 @@ async function neoGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
       signal: controller.signal,
     });
     clearTimeout(timeout);
+    const text = await res.text().catch(() => '');
     let body: unknown = null;
     try {
-      body = await res.json();
+      body = JSON.parse(text);
     } catch {
       body = null;
     }
+    // Surface Neoserra's own words on failures — a 404 "unknown endpoint"
+    // and a 403 "not authorized" point at completely different fixes.
+    const snippet = text.replace(/\s+/g, ' ').trim().slice(0, 160);
     return {
       path,
       status: res.status,
-      note: res.ok ? 'OK' : `Neoserra returned HTTP ${res.status}`,
+      note: res.ok ? 'OK' : `HTTP ${res.status}${snippet ? ` — ${snippet}` : ''}`,
       body,
     };
   } catch (err) {
@@ -102,6 +106,45 @@ export async function probeContactById(contactId: string): Promise<ProbeResult> 
 
 export async function probeClientById(clientId: string): Promise<ProbeResult> {
   return probe([`/api/v1/clients/${encodeURIComponent(clientId.trim())}`]);
+}
+
+/**
+ * Heuristically pull client (business) IDs out of a contact record so an
+ * email lookup can chain onward to client + milestone checks. Neoserra's
+ * contact response shape is undocumented, so this walks the JSON looking
+ * for client-ish keys with numeric-ID values. The raw record is shown in
+ * the UI's technical details, so misses are visible and correctable.
+ */
+export function extractClientIds(data: unknown): string[] {
+  const ids = new Set<string>();
+  const addIfId = (v: unknown) => {
+    const s = String(v).trim();
+    if (/^\d{4,9}$/.test(s)) ids.add(s);
+  };
+  const visit = (node: unknown, underClientKey: boolean): void => {
+    if (ids.size >= 8 || node == null) return;
+    if (Array.isArray(node)) {
+      for (const item of node) {
+        if (underClientKey && (typeof item === 'string' || typeof item === 'number')) addIfId(item);
+        else visit(item, underClientKey);
+      }
+      return;
+    }
+    if (typeof node === 'object') {
+      for (const [key, value] of Object.entries(node)) {
+        const isClientKey = /client/i.test(key) && !/email|name|public|count/i.test(key);
+        if (isClientKey && (typeof value === 'string' || typeof value === 'number')) {
+          addIfId(value);
+        } else if (typeof value === 'object' && value !== null) {
+          visit(value, underClientKey || isClientKey);
+        } else if (underClientKey && /^(id|clientId)$/i.test(key)) {
+          addIfId(value);
+        }
+      }
+    }
+  };
+  visit(data, false);
+  return [...ids].slice(0, 5);
 }
 
 /** Milestone/EI records for a client — endpoint shape undocumented, so probe. */

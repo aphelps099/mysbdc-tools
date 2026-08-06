@@ -48,6 +48,8 @@ export interface NeoserraFindings {
   contact: ProbeResult | null;
   client: ProbeResult | null;
   milestones: ProbeResult | null;
+  /** Client IDs discovered on the contact record (email-lookup chaining). */
+  linkedClientIds?: string[];
 }
 
 export type VerdictStatus =

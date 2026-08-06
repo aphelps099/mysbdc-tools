@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseNotification, looksLikeNotification } from '../src/lib/api-troubleshooter/parse-notification';
+import { extractClientIds } from '../src/lib/api-troubleshooter/neoserra-read';
 
 /** Plain-text shape a user gets copying the rendered Gmail body. */
 const PASTED_TEXT = `Contact ID
@@ -73,5 +74,18 @@ describe('parseNotification', () => {
   it('rejects text that is not a notification', () => {
     expect(looksLikeNotification('hello world, unrelated text')).toBe(false);
     expect(looksLikeNotification(PASTED_TEXT)).toBe(true);
+  });
+});
+
+describe('extractClientIds', () => {
+  it('finds IDs under client-ish keys across plausible response shapes', () => {
+    expect(extractClientIds({ id: 536464, clients: ['419762', '402390'] })).toEqual(['419762', '402390']);
+    expect(extractClientIds({ data: [{ contactId: 1, clientId: 419762 }] })).toEqual(['419762']);
+    expect(extractClientIds({ clients: [{ id: 419762, name: 'Woody’s' }] })).toEqual(['419762']);
+  });
+
+  it('ignores non-ID client fields and unrelated numbers', () => {
+    expect(extractClientIds({ clientEmail: 'x@y.com', clientCount: 2, zip: 96001 })).toEqual([]);
+    expect(extractClientIds(null)).toEqual([]);
   });
 });
