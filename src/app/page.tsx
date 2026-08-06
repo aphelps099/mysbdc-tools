@@ -102,6 +102,18 @@ const tools = [
     ),
   },
   {
+    href: '/api-troubleshooter',
+    name: 'API Troubleshooter',
+    description: 'Observe-only diagnostics for milestone submissions — trace a client or notification email through Neoserra and get a plain-English verdict with a ready-to-send email.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M21 21l-4.35-4.35" />
+        <path d="M8 11h6" /><path d="M11 8v6" />
+      </svg>
+    ),
+  },
+  {
     href: '/session-notes',
     name: 'Session Notes',
     description: 'Create counseling session notes with AI formatting and submit directly to NeoSerra.',
