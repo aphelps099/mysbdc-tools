@@ -21,7 +21,12 @@ import type { GfFindings } from './gravity-forms';
 function gfSentence(wp: GfFindings | undefined, label: string): string {
   if (!wp?.configured) return '';
   if (!wp.entries.length) {
-    return `The WordPress form log shows NO Step 2 submissions matching ${label}.`;
+    // Only claim "no submissions" when the log actually answered; a failed
+    // read is a different (and honest) statement.
+    const readFailed = wp.attempts.some((a) => a.status !== 200);
+    return readFailed
+      ? 'The WordPress form log could not be read just now (see technical details), so form submissions could not be checked.'
+      : `The WordPress form log shows NO Step 2 submissions matching ${label} (checked the keyed search and the latest 50 entries).`;
   }
   const n = wp.entries.length;
   const latest = wp.entries[0];

@@ -227,7 +227,41 @@ export async function fetchStep2Entries(filter: {
     return { configured: true, attempts, entries: [], totalCount: null };
   }
 
-  const entries = body.entries.map((e) => entryToSummary(e, map));
+  let entries = body.entries.map((e) => entryToSummary(e, map));
+  let totalCount = body.total_count ?? null;
+
+  // Fallback: GF's keyed field search is exact-match against one field ID
+  // and misses when the label→ID mapping is off. If it returned nothing,
+  // pull the latest entries and match client-side across every value.
+  if (filters.length && entries.length === 0) {
+    const wide = new URLSearchParams();
+    wide.set('paging[page_size]', '50');
+    wide.set('sorting[key]', 'date_created');
+    wide.set('sorting[direction]', 'DESC');
+    const wideRes = await gfGet(`/forms/${formId}/entries?${wide.toString()}`);
+    attempts.push({ path: wideRes.path, status: wideRes.status, note: wideRes.note });
+    const wideBody = wideRes.body as { total_count?: number; entries?: Record<string, unknown>[] } | null;
+    if (wideRes.status === 200 && wideBody?.entries) {
+      const email = filter.email?.trim().toLowerCase();
+      const biz = filter.businessId?.trim();
+      const all = wideBody.entries.map((e) => entryToSummary(e, map));
+      entries = all.filter((s) => {
+        const emailHit =
+          !!email &&
+          (s.contactEmail?.toLowerCase() === email ||
+            s.fields.some((f) => f.value.toLowerCase().includes(email)));
+        const bizHit = !!biz && (s.businessId === biz || s.fields.some((f) => f.value === biz));
+        return emailHit || bizHit;
+      });
+      totalCount = entries.length;
+      attempts.push({
+        path: '(client-side scan of the latest 50 entries)',
+        status: 200,
+        note: `keyed search matched 0 — scan matched ${entries.length}`,
+      });
+    }
+  }
+
   flagDuplicates(entries);
-  return { configured: true, attempts, entries, totalCount: body.total_count ?? null };
+  return { configured: true, attempts, entries, totalCount };
 }
