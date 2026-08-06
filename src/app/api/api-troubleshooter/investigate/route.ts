@@ -127,7 +127,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           attempts: [...neo.contact.attempts, ...full.attempts],
           data: full.found ? full.data : neo.contact.data,
         };
-        if (full.found) clientIds = extractClientIds(full.data);
+        clientIds = full.clientIds;
       }
     }
     neo.linkedClientIds = clientIds;
