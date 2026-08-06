@@ -196,6 +196,25 @@ export function diagnoseLookup(
   const milestonesFound = neo.milestones?.found ?? false;
   const milestonesReadable = neo.milestones ? endpointReadable(neo.milestones) : false;
 
+  // When literally every Neoserra request times out, say that — it's a
+  // Neoserra availability/rate-limit condition, not a data answer.
+  const allNeoAttempts = [neo.contact, neo.client, neo.milestones].flatMap((p) => p?.attempts ?? []);
+  if (allNeoAttempts.length > 0 && allNeoAttempts.every((a) => a.status === 'timeout')) {
+    return {
+      status: 'unverifiable',
+      headline: 'Neoserra is not responding right now',
+      whatHappened: `Every request to Neoserra timed out during this check for ${label}. ${gfSentence(wp, label)}`.trim(),
+      likelyIssue:
+        'Neoserra appears temporarily slow or is rate-limiting API requests. This is usually transient and says nothing about this client’s data.',
+      fix: 'Wait a few minutes and run the check again. If it persists for more than an hour, check Neoserra status with their support.',
+      emailDraft: draft(
+        `Neoserra check for ${label} — Neoserra temporarily unavailable`,
+        [`We tried a live Neoserra check for ${label}, but Neoserra did not respond to any request. This is usually transient — we will re-run the check shortly.`],
+        toolLink({ businessId: query.businessId ?? null, email: query.email ?? null }),
+      ),
+    };
+  }
+
   // Email lookup that found nothing → the classic "email is not valid" case.
   if (query.email && !contactFound && neo.contact && endpointReadable(neo.contact)) {
     return {

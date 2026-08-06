@@ -19,7 +19,17 @@ export function neoserraConfigured(): boolean {
   return Boolean(neoserraUrl() && neoserraKey());
 }
 
+/** 10-minute cache of successful reads — repeat lookups on the same client
+ *  during a troubleshooting session shouldn't re-hit Neoserra every time
+ *  (observed: bursts of parallel probes appear to trip its rate limiting). */
+const CACHE_TTL_MS = 10 * 60_000;
+const readCache = new Map<string, { at: number; res: ProbeAttempt & { body: unknown } }>();
+
 async function neoGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
+  const cached = readCache.get(path);
+  if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+    return { ...cached.res, note: `${cached.res.note} (cached)` };
+  }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -39,12 +49,17 @@ async function neoGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
     // Surface Neoserra's own words on failures — a 404 "unknown endpoint"
     // and a 403 "not authorized" point at completely different fixes.
     const snippet = text.replace(/\s+/g, ' ').trim().slice(0, 160);
-    return {
+    const result = {
       path,
       status: res.status,
       note: res.ok ? 'OK' : `HTTP ${res.status}${snippet ? ` — ${snippet}` : ''}`,
       body,
     };
+    if (res.status === 200) {
+      if (readCache.size > 200) readCache.clear();
+      readCache.set(path, { at: Date.now(), res: result });
+    }
+    return result;
   } catch (err) {
     clearTimeout(timeout);
     const isTimeout = err instanceof DOMException && err.name === 'AbortError';
@@ -72,19 +87,26 @@ function hasRecords(body: unknown): boolean {
   return false;
 }
 
-/** Try candidate paths concurrently; earliest-listed path with records wins.
- *  Parallel keeps wall time at one timeout even when several paths hang. */
+/** Try candidate paths in small concurrent chunks; earliest path with
+ *  records wins. Chunking (not full fan-out) keeps wall time bounded while
+ *  staying under Neoserra's apparent rate limiting. */
+const PROBE_CHUNK = 3;
+
 async function probe(paths: string[]): Promise<ProbeResult> {
-  const results = await Promise.all(paths.map((p) => neoGet(p)));
-  const attempts: ProbeAttempt[] = results.map((r) => ({ path: r.path, status: r.status, note: r.note }));
-  for (const res of results) {
-    if (res.status === 200 && hasRecords(res.body)) {
-      return { found: true, data: res.body, attempts };
+  const attempts: ProbeAttempt[] = [];
+  let emptyOk: unknown = undefined;
+  for (let i = 0; i < paths.length; i += PROBE_CHUNK) {
+    const results = await Promise.all(paths.slice(i, i + PROBE_CHUNK).map((p) => neoGet(p)));
+    for (const r of results) attempts.push({ path: r.path, status: r.status, note: r.note });
+    for (const res of results) {
+      if (res.status === 200 && hasRecords(res.body)) {
+        return { found: true, data: res.body, attempts };
+      }
+      if (res.status === 200 && emptyOk === undefined) emptyOk = res.body;
     }
   }
   // A valid-but-empty answer is meaningful ("endpoint works, no records").
-  const emptyOk = results.find((r) => r.status === 200);
-  return { found: false, data: emptyOk ? (emptyOk.body as object) : null, attempts };
+  return { found: false, data: emptyOk === undefined ? null : (emptyOk as object), attempts };
 }
 
 /** Did any probe path answer 200 (even with no records)? */
@@ -192,14 +214,17 @@ export async function probeClientsForContact(
     `/api/v1/contacts/${id}/clients`,
     `/api/v1/contacts/${id}`,
   ];
-  const results = await Promise.all(paths.map((p) => neoGet(p)));
-  const attempts: ProbeAttempt[] = results.map((r) => ({ path: r.path, status: r.status, note: r.note }));
+  const attempts: ProbeAttempt[] = [];
   let lastData: unknown = null;
-  for (const res of results) {
-    if (res.status === 200 && hasRecords(res.body)) {
-      const clientIds = extractClientIds(res.body);
-      if (clientIds.length) return { found: true, data: res.body, attempts, clientIds };
-      if (lastData == null) lastData = res.body;
+  for (let i = 0; i < paths.length; i += PROBE_CHUNK) {
+    const results = await Promise.all(paths.slice(i, i + PROBE_CHUNK).map((p) => neoGet(p)));
+    for (const r of results) attempts.push({ path: r.path, status: r.status, note: r.note });
+    for (const res of results) {
+      if (res.status === 200 && hasRecords(res.body)) {
+        const clientIds = extractClientIds(res.body);
+        if (clientIds.length) return { found: true, data: res.body, attempts, clientIds };
+        if (lastData == null) lastData = res.body;
+      }
     }
   }
   return { found: lastData != null, data: lastData, attempts, clientIds: [] };
