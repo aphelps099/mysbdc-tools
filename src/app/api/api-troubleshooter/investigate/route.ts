@@ -127,6 +127,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   }
 
+  // A matched GF entry carries the Neoserra client ID the client submitted
+  // under — use it when the contact record didn't yield one.
+  // (assertion: TS can't see the Promise.all closure assignment above)
+  const wpFound = wordpress as GfFindings | null;
+  if (configured && !businessId && !(neo.linkedClientIds?.length)) {
+    const gfBiz = wpFound?.entries.map((e) => e.businessId).find(Boolean);
+    if (gfBiz) {
+      neo.linkedClientIds = [gfBiz];
+      const milestones = await probeMilestonesForClient(gfBiz);
+      if (!neo.milestones || (!neo.milestones.found && milestones.found)) {
+        neo.milestones = milestones;
+      }
+      if (!neo.client) neo.client = await probeClientById(gfBiz);
+    }
+  }
+
   const response: InvestigateResponse = {
     parsed: null,
     neoserra: neo,
