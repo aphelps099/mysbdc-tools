@@ -228,13 +228,30 @@ export async function fetchLinkedClient(clientId: string): Promise<LinkedClientS
   };
 }
 
-/** Milestone/EI records for a client — endpoint shape undocumented, so probe. */
+/** Milestone/EI records for a client — endpoint shape undocumented, so probe.
+ *  The bare ?clientId= form hangs (classic Neoserra missing-required-param
+ *  behavior); the events endpoint needs startDate, so try dated combos too. */
 export async function probeMilestonesForClient(clientId: string): Promise<ProbeResult> {
   const id = encodeURIComponent(clientId.trim());
+  const yearAgo = new Date();
+  yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+  const since = yearAgo.toISOString().slice(0, 10);
   return probe([
+    `/api/v1/milestones?clientId=${id}&startDate=${since}`,
+    `/api/v1/milestones?clients=${id}&startDate=${since}`,
+    `/api/v1/milestones?client=${id}`,
     `/api/v1/milestones?clientId=${id}`,
     `/api/v1/milestones?clients=${id}`,
     `/api/v1/clients/${id}/milestones`,
     `/api/v1/milestones/${id}`,
   ]);
+}
+
+/**
+ * Raw read-only probe for the endpoint-explorer route: GET one Neoserra
+ * /api/v1/* path and report status + body. Same hard constraint as
+ * everything else in this file — GET only.
+ */
+export async function rawNeoserraGet(path: string): Promise<ProbeAttempt & { body: unknown }> {
+  return neoGet(path);
 }
