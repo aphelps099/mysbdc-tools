@@ -8,8 +8,8 @@
  * diagnostic output ("your key can read clients but not milestones").
  */
 
-import { neoserraUrl, neoserraKey } from '@/lib/neoserra';
-import type { ProbeAttempt, ProbeResult } from './types';
+import { neoserraUrl, neoserraKey, centerIdToName } from '@/lib/neoserra';
+import type { LinkedClientSummary, ProbeAttempt, ProbeResult } from './types';
 
 // Short leash: Neoserra can hang silently, and a lookup fans out over many
 // candidate paths — long timeouts stack up and 502 the whole request.
@@ -203,6 +203,29 @@ export async function probeClientsForContact(
     }
   }
   return { found: lastData != null, data: lastData, attempts, clientIds: [] };
+}
+
+/** Fetch a linked client's record and summarize it for display. */
+export async function fetchLinkedClient(clientId: string): Promise<LinkedClientSummary> {
+  const probe = await probeClientById(clientId);
+  const rec = (probe.data ?? {}) as Record<string, unknown>;
+  const str = (key: string): string | null => {
+    const v = rec[key];
+    return typeof v === 'string' && v.trim() ? v.trim() : null;
+  };
+  const centerId = str('centerId');
+  return {
+    clientId,
+    publicId: str('client'),
+    company: str('company'),
+    dba: str('dba'),
+    status: str('status'),
+    centerId,
+    centerName: centerId ? centerIdToName(centerId) : null,
+    found: probe.found,
+    attempts: probe.attempts,
+    data: probe.data,
+  };
 }
 
 /** Milestone/EI records for a client — endpoint shape undocumented, so probe. */

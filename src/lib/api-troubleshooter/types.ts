@@ -43,6 +43,22 @@ export interface ProbeResult<T = unknown> {
   attempts: ProbeAttempt[];
 }
 
+/** A client (business) record linked to the looked-up contact. */
+export interface LinkedClientSummary {
+  clientId: string;
+  /** Neoserra public ID, e.g. SHA0009422. */
+  publicId: string | null;
+  company: string | null;
+  dba: string | null;
+  status: string | null;
+  centerId: string | null;
+  centerName: string | null;
+  found: boolean;
+  attempts: ProbeAttempt[];
+  /** Raw client record for the technical-details panel. */
+  data: unknown;
+}
+
 export interface NeoserraFindings {
   configured: boolean;
   contact: ProbeResult | null;
@@ -50,6 +66,8 @@ export interface NeoserraFindings {
   milestones: ProbeResult | null;
   /** Client IDs discovered on the contact record (email-lookup chaining). */
   linkedClientIds?: string[];
+  /** Full record summaries for every linked client (capped at 5). */
+  linkedClients?: LinkedClientSummary[];
 }
 
 export type VerdictStatus =

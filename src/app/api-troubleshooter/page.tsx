@@ -67,6 +67,18 @@ interface GfFindings {
   entries: GfEntrySummary[];
   totalCount: number | null;
 }
+interface LinkedClientSummary {
+  clientId: string;
+  publicId: string | null;
+  company: string | null;
+  dba: string | null;
+  status: string | null;
+  centerId: string | null;
+  centerName: string | null;
+  found: boolean;
+  attempts: ProbeAttempt[];
+  data: unknown;
+}
 interface InvestigateResponse {
   parsed: ParsedSubmission | null;
   neoserra: {
@@ -75,6 +87,7 @@ interface InvestigateResponse {
     client: ProbeResult | null;
     milestones: ProbeResult | null;
     linkedClientIds?: string[];
+    linkedClients?: LinkedClientSummary[];
   };
   wordpress?: GfFindings | null;
   diagnosis: Diagnosis;
@@ -392,6 +405,50 @@ export default function ApiTroubleshooterPage() {
                 {result.diagnosis.emailDraft.body}
               </div>
             </div>
+
+            {/* Linked client records */}
+            {result.neoserra.linkedClients && result.neoserra.linkedClients.length > 0 && (
+              <div style={{ ...card }}>
+                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
+                  Client records on this contact ({result.neoserra.linkedClients.length})
+                </div>
+                <table style={{ width: '100%', fontSize: 13.5, borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${c.rule}`, textAlign: 'left', color: c.textMuted }}>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Neoserra ID</th>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Business</th>
+                      <th style={{ padding: '4px 10px 6px 0', fontWeight: 500 }}>Center</th>
+                      <th style={{ padding: '4px 0 6px 0', fontWeight: 500 }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.neoserra.linkedClients.map((cl) => (
+                      <tr key={cl.clientId} style={{ borderBottom: `1px solid ${c.rule}`, color: c.textSecondary }}>
+                        <td style={{ padding: '7px 10px 7px 0', whiteSpace: 'nowrap' }}>
+                          <a
+                            href={`https://norcal.neoserra.com/clients/${cl.clientId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{ color: c.pool, textDecoration: 'none' }}
+                          >
+                            {cl.clientId}
+                          </a>
+                          {cl.publicId && <span style={{ color: c.textMuted }}> · {cl.publicId}</span>}
+                        </td>
+                        <td style={{ padding: '7px 10px 7px 0' }}>
+                          {cl.dba || cl.company || (cl.found ? '—' : 'record not readable')}
+                          {cl.dba && cl.company && cl.dba !== cl.company && (
+                            <span style={{ color: c.textMuted }}> ({cl.company})</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '7px 10px 7px 0' }}>{cl.centerName ?? cl.centerId ?? '—'}</td>
+                        <td style={{ padding: '7px 0' }}>{cl.status ?? '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
             {/* WordPress form entries */}
             {result.wordpress?.configured && result.wordpress.entries.length > 0 && (
