@@ -108,7 +108,17 @@ export async function POST(req: NextRequest) {
     crmMatch = a.length === h.length && timingSafeEqual(a, h);
   }
 
+  // Eighth password: API Troubleshooter → session scoped to ONLY
+  // /api-troubleshooter, so the diagnostic can be shared as a direct link
+  // (e.g. with program staff) without exposing the rest of the toolbox.
+  const troubleshooterPassword = process.env.TROUBLESHOOTER_PASSWORD || 'Troubl3shoot3r';
+  let troubleshooterMatch = false;
   if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch && !mapMatch && !crmMatch) {
+    const t = Buffer.from(troubleshooterPassword);
+    troubleshooterMatch = a.length === t.length && timingSafeEqual(a, t);
+  }
+
+  if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch && !mapMatch && !crmMatch && !troubleshooterMatch) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
@@ -116,7 +126,7 @@ export async function POST(req: NextRequest) {
   // so it cannot be altered client-side; middleware restricts inject-scoped
   // sessions to the inject tool, tfg-scoped to TFG Motion, and map-scoped to
   // the Network Map.
-  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : mapMatch ? 'map' : crmMatch ? 'crm' : 'admin';
+  const scope = injectMatch ? 'inject' : tfgMatch ? 'tfg' : mapMatch ? 'map' : crmMatch ? 'crm' : troubleshooterMatch ? 'troubleshooter' : 'admin';
   const nonce = randomBytes(16).toString('hex');
   const payload = `${scope}:${nonce}:${Date.now()}`;
   const token = signToken(payload);
@@ -143,6 +153,7 @@ export async function POST(req: NextRequest) {
     ...(tfgMatch ? { redirect: '/motion/tfg' } : {}),
     ...(mapMatch ? { redirect: '/network-map' } : {}),
     ...(crmMatch ? { redirect: '/partnerships' } : {}),
+    ...(troubleshooterMatch ? { redirect: '/api-troubleshooter' } : {}),
   });
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,

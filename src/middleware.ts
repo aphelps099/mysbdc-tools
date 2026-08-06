@@ -38,7 +38,7 @@ async function hmacSha256(secret: string, message: string): Promise<string> {
   return bytesToHex(new Uint8Array(sig));
 }
 
-type SessionScope = 'admin' | 'inject' | 'tfg' | 'map' | 'crm';
+type SessionScope = 'admin' | 'inject' | 'tfg' | 'map' | 'crm' | 'troubleshooter';
 
 /**
  * Verify the signed session token. Returns the session scope, or null when
@@ -70,6 +70,7 @@ async function verifyToken(token: string): Promise<SessionScope | null> {
   if (parts.length >= 3 && parts[0] === 'tfg') return 'tfg';
   if (parts.length >= 3 && parts[0] === 'map') return 'map';
   if (parts.length >= 3 && parts[0] === 'crm') return 'crm';
+  if (parts.length >= 3 && parts[0] === 'troubleshooter') return 'troubleshooter';
   return 'admin';
 }
 
@@ -131,6 +132,21 @@ function isCrmAllowed(pathname: string): boolean {
 
 const CRM_LOGIN_PATH = '/partnerships/login';
 
+/** Paths a troubleshooter-scoped session may reach: the API Troubleshooter
+ *  page + its (read-only) API routes — never the tools index. */
+const TROUBLESHOOTER_ALLOWED_PATHS = [
+  '/api-troubleshooter',
+  '/api/api-troubleshooter',
+];
+
+function isTroubleshooterAllowed(pathname: string): boolean {
+  return TROUBLESHOOTER_ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+const TROUBLESHOOTER_LOGIN_PATH = '/api-troubleshooter/login';
+
 export async function middleware(req: NextRequest) {
   // Skip auth if APP_PASSWORD is not set (dev mode / not configured)
   if (!process.env.APP_PASSWORD) {
@@ -143,7 +159,8 @@ export async function middleware(req: NextRequest) {
   if (
     pathname === '/motion/tfg/login' ||
     pathname === MAP_LOGIN_PATH ||
-    pathname === CRM_LOGIN_PATH
+    pathname === CRM_LOGIN_PATH ||
+    pathname === TROUBLESHOOTER_LOGIN_PATH
   ) {
     return NextResponse.next();
   }
@@ -159,9 +176,11 @@ export async function middleware(req: NextRequest) {
       ? MAP_LOGIN_PATH
       : isCrmAllowed(pathname)
         ? CRM_LOGIN_PATH
-        : pathname.startsWith('/motion/tfg')
-          ? '/motion/tfg/login'
-          : '/login';
+        : isTroubleshooterAllowed(pathname)
+          ? TROUBLESHOOTER_LOGIN_PATH
+          : pathname.startsWith('/motion/tfg')
+            ? '/motion/tfg/login'
+            : '/login';
     if (pathname.startsWith('/api/')) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -199,6 +218,17 @@ export async function middleware(req: NextRequest) {
       );
     }
     return NextResponse.redirect(new URL('/partnerships', req.url));
+  }
+
+  // Troubleshooter-scoped sessions can reach ONLY the API Troubleshooter
+  if (scope === 'troubleshooter' && !isTroubleshooterAllowed(pathname)) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'This session is limited to the API Troubleshooter' },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL('/api-troubleshooter', req.url));
   }
 
   // Map-scoped sessions can reach ONLY the Network Map — never the tools index
