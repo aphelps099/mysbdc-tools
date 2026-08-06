@@ -1,8 +1,15 @@
 # API Troubleshooter (Milestone Delivery Watchdog) — Design
 
-**Status:** Design only — no implementation yet.
+**Status:** v1 built (Aug 2026) — the `/api-troubleshooter` page, read-only Neoserra
+probes, notification-email parser, diagnosis engine with copy-ready email drafts, and
+homepage card. v1 is fully **stateless** (persists nothing — the strongest possible
+non-interference guarantee); the automated Gmail ledger feed, reconciliation store, and
+alerting (§4.1–4.4) are the next phase.
 **Product name:** API Troubleshooter
-**Direct link (once built):** `https://tools.norcalsbdc.org/api-troubleshooter`
+**Direct link:** `https://tools.norcalsbdc.org/api-troubleshooter`
+**Code:** `src/app/api-troubleshooter/`, `src/app/api/api-troubleshooter/`,
+`src/lib/api-troubleshooter/` (types, parser, GET-only Neoserra reads, diagnosis engine),
+tests in `tests/api-troubleshooter-parse.test.ts`.
 
 ---
 
