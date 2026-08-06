@@ -93,6 +93,28 @@ export function diagnoseSubmission(p: ParsedSubmission, neo: NeoserraFindings, w
   const dataBlock = `Their submission (no need to ask the client to resubmit — we have their complete answers):\n${submissionSummary(p)}`;
   const anomalies = anomalyParagraph(p);
 
+  // A pasted "Neoserra API Error" email carries the definitive rejection.
+  if (p.apiErrors.length) {
+    return finish('missing', 'Neoserra rejected this submission', {
+      whatHappened: `${who} submitted the milestone form (business ${biz}), and Neoserra explicitly rejected the write. The error: ${p.apiErrors.join(' · ')}`,
+      likelyIssue:
+        'A required field on the client record is missing or invalid, so Neoserra refused the whole update. The client saw a success screen anyway — this failure is only visible in these error emails and the API Audit Trail.',
+      fix: `Fix the named field on the client record in Neoserra${neoClient ? ` (${neoClient})` : ''}, then enter the milestone manually from the data below — no need to ask the client to resubmit.`,
+    });
+  }
+
+  // Zero/negative EI never posts (Attribution Handbook p.19) — if the payload
+  // computes that way, the outcome is known without any Neoserra read.
+  const suppressed = p.anomalies.some((a) => /do not post/i.test(a.issue));
+  if (suppressed) {
+    return finish('missing', 'Will not post — zero or negative EI change', {
+      whatHappened: `${who} submitted the milestone form (business ${biz}), but the submitted numbers compute to a zero or negative change.`,
+      likelyIssue:
+        'Per network policy (Attribution Handbook p.19), zero or negative EI changes do not post to Neoserra. The client sees the success screen, but no record is created and no advisor notification goes out — exactly the "submitted but missing" pattern.',
+      fix: `Confirm the real figures with the advisor (start vs. current may have been entered in reverse), then enter the corrected milestone manually in Neoserra${neoClient ? ` (${neoClient})` : ''}. No client resubmission needed — their answers are below.`,
+    });
+  }
+
   // ── Not configured: parser-only mode ──
   if (!neo.configured) {
     return finish('not-configured', 'Parsed — Neoserra check unavailable', {

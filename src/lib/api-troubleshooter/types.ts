@@ -27,6 +27,9 @@ export interface ParsedSubmission {
   fields: { label: string; value: string }[];
   signature: string | null;
   anomalies: ValueAnomaly[];
+  /** Errors from a pasted "Neoserra API Error (Milestones - Step 2)" email,
+   *  e.g. "[update_client][primaryNaics] is a required value". */
+  apiErrors: string[];
 }
 
 /** One read-only request we attempted against Neoserra. */
