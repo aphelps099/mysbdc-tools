@@ -132,7 +132,8 @@ export function extractClientIds(data: unknown): string[] {
     }
     if (typeof node === 'object') {
       for (const [key, value] of Object.entries(node)) {
-        const isClientKey = /client/i.test(key) && !/email|name|public|count/i.test(key);
+        // 'fkey' observed in Neoserra contact rows as a client foreign key
+        const isClientKey = (/client/i.test(key) || /^fkey$/i.test(key)) && !/email|name|public|count/i.test(key);
         if (isClientKey && (typeof value === 'string' || typeof value === 'number')) {
           addIfId(value);
         } else if (typeof value === 'object' && value !== null) {
@@ -145,6 +146,47 @@ export function extractClientIds(data: unknown): string[] {
   };
   visit(data, false);
   return [...ids].slice(0, 5);
+}
+
+/**
+ * Pull contact IDs (Neoserra `indivId`) out of a contact-search response so
+ * the lookup can fetch the full contact record / relationships next.
+ */
+export function extractContactIds(data: unknown): string[] {
+  const ids = new Set<string>();
+  const visit = (node: unknown): void => {
+    if (ids.size >= 5 || node == null) return;
+    if (Array.isArray(node)) {
+      node.forEach(visit);
+      return;
+    }
+    if (typeof node === 'object') {
+      for (const [key, value] of Object.entries(node)) {
+        if (/^(indivId|contactId)$/i.test(key) && (typeof value === 'string' || typeof value === 'number')) {
+          const s = String(value).trim();
+          if (/^\d{4,9}$/.test(s)) ids.add(s);
+        } else if (typeof value === 'object' && value !== null) {
+          visit(value);
+        }
+      }
+    }
+  };
+  visit(data);
+  return [...ids];
+}
+
+/**
+ * Client records linked to a contact — the contact search returns bare rows
+ * (indivId/first/last/fkey), so client links live behind other endpoints.
+ * Probe the plausible ones; extractClientIds() digests whichever answers.
+ */
+export async function probeClientsForContact(contactId: string): Promise<ProbeResult> {
+  const id = encodeURIComponent(contactId.trim());
+  return probe([
+    `/api/v1/contacts/${id}`,
+    `/api/v1/relationships/${id}`,
+    `/api/v1/clients?contactId=${id}`,
+  ]);
 }
 
 /** Milestone/EI records for a client — endpoint shape undocumented, so probe. */
