@@ -1,6 +1,27 @@
-# Milestone Delivery Watchdog — Design
+# API Troubleshooter (Milestone Delivery Watchdog) — Design
 
 **Status:** Design only — no implementation yet.
+**Product name:** API Troubleshooter
+**Direct link (once built):** `https://tools.norcalsbdc.org/api-troubleshooter`
+
+---
+
+## 0. Read-only guarantee — this tool observes, it never interferes
+
+Hard constraints the implementation must satisfy; nothing below in this doc overrides them:
+
+| System | What the troubleshooter does | What it can never do |
+|---|---|---|
+| WordPress / Gravity Forms | **Nothing.** No connection at all. | Cannot touch forms, entries, notifications, or the plugin |
+| Gmail (phelps@) | Read + parse notification emails | Never sends, deletes, labels, or modifies mail |
+| Neoserra API | `GET` requests only, with a read-only key if available | Never creates, updates, or deletes any record |
+| The live /success flow | **Nothing.** Zero code in the submission path | Cannot slow down, block, or alter any client submission |
+| Existing tools pages (`/milestone-log`, etc.) | Untouched — new standalone route | No shared state modified |
+
+Concretely: the tool is a new, isolated page + API route in this repo. If the
+troubleshooter itself breaks or is deleted, **nothing about the milestone form,
+notifications, or Neoserra changes** — clients and advisors would never know it existed.
+The only "write" it ever performs is saving its own analysis results to its own store.
 **Companion doc:** `milestone-troubleshooting-plan.md` (July 2026) covers the *lookup* side
 (Step 1 "email is not valid" failures — the Zimmers case). This doc covers the *delivery*
 side: submissions that appear to succeed for the client but never land in Neoserra or never
@@ -142,12 +163,65 @@ A submission is healthy only when B ∧ A (∧ C). Every mismatch is a classifie
 - Per-client search → full trace: ledger entry, Neoserra verdict, links to the Neoserra
   client page and (manually) the API Audit Trail.
 
-### 4.6 Self-serve diagnostic ("where did this client's submission go?")
-- Admin page/CLI: enter client email or business ID → shows every ledger entry for them,
-  each verdict, and plain-language next step ("Submission received Aug 5 1:51 PM; no
-  matching Neoserra record — check API Audit Trail near this timestamp; payload had
-  negative FTE change which may have been rejected").
-- This turns the Quintin/Zack/Carrie email thread into a 30-second lookup.
+### 4.6 The page: `/api-troubleshooter`
+
+The user-facing surface for everything above, at
+**`https://tools.norcalsbdc.org/api-troubleshooter`** — deep-linkable so it can be pasted
+into email threads with advisors. Auth: same password gate as `/milestone-log` (the page
+shows client PII). A deep link with a query param
+(`/api-troubleshooter?email=bart@woodysbrewing.com`) opens straight to that client's trace.
+
+**Layout (top to bottom):**
+
+1. **Search box** — client email, business ID, or contact ID.
+2. **Health strip** — last 7 days: submissions received / delivered / flagged, and the
+   heartbeat status ("Notifications flowing normally" vs. "⚠️ No submissions parsed in
+   4 days — historical average is 3/day").
+3. **Recent submissions table** — one row per ledger entry, newest first, with a
+   plain-English status chip: ✅ Delivered to Neoserra · ⏳ Pending approval ·
+   ❌ Not found in Neoserra · 🔁 Submitted twice · 🚩 Values look wrong.
+4. **Detail view** (click a row or arrive via deep link) — the three-leg trace in plain
+   English, one line per leg, each marked found/missing with timestamp. No jargon in the
+   default view; raw payload behind a "show technical details" toggle.
+
+**The centerpiece: plain-English diagnosis + copy-pasteable email.** Every flagged
+submission renders a diagnosis card with a **"Copy email" button**. The generated text is
+ready to paste to an advisor, center director, or Jordan Crown — no editing needed.
+Example for the Woody's case:
+
+> **Subject: Milestone submission for Woody's Brewing (client 419762) — status and next step**
+>
+> Hi —
+>
+> We looked into the milestone (EI) submission for Woody's Brewing and here's what we found:
+>
+> **What happened:** Bart Hauptman submitted the milestone form on Aug 5 at 1:51 PM.
+> The form itself worked — the submission was captured and the confirmation email went
+> out to bart@woodysbrewing.com. However, no matching record appears in Neoserra for
+> client 419762.
+>
+> **Likely issue:** The handoff between the website form and Neoserra failed for this
+> submission. One thing that stands out: the employee numbers appear to have been entered
+> in reverse (15 initial staff → 6 current, which computes as *losing* 9 employees).
+> Neoserra can silently reject records with values like this.
+>
+> **The fix:** No need to ask the client to resubmit — we have their complete answers.
+> (1) Check Neoserra's API Audit Trail (System Administration → API Audit Trail) around
+> Aug 5, 1:51 PM to confirm whether the record arrived; (2) if it's not there, the
+> milestone can be entered manually from the data below; (3) confirm the intended figures
+> with the advisor (likely 6 initial → 15 current, a gain of 9).
+>
+> **Their submission:** I Hired New Employees — Initial FT staff: 15, Current FT: 6,
+> Initial PT: —, Current PT: 4 · Signed: Bart Hauptman · Contact 536464 · Business 419762
+>
+> This was generated by the API Troubleshooter:
+> https://tools.norcalsbdc.org/api-troubleshooter?business=419762
+
+Diagnosis templates exist per failure class (8–13), each with: what happened (facts with
+timestamps), likely issue (plain English, hedged honestly when uncertain), the fix (who
+does what), and the client's full submitted data so nobody has to ask the client to redo
+anything. This turns the Quintin/Zack/Carrie email thread into a 30-second lookup and a
+one-click reply.
 
 ## 5. Where it runs
 
