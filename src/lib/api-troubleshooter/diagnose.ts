@@ -224,10 +224,15 @@ export function diagnoseLookup(
   if (query.email) parts.push(contactFound ? `Contact found for ${query.email}.` : `Contact lookup was inconclusive (endpoint ${neo.contact ? summarizeResult(neo.contact.attempts.map((a) => a.status)) : 'not tried'}).`);
   if (query.businessId) parts.push(clientFound ? `Client ${query.businessId} exists in Neoserra.` : `Client ${query.businessId} was not readable.`);
   if (!query.businessId && contactFound) {
+    const named = (neo.linkedClients ?? [])
+      .map((c) => `${c.clientId}${c.dba || c.company ? ` — ${c.dba || c.company}` : ''}${c.centerName ? ` (${c.centerName})` : ''}`)
+      .join('; ');
     parts.push(
-      linkedIds.length
-        ? `Linked client record(s) on the contact: ${linkedIds.join(', ')}.`
-        : 'No linked client records could be identified from the contact data (see technical details for the raw record).',
+      named
+        ? `Linked client record(s) on this contact: ${named}.`
+        : linkedIds.length
+          ? `Linked client record(s) on the contact: ${linkedIds.join(', ')}.`
+          : 'No linked client records could be identified from the contact data (see technical details for the raw record).',
     );
   }
   parts.push(

@@ -19,6 +19,7 @@ import {
   probeClientById,
   probeMilestonesForClient,
   probeClientsForContact,
+  fetchLinkedClient,
   extractClientIds,
   extractContactIds,
 } from '@/lib/api-troubleshooter/neoserra-read';
@@ -157,6 +158,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         neo.milestones = milestones;
       }
       if (!neo.client) neo.client = await probeClientById(gfBiz);
+    }
+  }
+
+  // Surface EVERY client linked to the contact as a full record — the
+  // relationships endpoint enumerates them; show them all, not just IDs.
+  if (configured) {
+    const allIds = [...new Set([...(businessId ? [businessId] : []), ...(neo.linkedClientIds ?? [])])].slice(0, 5);
+    if (allIds.length) {
+      neo.linkedClients = await Promise.all(allIds.map((id) => fetchLinkedClient(id)));
+      neo.linkedClientIds = allIds;
+      const firstFound = neo.linkedClients.find((c) => c.found);
+      if (!neo.client?.found && firstFound) {
+        neo.client = { found: true, data: firstFound.data, attempts: firstFound.attempts };
+      }
     }
   }
 
