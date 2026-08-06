@@ -18,7 +18,9 @@ import {
   probeContactById,
   probeClientById,
   probeMilestonesForClient,
+  probeClientsForContact,
   extractClientIds,
+  extractContactIds,
 } from '@/lib/api-troubleshooter/neoserra-read';
 import { diagnoseSubmission, diagnoseLookup } from '@/lib/api-troubleshooter/diagnose';
 import { fetchStep2Entries, gfConfigured } from '@/lib/api-troubleshooter/gravity-forms';
@@ -113,7 +115,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // Chain: an email/contact lookup that found a contact but was given no
   // business ID continues to that contact's linked client(s) + milestones.
   if (configured && !businessId && neo.contact?.found) {
-    const clientIds = extractClientIds(neo.contact.data);
+    let clientIds = extractClientIds(neo.contact.data);
+    // The contact SEARCH returns bare rows (indivId/first/last/fkey) with no
+    // client links — fetch the full contact/relationships to find them.
+    if (!clientIds.length) {
+      const cid = contactId || extractContactIds(neo.contact.data)[0];
+      if (cid) {
+        const full = await probeClientsForContact(cid);
+        neo.contact = {
+          ...neo.contact,
+          attempts: [...neo.contact.attempts, ...full.attempts],
+          data: full.found ? full.data : neo.contact.data,
+        };
+        if (full.found) clientIds = extractClientIds(full.data);
+      }
+    }
     neo.linkedClientIds = clientIds;
     for (const id of clientIds.slice(0, 3)) {
       const milestones = await probeMilestonesForClient(id);
