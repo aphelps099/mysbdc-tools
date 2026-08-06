@@ -176,17 +176,34 @@ export function extractContactIds(data: unknown): string[] {
 }
 
 /**
- * Client records linked to a contact — the contact search returns bare rows
- * (indivId/first/last/fkey), so client links live behind other endpoints.
- * Probe the plausible ones; extractClientIds() digests whichever answers.
+ * Client records linked to a contact. Verified live: neither the contact
+ * search rows nor the full contact record carry client links, so the
+ * linkage must come from a relationship-style endpoint. Unlike probe(),
+ * this keeps going past a 200 until a response actually yields client IDs.
  */
-export async function probeClientsForContact(contactId: string): Promise<ProbeResult> {
+export async function probeClientsForContact(
+  contactId: string,
+): Promise<ProbeResult & { clientIds: string[] }> {
   const id = encodeURIComponent(contactId.trim());
-  return probe([
-    `/api/v1/contacts/${id}`,
+  const paths = [
     `/api/v1/relationships/${id}`,
     `/api/v1/clients?contactId=${id}`,
-  ]);
+    `/api/v1/clients?contacts=${id}`,
+    `/api/v1/contacts/${id}/clients`,
+    `/api/v1/contacts/${id}`,
+  ];
+  const attempts: ProbeAttempt[] = [];
+  let lastData: unknown = null;
+  for (const path of paths) {
+    const res = await neoGet(path);
+    attempts.push({ path: res.path, status: res.status, note: res.note });
+    if (res.status === 200 && hasRecords(res.body)) {
+      const clientIds = extractClientIds(res.body);
+      if (clientIds.length) return { found: true, data: res.body, attempts, clientIds };
+      if (lastData == null) lastData = res.body;
+    }
+  }
+  return { found: lastData != null, data: lastData, attempts, clientIds: [] };
 }
 
 /** Milestone/EI records for a client — endpoint shape undocumented, so probe. */
