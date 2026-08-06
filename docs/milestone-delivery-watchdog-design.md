@@ -19,7 +19,7 @@ Hard constraints the implementation must satisfy; nothing below in this doc over
 
 | System | What the troubleshooter does | What it can never do |
 |---|---|---|
-| WordPress / Gravity Forms | **Nothing.** No connection at all. | Cannot touch forms, entries, notifications, or the plugin |
+| WordPress / Gravity Forms | GET-only reads of the Entries ledger via the GF REST API, using an API key created with **READ permission only** | Cannot create/edit/delete entries, forms, notifications, or settings — the key itself lacks write rights |
 | Gmail (phelps@) | Read + parse notification emails | Never sends, deletes, labels, or modifies mail |
 | Neoserra API | `GET` requests only, with a read-only key if available | Never creates, updates, or deletes any record |
 | The live /success flow | **Nothing.** Zero code in the submission path | Cannot slow down, block, or alter any client submission |
@@ -77,6 +77,18 @@ Conclusions that reshape the design:
 System Administration → API Audit Trail around the timestamps above (did a write arrive?
 status Incoming/processed/error?) and the client activity + milestone approval queue.
 Whichever branch it is (a/b/c above) becomes the first documented playbook entry.
+
+**Update (Aug 6, GF Entries review):** the duplicates exist in Gravity Forms itself —
+entries 522033 (Anthony Lucero) and 462767 (Felicia Thomashill) were each submitted
+twice within the same minute. So class 11 is double *form submissions* (double-click /
+double-tap on submit), not a double-firing notification feed — and each may produce a
+duplicate Neoserra write. The GF Entries screen (Forms → Entries, form 39, 4,078
+entries) is the definitive submission ledger; the troubleshooter now reads it directly
+via the GF REST API (read-only key) instead of relying solely on parsed emails.
+The live deployment also confirmed: the Neoserra key CAN look up contacts by email,
+but CANNOT read milestone records back (all probe paths refused) — so delivered/missing
+verdicts come from the GF-ledger + Audit Trail combination until milestone read access
+is available.
 
 ---
 

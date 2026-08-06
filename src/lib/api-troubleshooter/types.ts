@@ -48,6 +48,8 @@ export interface NeoserraFindings {
   contact: ProbeResult | null;
   client: ProbeResult | null;
   milestones: ProbeResult | null;
+  /** Client IDs discovered on the contact record (email-lookup chaining). */
+  linkedClientIds?: string[];
 }
 
 export type VerdictStatus =
@@ -78,5 +80,7 @@ export interface Diagnosis {
 export interface InvestigateResponse {
   parsed: ParsedSubmission | null;
   neoserra: NeoserraFindings;
+  /** Gravity Forms entries ledger (read-only) — null when not configured. */
+  wordpress?: import('./gravity-forms').GfFindings | null;
   diagnosis: Diagnosis;
 }
