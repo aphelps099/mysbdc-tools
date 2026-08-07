@@ -6,6 +6,7 @@ import {
   resolveDataDir,
   writeSharedWorkspace,
 } from '@/lib/network-map-store';
+import { getDbQuery, readSharedWorkspaceDb, writeSharedWorkspaceDb } from '@/lib/network-map-db';
 import { normalizeState } from '@/components/network-map/logic';
 
 /* ═══════════════════════════════════════════════════════
@@ -20,6 +21,12 @@ import { normalizeState } from '@/components/network-map/logic';
           with the current copy, so a stale or never-synced
           client can never silently overwrite everyone's map.
 
+   Storage: Postgres (Neon) when NETWORK_MAP_DATABASE_URL /
+   DATABASE_URL is set — durable across redeploys with no
+   volume — otherwise the on-disk store. On first run with a
+   database configured, any workspace already on disk is
+   migrated in so nothing entered earlier is lost.
+
    Session-cookie-gated by src/middleware.ts, so only people
    who unlocked the toolbox can read or write it.
    ═══════════════════════════════════════════════════════ */
@@ -27,6 +34,26 @@ import { normalizeState } from '@/components/network-map/logic';
 const MAX_BODY_BYTES = 2_000_000;
 
 export async function GET() {
+  const db = getDbQuery();
+  if (db) {
+    try {
+      let shared = await readSharedWorkspaceDb(db);
+      if (!shared) {
+        // First run against the database: adopt whatever the disk store has
+        // (a previously entered map must never be lost by switching storage).
+        const onDisk = readSharedWorkspace(resolveDataDir());
+        if (onDisk) shared = await writeSharedWorkspaceDb(db, onDisk);
+      }
+      const workspace = shared ?? readSeedWorkspace();
+      if (!workspace) {
+        return NextResponse.json({ error: 'No shared workspace available.' }, { status: 404 });
+      }
+      return NextResponse.json({ workspace, source: shared ? 'shared' : 'seed', durable: true });
+    } catch {
+      return NextResponse.json({ error: 'Database unavailable.' }, { status: 503 });
+    }
+  }
+
   const dir = resolveDataDir();
   const shared = readSharedWorkspace(dir);
   const workspace = shared ?? readSeedWorkspace();
@@ -55,6 +82,20 @@ export async function PUT(request: NextRequest) {
   const incoming = body?.workspace as { locations?: unknown } | undefined;
   if (!incoming || typeof incoming !== 'object' || !Array.isArray(incoming.locations)) {
     return NextResponse.json({ error: 'Body must include a workspace with a locations array.' }, { status: 400 });
+  }
+
+  const db = getDbQuery();
+  if (db) {
+    try {
+      const current = await readSharedWorkspaceDb(db);
+      if (current && body.force !== true && body.baseUpdatedAt !== current.updatedAt) {
+        return NextResponse.json({ error: 'stale', workspace: current, durable: true }, { status: 409 });
+      }
+      const saved = await writeSharedWorkspaceDb(db, normalizeState(incoming));
+      return NextResponse.json({ workspace: saved, durable: true });
+    } catch {
+      return NextResponse.json({ error: 'Could not save the shared workspace.' }, { status: 500 });
+    }
   }
 
   const dir = resolveDataDir();

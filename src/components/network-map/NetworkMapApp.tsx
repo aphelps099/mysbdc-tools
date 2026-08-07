@@ -1116,7 +1116,8 @@ export default function NetworkMapApp() {
                 <p className="nm-callout-warn">
                   Heads up: the server hasn&apos;t been set up with permanent storage yet, so a site
                   update could clear the shared map. Download a backup file below after big edits —
-                  and ask to have the Railway <code>/data</code> volume attached to make saves
+                  and connect permanent storage (set <code>NETWORK_MAP_DATABASE_URL</code> to the
+                  Neon database, or attach the Railway <code>/data</code> volume) to make saves
                   permanent.
                 </p>
               )}
