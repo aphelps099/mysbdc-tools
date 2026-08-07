@@ -1,0 +1,381 @@
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+
+/* ═══════════════════════════════════════════════════════
+   ToolsIndex — shared tool directory used by two pages:
+   /          — the main index (tools with hidden: true omitted)
+   /all-tools — unlinked full directory, every tool listed
+   ═══════════════════════════════════════════════════════ */
+
+/* Featured campaign — rendered separately with accent styling.
+   Hidden from the main index; shown only on /all-tools. */
+const featured = {
+  href: '/brand/social/sbdc-day-grid.html',
+  name: 'SBDC Day Social Grid',
+  description: '25 ready-to-post social media graphics for SBDC Day — captions, hashtags, carousel preview & quick export.',
+  date: 'March 18, 2026',
+  icon: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+    </svg>
+  ),
+};
+
+type Tool = {
+  href: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  /** Omitted from the main index; still listed on /all-tools. */
+  hidden?: boolean;
+};
+
+const tools: Tool[] = [
+  {
+    href: '/chat',
+    name: 'Brand Chat',
+    description: 'AI-powered brand content assistant — draft social posts, emails, talking points, and more via chat.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+      </svg>
+    ),
+  },
+  {
+    href: '/brand/email',
+    name: 'Email Templates',
+    description: 'Client onboarding emails, signatures, event campaigns, and newsletter templates — preview and reference.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+  },
+  {
+    href: '/tfg-apply',
+    name: 'TFG Application',
+    description: 'Tech Futures Group application — multi-step startup intake with Neoserra PIN integration.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+      </svg>
+    ),
+  },
+  {
+    href: '/intake',
+    name: 'Smart 641 Intake',
+    description: 'Client intake wizard — collects info for the SBA 641 form in a guided, conversational flow.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" />
+        <path d="M9 12h6" /><path d="M9 16h4" />
+      </svg>
+    ),
+  },
+  {
+    href: '/roadmap-apply',
+    name: 'R4I Application',
+    description: 'Roadmap for Innovation — California SBDC manufacturer coaching & training application (Neoserra DB 113).',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 6l6 6-6 6" /><path d="M4 12h12" /><circle cx="19" cy="12" r="2" />
+      </svg>
+    ),
+  },
+  {
+    href: '/milestones',
+    name: 'Milestone Collection',
+    description: 'Collect client milestones — jobs created, capital accessed, revenue changes, and more.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v4" /><path d="M12 18v4" />
+        <path d="M4.93 4.93l2.83 2.83" /><path d="M16.24 16.24l2.83 2.83" />
+        <path d="M2 12h4" /><path d="M18 12h4" />
+        <path d="M4.93 19.07l2.83-2.83" /><path d="M16.24 7.76l2.83-2.83" />
+      </svg>
+    ),
+  },
+  {
+    href: '/milestone-log',
+    name: 'Milestone Log',
+    description: 'Review and manage submitted milestones — search, filter, and track client impact over time.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+        <path d="M14 2v6h6" /><path d="M16 13H8" /><path d="M16 17H8" /><path d="M10 9H8" />
+      </svg>
+    ),
+  },
+  {
+    href: '/api-troubleshooter',
+    name: 'API Troubleshooter',
+    description: 'Observe-only diagnostics for milestone submissions — trace a client or notification email through Neoserra and get a plain-English verdict with a ready-to-send email.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M21 21l-4.35-4.35" />
+        <path d="M8 11h6" /><path d="M11 8v6" />
+      </svg>
+    ),
+  },
+  {
+    href: '/session-notes',
+    name: 'Session Notes',
+    description: 'Create counseling session notes with AI formatting and submit directly to NeoSerra.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+        <path d="M14 2v6h6" />
+        <path d="M8 13h8" /><path d="M8 17h5" />
+        <path d="M8 9h1" />
+      </svg>
+    ),
+  },
+  {
+    href: '/atlas',
+    name: 'Atlas Dashboard',
+    description: 'NorCal SBDC impact dashboard — capital accessed, jobs created, and regional performance at a glance.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    ),
+  },
+  {
+    href: '/network-map',
+    name: 'Network Map',
+    description: 'Map the NorCal SBDC network — territory hosts, neighborhood branches, and investment by service region with address lookup.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+  },
+  {
+    href: '/motion',
+    name: 'Motion Studio',
+    description: 'Animation suite for promo videos — multi-scene text motion, images with overlays, Typekit fonts, and direct MP4 export.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M10 9.5v5l4.5-2.5L10 9.5z" fill="currentColor" stroke="none" />
+        <path d="M2 8h3M2 12h3M2 16h3M19 8h3M19 12h3M19 16h3" strokeWidth="1.2" />
+      </svg>
+    ),
+  },
+  {
+    href: '/motion/pro',
+    name: 'Motion Studio Pro',
+    description: 'Program-brandable animation suite — custom colors and logos per SBDC program, plus AI script-to-scenes storyboarding.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M9.5 9v6l5-3-5-3z" fill="currentColor" stroke="none" />
+        <path d="M16.5 7.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6.6-1.4z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    href: '/motion/tfg',
+    name: 'TFG Motion',
+    description: 'TFG-branded Motion Studio — brand-house schemes, GT America Extended and Tobias, TFG end-card marks, and TFG-voiced AI storyboarding.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M11 8l-3.5 5.25H11L9.5 17.5l5-6.25h-3L13 8h-2z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    href: '/pipeline',
+    name: 'Marketing Engine',
+    description: 'Event promo pipeline — auto-detects new events, creates sbdc.events shortlinks and on-voice copy, and queues Motion Pro videos via the shared Sheet.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 17V7l6 5 6-5v10" />
+        <circle cx="19.5" cy="12" r="2.5" />
+        <path d="M19.5 9.5V7M19.5 17v-2.5" />
+      </svg>
+    ),
+  },
+  {
+    href: '/titles',
+    name: 'Title Card Generator',
+    description: 'Animated title cards for video — motion graphics-style text you can screen-record.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M7 8h10" /><path d="M12 8v8" />
+      </svg>
+    ),
+  },
+  {
+    href: '/titles/tfg',
+    name: 'TFG Title Cards',
+    description: 'TFG-branded animated title cards — dark theme with electric green accent for video screen-recording.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+      </svg>
+    ),
+  },
+  {
+    href: '/partnerships',
+    name: 'Partnership CRM',
+    description: 'Track partner organizations through a relationship pipeline — owners, stages, client referrals, and follow-ups.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="5.5" r="2.5" />
+        <circle cx="5" cy="18" r="2.5" />
+        <circle cx="19" cy="18" r="2.5" />
+        <path d="M10.2 7.2 6.3 15.8M13.8 7.2l3.9 8.6M7.5 18h9" />
+      </svg>
+    ),
+  },
+  {
+    href: '/admin/analytics',
+    name: 'Usage Analytics',
+    description: 'See who is logging in and clicking around — logins by scope, daily activity, and a live event feed.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 3v18h18" />
+        <path d="M7 15v3M12 10v8M17 6v12" />
+      </svg>
+    ),
+  },
+  {
+    href: '/brand',
+    name: 'Brand House',
+    description: 'Visual identity, voice, and design system reference — colors, typography, logo usage, and more.',
+    hidden: true,
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2 2 7l10 5 10-5-10-5Z" /><path d="m2 17 10 5 10-5" /><path d="m2 12 10 5 10-5" />
+      </svg>
+    ),
+  },
+  {
+    href: '/brand/lender-resources',
+    name: 'Lender Resources',
+    description: 'Lender partnership guides, spotlight campaigns, talking points, and outreach tools — with inline document viewer.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg>
+    ),
+  },
+];
+
+export default function ToolsIndex({ showHidden = false }: { showHidden?: boolean }) {
+  const visible = showHidden ? tools : tools.filter((t) => !t.hidden);
+
+  return (
+    <div className="tools-page">
+      {/* ── Header ── */}
+      <header className="tools-header">
+        <Image
+          src="/sbdc-blue-2026.png"
+          alt="NorCal SBDC"
+          width={180}
+          height={48}
+          style={{ marginBottom: 32 }}
+          priority
+        />
+        <h1 className="tools-title">{showHidden ? 'All Tools' : 'Tools'}</h1>
+        <p className="tools-desc">
+          {showHidden
+            ? 'The full directory — every tool in the suite, including ones hidden from the main index.'
+            : 'Internal tools for the NorCal SBDC team — content generation, client intake, milestone tracking, and brand resources.'}
+        </p>
+        <hr className="tools-rule" />
+      </header>
+
+      {/* ── Featured campaign card (full directory only) ── */}
+      {showHidden && (
+        <div className="tools-grid" style={{ paddingBottom: 0 }}>
+          <a
+            href={featured.href}
+            className="tools-card"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: 'rgba(143, 197, 217, 0.15)',
+              border: '1px solid rgba(143, 197, 217, 0.3)',
+              animationDelay: '0.04s',
+            }}
+          >
+            <span
+              className="tools-card-icon"
+              style={{ background: 'rgba(143, 197, 217, 0.25)', color: '#0f1c2e' }}
+            >
+              {featured.icon}
+            </span>
+            <span>
+              <span className="tools-card-name" style={{ color: '#0f1c2e' }}>
+                {featured.name}
+                <span
+                  style={{
+                    display: 'inline-block',
+                    marginLeft: 10,
+                    fontSize: 10,
+                    fontFamily: 'var(--mono)',
+                    fontWeight: 600,
+                    letterSpacing: '0.08em',
+                    color: '#1D5AA7',
+                    background: 'rgba(29, 90, 167, 0.1)',
+                    padding: '3px 8px',
+                    borderRadius: 4,
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  {featured.date}
+                </span>
+              </span>
+              <span className="tools-card-desc">{featured.description}</span>
+            </span>
+          </a>
+        </div>
+      )}
+
+      {/* ── Tool cards ── */}
+      <main className="tools-grid">
+        {visible.map((tool, i) => (
+          <Link
+            key={tool.href}
+            href={tool.href}
+            className="tools-card"
+            style={{ animationDelay: `${0.08 + i * 0.04}s` }}
+          >
+            <span className="tools-card-icon">
+              {tool.icon}
+            </span>
+            <span>
+              <span className="tools-card-name">{tool.name}</span>
+              <span className="tools-card-desc">{tool.description}</span>
+            </span>
+          </Link>
+        ))}
+      </main>
+    </div>
+  );
+}
