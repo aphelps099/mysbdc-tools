@@ -137,6 +137,9 @@ export default function NetworkMapApp() {
   const [pickMode, setPickMode] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('loading');
+  // Whether the server says its storage survives redeploys (durable flag on
+  // /api/network-map/workspace responses). false → warn in the topbar.
+  const [durable, setDurable] = useState<boolean | null>(null);
   const [conflict, setConflict] = useState<Workspace | null>(null);
   const [exportScale, setExportScale] = useState<number | null>(null);
   const [exportStreets, setExportStreets] = useState(false);
@@ -227,6 +230,7 @@ export default function NetworkMapApp() {
           const probe = await fetch(WORKSPACE_API);
           if (probe.ok) {
             const data = await probe.json();
+            if (typeof data.durable === 'boolean') setDurable(data.durable);
             const incoming = normalizeState(data.workspace);
             if (sharedSnapshot(incoming) === snapshot) {
               markSynced(incoming.updatedAt, snapshot);
@@ -252,12 +256,14 @@ export default function NetworkMapApp() {
         });
         if (response.status === 409) {
           const data = await response.json();
+          if (typeof data.durable === 'boolean') setDurable(data.durable);
           setConflict(normalizeState(data.workspace));
           setSyncStatus('conflict');
           return;
         }
         if (!response.ok) throw new Error('save failed');
         const data = await response.json();
+        if (typeof data.durable === 'boolean') setDurable(data.durable);
         markSynced(data.workspace?.updatedAt ?? new Date().toISOString(), snapshot);
         try {
           window.localStorage.setItem(SYNC_PULSE_KEY, String(Date.now()));
@@ -292,6 +298,7 @@ export default function NetworkMapApp() {
       const response = await fetch(WORKSPACE_API);
       if (!response.ok) return;
       const data = await response.json();
+      if (typeof data.durable === 'boolean') setDurable(data.durable);
       // Re-check: an edit, save, or conflict may have started during the fetch.
       if (inFlightRef.current || isDirty() || draftRef.current.id !== '') return;
       if (syncStatusRef.current === 'saving' || syncStatusRef.current === 'conflict') return;
@@ -325,6 +332,7 @@ export default function NetworkMapApp() {
         if (!response.ok) throw new Error('workspace fetch failed');
         const data = await response.json();
         if (cancelled) return;
+        if (typeof data.durable === 'boolean') setDurable(data.durable);
         const incoming = normalizeState(data.workspace);
         const local = workspaceRef.current;
         const dirty = local !== null && sharedSnapshot(local) !== lastSyncedSharedRef.current;
@@ -796,6 +804,17 @@ export default function NetworkMapApp() {
               <p className={'nm-sync ' + (syncStatus === 'saved' ? 'saved' : syncStatus === 'offline' ? 'offline' : '')}>
                 {SYNC_LABELS[syncStatus]}
               </p>
+              {durable === false && (
+                <>
+                  <span className="nm-meta-dot" aria-hidden="true" />
+                  <p
+                    className="nm-sync warn"
+                    title="The server is writing to temporary storage that resets on redeploy. Attach the Railway /data volume (or set NETWORK_MAP_DATA_DIR) so the shared map survives deploys."
+                  >
+                    ⚠ Temporary server storage — resets on deploy
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
