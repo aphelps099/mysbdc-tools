@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
 
   // Sixth password: Network Map → session scoped to ONLY /network-map,
   // so the map can be shared without exposing the rest of the toolbox.
-  const mapPassword = process.env.MAP_PASSWORD || 'sbdc2027';
+  const mapPassword = process.env.MAP_PASSWORD || 'SBDCMAP';
   let mapMatch = false;
   if (!mainMatch && !lenderMatch && !milestonesMatch && !injectMatch && !tfgMatch) {
     const g = Buffer.from(mapPassword);
