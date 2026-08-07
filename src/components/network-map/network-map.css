@@ -129,31 +129,41 @@
   font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
 }
 
+/* One segmented strip instead of four floating chips — hairline dividers
+   inside a single ink-ruled container, echoing the back button + topbar rule. */
 .nm-stats {
   display: flex;
-  gap: 8px;
   margin-left: auto;
-  flex-wrap: wrap;
+  border: 1.5px solid var(--nm-ink);
+  border-radius: 12px;
+  background: var(--nm-panel);
+  overflow: hidden;
 }
 
 .nm-stat {
-  min-width: 84px;
-  padding: 5px 11px;
-  border: 1px solid var(--nm-border);
-  border-radius: 10px;
-  background: var(--nm-paper);
+  min-width: 86px;
+  padding: 6px 14px 5px;
   text-align: center;
   font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
 }
 
+.nm-stat + .nm-stat {
+  border-left: 1px solid var(--nm-border);
+}
+
 .nm-stat strong {
   display: block;
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
 }
 
 .nm-stat span {
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--nm-muted);
 }
@@ -280,6 +290,13 @@
 .nm-btn-small {
   padding: 5px 9px;
   font-size: 12px;
+}
+
+/* Topbar CTA — sized to sit flush with the stats strip */
+.nm-topbar-actions .nm-btn {
+  padding: 11px 18px;
+  border-radius: 12px;
+  letter-spacing: 0.01em;
 }
 
 /* ── Filters + list ── */
@@ -1052,6 +1069,11 @@
 
 .nm-sync.offline {
   color: var(--nm-danger);
+}
+
+.nm-sync.warn {
+  color: #9a6a12;
+  cursor: help;
 }
 
 /* ── Share & export ── */
