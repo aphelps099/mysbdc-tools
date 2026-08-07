@@ -1071,9 +1071,21 @@
   color: var(--nm-danger);
 }
 
-.nm-sync.warn {
-  color: #9a6a12;
-  cursor: help;
+/* Amber callout in the Data tab when server storage isn't durable */
+.nm-callout-warn {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid #e2c996;
+  border-radius: 10px;
+  background: #fdf6e7;
+  color: #7a5a17;
+  font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.nm-callout-warn code {
+  font-size: 11.5px;
 }
 
 /* ── Share & export ── */
