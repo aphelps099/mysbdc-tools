@@ -160,6 +160,18 @@ export default function NetworkMapApp() {
   draftRef.current = draft;
   pickModeRef.current = pickMode;
 
+  // Load the NorCal Adobe Fonts kit (Proxima Sera + Proxima Nova) — the
+  // topbar wordmark uses it, with Georgia as the fallback.
+  useEffect(() => {
+    const id = 'nm-typekit';
+    if (document.getElementById(id)) return;
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = 'https://use.typekit.net/pkl5rjs.css';
+    document.head.appendChild(link);
+  }, []);
+
   const showToast = useCallback((message: string) => {
     setToast(message);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -761,14 +773,30 @@ export default function NetworkMapApp() {
       <header className="nm-topbar">
         <div className="nm-brand">
           <Link href="/" className="nm-home" aria-label="Back to the toolbox">
-            ←
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M13.5 8H2.5" />
+              <path d="M7.5 3l-5 5 5 5" />
+            </svg>
           </Link>
-          <div>
+          <div className="nm-brand-copy">
             <h1>Network Map</h1>
-            <p>NorCal SBDC hosts, branches &amp; investment</p>
-            <p className={'nm-sync ' + (syncStatus === 'saved' ? 'saved' : syncStatus === 'offline' ? 'offline' : '')}>
-              {SYNC_LABELS[syncStatus]}
-            </p>
+            <div className="nm-brand-meta">
+              <p>NorCal SBDC hosts, branches &amp; investment</p>
+              <span className="nm-meta-dot" aria-hidden="true" />
+              <p className={'nm-sync ' + (syncStatus === 'saved' ? 'saved' : syncStatus === 'offline' ? 'offline' : '')}>
+                {SYNC_LABELS[syncStatus]}
+              </p>
+            </div>
           </div>
         </div>
         <div className="nm-stats" aria-label="Network totals">
