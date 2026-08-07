@@ -804,17 +804,6 @@ export default function NetworkMapApp() {
               <p className={'nm-sync ' + (syncStatus === 'saved' ? 'saved' : syncStatus === 'offline' ? 'offline' : '')}>
                 {SYNC_LABELS[syncStatus]}
               </p>
-              {durable === false && (
-                <>
-                  <span className="nm-meta-dot" aria-hidden="true" />
-                  <p
-                    className="nm-sync warn"
-                    title="The server is writing to temporary storage that resets on redeploy. Attach the Railway /data volume (or set NETWORK_MAP_DATA_DIR) so the shared map survives deploys."
-                  >
-                    ⚠ Temporary server storage — resets on deploy
-                  </p>
-                </>
-              )}
             </div>
           </div>
         </div>
@@ -1122,6 +1111,15 @@ export default function NetworkMapApp() {
                   fill, filters, and zoom first — the export matches what you see.
                 </p>
               </div>
+
+              {durable === false && (
+                <p className="nm-callout-warn">
+                  Heads up: the server hasn&apos;t been set up with permanent storage yet, so a site
+                  update could clear the shared map. Download a backup file below after big edits —
+                  and ask to have the Railway <code>/data</code> volume attached to make saves
+                  permanent.
+                </p>
+              )}
 
               <details className="nm-advanced">
                 <summary>Advanced — backup &amp; restore</summary>
