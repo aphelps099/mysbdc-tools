@@ -1,11 +1,12 @@
 import ToolsIndex from '@/components/ToolsIndex';
 
 /* ═══════════════════════════════════════════════════════
-   / — NorCal SBDC Tools Index
-   Landing page with the everyday tools; the full list
-   (including hidden tools) lives at /all-tools.
+   /all-tools — unlinked full tool directory.
+   Shows every tool, including ones hidden from the main
+   index. Not linked from anywhere; behind the main admin
+   login like the rest of the toolbox (see middleware.ts).
    ═══════════════════════════════════════════════════════ */
 
-export default function Home() {
-  return <ToolsIndex />;
+export default function AllToolsPage() {
+  return <ToolsIndex showHidden />;
 }
