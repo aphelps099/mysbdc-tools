@@ -97,6 +97,20 @@ export function parseNotification(raw: string): ParsedSubmission {
   const joined = lines.join('\n');
   const milestoneTypes = MILESTONE_TYPES.filter((t) => joined.includes(t));
 
+  // The WP plugin's failure notifications ("Neoserra API Error (Milestones -
+  // Step 2)") lead with the exact rejection, e.g.
+  // "Neoserra API Errors: [update_client][primaryNaics] is a required value".
+  const apiErrors: string[] = [];
+  const errIdx = joined.indexOf('Neoserra API Error');
+  if (errIdx !== -1) {
+    const tail = joined.slice(errIdx).replace(/^Neoserra API Errors?:?/i, '');
+    const stop = tail.search(/Contact Information:|Contact ID/i);
+    const errText = (stop === -1 ? tail : tail.slice(0, stop)).trim();
+    const bracketed = errText.match(/\[[^\]]+\]\[[^\]]+\][^[]*/g);
+    if (bracketed) apiErrors.push(...bracketed.map((e) => e.trim()).filter(Boolean));
+    else if (errText) apiErrors.push(errText);
+  }
+
   const parsed: ParsedSubmission = {
     contactId: get('Contact ID'),
     contactEmail: get('Contact Email'),
@@ -106,6 +120,7 @@ export function parseNotification(raw: string): ParsedSubmission {
     fields,
     signature: get('Signature'),
     anomalies: [],
+    apiErrors,
   };
   parsed.anomalies = findAnomalies(parsed);
   return parsed;
@@ -148,25 +163,25 @@ export function findAnomalies(p: ParsedSubmission): ValueAnomaly[] {
     const change = num(field(`Change in ${kind} Employees`));
     const initial = num(field(`Initial ${kind === 'Full Time' ? 'Full-Time' : 'Part-Time'} Staff`));
     const total = num(field(`Total ${kind === 'Full Time' ? 'Full-Time' : 'Part-Time'} Employees`));
-    if (change != null && change < 0) {
+    if (change != null && change <= 0) {
       anomalies.push({
         field: `Change in ${kind} Employees`,
-        issue: `Computes as ${change} — the client reports LOSING ${Math.abs(change)} ${kind.toLowerCase()} employees.`,
+        issue: `Computes as ${change} — and per network policy (Attribution Handbook p.19), zero or negative EI changes DO NOT post to Neoserra. The client sees a success screen, but no record is created and no advisor is notified.`,
         suggestion:
           initial != null && total != null
-            ? `The starting and current numbers were likely entered in reverse (entered ${initial} → ${total}; probably meant ${total} → ${initial}, a gain of ${Math.abs(change)}). Confirm with the advisor before correcting.`
-            : 'The starting and current numbers may have been entered in reverse. Confirm with the advisor.',
+            ? `The starting and current numbers may have been entered in reverse (entered ${initial} → ${total}). Confirm the real figures with the advisor, then enter the milestone manually in Neoserra.`
+            : 'Confirm the real figures with the advisor, then enter the milestone manually in Neoserra.',
       });
     }
   }
 
   // Sales milestone: negative change is the same swapped-fields signature.
   const salesChange = num(field('Change in Gross Sales'));
-  if (salesChange != null && salesChange < 0) {
+  if (salesChange != null && salesChange <= 0) {
     anomalies.push({
       field: 'Change in Gross Sales',
-      issue: `Computes as ${salesChange.toLocaleString()} — the client reports a sales DECREASE.`,
-      suggestion: 'Initial and current sales may have been entered in reverse. Confirm with the advisor.',
+      issue: `Computes as ${salesChange.toLocaleString()} — and per network policy (Attribution Handbook p.19), zero or negative EI changes DO NOT post to Neoserra.`,
+      suggestion: 'Initial and current sales may have been entered in reverse. Confirm with the advisor, then enter the milestone manually in Neoserra.',
     });
   }
 

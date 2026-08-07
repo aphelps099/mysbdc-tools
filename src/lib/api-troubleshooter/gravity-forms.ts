@@ -21,6 +21,10 @@ const TIMEOUT_MS = 10_000;
 /** Hard cap on how far back the client-side scan looks. */
 const SCAN_LIMIT = 100;
 
+/** Field-ID map cache — the form definition changes rarely. */
+const FORM_MAP_TTL_MS = 60 * 60_000;
+let formMapCache: { at: number; formId: string; map: ReturnType<typeof mapFieldIds> } | null = null;
+
 export interface GfEntrySummary {
   entryId: string;
   /** date_created as reported by WordPress (site-local time). */
@@ -203,13 +207,27 @@ export async function fetchStep2Entries(filter: {
   const formId = step2FormId();
 
   // Form definition → field-ID map (labels are the stable interface).
-  const formRes = await gfGet(`/forms/${formId}`);
-  attempts.push({ path: formRes.path, status: formRes.status, note: formRes.note });
-  const formBody = formRes.body as { fields?: GfField[] } | null;
-  if (formRes.status !== 200 || !formBody?.fields) {
-    return { configured: true, attempts, entries: [], totalCount: null };
+  // Cached for an hour, and a stale cache beats a failed fetch — a slow
+  // WordPress moment shouldn't blank the whole form log.
+  let map: ReturnType<typeof mapFieldIds>;
+  const cachedMap = formMapCache && formMapCache.formId === formId ? formMapCache : null;
+  if (cachedMap && Date.now() - cachedMap.at < FORM_MAP_TTL_MS) {
+    map = cachedMap.map;
+    attempts.push({ path: `/forms/${formId} (field map cached)`, status: 200, note: 'OK' });
+  } else {
+    const formRes = await gfGet(`/forms/${formId}`);
+    attempts.push({ path: formRes.path, status: formRes.status, note: formRes.note });
+    const formBody = formRes.body as { fields?: GfField[] } | null;
+    if (formRes.status === 200 && formBody?.fields) {
+      map = mapFieldIds(formBody.fields);
+      formMapCache = { at: Date.now(), formId, map };
+    } else if (cachedMap) {
+      map = cachedMap.map;
+      attempts.push({ path: '(stale cached field map used)', status: 200, note: 'form fetch failed; using last known field map' });
+    } else {
+      return { configured: true, attempts, entries: [], totalCount: null };
+    }
   }
-  const map = mapFieldIds(formBody.fields);
 
   const filters: { key: string; value: string }[] = [];
   if (filter.email && map.contactEmail) filters.push({ key: map.contactEmail, value: filter.email });
